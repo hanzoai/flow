@@ -1,8 +1,8 @@
 from random import randint
 
-from langflow.custom import Component
-from langflow.inputs.inputs import IntInput, MessageTextInput
-from langflow.template.field.base import Output
+from hanzoflow.custom import Component
+from hanzoflow.inputs.inputs import IntInput, MessageTextInput
+from hanzoflow.template.field.base import Output
 
 
 class MultipleOutputsComponent(Component):

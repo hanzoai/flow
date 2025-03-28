@@ -15,13 +15,13 @@ OpenAI uses this loaded data to generate a blog post, as instructed by the **Tex
 
 ---
 
-- [Langflow installed and running](/get-started-installation)
+- [Hanzoflow installed and running](/get-started-installation)
 - [OpenAI API key created](https://platform.openai.com/)
 
 
 ## Create the blog writer flow {#0c1a9c65b7d640f693ec3aad963416ff}
 
-1. From the Langflow dashboard, click **New Flow**.
+1. From the Hanzoflow dashboard, click **New Flow**.
 2. Select **Blog Writer**.
 3. The **Blog Writer** flow is created.
 

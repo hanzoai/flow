@@ -3,7 +3,7 @@ title: Data
 slug: /components-data
 ---
 
-# Data components in Langflow
+# Data components in Hanzoflow
 
 Data components load data from a source into your flow.
 

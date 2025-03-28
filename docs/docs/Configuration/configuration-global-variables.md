@@ -11,11 +11,11 @@ import TabItem from '@theme/TabItem';
 Global variables let you store and reuse generic input values and credentials across your projects.
 You can use a global variable in any text input field that displays the <Icon name="Globe" aria-label="Globe" /> **Globe** icon.
 
-Langflow stores global variables in its internal database, and encrypts the values using a secret key.
+Hanzoflow stores global variables in its internal database, and encrypts the values using a secret key.
 
 ## Create a global variable {#3543d5ef00eb453aa459b97ba85501e5}
 
-1. In the Langflow UI, click your profile icon, and then select **Settings**.
+1. In the Hanzoflow UI, click your profile icon, and then select **Settings**.
 
 2. Click **Global Variables**.
 
@@ -25,11 +25,11 @@ Langflow stores global variables in its internal database, and encrypts the valu
 
 5. Optional: Select a **Type** for your global variable. The available types are **Generic** (default) and **Credential**.
 
-   No matter which **Type** you select, Langflow still encrypts the **Value** of the global variable.
+   No matter which **Type** you select, Hanzoflow still encrypts the **Value** of the global variable.
 
 6. Enter the **Value** for your global variable.
 
-7. Optional: Use the **Apply To Fields** menu to select one or more fields that you want Langflow to automatically apply your global variable to. For example, if you select **OpenAI API Key**, Langflow will automatically apply the variable to any **OpenAI API Key** field.
+7. Optional: Use the **Apply To Fields** menu to select one or more fields that you want Hanzoflow to automatically apply your global variable to. For example, if you select **OpenAI API Key**, Hanzoflow will automatically apply the variable to any **OpenAI API Key** field.
 
 8. Click **Save Variable**.
 
@@ -42,7 +42,7 @@ In **Settings > Global Variables**, the **Value** column shows the encrypted has
 
 ## Edit a global variable
 
-1. In the Langflow UI, click your profile icon, and then select **Settings**.
+1. In the Hanzoflow UI, click your profile icon, and then select **Settings**.
 
 2. Click **Global Variables**.
 
@@ -58,7 +58,7 @@ In **Settings > Global Variables**, the **Value** column shows the encrypted has
 Deleting a global variable permanently deletes any references to it from your existing projects.
 :::
 
-1. In the Langflow UI, click your profile icon, and then select **Settings**.
+1. In the Hanzoflow UI, click your profile icon, and then select **Settings**.
 
 2. Click **Global Variables**.
 
@@ -72,42 +72,42 @@ The global variable, and any existing references to it, are deleted.
 
 ### Custom environment variables
 
-You can use the `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable to source global variables from your runtime environment.
+You can use the `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable to source global variables from your runtime environment.
 
 <Tabs>
 
 <TabItem value="local" label="Local" default>
 
-If you installed Langflow locally, you must define the `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable in a `.env` file.
+If you installed Hanzoflow locally, you must define the `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable in a `.env` file.
 
 1. Create a `.env` file and open it in your preferred editor.
 
-2. Add the `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable as follows:
+2. Add the `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` environment variable as follows:
 
    ```plaintext title=".env"
-   LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT=VARIABLE1,VARIABLE2
+   HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT=VARIABLE1,VARIABLE2
    ```
 
-   Replace `VARIABLE1,VARIABLE2` with a comma-separated list (no spaces) of variables that you want Langflow to source from the environment.
+   Replace `VARIABLE1,VARIABLE2` with a comma-separated list (no spaces) of variables that you want Hanzoflow to source from the environment.
    For example, `my_key,some_string`.
 
 3. Save and close the file.
 
-4. Start Langflow with the `.env` file:
+4. Start Hanzoflow with the `.env` file:
 
    ```bash
-   VARIABLE1="VALUE1" VARIABLE2="VALUE2" python -m langflow run --env-file .env
+   VARIABLE1="VALUE1" VARIABLE2="VALUE2" python -m hanzoflow run --env-file .env
    ```
 
    :::note
    In this example, the environment variables (`VARIABLE1="VALUE1"` and `VARIABLE2="VALUE2"`) are prefixed to the startup command.
    This is a rudimentary method for exposing environment variables to Python on the command line, and is meant for illustrative purposes.
-   Make sure to expose your environment variables to Langflow in a manner that best suits your own environment.
+   Make sure to expose your environment variables to Hanzoflow in a manner that best suits your own environment.
    :::
 
-5. Confirm that Langflow successfully sourced the global variables from the environment.
+5. Confirm that Hanzoflow successfully sourced the global variables from the environment.
 
-   1. In the Langflow UI, click your profile icon, and then select **Settings**.
+   1. In the Hanzoflow UI, click your profile icon, and then select **Settings**.
 
    2. Click **Global Variables**.
 
@@ -117,20 +117,20 @@ If you installed Langflow locally, you must define the `LANGFLOW_VARIABLES_TO_GE
 
 <TabItem value="docker" label="Docker">
 
-If you're using Docker, you can pass `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` directly from the command line or from a `.env` file.
+If you're using Docker, you can pass `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` directly from the command line or from a `.env` file.
 
-To pass `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` directly from the command line:
+To pass `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` directly from the command line:
 
 ```bash
 docker run -it --rm \
     -p 7860:7860 \
-    -e LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT="VARIABLE1,VARIABLE2" \
+    -e HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT="VARIABLE1,VARIABLE2" \
     -e VARIABLE1="VALUE1" \
     -e VARIABLE2="VALUE2" \
-    langflowai/langflow:latest
+    hanzoflowai/hanzoflow:latest
 ```
 
-To pass `LANGFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` from a `.env` file:
+To pass `HANZOFLOW_VARIABLES_TO_GET_FROM_ENVIRONMENT` from a `.env` file:
 
 ```bash
 docker run -it --rm \
@@ -138,7 +138,7 @@ docker run -it --rm \
     --env-file .env \
     -e VARIABLE1="VALUE1" \
     -e VARIABLE2="VALUE2" \
-    langflowai/langflow:latest
+    hanzoflowai/hanzoflow:latest
 ```
 
 </TabItem>
@@ -149,23 +149,23 @@ docker run -it --rm \
 When adding global variables from the environment, the following limitations apply:
 
 - You can only source the **Name** and **Value** from the environment.
-  To add additional parameters, such as the **Apply To Fields** parameter, you must edit the global variables in the Langflow UI.
+  To add additional parameters, such as the **Apply To Fields** parameter, you must edit the global variables in the Hanzoflow UI.
 
 - Global variables that you add from the environment always have the **Credential** type.
   :::
 
 :::tip
-If you want to explicitly prevent Langflow from sourcing global variables from the environment, set `LANGFLOW_STORE_ENVIRONMENT_VARIABLES` to `false` in your `.env` file:
+If you want to explicitly prevent Hanzoflow from sourcing global variables from the environment, set `HANZOFLOW_STORE_ENVIRONMENT_VARIABLES` to `false` in your `.env` file:
 
 ```plaintext title=".env"
-LANGFLOW_STORE_ENVIRONMENT_VARIABLES=false
+HANZOFLOW_STORE_ENVIRONMENT_VARIABLES=false
 ```
 
 :::
 
 ### Default environment variables
 
-Langflow automatically detects and converts some environment variables into global variables of the type **Credential**, which are applied to the specific fields in components that require them. Currently, the following variables are supported:
+Hanzoflow automatically detects and converts some environment variables into global variables of the type **Credential**, which are applied to the specific fields in components that require them. Currently, the following variables are supported:
 
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`

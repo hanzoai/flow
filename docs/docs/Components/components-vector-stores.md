@@ -3,7 +3,7 @@ title: Vector stores
 slug: /components-vector-stores
 ---
 
-# Vector store components in Langflow
+# Vector store components in Hanzoflow
 
 Vector databases store vector data, which backs AI workloads like chatbots and Retrieval Augmented Generation.
 
@@ -66,7 +66,7 @@ For more information, see the [DataStax documentation](https://docs.datastax.com
 
 The **Astra DB Vector Store** component offers two methods for generating embeddings.
 
-1. **Embedding Model**: Use your own embedding model by connecting an [Embeddings](/components-embedding-models) component in Langflow.
+1. **Embedding Model**: Use your own embedding model by connecting an [Embeddings](/components-embedding-models) component in Hanzoflow.
 
 2. **Astra Vectorize**: Use Astra DB's built-in embedding generation service. When creating a new collection, choose the embeddings provider and models, including NVIDIA's `NV-Embed-QA` model hosted by Datastax.
 
@@ -186,7 +186,7 @@ For more information, see the [Chroma documentation](https://docs.trychroma.com/
 
 | Name                         | Type          | Description                                      |
 |------------------------------|---------------|--------------------------------------------------|
-| collection_name               | String        | The name of the Chroma collection. Default: "langflow". |
+| collection_name               | String        | The name of the Chroma collection. Default: "hanzoflow". |
 | persist_directory             | String        | The directory to persist the Chroma database.     |
 | search_query                  | String        | The query to search for in the vector store.      |
 | ingest_data                   | Data          | The data to ingest into the vector store (list of Data objects). |
@@ -305,8 +305,8 @@ For more information, see the [FAISS documentation](https://faiss.ai/index.html)
 
 | Name                      | Type          | Description                                      |
 |---------------------------|---------------|--------------------------------------------------|
-| index_name                 | String        | The name of the FAISS index. Default: "langflow_index". |
-| persist_directory          | String        | Path to save the FAISS index. It will be relative to where Langflow is running. |
+| index_name                 | String        | The name of the FAISS index. Default: "hanzoflow_index". |
+| persist_directory          | String        | Path to save the FAISS index. It will be relative to where Hanzoflow is running. |
 | search_query               | String        | The query to search for in the vector store.     |
 | ingest_data                | Data          | The data to ingest into the vector store (list of Data objects or documents). |
 | allow_dangerous_deserialization | Boolean  | Set to True to allow loading pickle files from untrusted sources. Default: True (advanced). |

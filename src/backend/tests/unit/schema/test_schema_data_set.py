@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
-from langflow.schema.data import Data
-from langflow.schema.dataframe import DataFrame
+from hanzoflow.schema.data import Data
+from hanzoflow.schema.dataframe import DataFrame
 
 
 @pytest.fixture

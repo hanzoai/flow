@@ -3,7 +3,7 @@ title: Inputs and outputs
 slug: /components-io
 ---
 
-# Input and output components in Langflow
+# Input and output components in Hanzoflow
 
 Input and output components define where data enters and exits your flow.
 

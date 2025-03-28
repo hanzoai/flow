@@ -3,7 +3,7 @@ title: Models
 slug: /components-models
 ---
 
-# Model components in Langflow
+# Model components in Hanzoflow
 
 Model components generate text using large language models.
 
@@ -326,7 +326,7 @@ For more information, see [Mistral AI documentation](https://docs.mistral.ai/).
 
 This component generates text using Novita AI's language models.
 
-For more information, see [Novita AI documentation](https://novita.ai/docs/model-api/reference/llm/llm.html?utm_source=github_langflow&utm_medium=github_readme&utm_campaign=link).
+For more information, see [Novita AI documentation](https://novita.ai/docs/model-api/reference/llm/llm.html?utm_source=github_hanzoflow&utm_medium=github_readme&utm_campaign=link).
 
 ### Inputs
 

@@ -1,9 +1,9 @@
 import pytest
-from langflow.components.outputs import ChatOutput
-from langflow.schema.data import Data
-from langflow.schema.dataframe import DataFrame
-from langflow.schema.message import Message
-from langflow.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_NAME_AI
+from hanzoflow.components.outputs import ChatOutput
+from hanzoflow.schema.data import Data
+from hanzoflow.schema.dataframe import DataFrame
+from hanzoflow.schema.message import Message
+from hanzoflow.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_NAME_AI
 
 from tests.base import ComponentTestBaseWithClient
 

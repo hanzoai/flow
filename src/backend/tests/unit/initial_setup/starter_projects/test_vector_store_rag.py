@@ -3,19 +3,19 @@ import operator
 from textwrap import dedent
 
 import pytest
-from langflow.components.data import FileComponent
-from langflow.components.embeddings import OpenAIEmbeddingsComponent
-from langflow.components.inputs import ChatInput
-from langflow.components.models import OpenAIModelComponent
-from langflow.components.outputs import ChatOutput
-from langflow.components.processing import ParseDataComponent
-from langflow.components.processing.split_text import SplitTextComponent
-from langflow.components.prompts import PromptComponent
-from langflow.components.vectorstores import AstraDBVectorStoreComponent
-from langflow.graph import Graph
-from langflow.graph.graph.constants import Finish
-from langflow.schema import Data
-from langflow.schema.dataframe import DataFrame
+from hanzoflow.components.data import FileComponent
+from hanzoflow.components.embeddings import OpenAIEmbeddingsComponent
+from hanzoflow.components.inputs import ChatInput
+from hanzoflow.components.models import OpenAIModelComponent
+from hanzoflow.components.outputs import ChatOutput
+from hanzoflow.components.processing import ParseDataComponent
+from hanzoflow.components.processing.split_text import SplitTextComponent
+from hanzoflow.components.prompts import PromptComponent
+from hanzoflow.components.vectorstores import AstraDBVectorStoreComponent
+from hanzoflow.graph import Graph
+from hanzoflow.graph.graph.constants import Finish
+from hanzoflow.schema import Data
+from hanzoflow.schema.dataframe import DataFrame
 
 
 @pytest.fixture

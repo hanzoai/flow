@@ -13,13 +13,13 @@ Build a question-and-answer chatbot with a document loaded from local memory.
 
 ---
 
-- [Langflow installed and running](/get-started-installation)
+- [Hanzoflow installed and running](/get-started-installation)
 - [OpenAI API key created](https://platform.openai.com/)
 
 
 ## Create the document QA flow {#204500104f024553aab2b633bb99f603}
 
-1. From the Langflow dashboard, click **New Flow**.
+1. From the Hanzoflow dashboard, click **New Flow**.
 2. Select **Document QA**.
 3. The **Document QA** flow is created.
 

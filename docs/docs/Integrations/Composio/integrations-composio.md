@@ -1,9 +1,9 @@
 ---
-title: Integrate Composio with Langflow
+title: Integrate Composio with Hanzoflow
 slug: /integrations-composio
 ---
 
-Langflow integrates with [Composio](https://docs.composio.dev/introduction/intro/overview) as a toolset for your **Agent** component.
+Hanzoflow integrates with [Composio](https://docs.composio.dev/introduction/intro/overview) as a toolset for your **Agent** component.
 
 Instead of juggling multiple integrations and components in your flow, connect the Composio component to an **Agent** component to use all of Composio's supported APIs and actions as **Tools** for your agent.
 
@@ -13,9 +13,9 @@ Instead of juggling multiple integrations and components in your flow, connect t
 - [An OpenAI API key](https://platform.openai.com/)
 - [A Gmail account](https://mail.google.com)
 
-## Connect Langflow to a Composio tool
+## Connect Hanzoflow to a Composio tool
 
-1. In the Langflow **Workspace**, add an **Agent** component.
+1. In the Hanzoflow **Workspace**, add an **Agent** component.
 2. In the **Workspace**, add the **Composio Tools** component.
 3. Connect the **Agent** component's **Tools** port to the **Composio Tools** component's **Tools** port.
 4. In the **Composio API Key** field, paste your Composio API key.
@@ -27,9 +27,9 @@ The component's fields change based on the tool you selected.
 The **Gmail** tool requires authentication with Google, so it presents an **Authentication Link** button.
 7. Click the link to authenticate.
 8. In the Google authentication dialog, enter the credentials for the Gmail account you want to control with Composio, and then click **Authenticate**.
-9. Return to Langflow.
+9. Return to Hanzoflow.
 10. To update the Composio component, click **Refresh**.
-The **Auth Status** field changes to a ✅, which indicates the Langflow component is connected to your Composio account.
+The **Auth Status** field changes to a ✅, which indicates the Hanzoflow component is connected to your Composio account.
 11. In the **Actions to use** field, select the action you want the **Agent** to take with the **Gmail** tool.
 The **Gmail** tool supports multiple actions, and also supports multiple actions within the same tool.
 The default value of **GMAIL_CREATE_EMAIL_DRAFT** is OK for this example.
@@ -110,5 +110,5 @@ Body: Hello from composio!
 7. To confirm further, navigate to the Gmail account you authenticated with Composio.
 Your email is visible in **Drafts**.
 
-You have successfully integrated your Langflow component with Composio.
+You have successfully integrated your Hanzoflow component with Composio.
 To add more tools, add another Composio component.

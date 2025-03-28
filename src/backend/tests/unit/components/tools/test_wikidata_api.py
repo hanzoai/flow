@@ -3,11 +3,11 @@ from unittest.mock import MagicMock, patch
 import httpx
 import pytest
 from langchain_core.tools import ToolException
-from langflow.components.tools import WikidataComponent
-from langflow.custom import Component
-from langflow.custom.utils import build_custom_component_template
-from langflow.schema import Data
-from langflow.schema.message import Message
+from hanzoflow.components.tools import WikidataComponent
+from hanzoflow.custom import Component
+from hanzoflow.custom.utils import build_custom_component_template
+from hanzoflow.schema import Data
+from hanzoflow.schema.message import Message
 
 # Import the base test class
 from tests.base import ComponentTestBaseWithoutClient
@@ -47,7 +47,7 @@ class TestWikidataComponent(ComponentTestBaseWithoutClient):
         input_names = [input_["name"] for input_ in frontend_node["template"].values() if isinstance(input_, dict)]
         assert "query" in input_names
 
-    @patch("langflow.components.tools.wikidata_api.httpx.get")
+    @patch("hanzoflow.components.tools.wikidata_api.httpx.get")
     def test_fetch_content_success(self, mock_httpx, component_class, mock_query):
         component = component_class()
         component.query = mock_query
@@ -75,7 +75,7 @@ class TestWikidataComponent(ComponentTestBaseWithoutClient):
         assert result[0].data["label"] == "Test Label"
         assert result[0].data["id"] == "Q123"
 
-    @patch("langflow.components.tools.wikidata_api.httpx.get")
+    @patch("hanzoflow.components.tools.wikidata_api.httpx.get")
     def test_fetch_content_empty_response(self, mock_httpx, component_class, mock_query):
         component = component_class()
         component.query = mock_query
@@ -92,7 +92,7 @@ class TestWikidataComponent(ComponentTestBaseWithoutClient):
         assert "error" in result[0].data
         assert "No search results found" in result[0].data["error"]
 
-    @patch("langflow.components.tools.wikidata_api.httpx.get")
+    @patch("hanzoflow.components.tools.wikidata_api.httpx.get")
     def test_fetch_content_error_handling(self, mock_httpx, component_class, mock_query):
         component = component_class()
         component.query = mock_query

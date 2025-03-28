@@ -3,10 +3,10 @@ import uuid
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langflow.services.settings.base import Settings
-from langflow.services.settings.service import SettingsService
-from langflow.services.tracing.base import BaseTracer
-from langflow.services.tracing.service import (
+from hanzoflow.services.settings.base import Settings
+from hanzoflow.services.settings.service import SettingsService
+from hanzoflow.services.tracing.base import BaseTracer
+from hanzoflow.services.tracing.service import (
     TracingService,
     component_context_var,
     trace_context_var,
@@ -120,23 +120,23 @@ def mock_component():
 def mock_tracers():
     with (
         patch(
-            "langflow.services.tracing.service._get_langsmith_tracer",
+            "hanzoflow.services.tracing.service._get_langsmith_tracer",
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_langwatch_tracer",
+            "hanzoflow.services.tracing.service._get_langwatch_tracer",
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_langfuse_tracer",
+            "hanzoflow.services.tracing.service._get_langfuse_tracer",
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_arize_phoenix_tracer",
+            "hanzoflow.services.tracing.service._get_arize_phoenix_tracer",
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_opik_tracer",
+            "hanzoflow.services.tracing.service._get_opik_tracer",
             return_value=MockTracer,
         ),
     ):
@@ -382,7 +382,7 @@ async def test_start_tracers_with_exception(tracing_service):
             "_initialize_langsmith_tracer",
             side_effect=Exception("Mock exception"),
         ),
-        patch("langflow.services.tracing.service.logger.debug") as mock_logger,
+        patch("hanzoflow.services.tracing.service.logger.debug") as mock_logger,
     ):
         # start_tracers should return normally even with exception
         await tracing_service.start_tracers(run_id, run_name, user_id, session_id, project_name)
@@ -415,7 +415,7 @@ async def test_trace_worker_with_exception(tracing_service):
         msg = "Mock trace function exception"
         raise ValueError(msg)
 
-    with patch("langflow.services.tracing.service.logger.exception") as mock_logger:
+    with patch("hanzoflow.services.tracing.service.logger.exception") as mock_logger:
         # Remove incorrect context manager usage
         await tracing_service.start_tracers(run_id, run_name, user_id, session_id, project_name)
 

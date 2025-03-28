@@ -132,8 +132,8 @@ This component can be used as a standalone component to list all previously gene
 
 To run the Transcription and Speech AI Flow:
 
-1. Open Langflow and create a new project.
-2. Add the components listed above to your flow canvas, or download the [AssemblyAI Transcription and Speech AI Flow](./AssemblyAI_Flow.json)(Download link) and **Import** the JSON file into Langflow.
+1. Open Hanzoflow and create a new project.
+2. Add the components listed above to your flow canvas, or download the [AssemblyAI Transcription and Speech AI Flow](./AssemblyAI_Flow.json)(Download link) and **Import** the JSON file into Hanzoflow.
 3. Connect the components as shown in the flow diagram. **Tip**: Freeze the path of the *Start Transcript* component to only submit the file once.
 4. Input the AssemblyAI API key in in all components that require the key (Start Transcript, Poll Transcript, Get Subtitles, LeMUR, List Transcripts).
 5. Select an audio or video file in the *Start Transcript* component.
@@ -159,6 +159,6 @@ If you encounter issues:
 1. Ensure the API key is correctly set in all components that require the key.
 2. To use LeMUR, you need to upgrade your AssemblyAI account, since this is not included in the free account.
 3. Verify that all components are properly connected in the flow.
-4. Review the Langflow logs for any error messages.
+4. Review the Hanzoflow logs for any error messages.
 
 For more advanced usage, refer to the [AssemblyAI API documentation](https://www.assemblyai.com/docs/). If you need more help, you can reach out to the [AssemblyAI support](https://www.assemblyai.com/contact/support).

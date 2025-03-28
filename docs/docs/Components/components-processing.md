@@ -3,7 +3,7 @@ title: Processing
 slug: /components-processing
 ---
 
-# Processing components in Langflow
+# Processing components in Hanzoflow
 
 Processing components process and transform data within a flow.
 
@@ -56,7 +56,7 @@ This component concatenates two text sources into a single text chunk using a sp
 ## Create data
 
 :::important
-This component is in **Legacy**, which means it is no longer in active development as of Langflow version 1.1.3.
+This component is in **Legacy**, which means it is no longer in active development as of Hanzoflow version 1.1.3.
 :::
 
 This component dynamically creates a [Data](/concepts-objects#data-object) object with a specified number of fields.
@@ -77,7 +77,7 @@ This component dynamically creates a [Data](/concepts-objects#data-object) objec
 ## Data combiner
 
 :::important
-Prior to Langflow version 1.1.3, this component was named **Merge Data**.
+Prior to Hanzoflow version 1.1.3, this component was named **Merge Data**.
 :::
 
 This component combines multiple data sources into a single unified [Data](/concepts-objects#data-object) object.
@@ -138,7 +138,7 @@ This component performs the following operations on Pandas [DataFrame](https://p
 ## Data to message
 
 :::important
-Prior to Langflow version 1.1.3, this component was named **Parse Data**.
+Prior to Hanzoflow version 1.1.3, this component was named **Parse Data**.
 :::
 
 The ParseData component converts data objects into plain text using a specified template.
@@ -161,7 +161,7 @@ This component transforms structured data into human-readable text formats, allo
 ## Filter data
 
 :::important
-This component is in **Beta** as of Langflow version 1.1.3, and is not yet fully supported.
+This component is in **Beta** as of Hanzoflow version 1.1.3, and is not yet fully supported.
 :::
 
 This component filters a [Data](/concepts-objects#data-object) object based on a list of keys.
@@ -182,7 +182,7 @@ This component filters a [Data](/concepts-objects#data-object) object based on a
 ## Filter values
 
 :::important
-This component is in **Beta** as of Langflow version 1.1.3, and is not yet fully supported.
+This component is in **Beta** as of Hanzoflow version 1.1.3, and is not yet fully supported.
 :::
 
 The Filter values component filters a list of data items based on a specified key, filter value, and comparison operator.
@@ -279,7 +279,7 @@ This component converts DataFrames into plain text using templates.
 ## Parse JSON
 
 :::important
-This component is in **Legacy**, which means it is no longer in active development as of Langflow version 1.1.3.
+This component is in **Legacy**, which means it is no longer in active development as of Hanzoflow version 1.1.3.
 :::
 
 This component converts and extracts JSON fields using JQ queries.
@@ -300,7 +300,7 @@ This component converts and extracts JSON fields using JQ queries.
 ## Select data
 
 :::important
-This component is in **Legacy**, which means it is no longer in active development as of Langflow version 1.1.3.
+This component is in **Legacy**, which means it is no longer in active development as of Hanzoflow version 1.1.3.
 :::
 
 This component selects a single [Data](/concepts-objects#data-object) item from a list.

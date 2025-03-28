@@ -139,8 +139,8 @@ Displays the final output of the Notion Agent in the Playground.
 
 To run the Notion Agent for Meeting Notes:
 
-1. Open Langflow and create a new project.
-2. Add the components listed above to your flow canvas, or download the [Flow Meeting Agent Flow](./Meeting_Notes_Agent.json)(Download link) and **Import** the JSON file into Langflow.
+1. Open Hanzoflow and create a new project.
+2. Add the components listed above to your flow canvas, or download the [Flow Meeting Agent Flow](./Meeting_Notes_Agent.json)(Download link) and **Import** the JSON file into Hanzoflow.
 3. Connect the components as shown in the flow diagram.
 4. Input the Notion and OpenAI API keys in their respective components.
 5. Paste your meeting transcript into the Meeting Transcript component.
@@ -170,6 +170,6 @@ If you encounter issues:
 1. Ensure all API keys are correctly set and have the necessary permissions.
 2. Check that your Notion integration has access to the relevant pages and databases.
 3. Verify that all components are properly connected in the flow.
-4. Review the Langflow logs for any error messages.
+4. Review the Hanzoflow logs for any error messages.
 
-For more advanced usage and integration options, refer to the [Notion API documentation](https://developers.notion.com/) and [Langflow documentation](/).
+For more advanced usage and integration options, refer to the [Notion API documentation](https://developers.notion.com/) and [Hanzoflow documentation](/).

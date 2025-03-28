@@ -1,24 +1,24 @@
 services:
   # A Docker web service
   - type: web
-    name: langflow
+    name: hanzoflow
     runtime: docker
     dockerfilePath: ./docker/render.Dockerfile
-    repo: https://github.com/langflow-ai/langflow
+    repo: https://github.com/hanzoflow-ai/hanzoflow
     branch: main
     plan: standard
     healthCheckPath: /health_check
     autoDeploy: false
     envVars:
-      - key: LANGFLOW_DATABASE_URL
-        value: sqlite:////app/data/.cache/langflow/langflow.db
-      - key: LANGFLOW_HOST
+      - key: HANZOFLOW_DATABASE_URL
+        value: sqlite:////app/data/.cache/hanzoflow/hanzoflow.db
+      - key: HANZOFLOW_HOST
         value: 0.0.0.0
-      - key: LANGFLOW_PORT
+      - key: HANZOFLOW_PORT
         # default render port https://docs.render.com/web-services#port-binding
         value: 10000
-      - key: LANGFLOW_LOG_LEVEL
+      - key: HANZOFLOW_LOG_LEVEL
         value: INFO
     disk:
-      name: langflow-data
+      name: hanzoflow-data
       mountPath: /app/data

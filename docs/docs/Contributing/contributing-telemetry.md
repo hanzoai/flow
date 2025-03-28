@@ -3,15 +3,15 @@ title: Telemetry
 slug: /contributing-telemetry
 ---
 
-Langflow uses anonymous telemetry to collect essential usage statistics to enhance functionality and the user experience. This data helps us identify popular features and areas that need improvement, and ensures development efforts align with what you need.
+Hanzoflow uses anonymous telemetry to collect essential usage statistics to enhance functionality and the user experience. This data helps us identify popular features and areas that need improvement, and ensures development efforts align with what you need.
 
-We respect your privacy and are committed to protecting your data. We do not collect any personal information or sensitive data. All telemetry data is anonymized and used solely for improving Langflow.
+We respect your privacy and are committed to protecting your data. We do not collect any personal information or sensitive data. All telemetry data is anonymized and used solely for improving Hanzoflow.
 
 ## Opt out of telemetry
 
-To opt out of telemetry, set the `LANGFLOW_DO_NOT_TRACK` or `DO_NOT_TRACK` environment variable to `true` before running Langflow. This disables telemetry data collection.
+To opt out of telemetry, set the `HANZOFLOW_DO_NOT_TRACK` or `DO_NOT_TRACK` environment variable to `true` before running Hanzoflow. This disables telemetry data collection.
 
-## Data that Langflow collects
+## Data that Hanzoflow collects
 
 ### Run {#2d427dca4f0148ae867997f6789e8bfb}
 
@@ -26,13 +26,13 @@ To opt out of telemetry, set the `LANGFLOW_DO_NOT_TRACK` or `DO_NOT_TRACK` e
 
 ### Version {#dc09f6aba6c64c7b8dad3d86a7cba6d6}
 
-- **Version**: The specific version of Langflow used, which helps in tracking feature adoption and compatibility.
+- **Version**: The specific version of Hanzoflow used, which helps in tracking feature adoption and compatibility.
 - **Platform**: Operating system of the host machine, which aids in focusing our support for popular platforms like Windows, macOS, and Linux.
 - **Python**: The version of Python used, assisting in maintaining compatibility and support for various Python versions.
 - **Arch**: Architecture of the system (e.g., x86, ARM), which helps optimize our software for different hardware.
 - **AutoLogin**: Indicates whether the auto-login feature is enabled, reflecting user preference settings.
 - **CacheType**: Type of caching mechanism used, which impacts performance and efficiency.
-- **BackendOnly**: Boolean indicating whether you are running Langflow in a backend-only mode, useful for understanding deployment configurations.
+- **BackendOnly**: Boolean indicating whether you are running Hanzoflow in a backend-only mode, useful for understanding deployment configurations.
 
 ### Playground {#ae6c3859f612441db3c15a7155e9f920}
 
