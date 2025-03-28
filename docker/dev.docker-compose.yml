@@ -1,23 +1,23 @@
 networks:
-  dev-langflow:
+  dev-hanzoflow:
 
 services:
-  langflow:
+  hanzoflow:
     build:
       context: ..
       dockerfile: docker/dev.Dockerfile
-    image: dev-langflow
-    container_name: dev-langflow
+    image: dev-hanzoflow
+    container_name: dev-hanzoflow
     restart: always
     ports:
       - "7860:7860"
       - "3000:3000"
     environment:
       - PYTHONDONTWRITEBYTECODE=1
-      - LANGFLOW_DATABASE_URL=postgresql://langflow:langflow@postgres:5432/langflow
-      - LANGFLOW_SUPERUSER=langflow
-      - LANGFLOW_SUPERUSER_PASSWORD=langflow
-      - LANGFLOW_CONFIG_DIR=/var/lib/langflow
+      - HANZOFLOW_DATABASE_URL=postgresql://hanzoflow:hanzoflow@postgres:5432/hanzoflow
+      - HANZOFLOW_SUPERUSER=hanzoflow
+      - HANZOFLOW_SUPERUSER_PASSWORD=hanzoflow
+      - HANZOFLOW_CONFIG_DIR=/var/lib/hanzoflow
     env_file:
       - ../.env
     volumes:
@@ -25,18 +25,18 @@ services:
     depends_on:
       - postgres
     networks:
-      -  dev-langflow
+      -  dev-hanzoflow
 
 
   postgres:
     container_name: postgres
     image: pgvector/pgvector:pg16
     environment:
-      POSTGRES_USER: langflow
-      POSTGRES_PASSWORD: langflow
-      POSTGRES_DB: langflow
+      POSTGRES_USER: hanzoflow
+      POSTGRES_PASSWORD: hanzoflow
+      POSTGRES_DB: hanzoflow
     ports:
       - "5432:5432"
     networks:
-      -  dev-langflow
+      -  dev-hanzoflow
 

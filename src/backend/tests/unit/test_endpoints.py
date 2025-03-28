@@ -4,8 +4,8 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi import status
 from httpx import AsyncClient
-from langflow.custom.directory_reader.directory_reader import DirectoryReader
-from langflow.services.deps import get_settings_service
+from hanzoflow.custom.directory_reader.directory_reader import DirectoryReader
+from hanzoflow.services.deps import get_settings_service
 
 
 async def run_post(client, flow_id, headers, post_data):

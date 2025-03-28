@@ -21,7 +21,7 @@ Learn how to build a flow starting with the **Tool calling agent** component, an
 
 ## Create a problem-solving agent with AgentComponent
 
-Create a problem-solving agent in Langflow, starting with the **Tool calling agent**.
+Create a problem-solving agent in Hanzoflow, starting with the **Tool calling agent**.
 
 1. Click **New Flow**, and then click **Blank Flow**.
 2. Click and drag an **Agent** component to your workspace.
@@ -105,15 +105,15 @@ An agent can use custom components as tools.
 Here's an example text analyzer for sentiment analysis.
 
 ```python
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+from hanzoflow.custom import Component
+from hanzoflow.io import MessageTextInput, Output
+from hanzoflow.schema import Data
 import re
 
 class TextAnalyzerComponent(Component):
     display_name = "Text Analyzer"
     description = "Analyzes and transforms input text."
-    documentation: str = "http://docs.langflow.org/components/custom"
+    documentation: str = "http://docs.hanzoflow.org/components/custom"
     icon = "chart-bar"
     name = "TextAnalyzerComponent"
 
@@ -174,7 +174,7 @@ Current Date and Time: I can retrieve the current date and time in various time 
 
 If the component you want to use as a tool doesn't have a **Tool Mode** button, add `tool_mode=True` to one of the component's inputs, and connect the new **Toolset** output to the agent's **Tools** input.
 
-Langflow supports **Tool Mode** for the following data types:
+Hanzoflow supports **Tool Mode** for the following data types:
 
 * `DataInput`
 * `DataFrameInput`

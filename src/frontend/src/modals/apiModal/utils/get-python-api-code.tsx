@@ -28,9 +28,9 @@ import requests
 from typing import Optional
 import warnings
 try:
-    from langflow.load import upload_file
+    from hanzoflow.load import upload_file
 except ImportError:
-    warnings.warn("Langflow provides a function to help you upload files to the flow. Please install langflow to use it.")
+    warnings.warn("Hanzoflow provides a function to help you upload files to the flow. Please install hanzoflow to use it.")
     upload_file = None
 
 BASE_API_URL = "${window.location.protocol}//${window.location.host}"
@@ -94,7 +94,7 @@ def main():
 
     if args.upload_file:
         if not upload_file:
-            raise ImportError("Langflow is not installed. Please install it to use the upload_file function.")
+            raise ImportError("Hanzoflow is not installed. Please install it to use the upload_file function.")
         elif not args.components:
             raise ValueError("You need to provide the components to upload the file to.")
         tweaks = upload_file(file_path=args.upload_file, host=BASE_API_URL, flow_id=args.endpoint, components=[args.components], tweaks=tweaks)
@@ -150,9 +150,9 @@ ${
     ? `import os
 # API Configuration
 try:
-    api_key = os.environ["LANGFLOW_API_KEY"]
+    api_key = os.environ["HANZOFLOW_API_KEY"]
 except KeyError:
-    raise ValueError("LANGFLOW_API_KEY environment variable not found. Please set your API key in the environment variables.")\n`
+    raise ValueError("HANZOFLOW_API_KEY environment variable not found. Please set your API key in the environment variables.")\n`
     : ""
 }url = "${apiUrl}"  # The complete API endpoint URL for this flow
 

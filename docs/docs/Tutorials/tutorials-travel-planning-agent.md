@@ -17,7 +17,7 @@ All agents have access to the **Search API** and **URL Content Fetcher** compone
 
 To use this flow, you need an [OpenAI API key](https://platform.openai.com/) and a [Search API key](https://www.searchapi.io/).
 
-## Open Langflow and start a new flow
+## Open Hanzoflow and start a new flow
 
 Click **New Flow**, and then select the **Travel Planning Agent** flow.
 

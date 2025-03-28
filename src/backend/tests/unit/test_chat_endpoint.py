@@ -4,8 +4,8 @@ from uuid import UUID
 
 import pytest
 from httpx import codes
-from langflow.memory import aget_messages
-from langflow.services.database.models.flow import FlowUpdate
+from hanzoflow.memory import aget_messages
+from hanzoflow.services.database.models.flow import FlowUpdate
 
 from tests.unit.build_utils import build_flow, consume_and_assert_stream, create_flow, get_build_events
 
@@ -207,15 +207,15 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
     assert job_id is not None
 
     # Mock the cancel_flow_build function to raise an unexpected exception
-    import langflow.api.v1.chat
+    import hanzoflow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = hanzoflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_error(*_args, **_kwargs):
         msg = "Unexpected error during cancellation"
         raise RuntimeError(msg)
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
+    monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
 
     try:
         # Try to cancel the build - should return 500 Internal Server Error
@@ -228,7 +228,7 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
         assert "Unexpected error during cancellation" in response_data["detail"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -243,14 +243,14 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
     assert job_id is not None
 
     # Mock the cancel_flow_build function to simulate a successful cancellation
-    import langflow.api.v1.chat
+    import hanzoflow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = hanzoflow.api.v1.chat.cancel_flow_build
 
     async def mock_successful_cancel_flow_build(*_args, **_kwargs):
         return True  # Return True to indicate successful cancellation
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
+    monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return success)
@@ -265,7 +265,7 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
         assert "cancelled successfully" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -293,14 +293,14 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
 
     # Mock the cancel_flow_build function to simulate a failure
     # The import path in monkeypatch should match exactly how it's imported in the application
-    import langflow.api.v1.chat
+    import hanzoflow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = hanzoflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build(*_args, **_kwargs):
         return False  # Return False to indicate cancellation failure
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
+    monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return failure but success=False)
@@ -315,7 +315,7 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
         assert "Failed to cancel" in response_data["message"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -332,15 +332,15 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
     # Mock the cancel_flow_build function to raise CancelledError
     import asyncio
 
-    import langflow.api.v1.chat
+    import hanzoflow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = hanzoflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_cancelled_error(*_args, **_kwargs):
         msg = "Task cancellation failed"
         raise asyncio.CancelledError(msg)
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
+    monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
 
     try:
         # Try to cancel the build - should return failure when CancelledError is raised
@@ -356,4 +356,4 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
         assert "failed to cancel" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(hanzoflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)

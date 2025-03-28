@@ -2244,7 +2244,7 @@ wheels = [
 ]
 
 [[package]]
-name = "langflow-base"
+name = "hanzoflow-base"
 version = "0.0.96"
 source = { editable = "." }
 dependencies = [

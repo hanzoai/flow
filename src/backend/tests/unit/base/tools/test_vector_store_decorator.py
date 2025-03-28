@@ -1,7 +1,7 @@
 from typing import Any
 
 import pytest
-from langflow.components.vectorstores import AstraDBVectorStoreComponent
+from hanzoflow.components.vectorstores import AstraDBVectorStoreComponent
 
 from tests.base import ComponentTestBaseWithoutClient, VersionComponentMapping
 

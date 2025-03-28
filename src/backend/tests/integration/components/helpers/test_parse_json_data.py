@@ -1,6 +1,6 @@
-from langflow.components.inputs import ChatInput
-from langflow.components.processing.parse_json_data import ParseJSONDataComponent
-from langflow.schema import Data
+from hanzoflow.components.inputs import ChatInput
+from hanzoflow.components.processing.parse_json_data import ParseJSONDataComponent
+from hanzoflow.schema import Data
 
 from tests.integration.components.mock_components import TextToData
 from tests.integration.utils import ComponentInputHandle, run_single_component

@@ -3,13 +3,13 @@ title: Loaders
 slug: /components-loaders
 ---
 
-# Loader components in Langflow
+# Loader components in Hanzoflow
 
 :::info
-As of Langflow 1.1, loader components are now found in the **Components** menu under **Bundles**.
+As of Hanzoflow 1.1, loader components are now found in the **Components** menu under **Bundles**.
 :::
 
-Loaders fetch data into Langflow from various sources, such as databases, websites, and local files.
+Loaders fetch data into Hanzoflow from various sources, such as databases, websites, and local files.
 
 ## Use a loader component in a flow
 

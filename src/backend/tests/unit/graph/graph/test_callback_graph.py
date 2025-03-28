@@ -1,13 +1,13 @@
 import asyncio
 
 import pytest
-from langflow.components.outputs import ChatOutput
-from langflow.custom import Component
-from langflow.events.event_manager import EventManager
-from langflow.graph import Graph
-from langflow.inputs import IntInput
-from langflow.schema.message import Message
-from langflow.template import Output
+from hanzoflow.components.outputs import ChatOutput
+from hanzoflow.custom import Component
+from hanzoflow.events.event_manager import EventManager
+from hanzoflow.graph import Graph
+from hanzoflow.inputs import IntInput
+from hanzoflow.schema.message import Message
+from hanzoflow.template import Output
 
 
 class LogComponent(Component):
