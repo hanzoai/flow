@@ -3,31 +3,31 @@ title: API keys
 slug: /configuration-api-keys
 ---
 
-Langflow provides an API key functionality that allows users to access their individual components and flows without traditional login authentication. The API key is a user-specific token that can be included in the request header, query parameter, or as a command line argument to authenticate API calls. This documentation outlines how to generate, use, and manage API keys in Langflow.
+Hanzoflow provides an API key functionality that allows users to access their individual components and flows without traditional login authentication. The API key is a user-specific token that can be included in the request header, query parameter, or as a command line argument to authenticate API calls. This documentation outlines how to generate, use, and manage API keys in Hanzoflow.
 
 :::info
 
-The default user and password are set using the LANGFLOW_SUPERUSER and LANGFLOW_SUPERUSER_PASSWORD environment variables. The default values are `langflow` and `langflow`, respectively.
+The default user and password are set using the HANZOFLOW_SUPERUSER and HANZOFLOW_SUPERUSER_PASSWORD environment variables. The default values are `hanzoflow` and `hanzoflow`, respectively.
 
 :::
 
 ## Generate an API key
 
-Generate a user-specific token to use with Langflow.
+Generate a user-specific token to use with Hanzoflow.
 
-### Generate an API key with the Langflow UI
+### Generate an API key with the Hanzoflow UI
 
 1. Click your user icon and select **Settings**.
-2. Click **Langflow API**, and then click **Add New**.
+2. Click **Hanzoflow API**, and then click **Add New**.
 3. Name your key, and then click **Create Secret Key**.
 4. Copy the API key and store it in a secure location.
 
-### Generate an API key with the Langflow CLI
+### Generate an API key with the Hanzoflow CLI
 
 ```shell
-langflow api-key
+hanzoflow api-key
 # or
-python -m langflow api-key
+python -m hanzoflow api-key
 ╭─────────────────────────────────────────────────────────────────────╮
 │ API Key Created Successfully:                                       │
 │                                                                     │
@@ -41,9 +41,9 @@ python -m langflow api-key
 
 ```
 
-## Authenticate requests with the Langflow API key
+## Authenticate requests with the Hanzoflow API key
 
-Include your API key in API requests to authenticate requests to Langflow.
+Include your API key in API requests to authenticate requests to Hanzoflow.
 
 ### Include the API key in the HTTP header
 
@@ -76,9 +76,9 @@ import requests
 from typing import Optional
 import warnings
 try:
-    from langflow.load import upload_file
+    from hanzoflow.load import upload_file
 except ImportError:
-    warnings.warn("Langflow provides a function to help you upload files to the flow. Please install langflow to use it.")
+    warnings.warn("Hanzoflow provides a function to help you upload files to the flow. Please install hanzoflow to use it.")
     upload_file = None
 
 BASE_API_URL = "http://127.0.0.1:7860"
@@ -144,7 +144,7 @@ Run it like: python <your file>.py "your message here" --endpoint "your_endpoint
 
     if args.upload_file:
         if not upload_file:
-            raise ImportError("Langflow is not installed. Please install it to use the upload_file function.")
+            raise ImportError("Hanzoflow is not installed. Please install it to use the upload_file function.")
         elif not args.components:
             raise ValueError("You need to provide the components to upload the file to.")
         tweaks = upload_file(file_path=args.upload_file, host=BASE_API_URL, flow_id=args.endpoint, components=[args.components], tweaks=tweaks)
@@ -185,7 +185,7 @@ To choose a custom name for your API endpoint, select **Project Settings** &gt; 
 To revoke an API key, delete it from the list of keys in the **Settings** menu.
 
 1. Click your user icon and select **Settings**.
-2. Click **Langflow API**.
+2. Click **Hanzoflow API**.
 3. Select the keys you want to delete and click the trash can icon.
 
 This action immediately invalidates the key and prevents it from being used again.

@@ -3,10 +3,10 @@ from uuid import UUID
 import orjson
 import pytest
 from httpx import AsyncClient
-from langflow.components.logic.loop import LoopComponent
-from langflow.memory import aget_messages
-from langflow.schema.data import Data
-from langflow.services.database.models.flow import FlowCreate
+from hanzoflow.components.logic.loop import LoopComponent
+from hanzoflow.memory import aget_messages
+from hanzoflow.schema.data import Data
+from hanzoflow.services.database.models.flow import FlowCreate
 
 from tests.base import ComponentTestBaseWithClient
 from tests.unit.build_utils import build_flow, get_build_events

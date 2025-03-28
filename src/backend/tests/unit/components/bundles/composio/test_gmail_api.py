@@ -2,8 +2,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from composio.client.exceptions import NoItemsFound
-from langflow.components.composio.gmail_api import GmailAPIComponent
-from langflow.schema.message import Message
+from hanzoflow.components.composio.gmail_api import GmailAPIComponent
+from hanzoflow.schema.message import Message
 
 from tests.base import ComponentTestBaseWithoutClient
 
@@ -31,7 +31,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         """Return an empty list since this component doesn't have version-specific files."""
         return []
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     def test_execute_action_send_email_success(self, mock_toolset):
         # Setup mock
         mock_instance = mock_toolset.return_value
@@ -60,7 +60,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         assert call_args["params"]["subject"] == "Test Subject"
         assert call_args["params"]["body"] == "Test Body"
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     def test_execute_action_fetch_emails(self, mock_toolset):
         # Setup mock
         mock_instance = mock_toolset.return_value
@@ -84,7 +84,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         assert call_args["params"]["max_results"] == 5
         assert call_args["params"]["query"] == "from:test@example.com"
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     def test_execute_action_error(self, mock_toolset):
         # Setup mock to raise an exception
         mock_instance = mock_toolset.return_value
@@ -103,7 +103,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         with pytest.raises(ValueError, match="Failed to execute Send Email: API Error"):
             component.execute_action()
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     def test_update_build_config_with_valid_api_key(self, mock_toolset):
         # Setup mocks
         mock_instance = mock_toolset.return_value
@@ -149,7 +149,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         assert result["subject"]["show"] is True
         assert result["body"]["show"] is True
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     def test_update_build_config_needs_authentication(self, mock_toolset):
         # Setup mocks
         mock_instance = mock_toolset.return_value
@@ -236,7 +236,7 @@ class TestGmailAPIComponent(ComponentTestBaseWithoutClient):
         assert build_config["recipient_email"]["show"] is False
         assert build_config["subject"]["show"] is False
 
-    @patch("langflow.components.composio.gmail_api.ComposioToolSet")
+    @patch("hanzoflow.components.composio.gmail_api.ComposioToolSet")
     async def test_get_tools(self, mock_toolset):
         # Setup mock
         mock_instance = mock_toolset.return_value

@@ -1,5 +1,5 @@
 import pytest
-from langflow.components.prompts import PromptComponent
+from hanzoflow.components.prompts import PromptComponent
 
 from tests.base import ComponentTestBaseWithClient
 

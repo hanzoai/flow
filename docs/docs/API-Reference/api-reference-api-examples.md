@@ -6,9 +6,9 @@ slug: /api-reference-api-examples
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This page provides examples and practices for managing Langflow using the Langflow API.
+This page provides examples and practices for managing Hanzoflow using the Hanzoflow API.
 
-The Langflow API's OpenAPI spec can be viewed and tested at your Langflow deployment's `docs` endpoint.
+The Hanzoflow API's OpenAPI spec can be viewed and tested at your Hanzoflow deployment's `docs` endpoint.
 For example, `http://127.0.0.1:7860/docs`.
 
 ## Export values
@@ -17,10 +17,10 @@ You might find it helpful to set the following environment variables in your ter
 
 The examples in this guide use environment variables for these values.
 
-* Export your Langflow URL in your terminal.
-Langflow starts by default at `http://127.0.0.1:7860`.
+* Export your Hanzoflow URL in your terminal.
+Hanzoflow starts by default at `http://127.0.0.1:7860`.
 ```bash
-export LANGFLOW_URL="http://127.0.0.1:7860"
+export HANZOFLOW_URL="http://127.0.0.1:7860"
 ```
 
 * Export the `flow-id` in your terminal.
@@ -30,12 +30,12 @@ export FLOW_ID="359cd752-07ea-46f2-9d3b-a4407ef618da"
 ```
 
 * Export the `folder-id` in your terminal.
-To find your folder ID, call the Langflow [/api/v1/folders/](#read-folders) endpoint for a list of folders.
+To find your folder ID, call the Hanzoflow [/api/v1/folders/](#read-folders) endpoint for a list of folders.
 <Tabs>
   <TabItem value="curl" label="curl" default>
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/folders/" \
+  "$HANZOFLOW_URL/api/v1/folders/" \
   -H "accept: application/json"
 ```
   </TabItem>
@@ -57,12 +57,12 @@ Export the `folder-id` as an environment variable.
 export FOLDER_ID="1415de42-8f01-4f36-bf34-539f23e47466"
 ```
 
-* Export the Langflow API key as an environment variable.
-To create a Langflow API key, run the following command in the Langflow CLI.
+* Export the Hanzoflow API key as an environment variable.
+To create a Hanzoflow API key, run the following command in the Hanzoflow CLI.
 <Tabs>
   <TabItem value="curl" label="curl" default>
 ```text
-langflow api-key
+hanzoflow api-key
 ```
   </TabItem>
   <TabItem value="result" label="Result">
@@ -74,30 +74,30 @@ sk-...
 </Tabs>
 Export the generated API key as an environment variable.
 ```text
-export LANGFLOW_API_KEY="sk-..."
+export HANZOFLOW_API_KEY="sk-..."
 ```
 
 ## Base
 
-Use the base Langflow API to run your flow and retrieve configuration information.
+Use the base Hanzoflow API to run your flow and retrieve configuration information.
 
 ### Get all components
 
-This operation returns a dictionary of all Langflow components.
+This operation returns a dictionary of all Hanzoflow components.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/all" \
+  "$HANZOFLOW_URL/api/v1/all" \
   -H "accept: application/json"
 ```
 
   </TabItem>
   <TabItem value="result" label="Result">
 ```text
-A dictionary of all Langflow components.
+A dictionary of all Hanzoflow components.
 ```
   </TabItem>
 </Tabs>
@@ -116,7 +116,7 @@ The parameters are passed in the request body. In this example, the values are t
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/run/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/run/$FLOW_ID" \
   -H "Content-Type: application/json" \
   -d '{
     "input_value": "Tell me about something interesting!",
@@ -173,7 +173,7 @@ To stream LLM token responses, append the `?stream=true` query parameter to the 
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/run/$FLOW_ID?stream=true" \
+  "$HANZOFLOW_URL/api/v1/run/$FLOW_ID?stream=true" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -241,7 +241,7 @@ Parameters can be passed to the `/run` endpoint in three ways:
 **Example request**
 ```bash
 curl -X POST \
-  "http://$LANGFLOW_URL/api/v1/run/$FLOW_ID?stream=true" \
+  "http://$HANZOFLOW_URL/api/v1/run/$FLOW_ID?stream=true" \
   -H "Content-Type: application/json" \
   -H "accept: application/json" \
   -H "x-api-key: sk-..." \
@@ -272,7 +272,7 @@ To test the **Webhook** component in your flow, see the [Webhook component](/com
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/webhook/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/webhook/$FLOW_ID" \
   -H "Content-Type: application/json" \
   -d '{"data": "example-data"}'
 ```
@@ -310,7 +310,7 @@ Get the status of a task.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/task/TASK_ID" \
+  "$HANZOFLOW_URL/api/v1/task/TASK_ID" \
   -H "accept: application/json"
 ```
 
@@ -335,14 +335,14 @@ This endpoint is deprecated. Use the `/file` endpoint instead.
 
 ### Get version
 
-Get the version of the Langflow API.
+Get the version of the Hanzoflow API.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/version" \
+  "$HANZOFLOW_URL/api/v1/version" \
   -H "accept: application/json"
 ```
 
@@ -353,7 +353,7 @@ curl -X GET \
 {
     "version": "1.1.1",
     "main_version": "1.1.1",
-    "package": "Langflow"
+    "package": "Hanzoflow"
 }
 ```
 
@@ -362,14 +362,14 @@ curl -X GET \
 
 ### Get config
 
-Retrieve the Langflow configuration information.
+Retrieve the Hanzoflow configuration information.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/config" \
+  "$HANZOFLOW_URL/api/v1/config" \
   -H "accept: application/json"
 ```
 
@@ -416,7 +416,7 @@ This endpoint builds and executes a flow, returning a job ID that can be used to
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/build/$FLOW_ID/flow" \
+  "$HANZOFLOW_URL/api/v1/build/$FLOW_ID/flow" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -445,7 +445,7 @@ curl -X POST \
 
 ```curl
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/build/123e4567-e89b-12d3-a456-426614174000/events" \
+  "$HANZOFLOW_URL/api/v1/build/123e4567-e89b-12d3-a456-426614174000/events" \
   -H "accept: application/json"
 ```
 
@@ -469,7 +469,7 @@ The events endpoint accepts an optional `stream` query parameter which defaults 
 To disable streaming and get all events at once, set `stream` to `false`.
 ```curl
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/build/123e4567-e89b-12d3-a456-426614174000/events?stream=false" \
+  "$HANZOFLOW_URL/api/v1/build/123e4567-e89b-12d3-a456-426614174000/events?stream=false" \
   -H "accept: application/json"
 ```
 
@@ -503,14 +503,14 @@ For example, to stop flow execution at the Open AI model component, run the foll
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/build/$FLOW_ID/flow" \
+  "$HANZOFLOW_URL/api/v1/build/$FLOW_ID/flow" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY" \
+  -H "x-api-key: $HANZOFLOW_API_KEY" \
   -d '{"stop_component_id": "OpenAIModel-Uksag"}'
 ```
 
-The `/build` endpoint also accepts inputs for `data` directly, instead of using the values stored in the Langflow database.
+The `/build` endpoint also accepts inputs for `data` directly, instead of using the values stored in the Hanzoflow database.
 This is useful for running flows without having to pass custom values through the UI.
 
 <Tabs>
@@ -518,7 +518,7 @@ This is useful for running flows without having to pass custom values through th
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/build/$FLOW_ID/flow" \
+  "$HANZOFLOW_URL/api/v1/build/$FLOW_ID/flow" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -545,7 +545,7 @@ curl -X POST \
 
 ## Files
 
-Use the `/files` endpoint to add or delete files between your local machine and Langflow.
+Use the `/files` endpoint to add or delete files between your local machine and Hanzoflow.
 
 ### Upload file
 
@@ -558,7 +558,7 @@ This example uploads `the_oscar_award.csv`.
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/files/upload/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/files/upload/$FLOW_ID" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@the_oscar_award.csv"
@@ -579,15 +579,15 @@ curl -X POST \
 
 #### Upload image files
 
-Send image files to the Langflow API for AI analysis.
+Send image files to the Hanzoflow API for AI analysis.
 
-The default file limit is 100 MB. To configure this value, change the `LANGFLOW_MAX_FILE_SIZE_UPLOAD` environment variable.
+The default file limit is 100 MB. To configure this value, change the `HANZOFLOW_MAX_FILE_SIZE_UPLOAD` environment variable.
 For more information, see [Supported environment variables](/environment-variables#supported-variables).
 
 1. To send an image to your flow with the API, POST the image file to the `v1/files/upload/<YOUR-FLOW-ID>` endpoint of your flow.
 
 ```bash
-curl -X POST "$LANGFLOW_URL/api/v1/files/upload/a430cc57-06bb-4c11-be39-d3d4de68d2c4" \
+curl -X POST "$HANZOFLOW_URL/api/v1/files/upload/a430cc57-06bb-4c11-be39-d3d4de68d2c4" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@image-file.png"
 ```
@@ -599,11 +599,11 @@ The API returns the image file path in the format `"file_path":"<YOUR-FLOW-ID>/<
 ```
 
 2. Post the image file to the **Chat Input** component of a **Basic prompting** flow.
-Pass the file path value as an input in the **Tweaks** section of the curl call to Langflow.
+Pass the file path value as an input in the **Tweaks** section of the curl call to Hanzoflow.
 
 ```bash
 curl -X POST \
-    "$LANGFLOW_URL/api/v1/run/a430cc57-06bb-4c11-be39-d3d4de68d2c4?stream=false" \
+    "$HANZOFLOW_URL/api/v1/run/a430cc57-06bb-4c11-be39-d3d4de68d2c4?stream=false" \
     -H 'Content-Type: application/json'\
     -d '{
     "output_type": "chat",
@@ -632,7 +632,7 @@ List all files associated with a specific flow.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/files/list/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/files/list/$FLOW_ID" \
   -H "accept: application/json"
 ```
 
@@ -654,9 +654,9 @@ curl -X GET \
 
 Download a specific file for a given flow.
 
-To look up the file name in Langflow, use the `/list` endpoint.
+To look up the file name in Hanzoflow, use the `/list` endpoint.
 
-This example downloads the `2024-12-30_15-19-43_the_oscar_award.csv` file from Langflow to a file named `output-file.csv`.
+This example downloads the `2024-12-30_15-19-43_the_oscar_award.csv` file from Hanzoflow to a file named `output-file.csv`.
 
 The `--output` flag is optional.
 
@@ -665,7 +665,7 @@ The `--output` flag is optional.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/files/download/$FLOW_ID/2024-12-30_15-19-43_the_oscar_award.csv" \
+  "$HANZOFLOW_URL/api/v1/files/download/$FLOW_ID/2024-12-30_15-19-43_the_oscar_award.csv" \
   -H "accept: application/json" \
   --output output-file.csv
 ```
@@ -684,9 +684,9 @@ The file contents.
 
 Download an image file for a given flow.
 
-To look up the file name in Langflow, use the `/list` endpoint.
+To look up the file name in Hanzoflow, use the `/list` endpoint.
 
-This example downloads the `2024-12-30_15-42-44_image-file.png` file from Langflow to a file named `output-image.png`.
+This example downloads the `2024-12-30_15-42-44_image-file.png` file from Hanzoflow to a file named `output-image.png`.
 
 The `--output` flag is optional.
 
@@ -695,7 +695,7 @@ The `--output` flag is optional.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/files/images/$FLOW_ID/2024-12-30_15-42-44_image-file.png" \
+  "$HANZOFLOW_URL/api/v1/files/images/$FLOW_ID/2024-12-30_15-42-44_image-file.png" \
   -H "accept: application/json" \
   --output output-image.png
 ```
@@ -715,14 +715,14 @@ Image file content.
 
 Delete a specific file from a flow.
 
-This example deletes the `2024-12-30_15-42-44_image-file.png` file from Langflow.
+This example deletes the `2024-12-30_15-42-44_image-file.png` file from Hanzoflow.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/files/delete/$FLOW_ID/2024-12-30_15-42-44_image-file.png" \
+  "$HANZOFLOW_URL/api/v1/files/delete/$FLOW_ID/2024-12-30_15-42-44_image-file.png" \
   -H "accept: application/json"
 ```
 
@@ -751,7 +751,7 @@ Create a new flow.
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/flows/" \
+  "$HANZOFLOW_URL/api/v1/flows/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -789,7 +789,7 @@ Retrieve a list of flows with pagination support.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/flows/?remove_example_flows=false&components_only=false&get_all=true&header_flows=false&page=1&size=50" \
+  "$HANZOFLOW_URL/api/v1/flows/?remove_example_flows=false&components_only=false&get_all=true&header_flows=false&page=1&size=50" \
   -H "accept: application/json"
 ```
 
@@ -811,7 +811,7 @@ To retrieve only the flows from a specific folder, pass `folder_id` in the query
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/flows/?remove_example_flows=true&components_only=false&get_all=false&folder_id=$FOLDER_ID&header_flows=false&page=1&size=1" \
+  "$HANZOFLOW_URL/api/v1/flows/?remove_example_flows=true&components_only=false&get_all=false&folder_id=$FOLDER_ID&header_flows=false&page=1&size=1" \
   -H "accept: application/json"
 ```
 
@@ -835,7 +835,7 @@ Read a specific flow by its ID.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/flows/$FLOW_ID" \
   -H "accept: application/json"
 ```
 
@@ -872,7 +872,7 @@ This example changes the value for `endpoint_name` from a random UUID to `my_new
 
 ```bash
 curl -X PATCH \
-  "$LANGFLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/flows/$FLOW_ID" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -920,7 +920,7 @@ Delete a specific flow by its ID.
 
 ```bash
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/flows/$FLOW_ID" \
   -H "accept: application/json"
 ```
 
@@ -946,7 +946,7 @@ Create multiple new flows.
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/flows/batch/" \
+  "$HANZOFLOW_URL/api/v1/flows/batch/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1016,7 +1016,7 @@ This example uploads a local file named `agent-with-astra-db-tool.json`.
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/flows/upload/?folder_id=$FOLDER_ID" \
+  "$HANZOFLOW_URL/api/v1/flows/upload/?folder_id=$FOLDER_ID" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@agent-with-astra-db-tool.json;type=application/json"
@@ -1046,7 +1046,7 @@ The target `folder_id` must already exist before uploading a flow. Call the [/ap
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/flows/upload/?folder_id=$FOLDER_ID" \
+  "$HANZOFLOW_URL/api/v1/flows/upload/?folder_id=$FOLDER_ID" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@agent-with-astra-db-tool.json;type=application/json"
@@ -1063,14 +1063,14 @@ This endpoint downloads a ZIP file containing flows for all `flow-id` values lis
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/flows/download/" \
+  "$HANZOFLOW_URL/api/v1/flows/download/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '[
   "e1e40c77-0541-41a9-88ab-ddb3419398b5",
   "92f9a4c5-cfc8-4656-ae63-1f0881163c28"
 ]' \
-  --output langflow-flows.zip
+  --output hanzoflow-flows.zip
 ```
 
   </TabItem>
@@ -1093,7 +1093,7 @@ Retrieve a list of basic example flows.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/flows/basic_examples/" \
+  "$HANZOFLOW_URL/api/v1/flows/basic_examples/" \
   -H "accept: application/json"
 ```
 
@@ -1116,14 +1116,14 @@ Folders store your flows and components.
 
 ### Read folders
 
-Get a list of Langflow folders.
+Get a list of Hanzoflow folders.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/folders/" \
+  "$HANZOFLOW_URL/api/v1/folders/" \
   -H "accept: application/json"
 ```
 
@@ -1153,7 +1153,7 @@ Create a new folder.
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/folders/" \
+  "$HANZOFLOW_URL/api/v1/folders/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1185,7 +1185,7 @@ Adding a flow to a folder moves the flow from its previous location. The flow is
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/folders/" \
+  "$HANZOFLOW_URL/api/v1/folders/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1211,7 +1211,7 @@ To find the UUID of your folder, call the [read folders](#read-folders) endpoint
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/folders/$FOLDER_ID" \
+  "$HANZOFLOW_URL/api/v1/folders/$FOLDER_ID" \
   -H "accept: application/json"
 ```
 
@@ -1245,7 +1245,7 @@ If you send the same values multiple times, the update is still processed, even 
 
 ```bash
 curl -X PATCH \
-  "$LANGFLOW_URL/api/v1/folders/b408ddb9-6266-4431-9be8-e04a62758331" \
+  "$HANZOFLOW_URL/api/v1/folders/b408ddb9-6266-4431-9be8-e04a62758331" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1285,7 +1285,7 @@ Delete a specific folder.
 
 ```bash
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/folders/$FOLDER_ID" \
+  "$HANZOFLOW_URL/api/v1/folders/$FOLDER_ID" \
   -H "accept: */*"
 ```
 
@@ -1310,9 +1310,9 @@ The `--output` flag is optional.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/folders/download/b408ddb9-6266-4431-9be8-e04a62758331" \
+  "$HANZOFLOW_URL/api/v1/folders/download/b408ddb9-6266-4431-9be8-e04a62758331" \
   -H "accept: application/json" \
-  --output langflow-folder.zip
+  --output hanzoflow-folder.zip
 ```
 
   </TabItem>
@@ -1327,17 +1327,17 @@ The folder contents.
 
 ### Upload folder
 
-Upload a folder to Langflow.
+Upload a folder to Hanzoflow.
 
 <Tabs>
   <TabItem value="curl" label="curl" default>
 
 ```bash
 curl -X POST \
-  "$LANGFLOW_URL/api/v1/folders/upload/" \
+  "$HANZOFLOW_URL/api/v1/folders/upload/" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
-  -F "file=@20241230_135006_langflow_flows.zip;type=application/zip"
+  -F "file=@20241230_135006_hanzoflow_flows.zip;type=application/zip"
 ```
 
   </TabItem>
@@ -1345,7 +1345,7 @@ curl -X POST \
   <TabItem value="result" label="Result">
 
 ```text
-The folder contents are uploaded to Langflow.
+The folder contents are uploaded to Hanzoflow.
 ```
 
   </TabItem>
@@ -1354,24 +1354,24 @@ The folder contents are uploaded to Langflow.
 
 ## Logs
 
-Retrieve logs for your Langflow flow.
+Retrieve logs for your Hanzoflow flow.
 
-This endpoint requires log retrieval to be enabled in your Langflow application.
+This endpoint requires log retrieval to be enabled in your Hanzoflow application.
 
 To enable log retrieval, include these values in your `.env` file:
 
 ```text
-LANGFLOW_ENABLE_LOG_RETRIEVAL=true
-LANGFLOW_LOG_RETRIEVER_BUFFER_SIZE=10000
-LANGFLOW_LOG_LEVEL=DEBUG
+HANZOFLOW_ENABLE_LOG_RETRIEVAL=true
+HANZOFLOW_LOG_RETRIEVER_BUFFER_SIZE=10000
+HANZOFLOW_LOG_LEVEL=DEBUG
 ```
 
-For log retrieval to function, `LANGFLOW_LOG_RETRIEVER_BUFFER_SIZE` needs to be greater than 0. The default value is `10000`.
+For log retrieval to function, `HANZOFLOW_LOG_RETRIEVER_BUFFER_SIZE` needs to be greater than 0. The default value is `10000`.
 
-Start Langflow with this `.env`:
+Start Hanzoflow with this `.env`:
 
 ```text
-uv run langflow run --env-file .env
+uv run hanzoflow run --env-file .env
 ```
 
 ### Stream logs
@@ -1383,7 +1383,7 @@ Stream logs in real-time using Server-Sent Events (SSE).
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/logs-stream" \
+  "$HANZOFLOW_URL/logs-stream" \
   -H "accept: text/event-stream"
 ```
 
@@ -1429,7 +1429,7 @@ With these values, the endpoint returns the last 10 lines of logs.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/logs?lines_before=0&lines_after=0&timestamp=0" \
+  "$HANZOFLOW_URL/logs?lines_before=0&lines_after=0&timestamp=0" \
   -H "accept: application/json"
 ```
 
@@ -1447,7 +1447,7 @@ curl -X GET \
   "1736354770588": "2025-01-08T11:46:10.588105-0500 DEBUG Create service ServiceType.CHAT_SERVICE\n",
   "1736354771021": "2025-01-08T11:46:11.021817-0500 DEBUG Telemetry data sent successfully.\n",
   "1736354775619": "2025-01-08T11:46:15.619545-0500 DEBUG Create service ServiceType.STORE_SERVICE\n",
-  "1736354775699": "2025-01-08T11:46:15.699661-0500 DEBUG File 046-rocket.svg retrieved successfully from flow /Users/mendon.kissling/Library/Caches/langflow/profile_pictures/Space.\n"
+  "1736354775699": "2025-01-08T11:46:15.699661-0500 DEBUG File 046-rocket.svg retrieved successfully from flow /Users/mendon.kissling/Library/Caches/hanzoflow/profile_pictures/Space.\n"
 }
 ```
 
@@ -1456,7 +1456,7 @@ curl -X GET \
 
 ## Monitor
 
-Use the `/monitor` endpoint to monitor and modify messages passed between Langflow components, vertex builds, and transactions.
+Use the `/monitor` endpoint to monitor and modify messages passed between Hanzoflow components, vertex builds, and transactions.
 
 ### Get Vertex builds
 
@@ -1467,7 +1467,7 @@ Retrieve Vertex builds for a specific flow.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
   -H "accept: application/json"
 ```
 
@@ -1490,7 +1490,7 @@ Delete Vertex builds for a specific flow.
 
 ```bash
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
+  "$HANZOFLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
   -H "accept: */*"
 ```
 
@@ -1513,7 +1513,7 @@ Retrieve messages with optional filters.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/monitor/messages" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages" \
   -H "accept: application/json"
 ```
 
@@ -1537,7 +1537,7 @@ This example retrieves messages sent by `Machine` and `AI` in a given chat sessi
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/monitor/messages?flow_id=$FLOW_ID&session_id=01ce083d-748b-4b8d-97b6-33adbb6a528a&sender=Machine&sender_name=AI&order_by=timestamp" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages?flow_id=$FLOW_ID&session_id=01ce083d-748b-4b8d-97b6-33adbb6a528a&sender=Machine&sender_name=AI&order_by=timestamp" \
   -H "accept: application/json"
 ```
 
@@ -1591,7 +1591,7 @@ This example deletes the message retrieved in the previous Get messages example.
 
 ```bash
 curl -v -X DELETE \
-  "$LANGFLOW_URL/api/v1/monitor/messages" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages" \
   -H "accept: */*" \
   -H "Content-Type: application/json" \
   -d '["MESSAGE_ID_1", "MESSAGE_ID_2"]'
@@ -1617,7 +1617,7 @@ This example updates the `text` value of message `3ab66cc6-c048-48f8-ab07-570f5a
 
 ```bash
 curl -X PUT \
-  "$LANGFLOW_URL/api/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1647,7 +1647,7 @@ This example updates the `session_ID` value `01ce083d-748b-4b8d-97b6-33adbb6a528
 
 ```bash
 curl -X PATCH \
-  "$LANGFLOW_URL/api/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
   -H "accept: application/json"
 ```
 
@@ -1699,7 +1699,7 @@ Delete all messages for a specific session.
 
 ```bash
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/monitor/messages/session/different_session_id_2" \
+  "$HANZOFLOW_URL/api/v1/monitor/messages/session/different_session_id_2" \
   -H "accept: */*"
 ```
 
@@ -1722,7 +1722,7 @@ Retrieve all transactions (interactions between components) for a specific flow.
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/monitor/transactions?flow_id=$FLOW_ID&page=1&size=50" \
+  "$HANZOFLOW_URL/api/v1/monitor/transactions?flow_id=$FLOW_ID&page=1&size=50" \
   -H "accept: application/json"
 ```
 

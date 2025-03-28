@@ -1,26 +1,26 @@
 ---
-title: Langflow CLI
+title: Hanzoflow CLI
 slug: /configuration-cli
 ---
 
 import Link from '@docusaurus/Link';
 
-# Langflow CLI
+# Hanzoflow CLI
 
-The Langflow command line interface (Langflow CLI) is the main interface for managing and running the Langflow server.
+The Hanzoflow command line interface (Hanzoflow CLI) is the main interface for managing and running the Hanzoflow server.
 
 ## CLI commands
 
 The following sections describe the available CLI commands and their options, as well as their corresponding [environment variables](./environment-variables.md).
 
-### langflow
+### hanzoflow
 
 Running the CLI without any arguments displays a list of available options and commands.
 
 ```bash
-langflow [OPTIONS]
+hanzoflow [OPTIONS]
 # or
-python -m langflow [OPTIONS]
+python -m hanzoflow [OPTIONS]
 ```
 
 #### Options
@@ -31,14 +31,14 @@ python -m langflow [OPTIONS]
 | <Link id="show-completion"/>`--show-completion` | *Not applicable* | *Not applicable* | Show the location of the auto-completion config file (if installed). |
 | <Link id="help"/>`--help` | *Not applicable* | *Not applicable* | Display information about the command usage and its options and arguments. |
 
-### langflow api-key
+### hanzoflow api-key
 
-Create an API key for the default superuser if the [`LANGFLOW_AUTO_LOGIN` environment variable] is set to `true`.
+Create an API key for the default superuser if the [`HANZOFLOW_AUTO_LOGIN` environment variable] is set to `true`.
 
 ```bash
-langflow api-key [OPTIONS]
+hanzoflow api-key [OPTIONS]
 # or
-python -m langflow api-key [OPTIONS]
+python -m hanzoflow api-key [OPTIONS]
 ```
 
 #### Options
@@ -49,20 +49,20 @@ python -m langflow api-key [OPTIONS]
 | <Link id="show-completion"/>`--show-completion` | *Not applicable* | *Not applicable* | Show the location of the auto-completion config file (if installed). |
 | <Link id="help"/>`--help` | *Not applicable* | *Not applicable* | Display information about the command usage and its options and arguments. |
 
-### langflow copy-db
+### hanzoflow copy-db
 
 Copy the database files to the current directory.
-Copy the Langflow database files, `langflow.db` and `langflow-pre.db` (if they exist), from the cache directory to the current directory.
+Copy the Hanzoflow database files, `hanzoflow.db` and `hanzoflow-pre.db` (if they exist), from the cache directory to the current directory.
 
 :::note
 The current directory is the directory containing `__main__.py`.
-You can find this directory by running `which langflow`.
+You can find this directory by running `which hanzoflow`.
 :::
 
 ```bash
-langflow copy-db
+hanzoflow copy-db
 # or
-python -m langflow copy-db
+python -m hanzoflow copy-db
 ```
 
 #### Options
@@ -71,14 +71,14 @@ python -m langflow copy-db
 |--------|---------|--------|-------------|
 | <Link id="copy-db-help"/>`--help` | *Not applicable* | *Not applicable* | Display information about the command usage and its options and arguments. |
 
-### langflow migration
+### hanzoflow migration
 
 Run or test database migrations.
 
 ```bash
-langflow migration [OPTIONS]
+hanzoflow migration [OPTIONS]
 # or
-python -m langflow migration [OPTIONS]
+python -m hanzoflow migration [OPTIONS]
 ```
 
 #### Options
@@ -89,64 +89,64 @@ python -m langflow migration [OPTIONS]
 | <Link id="migration-fix"/>`--fix` | `false` (`--no-fix`) | [Boolean](#boolean) | Fix migrations. This is a destructive operation, and all affected data will be deleted. Only use this option if you know what you are doing. |
 | <Link id="migration-help"/>`--help` | *Not applicable* | *Not applicable* | Display information about the command usage and its options and arguments. |
 
-### langflow run
+### hanzoflow run
 
-Start the Langflow server.
+Start the Hanzoflow server.
 
 ```bash
-langflow run [OPTIONS]
+hanzoflow run [OPTIONS]
 # or
-python -m langflow run [OPTIONS]
+python -m hanzoflow run [OPTIONS]
 ```
 
 #### Options
 
 | Option | Default | Values | Description |
 |--------|---------|--------|-------------|
-| <Link id="run-host"/>`--host` | `127.0.0.1` | String | The host on which the Langflow server will run.<br/>See [`LANGFLOW_HOST` variable](./environment-variables.md#LANGFLOW_HOST). |
-| <Link id="run-workers"/>`--workers` | `1` | Integer | Number of worker processes.<br/>See [`LANGFLOW_WORKERS` variable](./environment-variables.md#LANGFLOW_WORKERS). |
-| <Link id="run-worker-timeout"/>`--worker-timeout` | `300` | Integer | Worker timeout in seconds.<br/>See [`LANGFLOW_WORKER_TIMEOUT` variable](./environment-variables.md#LANGFLOW_WORKER_TIMEOUT). |
-| <Link id="run-port"/>`--port` | `7860` | Integer | The port on which the Langflow server will run. The server automatically selects a free port if the specified port is in use.<br/>See [`LANGFLOW_PORT` variable](./environment-variables.md#LANGFLOW_PORT). |
-| <Link id="run-components-path"/>`--components-path` | `langflow/components` | String | Path to the directory containing custom components.<br/>See [`LANGFLOW_COMPONENTS_PATH` variable](./environment-variables.md#LANGFLOW_COMPONENTS_PATH). |
+| <Link id="run-host"/>`--host` | `127.0.0.1` | String | The host on which the Hanzoflow server will run.<br/>See [`HANZOFLOW_HOST` variable](./environment-variables.md#HANZOFLOW_HOST). |
+| <Link id="run-workers"/>`--workers` | `1` | Integer | Number of worker processes.<br/>See [`HANZOFLOW_WORKERS` variable](./environment-variables.md#HANZOFLOW_WORKERS). |
+| <Link id="run-worker-timeout"/>`--worker-timeout` | `300` | Integer | Worker timeout in seconds.<br/>See [`HANZOFLOW_WORKER_TIMEOUT` variable](./environment-variables.md#HANZOFLOW_WORKER_TIMEOUT). |
+| <Link id="run-port"/>`--port` | `7860` | Integer | The port on which the Hanzoflow server will run. The server automatically selects a free port if the specified port is in use.<br/>See [`HANZOFLOW_PORT` variable](./environment-variables.md#HANZOFLOW_PORT). |
+| <Link id="run-components-path"/>`--components-path` | `hanzoflow/components` | String | Path to the directory containing custom components.<br/>See [`HANZOFLOW_COMPONENTS_PATH` variable](./environment-variables.md#HANZOFLOW_COMPONENTS_PATH). |
 | <Link id="run-env-file"/>`--env-file` | Not set | String | Path to the `.env` file containing environment variables.<br/>See [Import environment variables from a .env file](./environment-variables.md#configure-variables-env-file). |
-| <Link id="run-log-level"/>`--log-level` | `critical` | `debug`<br/>`info`<br/>`warning`<br/>`error`<br/>`critical` | Set the logging level.<br/>See [`LANGFLOW_LOG_LEVEL` variable](./environment-variables.md#LANGFLOW_LOG_LEVEL). |
-| <Link id="run-log-file"/>`--log-file` | `logs/langflow.log` | String | Set the path to the log file for Langflow.<br/>See [`LANGFLOW_LOG_FILE` variable](./environment-variables.md#LANGFLOW_LOG_FILE). |
-| <Link id="run-cache"/>`--cache` | `InMemoryCache` | `InMemoryCache`<br/>`SQLiteCache` | Type of cache to use.<br/>See [`LANGFLOW_LANGCHAIN_CACHE` variable](./environment-variables.md#LANGFLOW_LANGCHAIN_CACHE). |
-| <Link id="run-dev"/>`--dev` | `false` (`--no-dev`) | [Boolean](#boolean) | Run Langflow in development mode (may contain bugs).<br/>See [`LANGFLOW_DEV` variable](./environment-variables.md#LANGFLOW_DEV). |
-| <Link id="run-frontend-path"/>`--frontend-path` | `./frontend` | String | Path to the frontend directory containing build files. This is for development purposes only.<br/>See [`LANGFLOW_FRONTEND_PATH` variable](./environment-variables.md#LANGFLOW_FRONTEND_PATH). |
-| <Link id="run-open-browser"/>`--open-browser` | `true` | [Boolean](#boolean) | Open the system web browser on startup. Use `--no-open-browser` to disable opening the system web browser on startup.<br/> See [`LANGFLOW_OPEN_BROWSER` variable](./environment-variables.md#LANGFLOW_OPEN_BROWSER). |
-| <Link id="run-remove-api-keys"/>`--remove-api-keys` | `false` (`--no-remove-api-keys`) | [Boolean](#boolean) | Remove API keys from the projects saved in the database.<br/> See [`LANGFLOW_REMOVE_API_KEYS` variable](./environment-variables.md#LANGFLOW_REMOVE_API_KEYS). |
-| <Link id="run-backend-only"/>`--backend-only` | `false` (`--no-backend-only`) | [Boolean](#boolean) | Only run Langflow's backend server (no frontend).<br/>See [`LANGFLOW_BACKEND_ONLY` variable](./environment-variables.md#LANGFLOW_BACKEND_ONLY). |
-| <Link id="run-store"/>`--store` | `true` | [Boolean](#boolean) | Enable the Langflow Store features. Use `--no-store` to disable the Langflow Store features.<br/>See [`LANGFLOW_STORE` variable](./environment-variables.md#LANGFLOW_STORE). |
-| <Link id="run-auto-saving"/>`--auto-saving` | `true` | [Boolean](#boolean) | Enable flow auto-saving. Use `--no-auto-saving` to disable flow auto-saving.<br/>See [`LANGFLOW_AUTO_SAVING` variable](./environment-variables.md#LANGFLOW_AUTO_SAVING). |
-| <Link id="run-auto-saving-interval"/>`--auto-saving-interval` | `1000` | Integer | Set the interval for flow auto-saving in milliseconds.<br/>See [`LANGFLOW_AUTO_SAVING_INTERVAL` variable](./environment-variables.md#LANGFLOW_AUTO_SAVING_INTERVAL). |
-| <Link id="run-health-check-max-retries"/>`--health-check-max-retries` | `5` | Integer | Set the maximum number of retries for the health check. Use `--no-health-check-max-retries` to disable the maximum number of retries for the health check.<br/>See [`LANGFLOW_HEALTH_CHECK_MAX_RETRIES` variable](./environment-variables.md#LANGFLOW_HEALTH_CHECK_MAX_RETRIES). |
-| <Link id="run-max-file-size-upload"/>`--max-file-size-upload` | `100` | Integer | Set the maximum file size for the upload in megabytes.<br/>See [`LANGFLOW_MAX_FILE_SIZE_UPLOAD` variable](./environment-variables.md#LANGFLOW_MAX_FILE_SIZE_UPLOAD). |
+| <Link id="run-log-level"/>`--log-level` | `critical` | `debug`<br/>`info`<br/>`warning`<br/>`error`<br/>`critical` | Set the logging level.<br/>See [`HANZOFLOW_LOG_LEVEL` variable](./environment-variables.md#HANZOFLOW_LOG_LEVEL). |
+| <Link id="run-log-file"/>`--log-file` | `logs/hanzoflow.log` | String | Set the path to the log file for Hanzoflow.<br/>See [`HANZOFLOW_LOG_FILE` variable](./environment-variables.md#HANZOFLOW_LOG_FILE). |
+| <Link id="run-cache"/>`--cache` | `InMemoryCache` | `InMemoryCache`<br/>`SQLiteCache` | Type of cache to use.<br/>See [`HANZOFLOW_LANGCHAIN_CACHE` variable](./environment-variables.md#HANZOFLOW_LANGCHAIN_CACHE). |
+| <Link id="run-dev"/>`--dev` | `false` (`--no-dev`) | [Boolean](#boolean) | Run Hanzoflow in development mode (may contain bugs).<br/>See [`HANZOFLOW_DEV` variable](./environment-variables.md#HANZOFLOW_DEV). |
+| <Link id="run-frontend-path"/>`--frontend-path` | `./frontend` | String | Path to the frontend directory containing build files. This is for development purposes only.<br/>See [`HANZOFLOW_FRONTEND_PATH` variable](./environment-variables.md#HANZOFLOW_FRONTEND_PATH). |
+| <Link id="run-open-browser"/>`--open-browser` | `true` | [Boolean](#boolean) | Open the system web browser on startup. Use `--no-open-browser` to disable opening the system web browser on startup.<br/> See [`HANZOFLOW_OPEN_BROWSER` variable](./environment-variables.md#HANZOFLOW_OPEN_BROWSER). |
+| <Link id="run-remove-api-keys"/>`--remove-api-keys` | `false` (`--no-remove-api-keys`) | [Boolean](#boolean) | Remove API keys from the projects saved in the database.<br/> See [`HANZOFLOW_REMOVE_API_KEYS` variable](./environment-variables.md#HANZOFLOW_REMOVE_API_KEYS). |
+| <Link id="run-backend-only"/>`--backend-only` | `false` (`--no-backend-only`) | [Boolean](#boolean) | Only run Hanzoflow's backend server (no frontend).<br/>See [`HANZOFLOW_BACKEND_ONLY` variable](./environment-variables.md#HANZOFLOW_BACKEND_ONLY). |
+| <Link id="run-store"/>`--store` | `true` | [Boolean](#boolean) | Enable the Hanzoflow Store features. Use `--no-store` to disable the Hanzoflow Store features.<br/>See [`HANZOFLOW_STORE` variable](./environment-variables.md#HANZOFLOW_STORE). |
+| <Link id="run-auto-saving"/>`--auto-saving` | `true` | [Boolean](#boolean) | Enable flow auto-saving. Use `--no-auto-saving` to disable flow auto-saving.<br/>See [`HANZOFLOW_AUTO_SAVING` variable](./environment-variables.md#HANZOFLOW_AUTO_SAVING). |
+| <Link id="run-auto-saving-interval"/>`--auto-saving-interval` | `1000` | Integer | Set the interval for flow auto-saving in milliseconds.<br/>See [`HANZOFLOW_AUTO_SAVING_INTERVAL` variable](./environment-variables.md#HANZOFLOW_AUTO_SAVING_INTERVAL). |
+| <Link id="run-health-check-max-retries"/>`--health-check-max-retries` | `5` | Integer | Set the maximum number of retries for the health check. Use `--no-health-check-max-retries` to disable the maximum number of retries for the health check.<br/>See [`HANZOFLOW_HEALTH_CHECK_MAX_RETRIES` variable](./environment-variables.md#HANZOFLOW_HEALTH_CHECK_MAX_RETRIES). |
+| <Link id="run-max-file-size-upload"/>`--max-file-size-upload` | `100` | Integer | Set the maximum file size for the upload in megabytes.<br/>See [`HANZOFLOW_MAX_FILE_SIZE_UPLOAD` variable](./environment-variables.md#HANZOFLOW_MAX_FILE_SIZE_UPLOAD). |
 | <Link id="run-help"/>`--help` | *Not applicable* | *Not applicable* | Display information about the command usage and its options and arguments. |
 
-### langflow superuser
+### hanzoflow superuser
 
 Create a superuser account.
 
 ```bash
-langflow superuser [OPTIONS]
+hanzoflow superuser [OPTIONS]
 # or
-python -m langflow superuser [OPTIONS]
+python -m hanzoflow superuser [OPTIONS]
 ```
 
 #### Options
 
 | Option | Default | Values | Description |
 |--------|---------|--------|-------------|
-| <Link id="superuser-username"/>`--username` | Required | String | Specify the name for the superuser.<br/>See [`LANGFLOW_SUPERUSER` variable](./environment-variables.md#LANGFLOW_SUPERUSER). |
-| <Link id="superuser-password"/>`--password` | Required | String | Specify the password for the superuser.<br/>See [`LANGFLOW_SUPERUSER_PASSWORD` variable](./environment-variables.md#LANGFLOW_SUPERUSER_PASSWORD). |
+| <Link id="superuser-username"/>`--username` | Required | String | Specify the name for the superuser.<br/>See [`HANZOFLOW_SUPERUSER` variable](./environment-variables.md#HANZOFLOW_SUPERUSER). |
+| <Link id="superuser-password"/>`--password` | Required | String | Specify the password for the superuser.<br/>See [`HANZOFLOW_SUPERUSER_PASSWORD` variable](./environment-variables.md#HANZOFLOW_SUPERUSER_PASSWORD). |
 | <Link id="superuser-log-level"/>`--log-level` | `critical` | `debug`<br/>`info`<br/>`warning`<br/>`error`<br/>`critical` | Set the logging level. |
 
 ## Precedence
 
-Langflow CLI options override the values of corresponding [environment variables](./environment-variables.md).
+Hanzoflow CLI options override the values of corresponding [environment variables](./environment-variables.md).
 
-For example, if you have `LANGFLOW_PORT=7860` defined as an environment variable, but you run the CLI with `--port 7880`, then Langflow will set the port to **`7880`** (the value passed with the CLI).
+For example, if you have `HANZOFLOW_PORT=7860` defined as an environment variable, but you run the CLI with `--port 7880`, then Hanzoflow will set the port to **`7880`** (the value passed with the CLI).
 
 ## Assign values
 
@@ -163,7 +163,7 @@ To activate a boolean option, type it on the command line.
 For example:
 
 ```bash
-langflow run --remove-api-keys
+hanzoflow run --remove-api-keys
 ```
 
 All boolean options have a corresponding option that negates it.

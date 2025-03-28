@@ -3,7 +3,7 @@ import { useMutationFunctionType } from "@/types/api";
 
 import {
   IS_AUTO_LOGIN,
-  LANGFLOW_AUTO_LOGIN_OPTION,
+  HANZOFLOW_AUTO_LOGIN_OPTION,
 } from "@/constants/constants";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
@@ -24,7 +24,7 @@ export const useLogout: useMutationFunctionType<undefined, void> = (
   async function logoutUser(): Promise<any> {
     const autoLogin =
       useAuthStore.getState().autoLogin ||
-      cookies.get(LANGFLOW_AUTO_LOGIN_OPTION) === "auto" ||
+      cookies.get(HANZOFLOW_AUTO_LOGIN_OPTION) === "auto" ||
       isAutoLoginEnv;
 
     if (autoLogin) {

@@ -14,7 +14,7 @@ It selects the **Calculator** tool for simpler math and the **Python REPL** tool
 
 To use this flow, you need an OpenAI API key.
 
-## Open Langflow and start a new flow
+## Open Hanzoflow and start a new flow
 
 Click **New Flow**, and then select the **Math Agent** flow.
 

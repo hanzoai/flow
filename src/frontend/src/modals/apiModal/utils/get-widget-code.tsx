@@ -13,15 +13,15 @@ export default function getWidgetCode({
 }: GetCodeType): string {
   const source = copy
     ? `<script
-  src="https://cdn.jsdelivr.net/gh/logspace-ai/langflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
+  src="https://cdn.jsdelivr.net/gh/logspace-ai/hanzoflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
 </script>`
     : `<script
-  src="https://cdn.jsdelivr.net/gh/logspace-ai/langflow-embedded-chat@v1.0.7/dist/
+  src="https://cdn.jsdelivr.net/gh/logspace-ai/hanzoflow-embedded-chat@v1.0.7/dist/
 build/static/js/bundle.min.js">
 </script>`;
 
   return `${source}
-  <langflow-chat
+  <hanzoflow-chat
     window_title="${flowName}"
     flow_id="${flowId}"
     host_url="${window.location.protocol}//${window.location.host}"${
@@ -30,5 +30,5 @@ build/static/js/bundle.min.js">
     api_key="..."`
         : ""
     }>
-</langflow-chat>`;
+</hanzoflow-chat>`;
 }

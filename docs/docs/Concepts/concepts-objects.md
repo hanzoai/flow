@@ -1,9 +1,9 @@
 ---
-title: Langflow objects
+title: Hanzoflow objects
 slug: /concepts-objects
 ---
 
-In Langflow, objects are [Pydantic](https://docs.pydantic.dev/latest/api/base_model/) models that serve as structured, functional representations of data.
+In Hanzoflow, objects are [Pydantic](https://docs.pydantic.dev/latest/api/base_model/) models that serve as structured, functional representations of data.
 
 ## Data object
 
@@ -19,7 +19,7 @@ The `Data` object is a [Pydantic](https://docs.pydantic.dev/latest/api/base_mo
 Create a `Data` object by directly assigning key-value pairs to it. For example:
 
 ```python
-from langflow.schema import Data
+from hanzoflow.schema import Data
 
 # Creating a Data object with specified key-value pairs
 data = Data(text="my_string", bar=3, foo="another_string")
@@ -43,7 +43,7 @@ print(data.get_text())  # Outputs: "No content available" because "content" key 
 print(data.title)  # Outputs: "Hello, World!" because "title" key is in the data dictionary
 ```
 
-The `Data` object is also convenient for visualization of outputs, since the output preview has visual elements to inspect data as a table and its cells as pop ups for basic types. The idea is to create a unified way to work and visualize complex information in Langflow.
+The `Data` object is also convenient for visualization of outputs, since the output preview has visual elements to inspect data as a table and its cells as pop ups for basic types. The idea is to create a unified way to work and visualize complex information in Hanzoflow.
 
 To receive `Data` objects in a component input, use the `DataInput` input type.
 
@@ -78,14 +78,14 @@ The `Message` object extends the functionality of `Data` and includes additi
   - `edit`: Boolean indicating if the message was edited
   - `category`: Message category ("message", "error", "warning", "info")
 
-The `Message` object can be used to send, store, and manipulate chat messages within Langflow.
+The `Message` object can be used to send, store, and manipulate chat messages within Hanzoflow.
 
 ### Create a Message object
 
 You can create a `Message` object by directly assigning key-value pairs to it. For example:
 
 ```python
-from langflow.schema.message import Message
+from hanzoflow.schema.message import Message
 
 message = Message(text="Hello, AI!", sender="User", sender_name="John Doe")
 ```
@@ -96,7 +96,7 @@ To receive `Message` objects in a component input, you can use the `MessageInput
 
 The `ContentBlock` object is a list of multiple `ContentTypes`. It allows you to include multiple types of content within a single `Message`, including images, videos, and text.
 
-Content types are Pydantic base classes constructed from the types in [content_types.py](https://github.com/langflow-ai/langflow/blob/main/src/backend/base/langflow/schema/content_types.py).
+Content types are Pydantic base classes constructed from the types in [content_types.py](https://github.com/hanzoflow-ai/hanzoflow/blob/main/src/backend/base/hanzoflow/schema/content_types.py).
 
 Each content type has specific fields related to its data type. For example:
 
@@ -128,9 +128,9 @@ content_block = ContentBlock(
 In this example, a text and a media `ContentBlock` are added to a message.
 
 ```python
-from langflow.schema.message import Message
-from langflow.schema.content_block import ContentBlock
-from langflow.schema.content_types import TextContent, MediaContent
+from hanzoflow.schema.message import Message
+from hanzoflow.schema.content_block import ContentBlock
+from hanzoflow.schema.content_types import TextContent, MediaContent
 
 message = Message(
     text="Main message text",
@@ -155,7 +155,7 @@ message = Message(
 
 ## DataFrame object
 
-The `DataFrame` class is a custom extension of the Pandas [DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) class, specifically designed to work seamlessly with Langflow's `Data` objects. The class includes methods for converting between `DataFrame` and lists of `Data` objects.
+The `DataFrame` class is a custom extension of the Pandas [DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) class, specifically designed to work seamlessly with Hanzoflow's `Data` objects. The class includes methods for converting between `DataFrame` and lists of `Data` objects.
 
 A `DataFrame` object accepts various input formats, including lists of `Data` objects, dictionaries, and existing `DataFrames`.
 
@@ -164,8 +164,8 @@ A `DataFrame` object accepts various input formats, including lists of `Data` ob
 You can create a DataFrame object using different data formats:
 
 ```python
-from langflow.schema import Data
-from langflow.schema.data import DataFrame
+from hanzoflow.schema import Data
+from hanzoflow.schema.data import DataFrame
 
 # From a list of Data objects
 data_list = [Data(data={"name": "John"}), Data(data={"name": "Jane"})]

@@ -2,7 +2,7 @@ import copy
 
 import pytest
 from langchain_core.documents import Document
-from langflow.schema import Data
+from hanzoflow.schema import Data
 
 
 def test_data_initialization():
