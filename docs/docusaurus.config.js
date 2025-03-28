@@ -7,17 +7,17 @@ const { remarkCodeHike } = require("@code-hike/mdx");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Langflow Documentation",
+  title: "Hanzoflow Documentation",
   tagline:
-    "Langflow is a low-code app builder for RAG and multi-agent AI applications.",
+    "Hanzoflow is a low-code app builder for RAG and multi-agent AI applications.",
   favicon: "img/favicon.ico",
-  url: "https://docs.langflow.org",
+  url: "https://docs.hanzoflow.org",
   baseUrl: process.env.BASE_URL ? process.env.BASE_URL : "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   onBrokenAnchors: "warn",
-  organizationName: "langflow-ai",
-  projectName: "langflow",
+  organizationName: "hanzoflow-ai",
+  projectName: "hanzoflow",
   trailingSlash: false,
   staticDirectories: ["static"],
   i18n: {
@@ -97,9 +97,9 @@ const config = {
           {
             to: "/",
             from: [
-              "/whats-new-a-new-chapter-langflow",
-              "/👋 Welcome-to-Langflow",
-              "/getting-started-welcome-to-langflow",
+              "/whats-new-a-new-chapter-hanzoflow",
+              "/👋 Welcome-to-Hanzoflow",
+              "/getting-started-welcome-to-hanzoflow",
               "/guides-new-to-llms"
             ],
           },
@@ -212,22 +212,22 @@ const config = {
       navbar: {
         hideOnScroll: true,
         logo: {
-          alt: "Langflow",
-          src: "img/langflow-logo-black.svg",
-          srcDark: "img/langflow-logo-white.svg",
+          alt: "Hanzoflow",
+          src: "img/hanzoflow-logo-black.svg",
+          srcDark: "img/hanzoflow-logo-white.svg",
         },
         items: [
           // right
           {
             position: "right",
-            href: "https://github.com/langflow-ai/langflow",
+            href: "https://github.com/hanzoflow-ai/hanzoflow",
             className: "header-github-link",
             target: "_blank",
             rel: null,
           },
           {
             position: "right",
-            href: "https://twitter.com/langflow_ai",
+            href: "https://twitter.com/hanzoflow_ai",
             className: "header-twitter-link",
             target: "_blank",
             rel: null,
@@ -268,7 +268,7 @@ const config = {
         appId: 'UZK6BDPCVY',
         // public key, safe to commit
         apiKey: 'adbd7686dceb1cd510d5ce20d04bf74c',
-        indexName: 'langflow',
+        indexName: 'hanzoflow',
         contextualSearch: true,
         searchParameters: {},
         searchPagePath: 'search',

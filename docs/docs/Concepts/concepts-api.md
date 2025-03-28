@@ -51,9 +51,9 @@ The response content depends on your flow. Make sure the endpoint returns a succ
 <TabItem value="Python code" label="Python code" default>
 
 
-The **Python Code** tab displays code to interact with your flow's `.json` file using the Langflow runtime.
+The **Python Code** tab displays code to interact with your flow's `.json` file using the Hanzoflow runtime.
 
-To use your code in a Python application using the Langflow runtime, you have to first download your flow’s JSON file.
+To use your code in a Python application using the Hanzoflow runtime, you have to first download your flow’s JSON file.
 
 1. In your **Workspace**, click **Settings**, and then select **Export**.
 
@@ -75,7 +75,7 @@ python python-test-script.py
 
 The **Chat Widget HTML** tab displays code that can be inserted in the `<body>` of your HTML to interact with your flow.
 
-The **Langflow Chat Widget** is a powerful web component that enables communication with a Langflow project. This widget allows for a chat interface embedding, allowing the integration of Langflow into web applications effortlessly.
+The **Hanzoflow Chat Widget** is a powerful web component that enables communication with a Hanzoflow project. This widget allows for a chat interface embedding, allowing the integration of Hanzoflow into web applications effortlessly.
 
 You can get the HTML code embedded with the chat by clicking the Code button at the Sidebar after building a flow.
 
@@ -86,14 +86,14 @@ Clicking the Chat Widget HTML tab, you'll get the code to be inserted. Read belo
 To embed the chat widget into any HTML page, insert the code snippet. inside a `<body>` tag.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/logspace-ai/langflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js""></script>
+<script src="https://cdn.jsdelivr.net/gh/logspace-ai/hanzoflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js""></script>
 
-  <langflow-chat
+  <hanzoflow-chat
     window_title="Basic Prompting"
     flow_id="801abb1e-19b9-4278-9632-179b6d84f126"
     host_url="http://localhost:7860"
 
-  ></langflow-chat>
+  ></hanzoflow-chat>
 ```
 
 ### Embed the chat widget with React
@@ -101,7 +101,7 @@ To embed the chat widget into any HTML page, insert the code snippet. inside a 
 To embed the Chat Widget using React, insert this `<script>` tag into the React _index.html_ file, inside the `<body>`tag:
 
 ```javascript
-<script src="https://cdn.jsdelivr.net/gh/langflow-ai/langflow-embedded-chat@main/dist/build/static/js/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hanzoflow-ai/hanzoflow-embedded-chat@main/dist/build/static/js/bundle.min.js"></script>
 ```
 
 Declare your Web Component and encapsulate it in a React component.
@@ -110,7 +110,7 @@ Declare your Web Component and encapsulate it in a React component.
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "langflow-chat": any;
+      "hanzoflow-chat": any;
     }
   }
 }
@@ -118,12 +118,12 @@ declare global {
 export default function ChatWidget({ className }) {
   return (
     <div className={className}>
-      <langflow-chat
+      <hanzoflow-chat
         chat_inputs='{"your_key":"value"}'
         chat_input_field="your_chat_key"
         flow_id="your_flow_id"
-        host_url="langflow_url"
-      ></langflow-chat>
+        host_url="hanzoflow_url"
+      ></hanzoflow-chat>
     </div>
   );
 }
@@ -136,12 +136,12 @@ Place the component anywhere in your code to display the Chat Widget.
 To use the chat widget in Angular, first add this `<script>` tag into the Angular _index.html_ file, inside the `<body>` tag.
 
 ```javascript
-<script src="https://cdn.jsdelivr.net/gh/langflow-ai/langflow-embedded-chat@main/dist/build/static/js/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hanzoflow-ai/hanzoflow-embedded-chat@main/dist/build/static/js/bundle.min.js"></script>
 ```
 
 When you use a custom web component in an Angular template, the Angular compiler might show a warning when it doesn't recognize the custom elements by default. To suppress this warning, add `CUSTOM_ELEMENTS_SCHEMA` to the module's `@NgModule.schemas`.
 
-- Open the module file (it typically ends with _.module.ts_) where you'd add the `langflow-chat` web component.
+- Open the module file (it typically ends with _.module.ts_) where you'd add the `hanzoflow-chat` web component.
 - Import `CUSTOM_ELEMENTS_SCHEMA` at the top of the file:
 
 `import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';`
@@ -163,15 +163,15 @@ When you use a custom web component in an Angular template, the Angular compiler
 export class YourModule { }
 ```
 
-In your Angular project, find the component belonging to the module where `CUSTOM_ELEMENTS_SCHEMA` was added. Inside the template, add the `langflow-chat` tag to include the Chat Widget in your component's view:
+In your Angular project, find the component belonging to the module where `CUSTOM_ELEMENTS_SCHEMA` was added. Inside the template, add the `hanzoflow-chat` tag to include the Chat Widget in your component's view:
 
 ```javascript
-<langflow-chat  chat_inputs='{"your_key":"value"}'  chat_input_field="your_chat_key"  flow_id="your_flow_id"  host_url="langflow_url"></langflow-chat>
+<hanzoflow-chat  chat_inputs='{"your_key":"value"}'  chat_input_field="your_chat_key"  flow_id="your_flow_id"  host_url="hanzoflow_url"></hanzoflow-chat>
 ```
 
 :::tip
 
-`CUSTOM_ELEMENTS_SCHEMA` is a built-in schema that allows Angular to recognize custom elements. Adding `CUSTOM_ELEMENTS_SCHEMA` tells Angular to allow custom elements in your templates, and it will suppress the warning related to unknown elements like `langflow-chat`. Notice that you can only use the Chat Widget in components that are part of the module where you added `CUSTOM_ELEMENTS_SCHEMA`.
+`CUSTOM_ELEMENTS_SCHEMA` is a built-in schema that allows Angular to recognize custom elements. Adding `CUSTOM_ELEMENTS_SCHEMA` tells Angular to allow custom elements in your templates, and it will suppress the warning related to unknown elements like `hanzoflow-chat`. Notice that you can only use the Chat Widget in components that are part of the module where you added `CUSTOM_ELEMENTS_SCHEMA`.
 
 :::
 
@@ -217,7 +217,7 @@ The **Tweaks** tab displays the available parameters for your flow. Modifying 
 
 ## Send image files to your flow with the API
 
-For information on sending files to the Langflow API, see [API examples](/api-reference-api-examples#upload-image-files).
+For information on sending files to the Hanzoflow API, see [API examples](/api-reference-api-examples#upload-image-files).
 
 ## Webhook cURL
 

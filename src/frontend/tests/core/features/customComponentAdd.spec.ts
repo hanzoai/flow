@@ -31,17 +31,17 @@ test(
     await page.getByTestId("code-button-modal").last().click();
 
     const waitTimeoutCode = `
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+# from hanzoflow.field_typing import Data
+from hanzoflow.custom import Component
+from hanzoflow.io import MessageTextInput, Output
+from hanzoflow.schema import Data
 from time import sleep
-from langflow.schema.message import Message
+from hanzoflow.schema.message import Message
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 

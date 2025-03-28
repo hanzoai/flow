@@ -2,7 +2,7 @@ import {
   BROKEN_EDGES_WARNING,
   componentsToIgnoreUpdate,
 } from "@/constants/constants";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_HANZOFLOW } from "@/customization/feature-flags";
 import {
   track,
   trackDataLoaded,
@@ -712,7 +712,7 @@ const useFlowStore = create<FlowStoreType>((set, get) => ({
           ...next_vertices_ids,
         ];
         if (
-          ENABLE_DATASTAX_LANGFLOW &&
+          ENABLE_DATASTAX_HANZOFLOW &&
           vertexBuildData?.id?.includes("AstraDB")
         ) {
           const search_results: LogsLogType[] = Object.values(

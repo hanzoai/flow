@@ -4,7 +4,7 @@ import uuid
 from anyio import Path
 from fastapi import status
 from httpx import AsyncClient
-from langflow.services.database.models import Flow
+from hanzoflow.services.database.models import Flow
 
 
 async def test_create_flow(client: AsyncClient, logged_in_headers):

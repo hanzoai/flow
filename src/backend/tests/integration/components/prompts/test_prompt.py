@@ -1,5 +1,5 @@
-from langflow.components.prompts import PromptComponent
-from langflow.schema.message import Message
+from hanzoflow.components.prompts import PromptComponent
+from hanzoflow.schema.message import Message
 
 from tests.integration.utils import run_single_component
 

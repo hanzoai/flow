@@ -1,11 +1,11 @@
 from unittest.mock import MagicMock
 
 import pytest
-from langflow.components.tools import WikipediaComponent
-from langflow.custom import Component
-from langflow.custom.utils import build_custom_component_template
-from langflow.schema import Data
-from langflow.schema.message import Message
+from hanzoflow.components.tools import WikipediaComponent
+from hanzoflow.custom import Component
+from hanzoflow.custom.utils import build_custom_component_template
+from hanzoflow.schema import Data
+from hanzoflow.schema.message import Message
 
 # Import the base test class
 from tests.base import ComponentTestBaseWithoutClient

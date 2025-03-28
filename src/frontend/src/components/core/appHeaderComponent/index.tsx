@@ -1,13 +1,13 @@
 import AlertDropdown from "@/alerts/alertDropDown";
 import DataStaxLogo from "@/assets/DataStaxLogo.svg?react";
-import LangflowLogo from "@/assets/LangflowLogo.svg?react";
+import HanzoflowLogo from "@/assets/HanzoflowLogo.svg?react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CustomOrgSelector } from "@/customization/components/custom-org-selector";
 import { CustomProductSelector } from "@/customization/components/custom-product-selector";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_HANZOFLOW } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useTheme from "@/customization/hooks/use-custom-theme";
 import { useResetDismissUpdateAll } from "@/hooks/use-reset-dismiss-update-all";
@@ -62,13 +62,13 @@ export default function AppHeader(): JSX.Element {
           className="mr-1 flex h-8 w-8 items-center"
           data-testid="icon-ChevronLeft"
         >
-          {ENABLE_DATASTAX_LANGFLOW ? (
+          {ENABLE_DATASTAX_HANZOFLOW ? (
             <DataStaxLogo className="fill-black dark:fill-[white]" />
           ) : (
-            <LangflowLogo className="h-5 w-6" />
+            <HanzoflowLogo className="h-5 w-6" />
           )}
         </Button>
-        {ENABLE_DATASTAX_LANGFLOW && (
+        {ENABLE_DATASTAX_HANZOFLOW && (
           <>
             <CustomOrgSelector />
             <CustomProductSelector />
@@ -86,13 +86,13 @@ export default function AppHeader(): JSX.Element {
         className={`z-30 flex items-center gap-2`}
         data-testid="header_right_section_wrapper"
       >
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {!ENABLE_DATASTAX_HANZOFLOW && (
           <>
             <Button
               unstyled
               className="hidden items-center whitespace-nowrap pr-2 2xl:inline"
               onClick={() =>
-                window.open("https://github.com/langflow-ai/langflow", "_blank")
+                window.open("https://github.com/hanzoflow-ai/hanzoflow", "_blank")
               }
             >
               <GithubStarComponent />
@@ -136,10 +136,10 @@ export default function AppHeader(): JSX.Element {
             </AlertDropdown>
           </ShadTooltip>
         </AlertDropdown>
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {!ENABLE_DATASTAX_HANZOFLOW && (
           <>
             <ShadTooltip
-              content="Go to Langflow Store"
+              content="Go to Hanzoflow Store"
               side="bottom"
               styleClasses="z-10"
             >
@@ -164,7 +164,7 @@ export default function AppHeader(): JSX.Element {
             />
           </>
         )}
-        {ENABLE_DATASTAX_LANGFLOW && (
+        {ENABLE_DATASTAX_HANZOFLOW && (
           <>
             <ShadTooltip content="Docs" side="bottom" styleClasses="z-10">
               <Button
@@ -172,7 +172,7 @@ export default function AppHeader(): JSX.Element {
                 className="flex text-sm font-medium"
                 onClick={() =>
                   window.open(
-                    "https://docs.datastax.com/en/langflow/index.html",
+                    "https://docs.datastax.com/en/hanzoflow/index.html",
                     "_blank",
                   )
                 }

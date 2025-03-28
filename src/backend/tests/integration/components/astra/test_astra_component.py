@@ -4,9 +4,9 @@ import pytest
 from astrapy import DataAPIClient
 from langchain_astradb import AstraDBVectorStore, CollectionVectorServiceOptions
 from langchain_core.documents import Document
-from langflow.components.embeddings import OpenAIEmbeddingsComponent
-from langflow.components.vectorstores import AstraDBVectorStoreComponent
-from langflow.schema.data import Data
+from hanzoflow.components.embeddings import OpenAIEmbeddingsComponent
+from hanzoflow.components.vectorstores import AstraDBVectorStoreComponent
+from hanzoflow.schema.data import Data
 
 from tests.api_keys import get_astradb_api_endpoint, get_astradb_application_token, get_openai_api_key
 from tests.integration.components.mock_components import TextToData

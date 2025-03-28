@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from langflow.components.processing.dataframe_operations import DataFrameOperationsComponent
+from hanzoflow.components.processing.dataframe_operations import DataFrameOperationsComponent
 
 
 @pytest.fixture

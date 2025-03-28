@@ -9,17 +9,17 @@ Prompts serve as the inputs to a large language model (LLM), acting as the inter
 
 By submitting natural language requests in a prompt to an LLM, you can obtain answers, generate text, and solve problems.
 
-This article demonstrates how to use Langflow's prompt tools to issue basic prompts to an LLM, and how various prompting strategies can affect your outcomes.
+This article demonstrates how to use Hanzoflow's prompt tools to issue basic prompts to an LLM, and how various prompting strategies can affect your outcomes.
 
 
 ## Prerequisites
 
-- [Langflow installed and running](/get-started-installation)
+- [Hanzoflow installed and running](/get-started-installation)
 - [OpenAI API key created](https://platform.openai.com/)
 
 ## Create the basic prompting flow
 
-1. From the Langflow dashboard, click **New Flow**.
+1. From the Hanzoflow dashboard, click **New Flow**.
 
 2. Select **Basic Prompting**.
 

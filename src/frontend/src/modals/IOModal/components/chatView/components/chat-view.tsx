@@ -1,9 +1,9 @@
-import LangflowLogo from "@/assets/LangflowLogo.svg?react";
+import HanzoflowLogo from "@/assets/HanzoflowLogo.svg?react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import { ProfileIcon } from "@/components/core/appHeaderComponent/components/ProfileIcon";
 import { TextEffectPerChar } from "@/components/ui/textAnimation";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_HANZOFLOW } from "@/customization/feature-flags";
 import { track } from "@/customization/utils/analytics";
 import { useMessagesStore } from "@/stores/messagesStore";
 import { useUtilityStore } from "@/stores/utilityStore";
@@ -192,8 +192,8 @@ export default function ChatView({
             <>
               <div className="flex h-full w-full flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center gap-4 p-8">
-                  <LangflowLogo
-                    title="Langflow logo"
+                  <HanzoflowLogo
+                    title="Hanzoflow logo"
                     className="h-10 w-10 scale-[1.5]"
                   />
                   <div className="flex flex-col items-center justify-center">

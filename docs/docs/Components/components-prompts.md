@@ -3,7 +3,7 @@ title: Prompts
 slug: /components-prompts
 ---
 
-# Prompt components in Langflow
+# Prompt components in Hanzoflow
 
 A prompt is a structured input to a language model that instructs the model how to handle user inputs and variables.
 

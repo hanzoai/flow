@@ -1,14 +1,14 @@
-# Langflow Demo Codespace Readme
+# Hanzoflow Demo Codespace Readme
 
-These instructions will walk you through the process of running a Langflow demo via GitHub Codespaces.
+These instructions will walk you through the process of running a Hanzoflow demo via GitHub Codespaces.
 
-If you want a faster and easier demo experience with Langflow, DataStax Langflow is a hosted environment with zero setup: [Sign up for a free account.](https://astra.datastax.com/signup?type=langflow)
+If you want a faster and easier demo experience with Hanzoflow, DataStax Hanzoflow is a hosted environment with zero setup: [Sign up for a free account.](https://astra.datastax.com/signup?type=hanzoflow)
 
 ## Create a Codespace in GitHub
 
 To setup the demo in Codespace:
 
-1. Navigate to the Langflow repo
+1. Navigate to the Hanzoflow repo
 2. On the "Code <>" button, select the "Codespaces" tab
 3. Click the green "Create codespace on..." button (or "+" icon if you want more options) to create a new Codespace
 
@@ -17,12 +17,12 @@ To setup the demo in Codespace:
 After the codespace is opened, there will be two phases to the process. It will take ≈5-10 minutes to complete.
 
 * **Phase 1**: Building Container; you can click on the "Building Codespace" link to watch the logs
-* **Phase 2**: Building Langflow; the terminal will now show `Running postCreateCommand...`, similar to:
+* **Phase 2**: Building Hanzoflow; the terminal will now show `Running postCreateCommand...`, similar to:
 
 ```
 ✔ Finishing up...
 ⠸ Running postCreateCommand...
-  › sudo chown -R langflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/langflow/frontend && make install_frontend && mak…
+  › sudo chown -R hanzoflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/hanzoflow/frontend && make install_frontend && mak…
 ```
 
 Once completed, this terminal window will close.
@@ -39,18 +39,18 @@ Installation is now complete.
 
 ## Start up the Service
 
-Open a new Terminal, and type `uv run langflow run`.
+Open a new Terminal, and type `uv run hanzoflow run`.
 
 The service will start, and you will may notice a dialog in the lower right indicating there is a port available to connect to. However, the service will not be ready until you see the welcome banner:
 
 ```
 ╭───────────────────────────────────────────────────────────────────╮
-│ Welcome to ⛓ Langflow                                             │
+│ Welcome to ⛓ Hanzoflow                                             │
 │                                                                   │
 │                                                                   │
 │ Collaborate, and contribute at our GitHub Repo 🌟                 │
 │                                                                   │
-│ We collect anonymous usage data to improve Langflow.              │
+│ We collect anonymous usage data to improve Hanzoflow.              │
 │ You can opt-out by setting DO_NOT_TRACK=true in your environment. │
 │                                                                   │
 │ Access http://127.0.0.1:7860                                      │

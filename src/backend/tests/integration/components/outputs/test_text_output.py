@@ -1,5 +1,5 @@
-from langflow.components.outputs import TextOutputComponent
-from langflow.schema.message import Message
+from hanzoflow.components.outputs import TextOutputComponent
+from hanzoflow.schema.message import Message
 
 from tests.integration.utils import run_single_component
 

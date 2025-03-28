@@ -1,9 +1,9 @@
 import json
 
-from langflow.custom import Component
-from langflow.inputs import BoolInput, StrInput
-from langflow.schema import Data
-from langflow.template import Output
+from hanzoflow.custom import Component
+from hanzoflow.inputs import BoolInput, StrInput
+from hanzoflow.schema import Data
+from hanzoflow.template import Output
 
 
 class TextToData(Component):

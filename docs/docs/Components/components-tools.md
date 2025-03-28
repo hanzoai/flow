@@ -3,7 +3,7 @@ title: Tools
 slug: /components-tools
 ---
 
-# Tool components in Langflow
+# Tool components in Hanzoflow
 
 Tools are typically connected to agent components at the **Tools** port. Agents use LLMs as a reasoning engine to decide which of the connected tool components to use to solve a problem.
 
@@ -259,7 +259,7 @@ This component allows you to call the Serper.dev Google Search API.
 
 ## MCP Tools (stdio)
 
-This component connects to a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server over `stdio` and exposes its tools as Langflow tools to be used by an Agent component.
+This component connects to a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server over `stdio` and exposes its tools as Hanzoflow tools to be used by an Agent component.
 
 To use the MCP stdio component, follow these steps:
 
@@ -291,14 +291,14 @@ This confirms the MCP server is connected and working.
 
 ## MCP Tools (SSE)
 
-This component connects to a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server over [SSE (Server-Sent Events)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) and exposes its tools as Langflow tools to be used by an Agent component.
+This component connects to a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server over [SSE (Server-Sent Events)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) and exposes its tools as Hanzoflow tools to be used by an Agent component.
 
 To use the MCP SSE component, follow these steps:
 
 1. Add the MCP SSE component to your workflow, and connect it to an agent. The flow looks similar to the MCP stdio component flow.
 
-2. In the MCP SSE component, in the **url** field, enter the URL of your current Langflow server's `mcp/sse` endpoint.
-This will fetch all currently available tools from the Langflow server.
+2. In the MCP SSE component, in the **url** field, enter the URL of your current Hanzoflow server's `mcp/sse` endpoint.
+This will fetch all currently available tools from the Hanzoflow server.
 
 ### Inputs
 

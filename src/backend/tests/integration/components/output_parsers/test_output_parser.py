@@ -1,9 +1,9 @@
 import os
 
 import pytest
-from langflow.components.helpers import OutputParserComponent
-from langflow.components.models import OpenAIModelComponent
-from langflow.components.prompts import PromptComponent
+from hanzoflow.components.helpers import OutputParserComponent
+from hanzoflow.components.models import OpenAIModelComponent
+from hanzoflow.components.prompts import PromptComponent
 
 from tests.integration.utils import ComponentInputHandle, run_single_component
 

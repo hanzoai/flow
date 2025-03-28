@@ -1,7 +1,7 @@
 import pytest
-from langflow.template.field.base import Input
-from langflow.template.frontend_node.base import FrontendNode
-from langflow.template.template.base import Template
+from hanzoflow.template.field.base import Input
+from hanzoflow.template.frontend_node.base import FrontendNode
+from hanzoflow.template.template.base import Template
 
 
 @pytest.fixture

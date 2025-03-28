@@ -3,7 +3,7 @@ title: Agents
 slug: /components-agents
 ---
 
-# Agent components in Langflow
+# Agent components in Hanzoflow
 
 Agent components define the behavior and capabilities of AI agents in your flow.
 

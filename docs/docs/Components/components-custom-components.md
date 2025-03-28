@@ -3,21 +3,21 @@ title: Create custom Python components
 slug: /components-custom-components
 ---
 
-Custom components are created within Langflow and extend the platform's functionality with custom, reusable Python code.
+Custom components are created within Hanzoflow and extend the platform's functionality with custom, reusable Python code.
 
-Since Langflow operates with Python behind the scenes, you can implement any Python function within a Custom Component. This means you can leverage the power of libraries such as Pandas, Scikit-learn, Numpy, and thousands of other packages to create components that handle data processing in unlimited ways. You can use any type as long as the type is properly annotated in the output methods (e.g., `> list[int]`).
+Since Hanzoflow operates with Python behind the scenes, you can implement any Python function within a Custom Component. This means you can leverage the power of libraries such as Pandas, Scikit-learn, Numpy, and thousands of other packages to create components that handle data processing in unlimited ways. You can use any type as long as the type is properly annotated in the output methods (e.g., `> list[int]`).
 
-Custom Components create reusable and configurable components to enhance the capabilities of Langflow, making it a powerful tool for developing complex processing between user and AI messages.
+Custom Components create reusable and configurable components to enhance the capabilities of Hanzoflow, making it a powerful tool for developing complex processing between user and AI messages.
 
 ## Directory structure requirements
 
-By default, Langflow looks for custom components in the `langflow/components` directory.
+By default, Hanzoflow looks for custom components in the `hanzoflow/components` directory.
 
-If you're creating custom components in a different location using the [LANGFLOW_COMPONENTS_PATH](/environment-variables#LANGFLOW_COMPONENTS_PATH)
-`LANGFLOW_COMPONENTS_PATH` environment variable, components must be organized in a specific directory structure to be properly loaded and displayed in the UI:
+If you're creating custom components in a different location using the [HANZOFLOW_COMPONENTS_PATH](/environment-variables#HANZOFLOW_COMPONENTS_PATH)
+`HANZOFLOW_COMPONENTS_PATH` environment variable, components must be organized in a specific directory structure to be properly loaded and displayed in the UI:
 
 ```
-/your/custom/components/path/    # Base directory (set by LANGFLOW_COMPONENTS_PATH)
+/your/custom/components/path/    # Base directory (set by HANZOFLOW_COMPONENTS_PATH)
     └── category_name/          # Required category subfolder (determines menu name)
         └── custom_component.py # Component file
 ```
@@ -28,7 +28,7 @@ The category folder name determines where the component appears in the UI menu.
 For example, to add a component to the **Helpers** menu, place it in a `helpers` subfolder:
 
 ```
-/app/custom_components/          # LANGFLOW_COMPONENTS_PATH
+/app/custom_components/          # HANZOFLOW_COMPONENTS_PATH
     └── helpers/                 # Shows up as "Helpers" menu
         └── custom_component.py  # Your component
 ```
@@ -42,28 +42,28 @@ You can have **multiple category folders** to organize components into different
         └── tool_component.py
 ```
 
-This folder structure is required for Langflow to properly discover and load your custom components. Components placed directly in the base directory will not be loaded.
+This folder structure is required for Hanzoflow to properly discover and load your custom components. Components placed directly in the base directory will not be loaded.
 
 ```
-/app/custom_components/          # LANGFLOW_COMPONENTS_PATH
+/app/custom_components/          # HANZOFLOW_COMPONENTS_PATH
     └── custom_component.py      # Won't be loaded - missing category folder!
 ```
 
-## Create a custom component in Langflow
+## Create a custom component in Hanzoflow
 
-Creating custom components in Langflow involves creating a Python class that defines the component's functionality, inputs, and outputs.
+Creating custom components in Hanzoflow involves creating a Python class that defines the component's functionality, inputs, and outputs.
 The default code provides a working structure for your custom component.
 ```python
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+# from hanzoflow.field_typing import Data
+from hanzoflow.custom import Component
+from hanzoflow.io import MessageTextInput, Output
+from hanzoflow.schema import Data
 
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 
@@ -82,16 +82,16 @@ class CustomComponent(Component):
 
 ```
 
-You can create your class in your favorite text editor outside of Langflow and paste it in later, or just follow along in the code pane.
+You can create your class in your favorite text editor outside of Hanzoflow and paste it in later, or just follow along in the code pane.
 
-1. In Langflow, click **+ Custom Component** to add a custom component into the workspace.
+1. In Hanzoflow, click **+ Custom Component** to add a custom component into the workspace.
 2. Open the component's code pane.
 3. Import dependencies.
-Your custom component inherits from the langflow `Component` class so you need to include it.
+Your custom component inherits from the hanzoflow `Component` class so you need to include it.
 ```python
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+from hanzoflow.custom import Component
+from hanzoflow.io import MessageTextInput, Output
+from hanzoflow.schema import Data
 ```
 4. **Define the Class**: Start by defining a Python class that inherits from `Component`. This class will encapsulate the functionality of your custom component.
 
@@ -99,11 +99,11 @@ from langflow.schema import Data
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 ```
-5. **Specify Inputs and Outputs**: Use Langflow's input and output classes to define the inputs and outputs of your component. They should be declared as class attributes.
+5. **Specify Inputs and Outputs**: Use Hanzoflow's input and output classes to define the inputs and outputs of your component. They should be declared as class attributes.
 ```python
     inputs = [
         MessageTextInput(name="input_value", display_name="Input Value", value="Hello, World!"),
@@ -120,7 +120,7 @@ class CustomComponent(Component):
         self.status = data
         return data
 ```
-7. **Use Proper Annotations**: Ensure that output methods are properly annotated with their types. Langflow uses these annotations to validate and handle data correctly. For example, this method is annotated to output `Data`.
+7. **Use Proper Annotations**: Ensure that output methods are properly annotated with their types. Hanzoflow uses these annotations to validate and handle data correctly. For example, this method is annotated to output `Data`.
 ```python
     def build_output(self) -> Data:
 ```
@@ -135,10 +135,10 @@ This code defines a custom component that accepts 5 inputs and outputs a Message
 Copy and paste it into the Custom Component code pane and click **Check & Save.**
 
 ```python
-from langflow.custom import Component
-from langflow.inputs import StrInput, MultilineInput, SecretStrInput, IntInput, DropdownInput
-from langflow.template import Output, Input
-from langflow.schema.message import Message
+from hanzoflow.custom import Component
+from hanzoflow.inputs import StrInput, MultilineInput, SecretStrInput, IntInput, DropdownInput
+from hanzoflow.template import Output, Input
+from hanzoflow.schema.message import Message
 
 class MyCustomComponent(Component):
     display_name = "My Custom Component"
@@ -196,7 +196,7 @@ Since the component outputs a `Message`, you can wire it into a chat and pass me
 
 Your Custom Component accepts the Chat Input message through `MessageTextInput`, fills in the variables with the `process_inputs` method, and finally passes the message `User Username (Age: 49, Gender: Male) sent the following special message: Hello!` to Chat Output.
 
-By defining inputs this way, Langflow can automatically handle the validation and display of these fields in the user interface, making it easier to create robust and user-friendly custom components.
+By defining inputs this way, Hanzoflow can automatically handle the validation and display of these fields in the user interface, making it easier to create robust and user-friendly custom components.
 
 All of the types detailed above derive from a general class that can also be accessed through the generic `Input` class.
 
@@ -209,7 +209,7 @@ Use `MessageInput` to get the entire Message object instead of just the text.
 ---
 
 
-Langflow provides several higher-level input types to simplify the creation of custom components. These input types standardize how inputs are defined, validated, and used. Here’s a guide on how to use these inputs and their primary purposes:
+Hanzoflow provides several higher-level input types to simplify the creation of custom components. These input types standardize how inputs are defined, validated, and used. Here’s a guide on how to use these inputs and their primary purposes:
 
 
 ### **HandleInput** {#fb06c48a326043ffa46badc1ab3ba467}
@@ -334,7 +334,7 @@ Represents a file input field.
 ---
 
 
-Langflow offers native input types, but you can use any type as long as they are properly annotated in the output methods (e.g., `-> list[int]`).
+Hanzoflow offers native input types, but you can use any type as long as they are properly annotated in the output methods (e.g., `-> list[int]`).
 
 
 The `Input` class is highly customizable, allowing you to specify a wide range of attributes for each input field. It has several attributes that can be customized:
@@ -370,10 +370,10 @@ Here is an example of how to define inputs for a component using the `Input` c
 Copy and paste it into the Custom Component code pane and click **Check & Save.**
 
 ```python
-from langflow.template import Input, Output
-from langflow.custom import Component
-from langflow.field_typing import Text
-from langflow.schema.message import Message
+from hanzoflow.template import Input, Output
+from hanzoflow.custom import Component
+from hanzoflow.field_typing import Text
+from hanzoflow.schema.message import Message
 from typing import Dict, Any
 
 class TextAnalyzerComponent(Component):
@@ -465,7 +465,7 @@ Since the component inputs and outputs a `Message`, you can wire the component i
 ---
 
 
-In Langflow, custom components can have multiple outputs. Each output can be associated with a specific method in the component, allowing you to define distinct behaviors for each output path. This feature is particularly useful when you want to route data based on certain conditions or process it in multiple ways.
+In Hanzoflow, custom components can have multiple outputs. Each output can be associated with a specific method in the component, allowing you to define distinct behaviors for each output path. This feature is particularly useful when you want to route data based on certain conditions or process it in multiple ways.
 
 1. **Definition of Outputs**: Each output is defined in the `outputs` list of the component. Each output is associated with a display name, an internal name, and a method that gets called to generate the output.
 2. **Output Methods**: The methods associated with outputs are responsible for generating the data for that particular output. These methods are called when the component is executed, and each method can independently produce its result.
@@ -477,10 +477,10 @@ This example component has two outputs:
 
 ```python
 from typing import Callable
-from langflow.custom import Component
-from langflow.inputs import StrInput
-from langflow.template import Output
-from langflow.field_typing import Text
+from hanzoflow.custom import Component
+from hanzoflow.inputs import StrInput
+from hanzoflow.template import Output
+from hanzoflow.field_typing import Text
 
 class DualOutputComponent(Component):
     display_name = "Dual Output"
@@ -526,6 +526,6 @@ Advanced methods and attributes offer additional control and functionality. Unde
 - `self.graph.flow_id`: Retrieve the flow ID, useful for maintaining context or debugging.
 - `self.stop("output_name")`: Use this method within an output function to prevent data from being sent through other components. This method stops next component execution and is particularly useful for specific operations where a component should stop from running based on specific conditions.
 
-## Contribute Custom Components to Langflow
+## Contribute Custom Components to Hanzoflow
 
-See [How to Contribute](/contributing-components) to contribute your custom component to Langflow.
+See [How to Contribute](/contributing-components) to contribute your custom component to Hanzoflow.

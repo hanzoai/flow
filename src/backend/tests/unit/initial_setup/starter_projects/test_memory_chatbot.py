@@ -3,16 +3,16 @@ from collections import deque
 from typing import TYPE_CHECKING
 
 import pytest
-from langflow.components.helpers.memory import MemoryComponent
-from langflow.components.inputs import ChatInput
-from langflow.components.models import OpenAIModelComponent
-from langflow.components.outputs import ChatOutput
-from langflow.components.prompts import PromptComponent
-from langflow.graph import Graph
-from langflow.graph.graph.constants import Finish
+from hanzoflow.components.helpers.memory import MemoryComponent
+from hanzoflow.components.inputs import ChatInput
+from hanzoflow.components.models import OpenAIModelComponent
+from hanzoflow.components.outputs import ChatOutput
+from hanzoflow.components.prompts import PromptComponent
+from hanzoflow.graph import Graph
+from hanzoflow.graph.graph.constants import Finish
 
 if TYPE_CHECKING:
-    from langflow.graph.graph.schema import GraphDump
+    from hanzoflow.graph.graph.schema import GraphDump
 
 
 @pytest.fixture

@@ -8,16 +8,16 @@ test(
   { tag: ["@release", "@workspace", "@components"] },
   async ({ page }) => {
     const customComponentCodeWithRaiseErrorMessage = `
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+# from hanzoflow.field_typing import Data
+from hanzoflow.custom import Component
+from hanzoflow.io import MessageTextInput, Output
+from hanzoflow.schema import Data
 
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
     icon = "code"
     name = "CustomComponent"
 

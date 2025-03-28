@@ -1,9 +1,9 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langflow.base.models.anthropic_constants import ANTHROPIC_MODELS
-from langflow.base.models.openai_constants import OPENAI_MODEL_NAMES
-from langflow.components.models import LanguageModelComponent
+from hanzoflow.base.models.anthropic_constants import ANTHROPIC_MODELS
+from hanzoflow.base.models.openai_constants import OPENAI_MODEL_NAMES
+from hanzoflow.components.models import LanguageModelComponent
 
 from tests.base import ComponentTestBaseWithClient
 
@@ -52,7 +52,7 @@ class TestLanguageModelComponent(ComponentTestBaseWithClient):
         assert updated_config["model_name"]["value"] == ANTHROPIC_MODELS[0]
         assert updated_config["api_key"]["display_name"] == "Anthropic API Key"
 
-    @patch("langflow.components.models.language_model.ChatOpenAI")
+    @patch("hanzoflow.components.models.language_model.ChatOpenAI")
     async def test_build_model_openai(self, mock_chat_openai, component_class, default_kwargs):
         # Setup mock
         mock_instance = MagicMock()
@@ -78,7 +78,7 @@ class TestLanguageModelComponent(ComponentTestBaseWithClient):
         )
         assert model == mock_instance
 
-    @patch("langflow.components.models.language_model.ChatAnthropic")
+    @patch("hanzoflow.components.models.language_model.ChatAnthropic")
     async def test_build_model_anthropic(self, mock_chat_anthropic, component_class, default_kwargs):
         # Setup mock
         mock_instance = MagicMock()

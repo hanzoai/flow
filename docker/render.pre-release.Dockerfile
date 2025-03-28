@@ -1,1 +1,1 @@
-FROM langflowai/langflow:1.0-alpha
+FROM hanzoflowai/hanzoflow:1.0-alpha

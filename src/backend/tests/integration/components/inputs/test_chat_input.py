@@ -1,6 +1,6 @@
-from langflow.components.inputs import ChatInput
-from langflow.memory import aget_messages
-from langflow.schema.message import Message
+from hanzoflow.components.inputs import ChatInput
+from hanzoflow.memory import aget_messages
+from hanzoflow.schema.message import Message
 
 from tests.integration.utils import run_single_component
 

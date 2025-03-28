@@ -1,7 +1,7 @@
 import SideBarButtonsComponent from "@/components/core/sidebarComponent";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import {
-  ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_DATASTAX_HANZOFLOW,
   ENABLE_PROFILE_ICONS,
 } from "@/customization/feature-flags";
 import useAuthStore from "@/stores/authStore";
@@ -70,10 +70,10 @@ export default function SettingsPage(): JSX.Element {
     },
   );
 
-  if (!ENABLE_DATASTAX_LANGFLOW) {
-    const langflowItems = [
+  if (!ENABLE_DATASTAX_HANZOFLOW) {
+    const hanzoflowItems = [
       {
-        title: "Langflow API Keys",
+        title: "Hanzoflow API Keys",
         href: "/settings/api-keys",
         icon: (
           <ForwardedIconComponent
@@ -83,7 +83,7 @@ export default function SettingsPage(): JSX.Element {
         ),
       },
       {
-        title: "Langflow Store",
+        title: "Hanzoflow Store",
         href: "/settings/store",
         icon: (
           <ForwardedIconComponent
@@ -94,14 +94,14 @@ export default function SettingsPage(): JSX.Element {
       },
     ];
 
-    sidebarNavItems.splice(2, 0, ...langflowItems);
+    sidebarNavItems.splice(2, 0, ...hanzoflowItems);
   }
 
   return (
     <PageLayout
       backTo={"/"}
       title="Settings"
-      description="Manage the general settings for Langflow."
+      description="Manage the general settings for Hanzoflow."
     >
       <SidebarProvider width="15rem" defaultOpen={false}>
         <SideBarButtonsComponent items={sidebarNavItems} />

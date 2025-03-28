@@ -1,3 +1,3 @@
-FROM langflowai/langflow:latest
+FROM hanzoflowai/hanzoflow:latest
 
-ENTRYPOINT ["python", "-m", "langflow", "run"]
+ENTRYPOINT ["python", "-m", "hanzoflow", "run"]

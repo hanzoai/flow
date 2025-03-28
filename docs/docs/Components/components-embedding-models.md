@@ -3,7 +3,7 @@ title: Embeddings
 slug: /components-embedding-models
 ---
 
-# Embeddings models in Langflow
+# Embeddings models in Hanzoflow
 
 Embeddings models convert text into numerical vectors. These embeddings capture semantic meaning of the input text, and allow LLMs to understand context.
 
@@ -56,7 +56,7 @@ This component is used to load embedding models from [Amazon Bedrock](https://aw
 ## Astra DB vectorize
 
 :::important
-This component is deprecated as of Langflow version 1.1.2.
+This component is deprecated as of Hanzoflow version 1.1.2.
 Instead, use the [Astra DB vector store component](/components-vector-stores#astra-db-vector-store)
 :::
 
@@ -178,7 +178,7 @@ This component connects to Google's generative AI embedding service using the Go
 ## Hugging Face Embeddings
 
 :::note
-This component is deprecated as of Langflow version 1.0.18.
+This component is deprecated as of Hanzoflow version 1.0.18.
 Instead, use the [Hugging Face Embeddings Inference component](#hugging-face-embeddings-inference).
 :::
 

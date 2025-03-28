@@ -1,9 +1,9 @@
 ---
-title: Deploy Langflow on Railway
+title: Deploy Hanzoflow on Railway
 slug: /deployment-railway
 ---
 
-This guide explains how to deploy Langflow on [Railway](https://railway.app/), a cloud infrastructure platform that provides auto-deploy, managed databases, and automatic scaling.
+This guide explains how to deploy Hanzoflow on [Railway](https://railway.app/), a cloud infrastructure platform that provides auto-deploy, managed databases, and automatic scaling.
 
 1. Click the following button to go to Railway:
 
@@ -12,9 +12,9 @@ This guide explains how to deploy Langflow on [Railway](https://railway.app/), a
 2. Click **Deploy Now**. 
 Railway automatically does the following:
    - Sets up the infrastructure.
-   - Deploys Langflow.
+   - Deploys Hanzoflow.
    - Starts the application.
 
 Wait for the deployment to complete.
 
-Your Langflow instance is now ready to use.
+Your Hanzoflow instance is now ready to use.

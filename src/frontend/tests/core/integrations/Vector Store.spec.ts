@@ -120,11 +120,11 @@ withEventDeliveryModes(
 
     await page.waitForTimeout(2000);
 
-    let langflowCount = await page
-      .locator('[data-testid="langflow-0-option"]')
+    let hanzoflowCount = await page
+      .locator('[data-testid="hanzoflow-0-option"]')
       .count();
 
-    while (langflowCount === 0) {
+    while (hanzoflowCount === 0) {
       await page.waitForTimeout(1000);
       await page.getByTestId("icon-RefreshCcw").click();
 
@@ -132,17 +132,17 @@ withEventDeliveryModes(
 
       await page.waitForTimeout(1000);
 
-      langflowCount = await page
-        .locator('[data-testid="langflow-0-option"]')
+      hanzoflowCount = await page
+        .locator('[data-testid="hanzoflow-0-option"]')
         .count();
     }
 
-    await page.locator('[data-testid="langflow-0-option"]').nth(0).waitFor({
+    await page.locator('[data-testid="hanzoflow-0-option"]').nth(0).waitFor({
       timeout: 15000,
       state: "visible",
     });
 
-    await page.getByTestId("langflow-0-option").nth(0).click();
+    await page.getByTestId("hanzoflow-0-option").nth(0).click();
 
     await page
       .locator('[data-testid="dropdown_str_collection_name"]')
@@ -207,11 +207,11 @@ withEventDeliveryModes(
 
     await page.waitForTimeout(2000);
 
-    langflowCount = await page
-      .locator('[data-testid="langflow-0-option"]')
+    hanzoflowCount = await page
+      .locator('[data-testid="hanzoflow-0-option"]')
       .count();
 
-    while (langflowCount === 0) {
+    while (hanzoflowCount === 0) {
       await page.waitForTimeout(1000);
       await page.getByTestId("icon-RefreshCcw").click();
 
@@ -226,12 +226,12 @@ withEventDeliveryModes(
 
       await page.waitForTimeout(1000);
 
-      langflowCount = await page
-        .locator('[data-testid="langflow-0-option"]')
+      hanzoflowCount = await page
+        .locator('[data-testid="hanzoflow-0-option"]')
         .count();
     }
 
-    await page.getByTestId("langflow-0-option").nth(0).click();
+    await page.getByTestId("hanzoflow-0-option").nth(0).click();
 
     await page.waitForTimeout(2000);
 

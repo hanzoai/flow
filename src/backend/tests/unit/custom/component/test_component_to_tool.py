@@ -1,8 +1,8 @@
 from collections.abc import Callable
 
-from langflow.base.agents.agent import DEFAULT_TOOLS_DESCRIPTION
-from langflow.components.agents.agent import AgentComponent
-from langflow.components.tools.calculator import CalculatorToolComponent
+from hanzoflow.base.agents.agent import DEFAULT_TOOLS_DESCRIPTION
+from hanzoflow.components.agents.agent import AgentComponent
+from hanzoflow.components.tools.calculator import CalculatorToolComponent
 
 
 async def test_component_to_toolkit():

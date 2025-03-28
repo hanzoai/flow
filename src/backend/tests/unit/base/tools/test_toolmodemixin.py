@@ -1,8 +1,8 @@
-from langflow.base.tools.component_tool import ComponentToolkit
-from langflow.custom import Component
+from hanzoflow.base.tools.component_tool import ComponentToolkit
+from hanzoflow.custom import Component
 
 # Import all input types
-from langflow.io import (
+from hanzoflow.io import (
     BoolInput,
     DataFrameInput,
     DataInput,
@@ -20,14 +20,14 @@ from langflow.io import (
     StrInput,
     TableInput,
 )
-from langflow.schema import Data
+from hanzoflow.schema import Data
 from pydantic import BaseModel
 
 
 class AllInputsComponent(Component):
     display_name = "All Inputs Component"
-    description = "A component with all input types available in Langflow."
-    documentation: str = "http://docs.langflow.org/components/all_inputs"
+    description = "A component with all input types available in Hanzoflow."
+    documentation: str = "http://docs.hanzoflow.org/components/all_inputs"
     icon = "code"
     name = "AllInputsComponent"
 

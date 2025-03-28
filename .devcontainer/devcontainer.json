@@ -1,5 +1,5 @@
 {
-  "name": "Langflow Dev Container",
+  "name": "Hanzoflow Dev Container",
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile"
@@ -8,7 +8,7 @@
     "ghcr.io/devcontainers/features/node": {},
     "ghcr.io/dhoeric/features/hadolint:1": {}
   },
-  "postCreateCommand": "sudo chown -R langflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/langflow/frontend && make install_frontend && make install_backend",
+  "postCreateCommand": "sudo chown -R hanzoflow:hanzoflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/hanzoflow/frontend && make install_frontend && make install_backend",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -29,52 +29,59 @@
           "zsh": {
             "path": "/bin/zsh"
           }
-        }
+        },
+        "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+        "python.analysis.extraPaths": [
+          "/workspace/src/backend/base"
+        ]
       }
     }
   },
-  "remoteUser": "langflow",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "remoteUser": "hanzoflow",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   "forwardPorts": [7860, 3000],
   "containerEnv": {
-    "FRONTEND_START_FLAGS": "--host"
+    "FRONTEND_START_FLAGS": "--host",
+    "PYTHONPATH": "/workspace/src/backend/base",
+    "HOME": "/home/hanzoflow"
   },
   "mounts": [
     {
-      "source": "${localWorkspaceFolderBasename}-frontend-node_modules",
+      "source": "hanzoflow-frontend-node_modules",
       "target": "/workspace/src/frontend/node_modules",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-frontend-build",
+      "source": "hanzoflow-frontend-build",
       "target": "/workspace/src/frontend/build",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-backend-frontend",
-      "target": "/workspace/src/backend/base/langflow/frontend",
+      "source": "hanzoflow-backend-frontend",
+      "target": "/workspace/src/backend/base/hanzoflow/frontend",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-venv",
+      "source": "hanzoflow-venv",
       "target": "/workspace/.venv",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-mypy-cache",
+      "source": "hanzoflow-mypy-cache",
       "target": "/workspace/.mypy_cache",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-dist",
+      "source": "hanzoflow-dist",
       "target": "/workspace/dist",
       "type": "volume"
     },
     {
-      "source": "${localWorkspaceFolderBasename}-backend-dist",
+      "source": "hanzoflow-backend-dist",
       "target": "/workspace/src/backend/base/dist",
       "type": "volume"
     }
-  ]
+  ],
+  "updateRemoteUserUID": true
 }

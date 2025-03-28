@@ -1,6 +1,6 @@
 import pytest
-from langflow.custom import Component
-from langflow.inputs.inputs import MessageTextInput, StrInput
+from hanzoflow.custom import Component
+from hanzoflow.inputs.inputs import MessageTextInput, StrInput
 
 
 @pytest.fixture

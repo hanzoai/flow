@@ -5,7 +5,7 @@ slug: /integrations/notion/setup
 
 # Set up a Notion App
 
-To use Notion components in Langflow, you first need to create a Notion integration and configure it with the necessary capabilities. This guide will walk you through the process of setting up a Notion integration and granting it access to your Notion databases.
+To use Notion components in Hanzoflow, you first need to create a Notion integration and configure it with the necessary capabilities. This guide will walk you through the process of setting up a Notion integration and granting it access to your Notion databases.
 
 ## Prerequisites
 
@@ -44,7 +44,7 @@ To authenticate your integration with Notion, you need to obtain an integration 
 2. Copy the "Internal Integration Token" value. This token will be used to authenticate your integration with Notion.
 
 :::warning
-Your integration token is a sensitive piece of information. Make sure to keep it secure and never share it publicly. Store it safely in your Langflow configuration or environment variables.
+Your integration token is a sensitive piece of information. Make sure to keep it secure and never share it publicly. Store it safely in your Hanzoflow configuration or environment variables.
 :::
 
 ## Grant Integration Access to Notion Databases
@@ -60,11 +60,11 @@ For your integration to interact with Notion databases, you need to grant it acc
 If your database contains references to other databases, you need to grant the integration access to those referenced databases as well. Repeat step 4 for each referenced database to ensure your integration has the necessary access.
 :::
 
-## Build with Notion Components in Langflow
+## Build with Notion Components in Hanzoflow
 
-Once you have set up your Notion integration and granted it access to the required databases, you can start using the Notion components in Langflow.
+Once you have set up your Notion integration and granted it access to the required databases, you can start using the Notion components in Hanzoflow.
 
-Langflow provides the following Notion components:
+Hanzoflow provides the following Notion components:
 
 - **Search**: Searches all pages and databases that have been shared with the integration. You can filter results to either pages or databases and specify the sort direction.
 - **List Users**: Retrieves a list of users from the Notion workspace.
@@ -76,8 +76,8 @@ Langflow provides the following Notion components:
 - **Page Content Viewer**: Retrieves the content of a Notion page as plain text.
 
 Each of these components output both "Data" and "Tool":
-- The "Data" output can be used directly in your Langflow for further processing or display.
-- The "Tool" output can be utilized in Langflow Agents, allowing them to interact with Notion programmatically.
+- The "Data" output can be used directly in your Hanzoflow for further processing or display.
+- The "Tool" output can be utilized in Hanzoflow Agents, allowing them to interact with Notion programmatically.
 
 
 ## Additional Resources
@@ -85,4 +85,4 @@ Each of these components output both "Data" and "Tool":
 - [Notion API Documentation](https://developers.notion.com/docs/getting-started)
 - [Notion Integration Capabilities](https://developers.notion.com/reference/capabilities)
 
-If you encounter any issues or have questions, please reach out to our support team or consult the Langflow community forums.
+If you encounter any issues or have questions, please reach out to our support team or consult the Hanzoflow community forums.

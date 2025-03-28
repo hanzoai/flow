@@ -3,7 +3,7 @@ import { ContentBlockDisplay } from "@/components/core/chatComponents/ContentBlo
 import { useUpdateMessage } from "@/controllers/API/queries/messages";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
 import {
-  ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_DATASTAX_HANZOFLOW,
   ENABLE_PUBLISH,
 } from "@/customization/feature-flags";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
@@ -282,7 +282,7 @@ export default function ChatMessage({
                   ) : (
                     <ForwardedIconComponent name={chat.properties.icon} />
                   )
-                ) : !ENABLE_DATASTAX_LANGFLOW && !playgroundPage ? (
+                ) : !ENABLE_DATASTAX_HANZOFLOW && !playgroundPage ? (
                   <ProfileIcon />
                 ) : playgroundPage ? (
                   <ForwardedIconComponent name="User" />

@@ -4,8 +4,8 @@ from typing import Any
 import pytest
 from langchain_community.embeddings.fake import DeterministicFakeEmbedding
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
-from langflow.components.vectorstores.mongodb_atlas import MongoVectorStoreComponent
-from langflow.schema.data import Data
+from hanzoflow.components.vectorstores.mongodb_atlas import MongoVectorStoreComponent
+from hanzoflow.schema.data import Data
 from pymongo.operations import SearchIndexModel
 
 from tests.base import ComponentTestBaseWithoutClient, VersionComponentMapping

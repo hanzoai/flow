@@ -1,6 +1,6 @@
 import pytest
-from langflow.__main__ import app
-from langflow.services import deps
+from hanzoflow.__main__ import app
+from hanzoflow.services import deps
 
 
 @pytest.fixture(scope="module")

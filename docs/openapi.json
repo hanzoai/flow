@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "title": "Langflow",
+        "title": "Hanzoflow",
         "version": "1.2.0"
     },
     "paths": {
@@ -811,7 +811,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/langflow__api__v1__schemas__UploadFileResponse"
+                                    "$ref": "#/components/schemas/hanzoflow__api__v1__schemas__UploadFileResponse"
                                 }
                             }
                         }
@@ -3068,7 +3068,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/langflow__api__v1__schemas__UploadFileResponse"
+                                    "$ref": "#/components/schemas/hanzoflow__api__v1__schemas__UploadFileResponse"
                                 }
                             }
                         }
@@ -4371,7 +4371,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/langflow__services__database__models__file__model__File"
+                                        "$ref": "#/components/schemas/hanzoflow__services__database__models__file__model__File"
                                     },
                                     "type": "array",
                                     "title": "Response List Files Api V2 Files Get"
@@ -4415,7 +4415,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/langflow__api__schemas__UploadFileResponse"
+                                    "$ref": "#/components/schemas/hanzoflow__api__schemas__UploadFileResponse"
                                 }
                             }
                         }
@@ -4570,7 +4570,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/langflow__api__schemas__UploadFileResponse"
+                                    "$ref": "#/components/schemas/hanzoflow__api__schemas__UploadFileResponse"
                                 }
                             }
                         }
@@ -5310,7 +5310,7 @@
                     },
                     "files": {
                         "items": {
-                            "$ref": "#/components/schemas/langflow__utils__schemas__File"
+                            "$ref": "#/components/schemas/hanzoflow__utils__schemas__File"
                         },
                         "type": "array",
                         "title": "Files",
@@ -9831,7 +9831,7 @@
                 ],
                 "title": "ViewPort"
             },
-            "langflow__api__schemas__UploadFileResponse": {
+            "hanzoflow__api__schemas__UploadFileResponse": {
                 "properties": {
                     "id": {
                         "type": "string",
@@ -9873,7 +9873,7 @@
                 "title": "UploadFileResponse",
                 "description": "File upload response schema."
             },
-            "langflow__api__v1__schemas__UploadFileResponse": {
+            "hanzoflow__api__v1__schemas__UploadFileResponse": {
                 "properties": {
                     "flowId": {
                         "type": "string",
@@ -9893,7 +9893,7 @@
                 "title": "UploadFileResponse",
                 "description": "Upload file response schema."
             },
-            "langflow__services__database__models__file__model__File": {
+            "hanzoflow__services__database__models__file__model__File": {
                 "properties": {
                     "id": {
                         "type": "string",
@@ -9948,7 +9948,7 @@
                 ],
                 "title": "File"
             },
-            "langflow__utils__schemas__File": {
+            "hanzoflow__utils__schemas__File": {
                 "properties": {
                     "path": {
                         "type": "string",

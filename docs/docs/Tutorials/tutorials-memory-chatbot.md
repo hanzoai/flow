@@ -9,12 +9,12 @@ This flow extends the [basic prompting flow](/starter-projects-basic-prompting)
 
 ## Prerequisites
 
-- [Langflow installed and running](/get-started-installation)
+- [Hanzoflow installed and running](/get-started-installation)
 - [OpenAI API key created](https://platform.openai.com/)
 
 ## Create the memory chatbot flow
 
-1. From the Langflow dashboard, click **New Flow**.
+1. From the Hanzoflow dashboard, click **New Flow**.
 2. Select **Memory Chatbot**.
 3. The **Memory Chatbot** flow is created.
 
@@ -62,7 +62,7 @@ The **Message Logs** pane displays all previous messages, with each conversation
 
 ## Use Session ID with the memory chatbot flow
 
-`session_id` is a unique identifier in Langflow that stores conversation sessions between the AI and a user. A `session_id` is created when a conversation is initiated, and then associated with all subsequent messages during that session.
+`session_id` is a unique identifier in Hanzoflow that stores conversation sessions between the AI and a user. A `session_id` is created when a conversation is initiated, and then associated with all subsequent messages during that session.
 
 In the **Memory Chatbot** flow you created, the **Chat Memory** component references past interactions by **Session ID**. You can demonstrate this by modifying the **Session ID** value to switch between conversation histories.
 

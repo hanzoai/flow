@@ -1,7 +1,7 @@
 import pytest
-from langflow.components.data import URLComponent
-from langflow.components.processing import SplitTextComponent
-from langflow.schema import Data, DataFrame
+from hanzoflow.components.data import URLComponent
+from hanzoflow.components.processing import SplitTextComponent
+from hanzoflow.schema import Data, DataFrame
 
 from tests.base import ComponentTestBaseWithoutClient
 

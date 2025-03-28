@@ -3,8 +3,8 @@ from unittest.mock import Mock, patch
 import pytest
 import respx
 from httpx import Response
-from langflow.components.data import URLComponent
-from langflow.schema import DataFrame, Message
+from hanzoflow.components.data import URLComponent
+from hanzoflow.schema import DataFrame, Message
 
 from tests.base import ComponentTestBaseWithoutClient
 
@@ -134,7 +134,7 @@ class TestURLComponent(ComponentTestBaseWithoutClient):
             assert item.source == urls[i], f"Expected '{urls[i]}', got '{item.source}'"
             assert item.text == f"content{i + 1}"
 
-    @patch("langflow.components.data.URLComponent.ensure_url")
+    @patch("hanzoflow.components.data.URLComponent.ensure_url")
     def test_recursive_url_component_error_handling(self, mock_recursive_loader):
         """Test error handling in URLComponent."""
         component = URLComponent()

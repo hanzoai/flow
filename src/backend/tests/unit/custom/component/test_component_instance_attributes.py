@@ -1,6 +1,6 @@
 import pytest
-from langflow.components.inputs.chat import ChatInput
-from langflow.schema.message import Message
+from hanzoflow.components.inputs.chat import ChatInput
+from hanzoflow.schema.message import Message
 
 
 @pytest.fixture

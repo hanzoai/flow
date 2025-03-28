@@ -103,11 +103,11 @@ export default defineConfig({
   webServer: [
     {
       command:
-        "uv run uvicorn --factory langflow.main:create_app --host 127.0.0.1 --port 7860 --loop asyncio",
+        "uv run uvicorn --factory hanzoflow.main:create_app --host 127.0.0.1 --port 7860 --loop asyncio",
       port: 7860,
       env: {
-        LANGFLOW_DATABASE_URL: "sqlite:///./temp",
-        LANGFLOW_AUTO_LOGIN: "true",
+        HANZOFLOW_DATABASE_URL: "sqlite:///./temp",
+        HANZOFLOW_AUTO_LOGIN: "true",
       },
       stdout: "ignore",
 

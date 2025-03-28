@@ -1,19 +1,19 @@
 <!-- markdownlint-disable MD030 -->
 
-![Langflow logo](./docs/static/img/langflow-logo-color-black-solid.svg)
+![Hanzoflow logo](./docs/static/img/hanzoflow-logo-color-black-solid.svg)
 
 
-[![Release Notes](https://img.shields.io/github/release/langflow-ai/langflow?style=flat-square)](https://github.com/langflow-ai/langflow/releases)
+[![Release Notes](https://img.shields.io/github/release/hanzoflow-ai/hanzoflow?style=flat-square)](https://github.com/hanzoflow-ai/hanzoflow/releases)
 [![PyPI - License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/MIT)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/langflow?style=flat-square)](https://pypistats.org/packages/langflow)
-[![GitHub star chart](https://img.shields.io/github/stars/langflow-ai/langflow?style=flat-square)](https://star-history.com/#langflow-ai/langflow)
-[![Open Issues](https://img.shields.io/github/issues-raw/langflow-ai/langflow?style=flat-square)](https://github.com/langflow-ai/langflow/issues)
-[![Open in HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Langflow/Langflow?duplicate=true)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/langflow-ai.svg?style=social&label=Follow%20%40Langflow)](https://twitter.com/langflow)
-[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCn2bInQrjdDYKEEmbpwblLQ)](https://www.youtube.com/@Langflow)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/hanzoflow?style=flat-square)](https://pypistats.org/packages/hanzoflow)
+[![GitHub star chart](https://img.shields.io/github/stars/hanzoflow-ai/hanzoflow?style=flat-square)](https://star-history.com/#hanzoflow-ai/hanzoflow)
+[![Open Issues](https://img.shields.io/github/issues-raw/hanzoflow-ai/hanzoflow?style=flat-square)](https://github.com/hanzoflow-ai/hanzoflow/issues)
+[![Open in HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Hanzoflow/Hanzoflow?duplicate=true)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/hanzoflow-ai.svg?style=social&label=Follow%20%40Hanzoflow)](https://twitter.com/hanzoflow)
+[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCn2bInQrjdDYKEEmbpwblLQ)](https://www.youtube.com/@Hanzoflow)
 
 
-[Langflow](https://langflow.org) is a powerful tool for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and a built-in API server that turns every agent into an API endpoint that can be integrated into applications built on any framework or stack. Langflow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
+[Hanzoflow](https://hanzoflow.org) is a powerful tool for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and a built-in API server that turns every agent into an API endpoint that can be integrated into applications built on any framework or stack. Hanzoflow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
 
 ## ✨ Highlight features
 
@@ -27,45 +27,45 @@
 
 ## ⚡️ Quickstart
 
-Langflow works with Python 3.10 to 3.13.
+Hanzoflow works with Python 3.10 to 3.13.
 
 Install with uv **(recommended)** 
 
 ```shell
-uv pip install langflow
+uv pip install hanzoflow
 ```
 
 Install with pip
 
 ```shell
-pip install langflow
+pip install hanzoflow
 ```
 
 ## 📦 Deployment
 
 ### Self-managed
 
-Langflow is completely open source and you can deploy it to all major deployment clouds. Follow this [guide](https://docs.langflow.org/deployment-docker) to learn how to use Docker to deploy Langflow.
+Hanzoflow is completely open source and you can deploy it to all major deployment clouds. Follow this [guide](https://docs.hanzoflow.org/deployment-docker) to learn how to use Docker to deploy Hanzoflow.
 
 ### Fully-managed by DataStax
 
-DataStax Langflow is a full-managed environment with zero setup. Developers can [sign up for a free account](https://astra.datastax.com/signup?type=langflow) to get started.
+DataStax Hanzoflow is a full-managed environment with zero setup. Developers can [sign up for a free account](https://astra.datastax.com/signup?type=hanzoflow) to get started.
 
 ## ⭐ Stay up-to-date
 
-Star Langflow on GitHub to be instantly notified of new releases.
+Star Hanzoflow on GitHub to be instantly notified of new releases.
 
-![Star Langflow](https://github.com/user-attachments/assets/03168b17-a11d-4b2a-b0f7-c1cce69e5a2c)
+![Star Hanzoflow](https://github.com/user-attachments/assets/03168b17-a11d-4b2a-b0f7-c1cce69e5a2c)
 
 ## 👋 Contribute
 
-We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Langflow more accessible.
+We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Hanzoflow more accessible.
 
 ---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=langflow-ai/langflow&type=Timeline)](https://star-history.com/#langflow-ai/langflow&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=hanzoflow-ai/hanzoflow&type=Timeline)](https://star-history.com/#hanzoflow-ai/hanzoflow&Date)
 
 ## ❤️ Contributors
 
-[![langflow contributors](https://contrib.rocks/image?repo=langflow-ai/langflow)](https://github.com/langflow-ai/langflow/graphs/contributors)
+[![hanzoflow contributors](https://contrib.rocks/image?repo=hanzoflow-ai/hanzoflow)](https://github.com/hanzoflow-ai/hanzoflow/graphs/contributors)
 

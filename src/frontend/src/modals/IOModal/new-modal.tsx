@@ -1,4 +1,4 @@
-//import LangflowLogoColor from "@/assets/LangflowLogocolor.svg?react";
+//import HanzoflowLogoColor from "@/assets/HanzoflowLogocolor.svg?react";
 import ThemeButtons from "@/components/core/appHeaderComponent/components/ThemeButtons";
 import { EventDeliveryType } from "@/constants/enums";
 import { useGetConfig } from "@/controllers/API/queries/config/use-get-config";
@@ -8,12 +8,12 @@ import {
 } from "@/controllers/API/queries/messages";
 import { ENABLE_PUBLISH } from "@/customization/feature-flags";
 import { track } from "@/customization/utils/analytics";
-import { LangflowButtonRedirectTarget } from "@/customization/utils/urls";
+import { HanzoflowButtonRedirectTarget } from "@/customization/utils/urls";
 import { useUtilityStore } from "@/stores/utilityStore";
 import { swatchColors } from "@/utils/styleUtils";
 import { useCallback, useEffect, useState } from "react";
 import { v5 as uuidv5 } from "uuid";
-import LangflowLogoColor from "../../assets/LangflowLogoColor.svg?react";
+import HanzoflowLogoColor from "../../assets/HanzoflowLogoColor.svg?react";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
 import { Button } from "../../components/ui/button";
@@ -264,9 +264,9 @@ export default function IOModal({
 
   const showPublishOptions = playgroundPage && ENABLE_PUBLISH;
 
-  const LangflowButtonClick = () => {
-    track("LangflowButtonClick");
-    window.open(LangflowButtonRedirectTarget(), "_blank");
+  const HanzoflowButtonClick = () => {
+    track("HanzoflowButtonClick");
+    window.open(HanzoflowButtonRedirectTarget(), "_blank");
   };
 
   useEffect(() => {
@@ -364,12 +364,12 @@ export default function IOModal({
                       <ThemeButtons />
                     </div>
                     <Button
-                      onClick={LangflowButtonClick}
+                      onClick={HanzoflowButtonClick}
                       variant="primary"
                       className="w-full !rounded-xl shadow-lg"
                     >
-                      <LangflowLogoColor />
-                      <div className="text-sm">Built with Langflow</div>
+                      <HanzoflowLogoColor />
+                      <div className="text-sm">Built with Hanzoflow</div>
                     </Button>
                   </div>
                 )}
@@ -380,14 +380,14 @@ export default function IOModal({
                 <ShadTooltip
                   styleClasses="z-50"
                   side="right"
-                  content="Built with Langflow"
+                  content="Built with Hanzoflow"
                 >
                   <Button
                     variant="primary"
                     className="h-12 w-12 !rounded-xl !p-4 shadow-lg"
-                    onClick={LangflowButtonClick}
+                    onClick={HanzoflowButtonClick}
                   >
-                    <LangflowLogoColor className="h-[18px] w-[18px] scale-150" />
+                    <HanzoflowLogoColor className="h-[18px] w-[18px] scale-150" />
                   </Button>
                 </ShadTooltip>
               </div>

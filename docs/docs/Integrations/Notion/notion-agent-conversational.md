@@ -51,11 +51,11 @@ The Notion Conversational Agent is an AI-powered assistant that interacts with y
 
 ---
 
-1. Open Langflow and create a new project.
-2. Add the components listed above to your flow canvas, or Download the [Conversation Agent Flow](./Conversational_Notion_Agent.json)(Download link) and **Import** the JSON file into Langflow.
+1. Open Hanzoflow and create a new project.
+2. Add the components listed above to your flow canvas, or Download the [Conversation Agent Flow](./Conversational_Notion_Agent.json)(Download link) and **Import** the JSON file into Hanzoflow.
 3. Connect the components as shown in the flow diagram.
 4. Input the Notion and OpenAI API keys in their respective components.
-5. To start the flow, click the "Play" button in Langflow.
+5. To start the flow, click the "Play" button in Hanzoflow.
 6. In the chat interface, enter a Notion-related request or question. For example:
    - "Create a new page in my task database"
    - "Search for pages about project management"
@@ -139,6 +139,6 @@ If you encounter issues:
 1. Ensure all API keys are correctly set and have the necessary permissions.
 2. Check that your Notion integration has access to the relevant pages and databases.
 3. Verify that all components are properly connected in the flow.
-4. Review the Langflow logs for any error messages.
+4. Review the Hanzoflow logs for any error messages.
 
-For more advanced usage and integration options, refer to the [Notion API documentation](https://developers.notion.com/) and [Langflow documentation](/).
+For more advanced usage and integration options, refer to the [Notion API documentation](https://developers.notion.com/) and [Hanzoflow documentation](/).

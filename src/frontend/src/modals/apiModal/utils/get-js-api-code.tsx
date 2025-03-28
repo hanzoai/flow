@@ -2,7 +2,7 @@ import useFlowStore from "@/stores/flowStore";
 import { GetCodeType } from "@/types/tweaks";
 
 /**
- * Function to generate JavaScript code for interfacing with an API using the LangflowClient class.
+ * Function to generate JavaScript code for interfacing with an API using the HanzoflowClient class.
  * @param {string} flowId - The id of the flow.
  * @param {boolean} isAuth - Whether the API requires authentication.
  * @param {any[]} tweaksBuildedObject - Customizations applied to the flow.
@@ -45,7 +45,7 @@ export default function getJsApiCode({
 `;
 }
 /**
- * Generates JavaScript code for making API calls to a Langflow endpoint.
+ * Generates JavaScript code for making API calls to a Hanzoflow endpoint.
  *
  * @param {Object} params - The parameters for generating the API code
  * @param {string} params.flowId - The ID of the flow to run
@@ -84,8 +84,8 @@ export function getNewJsApiCode({
   return `${
     isAuthenticated
       ? `// Get API key from environment variable
-if (!process.env.LANGFLOW_API_KEY) {
-    throw new Error('LANGFLOW_API_KEY environment variable not found. Please set your API key in the environment variables.');
+if (!process.env.HANZOFLOW_API_KEY) {
+    throw new Error('HANZOFLOW_API_KEY environment variable not found. Please set your API key in the environment variables.');
 }
 `
       : ""
@@ -105,7 +105,7 @@ if (!process.env.LANGFLOW_API_KEY) {
 const options = {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/json'${isAuthenticated ? ',\n        "x-api-key": process.env.LANGFLOW_API_KEY' : ""}
+        'Content-Type': 'application/json'${isAuthenticated ? ',\n        "x-api-key": process.env.HANZOFLOW_API_KEY' : ""}
     },
     body: JSON.stringify(payload)
 };

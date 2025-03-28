@@ -78,7 +78,7 @@ if ! poetry install; then
 fi
 
 # Start the backend
-LANGFLOW_DATABASE_URL=sqlite:///./temp LANGFLOW_AUTO_LOGIN=True poetry run langflow run --backend-only --port 7860 --host 0.0.0.0 --no-open-browser > /dev/null 2>&1 &
+HANZOFLOW_DATABASE_URL=sqlite:///./temp HANZOFLOW_AUTO_LOGIN=True poetry run hanzoflow run --backend-only --port 7860 --host 0.0.0.0 --no-open-browser > /dev/null 2>&1 &
 backend_pid=$!  # Capture PID of the backend process
 # Adjust sleep duration as needed
 sleep 25
