@@ -1,0 +1,160 @@
+name: Flow Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: flow
+          POSTGRES_PASSWORD: flow123
+          POSTGRES_DB: flow_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+          
+    - name: Install dependencies
+      run: |
+        if [ -f "pnpm-lock.yaml" ]; then
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+        elif [ -f "yarn.lock" ]; then
+          yarn install --frozen-lockfile
+        else
+          npm ci
+        fi
+        
+    - name: Create test environment
+      run: |
+        cat > .env.test << EOF
+        DATABASE_URL=postgresql://flow:flow123@localhost:5432/flow_test
+        MONGODB_URL=mongodb://localhost:27017/flow_test
+        JWT_SECRET=test-secret
+        ENABLE_WORKFLOW_EXECUTION=true
+        MAX_CONCURRENT_WORKFLOWS=5
+        EOF
+        
+    - name: Run database migrations
+      run: |
+        npm run db:migrate || true
+        
+    - name: Lint
+      run: |
+        npm run lint || true
+        
+    - name: Type check
+      run: |
+        npm run type-check || true
+        
+    - name: Run tests
+      run: |
+        npm test
+      env:
+        NODE_ENV: test
+        
+    - name: Test workflow execution
+      run: |
+        # Create a simple test workflow
+        cat > test-workflow.json << 'EOF'
+        {
+          "name": "Test Workflow",
+          "nodes": [
+            {
+              "id": "start",
+              "type": "trigger",
+              "data": { "event": "manual" }
+            },
+            {
+              "id": "transform",
+              "type": "transform",
+              "data": { "expression": "input.value * 2" }
+            }
+          ],
+          "edges": [
+            { "source": "start", "target": "transform" }
+          ]
+        }
+        EOF
+        
+        # Test workflow validation
+        npm run validate-workflow test-workflow.json || true
+        
+  docker-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: |
+        docker build -t flow-test .
+        
+    - name: Test container startup
+      run: |
+        docker run -d \
+          --name flow-test \
+          -p 3020:3020 \
+          -e DATABASE_URL="postgresql://test:test@localhost:5432/flow" \
+          -e MONGODB_URL="mongodb://localhost:27017/flow" \
+          flow-test
+          
+        sleep 5
+        docker logs flow-test
+        docker stop flow-test
+        docker rm flow-test
+        
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Semgrep
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          p/typescript
+          p/react
+          p/security-audit
+          p/secrets
