@@ -39,31 +39,29 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Node.js 20
-      uses: actions/setup-node@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        node-version: '20'
+        python-version: '3.10'
+        
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
         
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: |
-          node_modules
-          ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') }}
+          ~/.cache/uv
+          .venv
+        key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock', 'pyproject.toml') }}
         restore-keys: |
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-uv-
           
     - name: Install dependencies
       run: |
-        if [ -f "pnpm-lock.yaml" ]; then
-          npm install -g pnpm
-          pnpm install --frozen-lockfile
-        elif [ -f "yarn.lock" ]; then
-          yarn install --frozen-lockfile
-        else
-          npm ci
-        fi
+        uv sync --frozen
         
     - name: Create test environment
       run: |
@@ -77,21 +75,21 @@ jobs:
         
     - name: Run database migrations
       run: |
-        npm run db:migrate || true
+        uv run alembic upgrade head || echo "No migrations to run"
         
     - name: Lint
       run: |
-        npm run lint || true
+        uv run ruff check . || true
         
     - name: Type check
       run: |
-        npm run type-check || true
+        uv run mypy . || true
         
     - name: Run tests
       run: |
-        npm test
+        uv run pytest -v
       env:
-        NODE_ENV: test
+        PYTHONPATH: .
         
     - name: Test workflow execution
       run: |
@@ -118,7 +116,7 @@ jobs:
         EOF
         
         # Test workflow validation
-        npm run validate-workflow test-workflow.json || true
+        uv run python -m flow.validate test-workflow.json || echo "No validation script"
         
   docker-test:
     runs-on: ubuntu-latest
@@ -154,7 +152,7 @@ jobs:
       uses: returntocorp/semgrep-action@v1
       with:
         config: >-
-          p/typescript
-          p/react
+          p/python
+          p/fastapi
           p/security-audit
           p/secrets
