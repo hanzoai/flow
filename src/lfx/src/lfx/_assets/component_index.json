@@ -73407,6 +73407,9 @@
                 "gemini-2.5-pro",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-lite",
+                "gemini-3-pro-preview",
+                "gemini-3-flash-preview",
+                "gemini-3-pro-image-preview",
                 "gemini-2.0-flash",
                 "gemini-exp-1206",
                 "gemini-2.0-flash-thinking-exp-01-21",
@@ -116028,6 +116031,6 @@
     "num_components": 355,
     "num_modules": 95
   },
-  "sha256": "b4ab0ca4b775910c63b3d714677c822d83d8a96b2d28ffe0cbca928781823492",
+  "sha256": "bb11ddfc82b9283ee12d0b6d6b079f6e67429398fb06d364ddd615f6badeaf39",
   "version": "0.3.0"
 }
