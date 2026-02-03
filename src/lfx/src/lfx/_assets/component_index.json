@@ -4527,7 +4527,7 @@
                 },
                 {
                   "name": "anthropic",
-                  "version": "0.77.0"
+                  "version": "0.77.1"
                 }
               ],
               "total_dependencies": 5
@@ -116031,6 +116031,6 @@
     "num_components": 355,
     "num_modules": 95
   },
-  "sha256": "934b201e21494ae6e11f223683ad79494bd716412b8ad697bbc27f0bb05d95aa",
+  "sha256": "de6edd6bb4cd0773739964b5d3264020f6be439c16bdf11db9d5ef9f9d4765ca",
   "version": "0.3.0"
 }
