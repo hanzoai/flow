@@ -4527,7 +4527,7 @@
                 },
                 {
                   "name": "anthropic",
-                  "version": "0.76.0"
+                  "version": "0.77.0"
                 }
               ],
               "total_dependencies": 5
@@ -4853,7 +4853,7 @@
               "dependencies": [
                 {
                   "name": "apify_client",
-                  "version": "2.4.0"
+                  "version": "2.4.1"
                 },
                 {
                   "name": "langchain_community",
@@ -67131,7 +67131,7 @@
               "dependencies": [
                 {
                   "name": "numpy",
-                  "version": "2.4.1"
+                  "version": "2.4.2"
                 },
                 {
                   "name": "lfx",
@@ -75977,7 +75977,7 @@
                 },
                 {
                   "name": "ibm_watsonx_ai",
-                  "version": "1.5.0"
+                  "version": "1.5.1"
                 },
                 {
                   "name": "langchain_ibm",
@@ -97013,7 +97013,7 @@
               "dependencies": [
                 {
                   "name": "numpy",
-                  "version": "2.4.1"
+                  "version": "2.4.2"
                 },
                 {
                   "name": "langchain_core",
@@ -104542,7 +104542,7 @@
                 },
                 {
                   "name": "supabase",
-                  "version": "2.27.2"
+                  "version": "2.25.1"
                 },
                 {
                   "name": "lfx",
@@ -115196,7 +115196,7 @@
                 },
                 {
                   "name": "youtube_transcript_api",
-                  "version": "1.2.3"
+                  "version": "1.2.4"
                 },
                 {
                   "name": "lfx",
@@ -116031,6 +116031,6 @@
     "num_components": 355,
     "num_modules": 95
   },
-  "sha256": "379c9fb65e43f6a3ec701a1732d6c74eef405885c5e3f5dad30f2271c6cff198",
+  "sha256": "934b201e21494ae6e11f223683ad79494bd716412b8ad697bbc27f0bb05d95aa",
   "version": "0.3.0"
 }
