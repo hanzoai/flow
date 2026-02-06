@@ -2780,7 +2780,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -85435,7 +85437,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -85999,7 +86003,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -86235,7 +86241,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -86479,7 +86487,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -89203,7 +89213,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -90007,7 +90019,9 @@
                 }
               },
               "info": "Select your model provider",
-              "input_types": [],
+              "input_types": [
+                "LanguageModel"
+              ],
               "list": false,
               "list_add_label": "Add More",
               "model_type": "language",
@@ -116041,6 +116055,6 @@
     "num_components": 355,
     "num_modules": 95
   },
-  "sha256": "542a8ad6d9df7a8fd3588e92fcd7cc22435d2dc95a3f1ba2b9d7416f4dbcbd0f",
+  "sha256": "b2f10149a31287800a6a0b5b634a79c86697a1efa156350e9245afb70af19953",
   "version": "0.3.0"
 }
