@@ -277,3 +277,10 @@ src/frontend/temp
 
 .dspy_cache/
 *.db
+
+
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+GROK.md
+QWEN.md
