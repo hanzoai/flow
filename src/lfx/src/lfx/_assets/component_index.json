@@ -113256,7 +113256,7 @@
                 },
                 {
                   "name": "vlmrun",
-                  "version": "0.5.4"
+                  "version": "0.1.35"
                 }
               ],
               "total_dependencies": 3
@@ -116369,6 +116369,6 @@
     "num_components": 356,
     "num_modules": 95
   },
-  "sha256": "17315e53c4cc008218504292806c596a2cab9b595531a4a562c17ffb084af07a",
+  "sha256": "410ba282efbde01dd5ea2cec1bb6fedd1e89636014b3973f5b782afec6f2ef00",
   "version": "0.3.0"
 }
