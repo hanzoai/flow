@@ -1,8 +1,8 @@
+from lfx.services.settings.service import SettingsService
 from typing_extensions import override
 
-from hanzoflow.services.factory import ServiceFactory
-from hanzoflow.services.settings.service import SettingsService
-from hanzoflow.services.state.service import InMemoryStateService
+from langflow.services.factory import ServiceFactory
+from langflow.services.state.service import InMemoryStateService
 
 
 class StateServiceFactory(ServiceFactory):

@@ -1,16 +1,17 @@
 import * as Form from "@radix-ui/react-form";
 import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
+import IconComponent from "@/components/common/genericIconComponent";
+import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { Button } from "../../components/ui/button";
 import { Checkbox } from "../../components/ui/checkbox";
 import { CONTROL_NEW_USER } from "../../constants/constants";
 import { AuthContext } from "../../contexts/authContext";
-import {
+import type {
+  inputHandlerEventType,
   UserInputType,
   UserManagementType,
-  inputHandlerEventType,
 } from "../../types/components";
-import { nodeIconsLucide } from "../../utils/styleUtils";
 import BaseModal from "../baseModal";
 
 export default function UserManagementModal({
@@ -25,7 +26,6 @@ export default function UserManagementModal({
   onConfirm,
   asChild,
 }: UserManagementType) {
-  const Icon: any = nodeIconsLucide[icon];
   const [pwdVisible, setPwdVisible] = useState(false);
   const [confirmPwdVisible, setConfirmPwdVisible] = useState(false);
   const [open, setOpen] = useState(false);
@@ -72,8 +72,8 @@ export default function UserManagementModal({
       <BaseModal.Trigger asChild={asChild}>{children}</BaseModal.Trigger>
       <BaseModal.Header description={titleHeader}>
         <span className="pr-2">{title}</span>
-        <Icon
-          name="icon"
+        <IconComponent
+          name={icon}
           className="h-6 w-6 pl-1 text-foreground"
           aria-hidden="true"
         />
@@ -241,18 +241,32 @@ export default function UserManagementModal({
                   <Form.Label className="data-[invalid]:label-invalid mr-3">
                     Active
                   </Form.Label>
-                  <Form.Control asChild>
-                    <Checkbox
-                      value={isActive}
-                      checked={isActive}
-                      id="is_active"
-                      className="relative top-0.5"
-                      onCheckedChange={(value) => {
-                        handleInput({ target: { name: "is_active", value } });
-                        setIsActive(value);
-                      }}
-                    />
-                  </Form.Control>
+                  {data?.id === userData?.id ? (
+                    <ShadTooltip content="You cannot deactivate your own account">
+                      <span className="inline-block cursor-not-allowed">
+                        <Checkbox
+                          value={isActive}
+                          checked={isActive}
+                          id="is_active"
+                          className="relative top-0.5 pointer-events-none opacity-50"
+                          disabled
+                        />
+                      </span>
+                    </ShadTooltip>
+                  ) : (
+                    <Form.Control asChild>
+                      <Checkbox
+                        value={isActive}
+                        checked={isActive}
+                        id="is_active"
+                        className="relative top-0.5"
+                        onCheckedChange={(value) => {
+                          handleInput({ target: { name: "is_active", value } });
+                          setIsActive(value);
+                        }}
+                      />
+                    </Form.Control>
+                  )}
                 </div>
               </Form.Field>
               {userData?.is_superuser && (

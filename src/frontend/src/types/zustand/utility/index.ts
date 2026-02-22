@@ -1,8 +1,11 @@
-import { Pagination, Tag } from "@/types/utils/types";
+import type { EventDeliveryType } from "@/constants/enums";
+import type { Pagination, Tag } from "@/types/utils/types";
 
 export type UtilityStoreType = {
-  selectedItems: any[];
-  setSelectedItems: (itemId: any) => void;
+  awaitingBotResponse: boolean;
+  setAwaitingBotResponse: (value: boolean) => void;
+  selectedItems: string[];
+  setSelectedItems: (itemId: string) => void;
   healthCheckTimeout: string | null;
   setHealthCheckTimeout: (timeout: string | null) => void;
   playgroundScrollBehaves: ScrollBehavior;
@@ -13,16 +16,24 @@ export type UtilityStoreType = {
   setFlowsPagination: (pagination: Pagination) => void;
   tags: Tag[];
   setTags: (tags: Tag[]) => void;
-  featureFlags: Record<string, any>;
-  setFeatureFlags: (featureFlags: Record<string, any>) => void;
+  featureFlags: Record<string, unknown>;
+  setFeatureFlags: (featureFlags: Record<string, unknown>) => void;
   webhookPollingInterval: number;
   setWebhookPollingInterval: (webhookPollingInterval: number) => void;
   chatValueStore: string;
   setChatValueStore: (value: string) => void;
-  dismissAll: boolean;
-  setDismissAll: (dismissAll: boolean) => void;
   currentSessionId: string;
   setCurrentSessionId: (sessionId: string) => void;
   setClientId: (clientId: string) => void;
   clientId: string;
+  eventDelivery: EventDeliveryType;
+  setEventDelivery: (eventDelivery: EventDeliveryType) => void;
+  serializationMaxItemsLength: number;
+  setSerializationMaxItemsLength: (serializationMaxItemsLength: number) => void;
+  webhookAuthEnable: boolean;
+  setWebhookAuthEnable: (webhookAuthEnable: boolean) => void;
+  defaultFolderName: string;
+  setDefaultFolderName: (defaultFolderName: string) => void;
+  hideGettingStartedProgress: boolean;
+  setHideGettingStartedProgress: (hideGettingStartedProgress: boolean) => void;
 };

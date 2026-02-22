@@ -5,19 +5,20 @@ from collections import OrderedDict
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 
-from loguru import logger
+from lfx.log.logger import logger
 from typing_extensions import override
 
-from hanzoflow.services.tracing.base import BaseTracer
+from langflow.serialization.serialization import serialize
+from langflow.services.tracing.base import BaseTracer
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from uuid import UUID
 
     from langchain.callbacks.base import BaseCallbackHandler
+    from lfx.graph.vertex.base import Vertex
 
-    from hanzoflow.graph.vertex.base import Vertex
-    from hanzoflow.services.tracing.schema import Log
+    from langflow.services.tracing.schema import Log
 
 
 class LangFuseTracer(BaseTracer):
@@ -108,7 +109,7 @@ class LangFuseTracer(BaseTracer):
         #     last_span = next(reversed(self.spans))
         #     span = self.spans[last_span].span(**content_span)
         # else:
-        span = self.trace.span(**content_span)
+        span = self.trace.span(**serialize(content_span))
 
         self.spans[trace_id] = span
 
@@ -131,7 +132,7 @@ class LangFuseTracer(BaseTracer):
             output |= outputs or {}
             output |= {"error": str(error)} if error else {}
             output |= {"logs": list(logs)} if logs else {}
-            content = {"output": output, "end_time": end_time}
+            content = serialize({"output": output, "end_time": end_time})
             span.update(**content)
 
     @override
@@ -149,8 +150,7 @@ class LangFuseTracer(BaseTracer):
             "output": outputs,
             "metadata": metadata,
         }
-        self.trace.update(**content_update)
-        self._client.flush()
+        self.trace.update(**serialize(content_update))
 
     def get_langchain_callback(self) -> BaseCallbackHandler | None:
         if not self._ready:

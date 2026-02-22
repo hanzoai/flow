@@ -31,6 +31,11 @@ on:
         description: "(Optional) ref to checkout"
         required: false
         type: string
+      runs-on:
+        description: "Runner to use for the tests"
+        required: false
+        type: string
+        default: "ubuntu-latest"
   workflow_dispatch:
     inputs:
       suites:
@@ -48,25 +53,34 @@ on:
         required: false
         type: string
         default: "tests"
+      runs-on:
+        description: "Runner to use for the tests"
+        required: false
+        type: choice
+        options:
+          - ubuntu-latest
+          - self-hosted
+          - '["self-hosted", "linux", "ARM64", "langflow-ai-arm64-40gb-ephemeral"]'
+        default: ubuntu-latest
 
 env:
-  NODE_VERSION: "21"
+  NODE_VERSION: "22"
   PYTHON_VERSION: "3.13"
   # Define the directory where Playwright browsers will be installed.
   # This path is used for caching across workflows
   PLAYWRIGHT_BROWSERS_PATH: "ms-playwright"
-  PLAYWRIGHT_VERSION: "1.49.1" # Add explicit version for cache key
+  PLAYWRIGHT_VERSION: "1.57.0"
 
 jobs:
   determine-test-suite:
     name: Determine Test Suites and Shard Distribution
-    runs-on: ubuntu-latest
+    runs-on: ${{ (inputs['runs-on'] && startsWith(format('{0}', inputs['runs-on']), '[') && fromJSON(inputs['runs-on'])) || inputs['runs-on'] || github.event.inputs['runs-on'] || 'ubuntu-latest' }}
     outputs:
       matrix: ${{ steps.setup-matrix.outputs.matrix }}
       test_grep: ${{ steps.set-matrix.outputs.test_grep }}
       suites: ${{ steps.set-matrix.outputs.suites }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || github.ref }}
           fetch-depth: 0
@@ -94,7 +108,7 @@ jobs:
             SUITES='["release"]'
             echo "Release build detected - setting suites to: $SUITES"
             # grep pattern for release is the @release tag - run all tests
-            TEST_GREP="--grep=\"@release\""
+            TEST_GREP='--grep="@release"'
           else
             # If input suites were not provided, determine based on changes
             if [[ "$SUITES" == "[]" ]]; then
@@ -127,6 +141,11 @@ jobs:
                 TAGS+=("@database")
                 echo "Added database suite"
               fi
+              if [[ "${{ steps.filter.outputs.mainpage }}" == "true" ]]; then
+                SUITES=$(echo $SUITES | jq -c '. += ["mainpage"]')
+                TAGS+=("@mainpage")
+                echo "Added mainpage suite"
+              fi
               if [[ "${{ steps.filter.outputs.development }}" == "true" ]]; then
                 SUITES=$(echo $SUITES | jq -c '. += ["development"]')
                 TAGS+=("@development")
@@ -137,7 +156,13 @@ jobs:
               if [ ${#TAGS[@]} -gt 0 ]; then
                 # Join tags with | for OR logic
                 REGEX_PATTERN=$(IFS='|'; echo "${TAGS[*]}")
-                TEST_GREP="--grep=\"${REGEX_PATTERN}\""
+                TEST_GREP='--grep="${REGEX_PATTERN}"'
+              else
+                # No path-specific changes detected - default to running release tests
+                # so that FE tests always run even for backend-only changes
+                SUITES='["release"]'
+                TEST_GREP='--grep="@release"'
+                echo "No path-specific changes detected - defaulting to release suite"
               fi
             else
               # Process input suites to tags
@@ -155,7 +180,7 @@ jobs:
                 fi
                 echo "Fixed suites: $SUITES"
               fi
-              
+
               TAGS=()
               if echo "$SUITES" | jq -e 'contains(["components"])' > /dev/null; then
                 TAGS+=("@components")
@@ -179,7 +204,7 @@ jobs:
               if [ ${#TAGS[@]} -gt 0 ]; then
                 # Join tags with | for OR logic
                 REGEX_PATTERN=$(IFS='|'; echo "${TAGS[*]}")
-                TEST_GREP="--grep \"${REGEX_PATTERN}\""
+                TEST_GREP='--grep "${REGEX_PATTERN}"'
               fi
             fi
           fi
@@ -195,7 +220,7 @@ jobs:
           echo "suites=$SUITES" >> $GITHUB_OUTPUT
 
       - name: Setup Node ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         id: setup-node
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -220,12 +245,12 @@ jobs:
 
           echo "Total tests to run: $TEST_COUNT"
 
-          # Calculate optimal shard count - 1 shard per 5 tests, min 1, max 10
+          # Calculate optimal shard count - 1 shard per 5 tests, min 1, max 70
           SHARD_COUNT=$(( (TEST_COUNT + 4) / 5 ))
           if [ $SHARD_COUNT -lt 1 ]; then
             SHARD_COUNT=1
-          elif [ $SHARD_COUNT -gt 10 ]; then
-            SHARD_COUNT=10
+          elif [ $SHARD_COUNT -gt 70 ]; then
+            SHARD_COUNT=70
           fi
 
           # Create the matrix combinations string
@@ -241,7 +266,7 @@ jobs:
 
   setup-and-test:
     name: Playwright Tests - Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ (inputs['runs-on'] && startsWith(format('{0}', inputs['runs-on']), '[') && fromJSON(inputs['runs-on'])) || inputs['runs-on'] || github.event.inputs['runs-on'] || 'ubuntu-latest' }}
     if: ${{ needs.determine-test-suite.outputs.test_grep != '' }}
     needs: determine-test-suite
     strategy:
@@ -256,23 +281,21 @@ jobs:
       ANTHROPIC_API_KEY: "${{ secrets.ANTHROPIC_API_KEY }}"
       TAVILY_API_KEY: "${{ secrets.TAVILY_API_KEY }}"
       LANGFLOW_DEACTIVE_TRACING: "true"
-      UV_CACHE_DIR: /tmp/.uv-cache
     outputs:
       failed: ${{ steps.check-failure.outputs.failed }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Setup Node.js Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         id: setup-node
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
           cache-dependency-path: ./src/frontend/package-lock.json
-
       - name: Install Frontend Dependencies
         run: npm ci
         working-directory: ./src/frontend
@@ -280,7 +303,7 @@ jobs:
       # Cache Playwright browsers using a composite key
       - name: Cache Playwright Browsers
         id: cache-playwright
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium-${{ runner.os }}
@@ -288,16 +311,27 @@ jobs:
             playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium-${{ runner.os }}
 
       - name: Install Playwright Browser Dependencies
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        if: steps.cache-playwright.outputs.cache-hit != 'true' && inputs.runs-on != 'self-hosted'
         run: |
           cd ./src/frontend
           npx playwright install --with-deps chromium
 
-      - name: Setup Python Environment with UV
-        uses: ./.github/actions/setup-uv
+      - name: Install Playwright Browsers (Self-Hosted)
+        if: steps.cache-playwright.outputs.cache-hit != 'true' && inputs.runs-on == 'self-hosted'
+        run: |
+          cd ./src/frontend
+          npx playwright install chromium
+
+      - name: "Setup Environment"
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+          python-version: ${{ env.PYTHON_VERSION }}
+          prune-cache: false
 
       - name: Install Python Dependencies
-        run: uv sync
+        run: uv sync --extra audio
 
       - name: Configure Environment Variables
         run: |
@@ -312,15 +346,15 @@ jobs:
           command: |
             cd src/frontend
             echo 'Running tests with pattern: ${{ needs.determine-test-suite.outputs.test_grep }}'
-            npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --list
+            npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --list --retries=3
             # echo command before running
-            echo "npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --trace on --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers 2"
+            echo "npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --trace on --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers 2 --retries=3"
 
-            npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --trace on --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers 2
+            npx playwright test ${{ inputs.tests_folder }} ${{ needs.determine-test-suite.outputs.test_grep }} --trace on --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --workers 2 --retries=3
 
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: blob-report-${{ matrix.shardIndex }}
           path: src/frontend/blob-report
@@ -333,7 +367,7 @@ jobs:
     # We need to repeat the condition at every step
     # https://github.com/actions/runner/issues/662
     needs: setup-and-test
-    runs-on: ubuntu-latest
+    runs-on: ${{ (inputs['runs-on'] && startsWith(format('{0}', inputs['runs-on']), '[') && fromJSON(inputs['runs-on'])) || inputs['runs-on'] || github.event.inputs['runs-on'] || 'ubuntu-latest' }}
     if: always()
     env:
       EXIT_CODE: ${{!contains(needs.setup-and-test.result, 'failure') && !contains(needs.setup-and-test.result, 'cancelled') && '0' || '1'}}
@@ -350,19 +384,21 @@ jobs:
           fi
       - name: Checkout code
         if: ${{ steps.should_merge_reports.outputs.should_merge_reports == 'true' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
 
       - name: Setup Node.js
 
         if: ${{ steps.should_merge_reports.outputs.should_merge_reports == 'true' }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Download blob reports from GitHub Actions Artifacts
 
         if: ${{ steps.should_merge_reports.outputs.should_merge_reports == 'true' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: all-blob-reports
           pattern: blob-report-*
@@ -377,7 +413,7 @@ jobs:
       - name: Upload HTML report
 
         if: ${{ steps.should_merge_reports.outputs.should_merge_reports == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: html-report--attempt-${{ github.run_attempt }}
           path: playwright-report
