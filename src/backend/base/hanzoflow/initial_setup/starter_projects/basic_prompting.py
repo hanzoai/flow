@@ -1,8 +1,7 @@
-from hanzoflow.components.inputs import ChatInput
-from hanzoflow.components.models import OpenAIModelComponent
-from hanzoflow.components.outputs import ChatOutput
-from hanzoflow.components.prompts import PromptComponent
-from hanzoflow.graph import Graph
+from lfx.components.input_output import ChatInput, ChatOutput
+from lfx.components.models_and_agents import PromptComponent
+from lfx.components.openai.openai_chat_model import OpenAIModelComponent
+from lfx.graph import Graph
 
 
 def basic_prompting_graph(template: str | None = None):

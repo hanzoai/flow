@@ -8,7 +8,7 @@ from hanzoflow.services.factory import ServiceFactory
 from hanzoflow.services.tracing.service import TracingService
 
 if TYPE_CHECKING:
-    from hanzoflow.services.settings.service import SettingsService
+    from lfx.services.settings.service import SettingsService
 
 
 class TracingServiceFactory(ServiceFactory):

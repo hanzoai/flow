@@ -1,3 +1,5 @@
+import { DEFAULT_FILE_PICKER_TIMEOUT } from "@/constants/constants";
+
 export function createFileUpload(props?: {
   accept?: string;
   multiple?: boolean;
@@ -13,6 +15,7 @@ export function createFileUpload(props?: {
     input.style.pointerEvents = "none";
     input.accept = props?.accept ?? ".json";
     input.multiple = props?.multiple ?? true;
+    input.setAttribute("data-testid", "hidden-file-input");
 
     let isHandled = false;
 
@@ -64,6 +67,6 @@ export function createFileUpload(props?: {
         cleanup();
         resolve([]);
       }
-    }, 30000);
+    }, DEFAULT_FILE_PICKER_TIMEOUT);
   });
 }

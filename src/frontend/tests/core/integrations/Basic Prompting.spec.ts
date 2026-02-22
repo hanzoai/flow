@@ -1,6 +1,6 @@
-import { test } from "@playwright/test";
 import * as dotenv from "dotenv";
 import path from "path";
+import { test } from "../../fixtures";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { initialGPTsetup } from "../../utils/initialGPTsetup";
 import { withEventDeliveryModes } from "../../utils/withEventDeliveryModes";
@@ -28,15 +28,17 @@ withEventDeliveryModes(
     await page.getByTestId("button_run_chat output").click();
     await page.waitForSelector("text=built successfully", { timeout: 30000 });
 
-    await page.getByText("built successfully").last().click({
-      timeout: 15000,
-    });
-
-    await page.getByText("Playground", { exact: true }).last().click();
+    await page.getByRole("button", { name: "Playground", exact: true }).click();
     await page
       .getByText("No input message provided.", { exact: true })
       .last()
       .isVisible();
+
+    //create a new session - default session can not be deleted
+    await page.getByTestId("session-selector-trigger").click();
+    await page.getByText("New Session").click();
+    await page.keyboard.press("Escape");
+    await page.getByTitle("New Session 0").isVisible();
 
     await page.waitForSelector('[data-testid="input-chat-playground"]', {
       timeout: 100000,
@@ -58,7 +60,6 @@ withEventDeliveryModes(
     });
 
     await page.getByText("matey").last().isVisible();
-    await page.getByText("Default Session").last().click();
 
     await page.getByText("timestamp", { exact: true }).last().isVisible();
     await page.getByText("text", { exact: true }).last().isVisible();
@@ -68,8 +69,8 @@ withEventDeliveryModes(
     await page.getByText("files", { exact: true }).last().isVisible();
 
     await page.getByRole("gridcell").last().isVisible();
-    await page.getByRole("combobox").click();
-    await page.getByLabel("Delete").click();
+    await page.getByTestId("chat-header-more-menu").click();
+    await page.getByTestId("delete-session-option").click();
     await page.waitForSelector('[data-testid="input-chat-playground"]', {
       timeout: 100000,
     });

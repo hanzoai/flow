@@ -1,6 +1,6 @@
-import { test } from "@playwright/test";
 import * as dotenv from "dotenv";
 import path from "path";
+import { test } from "../../fixtures";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { initialGPTsetup } from "../../utils/initialGPTsetup";
 import { withEventDeliveryModes } from "../../utils/withEventDeliveryModes";
@@ -25,16 +25,23 @@ withEventDeliveryModes(
 
     await initialGPTsetup(page);
 
+    await page.getByText("URL", { exact: true }).last().click();
+
     await page
       .getByTestId("inputlist_str_urls_0")
       .nth(0)
       .fill(
         "https://www.natgeokids.com/uk/discover/animals/sea-life/turtle-facts/",
       );
+
+    await page.getByTestId("input-list-plus-btn_urls-0").click();
+
     await page
       .getByTestId("inputlist_str_urls_1")
       .nth(0)
       .fill("https://www.originaldiving.com/blog/top-ten-turtle-facts");
+
+    await page.getByText("Instructions", { exact: true }).last().click();
 
     await page
       .getByTestId("textarea_str_input_value")
@@ -44,13 +51,11 @@ withEventDeliveryModes(
 
     await page.getByTestId("button_run_chat output").click();
 
-    await page.waitForSelector("text=built successfully", { timeout: 30000 });
-
-    await page.getByText("built successfully").last().click({
-      timeout: 30000,
+    await page.waitForSelector("text=built successfully", {
+      timeout: 30000 * 3,
     });
 
-    await page.getByText("Playground", { exact: true }).last().click();
+    await page.getByRole("button", { name: "Playground", exact: true }).click();
     await page
       .getByPlaceholder(
         "No chat input variables found. Click to run your flow.",

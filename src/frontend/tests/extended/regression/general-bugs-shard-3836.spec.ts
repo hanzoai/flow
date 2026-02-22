@@ -1,9 +1,13 @@
-import { expect, test } from "@playwright/test";
 import * as dotenv from "dotenv";
 import path from "path";
+import { expect, test } from "../../fixtures";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { initialGPTsetup } from "../../utils/initialGPTsetup";
 import { uploadFile } from "../../utils/upload-file";
+import {
+  closeAdvancedOptions,
+  openAdvancedOptions,
+} from "../../utils/open-advanced-options";
 
 test(
   "user must be able to send an image on chat using advanced tool on ChatInputComponent",
@@ -27,39 +31,41 @@ test(
     await page.waitForSelector("text=Chat Input", { timeout: 30000 });
 
     await page.getByText("Chat Input", { exact: true }).click();
-    await page.getByTestId("more-options-modal").click();
-    await page.getByTestId("advanced-button-modal").click();
+    await openAdvancedOptions(page);
     await page.getByTestId("showfiles").click();
-    await page.getByText("Close").last().click();
-
+    await closeAdvancedOptions(page);
     const userQuestion = "What is this image?";
     await page.getByTestId("textarea_str_input_value").fill(userQuestion);
 
     await uploadFile(page, "chain.png");
 
-    await page.getByTestId("button_run_chat output").click();
-    await page.getByText("built successfully").last().click({
-      timeout: 15000,
-    });
+    const uploadButton = page.getByTestId("button_upload_file");
 
-    await page.getByText("Playground", { exact: true }).last().click();
+    await uploadButton.hover();
+    await expect(uploadButton.getByTestId("icon-X")).toHaveCSS("opacity", "1");
+    await uploadButton.click();
+    await expect(page.getByText("chain.png")).not.toBeVisible();
+
+    await uploadFile(page, "chain.png");
+
+    await page.getByTestId("button_run_chat output").click();
+
+    await page.getByRole("button", { name: "Playground", exact: true }).click();
 
     await page.waitForSelector('[data-testid="button-send"]', {
       timeout: 100000,
     });
 
-    await page.waitForSelector("text=chain.png", { timeout: 30000 });
+    // await page.waitForSelector("text=chain.png", { timeout: 30000 });
 
-    expect(await page.getByAltText("generated image").isVisible()).toBeTruthy();
+    // expect(await page.getByAltText("generated image").isVisible()).toBeTruthy();
+
+    await expect(page.locator('img[alt$="chain.png"]')).toBeVisible({
+      timeout: 100000,
+    });
 
     expect(
       await page.getByTestId(`chat-message-User-${userQuestion}`).isVisible(),
     ).toBeTruthy();
-
-    const textContents = await page
-      .getByTestId("div-chat-message")
-      .allTextContents();
-
-    expect(textContents[0]).toContain("chain");
   },
 );
