@@ -1,11 +1,10 @@
-import { expect, test } from "@playwright/test";
 import * as dotenv from "dotenv";
 import path from "path";
+import { expect, test } from "../../fixtures";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { getAllResponseMessage } from "../../utils/get-all-response-message";
-import { initialGPTsetup } from "../../utils/initialGPTsetup";
-import { waitForOpenModalWithChatInput } from "../../utils/wait-for-open-modal";
 import { withEventDeliveryModes } from "../../utils/withEventDeliveryModes";
+import { selectAnthropicModel } from "../../utils/select-anthropic-model";
 
 withEventDeliveryModes(
   "Custom Component Generator",
@@ -26,29 +25,11 @@ withEventDeliveryModes(
 
     await page.getByTestId("side_nav_options_all-templates").click();
     await page.getByTestId("template-custom-component-generator").click();
-
-    await page.waitForSelector('[data-testid="fit_view"]', {
+    await page.waitForSelector('[data-testid="canvas_controls_dropdown"]', {
       timeout: 100000,
     });
 
-    await page.waitForSelector('[data-testid="dropdown_str_model_name"]', {
-      timeout: 5000,
-    });
-
-    await page.getByTestId("dropdown_str_model_name").click();
-
-    await page.keyboard.press("Enter");
-
-    await page.waitForTimeout(1000);
-
-    try {
-      await page
-        .getByTestId("anchor-popover-anchor-input-api_key")
-        .last()
-        .fill(process.env.ANTHROPIC_API_KEY ?? "");
-    } catch (e) {
-      console.log("There's API already added");
-    }
+    await selectAnthropicModel(page);
 
     await page.getByTestId("playground-btn-flow-io").click();
 

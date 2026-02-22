@@ -1,9 +1,9 @@
 import pytest
-from hanzoflow.components.outputs import ChatOutput
-from hanzoflow.schema.data import Data
-from hanzoflow.schema.dataframe import DataFrame
-from hanzoflow.schema.message import Message
-from hanzoflow.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_NAME_AI
+from lfx.components.input_output import ChatOutput
+from lfx.schema.data import Data
+from lfx.schema.dataframe import DataFrame
+from lfx.schema.message import Message
+from lfx.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_NAME_AI
 
 from tests.base import ComponentTestBaseWithClient
 
@@ -53,7 +53,7 @@ class TestChatOutput(ComponentTestBaseWithClient):
         data = Data(text="Test data message")
         component.input_value = data
         result = await component.message_response()
-        assert result.text == "Test data message"
+        assert result.text == '```json\n{\n  "text": "Test data message"\n}\n```'
         assert result.sender == MESSAGE_SENDER_AI
 
     async def test_process_dataframe_input(self, component_class, default_kwargs):

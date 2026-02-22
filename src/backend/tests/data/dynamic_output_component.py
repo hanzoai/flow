@@ -1,9 +1,8 @@
-# from hanzoflow.field_typing import Data
 from typing import Any
 
-from hanzoflow.custom import Component
-from hanzoflow.io import BoolInput, MessageTextInput, Output
-from hanzoflow.schema import Data
+from lfx.custom import Component
+from lfx.io import BoolInput, MessageTextInput, Output
+from lfx.schema import Data
 
 
 class DynamicOutputComponent(Component):

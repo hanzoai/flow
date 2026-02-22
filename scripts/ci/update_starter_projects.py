@@ -11,9 +11,9 @@ from hanzoflow.initial_setup.setup import (
     update_project_file,
     update_projects_components_with_latest_component_versions,
 )
-from hanzoflow.interface.components import get_and_cache_all_types_dict
-from hanzoflow.services.deps import get_settings_service
-from hanzoflow.services.utils import initialize_services
+from langflow.services.utils import initialize_services
+from lfx.interface.components import get_and_cache_all_types_dict
+from lfx.services.deps import get_settings_service
 
 
 async def main():

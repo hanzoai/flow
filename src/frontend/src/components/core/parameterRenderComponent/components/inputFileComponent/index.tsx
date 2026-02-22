@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import { useGetFilesV2 } from "@/controllers/API/queries/file-management";
 import { usePostUploadFile } from "@/controllers/API/queries/files/use-post-upload-file";
@@ -7,7 +8,6 @@ import FileManagerModal from "@/modals/fileManagerModal";
 import FilesRendererComponent from "@/modals/fileManagerModal/components/filesRendererComponent";
 import useFileSizeValidator from "@/shared/hooks/use-file-size-validator";
 import { cn } from "@/utils/utils";
-import { useEffect } from "react";
 import {
   CONSOLE_ERROR_MSG,
   INVALID_FILE_ALERT,
@@ -18,7 +18,7 @@ import IconComponent, {
   ForwardedIconComponent,
 } from "../../../../common/genericIconComponent";
 import { Button } from "../../../../ui/button";
-import { FileComponentType, InputProps } from "../../types";
+import type { FileComponentType, InputProps } from "../../types";
 
 export default function InputFileComponent({
   value,
@@ -27,7 +27,7 @@ export default function InputFileComponent({
   disabled,
   fileTypes,
   isList,
-  tempFile = false,
+  tempFile = true,
   editNode = false,
   id,
 }: InputProps<string, FileComponentType>): JSX.Element {
@@ -111,7 +111,7 @@ export default function InputFileComponent({
           ),
         )
           .then((results) => {
-            console.log(results);
+            console.warn(results);
             // Filter out any failed uploads
             const successfulUploads = results.filter(
               (r): r is { file_name: string; file_path: string } => r !== null,
@@ -134,11 +134,18 @@ export default function InputFileComponent({
             }
           })
           .catch((e) => {
-            console.log(e);
+            console.error(e);
             // Error handling is done in the onError callback above
           });
       },
     );
+  };
+
+  const handleDismissClick = () => {
+    handleOnNewValue({
+      value: "",
+      file_path: "",
+    });
   };
 
   const isDisabled = disabled || isPending;
@@ -182,14 +189,14 @@ export default function InputFileComponent({
       }
       handleOnNewValue({
         value: isList
-          ? (files
-              ?.filter((f) => selectedFiles.includes(f.path))
-              .map((f) => f.name) ?? [])
+          ? (files ?? [])
+              .filter((f) => selectedFiles.includes(f.path))
+              .map((f) => f.name)
           : (files?.find((f) => selectedFiles.includes(f.path))?.name ?? ""),
         file_path: isList
-          ? (files
-              ?.filter((f) => selectedFiles.includes(f.path))
-              .map((f) => f.path) ?? [])
+          ? (files ?? [])
+              .filter((f) => selectedFiles.includes(f.path))
+              .map((f) => f.path)
           : (files?.find((f) => selectedFiles.includes(f.path))?.path ?? ""),
       });
     }
@@ -202,7 +209,7 @@ export default function InputFileComponent({
           {ENABLE_FILE_MANAGEMENT && !tempFile ? (
             files && (
               <div className="relative flex w-full flex-col gap-2">
-                <div className="flex flex-col">
+                <div className="nopan nowheel flex max-h-44 flex-col overflow-y-auto">
                   <FilesRendererComponent
                     files={files.filter((file) =>
                       selectedFiles.includes(file.path),
@@ -215,10 +222,12 @@ export default function InputFileComponent({
                         value: isList
                           ? newSelectedFiles.map(
                               (file) =>
-                                files.find((f) => f.path === file)?.name,
+                                (files ?? []).find((f) => f.path === file)
+                                  ?.name,
                             )
-                          : (files.find((f) => f.path == newSelectedFiles[0]) ??
-                            ""),
+                          : ((files ?? []).find(
+                              (f) => f.path === newSelectedFiles[0],
+                            )?.name ?? ""),
                         file_path: isList
                           ? newSelectedFiles
                           : (newSelectedFiles[0] ?? ""),
@@ -233,9 +242,12 @@ export default function InputFileComponent({
                     handleOnNewValue({
                       value: isList
                         ? selectedFiles.map(
-                            (file) => files.find((f) => f.path === file)?.name,
+                            (file) =>
+                              (files ?? []).find((f) => f.path === file)?.name,
                           )
-                        : (files.find((f) => f.path == selectedFiles[0]) ?? ""),
+                        : ((files ?? []).find(
+                            (f) => f.path === selectedFiles[0],
+                          )?.name ?? ""),
                       file_path: isList
                         ? selectedFiles
                         : (selectedFiles[0] ?? ""),
@@ -296,14 +308,14 @@ export default function InputFileComponent({
               <div>
                 <Button
                   className={cn(
-                    "h-9 w-9 rounded-l-none",
+                    "h-9 w-9 rounded-l-none group relative",
                     value &&
-                      "bg-accent-emerald-foreground ring-accent-emerald-foreground hover:bg-accent-emerald-foreground",
+                      "bg-accent-emerald-foreground hover:bg-accent-red-foreground ring-accent-emerald-foreground hover:ring-accent-red-foreground",
                     isDisabled &&
                       "relative top-[1px] h-9 ring-1 ring-border ring-offset-0 hover:ring-border",
                     editNode && "h-6",
                   )}
-                  onClick={handleButtonClick}
+                  onClick={value ? handleDismissClick : handleButtonClick}
                   disabled={isDisabled}
                   size="icon"
                   data-testid="button_upload_file"
@@ -311,9 +323,17 @@ export default function InputFileComponent({
                   <IconComponent
                     name={value ? "CircleCheckBig" : "Upload"}
                     className={cn(
-                      value && "text-background",
+                      value && "text-background group-hover:opacity-0",
                       isDisabled && "text-muted-foreground",
-                      "h-4 w-4",
+                      "h-4 w-4 absolute transition-opacity duration-200",
+                    )}
+                    strokeWidth={2}
+                  />
+                  <IconComponent
+                    name={"X"}
+                    className={cn(
+                      "h-4 w-4 text-background opacity-0 absolute transition-opacity duration-200",
+                      value && "group-hover:opacity-100",
                     )}
                     strokeWidth={2}
                   />

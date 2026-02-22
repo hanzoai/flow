@@ -1,9 +1,11 @@
-import useFlowStore from "@/stores/flowStore";
-import { useMessagesStore } from "@/stores/messagesStore";
 import { keepPreviousData } from "@tanstack/react-query";
-import { ColDef, ColGroupDef } from "ag-grid-community";
-import { useQueryFunctionType } from "../../../../types/api";
-import { extractColumnsFromRows } from "../../../../utils/utils";
+import type { ColDef, ColGroupDef } from "ag-grid-community";
+import useFlowStore from "@/stores/flowStore";
+import type { useQueryFunctionType } from "../../../../types/api";
+import {
+  extractColumnsFromRows,
+  prepareSessionIdForAPI,
+} from "../../../../utils/utils";
 import { api } from "../../api";
 import { getURL } from "../../helpers/constants";
 import { UseRequestProcessor } from "../../services/request-processor";
@@ -33,7 +35,14 @@ export const useGetMessagesQuery: useQueryFunctionType<
       config["params"] = { flow_id: id };
     }
     if (params) {
-      config["params"] = { ...config["params"], ...params };
+      // Process params to ensure session_id is properly encoded
+      const processedParams = { ...params } as any;
+      if (processedParams.session_id) {
+        processedParams.session_id = prepareSessionIdForAPI(
+          processedParams.session_id,
+        );
+      }
+      config["params"] = { ...config["params"], ...processedParams };
     }
     if (!isPlaygroundPage) {
       return await api.get<any>(`${getURL("MESSAGES")}`, config);
@@ -47,7 +56,7 @@ export const useGetMessagesQuery: useQueryFunctionType<
   const responseFn = async () => {
     const data = await getMessagesFn(id, params);
     const columns = extractColumnsFromRows(data.data, mode, excludedFields);
-    useMessagesStore.getState().setMessages(data.data);
+    // React Query cache is the source of truth, no need to update store
     return { rows: data, columns };
   };
 

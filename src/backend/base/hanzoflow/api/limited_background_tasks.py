@@ -1,7 +1,7 @@
 from fastapi import BackgroundTasks
+from lfx.graph.utils import log_vertex_build
 
-from hanzoflow.graph.utils import log_vertex_build
-from hanzoflow.services.deps import get_settings_service
+from langflow.services.deps import get_settings_service
 
 
 class LimitVertexBuildBackgroundTasks(BackgroundTasks):
