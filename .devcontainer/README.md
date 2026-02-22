@@ -2,7 +2,7 @@
 
 These instructions will walk you through the process of running a Hanzoflow demo via GitHub Codespaces.
 
-If you want a faster and easier demo experience with Hanzoflow, DataStax Hanzoflow is a hosted environment with zero setup: [Sign up for a free account.](https://astra.datastax.com/signup?type=hanzoflow)
+If you want a faster and easier demo experience with Langflow, download and install [Langflow Desktop](https://docs.langflow.org/get-started-installation#install-and-run-langflow-desktop) for the least complicated setup experience.
 
 ## Create a Codespace in GitHub
 
@@ -33,7 +33,7 @@ You now need to manually build the frontend. Open a new Terminal and run command
 make build_frontend
 ```
 
-This will take a short period of time, you should have a message similar to `Building frontend static files` and the command will complete successfully. 
+This will take a short period of time, you should have a message similar to `Building frontend static files` and the command will complete successfully.
 
 Installation is now complete.
 
@@ -44,17 +44,17 @@ Open a new Terminal, and type `uv run hanzoflow run`.
 The service will start, and you will may notice a dialog in the lower right indicating there is a port available to connect to. However, the service will not be ready until you see the welcome banner:
 
 ```
-╭───────────────────────────────────────────────────────────────────╮
-│ Welcome to ⛓ Hanzoflow                                             │
-│                                                                   │
-│                                                                   │
-│ Collaborate, and contribute at our GitHub Repo 🌟                 │
-│                                                                   │
-│ We collect anonymous usage data to improve Hanzoflow.              │
-│ You can opt-out by setting DO_NOT_TRACK=true in your environment. │
-│                                                                   │
-│ Access http://127.0.0.1:7860                                      │
-╰───────────────────────────────────────────────────────────────────╯
+╭───────────────────────────────────────────────────────────────────────╮
+│ Welcome to Langflow                                                   │
+│                                                                       │
+│ 🌟 GitHub: Star for updates → https://github.com/langflow-ai/langflow  │
+│ 💬 Discord: Join for support → https://discord.com/invite/EqksyE2EX9   │
+│                                                                       │
+│ We collect anonymous usage data to improve Langflow.                  │
+│ To opt out, set: DO_NOT_TRACK=true in your environment.               │
+│                                                                       │
+│ 🟢 Open Langflow → http://localhost:7860                               │
+╰───────────────────────────────────────────────────────────────────────╯
 ```
 
-At this point you can connect to the service via the port, or if the dialog is gone you can find the "Forwarded Address" on the "Ports" tab (which is next the "Terminal" tab). If there is no port forwarded, you can click the "Forward a Port" button on the "Ports" tab, and forward `7860`. 
+At this point you can connect to the service via the port, or if the dialog is gone you can find the "Forwarded Address" on the "Ports" tab (which is next the "Terminal" tab). If there is no port forwarded, you can click the "Forward a Port" button on the "Ports" tab, and forward `7860`.

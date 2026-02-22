@@ -1,7 +1,7 @@
 import pytest
-from hanzoflow.components.processing.regex import RegexExtractorComponent
-from hanzoflow.schema import Data
-from hanzoflow.schema.message import Message
+from lfx.components.processing.regex import RegexExtractorComponent
+from lfx.schema import Data
+from lfx.schema.message import Message
 
 from tests.base import ComponentTestBaseWithoutClient
 

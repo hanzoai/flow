@@ -1,9 +1,9 @@
 import json
 
-from hanzoflow.custom import Component
-from hanzoflow.inputs import BoolInput, StrInput
-from hanzoflow.schema import Data
-from hanzoflow.template import Output
+from lfx.custom import Component
+from lfx.inputs import BoolInput, StrInput
+from lfx.schema import Data
+from lfx.template import Output
 
 
 class TextToData(Component):

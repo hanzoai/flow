@@ -1,3 +1,5 @@
+import { cloneDeep } from "lodash";
+import { useContext, useEffect, useRef, useState } from "react";
 import PaginatorComponent from "@/components/common/paginatorComponent";
 import {
   useAddUser,
@@ -6,8 +8,6 @@ import {
   useUpdateUser,
 } from "@/controllers/API/queries/auth";
 import CustomLoader from "@/customization/components/custom-loader";
-import { cloneDeep } from "lodash";
-import { useContext, useEffect, useRef, useState } from "react";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
 import { Button } from "../../components/ui/button";
@@ -40,8 +40,8 @@ import { AuthContext } from "../../contexts/authContext";
 import ConfirmationModal from "../../modals/confirmationModal";
 import UserManagementModal from "../../modals/userManagementModal";
 import useAlertStore from "../../stores/alertStore";
-import { Users } from "../../types/api";
-import { UserInputType } from "../../types/components";
+import type { Users } from "../../types/api";
+import type { UserInputType } from "../../types/components";
 
 export default function AdminPage() {
   const [inputValue, setInputValue] = useState("");
@@ -352,36 +352,44 @@ export default function AdminPage() {
                             </ShadTooltip>
                           </TableCell>
                           <TableCell className="relative left-1 truncate py-2 text-align-last-left">
-                            <ConfirmationModal
-                              size="x-small"
-                              title="Edit"
-                              titleHeader={`${user.username}`}
-                              modalContentTitle="Attention!"
-                              cancelText="Cancel"
-                              confirmationText="Confirm"
-                              icon={"UserCog2"}
-                              data={user}
-                              index={index}
-                              onConfirm={(index, user) => {
-                                handleDisableUser(
-                                  user.is_active,
-                                  user.id,
-                                  user,
-                                );
-                              }}
-                            >
-                              <ConfirmationModal.Content>
-                                <span>
-                                  Are you completely confident about the changes
-                                  you are making to this user?
-                                </span>
-                              </ConfirmationModal.Content>
-                              <ConfirmationModal.Trigger>
-                                <div className="flex w-fit">
+                            {user.id === userData?.id ? (
+                              <ShadTooltip content="You cannot deactivate your own account">
+                                <div className="flex w-fit cursor-not-allowed opacity-50">
                                   <CheckBoxDiv checked={user.is_active} />
                                 </div>
-                              </ConfirmationModal.Trigger>
-                            </ConfirmationModal>
+                              </ShadTooltip>
+                            ) : (
+                              <ConfirmationModal
+                                size="x-small"
+                                title="Edit"
+                                titleHeader={`${user.username}`}
+                                modalContentTitle="Attention!"
+                                cancelText="Cancel"
+                                confirmationText="Confirm"
+                                icon={"UserCog2"}
+                                data={user}
+                                index={index}
+                                onConfirm={(index, user) => {
+                                  handleDisableUser(
+                                    user.is_active,
+                                    user.id,
+                                    user,
+                                  );
+                                }}
+                              >
+                                <ConfirmationModal.Content>
+                                  <span>
+                                    Are you completely confident about the
+                                    changes you are making to this user?
+                                  </span>
+                                </ConfirmationModal.Content>
+                                <ConfirmationModal.Trigger>
+                                  <div className="flex w-fit">
+                                    <CheckBoxDiv checked={user.is_active} />
+                                  </div>
+                                </ConfirmationModal.Trigger>
+                              </ConfirmationModal>
+                            )}
                           </TableCell>
                           <TableCell className="relative left-1 truncate py-2 text-align-last-left">
                             <ConfirmationModal

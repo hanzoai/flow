@@ -1,12 +1,11 @@
-from hanzoflow.components.crewai.crewai import CrewAIAgentComponent
-from hanzoflow.components.crewai.hierarchical_crew import HierarchicalCrewComponent
-from hanzoflow.components.crewai.hierarchical_task import HierarchicalTaskComponent
-from hanzoflow.components.inputs import ChatInput
-from hanzoflow.components.models import OpenAIModelComponent
-from hanzoflow.components.outputs import ChatOutput
-from hanzoflow.components.prompts import PromptComponent
-from hanzoflow.components.tools import SearchAPIComponent, YfinanceToolComponent
-from hanzoflow.graph import Graph
+from lfx.components.crewai.crewai import CrewAIAgentComponent
+from lfx.components.crewai.hierarchical_crew import HierarchicalCrewComponent
+from lfx.components.crewai.hierarchical_task import HierarchicalTaskComponent
+from lfx.components.input_output import ChatInput, ChatOutput
+from lfx.components.models_and_agents import PromptComponent
+from lfx.components.openai.openai_chat_model import OpenAIModelComponent
+from lfx.components.tools import SearchAPIComponent, YfinanceToolComponent
+from lfx.graph import Graph
 
 
 def complex_agent_graph():

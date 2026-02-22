@@ -1,10 +1,16 @@
+import { useMemo } from "react";
 import { getNodeInputColors } from "@/CustomNodes/helpers/get-node-input-colors";
 import { getNodeInputColorsName } from "@/CustomNodes/helpers/get-node-input-colors-name";
 import { sortToolModeFields } from "@/CustomNodes/helpers/sort-tool-mode-field";
 import getFieldTitle from "@/CustomNodes/utils/get-field-title";
 import { scapedJSONStringfy } from "@/utils/reactflowUtils";
-import { useMemo } from "react";
 import NodeInputField from "../NodeInputField";
+import { findPrimaryInput } from "./utils";
+import {
+  isCanvasVisible,
+  isInternalField,
+} from "@/CustomNodes/helpers/parameter-filtering";
+import useFlowStore from "@/stores/flowStore";
 
 const RenderInputParameters = ({
   data,
@@ -14,9 +20,11 @@ const RenderInputParameters = ({
   shownOutputs,
   showHiddenOutputs,
 }) => {
+  const edges = useFlowStore((state) => state.edges);
+
   const templateFields = useMemo(() => {
     return Object.keys(data.node?.template || {})
-      .filter((templateField) => templateField.charAt(0) !== "_")
+      .filter((templateField) => !isInternalField(templateField))
       .sort((a, b) =>
         sortToolModeFields(
           a,
@@ -27,6 +35,13 @@ const RenderInputParameters = ({
         ),
       );
   }, [data.node?.template, data.node?.field_order, isToolMode]);
+
+  const shownTemplateFields = useMemo(() => {
+    return templateFields.filter((templateField) => {
+      const template = data.node?.template[templateField];
+      return isCanvasVisible(template, isToolMode);
+    });
+  }, [templateFields, data.node?.template, isToolMode]);
 
   const memoizedColors = useMemo(() => {
     const colorMap = new Map();
@@ -74,20 +89,29 @@ const RenderInputParameters = ({
     return keyMap;
   }, [templateFields, data.id, data.node?.template]);
 
-  const renderInputParameter = templateFields.map(
-    (templateField: string, idx) => {
-      const template = data.node?.template[templateField];
+  const { displayHandleMap, primaryInputFieldName } = useMemo(() => {
+    return findPrimaryInput(
+      shownTemplateFields,
+      data.node?.template ?? {},
+      isToolMode,
+      data.id,
+      edges,
+    );
+  }, [shownTemplateFields, data.node?.template, isToolMode, data.id, edges]);
 
-      if (!template?.show || template?.advanced) {
-        return null;
-      }
+  const renderInputParameter = shownTemplateFields.map(
+    (templateField: string, idx: number) => {
+      const template = data.node?.template[templateField];
 
       const memoizedColor = memoizedColors.get(templateField);
       const memoizedKey = memoizedKeys.get(templateField);
 
       return (
         <NodeInputField
-          lastInput={!(shownOutputs.length > 0 || showHiddenOutputs)}
+          lastInput={
+            !(shownOutputs.length > 0 || showHiddenOutputs) &&
+            idx === shownTemplateFields.length - 1
+          }
           key={memoizedKey}
           data={data}
           colors={memoizedColor.colors}
@@ -108,6 +132,8 @@ const RenderInputParameters = ({
           showNode={showNode}
           colorName={memoizedColor.colorsName}
           isToolMode={isToolMode && template.tool_mode}
+          isPrimaryInput={templateField === primaryInputFieldName}
+          displayHandle={displayHandleMap.get(templateField) ?? false}
         />
       );
     },

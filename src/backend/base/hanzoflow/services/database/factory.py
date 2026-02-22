@@ -6,7 +6,7 @@ from hanzoflow.services.database.service import DatabaseService
 from hanzoflow.services.factory import ServiceFactory
 
 if TYPE_CHECKING:
-    from hanzoflow.services.settings.service import SettingsService
+    from lfx.services.settings.service import SettingsService
 
 
 class DatabaseServiceFactory(ServiceFactory):

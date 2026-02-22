@@ -1,8 +1,8 @@
 import re
 
 import pytest
-from hanzoflow.components.processing import UpdateDataComponent
-from hanzoflow.schema import Data
+from lfx.components.processing.update_data import UpdateDataComponent
+from lfx.schema import Data
 
 
 @pytest.fixture

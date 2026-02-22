@@ -1,6 +1,7 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
 import { useEffect, useState } from "react";
-import { InputProps, TabComponentType } from "../../types";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
+import { testIdCase } from "@/utils/utils";
+import type { InputProps, TabComponentType } from "../../types";
 
 export default function TabComponent({
   id,
@@ -9,8 +10,9 @@ export default function TabComponent({
   handleOnNewValue,
   disabled,
   options = [],
+  showParameter = true,
   ...baseInputProps
-}: InputProps<string, TabComponentType>) {
+}: InputProps<string, TabComponentType>): JSX.Element | null {
   const [activeTab, setActiveTab] = useState<string>(value || "");
 
   // Update the active tab when the component props change
@@ -34,6 +36,10 @@ export default function TabComponent({
     .slice(0, 3)
     .map((tab) => (tab.length > 20 ? tab.substring(0, 20) : tab));
 
+  if (!showParameter) {
+    return null;
+  }
+
   return (
     <div className="w-full">
       <Tabs
@@ -47,8 +53,9 @@ export default function TabComponent({
             <TabsTrigger
               key={`${id}_tab_${index}`}
               value={tab}
-              className="flex-1"
+              className="block flex-1 truncate px-2"
               disabled={disabled}
+              data-testid={`tab_${index}_${testIdCase(tab)}`}
             >
               {tab}
             </TabsTrigger>

@@ -1,7 +1,7 @@
+import { truncate } from "lodash";
+import { useCallback, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import Loading from "@/components/ui/loading";
-import { truncate } from "lodash";
-import { useState } from "react";
 import ConfirmationModal from "../confirmationModal";
 
 export function SaveChangesModal({
@@ -20,6 +20,14 @@ export function SaveChangesModal({
   autoSave: boolean;
 }): JSX.Element {
   const [saving, setSaving] = useState(false);
+
+  const handleOpenAutoFocus = useCallback((e: Event) => {
+    e.preventDefault();
+    (
+      document.querySelector('[data-testid="replace-button"]') as HTMLElement
+    )?.focus();
+  }, []);
+
   return (
     <ConfirmationModal
       open={true}
@@ -42,6 +50,7 @@ export function SaveChangesModal({
       onCancel={onProceed}
       loading={autoSave ? true : saving}
       size="x-small"
+      onOpenAutoFocus={handleOpenAutoFocus}
     >
       <ConfirmationModal.Content>
         {autoSave ? (
@@ -58,8 +67,9 @@ export function SaveChangesModal({
             Unsaved changes will be permanently lost.{" "}
             <a
               target="_blank"
-              className="underline"
-              href="https://docs.hanzoflow.org/configuration-auto-save"
+              className="text-accent-pink-foreground hover:underline"
+              href="https://docs.langflow.org/environment-variables#visual-editor-and-playground-behavior"
+              rel="noopener"
             >
               Enable auto-saving
             </a>{" "}

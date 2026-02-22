@@ -276,11 +276,18 @@ src/frontend/temp
 .history
 
 .dspy_cache/
-*.db
+*.db*
+*.mcp.json
 
-
-AGENTS.md
+news-aggregated.json
 CLAUDE.md
-GEMINI.md
-GROK.md
-QWEN.md
+.claude
+
+member_servers.json
+# Component index cache (user-specific)
+**/.cache/lfx/
+
+# data files used for desktop registration
+data/user
+
+sso-config.yaml

@@ -1,12 +1,8 @@
-import logging
-
 from pydantic import BaseModel, field_serializer
 from pydantic_core import PydanticSerializationError
 
 from hanzoflow.schema.log import LoggableType
 from hanzoflow.serialization.serialization import serialize
-
-logger = logging.getLogger(__name__)
 
 
 class Log(BaseModel):

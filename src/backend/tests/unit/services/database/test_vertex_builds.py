@@ -3,9 +3,9 @@ from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
-from hanzoflow.services.database.models.vertex_builds.crud import log_vertex_build
-from hanzoflow.services.database.models.vertex_builds.model import VertexBuildBase, VertexBuildTable
-from hanzoflow.services.settings.base import Settings
+from langflow.services.database.models.vertex_builds.crud import log_vertex_build
+from langflow.services.database.models.vertex_builds.model import VertexBuildBase, VertexBuildTable
+from lfx.services.settings.base import Settings
 from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 

@@ -1,4 +1,4 @@
-from hanzoflow.services.cache import ThreadingInMemoryCache
+from langflow.services.cache.service import ThreadingInMemoryCache
 
 
 class SharedComponentCacheService(ThreadingInMemoryCache):

@@ -4,10 +4,10 @@ import time
 from typing import Generic
 
 from diskcache import Cache
-from loguru import logger
+from lfx.log.logger import logger
+from lfx.services.cache.utils import CACHE_MISS
 
-from hanzoflow.services.cache.base import AsyncBaseCacheService, AsyncLockType
-from hanzoflow.services.cache.utils import CACHE_MISS
+from langflow.services.cache.base import AsyncBaseCacheService, AsyncLockType
 
 
 class AsyncDiskCache(AsyncBaseCacheService, Generic[AsyncLockType]):

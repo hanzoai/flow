@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from uuid import UUID
 
     from langchain.callbacks.base import BaseCallbackHandler
+    from lfx.graph.vertex.base import Vertex
 
-    from hanzoflow.graph.vertex.base import Vertex
-    from hanzoflow.services.tracing.schema import Log
+    from langflow.services.tracing.schema import Log
 
 
 class BaseTracer(ABC):

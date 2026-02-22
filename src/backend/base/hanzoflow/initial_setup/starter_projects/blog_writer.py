@@ -1,12 +1,11 @@
 from textwrap import dedent
 
-from hanzoflow.components.data import URLComponent
-from hanzoflow.components.inputs import TextInputComponent
-from hanzoflow.components.models import OpenAIModelComponent
-from hanzoflow.components.outputs import ChatOutput
-from hanzoflow.components.processing import ParseDataComponent
-from hanzoflow.components.prompts import PromptComponent
-from hanzoflow.graph import Graph
+from lfx.components.data import URLComponent
+from lfx.components.input_output import ChatOutput, TextInputComponent
+from lfx.components.models_and_agents import PromptComponent
+from lfx.components.openai.openai_chat_model import OpenAIModelComponent
+from lfx.components.processing import ParserComponent
+from lfx.graph import Graph
 
 
 def blog_writer_graph(template: str | None = None):
@@ -22,9 +21,9 @@ def blog_writer_graph(template: str | None = None):
 Blog:
 """)
     url_component = URLComponent()
-    url_component.set(urls=["https://hanzoflow.org/", "https://docs.hanzoflow.org/"])
-    parse_data_component = ParseDataComponent()
-    parse_data_component.set(data=url_component.fetch_content)
+    url_component.set(urls=["https://langflow.org/", "https://docs.langflow.org/"])
+    parse_data_component = ParserComponent()
+    parse_data_component.set(input_data=url_component.fetch_content)
 
     text_input = TextInputComponent(_display_name="Instructions")
     text_input.set(
@@ -36,7 +35,7 @@ Blog:
     prompt_component.set(
         template=template,
         instructions=text_input.text_response,
-        references=parse_data_component.parse_data,
+        references=parse_data_component.parse_combined_text,
     )
 
     openai_component = OpenAIModelComponent()
