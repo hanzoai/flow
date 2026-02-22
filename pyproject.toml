@@ -1,5 +1,5 @@
 [project]
-name = "langflow"
+name = "hanzoflow"
 version = "1.8.0"
 description = "A Python package with a built-in web application"
 requires-python = ">=3.10,<3.14"
