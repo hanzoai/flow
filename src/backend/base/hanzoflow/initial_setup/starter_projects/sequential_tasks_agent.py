@@ -1,11 +1,10 @@
-from hanzoflow.components.crewai.sequential_crew import SequentialCrewComponent
-from hanzoflow.components.crewai.sequential_task_agent import SequentialTaskAgentComponent
-from hanzoflow.components.inputs import TextInputComponent
-from hanzoflow.components.models import OpenAIModelComponent
-from hanzoflow.components.outputs import ChatOutput
-from hanzoflow.components.prompts import PromptComponent
-from hanzoflow.components.tools import SearchAPIComponent
-from hanzoflow.graph import Graph
+from lfx.components.crewai.sequential_crew import SequentialCrewComponent
+from lfx.components.crewai.sequential_task_agent import SequentialTaskAgentComponent
+from lfx.components.input_output import ChatOutput, TextInputComponent
+from lfx.components.models_and_agents import PromptComponent
+from lfx.components.openai.openai_chat_model import OpenAIModelComponent
+from lfx.components.tools import SearchAPIComponent
+from lfx.graph import Graph
 
 
 def sequential_tasks_agent_graph():

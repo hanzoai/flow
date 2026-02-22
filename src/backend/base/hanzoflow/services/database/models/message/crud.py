@@ -1,8 +1,9 @@
 from uuid import UUID
 
-from hanzoflow.services.database.models.message.model import MessageTable, MessageUpdate
-from hanzoflow.services.deps import session_scope
-from hanzoflow.utils.async_helpers import run_until_complete
+from lfx.utils.async_helpers import run_until_complete
+
+from langflow.services.database.models.message.model import MessageTable, MessageUpdate
+from langflow.services.deps import session_scope
 
 
 async def _update_message(message_id: UUID | str, message: MessageUpdate | dict):
@@ -16,7 +17,7 @@ async def _update_message(message_id: UUID | str, message: MessageUpdate | dict)
         message_dict = message.model_dump(exclude_unset=True, exclude_none=True)
         db_message.sqlmodel_update(message_dict)
         session.add(db_message)
-        await session.commit()
+        await session.flush()
         await session.refresh(db_message)
         return db_message
 

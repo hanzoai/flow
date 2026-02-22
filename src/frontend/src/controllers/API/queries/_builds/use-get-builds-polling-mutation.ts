@@ -1,11 +1,14 @@
+import { useEffect, useRef } from "react";
+import useAlertStore from "@/stores/alertStore";
 import useFlowStore from "@/stores/flowStore";
 import { useUtilityStore } from "@/stores/utilityStore";
-import { useMutationFunctionType } from "@/types/api";
-import { FlowPoolType } from "@/types/zustand/flow";
-import { useEffect, useRef } from "react";
+import type { useMutationFunctionType } from "@/types/api";
+import type { FlowPoolType } from "@/types/zustand/flow";
 import { api } from "../../api";
 import { getURL } from "../../helpers/constants";
 import { UseRequestProcessor } from "../../services/request-processor";
+
+const MAX_ERROR_DISPLAY_COUNT = 1;
 
 interface PollingItem {
   interval: NodeJS.Timeout;
@@ -96,6 +99,10 @@ export const useGetBuildsMutation: useMutationFunctionType<
 
   const flowIdRef = useRef<string | null>(null);
   const requestInProgressRef = useRef<Record<string, boolean>>({});
+  const errorDisplayCountRef = useRef<number>(0);
+  const timeoutIdsRef = useRef<number[]>([]);
+
+  const setErrorData = useAlertStore((state) => state.setErrorData);
 
   const getBuildsFn = async (
     payload: IGetBuilds,
@@ -111,10 +118,51 @@ export const useGetBuildsMutation: useMutationFunctionType<
       const res = await api.get<any>(`${getURL("BUILDS")}`, config);
 
       if (currentFlow) {
-        const flowPool = res?.data?.vertex_builds;
-        if (Object.keys(flowPool).length > 0) {
-          setFlowPool(flowPool);
+        const newFlowPool = res?.data?.vertex_builds;
+        if (Object.keys(newFlowPool).length > 0) {
+          // Merge with existing flow pool to preserve duration from SSE events
+          const existingFlowPool = useFlowStore.getState().flowPool;
+          const mergedFlowPool = { ...newFlowPool };
+
+          // For each vertex, preserve duration from SSE if polling data doesn't have it
+          Object.keys(mergedFlowPool).forEach((key) => {
+            const existingEntries = existingFlowPool[key];
+            const newEntries = mergedFlowPool[key];
+
+            if (existingEntries && newEntries && newEntries.length > 0) {
+              // Find duration from existing SSE data
+              const existingDuration =
+                existingEntries[existingEntries.length - 1]?.data?.duration;
+
+              // If we have duration from SSE but polling doesn't have it, add it
+              if (existingDuration && newEntries[newEntries.length - 1]?.data) {
+                const lastEntry = newEntries[newEntries.length - 1];
+                if (!lastEntry.data.duration) {
+                  lastEntry.data.duration = existingDuration;
+                }
+              }
+            }
+          });
+
+          setFlowPool(mergedFlowPool);
         }
+
+        if (errorDisplayCountRef.current < MAX_ERROR_DISPLAY_COUNT) {
+          Object.keys(newFlowPool).forEach((key) => {
+            const nodeBuild = newFlowPool[key];
+            if (nodeBuild.length > 0 && nodeBuild[0]?.valid === false) {
+              const errorMessage = nodeBuild?.[0]?.params || "Unknown error";
+              if (errorMessage) {
+                setErrorData({
+                  title: "Last build failed",
+                  list: [errorMessage],
+                });
+                errorDisplayCountRef.current = MAX_ERROR_DISPLAY_COUNT;
+              }
+            }
+          });
+        }
+
         return;
       }
 
@@ -145,9 +193,9 @@ export const useGetBuildsMutation: useMutationFunctionType<
     const timestamp = Date.now();
     const pollCallback = async () => {
       const data = await getBuildsFn(payload);
-      payload.onSuccess?.(data);
+      payload.onSuccess?.(data!);
 
-      if (payload.stopPollingOn?.(data)) {
+      if (payload.stopPollingOn?.(data!)) {
         PollingManager.stopPoll(payload.flowId);
       }
     };
@@ -164,8 +212,8 @@ export const useGetBuildsMutation: useMutationFunctionType<
     PollingManager.enqueuePolling(payload.flowId, pollingItem);
 
     return getBuildsFn(payload).then((data) => {
-      payload.onSuccess?.(data);
-      if (payload.stopPollingOn?.(data)) {
+      payload.onSuccess?.(data!);
+      if (payload.stopPollingOn?.(data!)) {
         PollingManager.stopPoll(payload.flowId);
       }
     });
@@ -176,6 +224,13 @@ export const useGetBuildsMutation: useMutationFunctionType<
       if (flowIdRef.current) {
         PollingManager.stopPoll(flowIdRef.current);
       }
+      // Clear all timeouts
+      timeoutIdsRef.current.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+      timeoutIdsRef.current = [];
+      // Reset error display count when component unmounts
+      errorDisplayCountRef.current = 0;
     };
   }, []);
 

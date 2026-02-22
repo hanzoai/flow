@@ -77,6 +77,7 @@ const StoreApiKeyFormComponent = ({
                   className="text-high-indigo underline"
                   href="https://hanzoflow.store/"
                   target="_blank"
+                  rel="noopener"
                 >
                   hanzoflow.store
                 </a>
