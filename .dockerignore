@@ -1,61 +1,12 @@
-# Git
-.git/
-.gitignore
-.github/
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-.env
-.venv/
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-.pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.ruff_cache/
-*.egg-info/
-dist/
-build/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Documentation
-docs/_build/
-*.md
-!README.md
-
-# Tests
-tests/
-test_*.py
-*_test.py
-
-# Development
-.dockerignore
-Dockerfile
-docker-compose*.yml
-Makefile
-*.log
-
-# Flow specific
-data/
-logs/
-.cache/
-tmp/
+src/frontend/node_modules
+src/frontend/build
+src/frontend/coverage
+src/frontend/test-results
+src/frontend/playwright-report
+src/frontend/.dspy_cache
+**/.DS_Store
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.venv
+**/.env

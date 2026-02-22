@@ -6,7 +6,7 @@ from hanzoflow.services.factory import ServiceFactory
 from hanzoflow.services.shared_component_cache.service import SharedComponentCacheService
 
 if TYPE_CHECKING:
-    from hanzoflow.services.settings.service import SettingsService
+    from lfx.services.settings.service import SettingsService
 
 
 class SharedComponentCacheServiceFactory(ServiceFactory):
