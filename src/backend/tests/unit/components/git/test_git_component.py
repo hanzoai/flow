@@ -2,7 +2,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from hanzoflow.components.git import GitLoaderComponent
+from lfx.components.git import GitLoaderComponent
 
 
 @pytest.fixture

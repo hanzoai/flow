@@ -1,6 +1,8 @@
-import { expect, Page, test } from "@playwright/test";
 import * as dotenv from "dotenv";
 import path from "path";
+import { expect, test } from "../../fixtures";
+import { addFlowToTestOnEmptyLangflow } from "../../utils/add-flow-to-test-on-empty-langflow";
+import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 import { initialGPTsetup } from "../../utils/initialGPTsetup";
 
@@ -20,22 +22,32 @@ test(
 
     await awaitBootstrapTest(page);
 
+    const firstRunLangflow = await page
+      .getByTestId("empty-project-description")
+      .count();
+
+    if (firstRunLangflow > 0) {
+      await addFlowToTestOnEmptyLangflow(page);
+    }
+
     await page.getByTestId("side_nav_options_all-templates").click();
     await page.getByRole("heading", { name: "Basic Prompting" }).click();
 
     await initialGPTsetup(page);
 
+    // Use unique prompts to avoid OpenAI caching returning identical responses
+    const timestamp = Date.now();
+
+    await page.getByText("Chat Input", { exact: true }).click();
+
     await page
       .getByTestId("textarea_str_input_value")
       .first()
       .fill(
-        "say a random number between 1 and 300000 and a random animal that lives in the sea",
+        `say a random number between 1 and 300000 and a random animal that lives in the sea. Request ID: ${timestamp}-1`,
       );
 
-    await page.getByTestId("dropdown_str_model_name").click();
-    await page.getByTestId("gpt-4o-1-option").click();
-
-    await page.getByTestId("fit_view").click();
+    await adjustScreenView(page);
 
     await page.waitForSelector('[data-testid="button_run_chat output"]', {
       timeout: 3000,
@@ -45,12 +57,8 @@ test(
 
     await page.waitForSelector("text=built successfully", { timeout: 30000 });
 
-    await page.getByText("built successfully").last().click({
-      timeout: 15000,
-    });
-
     await page
-      .getByTestId("output-inspection-message-chatoutput")
+      .getByTestId("output-inspection-output message-chatoutput")
       .first()
       .click();
 
@@ -61,9 +69,15 @@ test(
 
     await page.getByText("Close").last().click();
 
-    // Change model to force different output
-    await page.getByTestId("dropdown_str_model_name").click();
-    await page.getByTestId("gpt-4o-mini-0-option").click();
+    await page.getByText("Chat Input", { exact: true }).click();
+
+    // Change the prompt to ensure different output (avoid OpenAI caching)
+    await page
+      .getByTestId("textarea_str_input_value")
+      .first()
+      .fill(
+        `say a random number between 1 and 300000 and a random animal that lives in the sea. Request ID: ${timestamp}-2`,
+      );
 
     await page.waitForSelector('[data-testid="button_run_chat output"]', {
       timeout: 3000,
@@ -72,12 +86,8 @@ test(
     await page.getByTestId("button_run_chat output").click();
     await page.waitForSelector("text=built successfully", { timeout: 30000 });
 
-    await page.getByText("built successfully").last().click({
-      timeout: 15000,
-    });
-
     await page
-      .getByTestId("output-inspection-message-chatoutput")
+      .getByTestId("output-inspection-output message-chatoutput")
       .first()
       .click();
 
@@ -92,19 +102,18 @@ test(
       timeout: 3000,
     });
 
-    await page.getByText("OpenAI", { exact: true }).last().click();
+    await page
+      .locator(".react-flow__node", {
+        has: page.getByText("Language Model", { exact: true }),
+      })
+      .last()
+      .click();
 
     await page.waitForSelector('[data-testid="more-options-modal"]', {
       timeout: 3000,
     });
 
-    await page.getByTestId("more-options-modal").click();
-
-    await page.waitForSelector('[data-testid="freeze-path-button"]', {
-      timeout: 3000,
-    });
-
-    await page.getByTestId("freeze-path-button").click();
+    await page.getByText("Freeze").first().click();
 
     await page.waitForTimeout(2000);
 
@@ -122,12 +131,8 @@ test(
 
     await page.waitForSelector("text=built successfully", { timeout: 30000 });
 
-    await page.getByText("built successfully").last().click({
-      timeout: 15000,
-    });
-
     await page
-      .getByTestId("output-inspection-message-chatoutput")
+      .getByTestId("output-inspection-output message-chatoutput")
       .first()
       .click();
 
@@ -143,27 +148,3 @@ test(
     expect(secondRandomTextGeneratedByAI).toEqual(thirdRandomTextGeneratedByAI);
   },
 );
-
-async function moveSlider(
-  page: Page,
-  side: "left" | "right",
-  advanced: boolean = false,
-) {
-  const thumbSelector = `slider_thumb${advanced ? "_advanced" : ""}`;
-  const trackSelector = `slider_track${advanced ? "_advanced" : ""}`;
-
-  await page.getByTestId(thumbSelector).click();
-
-  const trackBoundingBox = await page.getByTestId(trackSelector).boundingBox();
-
-  if (trackBoundingBox) {
-    const moveDistance =
-      trackBoundingBox.width * 0.1 * (side === "left" ? -1 : 1);
-    const centerX = trackBoundingBox.x + trackBoundingBox.width / 2;
-    const centerY = trackBoundingBox.y + trackBoundingBox.height / 2;
-
-    await page.mouse.move(centerX + moveDistance, centerY);
-    await page.mouse.down();
-    await page.mouse.up();
-  }
-}

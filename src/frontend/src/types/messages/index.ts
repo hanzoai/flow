@@ -1,4 +1,4 @@
-import { ContentBlock } from "../chat";
+import type { ContentBlock } from "../chat";
 
 type Message = {
   flow_id: string;
@@ -8,12 +8,16 @@ type Message = {
   session_id: string;
   timestamp: string;
   files: Array<string>;
-  id: string;
+  id: string | null; // null for placeholder messages
   edit: boolean;
   background_color: string;
   text_color: string;
   category?: string;
-  properties?: any;
+  properties?: {
+    state?: "partial" | "complete";
+    source?: { id?: string };
+    [key: string]: unknown;
+  };
   content_blocks?: ContentBlock[];
 };
 
