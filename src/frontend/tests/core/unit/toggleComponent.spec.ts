@@ -1,6 +1,12 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../../fixtures";
 import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
+import {
+  closeAdvancedOptions,
+  disableInspectPanel,
+  enableInspectPanel,
+  openAdvancedOptions,
+} from "../../utils/open-advanced-options";
 
 test(
   "ToggleComponent",
@@ -16,11 +22,11 @@ test(
     await page.getByTestId("sidebar-search-input").click();
     await page.getByTestId("sidebar-search-input").fill("directory");
 
-    await page.waitForSelector('[data-testid="dataDirectory"]', {
+    await page.waitForSelector('[data-testid="files_and_knowledgeDirectory"]', {
       timeout: 30000,
     });
     await page
-      .getByTestId("dataDirectory")
+      .getByTestId("files_and_knowledgeDirectory")
       .dragTo(page.locator('//*[@id="react-flow-id"]'));
     await page.mouse.up();
     await page.mouse.down();
@@ -29,21 +35,16 @@ test(
 
     await page.getByTestId("div-generic-node").click();
 
-    await page.getByTestId("more-options-modal").click();
-    await page.getByTestId("advanced-button-modal").click();
+    await openAdvancedOptions(page);
 
     await page.locator('//*[@id="showload_hidden"]').click();
     expect(
       await page.locator('//*[@id="showload_hidden"]').isChecked(),
     ).toBeTruthy();
 
-    await page.getByText("Close").last().click();
+    await closeAdvancedOptions(page);
 
-    await page.waitForSelector('[data-testid="fit_view"]', {
-      timeout: 100000,
-    });
-
-    await page.getByTestId("fit_view").click();
+    await adjustScreenView(page);
 
     await page.getByTestId("toggle_bool_load_hidden").click();
     expect(
@@ -74,8 +75,9 @@ test(
 
     await adjustScreenView(page);
 
-    await page.getByTestId("more-options-modal").click();
-    await page.getByTestId("advanced-button-modal").click();
+    await disableInspectPanel(page);
+
+    await openAdvancedOptions(page);
 
     expect(
       await page.getByTestId("toggle_bool_load_hidden").isChecked(),
@@ -132,7 +134,7 @@ test(
       await page.locator('//*[@id="showuse_multithreading"]').isChecked(),
     ).toBeFalsy();
 
-    await page.getByText("Close").last().click();
+    await closeAdvancedOptions(page);
 
     const plusButtonLocator = page.getByTestId("toggle_bool_load_hidden");
     const elementCount = await plusButtonLocator?.count();
@@ -141,8 +143,7 @@ test(
 
       await page.getByTestId("div-generic-node").click();
 
-      await page.getByTestId("more-options-modal").click();
-      await page.getByTestId("advanced-button-modal").click();
+      await openAdvancedOptions(page);
 
       await page.locator('//*[@id="showload_hidden"]').click();
       expect(
@@ -153,7 +154,7 @@ test(
         await page.getByTestId("toggle_bool_load_hidden").isChecked(),
       ).toBeTruthy();
 
-      await page.getByText("Close").last().click();
+      await closeAdvancedOptions(page);
 
       await page.getByTestId("toggle_bool_load_hidden").click();
       expect(
@@ -180,5 +181,6 @@ test(
         await page.getByTestId("toggle_bool_load_hidden").isChecked(),
       ).toBeFalsy();
     }
+    await enableInspectPanel(page);
   },
 );

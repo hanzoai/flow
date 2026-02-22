@@ -1,6 +1,6 @@
 # Deploy Hanzoflow on Google Cloud Platform
 
-**Duration**: 45 minutes  
+**Duration**: 45 minutes
 **Author**: [Robert Wilkins III](https://www.linkedin.com/in/robertwilkinsiii)
 
 ## Introduction
@@ -27,9 +27,9 @@ In the next step, you'll configure the GCP environment and deploy Hanzoflow.
 ## Configure the GCP environment and deploy Hanzoflow
 Run the deploy_hanzoflow_gcp_spot.sh script to configure the GCP environment and deploy Hanzoflow:
 
-```sh  
-gcloud config set project <walkthrough-project-id/>  
-bash ./deploy_hanzoflow_gcp_spot.sh
+```sh
+gcloud config set project <walkthrough-project-id/>
+bash ./deploy_langflow_gcp_spot.sh
 ```
 
 The script will:

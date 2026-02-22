@@ -1,26 +1,25 @@
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
+import { convertTestName } from "@/components/common/storeCardComponent/utils/convert-test-name";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select-custom";
-import { FolderType } from "@/pages/MainPage/entities";
+import type { FolderType } from "@/pages/MainPage/entities";
 import { cn } from "@/utils/utils";
 import { handleSelectChange } from "../helpers/handle-select-change";
 import { FolderSelectItem } from "./folder-select-item";
 
 export const SelectOptions = ({
   item,
-  index,
   handleDeleteFolder,
   handleDownloadFolder,
   handleSelectFolderToRename,
   checkPathName,
 }: {
   item: FolderType;
-  index: number;
   handleDeleteFolder: ((folder: FolderType) => void) | undefined;
   handleDownloadFolder: (folderId: string) => void;
   handleSelectFolderToRename: (folder: FolderType) => void;
@@ -44,7 +43,9 @@ export const SelectOptions = ({
           <SelectTrigger
             className="w-fit"
             id={`options-trigger-${item.name}`}
-            data-testid="more-options-button"
+            data-testid={
+              "more-options-button" + `_${convertTestName(item?.name ?? "")}`
+            }
           >
             <IconComponent
               name={"MoreHorizontal"}
@@ -56,23 +57,28 @@ export const SelectOptions = ({
           </SelectTrigger>
         </ShadTooltip>
         <SelectContent align="end" alignOffset={-16} position="popper">
-          {item.name !== "My Projects" && (
-            <SelectItem
-              id="rename-button"
-              value="rename"
-              data-testid="btn-rename-folder"
-            >
-              <FolderSelectItem name="Rename" iconName="SquarePen" />
-            </SelectItem>
-          )}
-          <SelectItem value="download" data-testid="btn-download-folder">
+          <SelectItem
+            id="rename-button"
+            value="rename"
+            data-testid="btn-rename-project"
+            className="text-xs"
+          >
+            <FolderSelectItem name="Rename" iconName="SquarePen" />
+          </SelectItem>
+          <SelectItem
+            value="download"
+            data-testid="btn-download-project"
+            className="text-xs"
+          >
             <FolderSelectItem name="Download" iconName="Download" />
           </SelectItem>
-          {index > 0 && (
-            <SelectItem value="delete" data-testid="btn-delete-folder">
-              <FolderSelectItem name="Delete" iconName="Trash2" />
-            </SelectItem>
-          )}
+          <SelectItem
+            value="delete"
+            data-testid="btn-delete-project"
+            className="text-xs"
+          >
+            <FolderSelectItem name="Delete" iconName="Trash2" />
+          </SelectItem>
         </SelectContent>
       </Select>
     </div>

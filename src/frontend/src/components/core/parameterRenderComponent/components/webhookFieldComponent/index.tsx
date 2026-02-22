@@ -1,9 +1,10 @@
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/authContext";
 import { useGetBuildsMutation } from "@/controllers/API/queries/_builds/use-get-builds-polling-mutation";
 import SecretKeyModalButton from "@/customization/components/custom-secret-key-modal-button";
-import useFlowStore from "@/stores/flowStore";
-import { useContext, useEffect, useRef, useState } from "react";
-import { InputProps, TextAreaComponentType } from "../../types";
+import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { getModalPropsApiKey } from "@/customization/utils/get-modal-props";
+import type { InputProps, TextAreaComponentType } from "../../types";
 import CopyFieldAreaComponent from "../copyFieldAreaComponent";
 import TextAreaComponent from "../textAreaComponent";
 
@@ -13,20 +14,28 @@ export default function WebhookFieldComponent({
   editNode = false,
   id = "",
   nodeInformationMetadata,
+  showParameter = true,
   ...baseInputProps
-}: InputProps<string, TextAreaComponentType>): JSX.Element {
+}: InputProps<string, TextAreaComponentType>): JSX.Element | null {
   const { userData } = useContext(AuthContext);
   const [userId, setUserId] = useState("");
   const { mutate: getBuildsMutation } = useGetBuildsMutation();
   const hasInitialized = useRef(false);
+  const modalProps = getModalPropsApiKey();
 
   const isBackendUrl = nodeInformationMetadata?.variableName === "endpoint";
   const isCurlWebhook = nodeInformationMetadata?.variableName === "curl";
   const isAuth = nodeInformationMetadata?.isAuth;
-  const showGenerateToken = isBackendUrl && !editNode && !isAuth;
+  const showGenerateToken =
+    (isBackendUrl && !editNode && !isAuth) ||
+    (ENABLE_DATASTAX_LANGFLOW && !editNode);
 
   useEffect(() => {
-    if (!editNode && isBackendUrl && !hasInitialized.current) {
+    const getBuilds =
+      (!editNode && isBackendUrl && !hasInitialized.current) ||
+      (ENABLE_DATASTAX_LANGFLOW && !editNode);
+
+    if (getBuilds) {
       hasInitialized.current = true;
       getBuildsMutation({
         flowId: nodeInformationMetadata?.flowId!,
@@ -39,6 +48,10 @@ export default function WebhookFieldComponent({
       setUserId(userData.id);
     }
   }, [userData]);
+
+  if (!showParameter) {
+    return null;
+  }
 
   return (
     <div className="grid w-full gap-2">
@@ -69,7 +82,7 @@ export default function WebhookFieldComponent({
 
       {showGenerateToken && (
         <div>
-          <SecretKeyModalButton userId={userId} />
+          <SecretKeyModalButton userId={userId} modalProps={modalProps} />
         </div>
       )}
     </div>

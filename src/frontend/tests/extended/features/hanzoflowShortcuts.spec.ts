@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../../fixtures";
 import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
 
@@ -16,22 +16,21 @@ test(
     await page.getByTestId("sidebar-search-input").click();
     await page.getByTestId("sidebar-search-input").fill("ollama");
 
-    await page.waitForSelector('[data-testid="modelsOllama"]', {
+    await page.waitForSelector('[data-testid="ollamaOllama"]', {
       timeout: 3000,
     });
 
     await page
-      .getByTestId("modelsOllama")
+      .getByTestId("ollamaOllama")
       .dragTo(page.locator('//*[@id="react-flow-id"]'));
     await page.mouse.up();
     await page.mouse.down();
 
-    await page.locator('//*[@id="react-flow-id"]/div/div[2]/button[3]').click();
-
     await adjustScreenView(page);
+    await adjustScreenView(page, { numberOfZoomOut: 2 });
+
     await page.getByTestId("generic-node-title-arrangement").click();
-    await page.keyboard.press(`ControlOrMeta+Shift+A`);
-    await page.getByText("Close").last().click();
+    await expect(page.getByTestId("panel-description")).toBeVisible();
 
     await page.getByTestId("generic-node-title-arrangement").click();
     await page.keyboard.press(`ControlOrMeta+d`);

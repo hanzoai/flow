@@ -8,7 +8,7 @@ from hanzoflow.services.factory import ServiceFactory
 from hanzoflow.services.telemetry.service import TelemetryService
 
 if TYPE_CHECKING:
-    from hanzoflow.services.settings.service import SettingsService
+    from lfx.services.settings.service import SettingsService
 
 
 class TelemetryServiceFactory(ServiceFactory):

@@ -1,6 +1,6 @@
 import pytest
-from hanzoflow.custom.custom_component.custom_component import CustomComponent
-from hanzoflow.field_typing.constants import Data
+from langflow.custom.custom_component.custom_component import CustomComponent
+from lfx.field_typing.constants import Data
 
 
 @pytest.fixture
