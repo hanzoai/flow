@@ -14,7 +14,7 @@ Hanzo Flow follows a **release-when-ready** cadence, with each cycle typically l
 
 ### 1. OSS QA
 
-Create an OSS release candidate (RC) branch containing `langflow` and any associated PyPI packages (e.g. `lfx`).
+Create an OSS release candidate (RC) branch containing `hanzoflow` and any associated PyPI packages (e.g. `lfx`).
 During this period:
 
 * QA is performed manually.
