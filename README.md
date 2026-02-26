@@ -1,12 +1,12 @@
 <!-- markdownlint-disable MD030 -->
 
-![Hanzoflow logo](./docs/static/img/hanzoflow-logo-color-black-solid.svg)
+# Hanzo Flow
 
 [![Release Notes](https://img.shields.io/github/release/hanzoai/flow?style=flat-square)](https://github.com/hanzoai/flow/releases)
 [![PyPI - License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/MIT)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/hanzoflow?style=flat-square)](https://pypistats.org/packages/hanzoflow)
 
-[Hanzoflow](https://hanzoflow.org) is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers that turn every workflow into a tool that can be integrated into applications built on any framework or stack. Hanzoflow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
+**Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers that turn every workflow into a tool that can be integrated into applications built on any framework or stack. Hanzo Flow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
 
 ## Highlight features
 
@@ -34,12 +34,12 @@ uv pip install hanzoflow -U
 
 #### Run
 
-To start Hanzoflow, run:
+To start Hanzo Flow, run:
 ```shell
 uv run hanzoflow run
 ```
 
-Hanzoflow starts at http://127.0.0.1:7860.
+Hanzo Flow starts at http://127.0.0.1:7860.
 
 ## Other install options
 
@@ -51,20 +51,16 @@ make run_cli
 For more information, see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ### Docker
-Start a Hanzoflow container with default settings:
+Start a Hanzo Flow container with default settings:
 ```shell
 docker run -p 7860:7860 hanzoai/flow:latest
 ```
-Hanzoflow is available at http://localhost:7860/.
+Hanzo Flow is available at http://localhost:7860/.
 
 ## Deployment
 
-Hanzoflow is completely open source and you can deploy it to all major deployment clouds.
+Hanzo Flow is completely open source and you can deploy it to all major deployment clouds.
 
 ## Contribute
 
-We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Hanzoflow more accessible.
-
----
-
-Based on [Langflow](https://github.com/langflow-ai/langflow) by DataStax.
+We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Hanzo Flow more accessible.
