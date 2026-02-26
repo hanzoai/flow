@@ -9,7 +9,7 @@ services:
     environment:
       - HANZOFLOW_DATABASE_URL=postgresql://hanzoflow:hanzoflow@postgres:5432/hanzoflow
       # This variable defines where the logs, file storage, monitor data and secret keys are stored.
-      - LANGFLOW_CONFIG_DIR=/app/langflow
+      - HANZOFLOW_CONFIG_DIR=/app/hanzoflow
     volumes:
       - hanzoflow-data:/app/hanzoflow
 
