@@ -1,13 +1,13 @@
-# Langflow Load Testing
+# Hanzo Flow Load Testing
 
-This directory contains comprehensive load testing tools for both Langflow and LFX APIs using Locust.
+This directory contains comprehensive load testing tools for both Hanzo Flow and LFX APIs using Locust.
 
-## 🔧 **Two Testing Systems**
+## Two Testing Systems
 
-### **Langflow API Testing** (Enhanced System)
+### **Hanzo Flow API Testing** (Enhanced System)
 
 - Files: `langflow_*.py`
-- Tests the main Langflow application API
+- Tests the main Hanzo Flow application API
 - Includes automatic setup, real starter projects, and comprehensive error logging
 
 ### **LFX API Testing** (Complex Serve)
@@ -23,8 +23,8 @@ This directory contains comprehensive load testing tools for both Langflow and L
 - **Multiple User Types**: Different user behaviors to simulate realistic load patterns
 - **Load Test Shapes**: Predefined load patterns for different testing scenarios
 - **Comprehensive Metrics**: Performance grading and detailed reporting
-- **Enhanced Error Logging**: Detailed connection error analysis and Langflow log capture
-- **Easy Setup**: One-command execution with automatic Langflow startup
+- **Enhanced Error Logging**: Detailed connection error analysis and Hanzo Flow log capture
+- **Easy Setup**: One-command execution with automatic Hanzo Flow startup
 
 ## Quick Start
 
@@ -61,7 +61,7 @@ make load_test_help
 
 ## 🌐 **Remote Instance Testing**
 
-For testing against a remote Langflow instance:
+For testing against a remote Hanzo Flow instance:
 
 ### Setup for Remote Testing
 
@@ -93,7 +93,7 @@ python diagnose_remote.py --host https://your-remote-instance.com --load-test 5
 
 #### Step 1: Setup (Run Once)
 
-Choose and set up a real Langflow starter project for testing:
+Choose and set up a real Hanzo Flow starter project for testing:
 
 ```bash
 # Interactive flow selection
@@ -108,7 +108,7 @@ python langflow_setup_test.py --list-flows
 
 This will:
 
-- Use default Langflow credentials (langflow/langflow)
+- Use default credentials (langflow/langflow)
 - Generate API keys
 - Upload a real starter project flow
 - Provide credentials for load testing
@@ -135,7 +135,7 @@ python langflow_setup_test.py --host https://your-remote-instance.com --interact
 # Save credentials to file
 python langflow_setup_test.py --interactive --save-credentials my_test_creds.json
 
-# Test against existing remote Langflow instance
+# Test against existing remote Hanzo Flow instance
 python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-langflow
 
 # Save results to CSV and HTML
@@ -175,7 +175,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 ## Environment Variables
 
-- `LANGFLOW_HOST`: Base URL for Langflow server (default: http://localhost:7860)
+- `LANGFLOW_HOST`: Base URL for Hanzo Flow server (default: http://localhost:7860)
 - `SHAPE`: Load test shape (ramp100, stepramp)
 - `REQUEST_TIMEOUT`: Request timeout in seconds (default: 30.0)
 
@@ -183,7 +183,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 ### Setup Process (`langflow_setup_test.py`)
 
-1. **Health Check**: Verify Langflow is running
+1. **Health Check**: Verify Hanzo Flow is running
 2. **Flow Selection**: Choose from 40+ real starter project flows
 3. **Authentication**: Login with default credentials (langflow/langflow)
 4. **API Key Generation**: Create API key for load testing
@@ -192,7 +192,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 ### Real Starter Project Flows
 
-Instead of simple test flows, the system uses real Langflow starter projects:
+Instead of simple test flows, the system uses real Hanzo Flow starter projects:
 
 - **Basic Prompting**: Simple LLM interaction
 - **Memory Chatbot**: Conversational AI with memory
@@ -239,7 +239,7 @@ The test tracks:
 
 ### Common Issues
 
-1. **Setup Failed**: Ensure Langflow is accessible and not in read-only mode
+1. **Setup Failed**: Ensure Hanzo Flow is accessible and not in read-only mode
 2. **Authentication Errors**: Verify default credentials (langflow/langflow) are enabled
 3. **Flow Creation Failed**: Verify the user has permission to create flows
 4. **Connection Errors**: Check network connectivity and firewall settings
@@ -249,8 +249,8 @@ The test tracks:
 
 For debugging, you can:
 
-1. Run Langflow manually with `--log-level debug`
-2. Check the Langflow logs for detailed error information
+1. Run Hanzo Flow manually with `--log-level debug`
+2. Check the Hanzo Flow logs for detailed error information
 3. Use the web UI to verify the test flow was created correctly
 4. Test API endpoints manually with curl or httpx
 5. Use the diagnostic tool for remote instances: `python diagnose_remote.py --host <url> --load-test 10`
@@ -259,7 +259,7 @@ For debugging, you can:
 
 If automatic setup fails, you can set up manually:
 
-1. Start Langflow: `python -m langflow run --auto-login`
+1. Start Hanzo Flow: `python -m langflow run --auto-login`
 2. Create a user account through the UI
 3. Create an API key in the settings
 4. Create a simple flow and note its ID

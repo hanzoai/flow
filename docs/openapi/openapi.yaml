@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Langflow
+  title: Hanzo Flow
   version: 1.7.0
 paths:
   /api/v1/build/{flow_id}/vertices:
@@ -3542,7 +3542,7 @@ paths:
       summary: Create Response
       description: "Create a response using OpenAI Responses API format.\n\nThis endpoint\
         \ accepts a flow_id in the model parameter and processes\nthe input through\
-        \ the specified Langflow flow.\n\nArgs:\n    request: OpenAI Responses API\
+        \ the specified Hanzo Flow flow.\n\nArgs:\n    request: OpenAI Responses API\
         \ request with model (flow_id) and input\n    background_tasks: FastAPI background\
         \ task manager\n    api_key_user: Authenticated user from API key\n    http_request:\
         \ The incoming HTTP request\n    telemetry_service: Telemetry service for\
