@@ -129,6 +129,7 @@ class AuthService(BaseAuthService):
         """No user store; return None."""
         return None
 
+
     async def get_current_user_mcp(
         self,
         token: str | Coroutine[Any, Any, str] | None,

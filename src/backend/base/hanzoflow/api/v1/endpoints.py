@@ -50,7 +50,6 @@ from langflow.services.auth.utils import (
     api_key_security,
     get_current_active_user,
     get_current_user_for_sse,
-    get_optional_user,
 )
 from langflow.services.cache.utils import save_uploaded_file
 from langflow.services.database.models.flow.model import Flow, FlowRead
