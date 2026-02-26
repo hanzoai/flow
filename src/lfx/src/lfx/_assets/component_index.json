@@ -85391,6 +85391,360 @@
       }
     ],
     [
+      "litellm",
+      {
+        "LiteLLMProxyModel": {
+          "base_classes": [
+            "LanguageModel",
+            "Message"
+          ],
+          "beta": false,
+          "conditional_paths": [],
+          "custom_fields": {},
+          "description": "Generate text using any LLM provider via a LiteLLM proxy with virtual key authentication.",
+          "display_name": "LiteLLM Proxy",
+          "documentation": "",
+          "edited": false,
+          "field_order": [
+            "input_value",
+            "system_message",
+            "stream",
+            "api_base",
+            "api_key",
+            "model_name",
+            "temperature",
+            "max_tokens",
+            "timeout",
+            "max_retries"
+          ],
+          "frozen": false,
+          "icon": "GitBranch",
+          "legacy": false,
+          "metadata": {
+            "code_hash": "89b5d2281c93",
+            "dependencies": {
+              "dependencies": [
+                {
+                  "name": "httpx",
+                  "version": "0.28.1"
+                },
+                {
+                  "name": "langchain_openai",
+                  "version": "0.3.23"
+                },
+                {
+                  "name": "pydantic",
+                  "version": "2.11.10"
+                },
+                {
+                  "name": "lfx",
+                  "version": null
+                },
+                {
+                  "name": "openai",
+                  "version": "1.82.1"
+                }
+              ],
+              "total_dependencies": 5
+            },
+            "keywords": [
+              "model",
+              "llm",
+              "language model",
+              "large language model"
+            ],
+            "module": "lfx.components.litellm.litellm_proxy.LiteLLMProxyComponent"
+          },
+          "minimized": false,
+          "output_types": [],
+          "outputs": [
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Model Response",
+              "group_outputs": false,
+              "method": "text_response",
+              "name": "text_output",
+              "selected": "Message",
+              "tool_mode": true,
+              "types": [
+                "Message"
+              ],
+              "value": "__UNDEFINED__"
+            },
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Language Model",
+              "group_outputs": false,
+              "method": "build_model",
+              "name": "model_output",
+              "selected": "LanguageModel",
+              "tool_mode": true,
+              "types": [
+                "LanguageModel"
+              ],
+              "value": "__UNDEFINED__"
+            }
+          ],
+          "pinned": false,
+          "template": {
+            "_type": "Component",
+            "api_base": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "LiteLLM Proxy URL",
+              "dynamic": false,
+              "info": "Base URL of the LiteLLM proxy.",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "api_base",
+              "override_skip": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": "http://localhost:4000/v1"
+            },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": false,
+              "display_name": "Virtual Key",
+              "dynamic": false,
+              "info": "Virtual key for authentication.",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": "LITELLM_API_KEY"
+            },
+            "code": {
+              "advanced": true,
+              "dynamic": true,
+              "fileTypes": [],
+              "file_path": "",
+              "info": "",
+              "list": false,
+              "load_from_db": false,
+              "multiline": true,
+              "name": "code",
+              "password": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "type": "code",
+              "value": "import httpx\nfrom langchain_openai import ChatOpenAI\nfrom pydantic.v1 import SecretStr\n\nfrom lfx.base.models.model import LCModelComponent\nfrom lfx.field_typing import LanguageModel\nfrom lfx.field_typing.range_spec import RangeSpec\nfrom lfx.inputs.inputs import IntInput, SecretStrInput, SliderInput, StrInput\n\n\nclass LiteLLMProxyComponent(LCModelComponent):\n    \"\"\"LiteLLM Proxy component for routing to multiple LLM providers.\"\"\"\n\n    display_name = \"LiteLLM Proxy\"\n    description = \"Generate text using any LLM provider via a LiteLLM proxy with virtual key authentication.\"\n    icon = \"GitBranch\"\n    name = \"LiteLLMProxyModel\"\n\n    inputs = [\n        *LCModelComponent.get_base_inputs(),\n        StrInput(\n            name=\"api_base\",\n            display_name=\"LiteLLM Proxy URL\",\n            value=\"http://localhost:4000/v1\",\n            required=True,\n            info=\"Base URL of the LiteLLM proxy.\",\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"Virtual Key\",\n            value=\"LITELLM_API_KEY\",\n            required=True,\n            info=\"Virtual key for authentication.\",\n        ),\n        StrInput(\n            name=\"model_name\",\n            display_name=\"Model Name\",\n            required=True,\n            info=\"Model name to use (e.g. gpt-4o, claude-3-opus).\",\n        ),\n        SliderInput(\n            name=\"temperature\",\n            display_name=\"Temperature\",\n            value=0.7,\n            range_spec=RangeSpec(min=0, max=1, step=0.01),\n            advanced=True,\n            info=\"Controls randomness. Lower values are more deterministic.\",\n        ),\n        IntInput(\n            name=\"max_tokens\",\n            display_name=\"Max Tokens\",\n            advanced=True,\n            info=\"Maximum number of tokens to generate. Set to 0 for no limit.\",\n            range_spec=RangeSpec(min=0, max=128000),\n        ),\n        IntInput(\n            name=\"timeout\",\n            display_name=\"Timeout (seconds)\",\n            value=60,\n            advanced=True,\n            info=\"Request timeout in seconds.\",\n        ),\n        IntInput(\n            name=\"max_retries\",\n            display_name=\"Max Retries\",\n            value=2,\n            advanced=True,\n            info=\"Maximum number of retries on failure.\",\n        ),\n    ]\n\n    def build_model(self) -> LanguageModel:\n        \"\"\"Build the LiteLLM proxy model.\"\"\"\n        api_key = self.api_key\n        if isinstance(api_key, SecretStr):\n            api_key = api_key.get_secret_value()\n\n        self._validate_proxy_connection(api_key)\n\n        return ChatOpenAI(\n            base_url=self.api_base,\n            api_key=api_key,\n            model=self.model_name,\n            temperature=self.temperature,\n            max_tokens=self.max_tokens if self.max_tokens != 0 else None,\n            timeout=self.timeout,\n            max_retries=self.max_retries,\n            streaming=self.stream,\n        )\n\n    def _validate_proxy_connection(self, api_key: str) -> None:\n        \"\"\"Validate the proxy connection, API key, and model availability.\"\"\"\n        base_url = self.api_base.rstrip(\"/\")\n        models_url = f\"{base_url}/models\"\n\n        try:\n            response = httpx.get(\n                models_url,\n                headers={\"Authorization\": f\"Bearer {api_key}\"},\n                timeout=10,\n            )\n        except httpx.ConnectError as e:\n            msg = (\n                f\"Could not connect to LiteLLM Proxy at {base_url}. Verify the URL is correct and the proxy is running.\"\n            )\n            raise ValueError(msg) from e\n        except httpx.TimeoutException as e:\n            msg = f\"Connection to LiteLLM Proxy at {base_url} timed out.\"\n            raise ValueError(msg) from e\n\n        http_unauthorized = 401\n        if response.status_code == http_unauthorized:\n            msg = \"Authentication failed. Check that your Virtual Key is valid and not expired.\"\n            raise ValueError(msg)\n\n        response.raise_for_status()\n\n        data = response.json()\n        available_models = [m.get(\"id\", \"\") for m in data.get(\"data\", [])]\n        if available_models and self.model_name not in available_models:\n            msg = (\n                f\"Model '{self.model_name}' not found on the LiteLLM Proxy. \"\n                f\"Available models: {', '.join(available_models)}\"\n            )\n            raise ValueError(msg)\n\n    def _get_exception_message(self, e: Exception) -> str | None:\n        \"\"\"Extract meaningful error messages from OpenAI client exceptions.\"\"\"\n        try:\n            from openai import AuthenticationError, BadRequestError, NotFoundError\n        except ImportError:\n            return None\n\n        if isinstance(e, AuthenticationError):\n            return \"Authentication failed. Check that your Virtual Key is valid and not expired.\"\n        if isinstance(e, NotFoundError):\n            return f\"Model '{self.model_name}' not found. Verify the model name.\"\n        if isinstance(e, BadRequestError):\n            message = e.body.get(\"message\") if isinstance(e.body, dict) else None\n            if message:\n                return message\n        return None\n"
+            },
+            "input_value": {
+              "_input_type": "MessageInput",
+              "advanced": false,
+              "display_name": "Input",
+              "dynamic": false,
+              "info": "",
+              "input_types": [
+                "Message"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "input_value",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "max_retries": {
+              "_input_type": "IntInput",
+              "advanced": true,
+              "display_name": "Max Retries",
+              "dynamic": false,
+              "info": "Maximum number of retries on failure.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "max_retries",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 2
+            },
+            "max_tokens": {
+              "_input_type": "IntInput",
+              "advanced": true,
+              "display_name": "Max Tokens",
+              "dynamic": false,
+              "info": "Maximum number of tokens to generate. Set to 0 for no limit.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "max_tokens",
+              "override_skip": false,
+              "placeholder": "",
+              "range_spec": {
+                "max": 128000.0,
+                "min": 0.0,
+                "step": 0.1,
+                "step_type": "float"
+              },
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 0
+            },
+            "model_name": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "Model Name",
+              "dynamic": false,
+              "info": "Model name to use (e.g. gpt-4o, claude-3-opus).",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "model_name",
+              "override_skip": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "stream": {
+              "_input_type": "BoolInput",
+              "advanced": true,
+              "display_name": "Stream",
+              "dynamic": false,
+              "info": "Stream the response from the model. Streaming works only in Chat.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "stream",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "value": false
+            },
+            "system_message": {
+              "_input_type": "MultilineInput",
+              "advanced": false,
+              "ai_enabled": false,
+              "copy_field": false,
+              "display_name": "System Message",
+              "dynamic": false,
+              "info": "System message to pass to the model.",
+              "input_types": [
+                "Message"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "multiline": true,
+              "name": "system_message",
+              "override_skip": false,
+              "password": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "temperature": {
+              "_input_type": "SliderInput",
+              "advanced": true,
+              "display_name": "Temperature",
+              "dynamic": false,
+              "info": "Controls randomness. Lower values are more deterministic.",
+              "max_label": "",
+              "max_label_icon": "",
+              "min_label": "",
+              "min_label_icon": "",
+              "name": "temperature",
+              "override_skip": false,
+              "placeholder": "",
+              "range_spec": {
+                "max": 1.0,
+                "min": 0.0,
+                "step": 0.01,
+                "step_type": "float"
+              },
+              "required": false,
+              "show": true,
+              "slider_buttons": false,
+              "slider_buttons_options": [],
+              "slider_input": false,
+              "title_case": false,
+              "tool_mode": false,
+              "track_in_telemetry": false,
+              "type": "slider",
+              "value": 0.7
+            },
+            "timeout": {
+              "_input_type": "IntInput",
+              "advanced": true,
+              "display_name": "Timeout (seconds)",
+              "dynamic": false,
+              "info": "Request timeout in seconds.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "timeout",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 60
+            }
+          },
+          "tool_mode": false
+        }
+      }
+    ],
+    [
       "llm_operations",
       {
         "BatchRunComponent": {
@@ -116506,9 +116860,9 @@
     ]
   ],
   "metadata": {
-    "num_components": 356,
-    "num_modules": 95
+    "num_components": 357,
+    "num_modules": 96
   },
-  "sha256": "8a04398532d1f8aed60589beb6afcc946c58ee69901ac6092345d42f30ee72eb",
+  "sha256": "a6f973640c11e6430c20aa3979d566a855a1fa0dbbde67f2178ba3fc27d8ae8b",
   "version": "0.3.0"
 }
