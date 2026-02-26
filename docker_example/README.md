@@ -1,6 +1,6 @@
-# Running LangFlow with Docker
+# Running Hanzo Flow with Docker
 
-This guide will help you get LangFlow up and running using Docker and Docker Compose.
+This guide will help you get Hanzo Flow up and running using Docker and Docker Compose.
 
 ## Prerequisites
 
@@ -9,16 +9,16 @@ This guide will help you get LangFlow up and running using Docker and Docker Com
 
 ## Steps
 
-1. Clone the LangFlow repository:
+1. Clone the Hanzo Flow repository:
 
    ```sh
-   git clone https://github.com/hanzoflow-ai/hanzoflow.git
+   git clone https://github.com/hanzoai/flow.git
    ```
 
 2. Navigate to the `docker_example` directory:
 
    ```sh
-   cd hanzoflow/docker_example
+   cd flow/docker_example
    ```
 
 3. Run the Docker Compose file:
@@ -27,20 +27,20 @@ This guide will help you get LangFlow up and running using Docker and Docker Com
    docker compose up
    ```
 
-LangFlow will now be accessible at [http://localhost:7860/](http://localhost:7860/).
+Hanzo Flow will now be accessible at [http://localhost:7860/](http://localhost:7860/).
 
 ## Docker Compose Configuration
 
 The Docker Compose configuration spins up two services: `hanzoflow` and `postgres`.
 
-### LangFlow Service
+### Hanzo Flow Service
 
 The `hanzoflow` service uses the `hanzoflowai/hanzoflow:latest` Docker image and exposes port 7860. It depends on the `postgres` service.
 
 Environment variables:
 
 - `HANZOFLOW_DATABASE_URL`: The connection string for the PostgreSQL database.
-- `HANZOFLOW_CONFIG_DIR`: The directory where LangFlow stores logs, file storage, monitor data, and secret keys.
+- `HANZOFLOW_CONFIG_DIR`: The directory where Hanzo Flow stores logs, file storage, monitor data, and secret keys.
 
 Volumes:
 
@@ -60,6 +60,6 @@ Volumes:
 
 - `hanzoflow-postgres`: This volume is mapped to `/var/lib/postgresql/data` in the container.
 
-## Switching to a Specific LangFlow Version
+## Switching to a Specific Version
 
-If you want to use a specific version of LangFlow, you can modify the `image` field under the `hanzoflow` service in the Docker Compose file. For example, to use version 1.0-alpha, change `hanzoflowai/hanzoflow:latest` to `hanzoflowai/hanzoflow:1.0-alpha`.
+If you want to use a specific version of Hanzo Flow, you can modify the `image` field under the `hanzoflow` service in the Docker Compose file. For example, to use version 1.0-alpha, change `hanzoflowai/hanzoflow:latest` to `hanzoflowai/hanzoflow:1.0-alpha`.

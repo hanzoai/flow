@@ -29,7 +29,7 @@ Run the deploy_hanzoflow_gcp_spot.sh script to configure the GCP environment and
 
 ```sh
 gcloud config set project <walkthrough-project-id/>
-bash ./deploy_langflow_gcp_spot.sh
+bash ./deploy_hanzoflow_gcp_spot.sh
 ```
 
 The script will:
