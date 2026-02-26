@@ -1,10 +1,10 @@
 [project]
 name = "lfx"
 version = "0.3.0"
-description = "Langflow Executor - A lightweight CLI tool for executing and serving Langflow AI flows"
+description = "Hanzo Flow Executor - A lightweight CLI tool for executing and serving Hanzo Flow AI flows"
 readme = "README.md"
 authors = [
-    { name = "Gabriel Luiz Freitas Almeida", email = "gabriel@langflow.org" }
+    { name = "Hanzo AI", email = "oss@hanzo.ai" }
 ]
 requires-python = ">=3.10,<3.14"
 dependencies = [
