@@ -1,6 +1,6 @@
-# Releasing Langflow
+# Releasing Hanzo Flow
 
-Langflow follows a **release-when-ready** cadence, with each cycle typically lasting 4–6 weeks depending on QA and stabilization needs.
+Hanzo Flow follows a **release-when-ready** cadence, with each cycle typically lasting 4–6 weeks depending on QA and stabilization needs.
 
 ## Goals
 
@@ -39,7 +39,7 @@ This step also usually lasts about a week.
 After QA and bugfixing are complete for both OSS and Desktop:
 
 * Final releases are cut from their respective RC branches.
-* Release timing is coordinated with Langflow’s DevRel team.
+* Release timing is coordinated with the Hanzo Flow team.
 * For at least 24 hours after release, Discord, GitHub, and other support channels should be monitored for critical bug reports.
 
 ## Branch Model

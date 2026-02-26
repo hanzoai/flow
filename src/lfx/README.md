@@ -1,6 +1,6 @@
-# lfx - Langflow Executor
+# lfx - Hanzo Flow Executor
 
-lfx is a command-line tool for running Langflow workflows. It provides two main commands: `serve` and `run`.
+lfx is a command-line tool for running Hanzo Flow workflows. It provides two main commands: `serve` and `run`.
 
 ## Installation
 
@@ -19,8 +19,8 @@ uvx lfx run my_flow.json "input"
 
 ```bash
 # Clone and run in workspace
-git clone https://github.com/langflow-ai/langflow
-cd langflow/src/lfx
+git clone https://github.com/hanzoai/flow
+cd flow/src/lfx
 uv run lfx serve my_flow.json
 ```
 
@@ -28,14 +28,14 @@ uv run lfx serve my_flow.json
 
 ### Pluggable Services
 
-lfx supports a pluggable service architecture that allows you to customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use Langflow's full-featured services.
+lfx supports a pluggable service architecture that allows you to customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use Hanzo Flow's full-featured services.
 
 📖 **See [PLUGGABLE_SERVICES.md](./PLUGGABLE_SERVICES.md) for details** including:
 
 - Quick start guides for CLI users, library developers, and plugin authors
 - Service registration via config files, decorators, and entry points
 - Creating custom service implementations with dependency injection
-- Using full-featured Langflow services in lfx
+- Using full-featured Hanzo Flow services in lfx
 - Troubleshooting and migration guides
 
 ### Flattened Component Access
@@ -73,7 +73,7 @@ chat_output = cp.ChatOutput()
 
 ### `lfx serve` - Run flows as an API
 
-Serve a Langflow workflow as a REST API.
+Serve a Hanzo Flow workflow as a REST API.
 
 **Important:** You must set the `LANGFLOW_API_KEY` environment variable before running the serve command.
 
@@ -114,7 +114,7 @@ curl -X POST http://localhost:8000/flows/af9edd65-6393-58e2-9ae5-d5f012e714f4/ru
 
 ### `lfx run` - Run flows directly
 
-Execute a Langflow workflow and get results immediately.
+Execute a Hanzo Flow workflow and get results immediately.
 
 ```bash
 uv run lfx run my_flow.json "What is AI?"
@@ -160,9 +160,9 @@ Here's a step-by-step example of creating and running an agent workflow with dep
 Create a file called `simple_agent.py`:
 
 ```python
-"""A simple agent flow example for Langflow.
+"""A simple agent flow example for Hanzo Flow.
 
-This script demonstrates how to set up a conversational agent using Langflow's
+This script demonstrates how to set up a conversational agent using Hanzo Flow's
 Agent component with web search capabilities.
 
 Features:
