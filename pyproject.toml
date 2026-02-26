@@ -7,13 +7,7 @@ license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
 maintainers = [
-    { name = "Carlos Coelho", email = "carlos@hanzoflow.org" },
-    { name = "Cristhian Zanforlin", email = "cristhian.lousa@gmail.com" },
-    { name = "Gabriel Almeida", email = "gabriel@langflow.org" },
-    { name = "Lucas Eduoli", email = "lucaseduoli@gmail.com" },
-    { name = "Otávio Anovazzi", email = "otavio2204@gmail.com" },
-    { name = "Rodrigo Nader", email = "rodrigo@hanzoflow.org" },
-    { name = "Italo dos Anjos", email = "italojohnnydosanjos@gmail.com" },
+    { name = "Hanzo AI", email = "oss@hanzo.ai" },
 ]
 # Define your main dependencies here
 dependencies = [
@@ -89,8 +83,8 @@ members = [
 packages = ["src/backend/hanzoflow"]
 
 [project.urls]
-Repository = "https://github.com/hanzoflow-ai/hanzoflow"
-Documentation = "https://docs.hanzoflow.org"
+Repository = "https://github.com/hanzoai/flow"
+Documentation = "https://docs.hanzo.ai/flow"
 
 [project.optional-dependencies]
 docling = [
