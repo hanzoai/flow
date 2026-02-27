@@ -79587,7 +79587,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "path",
             "agent_type",
             "input_value",
@@ -79598,7 +79601,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "4978be110e63",
+            "code_hash": "1888a727f9dd",
             "dependencies": {
               "dependencies": [
                 {
@@ -79709,7 +79712,7 @@
             },
             "allow_dangerous_code": {
               "_input_type": "BoolInput",
-              "advanced": true,
+              "advanced": false,
               "display_name": "Allow Dangerous Code",
               "dynamic": false,
               "info": "SECURITY WARNING: Enabling this allows the agent to execute arbitrary Python code on the server, which can lead to remote code execution vulnerabilities. Only enable this if you fully trust the input sources and understand the security implications. When disabled, the agent can still analyze CSV data but cannot execute custom Python code.",
@@ -79718,7 +79721,7 @@
               "name": "allow_dangerous_code",
               "override_skip": false,
               "placeholder": "",
-              "required": false,
+              "required": true,
               "show": true,
               "title_case": false,
               "tool_mode": false,
@@ -79726,6 +79729,58 @@
               "track_in_telemetry": true,
               "type": "bool",
               "value": false
+            },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
             },
             "code": {
               "advanced": true,
@@ -79743,7 +79798,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "import contextlib\nimport tempfile\nfrom pathlib import Path\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.base.data.storage_utils import read_file_bytes\nfrom lfx.field_typing import AgentExecutor\nfrom lfx.inputs.inputs import (\n    DictInput,\n    DropdownInput,\n    FileInput,\n    HandleInput,\n    MessageTextInput,\n)\nfrom lfx.io import BoolInput\nfrom lfx.schema.message import Message\nfrom lfx.services.deps import get_settings_service\nfrom lfx.template.field.base import Output\nfrom lfx.utils.async_helpers import run_until_complete\n\n\nclass CSVAgentComponent(LCAgentComponent):\n    display_name = \"CSV Agent\"\n    description = \"Construct a CSV agent from a CSV and tools.\"\n    documentation = \"https://python.langchain.com/docs/modules/agents/toolkits/csv\"\n    name = \"CSVAgent\"\n    icon = \"LangChain\"\n\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        HandleInput(\n            name=\"llm\",\n            display_name=\"Language Model\",\n            input_types=[\"LanguageModel\"],\n            required=True,\n            info=\"An LLM Model Object (It can be found in any LLM Component).\",\n        ),\n        FileInput(\n            name=\"path\",\n            display_name=\"File Path\",\n            file_types=[\"csv\"],\n            input_types=[\"str\", \"Message\"],\n            required=True,\n            info=\"A CSV File or File Path.\",\n        ),\n        DropdownInput(\n            name=\"agent_type\",\n            display_name=\"Agent Type\",\n            advanced=True,\n            options=[\"zero-shot-react-description\", \"openai-functions\", \"openai-tools\"],\n            value=\"openai-tools\",\n        ),\n        MessageTextInput(\n            name=\"input_value\",\n            display_name=\"Text\",\n            info=\"Text to be passed as input and extract info from the CSV File.\",\n            required=True,\n        ),\n        DictInput(\n            name=\"pandas_kwargs\",\n            display_name=\"Pandas Kwargs\",\n            info=\"Pandas Kwargs to be passed to the agent.\",\n            advanced=True,\n            is_list=True,\n        ),\n        BoolInput(\n            name=\"allow_dangerous_code\",\n            display_name=\"Allow Dangerous Code\",\n            value=False,\n            advanced=True,\n            info=(\n                \"SECURITY WARNING: Enabling this allows the agent to execute arbitrary Python code \"\n                \"on the server, which can lead to remote code execution vulnerabilities. \"\n                \"Only enable this if you fully trust the input sources and understand the security implications. \"\n                \"When disabled, the agent can still analyze CSV data but cannot execute custom Python code.\"\n            ),\n        ),\n    ]\n\n    outputs = [\n        Output(display_name=\"Response\", name=\"response\", method=\"build_agent_response\"),\n        Output(display_name=\"Agent\", name=\"agent\", method=\"build_agent\", hidden=True, tool_mode=False),\n    ]\n\n    def _path(self) -> str:\n        if isinstance(self.path, Message) and isinstance(self.path.text, str):\n            return self.path.text\n        return self.path\n\n    def build_agent_response(self) -> Message:\n        \"\"\"Build and execute the CSV agent, returning the response.\"\"\"\n        try:\n            from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent\n        except ImportError as e:\n            msg = (\n                \"langchain-experimental is not installed. Please install it with `pip install langchain-experimental`.\"\n            )\n            raise ImportError(msg) from e\n\n        try:\n            # Use False as default if allow_dangerous_code is not set (secure by default)\n            allow_dangerous = getattr(self, \"allow_dangerous_code\", False) or False\n\n            agent_kwargs = {\n                \"verbose\": self.verbose,\n                \"allow_dangerous_code\": allow_dangerous,\n            }\n\n            # Get local path (downloads from S3 if needed)\n            local_path = self._get_local_path()\n\n            agent_csv = create_csv_agent(\n                llm=self.llm,\n                path=local_path,\n                agent_type=self.agent_type,\n                handle_parsing_errors=self.handle_parsing_errors,\n                pandas_kwargs=self.pandas_kwargs,\n                **agent_kwargs,\n            )\n\n            result = agent_csv.invoke({\"input\": self.input_value})\n            return Message(text=str(result[\"output\"]))\n\n        finally:\n            # Clean up temp file if created\n            self._cleanup_temp_file()\n\n    def build_agent(self) -> AgentExecutor:\n        try:\n            from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent\n        except ImportError as e:\n            msg = (\n                \"langchain-experimental is not installed. Please install it with `pip install langchain-experimental`.\"\n            )\n            raise ImportError(msg) from e\n\n        # Use False as default if allow_dangerous_code is not set (secure by default)\n        allow_dangerous = getattr(self, \"allow_dangerous_code\", False) or False\n\n        agent_kwargs = {\n            \"verbose\": self.verbose,\n            \"allow_dangerous_code\": allow_dangerous,\n        }\n\n        # Get local path (downloads from S3 if needed)\n        local_path = self._get_local_path()\n\n        agent_csv = create_csv_agent(\n            llm=self.llm,\n            path=local_path,\n            agent_type=self.agent_type,\n            handle_parsing_errors=self.handle_parsing_errors,\n            pandas_kwargs=self.pandas_kwargs,\n            **agent_kwargs,\n        )\n\n        self.status = Message(text=str(agent_csv))\n\n        # Note: Temp file will be cleaned up when the component is destroyed or\n        # when build_agent_response is called\n        return agent_csv\n\n    def _get_local_path(self) -> str:\n        \"\"\"Get a local file path, downloading from S3 storage if necessary.\n\n        Returns:\n            str: Local file path that can be used by LangChain\n        \"\"\"\n        file_path = self._path()\n        settings = get_settings_service().settings\n\n        # If using S3 storage, download the file to temp\n        if settings.storage_type == \"s3\":\n            # Download from S3 to temp file\n            csv_bytes = run_until_complete(read_file_bytes(file_path))\n\n            # Create temp file with .csv extension\n            suffix = Path(file_path.split(\"/\")[-1]).suffix or \".csv\"\n            with tempfile.NamedTemporaryFile(mode=\"wb\", suffix=suffix, delete=False) as tmp_file:\n                tmp_file.write(csv_bytes)\n                temp_path = tmp_file.name\n\n            # Store temp path for cleanup\n            self._temp_file_path = temp_path\n            return temp_path\n\n        # Local storage - return path as-is\n        return file_path\n\n    def _cleanup_temp_file(self) -> None:\n        \"\"\"Clean up temporary file if one was created.\"\"\"\n        if hasattr(self, \"_temp_file_path\"):\n            with contextlib.suppress(Exception):\n                Path(self._temp_file_path).unlink()  # Ignore cleanup errors\n"
+              "value": "import contextlib\nimport tempfile\nfrom pathlib import Path\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.base.data.storage_utils import read_file_bytes\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\nfrom lfx.field_typing import AgentExecutor\nfrom lfx.inputs.inputs import (\n    DictInput,\n    DropdownInput,\n    FileInput,\n    MessageTextInput,\n    ModelInput,\n)\nfrom lfx.io import BoolInput, SecretStrInput, StrInput\nfrom lfx.schema.message import Message\nfrom lfx.services.deps import get_settings_service\nfrom lfx.template.field.base import Output\nfrom lfx.utils.async_helpers import run_until_complete\n\n\nclass CSVAgentComponent(LCAgentComponent):\n    display_name = \"CSV Agent\"\n    description = \"Construct a CSV agent from a CSV and tools.\"\n    documentation = \"https://python.langchain.com/docs/modules/agents/toolkits/csv\"\n    name = \"CSVAgent\"\n    icon = \"LangChain\"\n\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        FileInput(\n            name=\"path\",\n            display_name=\"File Path\",\n            file_types=[\"csv\"],\n            input_types=[\"str\", \"Message\"],\n            required=True,\n            info=\"A CSV File or File Path.\",\n        ),\n        DropdownInput(\n            name=\"agent_type\",\n            display_name=\"Agent Type\",\n            advanced=True,\n            options=[\"zero-shot-react-description\", \"openai-functions\", \"openai-tools\"],\n            value=\"openai-tools\",\n        ),\n        MessageTextInput(\n            name=\"input_value\",\n            display_name=\"Text\",\n            info=\"Text to be passed as input and extract info from the CSV File.\",\n            required=True,\n        ),\n        DictInput(\n            name=\"pandas_kwargs\",\n            display_name=\"Pandas Kwargs\",\n            info=\"Pandas Kwargs to be passed to the agent.\",\n            advanced=True,\n            is_list=True,\n        ),\n        BoolInput(\n            name=\"allow_dangerous_code\",\n            display_name=\"Allow Dangerous Code\",\n            value=False,\n            required=True,\n            info=(\n                \"SECURITY WARNING: Enabling this allows the agent to execute arbitrary Python code \"\n                \"on the server, which can lead to remote code execution vulnerabilities. \"\n                \"Only enable this if you fully trust the input sources and understand the security implications. \"\n                \"When disabled, the agent can still analyze CSV data but cannot execute custom Python code.\"\n            ),\n        ),\n    ]\n\n    outputs = [\n        Output(display_name=\"Response\", name=\"response\", method=\"build_agent_response\"),\n        Output(display_name=\"Agent\", name=\"agent\", method=\"build_agent\", hidden=True, tool_mode=False),\n    ]\n\n    def _path(self) -> str:\n        if isinstance(self.path, Message) and isinstance(self.path.text, str):\n            return self.path.text\n        return self.path\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n\n        # Show/hide watsonx fields based on selected model\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n\n        return build_config\n\n    def build_agent_response(self) -> Message:\n        \"\"\"Build and execute the CSV agent, returning the response.\"\"\"\n        try:\n            from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent\n        except ImportError as e:\n            msg = (\n                \"langchain-experimental is not installed. Please install it with `pip install langchain-experimental`.\"\n            )\n            raise ImportError(msg) from e\n\n        try:\n            # Use False as default if allow_dangerous_code is not set (secure by default)\n            allow_dangerous = getattr(self, \"allow_dangerous_code\", False) or False\n\n            agent_kwargs = {\n                \"verbose\": self.verbose,\n                \"allow_dangerous_code\": allow_dangerous,\n            }\n\n            # Get local path (downloads from S3 if needed)\n            local_path = self._get_local_path()\n            llm = self._get_llm()\n\n            agent_csv = create_csv_agent(\n                llm=llm,\n                path=local_path,\n                agent_type=self.agent_type,\n                handle_parsing_errors=self.handle_parsing_errors,\n                pandas_kwargs=self.pandas_kwargs,\n                **agent_kwargs,\n            )\n\n            result = agent_csv.invoke({\"input\": self.input_value})\n            return Message(text=str(result[\"output\"]))\n\n        finally:\n            # Clean up temp file if created\n            self._cleanup_temp_file()\n\n    def build_agent(self) -> AgentExecutor:\n        try:\n            from langchain_experimental.agents.agent_toolkits.csv.base import create_csv_agent\n        except ImportError as e:\n            msg = (\n                \"langchain-experimental is not installed. Please install it with `pip install langchain-experimental`.\"\n            )\n            raise ImportError(msg) from e\n\n        # Use False as default if allow_dangerous_code is not set (secure by default)\n        allow_dangerous = getattr(self, \"allow_dangerous_code\", False) or False\n\n        agent_kwargs = {\n            \"verbose\": self.verbose,\n            \"allow_dangerous_code\": allow_dangerous,\n        }\n\n        # Get local path (downloads from S3 if needed)\n        local_path = self._get_local_path()\n        llm = self._get_llm()\n\n        agent_csv = create_csv_agent(\n            llm=llm,\n            path=local_path,\n            agent_type=self.agent_type,\n            handle_parsing_errors=self.handle_parsing_errors,\n            pandas_kwargs=self.pandas_kwargs,\n            **agent_kwargs,\n        )\n\n        self.status = Message(text=str(agent_csv))\n\n        # Note: Temp file will be cleaned up when the component is destroyed or\n        # when build_agent_response is called\n        return agent_csv\n\n    def _get_local_path(self) -> str:\n        \"\"\"Get a local file path, downloading from S3 storage if necessary.\n\n        Returns:\n            str: Local file path that can be used by LangChain\n        \"\"\"\n        file_path = self._path()\n        settings = get_settings_service().settings\n\n        # If using S3 storage, download the file to temp\n        if settings.storage_type == \"s3\":\n            # Download from S3 to temp file\n            csv_bytes = run_until_complete(read_file_bytes(file_path))\n\n            # Create temp file with .csv extension\n            suffix = Path(file_path.split(\"/\")[-1]).suffix or \".csv\"\n            with tempfile.NamedTemporaryFile(mode=\"wb\", suffix=suffix, delete=False) as tmp_file:\n                tmp_file.write(csv_bytes)\n                temp_path = tmp_file.name\n\n            # Store temp path for cleanup\n            self._temp_file_path = temp_path\n            return temp_path\n\n        # Local storage - return path as-is\n        return file_path\n\n    def _cleanup_temp_file(self) -> None:\n        \"\"\"Clean up temporary file if one was created.\"\"\"\n        if hasattr(self, \"_temp_file_path\"):\n            with contextlib.suppress(Exception):\n                Path(self._temp_file_path).unlink()  # Ignore cleanup errors\n"
             },
             "handle_parsing_errors": {
               "_input_type": "BoolInput",
@@ -79790,28 +79845,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "An LLM Model Object (It can be found in any LLM Component).",
-              "input_types": [
-                "LanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -79831,6 +79864,43 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
             },
             "pandas_kwargs": {
               "_input_type": "DictInput",
@@ -79879,6 +79949,27 @@
               "trace_as_metadata": true,
               "track_in_telemetry": false,
               "type": "file",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
               "value": ""
             },
             "verbose": {
@@ -81523,7 +81614,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "system_prompt",
             "user_prompt",
             "chat_history"
@@ -81532,7 +81626,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "b2ad248a3e6c",
+            "code_hash": "21bfd16796e5",
             "dependencies": {
               "dependencies": [
                 {
@@ -81616,6 +81710,58 @@
               "type": "str",
               "value": "A helpful assistant with access to the following tools:"
             },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
+            },
             "chat_history": {
               "_input_type": "DataInput",
               "advanced": true,
@@ -81656,7 +81802,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from langchain.agents import create_openai_tools_agent\nfrom langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\nfrom lfx.inputs.inputs import (\n    DataInput,\n    HandleInput,\n    MultilineInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass OpenAIToolsAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"OpenAI Tools Agent\"\n    description: str = \"Agent that uses tools via openai-tools.\"\n    icon = \"LangChain\"\n    name = \"OpenAIToolsAgent\"\n\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        HandleInput(\n            name=\"llm\",\n            display_name=\"Language Model\",\n            input_types=[\"LanguageModel\", \"ToolEnabledLanguageModel\"],\n            required=True,\n        ),\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt for the agent.\",\n            value=\"You are a helpful assistant\",\n        ),\n        MultilineInput(\n            name=\"user_prompt\", display_name=\"Prompt\", info=\"This prompt must contain 'input' key.\", value=\"{input}\"\n        ),\n        DataInput(name=\"chat_history\", display_name=\"Chat History\", is_list=True, advanced=True),\n    ]\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        if \"input\" not in self.user_prompt:\n            msg = \"Prompt must contain 'input' key.\"\n            raise ValueError(msg)\n        messages = [\n            (\"system\", self.system_prompt),\n            (\"placeholder\", \"{chat_history}\"),\n            HumanMessagePromptTemplate(prompt=PromptTemplate(input_variables=[\"input\"], template=self.user_prompt)),\n            (\"placeholder\", \"{agent_scratchpad}\"),\n        ]\n        prompt = ChatPromptTemplate.from_messages(messages)\n        return create_openai_tools_agent(self.llm, self.tools, prompt)\n"
+              "value": "from langchain.agents import create_openai_tools_agent\nfrom langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\nfrom lfx.inputs.inputs import (\n    DataInput,\n    DropdownInput,\n    ModelInput,\n    MultilineInput,\n    SecretStrInput,\n    StrInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass OpenAIToolsAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"OpenAI Tools Agent\"\n    description: str = \"Agent that uses tools via openai-tools.\"\n    icon = \"LangChain\"\n    name = \"OpenAIToolsAgent\"\n\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt for the agent.\",\n            value=\"You are a helpful assistant\",\n        ),\n        MultilineInput(\n            name=\"user_prompt\", display_name=\"Prompt\", info=\"This prompt must contain 'input' key.\", value=\"{input}\"\n        ),\n        DataInput(name=\"chat_history\", display_name=\"Chat History\", is_list=True, advanced=True),\n    ]\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n        return build_config\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        if \"input\" not in self.user_prompt:\n            msg = \"Prompt must contain 'input' key.\"\n            raise ValueError(msg)\n        llm = self._get_llm()\n        messages = [\n            (\"system\", self.system_prompt),\n            (\"placeholder\", \"{chat_history}\"),\n            HumanMessagePromptTemplate(prompt=PromptTemplate(input_variables=[\"input\"], template=self.user_prompt)),\n            (\"placeholder\", \"{agent_scratchpad}\"),\n        ]\n        prompt = ChatPromptTemplate.from_messages(messages)\n        return create_openai_tools_agent(llm, self.tools, prompt)\n"
             },
             "handle_parsing_errors": {
               "_input_type": "BoolInput",
@@ -81703,29 +81849,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "",
-              "input_types": [
-                "LanguageModel",
-                "ToolEnabledLanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -81745,6 +81868,64 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
             },
             "system_prompt": {
               "_input_type": "MultilineInput",
@@ -81867,7 +82048,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "path",
             "allow_dangerous_requests"
           ],
@@ -81875,7 +82059,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "3b817f0cd966",
+            "code_hash": "a4a7564100da",
             "dependencies": {
               "dependencies": [
                 {
@@ -81983,6 +82167,58 @@
               "type": "bool",
               "value": false
             },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
+            },
             "code": {
               "advanced": true,
               "dynamic": true,
@@ -81999,7 +82235,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from pathlib import Path\n\nimport yaml\nfrom langchain.agents import AgentExecutor\nfrom langchain_community.agent_toolkits import create_openapi_agent\nfrom langchain_community.agent_toolkits.openapi.toolkit import OpenAPIToolkit\nfrom langchain_community.tools.json.tool import JsonSpec\nfrom langchain_community.utilities.requests import TextRequestsWrapper\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.inputs.inputs import BoolInput, FileInput, HandleInput\n\n\nclass OpenAPIAgentComponent(LCAgentComponent):\n    display_name = \"OpenAPI Agent\"\n    description = \"Agent to interact with OpenAPI API.\"\n    name = \"OpenAPIAgent\"\n    icon = \"LangChain\"\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        HandleInput(name=\"llm\", display_name=\"Language Model\", input_types=[\"LanguageModel\"], required=True),\n        FileInput(name=\"path\", display_name=\"File Path\", file_types=[\"json\", \"yaml\", \"yml\"], required=True),\n        BoolInput(name=\"allow_dangerous_requests\", display_name=\"Allow Dangerous Requests\", value=False, required=True),\n    ]\n\n    def build_agent(self) -> AgentExecutor:\n        path = Path(self.path)\n        if path.suffix in {\"yaml\", \"yml\"}:\n            with path.open(encoding=\"utf-8\") as file:\n                yaml_dict = yaml.safe_load(file)\n            spec = JsonSpec(dict_=yaml_dict)\n        else:\n            spec = JsonSpec.from_file(path)\n        requests_wrapper = TextRequestsWrapper()\n        toolkit = OpenAPIToolkit.from_llm(\n            llm=self.llm,\n            json_spec=spec,\n            requests_wrapper=requests_wrapper,\n            allow_dangerous_requests=self.allow_dangerous_requests,\n        )\n\n        agent_args = self.get_agent_kwargs()\n\n        # This is bit weird - generally other create_*_agent functions have max_iterations in the\n        # `agent_executor_kwargs`, but openai has this parameter passed directly.\n        agent_args[\"max_iterations\"] = agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        del agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        return create_openapi_agent(llm=self.llm, toolkit=toolkit, **agent_args)\n"
+              "value": "from pathlib import Path\n\nimport yaml\nfrom langchain.agents import AgentExecutor\nfrom langchain_community.agent_toolkits import create_openapi_agent\nfrom langchain_community.agent_toolkits.openapi.toolkit import OpenAPIToolkit\nfrom langchain_community.tools.json.tool import JsonSpec\nfrom langchain_community.utilities.requests import TextRequestsWrapper\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\nfrom lfx.inputs.inputs import BoolInput, DropdownInput, FileInput, ModelInput, SecretStrInput, StrInput\n\n\nclass OpenAPIAgentComponent(LCAgentComponent):\n    display_name = \"OpenAPI Agent\"\n    description = \"Agent to interact with OpenAPI API.\"\n    name = \"OpenAPIAgent\"\n    icon = \"LangChain\"\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        FileInput(name=\"path\", display_name=\"File Path\", file_types=[\"json\", \"yaml\", \"yml\"], required=True),\n        BoolInput(name=\"allow_dangerous_requests\", display_name=\"Allow Dangerous Requests\", value=False, required=True),\n    ]\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n        return build_config\n\n    def build_agent(self) -> AgentExecutor:\n        llm = self._get_llm()\n        path = Path(self.path)\n        if path.suffix in {\"yaml\", \"yml\"}:\n            with path.open(encoding=\"utf-8\") as file:\n                yaml_dict = yaml.safe_load(file)\n            spec = JsonSpec(dict_=yaml_dict)\n        else:\n            spec = JsonSpec.from_file(path)\n        requests_wrapper = TextRequestsWrapper()\n        toolkit = OpenAPIToolkit.from_llm(\n            llm=llm,\n            json_spec=spec,\n            requests_wrapper=requests_wrapper,\n            allow_dangerous_requests=self.allow_dangerous_requests,\n        )\n\n        agent_args = self.get_agent_kwargs()\n\n        # This is bit weird - generally other create_*_agent functions have max_iterations in the\n        # `agent_executor_kwargs`, but openai has this parameter passed directly.\n        agent_args[\"max_iterations\"] = agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        del agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        return create_openapi_agent(llm=llm, toolkit=toolkit, **agent_args)\n"
             },
             "handle_parsing_errors": {
               "_input_type": "BoolInput",
@@ -82046,28 +82282,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "",
-              "input_types": [
-                "LanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -82087,6 +82301,43 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
             },
             "path": {
               "_input_type": "FileInput",
@@ -82113,6 +82364,27 @@
               "trace_as_metadata": true,
               "track_in_telemetry": false,
               "type": "file",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
               "value": ""
             },
             "verbose": {
@@ -82750,7 +83022,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "database_uri",
             "extra_tools"
           ],
@@ -82758,7 +83033,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "8d02598705fc",
+            "code_hash": "550c16461236",
             "dependencies": {
               "dependencies": [
                 {
@@ -82842,6 +83117,58 @@
               "type": "str",
               "value": "A helpful assistant with access to the following tools:"
             },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
+            },
             "code": {
               "advanced": true,
               "dynamic": true,
@@ -82858,7 +83185,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from langchain.agents import AgentExecutor\nfrom langchain_community.agent_toolkits import SQLDatabaseToolkit\nfrom langchain_community.agent_toolkits.sql.base import create_sql_agent\nfrom langchain_community.utilities import SQLDatabase\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.inputs.inputs import HandleInput, MessageTextInput\nfrom lfx.io import Output\n\n\nclass SQLAgentComponent(LCAgentComponent):\n    display_name = \"SQLAgent\"\n    description = \"Construct an SQL agent from an LLM and tools.\"\n    name = \"SQLAgent\"\n    icon = \"LangChain\"\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        HandleInput(name=\"llm\", display_name=\"Language Model\", input_types=[\"LanguageModel\"], required=True),\n        MessageTextInput(name=\"database_uri\", display_name=\"Database URI\", required=True),\n        HandleInput(\n            name=\"extra_tools\",\n            display_name=\"Extra Tools\",\n            input_types=[\"Tool\"],\n            is_list=True,\n            advanced=True,\n        ),\n    ]\n\n    outputs = [\n        Output(display_name=\"Response\", name=\"response\", method=\"message_response\"),\n        Output(display_name=\"Agent\", name=\"agent\", method=\"build_agent\", tool_mode=False),\n    ]\n\n    def build_agent(self) -> AgentExecutor:\n        db = SQLDatabase.from_uri(self.database_uri)\n        toolkit = SQLDatabaseToolkit(db=db, llm=self.llm)\n        agent_args = self.get_agent_kwargs()\n        agent_args[\"max_iterations\"] = agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        del agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        return create_sql_agent(llm=self.llm, toolkit=toolkit, extra_tools=self.extra_tools or [], **agent_args)\n"
+              "value": "from langchain.agents import AgentExecutor\nfrom langchain_community.agent_toolkits import SQLDatabaseToolkit\nfrom langchain_community.agent_toolkits.sql.base import create_sql_agent\nfrom langchain_community.utilities import SQLDatabase\n\nfrom lfx.base.agents.agent import LCAgentComponent\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\nfrom lfx.inputs.inputs import DropdownInput, HandleInput, MessageTextInput, ModelInput\nfrom lfx.io import Output, SecretStrInput, StrInput\n\n\nclass SQLAgentComponent(LCAgentComponent):\n    display_name = \"SQLAgent\"\n    description = \"Construct an SQL agent from an LLM and tools.\"\n    name = \"SQLAgent\"\n    icon = \"LangChain\"\n    inputs = [\n        *LCAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        MessageTextInput(name=\"database_uri\", display_name=\"Database URI\", required=True),\n        HandleInput(\n            name=\"extra_tools\",\n            display_name=\"Extra Tools\",\n            input_types=[\"Tool\"],\n            is_list=True,\n            advanced=True,\n        ),\n    ]\n\n    outputs = [\n        Output(display_name=\"Response\", name=\"response\", method=\"message_response\"),\n        Output(display_name=\"Agent\", name=\"agent\", method=\"build_agent\", tool_mode=False),\n    ]\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n\n        # Show/hide watsonx fields based on selected model\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n\n        return build_config\n\n    def build_agent(self) -> AgentExecutor:\n        llm = self._get_llm()\n        db = SQLDatabase.from_uri(self.database_uri)\n        toolkit = SQLDatabaseToolkit(db=db, llm=llm)\n        agent_args = self.get_agent_kwargs()\n        agent_args[\"max_iterations\"] = agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        del agent_args[\"agent_executor_kwargs\"][\"max_iterations\"]\n        return create_sql_agent(llm=llm, toolkit=toolkit, extra_tools=self.extra_tools or [], **agent_args)\n"
             },
             "database_uri": {
               "_input_type": "MessageTextInput",
@@ -82952,28 +83279,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "",
-              "input_types": [
-                "LanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -82993,6 +83298,64 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
             },
             "verbose": {
               "_input_type": "BoolInput",
@@ -84093,7 +84456,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "system_prompt",
             "chat_history"
           ],
@@ -84101,7 +84467,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "a5afe724de9c",
+            "code_hash": "cdeb13ac7430",
             "dependencies": {
               "dependencies": [
                 {
@@ -84185,6 +84551,58 @@
               "type": "str",
               "value": "A helpful assistant with access to the following tools:"
             },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
+            },
             "chat_history": {
               "_input_type": "DataInput",
               "advanced": true,
@@ -84225,7 +84643,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from langchain.agents import create_tool_calling_agent\nfrom langchain_core.prompts import ChatPromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\n\n# IBM Granite-specific logic is in a separate file\nfrom lfx.components.langchain_utilities.ibm_granite_handler import (\n    create_granite_agent,\n    get_enhanced_system_prompt,\n    is_granite_model,\n)\nfrom lfx.inputs.inputs import (\n    DataInput,\n    HandleInput,\n    MessageTextInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass ToolCallingAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"Tool Calling Agent\"\n    description: str = \"An agent designed to utilize various tools seamlessly within workflows.\"\n    icon = \"LangChain\"\n    name = \"ToolCallingAgent\"\n\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        HandleInput(\n            name=\"llm\",\n            display_name=\"Language Model\",\n            input_types=[\"LanguageModel\"],\n            required=True,\n            info=\"Language model that the agent utilizes to perform tasks effectively.\",\n        ),\n        MessageTextInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n        ),\n        DataInput(\n            name=\"chat_history\",\n            display_name=\"Chat Memory\",\n            is_list=True,\n            advanced=True,\n            info=\"This input stores the chat history, allowing the agent to remember previous conversations.\",\n        ),\n    ]\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        messages = []\n\n        # Use local variable to avoid mutating component state on repeated calls\n        effective_system_prompt = self.system_prompt or \"\"\n\n        # Enhance prompt for IBM Granite models (they need explicit tool usage instructions)\n        if is_granite_model(self.llm) and self.tools:\n            effective_system_prompt = get_enhanced_system_prompt(effective_system_prompt, self.tools)\n            # Store enhanced prompt for use in agent.py without mutating original\n            self._effective_system_prompt = effective_system_prompt\n\n        # Only include system message if system_prompt is provided and not empty\n        if effective_system_prompt.strip():\n            messages.append((\"system\", \"{system_prompt}\"))\n\n        messages.extend(\n            [\n                (\"placeholder\", \"{chat_history}\"),\n                (\"human\", \"{input}\"),\n                (\"placeholder\", \"{agent_scratchpad}\"),\n            ]\n        )\n\n        prompt = ChatPromptTemplate.from_messages(messages)\n        self.validate_tool_names()\n\n        try:\n            # Use IBM Granite-specific agent if detected\n            # Other WatsonX models (Llama, Mistral, etc.) use default behavior\n            if is_granite_model(self.llm) and self.tools:\n                return create_granite_agent(self.llm, self.tools, prompt)\n\n            # Default behavior for other models (including non-Granite WatsonX models)\n            return create_tool_calling_agent(self.llm, self.tools or [], prompt)\n        except NotImplementedError as e:\n            message = f\"{self.display_name} does not support tool calling. Please try using a compatible model.\"\n            raise NotImplementedError(message) from e\n"
+              "value": "from langchain.agents import create_tool_calling_agent\nfrom langchain_core.prompts import ChatPromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\n\n# IBM Granite-specific logic is in a separate file\nfrom lfx.components.langchain_utilities.ibm_granite_handler import (\n    create_granite_agent,\n    get_enhanced_system_prompt,\n    is_granite_model,\n)\nfrom lfx.inputs.inputs import (\n    DataInput,\n    DropdownInput,\n    MessageTextInput,\n    ModelInput,\n    SecretStrInput,\n    StrInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass ToolCallingAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"Tool Calling Agent\"\n    description: str = \"An agent designed to utilize various tools seamlessly within workflows.\"\n    icon = \"LangChain\"\n    name = \"ToolCallingAgent\"\n\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        MessageTextInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n        ),\n        DataInput(\n            name=\"chat_history\",\n            display_name=\"Chat Memory\",\n            is_list=True,\n            advanced=True,\n            info=\"This input stores the chat history, allowing the agent to remember previous conversations.\",\n        ),\n    ]\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n\n        # Show/hide watsonx fields based on selected model\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n\n        return build_config\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        messages = []\n\n        # Use local variable to avoid mutating component state on repeated calls\n        effective_system_prompt = self.system_prompt or \"\"\n\n        llm = self._get_llm()\n\n        # Enhance prompt for IBM Granite models (they need explicit tool usage instructions)\n        if is_granite_model(llm) and self.tools:\n            effective_system_prompt = get_enhanced_system_prompt(effective_system_prompt, self.tools)\n            # Store enhanced prompt for use in agent.py without mutating original\n            self._effective_system_prompt = effective_system_prompt\n\n        # Only include system message if system_prompt is provided and not empty\n        if effective_system_prompt.strip():\n            messages.append((\"system\", \"{system_prompt}\"))\n\n        messages.extend(\n            [\n                (\"placeholder\", \"{chat_history}\"),\n                (\"human\", \"{input}\"),\n                (\"placeholder\", \"{agent_scratchpad}\"),\n            ]\n        )\n\n        prompt = ChatPromptTemplate.from_messages(messages)\n        self.validate_tool_names()\n\n        try:\n            # Use IBM Granite-specific agent if detected\n            # Other WatsonX models (Llama, Mistral, etc.) use default behavior\n            if is_granite_model(llm) and self.tools:\n                return create_granite_agent(llm, self.tools, prompt)\n\n            # Default behavior for other models (including non-Granite WatsonX models)\n            return create_tool_calling_agent(llm, self.tools or [], prompt)\n        except NotImplementedError as e:\n            message = f\"{self.display_name} does not support tool calling. Please try using a compatible model.\"\n            raise NotImplementedError(message) from e\n"
             },
             "handle_parsing_errors": {
               "_input_type": "BoolInput",
@@ -84272,28 +84690,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "Language model that the agent utilizes to perform tasks effectively.",
-              "input_types": [
-                "LanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -84313,6 +84709,64 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
             },
             "system_prompt": {
               "_input_type": "MessageTextInput",
@@ -84811,7 +85265,10 @@
             "verbose",
             "max_iterations",
             "agent_description",
-            "llm",
+            "model",
+            "api_key",
+            "base_url_ibm_watsonx",
+            "project_id",
             "chat_history",
             "system_prompt",
             "user_prompt"
@@ -84820,7 +85277,7 @@
           "icon": "LangChain",
           "legacy": false,
           "metadata": {
-            "code_hash": "338332984901",
+            "code_hash": "17a0cb4c48a8",
             "dependencies": {
               "dependencies": [
                 {
@@ -84904,6 +85361,58 @@
               "type": "str",
               "value": "A helpful assistant with access to the following tools:"
             },
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": true,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "Model Provider API key",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "base_url_ibm_watsonx": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "watsonx API Endpoint",
+              "dynamic": false,
+              "external_options": {},
+              "info": "The base URL of the API (IBM watsonx.ai only)",
+              "name": "base_url_ibm_watsonx",
+              "options": [
+                "https://us-south.ml.cloud.ibm.com",
+                "https://eu-de.ml.cloud.ibm.com",
+                "https://eu-gb.ml.cloud.ibm.com",
+                "https://au-syd.ml.cloud.ibm.com",
+                "https://jp-tok.ml.cloud.ibm.com",
+                "https://ca-tor.ml.cloud.ibm.com"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "real_time_refresh": true,
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "https://us-south.ml.cloud.ibm.com"
+            },
             "chat_history": {
               "_input_type": "DataInput",
               "advanced": true,
@@ -84944,7 +85453,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from langchain.agents import create_xml_agent\nfrom langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\nfrom lfx.inputs.inputs import (\n    DataInput,\n    HandleInput,\n    MultilineInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass XMLAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"XML Agent\"\n    description: str = \"Agent that uses tools formatting instructions as xml to the Language Model.\"\n    icon = \"LangChain\"\n    beta = True\n    name = \"XMLAgent\"\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        HandleInput(name=\"llm\", display_name=\"Language Model\", input_types=[\"LanguageModel\"], required=True),\n        DataInput(name=\"chat_history\", display_name=\"Chat History\", is_list=True, advanced=True),\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt for the agent.\",\n            value=\"\"\"You are a helpful assistant. Help the user answer any questions.\n\nYou have access to the following tools:\n\n{tools}\n\nIn order to use a tool, you can use <tool></tool> and <tool_input></tool_input> tags. You will then get back a response in the form <observation></observation>\n\nFor example, if you have a tool called 'search' that could run a google search, in order to search for the weather in SF you would respond:\n\n<tool>search</tool><tool_input>weather in SF</tool_input>\n\n<observation>64 degrees</observation>\n\nWhen you are done, respond with a final answer between <final_answer></final_answer>. For example:\n\n<final_answer>The weather in SF is 64 degrees</final_answer>\n\nBegin!\n\nQuestion: {input}\n\n{agent_scratchpad}\n            \"\"\",  # noqa: E501\n        ),\n        MultilineInput(\n            name=\"user_prompt\", display_name=\"Prompt\", info=\"This prompt must contain 'input' key.\", value=\"{input}\"\n        ),\n    ]\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        if \"input\" not in self.user_prompt:\n            msg = \"Prompt must contain 'input' key.\"\n            raise ValueError(msg)\n        messages = [\n            (\"system\", self.system_prompt),\n            (\"placeholder\", \"{chat_history}\"),\n            HumanMessagePromptTemplate(prompt=PromptTemplate(input_variables=[\"input\"], template=self.user_prompt)),\n            (\"ai\", \"{agent_scratchpad}\"),\n        ]\n        prompt = ChatPromptTemplate.from_messages(messages)\n        return create_xml_agent(self.llm, self.tools, prompt)\n"
+              "value": "from langchain.agents import create_xml_agent\nfrom langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, PromptTemplate\n\nfrom lfx.base.agents.agent import LCToolsAgentComponent\nfrom lfx.base.models.unified_models import get_language_model_options, get_llm, update_model_options_in_build_config\nfrom lfx.base.models.watsonx_constants import IBM_WATSONX_URLS\nfrom lfx.inputs.inputs import (\n    DataInput,\n    DropdownInput,\n    ModelInput,\n    MultilineInput,\n    SecretStrInput,\n    StrInput,\n)\nfrom lfx.schema.data import Data\n\n\nclass XMLAgentComponent(LCToolsAgentComponent):\n    display_name: str = \"XML Agent\"\n    description: str = \"Agent that uses tools formatting instructions as xml to the Language Model.\"\n    icon = \"LangChain\"\n    beta = True\n    name = \"XMLAgent\"\n    inputs = [\n        *LCToolsAgentComponent.get_base_inputs(),\n        ModelInput(\n            name=\"model\",\n            display_name=\"Language Model\",\n            info=\"Select your model provider or connect a Language Model component.\",\n            real_time_refresh=True,\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"API Key\",\n            info=\"Model Provider API key\",\n            real_time_refresh=True,\n            advanced=True,\n        ),\n        DropdownInput(\n            name=\"base_url_ibm_watsonx\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API (IBM watsonx.ai only)\",\n            options=IBM_WATSONX_URLS,\n            value=IBM_WATSONX_URLS[0],\n            show=False,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project ID\",\n            info=\"The project ID associated with the foundation model (IBM watsonx.ai only)\",\n            show=False,\n            required=False,\n        ),\n        DataInput(name=\"chat_history\", display_name=\"Chat History\", is_list=True, advanced=True),\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"System Prompt\",\n            info=\"System prompt for the agent.\",\n            value=\"\"\"You are a helpful assistant. Help the user answer any questions.\n\nYou have access to the following tools:\n\n{tools}\n\nIn order to use a tool, you can use <tool></tool> and <tool_input></tool_input> tags. You will then get back a response in the form <observation></observation>\n\nFor example, if you have a tool called 'search' that could run a google search, in order to search for the weather in SF you would respond:\n\n<tool>search</tool><tool_input>weather in SF</tool_input>\n\n<observation>64 degrees</observation>\n\nWhen you are done, respond with a final answer between <final_answer></final_answer>. For example:\n\n<final_answer>The weather in SF is 64 degrees</final_answer>\n\nBegin!\n\nQuestion: {input}\n\n{agent_scratchpad}\n            \"\"\",  # noqa: E501\n        ),\n        MultilineInput(\n            name=\"user_prompt\", display_name=\"Prompt\", info=\"This prompt must contain 'input' key.\", value=\"{input}\"\n        ),\n    ]\n\n    def _get_llm(self):\n        \"\"\"Resolve the language model from dropdown selection or connected component.\"\"\"\n        return get_llm(\n            model=self.model,\n            user_id=self.user_id,\n            api_key=getattr(self, \"api_key\", None),\n            watsonx_url=getattr(self, \"base_url_ibm_watsonx\", None),\n            watsonx_project_id=getattr(self, \"project_id\", None),\n        )\n\n    def update_build_config(self, build_config: dict, field_value: str, field_name: str | None = None) -> dict:\n        \"\"\"Dynamically update build config with user-filtered model options (tool-calling capable models).\"\"\"\n\n        def get_tool_calling_model_options(user_id=None):\n            return get_language_model_options(user_id=user_id, tool_calling=True)\n\n        build_config = update_model_options_in_build_config(\n            component=self,\n            build_config=dict(build_config),\n            cache_key_prefix=\"language_model_options_tool_calling\",\n            get_options_func=get_tool_calling_model_options,\n            field_name=field_name,\n            field_value=field_value,\n        )\n\n        # Show/hide watsonx fields based on selected model\n        current_model_value = field_value if field_name == \"model\" else build_config.get(\"model\", {}).get(\"value\")\n        if isinstance(current_model_value, list) and len(current_model_value) > 0:\n            selected_model = current_model_value[0]\n            provider = selected_model.get(\"provider\", \"\")\n            is_watsonx = provider == \"IBM WatsonX\"\n            if \"base_url_ibm_watsonx\" in build_config:\n                build_config[\"base_url_ibm_watsonx\"][\"show\"] = is_watsonx\n                build_config[\"base_url_ibm_watsonx\"][\"required\"] = is_watsonx\n            if \"project_id\" in build_config:\n                build_config[\"project_id\"][\"show\"] = is_watsonx\n                build_config[\"project_id\"][\"required\"] = is_watsonx\n\n        return build_config\n\n    def get_chat_history_data(self) -> list[Data] | None:\n        return self.chat_history\n\n    def create_agent_runnable(self):\n        if \"input\" not in self.user_prompt:\n            msg = \"Prompt must contain 'input' key.\"\n            raise ValueError(msg)\n        llm = self._get_llm()\n        messages = [\n            (\"system\", self.system_prompt),\n            (\"placeholder\", \"{chat_history}\"),\n            HumanMessagePromptTemplate(prompt=PromptTemplate(input_variables=[\"input\"], template=self.user_prompt)),\n            (\"ai\", \"{agent_scratchpad}\"),\n        ]\n        prompt = ChatPromptTemplate.from_messages(messages)\n        return create_xml_agent(llm, self.tools, prompt)\n"
             },
             "handle_parsing_errors": {
               "_input_type": "BoolInput",
@@ -84991,28 +85500,6 @@
               "type": "str",
               "value": ""
             },
-            "llm": {
-              "_input_type": "HandleInput",
-              "advanced": false,
-              "display_name": "Language Model",
-              "dynamic": false,
-              "info": "",
-              "input_types": [
-                "LanguageModel"
-              ],
-              "list": false,
-              "list_add_label": "Add More",
-              "name": "llm",
-              "override_skip": false,
-              "placeholder": "",
-              "required": true,
-              "show": true,
-              "title_case": false,
-              "trace_as_metadata": true,
-              "track_in_telemetry": false,
-              "type": "other",
-              "value": ""
-            },
             "max_iterations": {
               "_input_type": "IntInput",
               "advanced": true,
@@ -85032,6 +85519,64 @@
               "track_in_telemetry": true,
               "type": "int",
               "value": 15
+            },
+            "model": {
+              "_input_type": "ModelInput",
+              "advanced": false,
+              "display_name": "Language Model",
+              "dynamic": false,
+              "external_options": {
+                "fields": {
+                  "data": {
+                    "node": {
+                      "display_name": "Connect other models",
+                      "icon": "CornerDownLeft",
+                      "name": "connect_other_models"
+                    }
+                  }
+                }
+              },
+              "info": "Select your model provider or connect a Language Model component.",
+              "input_types": [
+                "LanguageModel"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "model_type": "language",
+              "name": "model",
+              "override_skip": false,
+              "placeholder": "Setup Provider",
+              "real_time_refresh": true,
+              "refresh_button": true,
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "track_in_telemetry": false,
+              "type": "model",
+              "value": ""
+            },
+            "project_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Project ID",
+              "dynamic": false,
+              "info": "The project ID associated with the foundation model (IBM watsonx.ai only)",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "project_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": false,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
             },
             "system_prompt": {
               "_input_type": "MultilineInput",
@@ -116863,6 +117408,6 @@
     "num_components": 357,
     "num_modules": 96
   },
-  "sha256": "a6f973640c11e6430c20aa3979d566a855a1fa0dbbde67f2178ba3fc27d8ae8b",
+  "sha256": "171c5b44b170af44e7a5f96ba74b7062d09b1db618e335e0365308f489689519",
   "version": "0.3.0"
 }
