@@ -4696,14 +4696,14 @@
               "info": "",
               "name": "model_name",
               "options": [
-                "claude-opus-4-5-20251101",
+                "claude-opus-4-6",
+                "claude-sonnet-4-6",
                 "claude-haiku-4-5-20251001",
+                "claude-opus-4-5-20251101",
                 "claude-sonnet-4-5-20250929",
                 "claude-opus-4-1-20250805",
                 "claude-opus-4-20250514",
-                "claude-sonnet-4-20250514",
-                "claude-3-5-haiku-20241022",
-                "claude-3-haiku-20240307"
+                "claude-sonnet-4-20250514"
               ],
               "options_metadata": [],
               "override_skip": false,
@@ -4717,7 +4717,7 @@
               "trace_as_metadata": true,
               "track_in_telemetry": true,
               "type": "str",
-              "value": "claude-opus-4-5-20251101"
+              "value": "claude-opus-4-6"
             },
             "stream": {
               "_input_type": "BoolInput",
@@ -55332,10 +55332,15 @@
               "options": [
                 "gpt-4o-mini",
                 "gpt-4o",
+                "gpt-4.1",
+                "gpt-4.1-mini",
+                "gpt-4.1-nano",
+                "gpt-4.5-preview",
                 "gpt-4-turbo",
                 "gpt-4-turbo-preview",
                 "gpt-4",
                 "gpt-3.5-turbo",
+                "gpt-5.2",
                 "gpt-5.1",
                 "gpt-5",
                 "gpt-5-mini",
@@ -73550,6 +73555,7 @@
                 "gemini-2.0-flash",
                 "gemini-2.0-flash-lite",
                 "gemini-2.0-flash-preview-image-generation",
+                "gemini-3.1-pro-preview",
                 "gemini-3-pro-preview",
                 "gemini-3-flash-preview",
                 "gemini-3-pro-image-preview"
@@ -76410,6 +76416,10 @@
               "options": [
                 "gpt-4o-mini",
                 "gpt-4o",
+                "gpt-4.1",
+                "gpt-4.1-mini",
+                "gpt-4.1-nano",
+                "gpt-4.5-preview",
                 "gpt-4-turbo",
                 "gpt-4-turbo-preview",
                 "gpt-4",
@@ -97206,10 +97216,15 @@
               "options": [
                 "gpt-4o-mini",
                 "gpt-4o",
+                "gpt-4.1",
+                "gpt-4.1-mini",
+                "gpt-4.1-nano",
+                "gpt-4.5-preview",
                 "gpt-4-turbo",
                 "gpt-4-turbo-preview",
                 "gpt-4",
                 "gpt-3.5-turbo",
+                "gpt-5.2",
                 "gpt-5.1",
                 "gpt-5",
                 "gpt-5-mini",
@@ -117360,6 +117375,6 @@
     "num_components": 357,
     "num_modules": 96
   },
-  "sha256": "81f7a623a1762dbf9a3cffdbbc2a8b7609c66c2ce7806f5b0bed489e2c22b097",
+  "sha256": "2a6239f88b24c2b246d21ea55ed3a2bc64018c3b6c728cc08cd4a35536929323",
   "version": "0.3.0"
 }
