@@ -32,6 +32,9 @@ class User(SQLModel, table=True):  # type: ignore[call-arg]
     create_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     last_login_at: datetime | None = Field(default=None, nullable=True)
+    # Hanzo IAM org scoping: stores the IAM organization slug (e.g. "hanzo", "lux").
+    # Set during OIDC login from the `owner` claim. Used to scope flows/folders/variables.
+    org_id: str | None = Field(default=None, nullable=True, index=True)
     api_keys: list["ApiKey"] = Relationship(
         back_populates="user",
         sa_relationship_kwargs={"cascade": "delete"},
@@ -69,6 +72,7 @@ class UserRead(SQLModel):
     create_at: datetime = Field()
     updated_at: datetime = Field()
     last_login_at: datetime | None = Field(nullable=True)
+    org_id: str | None = Field(default=None)
     optins: dict[str, Any] | None = Field(default=None)
 
 
