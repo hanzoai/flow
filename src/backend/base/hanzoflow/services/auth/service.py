@@ -194,6 +194,16 @@ class AuthService(BaseAuthService):
             msg = "User account is inactive"
             raise InactiveUserError(msg)
 
+        # Sync IAM org from JWT payload (idempotent, only writes if changed)
+        try:
+            from langflow.services.auth.iam_org import extract_org_from_jwt_payload, sync_user_org
+            org_id = extract_org_from_jwt_payload(payload)
+            if org_id:
+                await sync_user_org(user, org_id, db)
+        except Exception:
+            # Never fail authentication due to org sync errors
+            logger.debug("Failed to sync user org from JWT", exc_info=True)
+
         return user
 
     async def _authenticate_with_api_key(self, api_key: str, db: AsyncSession) -> UserRead | None:
