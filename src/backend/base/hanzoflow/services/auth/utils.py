@@ -154,15 +154,28 @@ def _auth_error_to_http(e: AuthenticationError) -> HTTPException:
 
 
 async def get_current_user(
+    request: Request,
     token: Annotated[str | None, Security(oauth2_login)],
     query_param: Annotated[str | None, Security(api_key_query)],
     header_param: Annotated[str | None, Security(api_key_header)],
     db: AsyncSession = Depends(injectable_session_scope),
 ) -> User:
     try:
-        return await _auth_service().get_current_user(token, query_param, header_param, db)
+        user = await _auth_service().get_current_user(token, query_param, header_param, db)
     except AuthenticationError as e:
         raise _auth_error_to_http(e) from e
+
+    # Sync IAM org from gateway-injected header (X-Hanzo-Org-Id)
+    # This supplements the JWT-based extraction in _authenticate_with_token
+    try:
+        from langflow.services.auth.iam_org import extract_org_from_request, sync_user_org
+        org_id = extract_org_from_request(request)
+        if org_id and hasattr(user, "org_id"):
+            await sync_user_org(user, org_id, db)
+    except Exception:
+        logger.debug("Failed to sync user org from request header", exc_info=True)
+
+    return user
 
 
 async def get_current_user_from_access_token(
