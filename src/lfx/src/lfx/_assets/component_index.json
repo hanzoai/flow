@@ -312,7 +312,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "markdown",
@@ -485,7 +485,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -626,7 +626,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -795,7 +795,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -936,7 +936,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -1106,7 +1106,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -1277,7 +1277,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -1470,7 +1470,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -10003,7 +10003,7 @@
               "dependencies": [
                 {
                   "name": "chromadb",
-                  "version": "1.5.2"
+                  "version": "1.5.4"
                 },
                 {
                   "name": "langchain_chroma",
@@ -69864,7 +69864,7 @@
               "dependencies": [
                 {
                   "name": "chromadb",
-                  "version": "1.5.2"
+                  "version": "1.5.4"
                 },
                 {
                   "name": "cryptography",
@@ -75404,7 +75404,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -75587,7 +75587,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "pydantic",
@@ -81026,7 +81026,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 }
               ],
               "total_dependencies": 2
@@ -81329,7 +81329,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -81587,7 +81587,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -81715,7 +81715,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -81851,7 +81851,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 }
               ],
               "total_dependencies": 3
@@ -82464,7 +82464,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -82901,7 +82901,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_community",
@@ -83440,7 +83440,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -83664,7 +83664,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -83871,7 +83871,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_community",
@@ -84341,7 +84341,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -84547,7 +84547,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -84742,7 +84742,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_experimental",
@@ -85305,7 +85305,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -85696,7 +85696,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -85854,7 +85854,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "lfx",
@@ -86115,7 +86115,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -107640,7 +107640,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 }
               ],
               "total_dependencies": 5
@@ -107944,7 +107944,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_community",
@@ -108167,7 +108167,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -108461,7 +108461,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -108635,7 +108635,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -108818,7 +108818,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_community",
@@ -109057,7 +109057,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_community",
@@ -109287,7 +109287,7 @@
                 },
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -110030,7 +110030,7 @@
               "dependencies": [
                 {
                   "name": "langchain",
-                  "version": "0.3.27"
+                  "version": "0.3.28"
                 },
                 {
                   "name": "langchain_core",
@@ -115153,7 +115153,7 @@
                 },
                 {
                   "name": "vlmrun",
-                  "version": "0.5.4"
+                  "version": "0.5.6"
                 }
               ],
               "total_dependencies": 3
@@ -115396,7 +115396,7 @@
               "dependencies": [
                 {
                   "name": "weaviate",
-                  "version": "4.20.1"
+                  "version": "4.20.3"
                 },
                 {
                   "name": "langchain_community",
@@ -118266,6 +118266,6 @@
     "num_components": 359,
     "num_modules": 97
   },
-  "sha256": "574431890665b24ef69d5aad362ebac45984b8a1b67e06f733e642dd75a37af7",
+  "sha256": "0f9bfcab9c8747258f998b115b6975919f27938dff6112f891b2ed208a4fcefc",
   "version": "0.3.0"
 }
