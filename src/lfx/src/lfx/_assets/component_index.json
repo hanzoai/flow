@@ -76951,6 +76951,7 @@
           "field_order": [
             "url",
             "project_id",
+            "space_id",
             "api_key",
             "model_name",
             "truncate_input_tokens",
@@ -76960,7 +76961,7 @@
           "icon": "WatsonxAI",
           "legacy": false,
           "metadata": {
-            "code_hash": "011bcac795de",
+            "code_hash": "6effadae5f84",
             "dependencies": {
               "dependencies": [
                 {
@@ -77040,7 +77041,7 @@
               "show": true,
               "title_case": false,
               "type": "code",
-              "value": "from typing import Any\n\nfrom ibm_watsonx_ai import APIClient, Credentials\nfrom ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames\nfrom langchain_ibm import WatsonxEmbeddings\nfrom pydantic.v1 import SecretStr\n\nfrom lfx.base.embeddings.model import LCEmbeddingsModel\nfrom lfx.base.models.model_utils import get_watsonx_embedding_models\nfrom lfx.field_typing import Embeddings\nfrom lfx.io import BoolInput, DropdownInput, IntInput, SecretStrInput, StrInput\nfrom lfx.log.logger import logger\nfrom lfx.schema.dotdict import dotdict\n\n\nclass WatsonxEmbeddingsComponent(LCEmbeddingsModel):\n    display_name = \"IBM watsonx.ai Embeddings\"\n    description = \"Generate embeddings using IBM watsonx.ai models.\"\n    icon = \"WatsonxAI\"\n    name = \"WatsonxEmbeddingsComponent\"\n\n    # models present in all the regions\n    _default_models = [\n        \"sentence-transformers/all-minilm-l12-v2\",\n        \"ibm/slate-125m-english-rtrvr-v2\",\n        \"ibm/slate-30m-english-rtrvr-v2\",\n        \"intfloat/multilingual-e5-large\",\n    ]\n\n    inputs = [\n        DropdownInput(\n            name=\"url\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API.\",\n            value=None,\n            options=[\n                \"https://us-south.ml.cloud.ibm.com\",\n                \"https://eu-de.ml.cloud.ibm.com\",\n                \"https://eu-gb.ml.cloud.ibm.com\",\n                \"https://au-syd.ml.cloud.ibm.com\",\n                \"https://jp-tok.ml.cloud.ibm.com\",\n                \"https://ca-tor.ml.cloud.ibm.com\",\n            ],\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx project id\",\n            info=\"The project ID or deployment space ID that is associated with the foundation model.\",\n            required=True,\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"Watsonx API Key\",\n            info=\"The API Key to use for the model.\",\n            required=True,\n        ),\n        DropdownInput(\n            name=\"model_name\",\n            display_name=\"Model Name\",\n            options=[],\n            value=None,\n            dynamic=True,\n            required=True,\n        ),\n        IntInput(\n            name=\"truncate_input_tokens\",\n            display_name=\"Truncate Input Tokens\",\n            advanced=True,\n            value=200,\n        ),\n        BoolInput(\n            name=\"input_text\",\n            display_name=\"Include the original text in the output\",\n            value=True,\n            advanced=True,\n        ),\n    ]\n\n    @staticmethod\n    def fetch_models(base_url: str) -> list[str]:\n        \"\"\"Fetch available models from the watsonx.ai API.\n\n        Uses centralized model fetching from model_utils.\n        \"\"\"\n        return get_watsonx_embedding_models(base_url, default_models=WatsonxEmbeddingsComponent._default_models)\n\n    def update_build_config(self, build_config: dotdict, field_value: Any, field_name: str | None = None):\n        \"\"\"Update model options when URL or API key changes.\"\"\"\n        logger.debug(\n            \"Updating build config. Field name: %s, Field value: %s\",\n            field_name,\n            field_value,\n        )\n\n        if field_name == \"url\" and field_value:\n            try:\n                models = self.fetch_models(base_url=build_config.url.value)\n                build_config.model_name.options = models\n                if build_config.model_name.value:\n                    build_config.model_name.value = models[0]\n                info_message = f\"Updated model options: {len(models)} models found in {build_config.url.value}\"\n                logger.info(info_message)\n            except Exception:  # noqa: BLE001\n                logger.exception(\"Error updating model options.\")\n\n    def build_embeddings(self) -> Embeddings:\n        credentials = Credentials(\n            api_key=SecretStr(self.api_key).get_secret_value(),\n            url=self.url,\n        )\n\n        api_client = APIClient(credentials)\n\n        params = {\n            EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: self.truncate_input_tokens,\n            EmbedTextParamsMetaNames.RETURN_OPTIONS: {\"input_text\": self.input_text},\n        }\n\n        return WatsonxEmbeddings(\n            model_id=self.model_name,\n            params=params,\n            watsonx_client=api_client,\n            project_id=self.project_id,\n        )\n"
+              "value": "from typing import Any\n\nfrom ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames\nfrom langchain_ibm import WatsonxEmbeddings\nfrom pydantic.v1 import SecretStr\n\nfrom lfx.base.embeddings.model import LCEmbeddingsModel\nfrom lfx.base.models.model_utils import get_watsonx_embedding_models\nfrom lfx.field_typing import Embeddings\nfrom lfx.io import BoolInput, DropdownInput, IntInput, SecretStrInput, StrInput\nfrom lfx.log.logger import logger\nfrom lfx.schema.dotdict import dotdict\n\n\nclass WatsonxEmbeddingsComponent(LCEmbeddingsModel):\n    \"\"\"LFX component for IBM watsonx.ai embeddings.\"\"\"\n\n    display_name = \"IBM watsonx.ai Embeddings\"\n    description = \"Generate embeddings using IBM watsonx.ai models.\"\n    icon = \"WatsonxAI\"\n    name = \"WatsonxEmbeddingsComponent\"\n\n    # models present in all the regions\n    _default_models = [\n        \"sentence-transformers/all-minilm-l12-v2\",\n        \"ibm/slate-125m-english-rtrvr-v2\",\n        \"ibm/slate-30m-english-rtrvr-v2\",\n        \"intfloat/multilingual-e5-large\",\n    ]\n    _urls = [\n        \"https://us-south.ml.cloud.ibm.com\",\n        \"https://eu-de.ml.cloud.ibm.com\",\n        \"https://eu-gb.ml.cloud.ibm.com\",\n        \"https://au-syd.ml.cloud.ibm.com\",\n        \"https://jp-tok.ml.cloud.ibm.com\",\n        \"https://ca-tor.ml.cloud.ibm.com\",\n        \"https://ap-south-1.aws.wxai.ibm.com\",\n    ]\n\n    inputs = [\n        DropdownInput(\n            name=\"url\",\n            display_name=\"watsonx API Endpoint\",\n            info=\"The base URL of the API.\",\n            value=None,\n            options=_urls,\n            real_time_refresh=True,\n        ),\n        StrInput(\n            name=\"project_id\",\n            display_name=\"watsonx Project_ID\",\n            required=False,\n            info=\"The project ID associated with the embedding model.\",\n        ),\n        StrInput(\n            name=\"space_id\",\n            display_name=\"watsonx Space_ID\",\n            required=False,\n            info=\"The deployment space ID associated with the embedding model.\",\n        ),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"Watsonx API Key\",\n            info=\"The API Key to use for the model.\",\n            required=True,\n        ),\n        DropdownInput(\n            name=\"model_name\",\n            display_name=\"Model Name\",\n            options=[],\n            value=None,\n            dynamic=True,\n            required=True,\n        ),\n        IntInput(\n            name=\"truncate_input_tokens\",\n            display_name=\"Truncate Input Tokens\",\n            advanced=True,\n            value=200,\n        ),\n        BoolInput(\n            name=\"input_text\",\n            display_name=\"Include the original text in the output\",\n            value=True,\n            advanced=True,\n        ),\n    ]\n\n    @staticmethod\n    def fetch_models(base_url: str) -> list[str]:\n        \"\"\"Fetch available models from the watsonx.ai API.\n\n        Uses centralized model fetching from model_utils.\n        \"\"\"\n        return get_watsonx_embedding_models(base_url, default_models=WatsonxEmbeddingsComponent._default_models)\n\n    def update_build_config(self, build_config: dotdict, field_value: Any, field_name: str | None = None):\n        \"\"\"Update model options when URL or API key changes.\"\"\"\n        logger.debug(\n            \"Updating build config. Field name: %s, Field value: %s\",\n            field_name,\n            field_value,\n        )\n\n        if field_name == \"url\" and field_value:\n            try:\n                models = self.fetch_models(base_url=build_config.url.value)\n                build_config.model_name.options = models\n                if build_config.model_name.value:\n                    build_config.model_name.value = models[0]\n                info_message = f\"Updated model options: {len(models)} models found in {build_config.url.value}\"\n                logger.info(info_message)\n            except Exception:  # noqa: BLE001\n                logger.exception(\"Error updating model options.\")\n\n        return build_config\n\n    def build_embeddings(self) -> Embeddings:\n        params = {\n            EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: self.truncate_input_tokens,\n            EmbedTextParamsMetaNames.RETURN_OPTIONS: {\"input_text\": self.input_text},\n        }\n\n        api_key_value = self.api_key\n        if isinstance(api_key_value, SecretStr):\n            api_key_value = api_key_value.get_secret_value()\n\n        if bool(self.space_id) == bool(self.project_id):\n            msg = \"Exactly one of Project_ID or Space_ID must be selected\"\n            raise ValueError(msg)\n\n        return WatsonxEmbeddings(\n            apikey=api_key_value,\n            url=self.url,\n            project_id=self.project_id,\n            space_id=self.space_id,\n            model_id=self.model_name,\n            params=params,\n        )\n"
             },
             "input_text": {
               "_input_type": "BoolInput",
@@ -77088,16 +77089,37 @@
             "project_id": {
               "_input_type": "StrInput",
               "advanced": false,
-              "display_name": "watsonx project id",
+              "display_name": "watsonx Project_ID",
               "dynamic": false,
-              "info": "The project ID or deployment space ID that is associated with the foundation model.",
+              "info": "The project ID associated with the embedding model.",
               "list": false,
               "list_add_label": "Add More",
               "load_from_db": false,
               "name": "project_id",
               "override_skip": false,
               "placeholder": "",
-              "required": true,
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "space_id": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "watsonx Space_ID",
+              "dynamic": false,
+              "info": "The deployment space ID associated with the embedding model.",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "space_id",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
               "show": true,
               "title_case": false,
               "tool_mode": false,
@@ -77142,7 +77164,8 @@
                 "https://eu-gb.ml.cloud.ibm.com",
                 "https://au-syd.ml.cloud.ibm.com",
                 "https://jp-tok.ml.cloud.ibm.com",
-                "https://ca-tor.ml.cloud.ibm.com"
+                "https://ca-tor.ml.cloud.ibm.com",
+                "https://ap-south-1.aws.wxai.ibm.com"
               ],
               "options_metadata": [],
               "override_skip": false,
@@ -118289,6 +118312,6 @@
     "num_components": 359,
     "num_modules": 97
   },
-  "sha256": "d927edd2abfc5eb28e0b7338b0c0342eb5cb687a9a464f995c41bf40517e234d",
+  "sha256": "b4ad15cdd78b0f55e26ed49b475c2df2547310bf8ea4550ed9f02d0795d642c7",
   "version": "0.3.0"
 }
