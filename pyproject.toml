@@ -2,7 +2,7 @@
 name = "hanzoflow"
 version = "1.8.0"
 description = "A Python package with a built-in web application"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
