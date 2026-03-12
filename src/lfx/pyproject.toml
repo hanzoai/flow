@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Hanzo AI", email = "oss@hanzo.ai" }
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "langchain-core>=0.3.81,<1.0.0",
     "pandas>=2.0.0,<3.0.0",
