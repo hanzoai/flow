@@ -17,8 +17,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files
+# Copy all workspace manifests so uv can resolve workspace members
 COPY pyproject.toml uv.lock ./
+COPY src/backend/base/pyproject.toml ./src/backend/base/
+COPY src/lfx/pyproject.toml ./src/lfx/
 
 # Install dependencies
 RUN uv sync --frozen --no-dev
