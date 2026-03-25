@@ -82,4 +82,4 @@ EXPOSE 3006
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:3006/health || exit 1
 
-CMD ["hanzoflow", "run", "--host", "0.0.0.0", "--port", "3006"]
+CMD ["langflow", "run", "--host", "0.0.0.0", "--port", "3006"]
