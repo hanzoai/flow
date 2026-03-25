@@ -9,12 +9,12 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
-from langflow.services.database.models.api_key.crud import (
+from flow.services.database.models.api_key.crud import (
     _check_key_from_db,
     _check_key_from_env,
     check_key,
 )
-from langflow.services.database.models.user.model import User
+from flow.services.database.models.user.model import User
 
 
 @pytest.fixture
@@ -91,15 +91,15 @@ class TestCheckKeyRouting:
         """check_key should route to _check_key_from_db when API_KEY_SOURCE='db'."""
         with (
             patch(
-                "langflow.services.database.models.api_key.crud.get_settings_service",
+                "flow.services.database.models.api_key.crud.get_settings_service",
                 return_value=mock_settings_service_db,
             ),
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_db",
+                "flow.services.database.models.api_key.crud._check_key_from_db",
                 new_callable=AsyncMock,
             ) as mock_db_check,
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_env",
+                "flow.services.database.models.api_key.crud._check_key_from_env",
                 new_callable=AsyncMock,
             ) as mock_env_check,
         ):
@@ -116,15 +116,15 @@ class TestCheckKeyRouting:
         mock_user = MagicMock(spec=User)
         with (
             patch(
-                "langflow.services.database.models.api_key.crud.get_settings_service",
+                "flow.services.database.models.api_key.crud.get_settings_service",
                 return_value=mock_settings_service_env,
             ),
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_db",
+                "flow.services.database.models.api_key.crud._check_key_from_db",
                 new_callable=AsyncMock,
             ) as mock_db_check,
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_env",
+                "flow.services.database.models.api_key.crud._check_key_from_env",
                 new_callable=AsyncMock,
             ) as mock_env_check,
         ):
@@ -142,15 +142,15 @@ class TestCheckKeyRouting:
         mock_user = MagicMock(spec=User)
         with (
             patch(
-                "langflow.services.database.models.api_key.crud.get_settings_service",
+                "flow.services.database.models.api_key.crud.get_settings_service",
                 return_value=mock_settings_service_env,
             ),
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_db",
+                "flow.services.database.models.api_key.crud._check_key_from_db",
                 new_callable=AsyncMock,
             ) as mock_db_check,
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_env",
+                "flow.services.database.models.api_key.crud._check_key_from_env",
                 new_callable=AsyncMock,
             ) as mock_env_check,
         ):
@@ -168,15 +168,15 @@ class TestCheckKeyRouting:
         """check_key should return None when both env and db validation fail."""
         with (
             patch(
-                "langflow.services.database.models.api_key.crud.get_settings_service",
+                "flow.services.database.models.api_key.crud.get_settings_service",
                 return_value=mock_settings_service_env,
             ),
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_db",
+                "flow.services.database.models.api_key.crud._check_key_from_db",
                 new_callable=AsyncMock,
             ) as mock_db_check,
             patch(
-                "langflow.services.database.models.api_key.crud._check_key_from_env",
+                "flow.services.database.models.api_key.crud._check_key_from_env",
                 new_callable=AsyncMock,
             ) as mock_env_check,
         ):
@@ -289,7 +289,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", "sk-test-env-key")
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_superuser
@@ -332,7 +332,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", "sk-test-env-key")
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = None
@@ -349,7 +349,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", "sk-test-env-key")
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_inactive_user
@@ -391,7 +391,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", special_key)
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_superuser
@@ -407,7 +407,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", unicode_key)
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_superuser
@@ -423,7 +423,7 @@ class TestCheckKeyFromEnv:
         monkeypatch.setenv("LANGFLOW_API_KEY", long_key)
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_superuser
@@ -460,7 +460,7 @@ class TestCheckKeyEdgeCases:
         mock_superuser.username = "admin"
 
         with patch(
-            "langflow.services.database.models.user.crud.get_user_by_username",
+            "flow.services.database.models.user.crud.get_user_by_username",
             new_callable=AsyncMock,
         ) as mock_get_user:
             mock_get_user.return_value = mock_superuser
@@ -496,7 +496,7 @@ class TestCheckKeyIntegration:
         mock_settings.settings.disable_track_apikey_usage = False
 
         with patch(
-            "langflow.services.database.models.api_key.crud.get_settings_service",
+            "flow.services.database.models.api_key.crud.get_settings_service",
             return_value=mock_settings,
         ):
             result = await check_key(mock_session, "sk-valid-key")
@@ -515,11 +515,11 @@ class TestCheckKeyIntegration:
 
         with (
             patch(
-                "langflow.services.database.models.api_key.crud.get_settings_service",
+                "flow.services.database.models.api_key.crud.get_settings_service",
                 return_value=mock_settings,
             ),
             patch(
-                "langflow.services.database.models.user.crud.get_user_by_username",
+                "flow.services.database.models.user.crud.get_user_by_username",
                 new_callable=AsyncMock,
             ) as mock_get_user,
         ):
@@ -539,7 +539,7 @@ class TestCheckKeyIntegration:
         user_id = mock_user.id
 
         monkeypatch.setattr(
-            "langflow.services.database.models.api_key.crud.auth_utils.decrypt_api_key",
+            "flow.services.database.models.api_key.crud.auth_utils.decrypt_api_key",
             lambda v, _settings_service=None: "sk-wrong-key" if v == "sk-wrong-key" else v,
         )
 
@@ -555,7 +555,7 @@ class TestCheckKeyIntegration:
         mock_settings.settings.disable_track_apikey_usage = False
 
         with patch(
-            "langflow.services.database.models.api_key.crud.get_settings_service",
+            "flow.services.database.models.api_key.crud.get_settings_service",
             return_value=mock_settings,
         ):
             # Key doesn't match env, but exists in db
@@ -581,7 +581,7 @@ class TestCheckKeyIntegration:
         mock_settings.settings.disable_track_apikey_usage = False
 
         with patch(
-            "langflow.services.database.models.api_key.crud.get_settings_service",
+            "flow.services.database.models.api_key.crud.get_settings_service",
             return_value=mock_settings,
         ):
             # Key doesn't match env AND not in db

@@ -37,17 +37,17 @@ def main():
     lfx_tag = sys.argv[4]
 
     # First handle base package updates
-    update_pyproject_name("src/backend/base/pyproject.toml", "hanzoflow-base-nightly")
-    update_name_uv_dep("pyproject.toml", "hanzoflow-base-nightly")
+    update_pyproject_name("src/backend/base/pyproject.toml", "flow-base-nightly")
+    update_name_uv_dep("pyproject.toml", "flow-base-nightly")
     update_pyproject_version("src/backend/base/pyproject.toml", base_tag)
 
-    # Update LFX dependency in langflow-base
+    # Update LFX dependency in flow-base
     lfx_version = lfx_tag.lstrip("v")
     update_lfx_dep_in_base("src/backend/base/pyproject.toml", lfx_version)
 
     # Then handle main package updates
-    update_pyproject_name("pyproject.toml", "hanzoflow-nightly")
-    update_name_uv_dep("pyproject.toml", "hanzoflow-nightly")
+    update_pyproject_name("pyproject.toml", "flow-nightly")
+    update_name_uv_dep("pyproject.toml", "flow-nightly")
     update_pyproject_version("pyproject.toml", main_tag)
     # Update dependency version (strip 'v' prefix if present)
     base_version = base_tag.lstrip("v")

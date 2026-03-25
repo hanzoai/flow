@@ -69,7 +69,6 @@ dev = [
 
 [tool.uv.sources]
 langflow-base = { workspace = true }
-langflow = { workspace = true }
 lfx = { workspace = true }
 
 [tool.uv.workspace]
@@ -80,7 +79,7 @@ members = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/backend/hanzoflow"]
+packages = ["src/backend/flow"]
 
 [project.urls]
 Repository = "https://github.com/hanzoai/flow"
@@ -137,7 +136,7 @@ override-dependencies = [
 
 
 [project.scripts]
-hanzo-flow = "langflow.langflow_launcher:main"
+hanzo-flow = "flow.launcher:main"
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg,*.pdf,*.yaml,*.ipynb,poetry.lock,*.min.js,*.css,package-lock.json,*.trig.,**/node_modules/**,./stuff/*,*.csv'
@@ -174,7 +173,7 @@ command_line = """
     --cov --cov-report=term --cov-report=html
     --instafail -ra -n auto -m "not api_key_required"
 """
-source = ["src/backend/base/hanzoflow/"]
+source = ["src/backend/base/flow/"]
 omit = ["*/alembic/*", "tests/*", "*/__init__.py"]
 
 
@@ -191,7 +190,7 @@ directory = "coverage"
 
 [tool.ruff]
 target-version = "py310"
-exclude = ["src/backend/base/langflow/alembic/*", "src/frontend/tests/assets/*", "src/lfx/src/lfx/_assets/component_index.json"]
+exclude = ["src/backend/base/flow/alembic/*", "src/frontend/tests/assets/*", "src/lfx/src/lfx/_assets/component_index.json"]
 line-length = 120
 
 [tool.ruff.lint]
@@ -234,23 +233,23 @@ external = ["RUF027"]
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["D1", "INP", "T201"]
-"src/backend/base/langflow/alembic/versions/*" = ["INP001", "D415", "PGH003"]
-"src/backend/base/langflow/custom/__init__.py" = [
+"src/backend/base/flow/alembic/versions/*" = ["INP001", "D415", "PGH003"]
+"src/backend/base/flow/custom/__init__.py" = [
     "I001",  # Import order affects initialization - must import custom module first
 ]
-"src/backend/base/langflow/api/v1/*" = [
+"src/backend/base/flow/api/v1/*" = [
     "TCH",  # FastAPI needs to evaluate types at runtime
 ]
-"src/backend/base/langflow/api/v2/*" = [
+"src/backend/base/flow/api/v2/*" = [
     "TCH",  # FastAPI needs to evaluate types at runtime
 ]
-"src/backend/base/langflow/__main__.py" = [
+"src/backend/base/flow/__main__.py" = [
     "B008",  # Typer CLI requires function calls in defaults
 ]
-"src/backend/base/langflow/services/cache/*" = [
+"src/backend/base/flow/services/cache/*" = [
     "S301",  # Pickle usage is intentional for caching
 ]
-"src/backend/base/langflow/services/tracing/*" = [
+"src/backend/base/flow/services/tracing/*" = [
     "SLF001",  # Third-party library private member access (langwatch, opik)
 ]
 "src/lfx/src/lfx/base/curl/parse.py" = [
@@ -325,7 +324,7 @@ external = ["RUF027"]
     "SLF001",
     "BLE001",  # allow broad-exception catching in tests
 ]
-"src/backend/base/langflow/tests/*" = [
+"src/backend/base/flow/tests/*" = [
     "D1",
     "PLR2004",
     "S101",
@@ -378,7 +377,7 @@ plugins = ["pydantic.mypy"]
 follow_imports = "skip"
 disable_error_code = ["type-var"]
 namespace_packages = true
-mypy_path = "hanzoflow"
+mypy_path = "flow"
 ignore_missing_imports = true
 
 [build-system]

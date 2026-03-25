@@ -3,7 +3,7 @@ from typing import Any
 from uuid import uuid4
 
 import pytest
-from langflow.custom import Component
+from flow.custom import Component
 from lfx.base.models.anthropic_constants import ANTHROPIC_MODELS
 from lfx.components.altk.altk_agent import ALTKAgentComponent
 from lfx.components.tools.calculator import CalculatorToolComponent

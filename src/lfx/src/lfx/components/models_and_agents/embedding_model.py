@@ -27,7 +27,7 @@ from lfx.log.logger import logger
 class EmbeddingModelComponent(LCEmbeddingsModel):
     display_name = "Embedding Model"
     description = "Generate embeddings using a specified provider."
-    documentation: str = "https://docs.langflow.org/components-embedding-models"
+    documentation: str = "https://docs.hanzo.ai/flow/components-embedding-models"
     icon = "binary"
     name = "EmbeddingModel"
     category = "models"

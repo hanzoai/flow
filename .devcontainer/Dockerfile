@@ -22,14 +22,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create the vscode user and group with the expected UID and GID (1000)
-RUN groupadd -g 1000 hanzoflow && \
-    useradd -m -u 1000 -g 1000 -s /bin/zsh hanzoflow && \
-    echo "hanzoflow ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN groupadd -g 1000 flow && \
+    useradd -m -u 1000 -g 1000 -s /bin/zsh flow && \
+    echo "flow ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Set default shell to Zsh
 SHELL ["/bin/zsh", "-c"]
 
-RUN echo 'export PS1="%~ %# "' >> /home/hanzoflow/.zshrc
+RUN echo 'export PS1="%~ %# "' >> /home/flow/.zshrc
 
 # Set the default user
-USER hanzoflow
+USER flow

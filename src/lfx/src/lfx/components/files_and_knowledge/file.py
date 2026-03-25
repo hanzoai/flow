@@ -48,7 +48,7 @@ class FileComponent(BaseFileComponent):
     display_name = "Read File"
     # description is now a dynamic property - see get_tool_description()
     _base_description = "Loads content from one or more files."
-    documentation: str = "https://docs.langflow.org/read-file"
+    documentation: str = "https://docs.hanzo.ai/flow/read-file"
     icon = "file-text"
     name = "File"
     add_tool_output = True  # Enable tool mode toggle without requiring tool_mode inputs

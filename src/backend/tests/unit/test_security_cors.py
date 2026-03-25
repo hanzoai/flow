@@ -123,11 +123,11 @@ class TestCORSConfiguration:
             assert settings.cors_origins == ["https://app.example.com"]
             assert settings.cors_allow_credentials is True
 
-    @patch("langflow.main.setup_sentry")  # Mock Sentry setup
-    @patch("langflow.main.get_settings_service")
+    @patch("flow.main.setup_sentry")  # Mock Sentry setup
+    @patch("flow.main.get_settings_service")
     def test_cors_middleware_configuration(self, mock_get_settings, mock_setup_sentry):
         """Test that CORS middleware is configured correctly in the app."""
-        from langflow.main import create_app
+        from flow.main import create_app
 
         # Mock settings
         mock_settings = MagicMock()
@@ -157,14 +157,14 @@ class TestCORSConfiguration:
         assert cors_middleware.kwargs["allow_methods"] == ["GET", "POST"]
         assert cors_middleware.kwargs["allow_headers"] == ["Content-Type"]
 
-    @patch("langflow.main.setup_sentry")  # Mock Sentry setup
-    @patch("langflow.main.get_settings_service")
-    @patch("langflow.main.logger")
+    @patch("flow.main.setup_sentry")  # Mock Sentry setup
+    @patch("flow.main.get_settings_service")
+    @patch("flow.main.logger")
     def test_cors_wildcard_credentials_runtime_check_current_behavior(
         self, mock_logger, mock_get_settings, mock_setup_sentry
     ):
         """Test runtime validation prevents wildcard with credentials (current behavior)."""
-        from langflow.main import create_app
+        from flow.main import create_app
 
         # Mock settings with configuration that triggers current security measure
         mock_settings = MagicMock()
@@ -221,15 +221,15 @@ class TestRefreshTokenSecurity:
         NOTE: Currently the code doesn't validate that the token type is 'refresh'.
         It only checks if the token_type is empty. This should be enhanced.
         """
-        from langflow.services.deps import get_auth_service
+        from flow.services.deps import get_auth_service
 
         mock_db = MagicMock()
 
-        with patch("langflow.services.auth.utils.jwt.decode") as mock_decode:
+        with patch("flow.services.auth.utils.jwt.decode") as mock_decode:
             # Test with wrong token type - use a valid UUID string
             mock_decode.return_value = {"sub": "123e4567-e89b-12d3-a456-426614174000", "type": "access"}  # Wrong type
 
-            with patch("langflow.services.auth.utils.get_settings_service") as mock_settings:
+            with patch("flow.services.auth.utils.get_settings_service") as mock_settings:
                 mock_settings.return_value.auth_settings.SECRET_KEY.get_secret_value.return_value = "secret"
                 mock_settings.return_value.auth_settings.ALGORITHM = "HS256"
                 mock_settings.return_value.auth_settings.ACCESS_TOKEN_EXPIRE_SECONDS = 3600
@@ -250,22 +250,22 @@ class TestRefreshTokenSecurity:
         NOTE: This is a security enhancement that should be implemented.
         Currently, the system does not check if a user is active when refreshing tokens.
         """
-        from langflow.services.deps import get_auth_service
+        from flow.services.deps import get_auth_service
 
         mock_db = MagicMock()
         mock_user = MagicMock()
         mock_user.is_active = False  # Inactive user
 
-        with patch("langflow.services.auth.utils.jwt.decode") as mock_decode:
+        with patch("flow.services.auth.utils.jwt.decode") as mock_decode:
             mock_decode.return_value = {"sub": "user-123", "type": "refresh"}  # Correct type
 
-            with patch("langflow.services.auth.utils.get_settings_service") as mock_settings:
+            with patch("flow.services.auth.utils.get_settings_service") as mock_settings:
                 mock_settings.return_value.auth_settings.SECRET_KEY.get_secret_value.return_value = "secret"
                 mock_settings.return_value.auth_settings.ALGORITHM = "HS256"
                 mock_settings.return_value.auth_settings.ACCESS_TOKEN_EXPIRE_SECONDS = 3600  # 1 hour
                 mock_settings.return_value.auth_settings.REFRESH_TOKEN_EXPIRE_SECONDS = 86400  # 1 day
 
-                with patch("langflow.services.auth.utils.get_user_by_id") as mock_get_user:
+                with patch("flow.services.auth.utils.get_user_by_id") as mock_get_user:
                     mock_get_user.return_value = mock_user
 
                     # This SHOULD raise an exception for inactive users, but currently doesn't
@@ -280,7 +280,7 @@ class TestRefreshTokenSecurity:
         """Test that valid refresh tokens work correctly."""
         from uuid import uuid4
 
-        from langflow.services.auth.utils import create_refresh_token
+        from flow.services.auth.utils import create_refresh_token
 
         mock_db = AsyncMock()
         mock_user = MagicMock()
@@ -288,17 +288,17 @@ class TestRefreshTokenSecurity:
         user_id = uuid4()
         mock_user.id = user_id
 
-        with patch("langflow.services.auth.service.jwt.decode") as mock_decode:
+        with patch("flow.services.auth.service.jwt.decode") as mock_decode:
             mock_decode.return_value = {"sub": str(user_id), "type": "refresh"}  # Correct type
 
-            with patch("langflow.services.auth.utils.get_jwt_verification_key") as mock_verification_key:
+            with patch("flow.services.auth.utils.get_jwt_verification_key") as mock_verification_key:
                 mock_verification_key.return_value = "secret"
 
-                with patch("langflow.services.auth.service.get_user_by_id", new_callable=AsyncMock) as mock_get_user:
+                with patch("flow.services.auth.service.get_user_by_id", new_callable=AsyncMock) as mock_get_user:
                     mock_get_user.return_value = mock_user
 
                     with patch(
-                        "langflow.services.auth.service.AuthService.create_user_tokens", new_callable=AsyncMock
+                        "flow.services.auth.service.AuthService.create_user_tokens", new_callable=AsyncMock
                     ) as mock_create_tokens:
                         expected_access = "new-access-token"
                         expected_refresh = "new-refresh-token"
@@ -337,7 +337,7 @@ class TestRefreshTokenSecurity:
     def test_refresh_token_samesite_setting_future_secure(self):
         """Test future secure refresh token SameSite settings (skip until v1.7)."""
         # Future secure behavior (uncomment in v1.7):
-        # from langflow.services.settings.auth import AuthSettings
+        # from flow.services.settings.auth import AuthSettings
         # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
         #     auth_settings = AuthSettings(CONFIG_DIR=temp_dir)
         #     assert auth_settings.REFRESH_SAME_SITE == "lax"  # Secure default
@@ -348,12 +348,12 @@ class TestCORSIntegration:
     """Integration tests for CORS with actual HTTP requests."""
 
     @pytest.mark.asyncio
-    @patch("langflow.main.setup_sentry")  # Mock Sentry setup
+    @patch("flow.main.setup_sentry")  # Mock Sentry setup
     async def test_cors_headers_in_response_current_behavior(self, mock_setup_sentry):
         """Test that CORS headers are properly set in responses (current behavior)."""
         from fastapi.testclient import TestClient
 
-        with patch("langflow.main.get_settings_service") as mock_get_settings:
+        with patch("flow.main.get_settings_service") as mock_get_settings:
             mock_settings = MagicMock()
             mock_settings.settings.cors_origins = ["https://app.example.com"]
             mock_settings.settings.cors_allow_credentials = True
@@ -364,7 +364,7 @@ class TestCORSIntegration:
             mock_settings.settings.sentry_dsn = None  # Disable Sentry
             mock_get_settings.return_value = mock_settings
 
-            from langflow.main import create_app
+            from flow.main import create_app
 
             mock_setup_sentry.return_value = None  # Use the mock
             app = create_app()
@@ -396,12 +396,12 @@ class TestCORSIntegration:
         # This test represents the behavior we want in v1.7 with secure defaults
 
     @pytest.mark.asyncio
-    @patch("langflow.main.setup_sentry")  # Mock Sentry setup
+    @patch("flow.main.setup_sentry")  # Mock Sentry setup
     async def test_cors_blocks_unauthorized_origin_current_behavior(self, mock_setup_sentry):
         """Test that CORS blocks requests from unauthorized origins."""
         from fastapi.testclient import TestClient
 
-        with patch("langflow.main.get_settings_service") as mock_get_settings:
+        with patch("flow.main.get_settings_service") as mock_get_settings:
             mock_settings = MagicMock()
             mock_settings.settings.cors_origins = ["https://app.example.com"]
             mock_settings.settings.cors_allow_credentials = True
@@ -412,7 +412,7 @@ class TestCORSIntegration:
             mock_settings.settings.sentry_dsn = None  # Disable Sentry
             mock_get_settings.return_value = mock_settings
 
-            from langflow.main import create_app
+            from flow.main import create_app
 
             mock_setup_sentry.return_value = None  # Use the mock
             app = create_app()

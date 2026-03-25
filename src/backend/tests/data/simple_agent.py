@@ -5,7 +5,7 @@ Agent component with web search capabilities.
 
 Features:
 - Uses the new flattened component access (cp.AgentComponent instead of deep imports)
-- Configures logging to 'langflow.log' at INFO level
+- Configures logging to 'flow.log' at INFO level
 - Creates an agent with OpenAI GPT model
 - Provides web search tools via URLComponent
 - Connects ChatInput → Agent → ChatOutput
@@ -36,7 +36,7 @@ async def get_graph() -> Graph:
     """
     log_config = LogConfig(
         log_level="INFO",
-        log_file=Path("langflow.log"),
+        log_file=Path("flow.log"),
     )
 
     # Showcase the new flattened component access - no need for deep imports!

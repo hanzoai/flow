@@ -7,26 +7,26 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from langflow.agentic.helpers.code_extraction import extract_python_code
-from langflow.agentic.helpers.sse import (
+from flow.agentic.helpers.code_extraction import extract_python_code
+from flow.agentic.helpers.sse import (
     format_complete_event,
     format_error_event,
     format_progress_event,
 )
-from langflow.agentic.helpers.validation import validate_component_code
-from langflow.agentic.services.assistant_service import (
+from flow.agentic.helpers.validation import validate_component_code
+from flow.agentic.services.assistant_service import (
     execute_flow_with_validation,
     execute_flow_with_validation_streaming,
 )
-from langflow.agentic.services.flow_types import (
+from flow.agentic.services.flow_types import (
     VALIDATION_RETRY_TEMPLATE,
     IntentResult,
 )
 
 # Sample valid Langflow component code
-VALID_COMPONENT_CODE = """from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema.message import Message
+VALID_COMPONENT_CODE = """from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema.message import Message
 
 
 class HelloWorldComponent(Component):
@@ -46,8 +46,8 @@ class HelloWorldComponent(Component):
 """
 
 # Invalid component code (syntax error but has inputs/outputs to pass extraction)
-INVALID_COMPONENT_CODE = """from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
+INVALID_COMPONENT_CODE = """from flow.custom import Component
+from flow.io import MessageTextInput, Output
 
 class BrokenComponent(Component)  # Missing colon here
     display_name = "Broken"
@@ -64,9 +64,9 @@ class BrokenComponent(Component)  # Missing colon here
 # Incomplete code that got cut off (simulating rate limit/token limit)
 CUTOFF_COMPONENT_CODE = """from __future__ import annotations
 
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema.message import Message
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema.message import Message
 
 
 class SentimentAnalyzer(Component):
@@ -195,11 +195,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(mock_flow_result),
             ),
         ):
@@ -246,11 +246,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_sequence([invalid_response, valid_response]),
             ),
         ):
@@ -290,11 +290,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(invalid_response),
             ),
         ):
@@ -330,11 +330,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("question"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(text_only_response),
             ),
         ):
@@ -374,11 +374,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=mock_streaming_error,
             ),
         ):
@@ -423,11 +423,11 @@ class TestValidationRetryBehavior:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=mock_streaming,
             ),
         ):
@@ -464,7 +464,7 @@ class TestNonStreamingValidation:
         mock_flow_result = {"result": f"```python\n{VALID_COMPONENT_CODE}\n```"}
 
         with patch(
-            "langflow.agentic.services.assistant_service.execute_flow_file",
+            "flow.agentic.services.assistant_service.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_flow_result,
         ):
@@ -495,7 +495,7 @@ class TestNonStreamingValidation:
             return valid_response
 
         with patch(
-            "langflow.agentic.services.assistant_service.execute_flow_file",
+            "flow.agentic.services.assistant_service.execute_flow_file",
             side_effect=mock_execute_flow,
         ):
             result = await execute_flow_with_validation(
@@ -514,7 +514,7 @@ class TestNonStreamingValidation:
         invalid_response = {"result": f"```python\n{INVALID_COMPONENT_CODE}\n```"}
 
         with patch(
-            "langflow.agentic.services.assistant_service.execute_flow_file",
+            "flow.agentic.services.assistant_service.execute_flow_file",
             new_callable=AsyncMock,
             return_value=invalid_response,
         ):
@@ -553,11 +553,11 @@ This component will process your input."""
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(response_with_text),
             ),
         ):
@@ -594,11 +594,11 @@ This component will process your input."""
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(response_with_unclosed),
             ),
         ):
@@ -626,11 +626,11 @@ This component will process your input."""
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(mock_flow_result),
             ),
         ):
@@ -660,11 +660,11 @@ This component will process your input."""
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(invalid_response),
             ),
         ):
@@ -710,11 +710,11 @@ Here's the implementation:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(response_with_apology),
             ),
         ):
@@ -762,11 +762,11 @@ Here's the implementation:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_result(cutoff_response),
             ),
         ):
@@ -812,11 +812,11 @@ Here's the implementation:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("generate_component"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=_mock_streaming_sequence([cutoff_response, cutoff_response, valid_response]),
             ),
         ):
@@ -850,8 +850,8 @@ Here's the implementation:
 ```python
 from __future__ import annotations
 
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
 
 
 class SentimentComponent(Component):

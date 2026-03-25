@@ -2,14 +2,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
-from langflow.helpers.flow import (
+from flow.helpers.flow import (
     get_flow_by_id_or_name,
     list_flows,
     list_flows_by_flow_folder,
     list_flows_by_folder_id,
 )
-from langflow.schema.data import Data
-from langflow.services.database.models.flow.model import Flow
+from flow.schema.data import Data
+from flow.services.database.models.flow.model import Flow
 
 
 class TestListFlows:
@@ -32,7 +32,7 @@ class TestListFlows:
         mock_flow2 = MagicMock(spec=Flow)
         mock_flow2.to_data = MagicMock(return_value=Data(data={"name": "Flow 2"}))
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.all = MagicMock(return_value=[mock_flow1, mock_flow2])
@@ -75,7 +75,7 @@ class TestListFlowsByFlowFolder:
         mock_row2 = MagicMock()
         mock_row2._mapping = {"id": str(uuid4()), "name": "Flow 2", "updated_at": "2024-01-02"}
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.all = MagicMock(return_value=[mock_row1, mock_row2])
@@ -96,7 +96,7 @@ class TestListFlowsByFlowFolder:
         flow_id = str(uuid4())
         order_params = {"column": "name", "direction": "asc"}
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.all = MagicMock(return_value=[])
@@ -134,7 +134,7 @@ class TestListFlowsByFolderId:
         mock_row1 = MagicMock()
         mock_row1._mapping = {"id": str(uuid4()), "name": "Flow 1"}
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.all = MagicMock(return_value=[mock_row1])
@@ -172,7 +172,7 @@ class TestGetFlowByIdOrName:
         mock_flow = MagicMock(spec=Flow)
         mock_flow.to_data = MagicMock(return_value=Data(data={"name": "Test Flow"}))
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.first = MagicMock(return_value=mock_flow)
@@ -194,7 +194,7 @@ class TestGetFlowByIdOrName:
         mock_flow = MagicMock(spec=Flow)
         mock_flow.to_data = MagicMock(return_value=Data(data={"name": flow_name}))
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.first = MagicMock(return_value=mock_flow)
@@ -217,7 +217,7 @@ class TestGetFlowByIdOrName:
         mock_flow = MagicMock(spec=Flow)
         mock_flow.to_data = MagicMock(return_value=Data(data={"id": flow_id, "name": flow_name}))
 
-        with patch("langflow.helpers.flow.session_scope") as mock_session_scope:
+        with patch("flow.helpers.flow.session_scope") as mock_session_scope:
             mock_session = MagicMock()
             mock_result = MagicMock()
             mock_result.first = MagicMock(return_value=mock_flow)

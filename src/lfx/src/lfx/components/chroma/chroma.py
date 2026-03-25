@@ -26,7 +26,7 @@ class ChromaVectorStoreComponent(LCVectorStoreComponent):
         StrInput(
             name="collection_name",
             display_name="Collection Name",
-            value="hanzoflow",
+            value="flow",
         ),
         StrInput(
             name="persist_directory",

@@ -36,7 +36,7 @@ jobs:
         if: steps.check_pull_request.outputs.pr_exists != 'true'
         run: |
           # Start the container in the background
-          docker run -d --name langflow -p 7860:7860 langflowai/langflow:latest
+          docker run -d --name langflow -p 7860:7860 ghcr.io/hanzoai/flow:latest
 
           # Wait for the service to be ready (adjust timeout as needed)
           echo "Waiting for Langflow to start..."

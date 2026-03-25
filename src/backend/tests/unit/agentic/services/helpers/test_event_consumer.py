@@ -6,7 +6,7 @@ Tests the streaming event consumption and parsing functionality.
 import asyncio
 
 import pytest
-from langflow.agentic.services.helpers.event_consumer import (
+from flow.agentic.services.helpers.event_consumer import (
     consume_streaming_events,
     parse_event_data,
 )
