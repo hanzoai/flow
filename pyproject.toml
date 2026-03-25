@@ -137,7 +137,7 @@ override-dependencies = [
 
 
 [project.scripts]
-flow = "langflow.langflow_launcher:main"
+hanzo-flow = "langflow.langflow_launcher:main"
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg,*.pdf,*.yaml,*.ipynb,poetry.lock,*.min.js,*.css,package-lock.json,*.trig.,**/node_modules/**,./stuff/*,*.csv'
