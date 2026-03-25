@@ -11,7 +11,7 @@ if has_langflow_memory():
     try:
         # Import full langflow implementation
         # Base Model
-        from langflow.helpers.base_model import (
+        from flow.helpers.base_model import (
             BaseModel,
             SchemaField,
             build_model_from_schema,
@@ -19,12 +19,12 @@ if has_langflow_memory():
         )
 
         # Custom
-        from langflow.helpers.custom import (
+        from flow.helpers.custom import (
             format_type,
         )
 
         # Data
-        from langflow.helpers.data import (
+        from flow.helpers.data import (
             clean_string,
             data_to_text,
             data_to_text_list,
@@ -33,7 +33,7 @@ if has_langflow_memory():
         )
 
         # Flow
-        from langflow.helpers.flow import (
+        from flow.helpers.flow import (
             build_schema_from_inputs,
             get_arg_names,
             get_flow_by_id_or_name,

@@ -3,7 +3,7 @@
 This script demonstrates how to set up a basic conversational flow using Langflow's ChatInput and ChatOutput components.
 
 Features:
-- Configures logging to 'langflow.log' at INFO level
+- Configures logging to 'flow.log' at INFO level
 - Connects ChatInput to ChatOutput
 - Builds a Graph object for the flow
 
@@ -21,7 +21,7 @@ from lfx.log.logger import LogConfig
 
 log_config = LogConfig(
     log_level="INFO",
-    log_file=Path("langflow.log"),
+    log_file=Path("flow.log"),
 )
 chat_input = ChatInput()
 chat_output = ChatOutput().set(input_value=chat_input.message_response)

@@ -22,7 +22,7 @@ class LoopComponent(Component):
         "aggregating results from loop inputs. Message objects are automatically converted to "
         "Data objects for consistent processing."
     )
-    documentation: str = "https://docs.langflow.org/loop"
+    documentation: str = "https://docs.hanzo.ai/flow/loop"
     icon = "infinity"
 
     inputs = [

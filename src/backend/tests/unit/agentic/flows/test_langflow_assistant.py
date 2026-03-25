@@ -5,7 +5,7 @@ Tests the graph construction and model configuration for the assistant flow.
 
 from unittest.mock import MagicMock, patch
 
-from langflow.agentic.flows.langflow_assistant import (
+from flow.agentic.flows.langflow_assistant import (
     ASSISTANT_PROMPT,
     _build_model_config,
     get_graph,
@@ -83,10 +83,10 @@ class TestGetGraph:
     def test_should_create_graph_with_default_provider(self):
         """Should create graph with Anthropic as default provider."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_chat_input_instance = MagicMock()
             mock_chat_input.return_value = mock_chat_input_instance
@@ -110,10 +110,10 @@ class TestGetGraph:
     def test_should_use_provided_provider_and_model(self):
         """Should use provided provider and model_name."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_llm_instance = MagicMock()
             mock_llm.return_value = mock_llm_instance
@@ -128,10 +128,10 @@ class TestGetGraph:
     def test_should_include_api_key_when_provided(self):
         """Should include api_key in LLM config when api_key_var is provided."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_llm_instance = MagicMock()
             mock_llm.return_value = mock_llm_instance
@@ -146,10 +146,10 @@ class TestGetGraph:
     def test_should_not_include_api_key_when_not_provided(self):
         """Should not include api_key in LLM config when api_key_var is None."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_llm_instance = MagicMock()
             mock_llm.return_value = mock_llm_instance
@@ -162,10 +162,10 @@ class TestGetGraph:
     def test_should_enable_streaming(self):
         """Should enable streaming in LLM configuration."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_llm_instance = MagicMock()
             mock_llm.return_value = mock_llm_instance
@@ -178,10 +178,10 @@ class TestGetGraph:
     def test_should_set_system_message(self):
         """Should set system_message to ASSISTANT_PROMPT."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent") as mock_llm,
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_llm_instance = MagicMock()
             mock_llm.return_value = mock_llm_instance
@@ -194,10 +194,10 @@ class TestGetGraph:
     def test_should_configure_chat_input(self):
         """Should configure ChatInput with correct settings."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput"),
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent"),
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput"),
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent"),
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_input_instance = MagicMock()
             mock_chat_input.return_value = mock_input_instance
@@ -213,10 +213,10 @@ class TestGetGraph:
     def test_should_configure_chat_output(self):
         """Should configure ChatOutput with correct settings."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput"),
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent"),
-            patch("langflow.agentic.flows.langflow_assistant.Graph"),
+            patch("flow.agentic.flows.langflow_assistant.ChatInput"),
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent"),
+            patch("flow.agentic.flows.langflow_assistant.Graph"),
         ):
             mock_output_instance = MagicMock()
             mock_chat_output.return_value = mock_output_instance
@@ -233,10 +233,10 @@ class TestGetGraph:
     def test_should_create_graph_with_start_and_end(self):
         """Should create Graph with chat_input as start and chat_output as end."""
         with (
-            patch("langflow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
-            patch("langflow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
-            patch("langflow.agentic.flows.langflow_assistant.LanguageModelComponent"),
-            patch("langflow.agentic.flows.langflow_assistant.Graph") as mock_graph_class,
+            patch("flow.agentic.flows.langflow_assistant.ChatInput") as mock_chat_input,
+            patch("flow.agentic.flows.langflow_assistant.ChatOutput") as mock_chat_output,
+            patch("flow.agentic.flows.langflow_assistant.LanguageModelComponent"),
+            patch("flow.agentic.flows.langflow_assistant.Graph") as mock_graph_class,
         ):
             mock_input = MagicMock()
             mock_output = MagicMock()
@@ -263,7 +263,7 @@ class TestAssistantPrompt:
 
     def test_should_contain_code_requirements(self):
         """Should contain code requirements for components."""
-        assert "lfx.custom" in ASSISTANT_PROMPT or "langflow.custom" in ASSISTANT_PROMPT
+        assert "lfx.custom" in ASSISTANT_PROMPT or "flow.custom" in ASSISTANT_PROMPT
         assert "Component" in ASSISTANT_PROMPT
 
     def test_should_contain_input_output_instructions(self):

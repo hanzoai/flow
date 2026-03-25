@@ -5,10 +5,10 @@ from datetime import timezone
 from uuid import uuid4
 
 import pytest
-from hanzoflow.services.database.models.flow import Flow as FlowTable
-from hanzoflow.services.database.models.message.model import MessageTable
-from hanzoflow.services.deps import get_settings_service, get_storage_service, session_scope
-from hanzoflow.services.task.temp_flow_cleanup import (
+from flow.services.database.models.flow import Flow as FlowTable
+from flow.services.database.models.message.model import MessageTable
+from flow.services.deps import get_settings_service, get_storage_service, session_scope
+from flow.services.task.temp_flow_cleanup import (
     CleanupWorker,
     cleanup_orphaned_records,
 )
@@ -97,7 +97,7 @@ async def test_cleanup_worker_start_stop():
 async def test_cleanup_worker_run_with_exception(mocker):
     """Test CleanupWorker handles exceptions gracefully."""
     # Mock the logger to capture log calls
-    mock_logger = mocker.patch("langflow.services.task.temp_flow_cleanup.logger")
+    mock_logger = mocker.patch("flow.services.task.temp_flow_cleanup.logger")
     mock_logger.adebug = mocker.AsyncMock()
     mock_logger.awarning = mocker.AsyncMock()
 

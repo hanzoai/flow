@@ -11,11 +11,11 @@ import anyio
 import pytest
 from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
-from langflow.main import create_app
-from langflow.services.auth.utils import get_password_hash
-from langflow.services.database.models.api_key.model import ApiKey
-from langflow.services.database.models.flow.model import Flow, FlowCreate
-from langflow.services.database.models.user.model import User, UserRead
+from flow.main import create_app
+from flow.services.auth.utils import get_password_hash
+from flow.services.database.models.api_key.model import ApiKey
+from flow.services.database.models.flow.model import Flow, FlowCreate
+from flow.services.database.models.user.model import User, UserRead
 from lfx.services.deps import session_scope
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
@@ -101,14 +101,14 @@ async def files_flow(
 
 @pytest.fixture
 def max_file_size_upload_fixture(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_MAX_FILE_SIZE_UPLOAD", "1")
+    monkeypatch.setenv("FLOW_MAX_FILE_SIZE_UPLOAD", "1")
     yield
     monkeypatch.undo()
 
 
 @pytest.fixture
 def max_file_size_upload_10mb_fixture(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_MAX_FILE_SIZE_UPLOAD", "10")
+    monkeypatch.setenv("FLOW_MAX_FILE_SIZE_UPLOAD", "10")
     yield
     monkeypatch.undo()
 

@@ -7,8 +7,8 @@ classifies user intent as component generation or question.
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from langflow.agentic.services.flow_types import IntentResult
-from langflow.agentic.services.helpers.intent_classification import classify_intent
+from flow.agentic.services.flow_types import IntentResult
+from flow.agentic.services.helpers.intent_classification import classify_intent
 
 
 class TestClassifyIntent:
@@ -20,7 +20,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "create a component", "intent": "generate_component"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -38,7 +38,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "how to create a component", "intent": "question"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -67,7 +67,7 @@ class TestClassifyIntent:
         mock_result = {"result": "This is not valid JSON response"}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -83,7 +83,7 @@ class TestClassifyIntent:
     async def test_should_default_to_question_on_flow_error(self):
         """Should default to question intent when flow execution fails."""
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             side_effect=Exception("Flow execution failed"),
         ):
@@ -101,7 +101,7 @@ class TestClassifyIntent:
         mock_result = {"result": ""}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -119,7 +119,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"intent": "question"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -137,7 +137,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "translated text"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -155,7 +155,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "test", "intent": "question"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ) as mock_execute:
@@ -185,7 +185,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "test", "intent": "question"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ) as mock_execute:

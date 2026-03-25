@@ -4,7 +4,7 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException, status
 from httpx import AsyncClient
-from hanzoflow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE
+from flow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE
 
 
 @pytest.fixture
@@ -95,7 +95,7 @@ async def test_create_variable__httpexception(client: AsyncClient, credential_va
     status_code = 418
     generic_message = "I'm a teapot"
 
-    with mock.patch("hanzoflow.services.auth.utils.encrypt_api_key") as m:
+    with mock.patch("flow.services.auth.utils.encrypt_api_key") as m:
         m.side_effect = HTTPException(status_code=status_code, detail=generic_message)
         response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
         result = response.json()
@@ -108,7 +108,7 @@ async def test_create_variable__httpexception(client: AsyncClient, credential_va
 async def test_create_variable__exception(client: AsyncClient, credential_variable, logged_in_headers):
     generic_message = "Generic error message"
 
-    with mock.patch("hanzoflow.services.auth.utils.encrypt_api_key") as m:
+    with mock.patch("flow.services.auth.utils.encrypt_api_key") as m:
         m.side_effect = Exception(generic_message)
         response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
         result = response.json()
@@ -167,7 +167,7 @@ async def test_read_variables__(client: AsyncClient, logged_in_headers):
     generic_message = "Generic error message"
 
     with mock.patch(
-        "langflow.services.variable.service.DatabaseVariableService.get_all",
+        "flow.services.variable.service.DatabaseVariableService.get_all",
         new_callable=mock.AsyncMock,
         side_effect=Exception(generic_message),
     ):

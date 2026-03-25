@@ -5,7 +5,7 @@ from lfx.utils.langflow_utils import has_langflow_memory
 
 # Globals
 
-_LANGFLOW_HELPER_MODULE_FLOW = "langflow.helpers.flow"
+_LANGFLOW_HELPER_MODULE_FLOW = "flow.helpers.flow"
 
 # Helper Functions
 

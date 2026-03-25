@@ -1,7 +1,7 @@
 from unittest.mock import Mock, patch
 
-from hanzoflow.exceptions.api import APIException, ExceptionBody
-from hanzoflow.services.database.models.flow.model import Flow
+from flow.exceptions.api import APIException, ExceptionBody
+from flow.services.database.models.flow.model import Flow
 
 
 def test_api_exception():
@@ -17,12 +17,12 @@ def test_api_exception():
 
     with (
         patch(
-            "hanzoflow.services.database.models.flow.utils.get_outdated_components",
+            "flow.services.database.models.flow.utils.get_outdated_components",
             return_value=mock_outdated_components,
         ),
-        patch("hanzoflow.api.utils.get_suggestion_message", return_value=mock_suggestion_message),
+        patch("flow.api.utils.get_suggestion_message", return_value=mock_suggestion_message),
         patch(
-            "hanzoflow.services.database.models.flow.utils.get_components_versions",
+            "flow.services.database.models.flow.utils.get_components_versions",
             return_value=mock_component_versions,
         ),
     ):
