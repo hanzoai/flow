@@ -31,6 +31,11 @@ COPY ./src/backend/base/pyproject.toml /app/src/backend/base/pyproject.toml
 COPY ./src/lfx/README.md /app/src/lfx/README.md
 COPY ./src/lfx/pyproject.toml /app/src/lfx/pyproject.toml
 
+# Create placeholder for root hanzoflow package so uv can validate workspace.
+# (hatchling needs the package dir to exist; real source is copied after deps install)
+RUN mkdir -p /app/src/backend/hanzoflow && \
+    touch /app/src/backend/hanzoflow/__init__.py
+
 # Install dependencies only (no workspace packages yet — source not copied).
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project --no-editable
