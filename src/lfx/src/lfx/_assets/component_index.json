@@ -1812,6 +1812,7 @@
                   "sender": null,
                   "sender_name": null,
                   "session_id": "",
+                  "session_metadata": null,
                   "text": "http://localhost:11434"
                 },
                 "default_value": "",
@@ -2223,6 +2224,7 @@
                   "sender": null,
                   "sender_name": null,
                   "session_id": "",
+                  "session_metadata": null,
                   "text": "http://localhost:11434"
                 },
                 "default_value": "",
@@ -2629,6 +2631,7 @@
                   "sender": null,
                   "sender_name": null,
                   "session_id": "",
+                  "session_metadata": null,
                   "text": "http://localhost:11434"
                 },
                 "default_value": "",
@@ -118887,6 +118890,6 @@
     "num_components": 360,
     "num_modules": 97
   },
-  "sha256": "a7dbe8e05fcd66e2b9c2cc1be11bc19f5a06e77103fea3337a7e405c99e7fc3d",
+  "sha256": "75bc084b1d3f8e8a508e5883ff630167793df395ed3a574d109b2d35e908a1b2",
   "version": "0.4.0"
 }
