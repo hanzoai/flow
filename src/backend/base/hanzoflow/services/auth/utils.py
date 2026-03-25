@@ -165,7 +165,7 @@ async def get_current_user(
     except AuthenticationError as e:
         raise _auth_error_to_http(e) from e
 
-    # Sync IAM org from gateway-injected header (X-Hanzo-Org-Id)
+    # Sync IAM org from gateway-injected header (X-IAM-Org-Id)
     # This supplements the JWT-based extraction in _authenticate_with_token
     try:
         from langflow.services.auth.iam_org import extract_org_from_request, sync_user_org
