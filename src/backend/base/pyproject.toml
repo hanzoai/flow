@@ -2,7 +2,7 @@
 name = "langflow-base"
 version = "0.8.0"
 description = "A Python package with a built-in web application"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
@@ -214,7 +214,7 @@ mongodb-vectors = ["langchain-mongodb==0.7.0"]
 astradb = ["langchain-astradb>=0.6.1,<1.0.0"]
 
 # Individual LLM providers
-openai = ["langchain-openai>=0.3.0,<1.0.0", "openai>=1.68.2,<2.0.0"]
+openai = ["langchain-openai>=0.3.0,<1.0.0", "openai>=1.68.2"]
 anthropic = ["langchain-anthropic==0.3.14"]
 cohere = ["langchain-cohere>=0.3.3,<1.0.0"]
 google = [
