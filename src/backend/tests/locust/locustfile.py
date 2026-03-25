@@ -89,7 +89,7 @@ class FlowRunUser(FastHttpUser):
         # Realistic payload that exercises the system
         payload = {
             "input_value": (
-                "Hey, Could you check https://docs.hanzoflow.org for me? Later, could you calculate 1390 / 192 ?"
+                "Hey, Could you check https://docs.hanzo.ai/flow for me? Later, could you calculate 1390 / 192 ?"
             ),
             "output_type": "chat",
             "input_type": "chat",

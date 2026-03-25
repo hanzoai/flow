@@ -349,8 +349,8 @@ def _validate_and_get_enabled_providers(
                 enabled.add(provider)
             else:
                 # Legacy path: validate the API key (slow - makes external calls)
-                from langflow.services.auth import utils as auth_utils
-                from langflow.services.deps import get_settings_service
+                from flow.services.auth import utils as auth_utils
+                from flow.services.deps import get_settings_service
 
                 credential_var = credential_variables[var_name]
                 try:
@@ -489,7 +489,7 @@ def get_language_model_options(
                     variable_service = get_variable_service()
                     if variable_service is None:
                         return set(), set()
-                    from langflow.services.variable.service import DatabaseVariableService
+                    from flow.services.variable.service import DatabaseVariableService
 
                     if not isinstance(variable_service, DatabaseVariableService):
                         return set(), set()
@@ -526,8 +526,8 @@ def get_language_model_options(
                     if variable_service is None:
                         return set()
 
-                    from langflow.services.variable.constants import CREDENTIAL_TYPE
-                    from langflow.services.variable.service import DatabaseVariableService
+                    from flow.services.variable.constants import CREDENTIAL_TYPE
+                    from flow.services.variable.service import DatabaseVariableService
 
                     if not isinstance(variable_service, DatabaseVariableService):
                         return set()
@@ -676,7 +676,7 @@ def get_embedding_model_options(user_id: UUID | str | None = None) -> list[dict[
                     variable_service = get_variable_service()
                     if variable_service is None:
                         return set(), set()
-                    from langflow.services.variable.service import DatabaseVariableService
+                    from flow.services.variable.service import DatabaseVariableService
 
                     if not isinstance(variable_service, DatabaseVariableService):
                         return set(), set()
@@ -713,8 +713,8 @@ def get_embedding_model_options(user_id: UUID | str | None = None) -> list[dict[
                     if variable_service is None:
                         return set()
 
-                    from langflow.services.variable.constants import CREDENTIAL_TYPE
-                    from langflow.services.variable.service import DatabaseVariableService
+                    from flow.services.variable.constants import CREDENTIAL_TYPE
+                    from flow.services.variable.service import DatabaseVariableService
 
                     if not isinstance(variable_service, DatabaseVariableService):
                         return set()
@@ -1209,7 +1209,7 @@ def update_model_options_in_build_config(
                         variable_service = get_variable_service()
                         if variable_service is None:
                             return None, None
-                        from langflow.services.variable.service import DatabaseVariableService
+                        from flow.services.variable.service import DatabaseVariableService
 
                         if not isinstance(variable_service, DatabaseVariableService):
                             return None, None

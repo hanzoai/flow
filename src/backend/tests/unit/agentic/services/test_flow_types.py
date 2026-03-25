@@ -5,7 +5,7 @@ Tests the dataclasses and constants used in flow execution.
 
 from pathlib import Path
 
-from langflow.agentic.services.flow_types import (
+from flow.agentic.services.flow_types import (
     FLOWS_BASE_PATH,
     LANGFLOW_ASSISTANT_FLOW,
     MAX_VALIDATION_RETRIES,

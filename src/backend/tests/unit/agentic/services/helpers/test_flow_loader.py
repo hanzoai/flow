@@ -10,7 +10,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from fastapi import HTTPException
-from langflow.agentic.services.helpers.flow_loader import (
+from flow.agentic.services.helpers.flow_loader import (
     _load_graph_from_python,
     _temporary_sys_path,
     _validate_path_within_base,
@@ -67,7 +67,7 @@ class TestValidatePathWithinBase:
         test_file = tmp_path / "test.py"
         test_file.touch()
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result = _validate_path_within_base(test_file, "test.py")
 
             assert result == test_file.resolve()
@@ -77,7 +77,7 @@ class TestValidatePathWithinBase:
         # Create a candidate path outside the base
         outside_path = tmp_path.parent / "outside.py"
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             with pytest.raises(HTTPException) as exc_info:
                 _validate_path_within_base(outside_path, "../outside.py")
 
@@ -89,7 +89,7 @@ class TestValidatePathWithinBase:
         # Create a path that uses .. to escape base
         traversal_path = tmp_path / ".." / ".." / "etc" / "passwd"
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             with pytest.raises(HTTPException) as exc_info:
                 _validate_path_within_base(traversal_path, "../../etc/passwd")
 
@@ -105,7 +105,7 @@ class TestResolveFlowPath:
         json_file = tmp_path / "test.json"
         json_file.write_text("{}")
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path("test.json")
 
             assert result_type == "json"
@@ -117,7 +117,7 @@ class TestResolveFlowPath:
         py_file = tmp_path / "test.py"
         py_file.write_text("# test")
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path("test.py")
 
             assert result_type == "python"
@@ -131,7 +131,7 @@ class TestResolveFlowPath:
         json_file = tmp_path / "test.json"
         json_file.write_text("{}")
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path("test")
 
             assert result_type == "python"
@@ -143,7 +143,7 @@ class TestResolveFlowPath:
         json_file = tmp_path / "test.json"
         json_file.write_text("{}")
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path("test")
 
             assert result_type == "json"
@@ -151,7 +151,7 @@ class TestResolveFlowPath:
 
     def test_should_raise_404_when_flow_not_found(self, tmp_path):
         """Should raise HTTPException 404 when flow file doesn't exist."""
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             with pytest.raises(HTTPException) as exc_info:
                 resolve_flow_path("missing.json")
 
@@ -172,7 +172,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader = MagicMock()
@@ -204,7 +204,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
             patch.object(inspect, "signature", return_value=inspect.signature(mock_get_graph)),
         ):
             mock_spec = MagicMock()
@@ -235,7 +235,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader = MagicMock()
@@ -256,7 +256,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader = MagicMock()
@@ -275,7 +275,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader = MagicMock()
@@ -304,7 +304,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader.exec_module.side_effect = ImportError("module error")
@@ -327,7 +327,7 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
             patch.dict(sys.modules, {}, clear=False),
         ):
             mock_spec = MagicMock()
@@ -349,7 +349,7 @@ class TestLoadGraphForExecution:
         mock_graph = MagicMock()
 
         with patch(
-            "langflow.agentic.services.helpers.flow_loader._load_graph_from_python",
+            "flow.agentic.services.helpers.flow_loader._load_graph_from_python",
             new_callable=AsyncMock,
             return_value=mock_graph,
         ) as mock_load:
@@ -375,11 +375,11 @@ class TestLoadGraphForExecution:
 
         with (
             patch(
-                "langflow.agentic.services.helpers.flow_loader.load_and_prepare_flow",
+                "flow.agentic.services.helpers.flow_loader.load_and_prepare_flow",
                 return_value='{"data": {"nodes": []}}',
             ) as mock_prepare,
             patch(
-                "langflow.agentic.services.helpers.flow_loader.aload_flow_from_json",
+                "flow.agentic.services.helpers.flow_loader.aload_flow_from_json",
                 new_callable=AsyncMock,
                 return_value=mock_graph,
             ) as mock_load_json,
@@ -401,7 +401,7 @@ class TestLoadGraphForExecution:
         mock_graph = MagicMock()
 
         with patch(
-            "langflow.agentic.services.helpers.flow_loader._load_graph_from_python",
+            "flow.agentic.services.helpers.flow_loader._load_graph_from_python",
             new_callable=AsyncMock,
             return_value=mock_graph,
         ) as mock_load:

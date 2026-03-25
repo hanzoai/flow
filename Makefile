@@ -1,4 +1,4 @@
-.PHONY: all init format_backend format lint build run_backend dev help tests coverage clean_python_cache clean_npm_cache clean_frontend_build clean_all run_clic load_test_setup load_test_setup_basic load_test_list_flows load_test_run load_test_langflow_quick load_test_stress load_test_example load_test_clean load_test_remote_setup load_test_remote_run load_test_help docs docs_build docs_install
+.PHONY: all init format_backend format lint build run_backend dev help tests coverage clean_python_cache clean_npm_cache clean_frontend_build clean_all run_clic load_test_setup load_test_setup_basic load_test_list_flows load_test_run load_test_flow_quick load_test_stress load_test_example load_test_clean load_test_remote_setup load_test_remote_run load_test_help docs docs_build docs_install
 
 # Configurations
 VERSION=$(shell grep "^version" pyproject.toml | sed 's/.*\"\(.*\)\"$$/\1/')
@@ -18,7 +18,7 @@ host ?= 0.0.0.0
 port ?= 7860
 env ?= .env
 open_browser ?= true
-path = src/backend/base/hanzoflow/frontend
+path = src/backend/base/flow/frontend
 workers ?= 1
 async ?= true
 lf ?= false
@@ -103,7 +103,7 @@ clean_python_cache:
 clean_npm_cache:
 	@echo "Cleaning npm cache..."
 	cd src/frontend && npm cache clean --force
-	$(call CLEAR_DIRS,src/frontend/node_modules src/frontend/build src/backend/base/hanzoflow/frontend)
+	$(call CLEAR_DIRS,src/frontend/node_modules src/frontend/build src/backend/base/flow/frontend)
 	rm -f src/frontend/package-lock.json
 	@echo "$(GREEN)NPM cache and frontend directories cleaned.$(NC)"
 
@@ -112,7 +112,7 @@ clean_frontend_build: ## clean frontend build artifacts to ensure fresh build
 	@echo "  - Removing src/frontend/build directory"
 	$(call CLEAR_DIRS,src/frontend/build)
 	@echo "  - Removing built frontend files from backend"
-	$(call CLEAR_DIRS,src/backend/base/langflow/frontend)
+	$(call CLEAR_DIRS,src/backend/base/flow/frontend)
 	@echo "$(GREEN)Frontend build artifacts cleaned - fresh build guaranteed.$(NC)"
 
 clean_all: clean_python_cache clean_npm_cache # clean all caches and temporary directories
@@ -229,13 +229,13 @@ unsafe_fix:
 	@uv run ruff check . --fix --unsafe-fixes
 
 lint: install_backend ## run linters
-	@uv run mypy --namespace-packages -p "hanzoflow"
+	@uv run mypy --namespace-packages -p "flow"
 
 
 
 run_clic: clean_frontend_build install_frontend install_backend build_frontend ## run the CLI with fresh frontend build
 	@echo 'Running the CLI with fresh frontend build'
-	@uv run langflow run \
+	@uv run hanzo-flow run \
 		--frontend-path $(path) \
 		--log-level $(log_level) \
 		--host $(host) \
@@ -245,7 +245,7 @@ run_clic: clean_frontend_build install_frontend install_backend build_frontend #
 
 run_cli: install_frontend install_backend build_frontend ## run the CLI quickly (without cleaning build cache)
 	@echo 'Running the CLI quickly (reusing existing build cache if available)'
-	@uv run langflow run \
+	@uv run hanzo-flow run \
 		--frontend-path $(path) \
 		--log-level $(log_level) \
 		--host $(host) \
@@ -271,7 +271,7 @@ setup_devcontainer: ## set up the development container
 	make install_backend
 	make install_frontend
 	make build_frontend
-	uv run hanzoflow --frontend-path src/frontend/build
+	uv run hanzo-flow --frontend-path src/frontend/build
 
 setup_env: ## set up the environment
 	@sh ./scripts/setup/setup_env.sh
@@ -283,8 +283,8 @@ backend: setup_env install_backend ## run the backend in development mode
 	@-kill -9 $$(lsof -t -i:7860) || true
 ifdef login
 	@echo "Running backend autologin is $(login)";
-	HANZOFLOW_AUTO_LOGIN=$(login) uv run uvicorn \
-		--factory hanzoflow.main:create_app \
+	FLOW_AUTO_LOGIN=$(login) uv run uvicorn \
+		--factory flow.main:create_app \
 		--host 0.0.0.0 \
 		--port $(port) \
 		$(if $(filter-out 1,$(workers)),, --reload) \
@@ -294,7 +294,7 @@ ifdef login
 else
 	@echo "Running backend respecting the $(env) file";
 	uv run uvicorn \
-		--factory hanzoflow.main:create_app \
+		--factory flow.main:create_app \
 		--host 0.0.0.0 \
 		--port $(port) \
 		$(if $(filter-out 1,$(workers)),, --reload) \
@@ -307,7 +307,7 @@ build_and_run: setup_env ## build the project and run it
 	$(call CLEAR_DIRS,dist src/backend/base/dist)
 	make build
 	uv run pip install dist/*.tar.gz
-	uv run hanzoflow run
+	uv run hanzo-flow run
 
 build_and_install: ## build the project and install it
 	@echo 'Removing dist folder'
@@ -318,29 +318,29 @@ build: setup_env ## build the frontend static files and package the project
 ifdef base
 	make install_frontendci
 	make build_frontend
-	make build_hanzoflow_base args="$(args)"
+	make build_flow_base args="$(args)"
 endif
 
 ifdef main
 	make install_frontendci
 	make build_frontend
-	make build_hanzoflow_base args="$(args)"
-	make build_hanzoflow args="$(args)"
+	make build_flow_base args="$(args)"
+	make build_flow args="$(args)"
 endif
 
 ifdef pre
 	make install_frontendci
 	make build_frontend
-	make build_langflow args="$(args)"
+	make build_flow args="$(args)"
 endif
 
-build_langflow_base:
+build_flow_base:
 	cd src/backend/base && uv build $(args)
 
-build_hanzoflow_backup:
+build_flow_backup:
 	uv lock && uv build
 
-build_hanzoflow:
+build_flow:
 	uv lock --no-upgrade
 	uv build $(args)
 ifdef restore
@@ -360,23 +360,23 @@ dockerfile_build:
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
 		-f ${DOCKERFILE} \
-		-t hanzoflow:${VERSION} .
+		-t flow:${VERSION} .
 
 dockerfile_build_be: dockerfile_build
 	@echo 'BUILDING DOCKER IMAGE BACKEND: ${DOCKERFILE_BACKEND}'
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build_backend DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
-		--build-arg LANGFLOW_IMAGE=langflow:${VERSION} \
+		--build-arg FLOW_IMAGE=flow:${VERSION} \
 		-f ${DOCKERFILE_BACKEND} \
-		-t hanzoflow_backend:${VERSION} .
+		-t flow_backend:${VERSION} .
 
 dockerfile_build_fe: dockerfile_build
 	@echo 'BUILDING DOCKER IMAGE FRONTEND: ${DOCKERFILE_FRONTEND}'
 	@command -v $(DOCKER) >/dev/null 2>&1 || { echo "Error: $(DOCKER) is not installed. Please install $(DOCKER), or run 'make docker_build_frontend DOCKER=podman' (or DOCKER=docker) if you have an alternative installed."; exit 1; }
 	@$(DOCKER) build --rm \
-		--build-arg LANGFLOW_IMAGE=langflow:${VERSION} \
+		--build-arg FLOW_IMAGE=flow:${VERSION} \
 		-f ${DOCKERFILE_FRONTEND} \
-		-t hanzoflow_frontend:${VERSION} .
+		-t flow_frontend:${VERSION} .
 
 clear_dockerimage:
 	@echo 'Clearing the docker build'
@@ -400,7 +400,7 @@ dcdev_up:
 lock_base:
 	cd src/backend/base && uv lock
 
-lock_hanzoflow:
+lock_flow:
 	uv lock
 
 lock: ## lock dependencies
@@ -416,14 +416,14 @@ update: ## update dependencies
 publish_base:
 	cd src/backend/base && uv publish
 
-publish_hanzoflow:
+publish_flow:
 	uv publish
 
 publish_base_testpypi:
 	# TODO: update this to use the test-pypi repository
 	cd src/backend/base && uv publish -r test-pypi
 
-publish_hanzoflow_testpypi:
+publish_flow_testpypi:
 	# TODO: update this to use the test-pypi repository
 	uv publish -r test-pypi
 
@@ -434,7 +434,7 @@ ifdef base
 endif
 
 ifdef main
-	make publish_hanzoflow
+	make publish_flow
 endif
 
 publish_testpypi: ## build the frontend static files and package the project and publish it to PyPI
@@ -494,32 +494,32 @@ lfx_docker_test: ## run LFX tests in Docker
 # example make alembic-revision message="Add user table"
 alembic-revision: ## generate a new migration
 	@echo 'Generating a new Alembic revision'
-	cd src/backend/base/hanzoflow/ && uv run alembic revision --autogenerate -m "$(message)"
+	cd src/backend/base/flow/ && uv run alembic revision --autogenerate -m "$(message)"
 
 
 alembic-upgrade: ## upgrade database to the latest version
 	@echo 'Upgrading database to the latest version'
-	cd src/backend/base/hanzoflow/ && uv run alembic upgrade head
+	cd src/backend/base/flow/ && uv run alembic upgrade head
 
 alembic-downgrade: ## downgrade database by one version
 	@echo 'Downgrading database by one version'
-	cd src/backend/base/hanzoflow/ && uv run alembic downgrade -1
+	cd src/backend/base/flow/ && uv run alembic downgrade -1
 
 alembic-current: ## show current revision
 	@echo 'Showing current Alembic revision'
-	cd src/backend/base/hanzoflow/ && uv run alembic current
+	cd src/backend/base/flow/ && uv run alembic current
 
 alembic-history: ## show migration history
 	@echo 'Showing Alembic migration history'
-	cd src/backend/base/hanzoflow/ && uv run alembic history --verbose
+	cd src/backend/base/flow/ && uv run alembic history --verbose
 
 alembic-check: ## check migration status
 	@echo 'Running alembic check'
-	cd src/backend/base/hanzoflow/ && uv run alembic check
+	cd src/backend/base/flow/ && uv run alembic check
 
 alembic-stamp: ## stamp the database with a specific revision
 	@echo 'Stamping the database with revision $(revision)'
-	cd src/backend/base/hanzoflow/ && uv run alembic stamp $(revision)
+	cd src/backend/base/flow/ && uv run alembic stamp $(revision)
 
 ######################
 # VERSION MANAGEMENT
@@ -613,7 +613,7 @@ locust: ## run locust load tests (options: locust_users=10 locust_spawn_rate=1 l
 	@echo "Using locustfile: $(locust_file)"
 	@export API_KEY=$(locust_api_key) && \
 	export FLOW_ID=$(locust_flow_id) && \
-	export HANZOFLOW_HOST=$(locust_host) && \
+	export FLOW_HOST=$(locust_host) && \
 	export MIN_WAIT=$(locust_min_wait) && \
 	export MAX_WAIT=$(locust_max_wait) && \
 	export REQUEST_TIMEOUT=$(locust_request_timeout) && \
@@ -715,14 +715,14 @@ load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
 	uv run python langflow_run_load_test.py --headless --users 20 --duration 120 --no-start-langflow --html load_test_report.html --csv load_test_results
 
-load_test_langflow_quick: ## Quick Langflow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
+load_test_flow_quick: ## Quick Langflow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running quick Langflow load test with HTML report$(NC)"
 	@if [ ! -f "src/backend/tests/locust/load_test_creds.json" ]; then \
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
 			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
-			echo "$(RED)Please specify a flow: make load_test_langflow_quick FLOW_NAME=\"Basic Prompting\"$(NC)"; \
+			echo "$(RED)Please specify a flow: make load_test_flow_quick FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
@@ -791,7 +791,7 @@ load_test_help: ## Show detailed load testing help
 	@echo ""
 	@echo "$(YELLOW)Quick Start (Local):$(NC)"
 	@echo "  1. make load_test_setup_basic    # Set up with Basic Prompting flow"
-	@echo "  2. make load_test_langflow_quick # Run quick Langflow test"
+	@echo "  2. make load_test_flow_quick # Run quick Langflow test"
 	@echo "  3. Open quick_test_report.html  # View results"
 	@echo ""
 	@echo "$(YELLOW)Remote Testing:$(NC)"
@@ -804,7 +804,7 @@ load_test_help: ## Show detailed load testing help
 	@echo "  load_test_setup_basic  - Quick setup with Basic Prompting"
 	@echo "  load_test_list_flows   - List available starter flows"
 	@echo "  load_test_run          - Standard load test (25 users, 2 min)"
-	@echo "  load_test_langflow_quick - Quick Langflow test (10 users, 30s)"
+	@echo "  load_test_flow_quick - Quick Langflow test (10 users, 30s)"
 	@echo "  load_test_quick        - Quick complex serve test (30 users, 60s)"
 	@echo "  load_test_stress       - Stress test (100 users, 5 min)"
 	@echo "  load_test_example      - Complete example workflow"
@@ -861,7 +861,7 @@ help_backend: ## show backend-specific commands
 	@echo "  $(GREEN)make build$(NC)               - Build the project"
 	@echo "  $(GREEN)make build_and_run$(NC)       - Build and run the project"
 	@echo "  $(GREEN)make build_and_install$(NC)   - Build and install the project"
-	@echo "  $(GREEN)make build_langflow_base$(NC) - Build langflow-base package"
+	@echo "  $(GREEN)make build_flow_base$(NC) - Build langflow-base package"
 	@echo "  $(GREEN)make build_langflow$(NC)      - Build langflow package"
 	@echo "  $(GREEN)make lock$(NC)                - Lock dependencies"
 	@echo "  $(GREEN)make update$(NC)              - Update dependencies"
@@ -977,7 +977,7 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI (use: make publish base=1 or main=1)"
 	@echo "  $(GREEN)make publish_testpypi$(NC)    - Publish to test PyPI"
 	@echo "  $(GREEN)make publish_base$(NC)        - Publish langflow-base to PyPI"
-	@echo "  $(GREEN)make publish_langflow$(NC)    - Publish langflow to PyPI"
+	@echo "  $(GREEN)make publish_flow$(NC)    - Publish langflow to PyPI"
 	@echo "  $(GREEN)make lfx_publish$(NC)         - Publish LFX package to PyPI"
 	@echo "  $(GREEN)make lfx_publish_testpypi$(NC) - Publish LFX to test PyPI"
 	@echo ''

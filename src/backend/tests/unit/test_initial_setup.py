@@ -11,8 +11,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from anyio import Path
 from httpx import AsyncClient
-from langflow.initial_setup.constants import STARTER_FOLDER_NAME
-from langflow.initial_setup.setup import (
+from flow.initial_setup.constants import STARTER_FOLDER_NAME
+from flow.initial_setup.setup import (
     copy_profile_pictures,
     detect_github_url,
     get_project_data,
@@ -20,11 +20,11 @@ from langflow.initial_setup.setup import (
     load_starter_projects,
     update_projects_components_with_latest_component_versions,
 )
-from langflow.interface.components import get_and_cache_all_types_dict
-from langflow.services.auth.utils import create_super_user
-from langflow.services.database.models import Flow
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.deps import get_settings_service, session_scope
+from flow.interface.components import get_and_cache_all_types_dict
+from flow.services.auth.utils import create_super_user
+from flow.services.database.models import Flow
+from flow.services.database.models.folder.model import Folder
+from flow.services.deps import get_settings_service, session_scope
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
@@ -171,48 +171,48 @@ async def test_refresh_starter_projects():
     ("url", "expected"),
     [
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/main.zip",
+            "https://github.com/hanzoai/flow-bundles",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/main.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/main.zip",
+            "https://github.com/hanzoai/flow-bundles/",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/main.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles.git",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/main.zip",
+            "https://github.com/hanzoai/flow-bundles.git",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/main.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/tree/some.branch-0_1",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/some.branch-0_1.zip",
+            "https://github.com/hanzoai/flow-bundles/tree/some.branch-0_1",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/some.branch-0_1.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/tree/some/branch",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/some/branch.zip",
+            "https://github.com/hanzoai/flow-bundles/tree/some/branch",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/some/branch.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/tree/some/branch/",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/heads/some/branch.zip",
+            "https://github.com/hanzoai/flow-bundles/tree/some/branch/",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/heads/some/branch.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/releases/tag/v1.0.0-0_1",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/tags/v1.0.0-0_1.zip",
+            "https://github.com/hanzoai/flow-bundles/releases/tag/v1.0.0-0_1",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/tags/v1.0.0-0_1.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/releases/tag/foo/v1.0.0",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/tags/foo/v1.0.0.zip",
+            "https://github.com/hanzoai/flow-bundles/releases/tag/foo/v1.0.0",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/tags/foo/v1.0.0.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/releases/tag/foo/v1.0.0/",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/refs/tags/foo/v1.0.0.zip",
+            "https://github.com/hanzoai/flow-bundles/releases/tag/foo/v1.0.0/",
+            "https://github.com/hanzoai/flow-bundles/archive/refs/tags/foo/v1.0.0.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9.zip",
+            "https://github.com/hanzoai/flow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9",
+            "https://github.com/hanzoai/flow-bundles/archive/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9.zip",
         ),
         (
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9/",
-            "https://github.com/hanzoflow-ai/hanzoflow-bundles/archive/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9.zip",
+            "https://github.com/hanzoai/flow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9/",
+            "https://github.com/hanzoai/flow-bundles/archive/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9.zip",
         ),
         ("https://example.com/myzip.zip", "https://example.com/myzip.zip"),
     ],
@@ -238,7 +238,7 @@ async def test_detect_github_url(url, expected):
 async def test_load_bundles_from_urls():
     settings_service = get_settings_service()
     settings_service.settings.bundle_urls = [
-        "https://github.com/hanzoflow-ai/hanzoflow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9"
+        "https://github.com/hanzoai/flow-bundles/commit/68428ce16729a385fe1bcc0f1ec91fd5f5f420b9"
     ]
     settings_service.auth_settings.AUTO_LOGIN = True
 
@@ -302,7 +302,7 @@ async def test_sync_flows_from_fs(client: AsyncClient, logged_in_headers):
 
         # Construct the full path where the file was saved
         # The API saves relative paths to: storage_service.data_dir / "flows" / user_id / filename
-        from langflow.services.deps import get_storage_service
+        from flow.services.deps import get_storage_service
 
         storage_service = get_storage_service()
         flow_file = storage_service.data_dir / "flows" / str(user_id) / flow_filename
@@ -424,7 +424,7 @@ async def test_copy_profile_pictures_is_idempotent():
 
 async def test_copy_profile_pictures_source_exists():
     """Test that the source profile pictures directory exists in the package."""
-    from langflow.initial_setup import setup
+    from flow.initial_setup import setup
 
     source_path = Path(setup.__file__).parent / "profile_pictures"
     assert await source_path.exists(), "Source profile_pictures directory should exist in package"
@@ -479,7 +479,7 @@ async def test_profile_picture_can_be_downloaded(client: AsyncClient, logged_in_
 
 async def test_copy_profile_pictures_handles_missing_config_dir():
     """Test that copy_profile_pictures raises error when config_dir is not set."""
-    with patch("langflow.initial_setup.setup.get_storage_service") as mock_storage:
+    with patch("flow.initial_setup.setup.get_storage_service") as mock_storage:
         mock_settings = AsyncMock()
         mock_settings.settings_service.settings.config_dir = None
         mock_storage.return_value = mock_settings

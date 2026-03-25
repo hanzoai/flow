@@ -2,9 +2,9 @@ from uuid import uuid4
 
 import pytest
 from httpx import AsyncClient
-from langflow.memory import aadd_messagetables
-from langflow.services.database.models.message.model import MessageTable
-from langflow.services.deps import session_scope
+from flow.memory import aadd_messagetables
+from flow.services.database.models.message.model import MessageTable
+from flow.services.deps import session_scope
 
 
 @pytest.fixture

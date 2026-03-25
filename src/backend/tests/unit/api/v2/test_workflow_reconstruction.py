@@ -12,8 +12,8 @@ from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
 import pytest
-from langflow.api.v2.workflow_reconstruction import reconstruct_workflow_response_from_job_id
-from langflow.services.database.models.vertex_builds.model import VertexBuildTable
+from flow.api.v2.workflow_reconstruction import reconstruct_workflow_response_from_job_id
+from flow.services.database.models.vertex_builds.model import VertexBuildTable
 
 
 class TestWorkflowReconstruction:
@@ -46,9 +46,9 @@ class TestWorkflowReconstruction:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb,
-            patch("langflow.api.v2.workflow_reconstruction.Graph") as mock_graph_class,
-            patch("langflow.api.v2.workflow_reconstruction.run_response_to_workflow_response") as mock_converter,
+            patch("flow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb,
+            patch("flow.api.v2.workflow_reconstruction.Graph") as mock_graph_class,
+            patch("flow.api.v2.workflow_reconstruction.run_response_to_workflow_response") as mock_converter,
         ):
             mock_get_vb.return_value = [mock_vb1, mock_vb2]
 
@@ -79,7 +79,7 @@ class TestWorkflowReconstruction:
         mock_flow.data = {"nodes": [{"id": "node1"}], "edges": []}
         mock_session = MagicMock()
 
-        with patch("langflow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb:
+        with patch("flow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb:
             mock_get_vb.return_value = []
 
             with pytest.raises(ValueError, match="No vertex builds found"):
@@ -127,9 +127,9 @@ class TestWorkflowReconstruction:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb,
-            patch("langflow.api.v2.workflow_reconstruction.Graph") as mock_graph_class,
-            patch("langflow.api.v2.workflow_reconstruction.run_response_to_workflow_response") as mock_converter,
+            patch("flow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb,
+            patch("flow.api.v2.workflow_reconstruction.Graph") as mock_graph_class,
+            patch("flow.api.v2.workflow_reconstruction.run_response_to_workflow_response") as mock_converter,
         ):
             mock_get_vb.return_value = mock_vertex_builds
 

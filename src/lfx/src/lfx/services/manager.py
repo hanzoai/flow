@@ -436,7 +436,7 @@ class ServiceManager:
 
         Args:
             service_key: ServiceType enum value (e.g., "database_service")
-            service_path: Import path (e.g., "langflow.services.database.service:DatabaseService")
+            service_path: Import path (e.g., "flow.services.database.service:DatabaseService")
         """
         try:
             # Validate service_key matches ServiceType enum

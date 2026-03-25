@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-STARTER_PROJECTS_DIR = Path(__file__).parent.parent / "base" / "langflow" / "initial_setup" / "starter_projects"
+STARTER_PROJECTS_DIR = Path(__file__).parent.parent / "base" / "flow" / "initial_setup" / "starter_projects"
 
 
 def get_starter_project_files() -> list[Path]:
