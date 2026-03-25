@@ -1,1 +1,1 @@
-"""Unit tests for hanzoflow."""
+"""Unit tests for flow."""

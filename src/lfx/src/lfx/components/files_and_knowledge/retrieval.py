@@ -4,8 +4,8 @@ from typing import Any
 
 from cryptography.fernet import InvalidToken
 from langchain_chroma import Chroma
-from langflow.services.auth.utils import decrypt_api_key
-from langflow.services.database.models.user.crud import get_user_by_id
+from flow.services.auth.utils import decrypt_api_key
+from flow.services.database.models.user.crud import get_user_by_id
 from pydantic import SecretStr
 
 from lfx.base.knowledge_bases.knowledge_base_utils import get_knowledge_bases

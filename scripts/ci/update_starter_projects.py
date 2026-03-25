@@ -3,15 +3,15 @@
 import asyncio
 import os
 
-import hanzoflow.main  # noqa: F401
-from hanzoflow.initial_setup.setup import (
+import flow.main  # noqa: F401
+from flow.initial_setup.setup import (
     get_project_data,
     load_starter_projects,
     update_edges_with_latest_component_versions,
     update_project_file,
     update_projects_components_with_latest_component_versions,
 )
-from langflow.services.utils import initialize_services
+from flow.services.utils import initialize_services
 from lfx.interface.components import get_and_cache_all_types_dict
 from lfx.services.deps import get_settings_service
 

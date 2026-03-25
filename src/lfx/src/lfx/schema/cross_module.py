@@ -74,7 +74,7 @@ class CrossModuleModel(BaseModel, metaclass=CrossModuleMeta):
         ...
         >>> # Even if Message is imported from different paths:
         >>> from lfx.schema.message import Message as LfxMessage
-        >>> from langflow.schema import Message as LangflowMessage
+        >>> from flow.schema import Message as LangflowMessage
         >>> msg = LfxMessage(text="hello")
         >>> isinstance(msg, LangflowMessage)  # True (with cross-module support)
     """

@@ -4,9 +4,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
-from langflow.services.auth.mcp_encryption import is_encrypted
-from langflow.services.auth.service import AuthService
-from langflow.services.auth.utils import decrypt_api_key, encrypt_api_key
+from flow.services.auth.mcp_encryption import is_encrypted
+from flow.services.auth.service import AuthService
+from flow.services.auth.utils import decrypt_api_key, encrypt_api_key
 from lfx.services.settings.auth import AuthSettings
 from pydantic import SecretStr
 
@@ -26,7 +26,7 @@ def langflow_auth_service(tmp_path):
 @pytest.fixture(autouse=True)
 def use_langflow_auth_for_encryption(langflow_auth_service):
     """Ensure utils use Langflow AuthService (real encrypt/decrypt), not LFX stub."""
-    with patch("langflow.services.auth.utils.get_auth_service", return_value=langflow_auth_service):
+    with patch("flow.services.auth.utils.get_auth_service", return_value=langflow_auth_service):
         yield
 
 

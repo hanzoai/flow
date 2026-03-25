@@ -11,7 +11,7 @@ from lfx.services.base import Service
 from lfx.services.storage.service import StorageService
 
 if TYPE_CHECKING:
-    from langflow.services.session.service import SessionService
+    from flow.services.session.service import SessionService
 
     from lfx.services.settings.service import SettingsService
 

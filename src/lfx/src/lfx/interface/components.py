@@ -166,7 +166,7 @@ def _get_cache_path() -> Path:
     """Get the path for the cached component index in the user's cache directory."""
     from platformdirs import user_cache_dir
 
-    cache_dir = Path(user_cache_dir("lfx", "langflow"))
+    cache_dir = Path(user_cache_dir("lfx", "flow"))
     cache_dir.mkdir(parents=True, exist_ok=True)
     return cache_dir / "component_index.json"
 
@@ -190,7 +190,7 @@ def _save_generated_index(modules_dict: dict) -> None:
         # Get version
         from importlib.metadata import version
 
-        langflow_version = version("langflow")
+        langflow_version = version("flow")
 
         # Build index structure
         index = {
@@ -244,7 +244,7 @@ async def _send_telemetry(
         filtered_modules = ",".join(target_modules) if target_modules else None
 
         # Import the payload class dynamically to avoid circular imports
-        from langflow.services.telemetry.schema import ComponentIndexPayload
+        from flow.services.telemetry.schema import ComponentIndexPayload
 
         payload = ComponentIndexPayload(
             index_source=index_source,
@@ -334,7 +334,7 @@ async def _load_components_dynamically(
     try:
         import lfx.components as components_pkg
     except ImportError as e:
-        await logger.aerror(f"Failed to import langflow.components package: {e}", exc_info=True)
+        await logger.aerror(f"Failed to import flow.components package: {e}", exc_info=True)
         return modules_dict
 
     # Collect all module names to process
@@ -853,7 +853,7 @@ async def get_type_dict(component_type: str, settings_service: Optional["Setting
     """Get a specific component type dictionary, loading if needed."""
     if settings_service is None:
         # Import here to avoid circular imports
-        from langflow.services.deps import get_settings_service
+        from flow.services.deps import get_settings_service
 
         settings_service = get_settings_service()
 

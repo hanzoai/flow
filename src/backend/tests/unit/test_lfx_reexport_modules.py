@@ -48,38 +48,38 @@ def get_all_reexport_modules():
     """Get all known re-export modules for parametrized testing."""
     # Define the modules here so they can be accessed by parametrize
     direct_reexport_modules = {
-        "langflow.base.agents": "lfx.base.agents",
-        "langflow.base.data": "lfx.base.data",
-        "langflow.base.embeddings": "lfx.base.embeddings",
-        "langflow.base.io": "lfx.base.io",
-        "langflow.base.memory": "lfx.base.memory",
-        "langflow.base.models": "lfx.base.models",
-        "langflow.base.prompts": "lfx.base.prompts",
-        "langflow.base.textsplitters": "lfx.base.textsplitters",
-        "langflow.base.tools": "lfx.base.tools",
-        "langflow.base.vectorstores": "lfx.base.vectorstores",
-        "langflow.custom.custom_component": "lfx.custom.custom_component",
-        "langflow.graph": "lfx.graph",
-        "langflow.inputs": "lfx.inputs.inputs",
-        "langflow.interface": "lfx.interface",
-        "langflow.load": "lfx.load",
-        "langflow.logging": "lfx.log",
-        "langflow.schema": "lfx.schema",
-        "langflow.template.field": "lfx.template.field",
+        "flow.base.agents": "lfx.base.agents",
+        "flow.base.data": "lfx.base.data",
+        "flow.base.embeddings": "lfx.base.embeddings",
+        "flow.base.io": "lfx.base.io",
+        "flow.base.memory": "lfx.base.memory",
+        "flow.base.models": "lfx.base.models",
+        "flow.base.prompts": "lfx.base.prompts",
+        "flow.base.textsplitters": "lfx.base.textsplitters",
+        "flow.base.tools": "lfx.base.tools",
+        "flow.base.vectorstores": "lfx.base.vectorstores",
+        "flow.custom.custom_component": "lfx.custom.custom_component",
+        "flow.graph": "lfx.graph",
+        "flow.inputs": "lfx.inputs.inputs",
+        "flow.interface": "lfx.interface",
+        "flow.load": "lfx.load",
+        "flow.logging": "lfx.log",
+        "flow.schema": "lfx.schema",
+        "flow.template.field": "lfx.template.field",
     }
 
     wildcard_reexport_modules = {
-        "langflow.base": "lfx.base",
-        "langflow.template": "lfx.template",
+        "flow.base": "lfx.base",
+        "flow.template": "lfx.template",
     }
 
     complex_reexport_modules = {
-        "langflow.custom": ["lfx.custom", "lfx.custom.custom_component", "lfx.custom.utils"],
-        "langflow.io": ["lfx.io", "lfx.template"],
+        "flow.custom": ["lfx.custom", "lfx.custom.custom_component", "lfx.custom.utils"],
+        "flow.io": ["lfx.io", "lfx.template"],
     }
 
     dynamic_reexport_modules = {
-        "langflow.field_typing": "lfx.field_typing",
+        "flow.field_typing": "lfx.field_typing",
     }
 
     return list(
@@ -100,9 +100,9 @@ class TestLfxReexportModules:
         """Dynamically discover all langflow modules."""
         langflow_modules: list[str] = []
         try:
-            import langflow
+            import flow
 
-            for _importer, modname, _ispkg in pkgutil.walk_packages(langflow.__path__, langflow.__name__ + "."):
+            for _importer, modname, _ispkg in pkgutil.walk_packages(flow.__path__, flow.__name__ + "."):
                 langflow_modules.append(modname)
         except ImportError:
             pass
@@ -164,42 +164,42 @@ class TestLfxReexportModules:
     # Define all the modules that re-export from lfx (kept for backward compatibility)
     DIRECT_REEXPORT_MODULES = {
         # Base modules with direct re-exports
-        "langflow.base.agents": "lfx.base.agents",
-        "langflow.base.data": "lfx.base.data",
-        "langflow.base.embeddings": "lfx.base.embeddings",
-        "langflow.base.io": "lfx.base.io",
-        "langflow.base.memory": "lfx.base.memory",
-        "langflow.base.models": "lfx.base.models",
-        "langflow.base.prompts": "lfx.base.prompts",
-        "langflow.base.textsplitters": "lfx.base.textsplitters",
-        "langflow.base.tools": "lfx.base.tools",
-        "langflow.base.vectorstores": "lfx.base.vectorstores",
+        "flow.base.agents": "lfx.base.agents",
+        "flow.base.data": "lfx.base.data",
+        "flow.base.embeddings": "lfx.base.embeddings",
+        "flow.base.io": "lfx.base.io",
+        "flow.base.memory": "lfx.base.memory",
+        "flow.base.models": "lfx.base.models",
+        "flow.base.prompts": "lfx.base.prompts",
+        "flow.base.textsplitters": "lfx.base.textsplitters",
+        "flow.base.tools": "lfx.base.tools",
+        "flow.base.vectorstores": "lfx.base.vectorstores",
         # Core system modules with direct re-exports
-        "langflow.custom.custom_component": "lfx.custom.custom_component",
-        "langflow.graph": "lfx.graph",
-        "langflow.inputs": "lfx.inputs.inputs",
-        "langflow.interface": "lfx.interface",
-        "langflow.load": "lfx.load",
-        "langflow.logging": "lfx.log",  # Note: imports from lfx.log.logger
-        "langflow.schema": "lfx.schema",
-        "langflow.template.field": "lfx.template.field",
+        "flow.custom.custom_component": "lfx.custom.custom_component",
+        "flow.graph": "lfx.graph",
+        "flow.inputs": "lfx.inputs.inputs",
+        "flow.interface": "lfx.interface",
+        "flow.load": "lfx.load",
+        "flow.logging": "lfx.log",  # Note: imports from lfx.log.logger
+        "flow.schema": "lfx.schema",
+        "flow.template.field": "lfx.template.field",
     }
 
     # Modules that use wildcard imports from lfx
     WILDCARD_REEXPORT_MODULES = {
-        "langflow.base": "lfx.base",
-        "langflow.template": "lfx.template",
+        "flow.base": "lfx.base",
+        "flow.template": "lfx.template",
     }
 
     # Modules with complex/mixed import patterns
     COMPLEX_REEXPORT_MODULES = {
-        "langflow.custom": ["lfx.custom", "lfx.custom.custom_component", "lfx.custom.utils"],
-        "langflow.io": ["lfx.io", "lfx.template"],  # Mixed imports
+        "flow.custom": ["lfx.custom", "lfx.custom.custom_component", "lfx.custom.utils"],
+        "flow.io": ["lfx.io", "lfx.template"],  # Mixed imports
     }
 
     # Modules with dynamic __getattr__ patterns
     DYNAMIC_REEXPORT_MODULES = {
-        "langflow.field_typing": "lfx.field_typing",
+        "flow.field_typing": "lfx.field_typing",
     }
 
     def test_direct_reexport_modules_importable(self):
@@ -289,7 +289,7 @@ class TestLfxReexportModules:
                 assert hasattr(lf_module, "__getattr__"), f"Dynamic module {langflow_module} missing __getattr__"
 
                 # Test accessing some known attributes dynamically
-                if langflow_module == "langflow.field_typing":
+                if langflow_module == "flow.field_typing":
                     # Test some known field typing constants
                     test_attrs = ["Data", "Text", "LanguageModel"]
                     for attr in test_attrs:
@@ -335,15 +335,15 @@ class TestLfxReexportModules:
         """Test that common import patterns still work for backward compatibility."""
         # Test some key imports that should always work
         backward_compatible_imports = [
-            ("langflow.schema", "Data"),
-            ("langflow.inputs", "StrInput"),
-            ("langflow.inputs", "IntInput"),
-            ("langflow.custom", "Component"),  # Base component class
-            ("langflow.custom", "CustomComponent"),
-            ("langflow.field_typing", "Text"),  # Dynamic
-            ("langflow.field_typing", "Data"),  # Dynamic
-            ("langflow.load", "load_flow_from_json"),
-            ("langflow.logging", "logger"),
+            ("flow.schema", "Data"),
+            ("flow.inputs", "StrInput"),
+            ("flow.inputs", "IntInput"),
+            ("flow.custom", "Component"),  # Base component class
+            ("flow.custom", "CustomComponent"),
+            ("flow.field_typing", "Text"),  # Dynamic
+            ("flow.field_typing", "Data"),  # Dynamic
+            ("flow.load", "load_flow_from_json"),
+            ("flow.logging", "logger"),
         ]
 
         for module_name, symbol_name in backward_compatible_imports:
@@ -363,12 +363,12 @@ class TestLfxReexportModules:
         """Test that there are no circular import issues in re-export modules."""
         # Test importing modules in different orders to catch circular imports
         import_orders = [
-            ["langflow.schema", "langflow.inputs", "langflow.base"],
-            ["langflow.base", "langflow.schema", "langflow.inputs"],
-            ["langflow.inputs", "langflow.base", "langflow.schema"],
-            ["langflow.custom", "langflow.field_typing", "langflow.template"],
-            ["langflow.template", "langflow.custom", "langflow.field_typing"],
-            ["langflow.field_typing", "langflow.template", "langflow.custom"],
+            ["flow.schema", "flow.inputs", "flow.base"],
+            ["flow.base", "flow.schema", "flow.inputs"],
+            ["flow.inputs", "flow.base", "flow.schema"],
+            ["flow.custom", "flow.field_typing", "flow.template"],
+            ["flow.template", "flow.custom", "flow.field_typing"],
+            ["flow.field_typing", "flow.template", "flow.custom"],
         ]
 
         for order in import_orders:
@@ -392,11 +392,11 @@ class TestLfxReexportModules:
         """Test that re-export modules import efficiently."""
         # Test that basic imports are fast
         performance_critical_modules = [
-            "langflow.schema",
-            "langflow.inputs",
-            "langflow.field_typing",
-            "langflow.load",
-            "langflow.logging",
+            "flow.schema",
+            "flow.inputs",
+            "flow.field_typing",
+            "flow.load",
+            "flow.logging",
         ]
 
         slow_imports = []
@@ -440,7 +440,7 @@ class TestLfxReexportModules:
         assert len(modules) > 0, "Should discover at least some langflow modules"
 
         # Check that known modules are found
-        expected_modules = ["langflow.schema", "langflow.inputs", "langflow.custom"]
+        expected_modules = ["flow.schema", "flow.inputs", "flow.custom"]
         found_modules = [mod for mod in expected_modules if mod in modules]
         assert len(found_modules) > 0, f"Expected to find some of {expected_modules}, but found: {found_modules}"
 
@@ -465,7 +465,7 @@ class TestLfxReexportModules:
     def test_generate_backward_compatibility_imports(self):
         """Test generating backward compatibility imports dynamically."""
         # Test with a known module that has lfx imports
-        test_cases = [("langflow.schema", "lfx.schema"), ("langflow.custom", "lfx.custom")]
+        test_cases = [("flow.schema", "lfx.schema"), ("flow.custom", "lfx.custom")]
 
         for lf_module, expected_lfx_source in test_cases:
             lfx_symbols = self._get_expected_symbols(expected_lfx_source)

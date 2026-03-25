@@ -246,7 +246,7 @@ except ImportError:
 import os
 import sys
 from typing import Dict, List
-from langflow.custom import CustomComponent
+from flow.custom import CustomComponent
 import numpy as np
 
 class TestComponent(CustomComponent):
@@ -410,7 +410,7 @@ class TestComponent:
         test_component = Mock(spec=Component)
         test_component._code = """
 import os
-from langflow.custom import CustomComponent
+from flow.custom import CustomComponent
 
 class TestComponent(CustomComponent):
     def build(self):
@@ -480,8 +480,8 @@ from urllib.parse import urljoin
 import httpx
 from langchain_openai import ChatOpenAI
 
-from langflow.base.models.model import LCModelComponent
-from langflow.field_typing import LanguageModel
+from flow.base.models.model import LCModelComponent
+from flow.field_typing import LanguageModel
 
 class LMStudioModelComponent(LCModelComponent):
     display_name = "LM Studio"
@@ -499,7 +499,7 @@ class LMStudioModelComponent(LCModelComponent):
 
         # Call the function
         build_component_metadata(
-            mock_frontend, test_component, "langflow.components.lmstudio", "LMStudioModelComponent"
+            mock_frontend, test_component, "flow.components.lmstudio", "LMStudioModelComponent"
         )
 
         # Verify metadata was added

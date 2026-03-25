@@ -11,7 +11,7 @@ from lfx.schema.data import Data
 class NotionUserList(LCToolComponent):
     display_name = "List Users "
     description = "Retrieve users from Notion."
-    documentation = "https://docs.langflow.org/bundles-notion"
+    documentation = "https://docs.hanzo.ai/flow/bundles-notion"
     icon = "NotionDirectoryLoader"
 
     inputs = [

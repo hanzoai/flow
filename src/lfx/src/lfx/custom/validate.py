@@ -11,12 +11,12 @@ from pydantic import ValidationError
 from lfx.field_typing.constants import CUSTOM_COMPONENT_SUPPORTED_TYPES, DEFAULT_IMPORT_STRING
 from lfx.log.logger import logger
 
-_LANGFLOW_IS_INSTALLED = False
+_FLOW_IS_INSTALLED = False
 
 with contextlib.suppress(ImportError):
-    import langflow  # noqa: F401
+    import flow  # noqa: F401
 
-    _LANGFLOW_IS_INSTALLED = True
+    _FLOW_IS_INSTALLED = True
 
 
 def add_type_ignores() -> None:
@@ -254,10 +254,10 @@ def create_class(code, class_name):
     if not hasattr(ast, "TypeIgnore"):
         ast.TypeIgnore = create_type_ignore_class()
 
-    code = code.replace("from langflow import CustomComponent", "from langflow.custom import CustomComponent")
+    code = code.replace("from flow import CustomComponent", "from flow.custom import CustomComponent")
     code = code.replace(
-        "from langflow.interface.custom.custom_component import CustomComponent",
-        "from langflow.custom import CustomComponent",
+        "from flow.interface.custom.custom_component import CustomComponent",
+        "from flow.custom import CustomComponent",
     )
 
     code = DEFAULT_IMPORT_STRING + "\n" + code
@@ -365,8 +365,8 @@ def prepare_global_scope(module):
         module_names_to_try = [node.module]
 
         # If original module starts with langflow, also try lfx equivalent
-        if node.module and node.module.startswith("langflow."):
-            lfx_module_name = node.module.replace("langflow.", "lfx.", 1)
+        if node.module and node.module.startswith("flow."):
+            lfx_module_name = node.module.replace("flow.", "lfx.", 1)
             module_names_to_try.append(lfx_module_name)
 
         success = False

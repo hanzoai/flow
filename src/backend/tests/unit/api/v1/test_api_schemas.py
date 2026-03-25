@@ -2,10 +2,10 @@ from datetime import datetime, timezone
 
 from hypothesis import HealthCheck, example, given, settings
 from hypothesis import strategies as st
-from hanzoflow.api.v1.schemas import ResultDataResponse, VertexBuildResponse
-from hanzoflow.schema.schema import OutputValue
-from hanzoflow.serialization import serialize
-from hanzoflow.services.tracing.schema import Log
+from flow.api.v1.schemas import ResultDataResponse, VertexBuildResponse
+from flow.schema.schema import OutputValue
+from flow.serialization import serialize
+from flow.services.tracing.schema import Log
 from pydantic import BaseModel
 
 # Use a smaller test size for hypothesis

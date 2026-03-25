@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 
 import httpx
 import pytest
-from langflow.utils.version import (
+from flow.utils.version import (
     _compute_non_prerelease_version,
     _get_version_info,
     fetch_latest_version,
@@ -73,7 +73,7 @@ class TestComputeNonPrereleaseVersion:
 class TestGetVersionInfo:
     """Test cases for _get_version_info function."""
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_langflow_package(self, mock_metadata):
         """Test getting version info for langflow package."""
         mock_metadata.version.return_value = "1.0.0"
@@ -84,7 +84,7 @@ class TestGetVersionInfo:
         assert result["main_version"] == "1.0.0"
         assert result["package"] == "Langflow"
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_langflow_base_package(self, mock_metadata):
         """Test getting version info for langflow-base package."""
         from importlib import metadata as real_metadata
@@ -106,7 +106,7 @@ class TestGetVersionInfo:
         assert result["main_version"] == "1.0.0"
         assert result["package"] == "Langflow Base"
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_nightly_package(self, mock_metadata):
         """Test getting version info for nightly package."""
         from importlib import metadata as real_metadata
@@ -128,7 +128,7 @@ class TestGetVersionInfo:
         assert result["main_version"] == "1.0.0"
         assert result["package"] == "Langflow Nightly"
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_base_nightly_package(self, mock_metadata):
         """Test getting version info for base nightly package."""
         from importlib import metadata as real_metadata
@@ -150,7 +150,7 @@ class TestGetVersionInfo:
         assert result["main_version"] == "1.0.0"
         assert result["package"] == "Langflow Base Nightly"
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_no_package_found(self, mock_metadata):
         """Test getting version info when no package is found."""
         from importlib import metadata as real_metadata
@@ -161,7 +161,7 @@ class TestGetVersionInfo:
         with pytest.raises(ValueError, match="Package not found from options"):
             _get_version_info()
 
-    @patch("langflow.utils.version.metadata")
+    @patch("flow.utils.version.metadata")
     def test_get_version_info_import_error(self, mock_metadata):
         """Test getting version info when ImportError occurs."""
         from importlib import metadata as real_metadata
@@ -241,7 +241,7 @@ class TestIsNightly:
 class TestFetchLatestVersion:
     """Test cases for fetch_latest_version function."""
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_success(self, mock_httpx):
         """Test successful fetching of latest version."""
         mock_response = Mock()
@@ -253,7 +253,7 @@ class TestFetchLatestVersion:
         assert result == "1.2.0"
         mock_httpx.get.assert_called_once_with("https://pypi.org/pypi/test-package/json")
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_with_prerelease(self, mock_httpx):
         """Test fetching latest version including prerelease."""
         mock_response = Mock()
@@ -264,7 +264,7 @@ class TestFetchLatestVersion:
 
         assert result == "2.0.0b1"
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_no_stable_versions(self, mock_httpx):
         """Test fetching when no stable versions exist."""
         mock_response = Mock()
@@ -275,7 +275,7 @@ class TestFetchLatestVersion:
 
         assert result is None
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_package_name_normalization(self, mock_httpx):
         """Test package name normalization."""
         mock_response = Mock()
@@ -286,7 +286,7 @@ class TestFetchLatestVersion:
 
         mock_httpx.get.assert_called_once_with("https://pypi.org/pypi/test-package-name/json")
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_http_error(self, mock_httpx):
         """Test handling HTTP errors."""
         mock_httpx.get.side_effect = httpx.HTTPError("Network error")
@@ -295,7 +295,7 @@ class TestFetchLatestVersion:
 
         assert result is None
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_json_error(self, mock_httpx):
         """Test handling JSON parsing errors."""
         mock_response = Mock()
@@ -306,7 +306,7 @@ class TestFetchLatestVersion:
 
         assert result is None
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_empty_releases(self, mock_httpx):
         """Test handling empty releases."""
         mock_response = Mock()
@@ -317,7 +317,7 @@ class TestFetchLatestVersion:
 
         assert result is None
 
-    @patch("langflow.utils.version.httpx")
+    @patch("flow.utils.version.httpx")
     def test_fetch_latest_version_complex_versions(self, mock_httpx):
         """Test fetching with complex version numbers."""
         mock_response = Mock()
@@ -335,12 +335,12 @@ class TestFetchLatestVersion:
 class TestGetVersionInfoFunction:
     """Test cases for get_version_info function."""
 
-    @patch("langflow.utils.version.VERSION_INFO")
+    @patch("flow.utils.version.VERSION_INFO")
     def test_get_version_info_returns_version_info(self, mock_version_info):
         """Test that get_version_info returns VERSION_INFO."""
         mock_version_info = {"version": "1.0.0", "main_version": "1.0.0", "package": "Langflow"}
 
-        with patch("langflow.utils.version.VERSION_INFO", mock_version_info):
+        with patch("flow.utils.version.VERSION_INFO", mock_version_info):
             result = get_version_info()
 
             assert result == mock_version_info

@@ -28,17 +28,17 @@ def setup_structlog():
 # Set up test data paths
 def pytest_configure(config):  # noqa: ARG001
     """Configure pytest with data paths and check prerequisites."""
-    # Check if langflow is installed first - fail fast
+    # Check if flow is installed first - fail fast
     import os
 
-    if not os.getenv("LFX_TEST_ALLOW_LANGFLOW"):
+    if not os.getenv("LFX_TEST_ALLOW_FLOW"):
         try:
-            import langflow  # noqa: F401
+            import flow  # noqa: F401
 
             pytest.exit(
                 "\n"
                 "=" * 80 + "\n"
-                "ERROR: langflow is installed. These tests require langflow to NOT be installed.\n"
+                "ERROR: flow is installed. These tests require flow to NOT be installed.\n"
                 "\n"
                 "To fix this, run these commands:\n"
                 "\n"
@@ -46,13 +46,13 @@ def pytest_configure(config):  # noqa: ARG001
                 "    uv sync\n"
                 "    uv run pytest ...\n"
                 "\n"
-                "The lfx tests are designed to run in isolation from langflow to ensure proper\n"
+                "The lfx tests are designed to run in isolation from flow to ensure proper\n"
                 "packaging and dependency management.\n"
                 "=" * 80 + "\n",
                 returncode=1,
             )
         except ImportError:
-            # Good, langflow is not installed
+            # Good, flow is not installed
             pass
 
     # Set up test data paths
@@ -194,12 +194,10 @@ def json_loop_test():
     return pytest.LOOP_TEST.read_text(encoding="utf-8")
 
 
-# Simple client fixture for basic HTTP testing (without full langflow app dependencies)
+# Simple client fixture for basic HTTP testing (without full flow app dependencies)
 @pytest.fixture(name="client")
 async def simple_client_fixture():
     """Simple HTTP client for basic testing."""
-    # For lfx-specific tests, we might not need the full langflow app
-    # This is a placeholder that can be expanded as needed
     from httpx import AsyncClient
 
     async with AsyncClient(base_url="http://testserver") as client:

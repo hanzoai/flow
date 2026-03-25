@@ -1,5 +1,5 @@
 import pytest
-from hanzoflow.utils.connection_string_parser import transform_connection_string
+from flow.utils.connection_string_parser import transform_connection_string
 
 
 @pytest.mark.parametrize(

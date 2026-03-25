@@ -4,7 +4,7 @@ from unittest.mock import patch
 import aiofiles
 import anyio
 import pytest
-from langflow.services.event_manager import WebhookEventManager
+from flow.services.event_manager import WebhookEventManager
 
 
 @pytest.fixture(autouse=True)
@@ -60,7 +60,7 @@ async def test_webhook_with_json_payload(client, added_webhook_test, created_api
 async def test_webhook_endpoint_requires_api_key_when_auto_login_false(client, added_webhook_test):
     """Test that webhook endpoint requires API key when WEBHOOK_AUTH_ENABLE=true."""
     # Modify the auth_settings.WEBHOOK_AUTH_ENABLE on the real settings service
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     original_webhook_auth_enable = settings_service.auth_settings.WEBHOOK_AUTH_ENABLE
@@ -106,7 +106,7 @@ async def test_webhook_endpoint_with_valid_api_key(client, added_webhook_test, c
 async def test_webhook_endpoint_unauthorized_user_flow(client, added_webhook_test):
     """Test that webhook fails when user doesn't own the flow."""
     # Modify the auth_settings.WEBHOOK_AUTH_ENABLE on the real settings service
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     original_webhook_auth_enable = settings_service.auth_settings.WEBHOOK_AUTH_ENABLE
@@ -145,7 +145,7 @@ async def test_webhook_flow_on_run_endpoint(client, added_webhook_test, created_
 async def test_webhook_with_auto_login_enabled(client, added_webhook_test):
     """Test webhook behavior when WEBHOOK_AUTH_ENABLE=false - should work without API key."""
     # Modify the auth_settings.WEBHOOK_AUTH_ENABLE on the real settings service
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     original_webhook_auth_enable = settings_service.auth_settings.WEBHOOK_AUTH_ENABLE
@@ -168,7 +168,7 @@ async def test_webhook_with_auto_login_enabled(client, added_webhook_test):
 async def test_webhook_with_random_payload_requires_auth(client, added_webhook_test, created_api_key):
     """Test that webhook with random payload still requires authentication."""
     # Modify the auth_settings.WEBHOOK_AUTH_ENABLE on the real settings service
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
 
@@ -224,7 +224,7 @@ async def test_webhook_invalid_api_key(client, added_webhook_test):
     from unittest.mock import AsyncMock, MagicMock
 
     from fastapi import HTTPException
-    from langflow.services.auth.service import AuthService
+    from flow.services.auth.service import AuthService
 
     # Create a mock settings service with WEBHOOK_AUTH_ENABLE=True
     mock_auth_settings = MagicMock()
@@ -238,7 +238,7 @@ async def test_webhook_invalid_api_key(client, added_webhook_test):
     mock_auth_service.settings_service = mock_settings_service
     mock_auth_service.get_webhook_user = AsyncMock(side_effect=HTTPException(status_code=403, detail="Invalid API key"))
 
-    with patch("langflow.api.v1.endpoints.get_auth_service", return_value=mock_auth_service):
+    with patch("flow.api.v1.endpoints.get_auth_service", return_value=mock_auth_service):
         endpoint_name = added_webhook_test["endpoint_name"]
         endpoint = f"api/v1/webhook/{endpoint_name}"
         payload = {"test": "data"}
@@ -253,7 +253,7 @@ async def test_webhook_missing_api_key_when_required(client, added_webhook_test)
     from unittest.mock import AsyncMock, MagicMock
 
     from fastapi import HTTPException
-    from langflow.services.auth.service import AuthService
+    from flow.services.auth.service import AuthService
 
     # Create a mock settings service with WEBHOOK_AUTH_ENABLE=True
     mock_auth_settings = MagicMock()
@@ -269,7 +269,7 @@ async def test_webhook_missing_api_key_when_required(client, added_webhook_test)
         side_effect=HTTPException(status_code=403, detail="API key required when webhook authentication is enabled")
     )
 
-    with patch("langflow.api.v1.endpoints.get_auth_service", return_value=mock_auth_service):
+    with patch("flow.api.v1.endpoints.get_auth_service", return_value=mock_auth_service):
         endpoint_name = added_webhook_test["endpoint_name"]
         endpoint = f"api/v1/webhook/{endpoint_name}"
         payload = {"test": "data"}
@@ -428,7 +428,7 @@ async def test_webhook_multiple_executions_create_multiple_builds(client, added_
 
 async def test_vertex_builds_endpoint_returns_empty_for_new_flow(client, logged_in_headers):
     """Test that vertex builds endpoint returns empty for a flow with no executions."""
-    from langflow.services.database.models.flow.model import FlowCreate
+    from flow.services.database.models.flow.model import FlowCreate
     from lfx.components.input_output import ChatInput
     from lfx.graph import Graph
 
@@ -580,7 +580,7 @@ class TestGetVertexIdsFromFlow:
         """Should return empty list when flow.data is None."""
         from unittest.mock import Mock
 
-        from langflow.api.v1.endpoints import _get_vertex_ids_from_flow
+        from flow.api.v1.endpoints import _get_vertex_ids_from_flow
 
         flow = Mock()
         flow.data = None
@@ -593,7 +593,7 @@ class TestGetVertexIdsFromFlow:
         """Should return empty list when nodes array is empty."""
         from unittest.mock import Mock
 
-        from langflow.api.v1.endpoints import _get_vertex_ids_from_flow
+        from flow.api.v1.endpoints import _get_vertex_ids_from_flow
 
         flow = Mock()
         flow.data = {"nodes": []}
@@ -606,7 +606,7 @@ class TestGetVertexIdsFromFlow:
         """Should return empty list when nodes key is missing."""
         from unittest.mock import Mock
 
-        from langflow.api.v1.endpoints import _get_vertex_ids_from_flow
+        from flow.api.v1.endpoints import _get_vertex_ids_from_flow
 
         flow = Mock()
         flow.data = {"other_key": "value"}
@@ -619,7 +619,7 @@ class TestGetVertexIdsFromFlow:
         """Should extract all vertex IDs from nodes."""
         from unittest.mock import Mock
 
-        from langflow.api.v1.endpoints import _get_vertex_ids_from_flow
+        from flow.api.v1.endpoints import _get_vertex_ids_from_flow
 
         flow = Mock()
         flow.data = {
@@ -638,7 +638,7 @@ class TestGetVertexIdsFromFlow:
         """Should skip nodes that don't have an id field."""
         from unittest.mock import Mock
 
-        from langflow.api.v1.endpoints import _get_vertex_ids_from_flow
+        from flow.api.v1.endpoints import _get_vertex_ids_from_flow
 
         flow = Mock()
         flow.data = {
@@ -667,7 +667,7 @@ class TestSimpleRunFlowTask:
         """Should emit vertices_sorted event when emit_events=True and has listeners."""
         from unittest.mock import AsyncMock, Mock, patch
 
-        from langflow.api.v1.endpoints import simple_run_flow_task
+        from flow.api.v1.endpoints import simple_run_flow_task
 
         flow = Mock()
         flow.id = "test-flow-id"
@@ -676,8 +676,8 @@ class TestSimpleRunFlowTask:
         input_request = Mock()
 
         with (
-            patch("langflow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
-            patch("langflow.api.v1.endpoints.webhook_event_manager") as mock_manager,
+            patch("flow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
+            patch("flow.api.v1.endpoints.webhook_event_manager") as mock_manager,
         ):
             mock_run.return_value = {"result": "success"}
             mock_manager.emit = AsyncMock()
@@ -708,7 +708,7 @@ class TestSimpleRunFlowTask:
         """Should not emit events when emit_events=False."""
         from unittest.mock import AsyncMock, Mock, patch
 
-        from langflow.api.v1.endpoints import simple_run_flow_task
+        from flow.api.v1.endpoints import simple_run_flow_task
 
         flow = Mock()
         flow.id = "test-flow-id"
@@ -717,8 +717,8 @@ class TestSimpleRunFlowTask:
         input_request = Mock()
 
         with (
-            patch("langflow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
-            patch("langflow.api.v1.endpoints.webhook_event_manager") as mock_manager,
+            patch("flow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
+            patch("flow.api.v1.endpoints.webhook_event_manager") as mock_manager,
         ):
             mock_run.return_value = {"result": "success"}
             mock_manager.emit = AsyncMock()
@@ -737,7 +737,7 @@ class TestSimpleRunFlowTask:
         """Should emit end event with error when exception occurs."""
         from unittest.mock import AsyncMock, Mock, patch
 
-        from langflow.api.v1.endpoints import simple_run_flow_task
+        from flow.api.v1.endpoints import simple_run_flow_task
 
         flow = Mock()
         flow.id = "test-flow-id"
@@ -746,9 +746,9 @@ class TestSimpleRunFlowTask:
         input_request = Mock()
 
         with (
-            patch("langflow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
-            patch("langflow.api.v1.endpoints.webhook_event_manager") as mock_manager,
-            patch("langflow.api.v1.endpoints.logger") as mock_logger,
+            patch("flow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run,
+            patch("flow.api.v1.endpoints.webhook_event_manager") as mock_manager,
+            patch("flow.api.v1.endpoints.logger") as mock_logger,
         ):
             mock_run.side_effect = Exception("Test error")
             mock_manager.emit = AsyncMock()
@@ -776,7 +776,7 @@ class TestSimpleRunFlowTask:
         """Should log telemetry on successful execution."""
         from unittest.mock import AsyncMock, Mock, patch
 
-        from langflow.api.v1.endpoints import simple_run_flow_task
+        from flow.api.v1.endpoints import simple_run_flow_task
 
         flow = Mock()
         flow.id = "test-flow-id"
@@ -786,7 +786,7 @@ class TestSimpleRunFlowTask:
         telemetry_service = Mock()
         telemetry_service.log_package_run = AsyncMock()
 
-        with patch("langflow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run:
+        with patch("flow.api.v1.endpoints.simple_run_flow", new_callable=AsyncMock) as mock_run:
             mock_run.return_value = {"result": "success"}
 
             await simple_run_flow_task(
@@ -816,7 +816,7 @@ class TestWebhookEventsStreamAuth:
         """Should call get_current_user_for_sse to validate authentication."""
         from unittest.mock import AsyncMock, Mock, patch
 
-        from langflow.api.v1.endpoints import webhook_events_stream
+        from flow.api.v1.endpoints import webhook_events_stream
 
         user_id = "user-123"
         flow = Mock()
@@ -831,8 +831,8 @@ class TestWebhookEventsStreamAuth:
         mock_user.id = user_id
 
         with (
-            patch("langflow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth,
-            patch("langflow.api.v1.endpoints.webhook_event_manager") as mock_manager,
+            patch("flow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth,
+            patch("flow.api.v1.endpoints.webhook_event_manager") as mock_manager,
         ):
             mock_auth.return_value = mock_user
             mock_manager.subscribe = AsyncMock(return_value=asyncio.Queue())
@@ -852,14 +852,14 @@ class TestWebhookEventsStreamAuth:
         from unittest.mock import AsyncMock, Mock, patch
 
         from fastapi import HTTPException
-        from langflow.api.v1.endpoints import webhook_events_stream
+        from flow.api.v1.endpoints import webhook_events_stream
 
         flow = Mock()
         flow.id = "test-flow-id"
 
         request = Mock()
 
-        with patch("langflow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth:
+        with patch("flow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth:
             mock_auth.side_effect = HTTPException(status_code=403, detail="Missing or invalid credentials")
 
             with pytest.raises(HTTPException) as exc_info:
@@ -877,7 +877,7 @@ class TestWebhookEventsStreamAuth:
         from unittest.mock import AsyncMock, Mock, patch
 
         from fastapi import HTTPException
-        from langflow.api.v1.endpoints import webhook_events_stream
+        from flow.api.v1.endpoints import webhook_events_stream
 
         flow = Mock()
         flow.id = "test-flow-id"
@@ -888,7 +888,7 @@ class TestWebhookEventsStreamAuth:
 
         request = Mock()
 
-        with patch("langflow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth:
+        with patch("flow.api.v1.endpoints.get_current_user_for_sse", new_callable=AsyncMock) as mock_auth:
             mock_auth.return_value = mock_user
 
             with pytest.raises(HTTPException) as exc_info:

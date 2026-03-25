@@ -23,7 +23,7 @@ from lfx.inputs.inputs import (
     TabInput,
 )
 from lfx.io import Output
-from lfx.io.schema import flatten_schema, schema_to_langflow_inputs
+from lfx.io.schema import flatten_schema, schema_to_flow_inputs
 from lfx.log.logger import logger
 from lfx.schema.data import Data
 from lfx.schema.dataframe import DataFrame
@@ -889,7 +889,7 @@ class ComposioBaseComponent(Component):
                 logger.warning(f"Input schema is None for action key: {action_key}")
                 return []
 
-            # Additional safety check before calling schema_to_langflow_inputs
+            # Additional safety check before calling schema_to_flow_inputs
             if not hasattr(input_schema, "model_fields"):
                 logger.warning(f"Input schema for {action_key} does not have model_fields attribute")
                 return []
@@ -898,7 +898,7 @@ class ComposioBaseComponent(Component):
                 logger.warning(f"Input schema model_fields is None for {action_key}")
                 return []
 
-            result = schema_to_langflow_inputs(input_schema)
+            result = schema_to_flow_inputs(input_schema)
 
             # Process inputs to handle attachment fields and set advanced status
             if result:

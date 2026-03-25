@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import UUID
 
 import pytest
-from langflow.agentic.services.provider_service import (
+from flow.agentic.services.provider_service import (
     DEFAULT_MODELS,
     PREFERRED_PROVIDERS,
     check_api_key,
@@ -211,7 +211,7 @@ class TestGetEnabledProvidersForUser:
         mock_session = MagicMock()
         user_id = "test-user"
 
-        with patch("langflow.agentic.services.provider_service.get_variable_service") as mock_get_service:
+        with patch("flow.agentic.services.provider_service.get_variable_service") as mock_get_service:
             mock_get_service.return_value = MagicMock()  # Not DatabaseVariableService
 
             result = await get_enabled_providers_for_user(user_id, mock_session)

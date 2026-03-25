@@ -1,7 +1,7 @@
-from langflow.custom import Component
+from flow.custom import Component
 
 # Import all input types
-from hanzoflow.io import (
+from flow.io import (
     BoolInput,
     DataFrameInput,
     DataInput,
@@ -26,8 +26,8 @@ from pydantic import BaseModel
 
 class AllInputsComponent(Component):
     display_name = "All Inputs Component"
-    description = "A component with all input types available in Hanzoflow."
-    documentation: str = "http://docs.hanzoflow.org/components/all_inputs"
+    description = "A component with all input types available in Flow."
+    documentation: str = "http://docs.hanzo.ai/flow/components/all_inputs"
     icon = "code"
     name = "AllInputsComponent"
 

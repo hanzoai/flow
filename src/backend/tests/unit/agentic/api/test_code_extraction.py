@@ -4,17 +4,17 @@ These tests validate the core functionality of extracting Python code from LLM r
 and validating that the code is a valid Langflow component.
 """
 
-from langflow.agentic.helpers.code_extraction import (
+from flow.agentic.helpers.code_extraction import (
     _find_code_blocks,
     _find_unclosed_code_block,
     extract_python_code,
 )
-from langflow.agentic.helpers.validation import validate_component_code
+from flow.agentic.helpers.validation import validate_component_code
 
 # Sample valid Langflow component code
-VALID_COMPONENT_CODE = """from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema.message import Message
+VALID_COMPONENT_CODE = """from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema.message import Message
 
 
 class HelloWorldComponent(Component):
@@ -34,8 +34,8 @@ class HelloWorldComponent(Component):
 """
 
 # Incomplete component code (missing closing bracket)
-INCOMPLETE_COMPONENT_CODE = """from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
+INCOMPLETE_COMPONENT_CODE = """from flow.custom import Component
+from flow.io import MessageTextInput, Output
 
 
 class IncompleteComponent(Component):
@@ -46,7 +46,7 @@ class IncompleteComponent(Component):
 """
 
 # Invalid syntax code
-INVALID_SYNTAX_CODE = """from langflow.custom import Component
+INVALID_SYNTAX_CODE = """from flow.custom import Component
 
 class BrokenComponent(Component)
     display_name = "Broken"
@@ -64,7 +64,7 @@ class TestExtractPythonCode:
 
         assert result is not None
         assert "class HelloWorldComponent" in result
-        assert "from langflow.custom import Component" in result
+        assert "from flow.custom import Component" in result
 
     def test_extract_from_unclosed_python_block(self):
         """Should extract code from an unclosed ```python block."""
@@ -101,7 +101,7 @@ Here's a component that uses TextBlob for sentiment analysis:
 
         assert result is not None
         assert "class HelloWorldComponent" in result
-        assert "from langflow.custom import Component" in result
+        assert "from flow.custom import Component" in result
 
     def test_extract_from_generic_code_block(self):
         """Should extract code from a generic ``` block without language specifier."""
@@ -150,7 +150,7 @@ And here's the component:
 
     def test_handles_code_with_special_characters(self):
         """Should handle code containing special characters."""
-        code_with_specials = """from langflow.custom import Component
+        code_with_specials = """from flow.custom import Component
 
 class SpecialComponent(Component):
     display_name = "Special < > & Characters"
@@ -404,7 +404,7 @@ class TestEdgeCases:
 
     def test_handles_unicode_in_code(self):
         """Should handle unicode characters in code."""
-        unicode_code = """from langflow.custom import Component
+        unicode_code = """from flow.custom import Component
 
 class UnicodeComponent(Component):
     display_name = "Unicode \u00e9\u00e0\u00fc"

@@ -6,7 +6,7 @@ Tests the event formatting functions used for streaming responses.
 import json
 
 import pytest
-from langflow.agentic.helpers.sse import (
+from flow.agentic.helpers.sse import (
     format_complete_event,
     format_error_event,
     format_progress_event,

@@ -10,7 +10,7 @@ from lfx.template.field.base import Output
 class ParserComponent(Component):
     display_name = "Parser"
     description = "Extracts text using a template."
-    documentation: str = "https://docs.langflow.org/parser"
+    documentation: str = "https://docs.hanzo.ai/flow/parser"
     icon = "braces"
 
     inputs = [

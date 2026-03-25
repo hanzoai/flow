@@ -17,7 +17,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
-from langflow.services.storage.s3 import S3StorageService
+from flow.services.storage.s3 import S3StorageService
 
 # Mark all tests in this module as requiring API keys
 pytestmark = pytest.mark.api_key_required

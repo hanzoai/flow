@@ -17,15 +17,15 @@ from blockbuster import blockbuster_ctx
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
-from langflow.initial_setup.constants import STARTER_FOLDER_NAME
-from langflow.main import create_app
-from langflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
-from langflow.services.database.models.flow.model import Flow, FlowCreate, FlowRead
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.database.models.transactions.model import TransactionTable
-from langflow.services.database.models.user.model import User, UserCreate, UserRead
-from langflow.services.database.models.vertex_builds.crud import delete_vertex_builds_by_flow_id
-from langflow.services.deps import get_auth_service, get_db_service, session_scope
+from flow.initial_setup.constants import STARTER_FOLDER_NAME
+from flow.main import create_app
+from flow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
+from flow.services.database.models.flow.model import Flow, FlowCreate, FlowRead
+from flow.services.database.models.folder.model import Folder
+from flow.services.database.models.transactions.model import TransactionTable
+from flow.services.database.models.user.model import User, UserCreate, UserRead
+from flow.services.database.models.vertex_builds.crud import delete_vertex_builds_by_flow_id
+from flow.services.deps import get_auth_service, get_db_service, session_scope
 from lfx.components.input_output import ChatInput
 from lfx.graph import Graph
 from lfx.log.logger import logger
@@ -183,7 +183,7 @@ async def delete_transactions_by_flow_id(db: AsyncSession, flow_id: UUID):
 
 
 async def _delete_transactions_and_vertex_builds(session, flows: list[Flow]):
-    from langflow.services.database.models.jobs.model import Job
+    from flow.services.database.models.jobs.model import Job
 
     flow_ids = [flow.id for flow in flows]
     for flow_id in flow_ids:
@@ -287,7 +287,7 @@ def distributed_client_fixture(
     distributed_env,  # noqa: ARG001
 ):
     # Here we load the .env from ../deploy/.env
-    from hanzoflow.core import celery_app
+    from flow.core import celery_app
 
     db_dir = tempfile.mkdtemp()
     try:
@@ -296,7 +296,7 @@ def distributed_client_fixture(
         monkeypatch.setenv("HANZOFLOW_AUTO_LOGIN", "false")
         # monkeypatch hanzoflow.services.task.manager.USE_CELERY to True
         # monkeypatch.setattr(manager, "USE_CELERY", True)
-        monkeypatch.setattr(celery_app, "celery_app", celery_app.make_celery("hanzoflow", Config))
+        monkeypatch.setattr(celery_app, "celery_app", celery_app.make_celery("flow", Config))
 
         # def get_session_override():
         #     return session

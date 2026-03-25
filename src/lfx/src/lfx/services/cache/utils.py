@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 CACHE: dict[str, Any] = {}
 
-CACHE_DIR = user_cache_dir("langflow", "langflow")
+CACHE_DIR = user_cache_dir("flow", "flow")
 
 PREFIX = "langflow_cache"
 

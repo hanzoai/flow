@@ -2,11 +2,11 @@ from datetime import datetime, timezone
 
 import pytest
 from httpx import AsyncClient
-from langflow.services.auth.utils import create_super_user, get_password_hash
-from langflow.services.database.models.user import UserUpdate
-from langflow.services.database.models.user.model import User
-from langflow.services.database.utils import session_getter
-from langflow.services.deps import get_db_service, get_settings_service
+from flow.services.auth.utils import create_super_user, get_password_hash
+from flow.services.database.models.user import UserUpdate
+from flow.services.database.models.user.model import User
+from flow.services.database.utils import session_getter
+from flow.services.deps import get_db_service, get_settings_service
 from lfx.services.settings.constants import DEFAULT_SUPERUSER
 from sqlmodel import select
 

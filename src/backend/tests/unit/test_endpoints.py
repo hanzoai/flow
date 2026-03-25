@@ -6,7 +6,7 @@ import orjson
 import pytest
 from fastapi import status
 from httpx import AsyncClient
-from langflow.services.database.models.flow.model import FlowCreate
+from flow.services.database.models.flow.model import FlowCreate
 from lfx.custom.directory_reader.directory_reader import DirectoryReader
 from lfx.services.settings.base import BASE_COMPONENTS_PATH
 

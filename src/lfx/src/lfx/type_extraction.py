@@ -1,4 +1,4 @@
-"""Type extraction utilities copied from langflow for lfx package."""
+"""Type extraction utilities copied from flow for lfx package."""
 
 import re
 from collections.abc import Sequence as SequenceABC

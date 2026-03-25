@@ -1,4 +1,4 @@
-"""Properties and Source schema classes copied from langflow for lfx package."""
+"""Properties and Source schema classes copied from flow for lfx package."""
 
 from typing import Literal
 

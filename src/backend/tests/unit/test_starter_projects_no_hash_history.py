@@ -43,7 +43,7 @@ def find_hash_history_in_dict(data, path=""):
 def get_starter_project_files():
     """Get all starter project JSON files."""
     starter_projects_dir = (
-        Path(__file__).parent.parent.parent / "base" / "langflow" / "initial_setup" / "starter_projects"
+        Path(__file__).parent.parent.parent / "base" / "flow" / "initial_setup" / "starter_projects"
     )
 
     if not starter_projects_dir.exists():

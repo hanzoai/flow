@@ -8,13 +8,13 @@ from uuid import UUID, uuid4
 import jwt
 import pytest
 from fastapi import HTTPException, status
-from langflow.services.auth.exceptions import (
+from flow.services.auth.exceptions import (
     InactiveUserError,
     InvalidTokenError,
     TokenExpiredError,
 )
-from langflow.services.auth.service import AuthService
-from langflow.services.database.models.user.model import User
+from flow.services.auth.service import AuthService
+from flow.services.database.models.user.model import User
 from lfx.services.settings.auth import AuthSettings
 from pydantic import SecretStr
 
@@ -56,7 +56,7 @@ async def test_get_current_user_from_access_token_returns_active_user(auth_servi
     token = auth_service.create_token({"sub": str(user_id), "type": "access"}, timedelta(minutes=5))
     fake_user = _dummy_user(user_id)
 
-    with patch("langflow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=fake_user)) as mock_get_user:
+    with patch("flow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=fake_user)) as mock_get_user:
         result = await auth_service.get_current_user_from_access_token(token, db)
 
     assert result is fake_user
@@ -100,7 +100,7 @@ async def test_get_current_user_from_access_token_requires_active_user(auth_serv
     inactive_user = _dummy_user(user_id, active=False)
 
     with (
-        patch("langflow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=inactive_user)),
+        patch("flow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=inactive_user)),
         pytest.raises(InactiveUserError),
     ):
         await auth_service.get_current_user_from_access_token(token, db)
@@ -211,7 +211,7 @@ async def test_create_user_tokens_updates_last_login(auth_service: AuthService):
     user_id = uuid4()
     db = AsyncMock()
 
-    with patch("langflow.services.auth.service.update_user_last_login_at", new=AsyncMock()) as mock_update:
+    with patch("flow.services.auth.service.update_user_last_login_at", new=AsyncMock()) as mock_update:
         await auth_service.create_user_tokens(user_id, db, update_last_login=True)
         mock_update.assert_awaited_once_with(user_id, db)
 
@@ -224,7 +224,7 @@ async def test_create_refresh_token_valid(auth_service: AuthService):
     refresh_token = auth_service.create_token({"sub": str(user_id), "type": "refresh"}, timedelta(minutes=5))
     fake_user = _dummy_user(user_id)
 
-    with patch("langflow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=fake_user)):
+    with patch("flow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=fake_user)):
         result = await auth_service.create_refresh_token(refresh_token, db)
 
     assert "access_token" in result
@@ -239,7 +239,7 @@ async def test_create_refresh_token_user_not_found(auth_service: AuthService):
     refresh_token = auth_service.create_token({"sub": str(user_id), "type": "refresh"}, timedelta(minutes=5))
 
     with (
-        patch("langflow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=None)),
+        patch("flow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=None)),
         pytest.raises(HTTPException) as exc,
     ):
         await auth_service.create_refresh_token(refresh_token, db)
@@ -256,7 +256,7 @@ async def test_create_refresh_token_inactive_user(auth_service: AuthService):
     inactive_user = _dummy_user(user_id, active=False)
 
     with (
-        patch("langflow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=inactive_user)),
+        patch("flow.services.auth.service.get_user_by_id", new=AsyncMock(return_value=inactive_user)),
         pytest.raises(HTTPException) as exc,
     ):
         await auth_service.create_refresh_token(refresh_token, db)
@@ -345,7 +345,7 @@ async def test_authenticate_user_success(auth_service: AuthService):
     )
     db = AsyncMock()
 
-    with patch("langflow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)):
+    with patch("flow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)):
         result = await auth_service.authenticate_user("testuser", password, db)
 
     assert result is user
@@ -365,7 +365,7 @@ async def test_authenticate_user_wrong_password(auth_service: AuthService):
     )
     db = AsyncMock()
 
-    with patch("langflow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)):
+    with patch("flow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)):
         result = await auth_service.authenticate_user("testuser", "wrong_password", db)
 
     assert result is None
@@ -376,7 +376,7 @@ async def test_authenticate_user_not_found(auth_service: AuthService):
     """Test authentication returns None for non-existent user."""
     db = AsyncMock()
 
-    with patch("langflow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=None)):
+    with patch("flow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=None)):
         result = await auth_service.authenticate_user("nonexistent", "password", db)
 
     assert result is None
@@ -396,7 +396,7 @@ async def test_authenticate_user_inactive_never_logged_in(auth_service: AuthServ
     db = AsyncMock()
 
     with (
-        patch("langflow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)),
+        patch("flow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)),
         pytest.raises(HTTPException) as exc,
     ):
         await auth_service.authenticate_user("testuser", "password", db)
@@ -419,7 +419,7 @@ async def test_authenticate_user_inactive_previously_logged_in(auth_service: Aut
     db = AsyncMock()
 
     with (
-        patch("langflow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)),
+        patch("flow.services.auth.service.get_user_by_username", new=AsyncMock(return_value=user)),
         pytest.raises(HTTPException) as exc,
     ):
         await auth_service.authenticate_user("testuser", "password", db)

@@ -1,5 +1,5 @@
 import pytest
-from langflow.utils.lazy_load import LazyLoadDictBase
+from flow.utils.lazy_load import LazyLoadDictBase
 
 
 class TestLazyLoadDictBase:

@@ -14,7 +14,7 @@ class TestDatabasePathResolution:
 
     def test_database_path_uses_langflow_package_when_save_db_in_config_dir_false(self, tmp_path):
         """When save_db_in_config_dir=False, database should be in langflow package dir."""
-        import langflow
+        import flow
         from lfx.services.settings.base import Settings
 
         env_vars = {
@@ -28,7 +28,7 @@ class TestDatabasePathResolution:
         with patch.dict(os.environ, env, clear=True):
             settings = Settings()
 
-        expected_dir = Path(langflow.__file__).parent.resolve()
+        expected_dir = Path(flow.__file__).parent.resolve()
         assert settings.database_url is not None
         # The database_url should contain the langflow package path
         assert str(expected_dir) in settings.database_url

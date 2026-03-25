@@ -1,6 +1,6 @@
 import pytest
 from httpx import AsyncClient
-from hanzoflow.services.database.models.api_key import ApiKeyCreate
+from flow.services.database.models.api_key import ApiKeyCreate
 
 
 @pytest.fixture

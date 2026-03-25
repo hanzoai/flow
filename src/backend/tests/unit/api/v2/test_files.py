@@ -13,17 +13,17 @@ import anyio
 import pytest
 from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
-from langflow.api.v2.files import (
+from flow.api.v2.files import (
     delete_all_files,
     delete_file,
     delete_files_batch,
     is_permanent_storage_failure,
 )
-from langflow.api.v2.mcp import get_mcp_file
-from langflow.main import create_app
-from langflow.services.auth.utils import get_password_hash
-from langflow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
-from langflow.services.database.models.user.model import User, UserRead
+from flow.api.v2.mcp import get_mcp_file
+from flow.main import create_app
+from flow.services.auth.utils import get_password_hash
+from flow.services.database.models.api_key.model import ApiKey, UnmaskedApiKeyRead
+from flow.services.database.models.user.model import User, UserRead
 from lfx.services.deps import session_scope
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
@@ -87,14 +87,14 @@ async def files_active_user(files_client):  # noqa: ARG001
 
 @pytest.fixture
 def max_file_size_upload_fixture(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_MAX_FILE_SIZE_UPLOAD", "1")
+    monkeypatch.setenv("FLOW_MAX_FILE_SIZE_UPLOAD", "1")
     yield
     monkeypatch.undo()
 
 
 @pytest.fixture
 def max_file_size_upload_10mb_fixture(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_MAX_FILE_SIZE_UPLOAD", "10")
+    monkeypatch.setenv("FLOW_MAX_FILE_SIZE_UPLOAD", "10")
     yield
     monkeypatch.undo()
 
@@ -653,7 +653,7 @@ async def s3_files_client_fixture(
             tags_json = json.dumps({"env": "test-api", "type": "file-upload"})
             monkeypatch.setenv("LANGFLOW_OBJECT_STORAGE_TAGS", tags_json)
 
-            from langflow.services.manager import service_manager
+            from flow.services.manager import service_manager
 
             service_manager.factories.clear()
             service_manager.services.clear()  # Clear the services cache
@@ -960,7 +960,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_file_with_permanent_failure_deletes_from_db(self):
         """Test that permanent storage failures still delete from database."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         file_id = uuid.uuid4()
         user_id = uuid.uuid4()
@@ -1005,7 +1005,7 @@ class TestStorageFailureHandling:
     async def test_delete_file_with_transient_failure_keeps_in_db(self):
         """Test that transient storage failures keep file in database for retry."""
         from fastapi import HTTPException
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         file_id = uuid.uuid4()
         user_id = uuid.uuid4()
@@ -1052,7 +1052,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_with_mixed_failures(self):
         """Test batch delete with mix of permanent and transient failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(3)]
@@ -1114,7 +1114,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_all_files_message_all_successful(self):
         """Test delete_all_files returns correct message when all files deleted successfully."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         mock_files = [
@@ -1150,7 +1150,7 @@ class TestStorageFailureHandling:
 
     async def test_delete_all_files_message_with_transient_failures(self):
         """Test delete_all_files returns correct message when some files have transient storage failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         mock_files = [
@@ -1195,7 +1195,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_message_all_successful(self):
         """Test batch delete returns correct message when all files deleted successfully."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(2)]
@@ -1233,7 +1233,7 @@ class TestStorageFailureHandling:
 
     async def test_batch_delete_message_with_transient_failures(self):
         """Test batch delete returns correct message when some files have transient storage failures."""
-        from langflow.services.database.models.file.model import File as UserFile
+        from flow.services.database.models.file.model import File as UserFile
 
         user_id = uuid.uuid4()
         file_ids = [uuid.uuid4() for _ in range(3)]

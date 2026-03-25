@@ -1,7 +1,7 @@
 """Tests for mustache security utilities."""
 
 import pytest
-from langflow.utils.mustache_security import safe_mustache_render, validate_mustache_template
+from flow.utils.mustache_security import safe_mustache_render, validate_mustache_template
 
 
 class TestMustacheSecurity:

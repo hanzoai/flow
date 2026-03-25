@@ -8,10 +8,10 @@ import requests
 from packaging.version import Version
 
 PYPI_HANZOFLOW_URL = "https://pypi.org/pypi/hanzoflow/json"
-PYPI_HANZOFLOW_NIGHTLY_URL = "https://pypi.org/pypi/hanzoflow-nightly/json"
+PYPI_HANZOFLOW_NIGHTLY_URL = "https://pypi.org/pypi/flow-nightly/json"
 
-PYPI_HANZOFLOW_BASE_URL = "https://pypi.org/pypi/hanzoflow-base/json"
-PYPI_HANZOFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/hanzoflow-base-nightly/json"
+PYPI_HANZOFLOW_BASE_URL = "https://pypi.org/pypi/flow-base/json"
+PYPI_HANZOFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/flow-base-nightly/json"
 
 ARGUMENT_NUMBER = 2
 

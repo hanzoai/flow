@@ -1,6 +1,6 @@
 import pytest
-from langflow.services.database.models.user import User
-from langflow.services.deps import get_auth_service, session_scope
+from flow.services.database.models.user import User
+from flow.services.deps import get_auth_service, session_scope
 from sqlalchemy.exc import IntegrityError
 
 
