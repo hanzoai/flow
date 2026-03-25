@@ -1,1 +1,1 @@
-"""Tests package for hanzoflow."""
+"""Tests package for flow."""

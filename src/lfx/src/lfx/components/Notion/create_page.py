@@ -14,7 +14,7 @@ from lfx.schema.data import Data
 class NotionPageCreator(LCToolComponent):
     display_name: str = "Create Page "
     description: str = "A component for creating Notion pages."
-    documentation: str = "https://docs.langflow.org/bundles-notion"
+    documentation: str = "https://docs.hanzo.ai/flow/bundles-notion"
     icon = "NotionDirectoryLoader"
 
     inputs = [

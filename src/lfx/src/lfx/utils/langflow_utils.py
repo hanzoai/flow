@@ -1,16 +1,16 @@
-"""Langflow environment utility functions."""
+"""Flow environment utility functions."""
 
 import importlib.util
 
 from lfx.log.logger import logger
 
 
-class _LangflowModule:
+class _FlowModule:
     # Static variable
     # Tri-state:
-    # - None: Langflow check not performed yet
-    # - True: Langflow is available
-    # - False: Langflow is not available
+    # - None: Flow check not performed yet
+    # - True: Flow is available
+    # - False: Flow is not available
     _available = None
 
     @classmethod
@@ -23,30 +23,26 @@ class _LangflowModule:
 
 
 def has_langflow_memory():
-    """Check if langflow.memory (with database support) and MessageTable are available."""
-    # TODO: REVISIT: Optimize this implementation later
-    # - Consider refactoring to use lazy loading or a more robust service discovery mechanism
-    #   that can handle runtime availability changes.
-
+    """Check if flow.memory (with database support) and MessageTable are available."""
     # Use cached check from previous invocation (if applicable)
 
-    is_langflow_available = _LangflowModule.is_available()
+    is_flow_available = _FlowModule.is_available()
 
-    if is_langflow_available is not None:
-        return is_langflow_available
+    if is_flow_available is not None:
+        return is_flow_available
 
     # First check (lazy load and cache check)
 
     module_spec = None
 
     try:
-        module_spec = importlib.util.find_spec("langflow")
+        module_spec = importlib.util.find_spec("flow")
     except ImportError:
         pass
     except (TypeError, ValueError) as e:
-        logger.error(f"Error encountered checking for langflow.memory: {e}")
+        logger.error(f"Error encountered checking for flow.memory: {e}")
 
-    is_langflow_available = module_spec is not None
-    _LangflowModule.set_available(is_langflow_available)
+    is_flow_available = module_spec is not None
+    _FlowModule.set_available(is_flow_available)
 
-    return is_langflow_available
+    return is_flow_available

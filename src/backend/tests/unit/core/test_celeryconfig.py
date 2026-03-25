@@ -1,7 +1,7 @@
 """Unit tests for langflow.core.celeryconfig module."""
 
 # Import the module to test
-from langflow.core import celeryconfig
+from flow.core import celeryconfig
 
 
 class TestCeleryConfigAcceptContent:

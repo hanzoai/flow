@@ -22,27 +22,27 @@ def update_pyproject_name(pyproject_path: str, new_project_name: str) -> None:
     content = pattern.sub(new_project_name, content)
 
     # Update extra references in [complete] and [all] extras for nightly builds
-    if new_project_name == "langflow-base-nightly":
-        # Replace langflow-base[extra] with langflow-base-nightly[extra] in optional dependencies
-        content = re.sub(r'"langflow-base\[([^\]]+)\]"', r'"langflow-base-nightly[\1]"', content)
-    elif new_project_name == "langflow-nightly":
-        # Replace langflow[extra] with langflow-nightly[extra] in optional dependencies
-        content = re.sub(r'"langflow\[([^\]]+)\]"', r'"langflow-nightly[\1]"', content)
+    if new_project_name == "flow-base-nightly":
+        # Replace flow-base[extra] with flow-base-nightly[extra] in optional dependencies
+        content = re.sub(r'"flow-base\[([^\]]+)\]"', r'"flow-base-nightly[\1]"', content)
+    elif new_project_name == "flow-nightly":
+        # Replace langflow[extra] with flow-nightly[extra] in optional dependencies
+        content = re.sub(r'"langflow\[([^\]]+)\]"', r'"flow-nightly[\1]"', content)
 
     filepath.write_text(content, encoding="utf-8")
 
 
 def update_uv_dep(pyproject_path: str, new_project_name: str) -> None:
-    """Update the hanzoflow-base dependency in pyproject.toml."""
+    """Update the flow-base dependency in pyproject.toml."""
     filepath = BASE_DIR / pyproject_path
     content = filepath.read_text(encoding="utf-8")
 
-    if new_project_name == "hanzoflow-nightly":
-        pattern = re.compile(r"hanzoflow = \{ workspace = true \}")
-        replacement = "hanzoflow-nightly = { workspace = true }"
-    elif new_project_name == "hanzoflow-base-nightly":
-        pattern = re.compile(r"hanzoflow-base = \{ workspace = true \}")
-        replacement = "hanzoflow-base-nightly = { workspace = true }"
+    if new_project_name == "flow-nightly":
+        pattern = re.compile(r"flow = \{ workspace = true \}")
+        replacement = "flow-nightly = { workspace = true }"
+    elif new_project_name == "flow-base-nightly":
+        pattern = re.compile(r"flow-base = \{ workspace = true \}")
+        replacement = "flow-base-nightly = { workspace = true }"
     else:
         msg = f"Invalid project name: {new_project_name}"
         raise ValueError(msg)
@@ -57,7 +57,7 @@ def update_uv_dep(pyproject_path: str, new_project_name: str) -> None:
 
 def main() -> None:
     if len(sys.argv) != ARGUMENT_NUMBER:
-        msg = "Must specify project name and build type, e.g. hanzoflow-nightly base"
+        msg = "Must specify project name and build type, e.g. flow-nightly base"
         raise ValueError(msg)
     new_project_name = sys.argv[1]
     build_type = sys.argv[2]
