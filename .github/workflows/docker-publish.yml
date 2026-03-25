@@ -4,8 +4,7 @@ on:
   push:
     branches: [main, test, dev]
     tags: ['v*']
-  pull_request:
-    branches: [main]
+  # No pull_request trigger — prevents fork PRs from running on self-hosted runners
   workflow_dispatch:
 
 jobs:
