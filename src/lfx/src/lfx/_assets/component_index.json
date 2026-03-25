@@ -56540,6 +56540,12 @@
                 "gpt-4-turbo-preview",
                 "gpt-4",
                 "gpt-3.5-turbo",
+                "gpt-5.4",
+                "gpt-5.4-mini",
+                "gpt-5.4-pro",
+                "gpt-5.3",
+                "gpt-5.3-instant",
+                "gpt-5.3-codex",
                 "gpt-5.2",
                 "gpt-5.1",
                 "gpt-5",
@@ -98550,6 +98556,12 @@
                 "gpt-4-turbo-preview",
                 "gpt-4",
                 "gpt-3.5-turbo",
+                "gpt-5.4",
+                "gpt-5.4-mini",
+                "gpt-5.4-pro",
+                "gpt-5.3",
+                "gpt-5.3-instant",
+                "gpt-5.3-codex",
                 "gpt-5.2",
                 "gpt-5.1",
                 "gpt-5",
@@ -118875,6 +118887,6 @@
     "num_components": 360,
     "num_modules": 97
   },
-  "sha256": "0b4b30af3b87a2a2e5354e3881319934b54768f590e182b6bb0ed21ffb6cec4d",
+  "sha256": "a7dbe8e05fcd66e2b9c2cc1be11bc19f5a06e77103fea3337a7e405c99e7fc3d",
   "version": "0.4.0"
 }
