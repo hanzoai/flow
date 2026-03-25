@@ -2,7 +2,7 @@
 Hanzo IAM Organization extraction for Flow (Langflow fork).
 
 Extracts the IAM organization slug from:
-  1. X-Hanzo-Org-Id request header (set by gateway)
+  1. X-IAM-Org-Id request header (set by gateway)
   2. JWT `owner` claim (from Casdoor OIDC token)
   3. JWT `org` or `organization` claim (generic OIDC)
 
@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 def extract_org_from_request(request: Request) -> str | None:
     """Extract org ID from request headers (gateway-injected).
 
-    The Hanzo gateway injects X-Hanzo-Org-Id based on the authenticated
+    The Hanzo gateway injects X-IAM-Org-Id based on the authenticated
     user's IAM organization.
     """
     return (
-        request.headers.get("x-hanzo-org-id")
+        request.headers.get("x-iam-org-id")
         or request.headers.get("x-org-id")
         or None
     )
