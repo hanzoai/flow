@@ -4,8 +4,8 @@ These tests verify that isinstance checks work correctly when classes are
 re-exported from different modules (e.g., lfx.schema.Message vs langflow.schema.Message).
 """
 
-from langflow.schema import Data as LangflowData
-from langflow.schema import Message as LangflowMessage
+from flow.schema import Data as LangflowData
+from flow.schema import Message as LangflowMessage
 from lfx.schema.data import Data as LfxData
 from lfx.schema.message import Message as LfxMessage
 

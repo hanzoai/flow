@@ -3,8 +3,8 @@
 from unittest.mock import Mock
 
 import pytest
-from langflow.services.storage.local import LocalStorageService
-from langflow.services.storage.s3 import S3StorageService
+from flow.services.storage.local import LocalStorageService
+from flow.services.storage.s3 import S3StorageService
 
 
 class TestLocalStorageParseFilePath:

@@ -17,7 +17,7 @@ class AuthService(BaseAuthService):
     """Default LFX auth service.
 
     No database, JWT, or API key validation. For full auth, configure
-    auth_service = "langflow.services.auth.service:AuthService" in lfx.toml.
+    auth_service = "flow.services.auth.service:AuthService" in lfx.toml.
     """
 
     def __init__(self) -> None:

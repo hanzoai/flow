@@ -5,7 +5,7 @@ from typing import Any
 from anyio import Path
 from fastapi import status
 from httpx import AsyncClient
-from langflow.api.v1.schemas import CustomComponentRequest, UpdateCustomComponentRequest
+from flow.api.v1.schemas import CustomComponentRequest, UpdateCustomComponentRequest
 from lfx.components.models_and_agents.agent import AgentComponent
 from lfx.custom.utils import build_custom_component_template
 
@@ -263,7 +263,7 @@ async def test_get_config_returns_500_on_settings_error(client: AsyncClient, mon
         raise RuntimeError(error_message)
 
     # Patch get_settings_service at the module level
-    monkeypatch.setattr("langflow.api.v1.endpoints.get_settings_service", raise_settings_error)
+    monkeypatch.setattr("flow.api.v1.endpoints.get_settings_service", raise_settings_error)
 
     response = await client.get("api/v1/config")
     result = response.json()

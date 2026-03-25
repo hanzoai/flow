@@ -380,7 +380,7 @@ def get_unique_name(base_name, max_length, existing_names):
 
 async def get_flow_snake_case(flow_name: str, user_id: str, session, *, is_action: bool | None = None):
     try:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
     except ImportError as e:
         msg = "Langflow Flow model is not available. This feature requires the full Langflow installation."

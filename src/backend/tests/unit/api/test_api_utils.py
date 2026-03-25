@@ -1,8 +1,8 @@
 from unittest.mock import patch
 
-from langflow.api.utils import get_suggestion_message, remove_api_keys
-from langflow.services.database.models.flow.utils import get_outdated_components
-from langflow.utils.version import get_version_info
+from flow.api.utils import get_suggestion_message, remove_api_keys
+from flow.services.database.models.flow.utils import get_outdated_components
+from flow.utils.version import get_version_info
 
 
 def test_get_suggestion_message():
@@ -37,7 +37,7 @@ def test_get_outdated_components():
     expected_outdated_components = ["component3"]
 
     with patch(
-        "hanzoflow.services.database.models.flow.utils.get_components_versions", return_value=mock_component_versions
+        "flow.services.database.models.flow.utils.get_components_versions", return_value=mock_component_versions
     ):
         # Call the function with the mock flow
         result = get_outdated_components(flow)

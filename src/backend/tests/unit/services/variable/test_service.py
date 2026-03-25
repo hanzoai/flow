@@ -3,10 +3,10 @@ from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
-from langflow.services.database.models.variable.model import VariableUpdate
-from langflow.services.deps import get_settings_service
-from langflow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE
-from langflow.services.variable.service import DatabaseVariableService
+from flow.services.database.models.variable.model import VariableUpdate
+from flow.services.deps import get_settings_service
+from flow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE
+from flow.services.variable.service import DatabaseVariableService
 from lfx.services.settings.constants import VARIABLES_TO_GET_FROM_ENVIRONMENT
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel
@@ -51,7 +51,7 @@ async def test_initialize_user_variables__create_and_update(service, session: As
 
 
 async def test_initialize_user_variables__not_found_variable(service, session: AsyncSession):
-    with patch("hanzoflow.services.variable.service.DatabaseVariableService.create_variable") as m:
+    with patch("flow.services.variable.service.DatabaseVariableService.create_variable") as m:
         m.side_effect = Exception()
         await service.initialize_user_variables(uuid4(), session=session)
     assert True
@@ -315,7 +315,7 @@ async def test_get_all_decrypted_variables__decryption_failure(service, session:
     await service.create_variable(user_id, "TEST_VAR", "test_value", session=session)
 
     # Mock decryption to fail
-    with patch("langflow.services.auth.utils.decrypt_api_key") as mock_decrypt:
+    with patch("flow.services.auth.utils.decrypt_api_key") as mock_decrypt:
         mock_decrypt.side_effect = Exception("Decryption failed")
 
         result = await service.get_all_decrypted_variables(user_id, session=session)

@@ -29,7 +29,7 @@ Agent component with proper async handling.
 
 Features:
 - Uses the new flattened component access (cp.AgentComponent instead of deep imports)
-- Configures logging to 'langflow.log' at INFO level
+- Configures logging to 'flow.log' at INFO level
 - Creates an agent with OpenAI GPT model
 - Connects ChatInput → Agent → ChatOutput
 - Uses async get_graph() function for proper async handling
@@ -60,7 +60,7 @@ async def get_graph() -> Graph:
     """
     log_config = LogConfig(
         log_level="INFO",
-        log_file=Path("langflow.log"),
+        log_file=Path("flow.log"),
     )
 
     # Showcase the new flattened component access - no need for deep imports!
@@ -95,7 +95,7 @@ async def get_graph() -> Graph:
         yield script_path
 
         # Cleanup any log file that might be created
-        log_file = Path("langflow.log")
+        log_file = Path("flow.log")
         if log_file.exists():
             log_file.unlink(missing_ok=True)
 
@@ -174,7 +174,7 @@ async def get_graph() -> Graph:
         # Create the agent workflow
         log_config = LogConfig(
             log_level="INFO",
-            log_file=Path("langflow.log"),
+            log_file=Path("flow.log"),
         )
 
         chat_input = cp.ChatInput()
@@ -205,7 +205,7 @@ async def get_graph() -> Graph:
         assert str(graph), "Graph should have string representation"
 
         # Cleanup log file
-        log_file = Path("langflow.log")
+        log_file = Path("flow.log")
         if log_file.exists():
             log_file.unlink(missing_ok=True)
 
@@ -305,19 +305,19 @@ async def get_graph() -> Graph:
         # Test LogConfig creation for the workflow
         log_config = LogConfig(
             log_level="INFO",
-            log_file=Path("langflow.log"),
+            log_file=Path("flow.log"),
         )
 
         assert log_config is not None
         # LogConfig may be a dict or object, verify it contains the expected data
         if isinstance(log_config, dict):
             assert log_config.get("log_level") == "INFO"
-            assert log_config.get("log_file") == Path("langflow.log")
+            assert log_config.get("log_file") == Path("flow.log")
         else:
             assert hasattr(log_config, "log_level") or hasattr(log_config, "__dict__")
 
         # Cleanup
-        log_file = Path("langflow.log")
+        log_file = Path("flow.log")
         if log_file.exists():
             log_file.unlink(missing_ok=True)
 
@@ -346,7 +346,7 @@ async def get_graph() -> Graph:
         # Set up the complete workflow
         log_config = LogConfig(
             log_level="INFO",
-            log_file=Path("langflow.log"),
+            log_file=Path("flow.log"),
         )
 
         chat_input = cp.ChatInput()
@@ -376,6 +376,6 @@ async def get_graph() -> Graph:
         # For now, just verify the setup completed without errors
 
         # Cleanup
-        log_file = Path("langflow.log")
+        log_file = Path("flow.log")
         if log_file.exists():
             log_file.unlink(missing_ok=True)

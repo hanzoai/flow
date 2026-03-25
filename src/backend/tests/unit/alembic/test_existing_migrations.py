@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from langflow.alembic.migration_validator import MigrationValidator
+from flow.alembic.migration_validator import MigrationValidator
 
 
 class TestExistingMigrations:

@@ -539,8 +539,8 @@ class TestMCPComponentConfigPriority:
         }
 
         with (
-            patch("langflow.api.v2.mcp.get_server") as mock_get_server,
-            patch("langflow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
+            patch("flow.api.v2.mcp.get_server") as mock_get_server,
+            patch("flow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
             patch("lfx.components.models_and_agents.mcp_component.session_scope"),
             patch.object(component.stdio_client, "connect_to_server") as mock_connect,
         ):
@@ -575,8 +575,8 @@ class TestMCPComponentConfigPriority:
         }
 
         with (
-            patch("langflow.api.v2.mcp.get_server") as mock_get_server,
-            patch("langflow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
+            patch("flow.api.v2.mcp.get_server") as mock_get_server,
+            patch("flow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
             patch("lfx.components.models_and_agents.mcp_component.session_scope"),
             patch.object(component.stdio_client, "connect_to_server") as mock_connect,
         ):
@@ -605,8 +605,8 @@ class TestMCPComponentConfigPriority:
         component._user_id = "test_user_123"
 
         with (
-            patch("langflow.api.v2.mcp.get_server") as mock_get_server,
-            patch("langflow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
+            patch("flow.api.v2.mcp.get_server") as mock_get_server,
+            patch("flow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
             patch("lfx.components.models_and_agents.mcp_component.session_scope"),
             patch.object(component.stdio_client, "connect_to_server") as mock_connect,
         ):
@@ -637,8 +637,8 @@ class TestMCPComponentConfigPriority:
         component._user_id = "api_user_456"
 
         with (
-            patch("langflow.api.v2.mcp.get_server") as mock_get_server,
-            patch("langflow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
+            patch("flow.api.v2.mcp.get_server") as mock_get_server,
+            patch("flow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
             patch("lfx.components.models_and_agents.mcp_component.session_scope"),
             patch.object(component.stdio_client, "connect_to_server") as mock_connect,
         ):
@@ -730,8 +730,8 @@ async def test_config_priority_with_fixtures(mock_db_session_with_servers):
 
     # Inject the mock session directly rather than mocking session_scope
     with (
-        patch("langflow.api.v2.mcp.get_server") as mock_get_server,
-        patch("langflow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
+        patch("flow.api.v2.mcp.get_server") as mock_get_server,
+        patch("flow.services.database.models.user.crud.get_user_by_id") as mock_get_user,
         patch(
             "lfx.components.models_and_agents.mcp_component.session_scope",
             return_value=mock_db_session_with_servers,

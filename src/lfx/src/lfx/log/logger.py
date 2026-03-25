@@ -316,8 +316,8 @@ def configure(
     # Set up file logging if needed
     if log_file:
         if not log_file.parent.exists():
-            cache_dir = Path(user_cache_dir("langflow"))
-            log_file = cache_dir / "langflow.log"
+            cache_dir = Path(user_cache_dir("flow"))
+            log_file = cache_dir / "flow.log"
 
         # Parse rotation settings
         if log_rotation:

@@ -23,15 +23,15 @@ def get_starter_projects_path() -> Path:
     # Navigate up to find the langflow project root
     current = test_file_path.parent
     while current != current.parent:
-        if (current / "src" / "backend" / "base" / "langflow" / "initial_setup" / "starter_projects").exists():
-            return current / "src" / "backend" / "base" / "langflow" / "initial_setup" / "starter_projects"
+        if (current / "src" / "backend" / "base" / "flow" / "initial_setup" / "starter_projects").exists():
+            return current / "src" / "backend" / "base" / "flow" / "initial_setup" / "starter_projects"
         current = current.parent
 
     # Fallback to a relative path from the test file
     # test_file is in: src/lfx/tests/unit/cli
-    # starter projects are in: src/backend/base/langflow/initial_setup/starter_projects
+    # starter projects are in: src/backend/base/flow/initial_setup/starter_projects
     project_root = test_file_path.parent.parent.parent.parent.parent
-    return project_root / "backend" / "base" / "langflow" / "initial_setup" / "starter_projects"
+    return project_root / "backend" / "base" / "flow" / "initial_setup" / "starter_projects"
 
 
 def get_starter_project_files():
