@@ -71,7 +71,10 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PORT=3006
 
-COPY --chown=hanzo:hanzo . .
+# Copy only what's needed at runtime (not .git, tests, docs, docker/, etc.)
+COPY --chown=hanzo:hanzo ./src /app/src
+COPY --chown=hanzo:hanzo ./pyproject.toml /app/pyproject.toml
+COPY --chown=hanzo:hanzo ./README.md /app/README.md
 
 RUN mkdir -p /app/data /app/logs && chown -R hanzo:hanzo /app/data /app/logs
 
