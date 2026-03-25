@@ -7,10 +7,5 @@ RUN npm install
 COPY ./src /app/src
 RUN npm run build
 
-FROM nginx
-COPY --from=frontend_build /app/build/ /usr/share/nginx/html
-COPY /nginx.conf /etc/nginx/conf.d/default.conf
-COPY start-nginx.sh /start-nginx.sh
-RUN chmod +x /start-nginx.sh
-ENV BACKEND_URL=$BACKEND_URL
-CMD ["/start-nginx.sh"]
+FROM ghcr.io/hanzoai/static:latest
+COPY --from=frontend_build /app/build/ /srv

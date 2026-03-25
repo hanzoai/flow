@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
-from langflow.api.v1 import mcp_utils
+from flow.api.v1 import mcp_utils
 
 
 class FakeResult:

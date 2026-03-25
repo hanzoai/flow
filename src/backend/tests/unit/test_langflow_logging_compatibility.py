@@ -10,18 +10,18 @@ import pytest
 def test_langflow_logging_imports():
     """Test that langflow.logging can be imported and works correctly."""
     try:
-        from langflow.logging import configure, logger
+        from flow.logging import configure, logger
 
         assert configure is not None
         assert logger is not None
         assert callable(configure)
     except ImportError as e:
-        pytest.fail(f"langflow.logging should be importable: {e}")
+        pytest.fail(f"flow.logging should be importable: {e}")
 
 
 def test_langflow_logging_functionality():
     """Test that langflow.logging functions work correctly."""
-    from langflow.logging import configure, logger
+    from flow.logging import configure, logger
 
     # Should be able to configure
     try:
@@ -31,14 +31,14 @@ def test_langflow_logging_functionality():
 
     # Should be able to log
     try:
-        logger.info("Test message from langflow.logging")
+        logger.info("Test message from flow.logging")
     except Exception as e:
         pytest.fail(f"logger should work: {e}")
 
 
 def test_langflow_logging_has_expected_exports():
     """Test that langflow.logging has the expected exports."""
-    import langflow.logging
+    import flow.logging
 
     assert hasattr(langflow.logging, "configure")
     assert hasattr(langflow.logging, "logger")
@@ -53,7 +53,7 @@ def test_langflow_logging_has_expected_exports():
 
 def test_langflow_logging_specific_functions():
     """Test langflow.logging specific functions (disable_logging, enable_logging)."""
-    from langflow.logging import disable_logging, enable_logging
+    from flow.logging import disable_logging, enable_logging
 
     assert callable(disable_logging)
     assert callable(enable_logging)
@@ -67,8 +67,8 @@ def test_langflow_logging_specific_functions():
 def test_no_conflict_with_lfx_logging():
     """Test that langflow.logging and lfx.logging don't conflict."""
     # Import both
-    from langflow.logging import configure as lf_configure
-    from langflow.logging import logger as lf_logger
+    from flow.logging import configure as lf_configure
+    from flow.logging import logger as lf_logger
     from lfx.logging import configure as lfx_configure
     from lfx.logging import logger as lfx_logger
 
@@ -84,13 +84,13 @@ def test_no_conflict_with_lfx_logging():
     # Test that both work without conflicts
     lf_configure(log_level="INFO")
     lfx_configure(log_level="INFO")
-    lf_logger.info("Test from langflow.logging")
+    lf_logger.info("Test from flow.logging")
     lfx_logger.info("Test from lfx.logging")
 
 
 def test_langflow_logging_imports_from_lfx():
     """Test that langflow.logging correctly imports from lfx."""
-    from langflow.logging import configure, logger
+    from flow.logging import configure, logger
     from lfx.log.logger import configure as lfx_configure
     from lfx.log.logger import logger as lfx_logger
 
@@ -103,7 +103,7 @@ def test_langflow_logging_imports_from_lfx():
 
     # Test functionality equivalence
     configure(log_level="DEBUG")
-    logger.debug("Test from langflow.logging")
+    logger.debug("Test from flow.logging")
     lfx_configure(log_level="DEBUG")
     lfx_logger.debug("Test from lfx.log.logger")
 
@@ -116,8 +116,8 @@ def test_backwards_compatibility_scenario():
     # 3. Both should work without conflicts
 
     # Import from all paths
-    from langflow.logging import configure as lf_configure
-    from langflow.logging import logger as lf_logger
+    from flow.logging import configure as lf_configure
+    from flow.logging import logger as lf_logger
     from lfx.log.logger import configure as orig_configure
     from lfx.log.logger import logger as orig_logger
     from lfx.logging import configure as lfx_configure
@@ -133,7 +133,7 @@ def test_backwards_compatibility_scenario():
 
     # All should work without conflicts
     lf_configure(log_level="ERROR")
-    lf_logger.error("Message from langflow.logging")
+    lf_logger.error("Message from flow.logging")
 
     lfx_configure(log_level="INFO")
     lfx_logger.info("Message from lfx.logging")
@@ -154,15 +154,15 @@ def test_importing_langflow_logging_in_langflow():
 
     # Test that langflow.logging can be used in component code created via create_class
     code = dedent("""
-from langflow.logging import logger, configure
-from langflow.logging.logger import logger
-from langflow.custom import Component
+from flow.logging import logger, configure
+from flow.logging.logger import logger
+from flow.custom import Component
 
 class TestLangflowLoggingComponent(Component):
     def some_method(self):
         # Test that both logger and configure work in langflow context
         configure(log_level="INFO")
-        logger.info("Test message from langflow component")
+        logger.info("Test message from flow component")
 
         # Test different log levels
         logger.debug("Debug message")

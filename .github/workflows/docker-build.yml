@@ -60,7 +60,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.13"
-  TEST_TAG: "langflowai/langflow:test"
+  TEST_TAG: "ghcr.io/hanzoai/flow:test"
 
 jobs:
   get-version:
@@ -171,29 +171,29 @@ jobs:
 
           if [[ "${{ inputs.release_type }}" == "base" || "${{ inputs.release_type }}" == "nightly-base" ]]; then
             # LANGFLOW-BASE RELEASE
-            echo "docker_tags=langflowai/langflow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},langflowai/langflow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
-            echo "ghcr_tags=ghcr.io/langflow-ai/langflow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
+            echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
+            echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
             echo "file=./docker/build_and_push_base.Dockerfile" >> $GITHUB_OUTPUT
           else
             if [[ "${{ inputs.pre_release }}" == "true" ]]; then
               # LANGFLOW-MAIN PRE-RELEASE
-              echo "docker_tags=langflowai/langflow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
-              echo "ghcr_tags=ghcr.io/langflow-ai/langflow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
+              echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
+              echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main-ep" ]]; then
               # LANGFLOW-MAIN (ENTRYPOINT) RELEASE
-              echo "docker_tags=langflowai/langflow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},langflowai/langflow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
-              echo "ghcr_tags=ghcr.io/langflow-ai/langflow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "docker_tags=ghcr.io/hanzoai/flow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "ghcr_tags=ghcr.io/hanzoai/flow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push_ep.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main" || "${{ inputs.release_type }}" == "nightly-main" ]]; then
               # LANGFLOW-MAIN RELEASE
-              echo "docker_tags=langflowai/langflow${nightly_suffix}:${{ needs.get-version.outputs.version }},langflowai/langflow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
-              echo "ghcr_tags=ghcr.io/langflow-ai/langflow${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main-all" || "${{ inputs.release_type }}" == "nightly-main-all" ]]; then
               # LANGFLOW-MAIN (ALL OPTIONAL DEPS) RELEASE
-              echo "docker_tags=langflowai/langflow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},langflowai/langflow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
-              echo "ghcr_tags=ghcr.io/langflow-ai/langflow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "docker_tags=ghcr.io/hanzoai/flow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
+              echo "ghcr_tags=ghcr.io/hanzoai/flow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push_with_extras.Dockerfile" >> $GITHUB_OUTPUT
             else
               echo "Invalid release type. Exiting the workflow."
@@ -299,20 +299,20 @@ jobs:
         include:
           - component: docker-backend
             dockerfile: ./docker/build_and_push_backend.Dockerfile
-            tags: langflowai/langflow-backend:${{ needs.get-version.outputs.version }},langflowai/langflow-backend:latest
-            langflow_image: langflowai/langflow:${{ needs.get-version.outputs.version }}
+            tags: ghcr.io/hanzoai/flow-backend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-backend:latest
+            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: docker-frontend
             dockerfile: ./docker/frontend/build_and_push_frontend.Dockerfile
-            tags: langflowai/langflow-frontend:${{ needs.get-version.outputs.version }},langflowai/langflow-frontend:latest
-            langflow_image: langflowai/langflow:${{ needs.get-version.outputs.version }}
+            tags: ghcr.io/hanzoai/flow-frontend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-frontend:latest
+            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: ghcr-backend
             dockerfile: ./docker/build_and_push_backend.Dockerfile
-            tags: ghcr.io/langflow-ai/langflow-backend:${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow-backend:latest
-            langflow_image: ghcr.io/langflow-ai/langflow:${{ needs.get-version.outputs.version }}
+            tags: ghcr.io/hanzoai/flow-backend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-backend:latest
+            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: ghcr-frontend
             dockerfile: ./docker/frontend/build_and_push_frontend.Dockerfile
-            tags: ghcr.io/langflow-ai/langflow-frontend:${{ needs.get-version.outputs.version }},ghcr.io/langflow-ai/langflow-frontend:latest
-            langflow_image: ghcr.io/langflow-ai/langflow:${{ needs.get-version.outputs.version }}
+            tags: ghcr.io/hanzoai/flow-frontend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-frontend:latest
+            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
     steps:
       - name: Check out the code at a specific ref
         uses: actions/checkout@v6

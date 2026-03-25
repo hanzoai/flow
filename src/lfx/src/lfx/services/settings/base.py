@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     """Define if langflow database should be saved in LANGFLOW_CONFIG_DIR or in the langflow directory
     (i.e. in the package directory)."""
 
-    knowledge_bases_dir: str | None = "~/.langflow/knowledge_bases"
+    knowledge_bases_dir: str | None = "~/.flow/knowledge_bases"
     """The directory to store knowledge bases."""
 
     dev: bool = False
@@ -192,8 +192,8 @@ class Settings(BaseSettings):
 
     storage_type: str = "local"
     """Storage type for file storage. Defaults to 'local'. Supports 'local' and 's3'."""
-    object_storage_bucket_name: str | None = "langflow-bucket"
-    """Object storage bucket name for file storage. Defaults to 'langflow-bucket'."""
+    object_storage_bucket_name: str | None = "flow-bucket"
+    """Object storage bucket name for file storage. Defaults to 'flow-bucket'."""
     object_storage_prefix: str | None = "files"
     """Object storage prefix for file storage. Defaults to 'files'."""
     object_storage_tags: dict[str, str] | None = None
@@ -213,7 +213,7 @@ class Settings(BaseSettings):
     """Timeout for the API calls in seconds."""
     frontend_timeout: int = 0
     """Timeout for the frontend API calls in seconds."""
-    user_agent: str = "langflow"
+    user_agent: str = "flow"
     """User agent for the API calls."""
     backend_only: bool = False
     """If set to True, Langflow will not serve the frontend."""
@@ -252,7 +252,7 @@ class Settings(BaseSettings):
     """The number of workers to run."""
     log_level: str = "critical"
     """The log level for Langflow."""
-    log_file: str | None = "logs/langflow.log"
+    log_file: str | None = "logs/flow.log"
     """The path to log file for Langflow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""
@@ -389,7 +389,7 @@ class Settings(BaseSettings):
     @classmethod
     def set_user_agent(cls, value):
         if not value:
-            value = "Langflow"
+            value = "Flow"
         import os
 
         os.environ["USER_AGENT"] = value
@@ -455,13 +455,13 @@ class Settings(BaseSettings):
             from platformdirs import user_cache_dir
 
             # Define the app name and author
-            app_name = "langflow"
-            app_author = "langflow"
+            app_name = "flow"
+            app_author = "flow"
 
             # Get the cache directory for the application
             cache_dir = user_cache_dir(app_name, app_author)
 
-            # Create a .langflow directory inside the cache directory
+            # Create a .flow directory inside the cache directory
             value = Path(cache_dir)
             value.mkdir(parents=True, exist_ok=True)
 
@@ -493,24 +493,24 @@ class Settings(BaseSettings):
                 raise ValueError(msg)
 
             from lfx.utils.version import get_version_info
-            from lfx.utils.version import is_pre_release as langflow_is_pre_release
+            from lfx.utils.version import is_pre_release as flow_is_pre_release
 
             version = get_version_info()["version"]
-            is_pre_release = langflow_is_pre_release(version)
+            is_pre_release = flow_is_pre_release(version)
 
             if info.data["save_db_in_config_dir"]:
                 database_dir = info.data["config_dir"]
             else:
-                # Use langflow package path, not lfx, for backwards compatibility
+                # Use flow package path, not lfx, for backwards compatibility
                 try:
-                    import langflow
+                    import flow
 
-                    database_dir = Path(langflow.__file__).parent.resolve()
+                    database_dir = Path(flow.__file__).parent.resolve()
                 except ImportError:
                     database_dir = Path(__file__).parent.parent.parent.resolve()
 
-            pre_db_file_name = "langflow-pre.db"
-            db_file_name = "langflow.db"
+            pre_db_file_name = "flow-pre.db"
+            db_file_name = "flow.db"
             new_pre_path = f"{database_dir}/{pre_db_file_name}"
             new_path = f"{database_dir}/{db_file_name}"
             final_path = None

@@ -381,7 +381,7 @@ class JsonHandler:
     def test_replaces_legacy_imports(self):
         """Test that legacy import statements are replaced."""
         code = """
-from langflow import CustomComponent
+from flow import CustomComponent
 
 class MyComponent(CustomComponent):
     def build(self):

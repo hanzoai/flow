@@ -10,7 +10,7 @@ from lfx.utils.langflow_utils import has_langflow_memory
 if has_langflow_memory():
     try:
         # Import full langflow implementation
-        from langflow.memory import (
+        from flow.memory import (
             aadd_messages,
             aadd_messagetables,
             add_messages,

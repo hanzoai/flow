@@ -96,7 +96,7 @@ def setup_llm_caching() -> None:
 
 def set_langchain_cache(settings) -> None:
     from langchain.globals import set_llm_cache
-    from langflow.interface.importing.utils import import_class
+    from flow.interface.importing.utils import import_class
 
     if cache_type := os.getenv("LANGFLOW_LANGCHAIN_CACHE"):
         try:

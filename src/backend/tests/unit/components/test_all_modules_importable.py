@@ -18,7 +18,7 @@ import importlib
 import pkgutil
 
 import pytest
-from langflow import components
+from flow import components
 
 
 class TestAllModulesImportable:
@@ -119,11 +119,11 @@ class TestAllModulesImportable:
         """Test that traditional import patterns still work."""
         # Test some key imports that should always work
         traditional_imports = [
-            ("langflow.components.openai", "OpenAIModelComponent"),
-            ("langflow.components.anthropic", "AnthropicModelComponent"),
-            ("langflow.components.data", "APIRequestComponent"),
-            ("langflow.components.models_and_agents", "AgentComponent"),
-            ("langflow.components.helpers", "CalculatorComponent"),
+            ("flow.components.openai", "OpenAIModelComponent"),
+            ("flow.components.anthropic", "AnthropicModelComponent"),
+            ("flow.components.data", "APIRequestComponent"),
+            ("flow.components.models_and_agents", "AgentComponent"),
+            ("flow.components.helpers", "CalculatorComponent"),
         ]
 
         failed_imports = []

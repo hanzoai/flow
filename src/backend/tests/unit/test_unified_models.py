@@ -1,4 +1,4 @@
-from langflow.base.models.unified_models import get_unified_models_detailed
+from flow.base.models.unified_models import get_unified_models_detailed
 
 
 def _flatten_models(result):

@@ -192,9 +192,9 @@ async def test_read_flows_user_isolation(client: AsyncClient, logged_in_headers,
     """Test that read_flows returns only flows from the current user."""
     from uuid import uuid4
 
-    from langflow.services.auth.utils import get_password_hash
-    from langflow.services.database.models.user.model import User
-    from langflow.services.deps import session_scope
+    from flow.services.auth.utils import get_password_hash
+    from flow.services.database.models.user.model import User
+    from flow.services.deps import session_scope
 
     # Create a second user
     other_user_id = uuid4()
@@ -557,9 +557,9 @@ async def test_upsert_flow_updates_existing_flow(client: AsyncClient, logged_in_
 
 async def test_upsert_flow_returns_404_for_other_users_flow(client: AsyncClient, logged_in_headers):
     """Test that PUT returns 404 when trying to upsert another user's flow (avoids leaking existence)."""
-    from langflow.services.auth.utils import get_password_hash
-    from langflow.services.database.models.user.model import User
-    from langflow.services.deps import session_scope
+    from flow.services.auth.utils import get_password_hash
+    from flow.services.database.models.user.model import User
+    from flow.services.deps import session_scope
 
     # Create another user
     other_user_id = uuid.uuid4()

@@ -12,18 +12,18 @@ from platformdirs import user_cache_dir
 
 
 @pytest.fixture
-def hanzoflow_cache_dir(tmp_path):
+def flow_cache_dir(tmp_path):
     """Create a temporary hanzoflow cache directory."""
-    cache_dir = tmp_path / "hanzoflow"
+    cache_dir = tmp_path / "flow"
     cache_dir.mkdir(parents=True)
     return cache_dir
 
 
 @pytest.fixture
-def sample_image(hanzoflow_cache_dir):
+def sample_image(flow_cache_dir):
     """Create a sample image file for testing."""
     # Create the test_flow directory in the cache
-    flow_dir = hanzoflow_cache_dir / "test_flow"
+    flow_dir = flow_cache_dir / "test_flow"
     flow_dir.mkdir(parents=True, exist_ok=True)
 
     # Create the image in the flow directory
@@ -35,7 +35,7 @@ def sample_image(hanzoflow_cache_dir):
     image_path.write_bytes(image_content)
 
     # Use platformdirs to get the cache directory
-    real_cache_dir = Path(user_cache_dir("hanzoflow"))
+    real_cache_dir = Path(user_cache_dir("flow"))
     real_cache_dir.mkdir(parents=True, exist_ok=True)
     real_flow_dir = real_cache_dir / "test_flow"
     real_flow_dir.mkdir(parents=True, exist_ok=True)
@@ -101,15 +101,15 @@ def test_message_with_single_image(sample_image):
     assert message.files == [file_path]
 
 
-def test_message_with_multiple_images(sample_image, hanzoflow_cache_dir):
+def test_message_with_multiple_images(sample_image, flow_cache_dir):
     """Test creating a message with multiple images."""
     # Create a second image in the cache directory
-    flow_dir = hanzoflow_cache_dir / "test_flow"
+    flow_dir = flow_cache_dir / "test_flow"
     second_image = flow_dir / "second_image.png"
     shutil.copy2(str(sample_image), str(second_image))
 
     # Use platformdirs for the real cache location
-    real_cache_dir = Path(user_cache_dir("hanzoflow")) / "test_flow"
+    real_cache_dir = Path(user_cache_dir("flow")) / "test_flow"
     real_cache_dir.mkdir(parents=True, exist_ok=True)
     real_second_image = real_cache_dir / "second_image.png"
     shutil.copy2(str(sample_image), str(real_second_image))
@@ -310,7 +310,7 @@ def test_get_file_content_dicts_with_string_paths():
 def cleanup():
     yield
     # Clean up the real cache directory after tests
-    cache_dir = Path(user_cache_dir("hanzoflow"))
+    cache_dir = Path(user_cache_dir("flow"))
     if cache_dir.exists():
         try:
             shutil.rmtree(str(cache_dir))

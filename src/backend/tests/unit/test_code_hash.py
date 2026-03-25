@@ -1,7 +1,7 @@
 """Test code hash and module metadata functionality."""
 
 import pytest
-from langflow.interface.components import import_langflow_components
+from flow.interface.components import import_langflow_components
 
 
 @pytest.mark.asyncio

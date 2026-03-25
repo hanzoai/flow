@@ -29,7 +29,7 @@ URL_REGEX = re.compile(
 
 USER_AGENT = None
 # Check if langflow is installed using importlib.util.find_spec(name))
-if importlib.util.find_spec("langflow"):
+if importlib.util.find_spec("flow"):
     langflow_installed = True
     USER_AGENT = get_user_agent()
 else:
@@ -50,7 +50,7 @@ class URLComponent(Component):
 
     display_name = "URL"
     description = "Fetch content from one or more web pages, following links recursively."
-    documentation: str = "https://docs.langflow.org/url"
+    documentation: str = "https://docs.hanzo.ai/flow/url"
     icon = "layout-template"
     name = "URLComponent"
 

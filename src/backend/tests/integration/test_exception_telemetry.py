@@ -4,7 +4,7 @@ import asyncio
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from langflow.services.telemetry.schema import (
+from flow.services.telemetry.schema import (
     ComponentPayload,
     ExceptionPayload,
     PlaygroundPayload,
@@ -12,7 +12,7 @@ from langflow.services.telemetry.schema import (
     ShutdownPayload,
     VersionPayload,
 )
-from langflow.services.telemetry.service import TelemetryService
+from flow.services.telemetry.service import TelemetryService
 
 
 class TestExceptionTelemetryIntegration:
@@ -209,7 +209,7 @@ class TestTelemetryPayloadValidation:
 
     def test_component_inputs_payload_creation_and_serialization(self):
         """Test ComponentInputsPayload creation and serialization."""
-        from langflow.services.telemetry.schema import ComponentInputsPayload
+        from flow.services.telemetry.schema import ComponentInputsPayload
 
         payload = ComponentInputsPayload(
             component_run_id="run-abc-123",
@@ -518,7 +518,7 @@ class TestComponentInputTelemetry:
 
     def test_component_inputs_payload_with_dict(self):
         """Test ComponentInputsPayload with dict."""
-        from langflow.services.telemetry.schema import ComponentInputsPayload
+        from flow.services.telemetry.schema import ComponentInputsPayload
 
         inputs_dict = {
             "temperature": 0.7,
@@ -574,7 +574,7 @@ class TestComponentInputTelemetry:
 
     def test_multiple_component_inputs_same_run(self):
         """Test multiple ComponentInputsPayload for same run_id."""
-        from langflow.services.telemetry.schema import ComponentInputsPayload
+        from flow.services.telemetry.schema import ComponentInputsPayload
 
         run_id = "run-xyz-789"
 
@@ -600,7 +600,7 @@ class TestComponentInputTelemetry:
 
     def test_component_payload_with_run_id_integration(self):
         """Test ComponentPayload with run_id for joining data."""
-        from langflow.services.telemetry.schema import ComponentInputsPayload, ComponentPayload
+        from flow.services.telemetry.schema import ComponentInputsPayload, ComponentPayload
 
         run_id = "run-integration-123"
         component_id = "TestComponent-xyz"

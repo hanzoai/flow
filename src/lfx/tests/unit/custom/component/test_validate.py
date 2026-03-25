@@ -4,7 +4,7 @@ from lfx.custom.validate import create_class
 
 
 def test_importing_langflow_module_in_lfx():
-    code = dedent("""from langflow.custom import   Component
+    code = dedent("""from flow.custom import   Component
 class TestComponent(Component):
     def some_method(self):
         pass
@@ -16,8 +16,8 @@ class TestComponent(Component):
 def test_importing_langflow_logging_in_lfx():
     """Test that langflow.logging can be imported in lfx context without errors."""
     code = dedent("""
-from langflow.logging import logger, configure
-from langflow.custom import Component
+from flow.logging import logger, configure
+from flow.custom import Component
 
 class TestLoggingComponent(Component):
     def some_method(self):

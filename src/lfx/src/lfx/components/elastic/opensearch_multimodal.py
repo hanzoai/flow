@@ -161,7 +161,7 @@ class OpenSearchVectorStoreComponentMultimodalMultiEmbedding(LCVectorStoreCompon
         StrInput(
             name="index_name",
             display_name="Index Name",
-            value="langflow",
+            value="flow",
             info=(
                 "The OpenSearch index name where documents will be stored and searched. "
                 "Will be created automatically if it doesn't exist."
