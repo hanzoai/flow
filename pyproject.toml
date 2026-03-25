@@ -2,7 +2,7 @@
 name = "hanzoflow"
 version = "1.8.0"
 description = "A Python package with a built-in web application"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 license = "MIT"
 keywords = ["nlp", "langchain", "openai", "gpt", "gui"]
 readme = "README.md"
@@ -114,14 +114,12 @@ clickhouse-connect = [
     "clickhouse-connect==0.7.19"
 ]
 
-nv-ingest = [
-    # NOTE: These must be removed in order to run `uv lock --upgrade` or `uv sync --upgrade`
-    # due to incompatibility with <3.12 and how uv handles lockfile creation.
-    # If upgrading, ensure `uv lock` and `uv sync` are run after upgrade with these,
-    # and that afterward, the lockfile contains nv-ingest.
-    "nv-ingest-api==25.6.2,<26.0.0 ; python_version >= '3.12'",
-    "nv-ingest-client==25.6.3,<26.0.0 ; python_version >= '3.12'",
-]
+# nv-ingest disabled — nv-ingest-client pins openai<1.83 which conflicts
+# with hanzo-llm requiring openai>=2.8.0. Re-enable when NVIDIA updates.
+# nv-ingest = [
+#     "nv-ingest-api==25.6.2,<26.0.0 ; python_version >= '3.12'",
+#     "nv-ingest-client==25.6.3,<26.0.0 ; python_version >= '3.12'",
+# ]
 
 postgresql = [
     "sqlalchemy[postgresql_psycopg2binary]>=2.0.38,<3.0.0",
@@ -132,7 +130,11 @@ postgresql = [
 override-dependencies = [
     # temporary force a newer python-pptx
     "python-pptx>=1.0.2",
+    # hanzo-llm 1.81.15 wants openai>=2.8.0 but mem0ai, nv-ingest, and
+    # other langflow deps cap at <2.0.0. Force openai 1.x until ecosystem catches up.
+    "openai>=1.68.2,<2.0.0",
 ]
+
 
 [project.scripts]
 langflow = "langflow.langflow_launcher:main"
