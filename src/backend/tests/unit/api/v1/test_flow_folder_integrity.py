@@ -14,9 +14,9 @@ import uuid
 
 from fastapi import status
 from httpx import AsyncClient
-from langflow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.deps import session_scope
+from flow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
+from flow.services.database.models.folder.model import Folder
+from flow.services.deps import session_scope
 from sqlmodel import select
 
 

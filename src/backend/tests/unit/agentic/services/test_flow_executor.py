@@ -9,22 +9,22 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from fastapi import HTTPException
-from langflow.agentic.services.flow_executor import (
+from flow.agentic.services.flow_executor import (
     execute_flow_file,
     execute_flow_file_streaming,
     extract_response_text,
 )
-from langflow.agentic.services.flow_preparation import (
+from flow.agentic.services.flow_preparation import (
     inject_model_into_flow,
     load_and_prepare_flow,
 )
-from langflow.agentic.services.flow_types import (
+from flow.agentic.services.flow_types import (
     FLOWS_BASE_PATH,
     STREAMING_EVENT_TIMEOUT_SECONDS,
     STREAMING_QUEUE_MAX_SIZE,
     FlowExecutionResult,
 )
-from langflow.agentic.services.helpers.event_consumer import parse_event_data
+from flow.agentic.services.helpers.event_consumer import parse_event_data
 
 
 class TestFlowExecutionResult:
@@ -79,7 +79,7 @@ class TestInjectModelIntoFlow:
             }
         }
 
-        with patch("langflow.agentic.services.flow_preparation.get_provider_config") as mock_config:
+        with patch("flow.agentic.services.flow_preparation.get_provider_config") as mock_config:
             mock_config.return_value = {
                 "variable_name": "OPENAI_API_KEY",
                 "api_key_param": "api_key",
@@ -112,7 +112,7 @@ class TestInjectModelIntoFlow:
             }
         }
 
-        with patch("langflow.agentic.services.flow_preparation.get_provider_config") as mock_config:
+        with patch("flow.agentic.services.flow_preparation.get_provider_config") as mock_config:
             mock_config.return_value = {
                 "variable_name": "TEST_KEY",
                 "api_key_param": "api_key",
@@ -130,7 +130,7 @@ class TestInjectModelIntoFlow:
         """Should use provided api_key_var instead of default."""
         flow_data = {"data": {"nodes": []}}
 
-        with patch("langflow.agentic.services.flow_preparation.get_provider_config") as mock_config:
+        with patch("flow.agentic.services.flow_preparation.get_provider_config") as mock_config:
             mock_config.return_value = {
                 "variable_name": "DEFAULT_KEY",
                 "api_key_param": "api_key",
@@ -257,11 +257,11 @@ class TestExecuteFlowFile:
 
         with (
             patch(
-                "langflow.agentic.services.flow_executor.resolve_flow_path",
+                "flow.agentic.services.flow_executor.resolve_flow_path",
                 return_value=(Path("/fake/path/test.json"), "json"),
             ),
             patch(
-                "langflow.agentic.services.flow_executor.load_graph_for_execution",
+                "flow.agentic.services.flow_executor.load_graph_for_execution",
                 new_callable=AsyncMock,
                 return_value=mock_graph,
             ) as mock_load,
@@ -293,11 +293,11 @@ class TestExecuteFlowFile:
 
         with (
             patch(
-                "langflow.agentic.services.flow_executor.resolve_flow_path",
+                "flow.agentic.services.flow_executor.resolve_flow_path",
                 return_value=(Path("/fake/path/test.json"), "json"),
             ),
             patch(
-                "langflow.agentic.services.flow_executor.load_graph_for_execution",
+                "flow.agentic.services.flow_executor.load_graph_for_execution",
                 new_callable=AsyncMock,
                 return_value=mock_graph,
             ),
@@ -330,7 +330,7 @@ class TestLoadAndPrepareFlow:
         mock_path.read_text.return_value = json.dumps(mock_flow_data)
 
         with patch(
-            "langflow.agentic.services.flow_preparation.inject_model_into_flow",
+            "flow.agentic.services.flow_preparation.inject_model_into_flow",
             return_value={"data": {"nodes": [], "injected": True}},
         ) as mock_inject:
             result = load_and_prepare_flow(mock_path, "OpenAI", "gpt-4", None)
@@ -367,15 +367,15 @@ class TestExecuteFlowFileStreaming:
         # This test verifies the streaming setup and basic flow
         with (
             patch(
-                "langflow.agentic.services.flow_executor.resolve_flow_path",
+                "flow.agentic.services.flow_executor.resolve_flow_path",
                 return_value=(Path("/fake/path/test.json"), "json"),
             ),
             patch(
-                "langflow.agentic.services.flow_executor.load_graph_for_execution",
+                "flow.agentic.services.flow_executor.load_graph_for_execution",
                 new_callable=AsyncMock,
                 return_value=mock_graph,
             ),
-            patch("langflow.agentic.services.flow_executor.create_default_event_manager"),
+            patch("flow.agentic.services.flow_executor.create_default_event_manager"),
         ):
             # The streaming function is complex; for unit tests we verify setup
             pass

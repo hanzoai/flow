@@ -16,7 +16,7 @@ from lfx.base.mcp.util import (
 from lfx.custom.custom_component.component_with_cache import ComponentWithCache
 from lfx.inputs.inputs import InputTypes  # noqa: TC001
 from lfx.io import BoolInput, DictInput, DropdownInput, McpInput, MessageTextInput, Output
-from lfx.io.schema import flatten_schema, schema_to_langflow_inputs
+from lfx.io.schema import flatten_schema, schema_to_flow_inputs
 from lfx.log.logger import logger
 from lfx.schema.dataframe import DataFrame
 from lfx.schema.message import Message
@@ -92,7 +92,7 @@ class MCPToolsComponent(ComponentWithCache):
 
     display_name = "MCP Tools"
     description = "Connect to an MCP server to use its tools."
-    documentation: str = "https://docs.langflow.org/mcp-tools"
+    documentation: str = "https://docs.hanzo.ai/flow/mcp-tools"
     icon = "Mcp"
     name = "MCPTools"
 
@@ -171,7 +171,7 @@ class MCPToolsComponent(ComponentWithCache):
                 msg = f"Empty input schema for tool '{tool_obj.name}'"
                 raise ValueError(msg)
 
-            schema_inputs = schema_to_langflow_inputs(input_schema)
+            schema_inputs = schema_to_flow_inputs(input_schema)
             if not schema_inputs:
                 msg = f"No input parameters defined for tool '{tool_obj.name}'"
                 await logger.awarning(msg)
@@ -229,8 +229,8 @@ class MCPToolsComponent(ComponentWithCache):
             # Try to fetch from database first to ensure we have the latest config
             # This ensures database updates (like editing a server) take effect
             try:
-                from langflow.api.v2.mcp import get_server
-                from langflow.services.database.models.user.crud import get_user_by_id
+                from flow.api.v2.mcp import get_server
+                from flow.services.database.models.user.crud import get_user_by_id
 
                 from lfx.services.deps import get_settings_service
             except ImportError as e:
@@ -545,7 +545,7 @@ class MCPToolsComponent(ComponentWithCache):
             try:
                 flat_schema = flatten_schema(tool.args_schema.schema())
                 input_schema = create_input_schema_from_json_schema(flat_schema)
-                langflow_inputs = schema_to_langflow_inputs(input_schema)
+                langflow_inputs = schema_to_flow_inputs(input_schema)
                 inputs[tool.name] = langflow_inputs
             except (AttributeError, ValueError, TypeError, KeyError) as e:
                 msg = f"Error getting inputs for tool {getattr(tool, 'name', 'unknown')}: {e!s}"

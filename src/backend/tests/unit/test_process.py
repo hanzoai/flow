@@ -1,6 +1,6 @@
-from langflow.processing.process import process_tweaks
-from langflow.services.deps import get_session_service
-from langflow.services.utils import register_all_service_factories
+from flow.processing.process import process_tweaks
+from flow.services.deps import get_session_service
+from flow.services.utils import register_all_service_factories
 
 
 def test_no_tweaks():
@@ -314,7 +314,7 @@ def test_apply_tweaks_code_override_prevention():
     """Test that code tweaks are prevented and logged as warning."""
     from unittest.mock import patch
 
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a simple node with template including code field
     node = {
@@ -333,7 +333,7 @@ def test_apply_tweaks_code_override_prevention():
     node_tweaks = {"code": "malicious_code_injection", "param1": "new_value"}
 
     # Capture log output
-    with patch("langflow.processing.process.logger") as mock_logger:
+    with patch("flow.processing.process.logger") as mock_logger:
         apply_tweaks(node, node_tweaks)
 
         # Verify warning was logged for code override attempt
@@ -350,7 +350,7 @@ def test_apply_tweaks_code_only_prevention():
     """Test that only code tweaks are prevented when trying to override code alone."""
     from unittest.mock import patch
 
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a simple node with template including code field
     node = {
@@ -368,7 +368,7 @@ def test_apply_tweaks_code_only_prevention():
     node_tweaks = {"code": "attempted_code_injection"}
 
     # Capture log output
-    with patch("langflow.processing.process.logger") as mock_logger:
+    with patch("flow.processing.process.logger") as mock_logger:
         apply_tweaks(node, node_tweaks)
 
         # Verify warning was logged
@@ -380,7 +380,7 @@ def test_apply_tweaks_code_only_prevention():
 
 def test_apply_tweaks_mcp_field_type():
     """Test that MCP field types are handled correctly with dict values."""
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a node with an MCP field type
     node = {
@@ -418,7 +418,7 @@ def test_apply_tweaks_mcp_field_type():
 
 def test_apply_tweaks_mcp_field_with_string_value():
     """Test that MCP field types handle string values correctly."""
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a node with an MCP field type
     node = {
@@ -446,7 +446,7 @@ def test_apply_tweaks_mcp_field_with_string_value():
 
 def test_apply_tweaks_field_type_extraction():
     """Test that field type is safely extracted with .get() to avoid KeyError."""
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a node with a field that has no explicit type
     node = {
@@ -482,7 +482,7 @@ def test_apply_tweaks_dict_field_type():
     the dict keys and set them as top-level template properties instead of setting
     the field's value. This caused headers passed via tweaks to be ignored.
     """
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     # Create a node with a dict field type (like MCP Tools headers)
     node = {
@@ -523,7 +523,7 @@ def test_apply_tweaks_dict_field_type():
 
 def test_apply_tweaks_dict_field_overwrites_list_default():
     """Test that a dict tweak fully replaces a list-format default value on a dict field."""
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     node = {
         "id": "node1",
@@ -552,7 +552,7 @@ def test_apply_tweaks_dict_field_value_wrapped_list():
     the list of key-value pairs is wrapped in a "value" key. The tweak should
     unwrap this and set the inner list as the field's value.
     """
-    from langflow.processing.process import apply_tweaks
+    from flow.processing.process import apply_tweaks
 
     node = {
         "id": "MCPTools-svrRq",

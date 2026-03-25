@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
 import pytest
-from langflow.memory import (
+from flow.memory import (
     aadd_messages,
     aadd_messagetables,
     add_messages,
@@ -13,16 +13,16 @@ from langflow.memory import (
     delete_messages,
     get_messages,
 )
-from langflow.schema.content_block import ContentBlock
-from langflow.schema.content_types import TextContent, ToolContent
-from langflow.schema.message import Message
-from langflow.schema.properties import Properties, Source
+from flow.schema.content_block import ContentBlock
+from flow.schema.content_types import TextContent, ToolContent
+from flow.schema.message import Message
+from flow.schema.properties import Properties, Source
 
 # Assuming you have these imports available
-from langflow.services.database.models.message import MessageCreate, MessageRead
-from langflow.services.database.models.message.model import MessageTable
-from langflow.services.deps import session_scope
-from langflow.services.tracing.utils import convert_to_langchain_type
+from flow.services.database.models.message import MessageCreate, MessageRead
+from flow.services.database.models.message.model import MessageTable
+from flow.services.deps import session_scope
+from flow.services.tracing.utils import convert_to_langchain_type
 
 
 @pytest.fixture
@@ -374,7 +374,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_session_id_in_file_path(self):
         """Test that file paths containing session_id are correctly processed."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session-123"
@@ -396,7 +396,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_session_id_not_in_file_path(self):
         """Test that file paths NOT containing session_id are preserved as-is."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session-123"
@@ -418,7 +418,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_no_session_id(self):
         """Test that file paths are preserved when session_id is empty."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         file_path = "/uploads/some-folder/image.png"
@@ -439,7 +439,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_session_id_at_end_of_path(self):
         """Test edge case where session_id is at the end of path (no parts after split)."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session-123"
@@ -468,7 +468,7 @@ class TestMessageBaseFromMessageFilePaths:
         and session_id "abc", split gives ["uploads/", "/folder/", "/image.png"].
         parts[1] is "/folder/" so result is "abc/folder/".
         """
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "abc"
@@ -493,7 +493,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_multiple_files_mixed_paths(self):
         """Test multiple files with different path scenarios."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "session-xyz"
@@ -567,7 +567,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_image_no_url(self):
         """Test that Image without url attribute still works (url defaults to None)."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session"
@@ -591,7 +591,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_empty_session_id_preserves_path(self):
         """Test file path handling when session_id is empty string."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         file_path = "/uploads/folder/image.png"
@@ -612,7 +612,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_uuid_session_id(self):
         """Test file path handling with UUID session_id."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_uuid = uuid4()
@@ -635,7 +635,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_preserves_string_files(self):
         """Test that string file paths are preserved correctly."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test message",
@@ -658,7 +658,7 @@ class TestMessageBaseFromMessageFilePaths:
         message.files is REPLACED by image_paths. String paths are not preserved in image_paths
         because they don't have path/url attributes.
         """
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session"
@@ -682,7 +682,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_special_characters_in_session_id(self):
         """Test message with special characters in session_id."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         special_session_id = "session:with/special@chars#123"
@@ -704,7 +704,7 @@ class TestMessageBaseFromMessageFilePaths:
 
     def test_from_message_with_unicode_in_file_path(self):
         """Test message with unicode characters in file path."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.image import Image
 
         session_id = "test-session"
@@ -908,7 +908,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_missing_required_fields(self):
         """Test from_message raises error when required fields are missing."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         # Missing text
         message = Message(
@@ -923,7 +923,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_missing_sender(self):
         """Test from_message raises error when sender is missing."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -937,7 +937,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_missing_sender_name(self):
         """Test from_message raises error when sender_name is missing."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -951,7 +951,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_with_invalid_flow_id(self):
         """Test from_message raises error with invalid flow_id string."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -965,7 +965,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_with_valid_uuid_string_flow_id(self):
         """Test from_message accepts valid UUID string as flow_id."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -981,7 +981,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_with_iterator_text(self):
         """Test from_message handles iterator text gracefully."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         def text_generator():
             yield "chunk1"
@@ -1001,7 +1001,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_timestamp_string_format(self):
         """Test from_message parses timestamp string correctly."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -1020,7 +1020,7 @@ class TestMessageEdgeCases:
 
     def test_from_message_timestamp_iso_format(self):
         """Test from_message parses ISO format timestamp."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         message = Message(
             text="Test",
@@ -1064,7 +1064,7 @@ class TestMessageEdgeCases:
 
     def test_session_id_validator_with_uuid(self):
         """Test session_id validator handles UUID objects."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
 
         session_uuid = uuid4()
         message = MessageCreate(
@@ -1079,7 +1079,7 @@ class TestMessageEdgeCases:
 
     def test_content_blocks_validation(self):
         """Test content_blocks field validation."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.content_block import ContentBlock as LfxContentBlock
         from lfx.schema.content_types import TextContent as LfxTextContent
 
@@ -1102,7 +1102,7 @@ class TestMessageEdgeCases:
 
     def test_properties_validation(self):
         """Test properties field validation."""
-        from langflow.services.database.models.message.model import MessageTable
+        from flow.services.database.models.message.model import MessageTable
         from lfx.schema.properties import Properties as LfxProperties
         from lfx.schema.properties import Source as LfxSource
 

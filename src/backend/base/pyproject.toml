@@ -130,7 +130,7 @@ dev = [
 
 
 [tool.hatch.build.targets.wheel]
-packages = ["hanzoflow"]
+packages = ["flow"]
 
 
 [tool.pytest.ini_options]
@@ -149,15 +149,15 @@ plugins = ["pydantic.mypy"]
 follow_imports = "skip"
 disable_error_code = ["type-var"]
 namespace_packages = true
-mypy_path = "hanzoflow"
+mypy_path = "flow"
 ignore_missing_imports = true
 
 [tool.codeflash]
 # All paths are relative to this pyproject.toml's directory.
-module-root = "hanzoflow"
+module-root = "flow"
 tests-root = "../tests/unit"
 test-framework = "pytest"
-ignore-paths = ["hanzoflow/components/"]
+ignore-paths = ["flow/components/"]
 formatter-cmds = ["ruff check --exit-zero --fix $file", "ruff format $file"]
 #disable plugins that might interfere with runtime measurement
 pytest-cmd = "pytest -p no:profiling -p no:sugar -p no:xdist -p no:cov -p no:split"
@@ -474,4 +474,4 @@ all = [
 ]
 
 [project.scripts]
-langflow-base = "langflow.langflow_launcher:main"
+langflow-base = "flow.launcher:main"

@@ -6,13 +6,13 @@ from uuid import UUID, uuid4
 import orjson
 import pytest
 from httpx import AsyncClient
-from langflow.api.v1.schemas import FlowListCreate, ResultDataResponse
-from langflow.initial_setup.setup import load_starter_projects
-from langflow.services.database.models.base import orjson_dumps
-from langflow.services.database.models.flow import Flow, FlowCreate, FlowUpdate
-from langflow.services.database.models.folder.model import FolderCreate
-from langflow.services.database.utils import session_getter
-from langflow.services.deps import get_db_service
+from flow.api.v1.schemas import FlowListCreate, ResultDataResponse
+from flow.initial_setup.setup import load_starter_projects
+from flow.services.database.models.base import orjson_dumps
+from flow.services.database.models.flow import Flow, FlowCreate, FlowUpdate
+from flow.services.database.models.folder.model import FolderCreate
+from flow.services.database.utils import session_getter
+from flow.services.deps import get_db_service
 from lfx.graph.utils import log_transaction, log_vertex_build
 
 
@@ -812,7 +812,7 @@ async def test_read_folder_with_component_filter(client: AsyncClient, json_flow:
 
 def test_transaction_excludes_code_key(session):
     """Test that the code key is excluded from transaction inputs when logged to the database."""
-    from langflow.services.database.models.transactions.model import TransactionTable
+    from flow.services.database.models.transactions.model import TransactionTable
 
     # Create a flow to associate with the transaction
     flow = Flow(name=str(uuid4()), description="Test flow", data={})

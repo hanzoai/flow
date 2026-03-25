@@ -57,13 +57,13 @@ jobs:
 
       - name: Build image
         run: |
-          ${{ env.CONTAINER_RUNTIME }} build -t langflowai/langflow:latest-dev \
+          ${{ env.CONTAINER_RUNTIME }} build -t ghcr.io/hanzoai/flow:latest-dev \
             -f docker/build_and_push.Dockerfile \
             .
       - name: Test image
         run: |
           expected_version=$(cat pyproject.toml | grep version | head -n 1 | cut -d '"' -f 2)
-          version=$(${{ env.CONTAINER_RUNTIME }} run --rm --entrypoint bash langflowai/langflow:latest-dev -c "python -c 'from langflow.utils.version import get_version_info; print(get_version_info()[\"version\"])'")
+          version=$(${{ env.CONTAINER_RUNTIME }} run --rm --entrypoint bash ghcr.io/hanzoai/flow:latest-dev -c "python -c 'from flow.utils.version import get_version_info; print(get_version_info()[\"version\"])'")
           if [ "$expected_version" != "$version" ]; then
               echo "Expected version: $expected_version"
               echo "Actual version: $version"
@@ -72,14 +72,14 @@ jobs:
 
       - name: Build backend image
         run: |
-          ${{ env.CONTAINER_RUNTIME }} build -t langflowai/langflow-backend:latest-dev \
-            --build-arg LANGFLOW_IMAGE=langflowai/langflow:latest-dev \
+          ${{ env.CONTAINER_RUNTIME }} build -t ghcr.io/hanzoai/flow-backend:latest-dev \
+            --build-arg LANGFLOW_IMAGE=ghcr.io/hanzoai/flow:latest-dev \
             -f docker/build_and_push_backend.Dockerfile \
             .
       - name: Test backend image
         run: |
           expected_version=$(cat src/backend/base/pyproject.toml | grep version | head -n 1 | cut -d '"' -f 2)
-          version=$(${{ env.CONTAINER_RUNTIME }} run --rm --entrypoint bash langflowai/langflow-backend:latest-dev -c "python -c 'from langflow.utils.version import get_version_info; print(get_version_info()[\"version\"])'")
+          version=$(${{ env.CONTAINER_RUNTIME }} run --rm --entrypoint bash ghcr.io/hanzoai/flow-backend:latest-dev -c "python -c 'from flow.utils.version import get_version_info; print(get_version_info()[\"version\"])'")
           if [ "$expected_version" != "$version" ]; then
               echo "Expected version: $expected_version"
               echo "Actual version: $version"
@@ -87,6 +87,6 @@ jobs:
           fi
       - name: Build frontend image
         run: |
-          ${{ env.CONTAINER_RUNTIME }} build -t langflowai/langflow-frontend:latest-dev \
+          ${{ env.CONTAINER_RUNTIME }} build -t ghcr.io/hanzoai/flow-frontend:latest-dev \
             -f docker/frontend/build_and_push_frontend.Dockerfile \
             .

@@ -7,9 +7,9 @@ from uuid import uuid4
 import pytest
 from fastapi import status
 from httpx import AsyncClient
-from langflow.initial_setup.constants import STARTER_FOLDER_NAME
-from langflow.services.database.models.flow.model import Flow, FlowCreate
-from langflow.services.deps import session_scope
+from flow.initial_setup.constants import STARTER_FOLDER_NAME
+from flow.services.database.models.flow.model import Flow, FlowCreate
+from flow.services.deps import session_scope
 
 CYRILLIC_NAME = "Новый проект"
 CYRILLIC_DESC = "Описание проекта с кириллицей"  # noqa: RUF001
@@ -422,7 +422,7 @@ class TestProjectMCPIntegration:
     @pytest.fixture
     def mock_mcp_settings_enabled(self):
         """Mock settings with MCP auto-add enabled."""
-        with patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings:
+        with patch("flow.api.v1.projects.get_settings_service") as mock_get_settings:
             mock_service = MagicMock()
             mock_service.settings.add_projects_to_mcp_servers = True
             mock_service.auth_settings.AUTO_LOGIN = False
@@ -432,7 +432,7 @@ class TestProjectMCPIntegration:
     @pytest.fixture
     def mock_mcp_settings_disabled(self):
         """Mock settings with MCP auto-add disabled."""
-        with patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings:
+        with patch("flow.api.v1.projects.get_settings_service") as mock_get_settings:
             mock_service = MagicMock()
             mock_service.settings.add_projects_to_mcp_servers = False
             mock_service.auth_settings.AUTO_LOGIN = False
@@ -463,12 +463,12 @@ class TestProjectMCPIntegration:
     ):
         """Test successful project creation with MCP server auto-add."""
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.create_api_key") as mock_create_api_key,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.create_api_key") as mock_create_api_key,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
@@ -513,13 +513,13 @@ class TestProjectMCPIntegration:
     ):
         """Legacy SSE test for project creation with MCP server auto-add."""
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.create_api_key") as mock_create_api_key,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.create_api_key") as mock_create_api_key,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
@@ -565,10 +565,10 @@ class TestProjectMCPIntegration:
     ):
         """Test project creation failure due to MCP server name conflict."""
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
@@ -610,11 +610,11 @@ class TestProjectMCPIntegration:
     ):
         """Legacy SSE test verifying project creation failure due to MCP server name conflict."""
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
@@ -659,9 +659,9 @@ class TestProjectMCPIntegration:
         oauth_case["auth_settings"] = {"auth_type": "oauth"}
 
         with (
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks to trigger OAuth path
             mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
@@ -691,10 +691,10 @@ class TestProjectMCPIntegration:
         oauth_case["auth_settings"] = {"auth_type": "oauth"}
 
         with (
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks to trigger OAuth path
             mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
@@ -723,12 +723,12 @@ class TestProjectMCPIntegration:
         """Test project rename with MCP server name update."""
         # First create a project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url"),
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url"),
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -749,10 +749,10 @@ class TestProjectMCPIntegration:
         update_case = {"name": "Updated Project Name", "description": "Updated description"}
 
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -796,13 +796,13 @@ class TestProjectMCPIntegration:
         """Legacy SSE test for project rename with MCP server name update."""
         # First create a project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -826,10 +826,10 @@ class TestProjectMCPIntegration:
         update_case = {"name": "Updated Project Name", "description": "Updated description"}
 
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -873,12 +873,12 @@ class TestProjectMCPIntegration:
         """Test project rename with MCP server name conflict."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url"),
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url"),
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -899,9 +899,9 @@ class TestProjectMCPIntegration:
         update_case = {"name": "Conflicting Project"}
 
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -939,13 +939,13 @@ class TestProjectMCPIntegration:
         """Legacy SSE test for project rename with MCP server name conflict."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -969,9 +969,9 @@ class TestProjectMCPIntegration:
         update_case = {"name": "Conflicting Project"}
 
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1009,12 +1009,12 @@ class TestProjectMCPIntegration:
         """Test project deletion with MCP server cleanup."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url"),
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url"),
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1033,10 +1033,10 @@ class TestProjectMCPIntegration:
 
         # Delete the project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1073,13 +1073,13 @@ class TestProjectMCPIntegration:
         """Legacy SSE test for project deletion with MCP server cleanup."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1101,10 +1101,10 @@ class TestProjectMCPIntegration:
 
         # Delete the project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1141,12 +1141,12 @@ class TestProjectMCPIntegration:
         """Test project deletion when MCP server belongs to different project."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url"),
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_streamable_http_url"),
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1165,10 +1165,10 @@ class TestProjectMCPIntegration:
 
         # Delete the project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1202,13 +1202,13 @@ class TestProjectMCPIntegration:
         """Legacy SSE test for project deletion when MCP server belongs to different project."""
         # Create project first
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
-            patch("langflow.api.v1.projects.update_server"),
-            patch("langflow.api.v1.projects.create_api_key"),
-            patch("langflow.api.v1.projects.get_storage_service"),
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate_create,
+            patch("flow.api.v1.projects.update_server"),
+            patch("flow.api.v1.projects.create_api_key"),
+            patch("flow.api.v1.projects.get_storage_service"),
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1230,10 +1230,10 @@ class TestProjectMCPIntegration:
 
         # Delete the project
         with (
-            patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.update_server") as mock_update_server,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_settings_service") as mock_get_settings,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.update_server") as mock_update_server,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Mock settings to enable MCP auto-add
             mock_settings = MagicMock()
@@ -1261,13 +1261,13 @@ class TestProjectMCPIntegration:
         self, client: AsyncClient, logged_in_headers, basic_case
     ):
         """Test that projects get API key auth when AUTO_LOGIN is disabled."""
-        with patch("langflow.api.v1.projects.get_settings_service") as mock_get_settings:
+        with patch("flow.api.v1.projects.get_settings_service") as mock_get_settings:
             mock_service = MagicMock()
             mock_service.settings.add_projects_to_mcp_servers = False  # Disable MCP to focus on auth
             mock_service.auth_settings.AUTO_LOGIN = False
             mock_get_settings.return_value = mock_service
 
-            with patch("langflow.api.v1.projects.encrypt_auth_settings") as mock_encrypt:
+            with patch("flow.api.v1.projects.encrypt_auth_settings") as mock_encrypt:
                 mock_encrypt.return_value = {"auth_type": "apikey"}
 
                 response = await client.post("api/v1/projects/", json=basic_case, headers=logged_in_headers)
@@ -1285,9 +1285,9 @@ class TestProjectMCPIntegration:
     ):
         """Test that MCP exceptions during project creation don't prevent project creation."""
         with (
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
@@ -1313,10 +1313,10 @@ class TestProjectMCPIntegration:
     ):
         """Legacy SSE test ensuring MCP exceptions don't block project creation."""
         with (
-            patch("langflow.api.v1.projects.get_project_sse_url") as mock_sse_url,
-            patch("langflow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
-            patch("langflow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
-            patch("langflow.api.v1.projects.get_storage_service") as mock_storage,
+            patch("flow.api.v1.projects.get_project_sse_url") as mock_sse_url,
+            patch("flow.api.v1.projects.get_project_streamable_http_url") as mock_streamable_url,
+            patch("flow.api.v1.projects.validate_mcp_server_for_project") as mock_validate,
+            patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
             mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"

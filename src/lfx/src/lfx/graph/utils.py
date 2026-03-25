@@ -150,7 +150,7 @@ async def emit_vertex_build_event(
     try:
         from datetime import datetime, timezone
 
-        from langflow.services.event_manager import webhook_event_manager
+        from flow.services.event_manager import webhook_event_manager
 
         flow_id_str = str(flow_id)
         if not webhook_event_manager.has_listeners(flow_id_str):
@@ -212,7 +212,7 @@ async def emit_build_start_event(flow_id: str | UUID, vertex_id: str) -> None:
     Errors are silently ignored as SSE emission is not critical.
     """
     try:
-        from langflow.services.event_manager import webhook_event_manager
+        from flow.services.event_manager import webhook_event_manager
 
         flow_id_str = str(flow_id)
         if not webhook_event_manager.has_listeners(flow_id_str):
@@ -324,8 +324,8 @@ async def log_vertex_build(
     try:
         # Try to use langflow's services if available (when running within langflow)
         try:
-            from langflow.services.deps import get_db_service as langflow_get_db_service
-            from langflow.services.deps import get_settings_service as langflow_get_settings_service
+            from flow.services.deps import get_db_service as langflow_get_db_service
+            from flow.services.deps import get_settings_service as langflow_get_settings_service
 
             settings_service = langflow_get_settings_service()
             if not settings_service:
@@ -336,10 +336,10 @@ async def log_vertex_build(
             if isinstance(flow_id, str):
                 flow_id = UUID(flow_id)
 
-            from langflow.services.database.models.vertex_builds.crud import (
+            from flow.services.database.models.vertex_builds.crud import (
                 log_vertex_build as crud_log_vertex_build,
             )
-            from langflow.services.database.models.vertex_builds.model import VertexBuildBase
+            from flow.services.database.models.vertex_builds.model import VertexBuildBase
 
             # Convert data to dict if it's a pydantic model
             data_dict = data

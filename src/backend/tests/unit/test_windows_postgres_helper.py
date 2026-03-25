@@ -13,7 +13,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langflow.helpers.windows_postgres_helper import (
+from flow.helpers.windows_postgres_helper import (
     LANGFLOW_DATABASE_URL,
     POSTGRESQL_PREFIXES,
     configure_windows_postgres_event_loop,
@@ -126,7 +126,7 @@ class TestWindowsPostgresHelper:
     @patch.dict(os.environ, {"LANGFLOW_DATABASE_URL": "postgresql://user:pass@localhost/db"}, clear=True)
     @patch("asyncio.get_event_loop_policy")
     @patch("asyncio.set_event_loop_policy")
-    @patch("langflow.helpers.windows_postgres_helper.logger")
+    @patch("flow.helpers.windows_postgres_helper.logger")
     def test_logging_includes_source_when_provided(self, mock_logger, mock_set_policy, mock_get_policy, mock_platform):  # noqa: ARG002
         """Test that source is included in log context when provided."""
         mock_platform.return_value = "Windows"
