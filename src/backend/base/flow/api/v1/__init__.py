@@ -13,6 +13,7 @@ from flow.api.v1.users import router as users_router
 from flow.api.v1.validate import router as validate_router
 from flow.api.v1.variable import router as variables_router
 from flow.api.v1.voice_mode import router as voice_mode_router
+from flow.api.v1.knowledge_bases import router as knowledge_bases_router
 
 __all__ = [
     "api_key_router",
@@ -29,5 +30,7 @@ __all__ = [
     "users_router",
     "validate_router",
     "variables_router",
+    "knowledge_bases_router",
     "voice_mode_router",
+from flow.api.v1.knowledge_bases import router as knowledge_bases_router
 ]
