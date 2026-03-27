@@ -59,7 +59,7 @@ class TelemetryService(Service):
         version_info = get_version_info()
         self.common_telemetry_fields = {
             "langflow_version": version_info["version"],
-            "platform": "desktop" if self._get_langflow_desktop() else "python_package",
+            "platform": "desktop" if self._get_flow_desktop() else "python_package",
             "os": platform.system().lower(),
         }
 
@@ -124,7 +124,7 @@ class TelemetryService(Service):
         return str(os.getenv("FLOW_DESKTOP", "False")).lower() in {"1", "true"}
 
     def _get_client_type(self) -> str:
-        return "desktop" if self._get_langflow_desktop() else "oss"
+        return "desktop" if self._get_flow_desktop() else "oss"
 
     async def _send_email_telemetry(self) -> None:
         """Send the telemetry event for the registered email address."""
@@ -218,7 +218,7 @@ class TelemetryService(Service):
             self._start_time = datetime.now(timezone.utc)
             self.worker_task = asyncio.create_task(self.telemetry_worker())
             self.log_package_version_task = asyncio.create_task(self.log_package_version())
-            if self._get_langflow_desktop():
+            if self._get_flow_desktop():
                 self.log_package_email_task = asyncio.create_task(self._send_email_telemetry())
         except Exception:  # noqa: BLE001
             logger.exception("Error starting telemetry service")
