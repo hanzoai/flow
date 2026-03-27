@@ -37,15 +37,16 @@ RUN mkdir -p /app/src/backend/flow && \
     touch /app/src/backend/flow/__init__.py
 
 # Install dependencies only (no workspace packages yet — source not copied).
+# --extra postgresql: production uses PostgreSQL (psycopg driver required)
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-install-project --no-editable
+    uv sync --frozen --no-dev --no-install-project --no-editable --extra postgresql
 
 # Copy application source code.
 COPY ./src /app/src
 
 # Install the workspace packages now that source is available.
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-editable
+    uv sync --frozen --no-dev --no-editable --extra postgresql
 
 ################################
 # RUNTIME
