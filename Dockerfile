@@ -69,7 +69,7 @@ COPY --from=builder --chown=hanzo:hanzo /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:${PATH}"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PORT=3006
+ENV PORT=7860
 
 # Copy only what's needed at runtime (not .git, tests, docs, docker/, etc.)
 COPY --chown=hanzo:hanzo ./src /app/src
@@ -80,9 +80,9 @@ RUN mkdir -p /app/data /app/logs && chown -R hanzo:hanzo /app/data /app/logs
 
 USER hanzo
 
-EXPOSE 3006
+EXPOSE 7860
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:3006/health || exit 1
+    CMD curl -f http://localhost:7860/health || exit 1
 
-CMD ["python", "-m", "langflow", "run", "--host", "0.0.0.0", "--port", "3006"]
+CMD ["python", "-m", "flow", "run", "--host", "0.0.0.0", "--port", "7860", "--backend-only"]
