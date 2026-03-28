@@ -64,7 +64,7 @@ class AuthSettings(BaseSettings):
         description=(
             "Source for API key validation. "
             "'db' validates against database-stored API keys (default behavior). "
-            "'env' validates against the LANGFLOW_API_KEY environment variable."
+            "'env' validates against the FLOW_API_KEY environment variable."
         ),
     )
 
@@ -133,7 +133,7 @@ class AuthSettings(BaseSettings):
 
     pwd_context: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    model_config = SettingsConfigDict(validate_assignment=True, extra="ignore", env_prefix="LANGFLOW_")
+    model_config = SettingsConfigDict(validate_assignment=True, extra="ignore", env_prefix="FLOW_")
 
     def reset_credentials(self) -> None:
         # Preserve the configured username but scrub the password from memory to avoid plaintext exposure.

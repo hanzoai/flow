@@ -1,4 +1,4 @@
-import { LANGFLOW_SUPPORTED_TYPES } from "@/constants/constants";
+import { HANZOFLOW_SUPPORTED_TYPES } from "@/constants/constants";
 import { scapedJSONStringfy } from "@/utils/reactflowUtils";
 import type { Edge } from "@xyflow/react";
 
@@ -39,7 +39,7 @@ export const computeDisplayHandle = (
   }
 
   return !!(
-    (!LANGFLOW_SUPPORTED_TYPES.has(type ?? "") ||
+    (!HANZOFLOW_SUPPORTED_TYPES.has(type ?? "") ||
       (optionalHandle && optionalHandle.length > 0)) &&
     !(isToolMode && template.tool_mode) &&
     !hasRefreshButton

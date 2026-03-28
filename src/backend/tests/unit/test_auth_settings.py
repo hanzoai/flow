@@ -94,22 +94,22 @@ class TestApiKeySourceEnvironmentVariables:
     """Tests for API_KEY_SOURCE loaded from environment variables."""
 
     def test_api_key_source_from_env_var(self, tmp_path: Path, monkeypatch):
-        """API_KEY_SOURCE should be loaded from LANGFLOW_API_KEY_SOURCE env var."""
+        """API_KEY_SOURCE should be loaded from FLOW_API_KEY_SOURCE env var."""
         cfg_dir = tmp_path.as_posix()
-        monkeypatch.setenv("LANGFLOW_API_KEY_SOURCE", "env")
+        monkeypatch.setenv("FLOW_API_KEY_SOURCE", "env")
         settings = AuthSettings(CONFIG_DIR=cfg_dir)
         assert settings.API_KEY_SOURCE == "env"
 
     def test_explicit_value_overrides_env_var(self, tmp_path: Path, monkeypatch):
         """Explicit parameter should override environment variable."""
         cfg_dir = tmp_path.as_posix()
-        monkeypatch.setenv("LANGFLOW_API_KEY_SOURCE", "env")
+        monkeypatch.setenv("FLOW_API_KEY_SOURCE", "env")
         settings = AuthSettings(CONFIG_DIR=cfg_dir, API_KEY_SOURCE="db")
         assert settings.API_KEY_SOURCE == "db"
 
     def test_invalid_api_key_source_from_env_var(self, tmp_path: Path, monkeypatch):
         """Invalid API_KEY_SOURCE from env var should raise ValidationError."""
         cfg_dir = tmp_path.as_posix()
-        monkeypatch.setenv("LANGFLOW_API_KEY_SOURCE", "invalid")
+        monkeypatch.setenv("FLOW_API_KEY_SOURCE", "invalid")
         with pytest.raises(ValidationError):
             AuthSettings(CONFIG_DIR=cfg_dir)

@@ -29,7 +29,7 @@ class TestDatabaseServiceWindowsPostgres:
         return mock_service
 
     @patch("platform.system")
-    @patch.dict(os.environ, {"LANGFLOW_DATABASE_URL": "postgresql://user:pass@localhost/db"}, clear=True)
+    @patch.dict(os.environ, {"FLOW_DATABASE_URL": "postgresql://user:pass@localhost/db"}, clear=True)
     @patch("flow.services.database.service.create_async_engine")
     @patch("flow.services.database.service.configure_windows_postgres_event_loop")
     def test_windows_postgresql_configures_event_loop(

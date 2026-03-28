@@ -157,12 +157,12 @@ def main():
 
             # Set environment variables for the load test
             env = os.environ.copy()
-            env["LANGFLOW_HOST"] = creds["host"]
+            env["FLOW_HOST"] = creds["host"]
             env["API_KEY"] = creds["api_key"]
             env["FLOW_ID"] = creds["flow_id"]
 
             print("   🔧 Setting environment variables:")
-            print(f"      LANGFLOW_HOST={creds['host']}")
+            print(f"      FLOW_HOST={creds['host']}")
             print(f"      API_KEY={creds['api_key'][:20]}...")
             print(f"      FLOW_ID={creds['flow_id']}")
 
