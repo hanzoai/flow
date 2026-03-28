@@ -24,7 +24,7 @@ export const useLogout: useMutationFunctionType<undefined, void> = (
   async function logoutUser(): Promise<any> {
     const autoLogin =
       useAuthStore.getState().autoLogin ||
-      getAuthCookie(cookies, LANGFLOW_AUTO_LOGIN_OPTION) === "auto" ||
+      getAuthCookie(cookies, HANZOFLOW_AUTO_LOGIN_OPTION) === "auto" ||
       isAutoLoginEnv;
 
     if (autoLogin) {

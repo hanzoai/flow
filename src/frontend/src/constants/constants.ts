@@ -876,8 +876,8 @@ export const HANZOFLOW_API_TOKEN = "apikey_tkn_lflw";
 export const HANZOFLOW_AUTO_LOGIN_OPTION = "auto_login_lf";
 export const HANZOFLOW_REFRESH_TOKEN = "refresh_token_lf";
 
-export const LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60 - 60 * 60 * 0.1;
-export const LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV =
+export const FLOW_ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60 - 60 * 60 * 0.1;
+export const FLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV =
   Number(getEnvVar("ACCESS_TOKEN_EXPIRE_SECONDS", 60)) -
   Number(getEnvVar("ACCESS_TOKEN_EXPIRE_SECONDS", 60)) * 0.1;
 export const TEXT_FIELD_TYPES: string[] = ["str", "SecretStr"];
@@ -947,8 +947,8 @@ export const POLLING_MESSAGES = {
 export const BUILD_POLLING_INTERVAL = 25;
 
 export const IS_AUTO_LOGIN =
-  !getEnvVar("LANGFLOW_AUTO_LOGIN") ||
-  String(getEnvVar("LANGFLOW_AUTO_LOGIN"))?.toLowerCase() !== "false";
+  !getEnvVar("FLOW_AUTO_LOGIN") ||
+  String(getEnvVar("FLOW_AUTO_LOGIN"))?.toLowerCase() !== "false";
 
 export const AUTO_LOGIN_RETRY_DELAY = 2000;
 export const AUTO_LOGIN_MAX_RETRY_DELAY = 60000;

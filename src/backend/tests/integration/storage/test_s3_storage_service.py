@@ -44,11 +44,11 @@ def mock_settings_service():
     """Create a mock settings service with S3 configuration.
 
     Configuration via environment variables:
-    - LANGFLOW_OBJECT_STORAGE_BUCKET_NAME: S3 bucket name (default: langflow-ci)
-    - LANGFLOW_OBJECT_STORAGE_PREFIX: S3 prefix (default: test-files-1)
-    - LANGFLOW_OBJECT_STORAGE_TAGS: S3 tags as JSON string (default: {"env": "test-1"})
+    - FLOW_OBJECT_STORAGE_BUCKET_NAME: S3 bucket name (default: langflow-ci)
+    - FLOW_OBJECT_STORAGE_PREFIX: S3 prefix (default: test-files-1)
+    - FLOW_OBJECT_STORAGE_TAGS: S3 tags as JSON string (default: {"env": "test-1"})
 
-    Note: All settings use LANGFLOW_OBJECT_STORAGE_* names to test that
+    Note: All settings use FLOW_OBJECT_STORAGE_* names to test that
     the S3StorageService properly respects these settings.
     """
     settings_service = Mock()
@@ -56,15 +56,15 @@ def mock_settings_service():
 
     # Bucket name from env or default
     settings_service.settings.object_storage_bucket_name = os.environ.get(
-        "LANGFLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci"
+        "FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci"
     )
 
     # Prefix from env - using standard LANGFLOW env var name
-    settings_service.settings.object_storage_prefix = os.environ.get("LANGFLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
+    settings_service.settings.object_storage_prefix = os.environ.get("FLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
 
     # Tags from env - using standard LANGFLOW env var name
     default_tags = {"env": "test-1"}
-    tags_str = os.environ.get("LANGFLOW_OBJECT_STORAGE_TAGS")
+    tags_str = os.environ.get("FLOW_OBJECT_STORAGE_TAGS")
     if tags_str:
         try:
             settings_service.settings.object_storage_tags = json.loads(tags_str)
@@ -107,24 +107,24 @@ class TestS3StorageServiceInitialization:
         assert s3_storage_service.ready is True
 
         # Verify bucket name matches env or default
-        expected_bucket = os.environ.get("LANGFLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+        expected_bucket = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
         assert s3_storage_service.bucket_name == expected_bucket
 
         # Verify prefix matches env or default (with trailing slash)
-        # This tests that S3StorageService respects LANGFLOW_OBJECT_STORAGE_PREFIX
-        expected_prefix = os.environ.get("LANGFLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
+        # This tests that S3StorageService respects FLOW_OBJECT_STORAGE_PREFIX
+        expected_prefix = os.environ.get("FLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
         assert s3_storage_service.prefix == f"{expected_prefix}/"
 
         # Verify tags match env or default
-        # This tests that S3StorageService respects LANGFLOW_OBJECT_STORAGE_TAGS
+        # This tests that S3StorageService respects FLOW_OBJECT_STORAGE_TAGS
         default_tags = {"env": "test-1"}
-        tags_str = os.environ.get("LANGFLOW_OBJECT_STORAGE_TAGS")
+        tags_str = os.environ.get("FLOW_OBJECT_STORAGE_TAGS")
         expected_tags = json.loads(tags_str) if tags_str else default_tags
         assert s3_storage_service.tags == expected_tags
 
     async def test_build_full_path(self, s3_storage_service):
         """Test building full S3 key with configured prefix."""
-        expected_prefix = os.environ.get("LANGFLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
+        expected_prefix = os.environ.get("FLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
         key = s3_storage_service.build_full_path("flow_123", "test.txt")
         assert key == f"{expected_prefix}/flow_123/test.txt"
 

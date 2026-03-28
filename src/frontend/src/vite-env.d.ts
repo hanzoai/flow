@@ -22,8 +22,8 @@ interface ImportMetaEnv {
   readonly BACKEND_URL: string;
   readonly ACCESS_TOKEN_EXPIRE_SECONDS: string;
   readonly CI: string;
-  readonly LANGFLOW_AUTO_LOGIN: string;
-  readonly LANGFLOW_MCP_COMPOSER_ENABLED: string;
+  readonly FLOW_AUTO_LOGIN: string;
+  readonly FLOW_MCP_COMPOSER_ENABLED: string;
 }
 
 interface ImportMeta {
