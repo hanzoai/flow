@@ -2,9 +2,9 @@
 
 import { create } from "zustand";
 import {
-  LANGFLOW_ACCESS_TOKEN,
-  LANGFLOW_API_TOKEN,
-  LANGFLOW_REFRESH_TOKEN,
+  HANZOFLOW_ACCESS_TOKEN,
+  HANZOFLOW_API_TOKEN,
+  HANZOFLOW_REFRESH_TOKEN,
 } from "@/constants/constants";
 import type { AuthStoreType } from "@/types/zustand/auth";
 import { cookieManager, getCookiesInstance } from "@/utils/cookie-manager";
@@ -30,9 +30,9 @@ const useAuthStore = create<AuthStoreType>((set, get) => ({
     set({ authenticationErrorCount }),
 
   logout: async () => {
-    localStorage.removeItem(LANGFLOW_ACCESS_TOKEN);
-    localStorage.removeItem(LANGFLOW_API_TOKEN);
-    localStorage.removeItem(LANGFLOW_REFRESH_TOKEN);
+    localStorage.removeItem(HANZOFLOW_ACCESS_TOKEN);
+    localStorage.removeItem(HANZOFLOW_API_TOKEN);
+    localStorage.removeItem(HANZOFLOW_REFRESH_TOKEN);
 
     cookieManager.clearAuthCookies();
 

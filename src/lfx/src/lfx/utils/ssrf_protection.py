@@ -13,13 +13,13 @@ IMPORTANT: HTTP Redirects
     See: https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
 
 Configuration:
-    LANGFLOW_SSRF_PROTECTION_ENABLED: Enable/disable SSRF protection (default: false)
+    FLOW_SSRF_PROTECTION_ENABLED: Enable/disable SSRF protection (default: false)
         TODO: Change default to true in next major version (2.0)
-    LANGFLOW_SSRF_ALLOWED_HOSTS: Comma-separated list of allowed hosts/CIDR ranges
+    FLOW_SSRF_ALLOWED_HOSTS: Comma-separated list of allowed hosts/CIDR ranges
         Examples: "192.168.1.0/24,internal-api.company.local,10.0.0.5"
 
 TODO: In next major version (2.0):
-    - Change LANGFLOW_SSRF_PROTECTION_ENABLED default to "true"
+    - Change FLOW_SSRF_PROTECTION_ENABLED default to "true"
     - Remove warning-only mode and enforce blocking
     - Update documentation to reflect breaking change
 """
@@ -272,7 +272,7 @@ def _validate_direct_ip_address(hostname: str) -> bool:
         msg = (
             f"Access to IP address {hostname} is blocked by SSRF protection. "
             "Requests to private/internal IP ranges are not allowed for security reasons. "
-            "To allow this IP, add it to LANGFLOW_SSRF_ALLOWED_HOSTS environment variable."
+            "To allow this IP, add it to FLOW_SSRF_ALLOWED_HOSTS environment variable."
         )
         raise SSRFProtectionError(msg)
 
@@ -316,7 +316,7 @@ def _validate_hostname_resolution(hostname: str) -> None:
             "Requests to private/internal IP ranges are not allowed for security reasons. "
             "This protection prevents access to internal services, cloud metadata endpoints "
             "(e.g., AWS 169.254.169.254), and other sensitive internal resources. "
-            "To allow this hostname, add it to LANGFLOW_SSRF_ALLOWED_HOSTS environment variable."
+            "To allow this hostname, add it to FLOW_SSRF_ALLOWED_HOSTS environment variable."
         )
         raise SSRFProtectionError(msg)
 

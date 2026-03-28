@@ -368,7 +368,7 @@ def print_setup_results(setup_state: dict):
 
     # Environment variables for easy copy-paste
     print("# Set environment variables:")
-    print(f"export LANGFLOW_HOST='{setup_state['host']}'")
+    print(f"export FLOW_HOST='{setup_state['host']}'")
     print(f"export API_KEY='{setup_state['api_key']}'")
     print(f"export FLOW_ID='{setup_state['flow_id']}'")
     print()

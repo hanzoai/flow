@@ -4,7 +4,7 @@
 # instead of the minimal/noop services built into LFX.
 #
 # Usage:
-#   1. Copy this file to your LANGFLOW_CONFIG_DIR as lfx.toml
+#   1. Copy this file to your FLOW_CONFIG_DIR as lfx.toml
 #   2. Or add to pyproject.toml under [tool.lfx.services]
 #
 # The services will be automatically discovered and loaded when you run:
