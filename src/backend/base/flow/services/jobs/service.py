@@ -141,7 +141,7 @@ class JobService(Service):
 
         except asyncio.CancelledError as exc:
             # Check the message code to determine if this was user-initiated or system-initiated
-            if exc.args and exc.args[0] == "LANGFLOW_USER_CANCELLED":
+            if exc.args and exc.args[0] == "FLOW_USER_CANCELLED":
                 # User-initiated cancellation, update status to CANCELLED
                 await self.update_job_status(job_id, JobStatus.CANCELLED, finished_timestamp=True)
             else:

@@ -198,7 +198,7 @@ def run_locust_test(args):
         env["SHAPE"] = args.shape
 
     # Add other environment variables
-    env["LANGFLOW_HOST"] = args.host
+    env["FLOW_HOST"] = args.host
 
     if args.headless:
         cmd.extend(

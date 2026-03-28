@@ -67,8 +67,8 @@ For testing against a remote Hanzo Flow instance:
 
 ```bash
 # Using Makefile (recommended)
-make load_test_remote_setup LANGFLOW_HOST="https://your-remote-instance.com"
-make load_test_remote_run LANGFLOW_HOST="https://your-remote-instance.com"
+make load_test_remote_setup FLOW_HOST="https://your-remote-instance.com"
+make load_test_remote_run FLOW_HOST="https://your-remote-instance.com"
 
 # Or using Python scripts directly
 python langflow_setup_test.py --host https://your-remote-instance.com --interactive
@@ -175,7 +175,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 ## Environment Variables
 
-- `LANGFLOW_HOST`: Base URL for Hanzo Flow server (default: http://localhost:7860)
+- `FLOW_HOST`: Base URL for Hanzo Flow server (default: http://localhost:7860)
 - `SHAPE`: Load test shape (ramp100, stepramp)
 - `REQUEST_TIMEOUT`: Request timeout in seconds (default: 30.0)
 

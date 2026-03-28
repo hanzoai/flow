@@ -116,10 +116,10 @@ async def serve_command(
     # Validate API key
     try:
         api_key = get_api_key()
-        verbose_print("✓ LANGFLOW_API_KEY is configured")
+        verbose_print("✓ FLOW_API_KEY is configured")
     except ValueError as e:
         typer.echo(f"✗ {e}", err=True)
-        typer.echo("Set the LANGFLOW_API_KEY environment variable before serving.", err=True)
+        typer.echo("Set the FLOW_API_KEY environment variable before serving.", err=True)
         raise typer.Exit(1) from e
 
     # Validate log level
@@ -130,7 +130,7 @@ async def serve_command(
 
     # Configure logging with the specified level
     # Disable pretty logs for serve command to avoid ANSI codes in API responses
-    os.environ["LANGFLOW_PRETTY_LOGS"] = "false"
+    os.environ["FLOW_PRETTY_LOGS"] = "false"
     verbose_print(f"Configuring logging with level: {log_level}")
     from lfx.log.logger import configure
 

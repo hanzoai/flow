@@ -126,8 +126,8 @@ async def files_client_fixture(
         def init_app():
             db_dir = tempfile.mkdtemp()
             db_path = Path(db_dir) / "test.db"
-            monkeypatch.setenv("LANGFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-            monkeypatch.setenv("LANGFLOW_AUTO_LOGIN", "false")
+            monkeypatch.setenv("FLOW_DATABASE_URL", f"sqlite:///{db_path}")
+            monkeypatch.setenv("FLOW_AUTO_LOGIN", "false")
             from lfx.services.manager import get_service_manager
 
             get_service_manager().factories.clear()
@@ -294,7 +294,7 @@ async def test_upload_file_size_limit(files_client, files_created_api_key, files
 async def setup_profile_pictures(monkeypatch):
     """Fixture to set up profile pictures in a temporary config directory.
 
-    This fixture must run before files_client to set LANGFLOW_CONFIG_DIR
+    This fixture must run before files_client to set FLOW_CONFIG_DIR
     before app initialization.
 
     Args:
@@ -327,7 +327,7 @@ async def setup_profile_pictures(monkeypatch):
     (people_dir / "001-person.svg").write_bytes(person_svg)
 
     # Override the config_dir setting BEFORE app initialization
-    monkeypatch.setenv("LANGFLOW_CONFIG_DIR", str(config_path))
+    monkeypatch.setenv("FLOW_CONFIG_DIR", str(config_path))
 
     yield config_path
 
@@ -446,7 +446,7 @@ async def test_profile_pictures_with_s3_storage(setup_profile_pictures, files_cl
         monkeypatch: For overriding environment variables
     """
     # Set storage type to S3 (simulating S3 configuration)
-    monkeypatch.setenv("LANGFLOW_STORAGE_TYPE", "s3")
+    monkeypatch.setenv("FLOW_STORAGE_TYPE", "s3")
 
     # List should still work (from local filesystem)
     response = await files_client.get("api/v1/files/profile_pictures/list")
@@ -508,7 +508,7 @@ async def empty_config_dir(monkeypatch):
     (config_path / "profile_pictures").mkdir(parents=True, exist_ok=True)
 
     # Override the config_dir setting BEFORE app initialization
-    monkeypatch.setenv("LANGFLOW_CONFIG_DIR", str(config_path))
+    monkeypatch.setenv("FLOW_CONFIG_DIR", str(config_path))
 
     yield config_path
 
@@ -714,7 +714,7 @@ async def partial_config_dir(monkeypatch):
     # Note: Space directory is NOT created intentionally
 
     # Override the config_dir setting BEFORE app initialization
-    monkeypatch.setenv("LANGFLOW_CONFIG_DIR", str(config_path))
+    monkeypatch.setenv("FLOW_CONFIG_DIR", str(config_path))
 
     yield config_path
 

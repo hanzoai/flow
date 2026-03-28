@@ -262,8 +262,8 @@ class TestSimpleAgentServe:
         assert "serve" in result.output.lower() or "Serve" in result.output
 
     def test_serve_requires_api_key(self, simple_agent_flow_path: Path, monkeypatch):
-        """Test serve requires LANGFLOW_API_KEY."""
-        monkeypatch.delenv("LANGFLOW_API_KEY", raising=False)
+        """Test serve requires FLOW_API_KEY."""
+        monkeypatch.delenv("FLOW_API_KEY", raising=False)
 
         result = runner.invoke(
             lfx_app,
@@ -271,7 +271,7 @@ class TestSimpleAgentServe:
         )
 
         # Should fail or warn about API key
-        assert result.exit_code != 0 or "LANGFLOW_API_KEY" in result.output
+        assert result.exit_code != 0 or "FLOW_API_KEY" in result.output
 
     def test_serve_loads_flow(self, simple_agent_flow_path: Path):
         """Test serve can load the flow without module errors.
@@ -321,7 +321,7 @@ class TestSimpleAgentServe:
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
-            env={**os.environ, "LANGFLOW_API_KEY": "test-key-12345"},  # pragma: allowlist secret
+            env={**os.environ, "FLOW_API_KEY": "test-key-12345"},  # pragma: allowlist secret
         )
 
         server_ready = False

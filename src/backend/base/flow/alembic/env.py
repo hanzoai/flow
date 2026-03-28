@@ -105,7 +105,7 @@ def _do_run_migrations(connection):
     with context.begin_transaction():
         if connection.dialect.name == "postgresql":
             # Use namespace from environment variable if provided, otherwise use default static key
-            namespace = os.getenv("LANGFLOW_MIGRATION_LOCK_NAMESPACE")
+            namespace = os.getenv("FLOW_MIGRATION_LOCK_NAMESPACE")
             if namespace:
                 lock_key = int(hashlib.sha256(namespace.encode()).hexdigest()[:16], 16) % (2**63 - 1)
                 logger.info(f"Using migration lock namespace: {namespace}, lock_key: {lock_key}")

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from flow.agentic.services.flow_types import (
     FLOWS_BASE_PATH,
-    LANGFLOW_ASSISTANT_FLOW,
+    FLOW_ASSISTANT_FLOW,
     MAX_VALIDATION_RETRIES,
     STREAMING_EVENT_TIMEOUT_SECONDS,
     STREAMING_QUEUE_MAX_SIZE,
@@ -149,9 +149,9 @@ class TestConstants:
         assert VALIDATION_UI_DELAY_SECONDS < 2
 
     def test_langflow_assistant_flow_should_be_string(self):
-        """LANGFLOW_ASSISTANT_FLOW should be a non-empty string."""
-        assert isinstance(LANGFLOW_ASSISTANT_FLOW, str)
-        assert len(LANGFLOW_ASSISTANT_FLOW) > 0
+        """FLOW_ASSISTANT_FLOW should be a non-empty string."""
+        assert isinstance(FLOW_ASSISTANT_FLOW, str)
+        assert len(FLOW_ASSISTANT_FLOW) > 0
 
     def test_translation_flow_should_be_string(self):
         """TRANSLATION_FLOW should be a non-empty string."""

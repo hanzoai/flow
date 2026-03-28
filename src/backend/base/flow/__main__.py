@@ -279,8 +279,8 @@ def run(
         load_dotenv(env_file, override=True)
 
     # Set and normalize log level, with precedence: cli > env > default
-    log_level = (log_level or os.environ.get("LANGFLOW_LOG_LEVEL") or "info").lower()
-    os.environ["LANGFLOW_LOG_LEVEL"] = log_level
+    log_level = (log_level or os.environ.get("FLOW_LOG_LEVEL") or "info").lower()
+    os.environ["FLOW_LOG_LEVEL"] = log_level
 
     configure(log_level=log_level, log_file=log_file, log_rotation=log_rotation)
 
@@ -297,7 +297,7 @@ def run(
     # Step 1: Checking Environment
     with progress.step(1):
         for key, value in os.environ.items():
-            new_key = key.replace("LANGFLOW_", "")
+            new_key = key.replace("FLOW_", "")
             if hasattr(settings_service.auth_settings, new_key):
                 setattr(settings_service.auth_settings, new_key, value)
 
@@ -368,9 +368,9 @@ def run(
             progress.print_summary()
             print_banner(str(host), int(port or 7860), protocol)
 
-        from flow.helpers.windows_postgres_helper import LANGFLOW_DATABASE_URL, POSTGRESQL_PREFIXES
+        from flow.helpers.windows_postgres_helper import FLOW_DATABASE_URL, POSTGRESQL_PREFIXES
 
-        db_url = os.environ.get(LANGFLOW_DATABASE_URL, "")
+        db_url = os.environ.get(FLOW_DATABASE_URL, "")
         loop_type = "asyncio"
         if (
             platform.system() == "Windows"
@@ -626,7 +626,7 @@ def print_banner(host: str, port: int, protocol: str) -> None:
             "We collect anonymous usage data to improve Flow.\n"
             "To opt out, set: [bold]DO_NOT_TRACK=true[/bold] in your environment."
         )
-        if os.getenv("DO_NOT_TRACK", os.getenv("LANGFLOW_DO_NOT_TRACK", "False")).lower() != "true"
+        if os.getenv("DO_NOT_TRACK", os.getenv("FLOW_DO_NOT_TRACK", "False")).lower() != "true"
         else (
             "We are [bold]not[/bold] collecting anonymous usage data to improve Flow.\n"
             "To contribute, set: [bold]DO_NOT_TRACK=false[/bold] in your environment."
@@ -669,9 +669,9 @@ def superuser(
     password: str = typer.Option(
         None, help="Password for the superuser. Defaults to 'langflow' when AUTO_LOGIN is enabled."
     ),
-    log_level: str = typer.Option("error", help="Logging level.", envvar="LANGFLOW_LOG_LEVEL"),
+    log_level: str = typer.Option("error", help="Logging level.", envvar="FLOW_LOG_LEVEL"),
     auth_token: str = typer.Option(
-        None, help="Authentication token of existing superuser.", envvar="LANGFLOW_SUPERUSER_TOKEN"
+        None, help="Authentication token of existing superuser.", envvar="FLOW_SUPERUSER_TOKEN"
     ),
 ) -> None:
     """Create a superuser.
@@ -692,7 +692,7 @@ async def _create_superuser(username: str, password: str, auth_token: str | None
     # Check if superuser creation via CLI is enabled
     if not settings_service.auth_settings.ENABLE_SUPERUSER_CLI:
         typer.echo("Error: Superuser creation via CLI is disabled.")
-        typer.echo("Set LANGFLOW_ENABLE_SUPERUSER_CLI=true to enable this feature.")
+        typer.echo("Set FLOW_ENABLE_SUPERUSER_CLI=true to enable this feature.")
         raise typer.Exit(1)
 
     if settings_service.auth_settings.AUTO_LOGIN:
@@ -721,7 +721,7 @@ async def _create_superuser(username: str, password: str, auth_token: str | None
             typer.echo("Error: Cannot create additional superusers when AUTO_LOGIN is enabled.")
             typer.echo("AUTO_LOGIN mode is for development with only the default superuser.")
             typer.echo("To create additional superusers:")
-            typer.echo("1. Set LANGFLOW_AUTO_LOGIN=false")
+            typer.echo("1. Set FLOW_AUTO_LOGIN=false")
             typer.echo("2. Run this command again with --auth-token")
             raise typer.Exit(1)
 
