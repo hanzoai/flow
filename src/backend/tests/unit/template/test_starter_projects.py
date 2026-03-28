@@ -43,7 +43,7 @@ def get_basic_template_files():
 @pytest.fixture(autouse=True)
 def disable_tracing(monkeypatch):
     """Disable tracing for all template tests."""
-    monkeypatch.setenv("LANGFLOW_DEACTIVATE_TRACING", "true")
+    monkeypatch.setenv("FLOW_DEACTIVATE_TRACING", "true")
 
 
 class TestStarterProjects:

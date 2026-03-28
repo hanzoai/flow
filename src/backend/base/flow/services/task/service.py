@@ -98,7 +98,7 @@ class TaskService(Service):
         try:
             await job_queue_service.cleanup_job(str(task_id))
         except asyncio.CancelledError as e:
-            if str(e) != "LANGFLOW_USER_CANCELLED":
+            if str(e) != "FLOW_USER_CANCELLED":
                 raise
             return True
         return True
