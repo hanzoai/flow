@@ -391,7 +391,7 @@ class TestAPIRequestSSRFProtection:
 
         # Enable SSRF protection in enforcement mode
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             patch("lfx.components.data_source.api_request.validate_url_for_ssrf") as mock_validate,
         ):
             from lfx.utils.ssrf_protection import SSRFProtectionError
@@ -410,7 +410,7 @@ class TestAPIRequestSSRFProtection:
             "http://172.16.0.1/internal",
         ]
 
-        with patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}):
+        with patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}):
             for url in private_ips:
                 component.url_input = url
 
@@ -427,7 +427,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://169.254.169.254/latest/meta-data/"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             patch("lfx.components.data_source.api_request.validate_url_for_ssrf") as mock_validate,
         ):
             from lfx.utils.ssrf_protection import SSRFProtectionError
@@ -446,7 +446,7 @@ class TestAPIRequestSSRFProtection:
             "https://www.google.com",
         ]
 
-        with patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}):
+        with patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}):
             for url in public_urls:
                 component.url_input = url
                 respx.get(url).mock(return_value=Response(200, json={"status": "ok"}))
@@ -462,7 +462,7 @@ class TestAPIRequestSSRFProtection:
         with (
             patch.dict(
                 os.environ,
-                {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true", "LANGFLOW_SSRF_ALLOWED_HOSTS": "internal.company.local"},
+                {"FLOW_SSRF_PROTECTION_ENABLED": "true", "FLOW_SSRF_ALLOWED_HOSTS": "internal.company.local"},
             ),
             respx.mock,
         ):
@@ -479,7 +479,7 @@ class TestAPIRequestSSRFProtection:
         with (
             patch.dict(
                 os.environ,
-                {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true", "LANGFLOW_SSRF_ALLOWED_HOSTS": "192.168.1.0/24"},
+                {"FLOW_SSRF_PROTECTION_ENABLED": "true", "FLOW_SSRF_ALLOWED_HOSTS": "192.168.1.0/24"},
             ),
             respx.mock,
         ):
@@ -493,7 +493,7 @@ class TestAPIRequestSSRFProtection:
         """Test that warn_only mode logs warnings instead of blocking."""
         component.url_input = "http://127.0.0.1:8080/admin"
 
-        with patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}), respx.mock:
+        with patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}), respx.mock:
             respx.get("http://127.0.0.1:8080/admin").mock(return_value=Response(200, json={"status": "ok"}))
 
             # In warn_only mode (default), should not raise but should log

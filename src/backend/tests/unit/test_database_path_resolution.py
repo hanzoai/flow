@@ -18,11 +18,11 @@ class TestDatabasePathResolution:
         from lfx.services.settings.base import Settings
 
         env_vars = {
-            "LANGFLOW_CONFIG_DIR": str(tmp_path),
-            "LANGFLOW_SAVE_DB_IN_CONFIG_DIR": "false",
+            "FLOW_CONFIG_DIR": str(tmp_path),
+            "FLOW_SAVE_DB_IN_CONFIG_DIR": "false",
         }
         # Remove DATABASE_URL from env to trigger path resolution
-        env = {k: v for k, v in os.environ.items() if k != "LANGFLOW_DATABASE_URL"}
+        env = {k: v for k, v in os.environ.items() if k != "FLOW_DATABASE_URL"}
         env.update(env_vars)
 
         with patch.dict(os.environ, env, clear=True):
@@ -41,11 +41,11 @@ class TestDatabasePathResolution:
         config_dir.mkdir()
 
         env_vars = {
-            "LANGFLOW_CONFIG_DIR": str(config_dir),
-            "LANGFLOW_SAVE_DB_IN_CONFIG_DIR": "true",
+            "FLOW_CONFIG_DIR": str(config_dir),
+            "FLOW_SAVE_DB_IN_CONFIG_DIR": "true",
         }
         # Remove DATABASE_URL from env to trigger path resolution
-        env = {k: v for k, v in os.environ.items() if k != "LANGFLOW_DATABASE_URL"}
+        env = {k: v for k, v in os.environ.items() if k != "FLOW_DATABASE_URL"}
         env.update(env_vars)
 
         with patch.dict(os.environ, env, clear=True):
@@ -69,10 +69,10 @@ class TestDatabasePathResolution:
             return original_import(name, *args, **kwargs)
 
         env_vars = {
-            "LANGFLOW_CONFIG_DIR": str(tmp_path),
-            "LANGFLOW_SAVE_DB_IN_CONFIG_DIR": "false",
+            "FLOW_CONFIG_DIR": str(tmp_path),
+            "FLOW_SAVE_DB_IN_CONFIG_DIR": "false",
         }
-        env = {k: v for k, v in os.environ.items() if k != "LANGFLOW_DATABASE_URL"}
+        env = {k: v for k, v in os.environ.items() if k != "FLOW_DATABASE_URL"}
         env.update(env_vars)
 
         with (
@@ -87,14 +87,14 @@ class TestDatabasePathResolution:
         assert str(lfx_path) in settings.database_url
 
     def test_explicit_database_url_env_var_takes_precedence(self, tmp_path):
-        """LANGFLOW_DATABASE_URL env var should take precedence over path resolution."""
+        """FLOW_DATABASE_URL env var should take precedence over path resolution."""
         from lfx.services.settings.base import Settings
 
         custom_url = "sqlite:///custom/path/test.db"
 
         with patch.dict(
             os.environ,
-            {"LANGFLOW_DATABASE_URL": custom_url, "LANGFLOW_CONFIG_DIR": str(tmp_path)},
+            {"FLOW_DATABASE_URL": custom_url, "FLOW_CONFIG_DIR": str(tmp_path)},
             clear=False,
         ):
             settings = Settings(config_dir=str(tmp_path))

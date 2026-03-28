@@ -77,7 +77,7 @@ class TestSettingsInitializationOrder:
 
         # Create .env file
         env_file = tmp_path / ".env.test"
-        env_file.write_text("LANGFLOW_SAVE_DB_IN_CONFIG_DIR=true\n")
+        env_file.write_text("FLOW_SAVE_DB_IN_CONFIG_DIR=true\n")
 
         # Step 1: Check settings not initialized
         assert is_settings_service_initialized() is False
@@ -89,7 +89,7 @@ class TestSettingsInitializationOrder:
         assert is_settings_service_initialized() is False
 
         # Step 4: Env var is available
-        assert os.environ.get("LANGFLOW_SAVE_DB_IN_CONFIG_DIR") == "true"
+        assert os.environ.get("FLOW_SAVE_DB_IN_CONFIG_DIR") == "true"
 
         # Step 5: Initialize settings
         settings = get_settings_service()
@@ -99,8 +99,8 @@ class TestSettingsInitializationOrder:
         assert settings is not None
 
         # Clean up
-        if "LANGFLOW_SAVE_DB_IN_CONFIG_DIR" in os.environ:
-            del os.environ["LANGFLOW_SAVE_DB_IN_CONFIG_DIR"]
+        if "FLOW_SAVE_DB_IN_CONFIG_DIR" in os.environ:
+            del os.environ["FLOW_SAVE_DB_IN_CONFIG_DIR"]
 
     def test_cli_check_pattern_success_case(self, tmp_path):
         """Test the CLI check pattern when settings are NOT initialized (success case)."""
@@ -113,7 +113,7 @@ class TestSettingsInitializationOrder:
         service_manager.services.clear()
 
         env_file = tmp_path / ".env.cli"
-        env_file.write_text("LANGFLOW_DATABASE_URL=sqlite:///./test.db\n")
+        env_file.write_text("FLOW_DATABASE_URL=sqlite:///./test.db\n")
 
         # Verify settings are not initialized
         assert is_settings_service_initialized() is False
@@ -126,11 +126,11 @@ class TestSettingsInitializationOrder:
             else:
                 # This is the success case - load the env file
                 load_dotenv(env_file, override=True)
-                assert os.environ.get("LANGFLOW_DATABASE_URL") == "sqlite:///./test.db"
+                assert os.environ.get("FLOW_DATABASE_URL") == "sqlite:///./test.db"
 
         # Clean up
-        if "LANGFLOW_DATABASE_URL" in os.environ:
-            del os.environ["LANGFLOW_DATABASE_URL"]
+        if "FLOW_DATABASE_URL" in os.environ:
+            del os.environ["FLOW_DATABASE_URL"]
 
     def test_cli_check_pattern_error_case(self, tmp_path):
         """Test the CLI check pattern when settings ARE initialized (error case)."""
@@ -146,7 +146,7 @@ class TestSettingsInitializationOrder:
         assert is_settings_service_initialized() is True
 
         env_file = tmp_path / ".env.cli"
-        env_file.write_text("LANGFLOW_DATABASE_URL=sqlite:///./test.db\n")
+        env_file.write_text("FLOW_DATABASE_URL=sqlite:///./test.db\n")
 
         # Simulate the CLI check pattern
         if env_file:
@@ -176,7 +176,7 @@ class TestSettingsInitializationOrder:
         get_settings_service()
 
         env_file = tmp_path / ".env.late"
-        env_file.write_text("LANGFLOW_DATABASE_URL=sqlite:///./test.db\n")
+        env_file.write_text("FLOW_DATABASE_URL=sqlite:///./test.db\n")
 
         # Now try to use the CLI pattern
         if env_file:
@@ -237,10 +237,10 @@ class TestCLISubprocessIntegration:
         env_file = tmp_path / "integration_test.env"
         env_file.write_text(
             f"""
-LANGFLOW_DATABASE_URL=sqlite:///{db_path}
-LANGFLOW_AUTO_SAVING=false
-LANGFLOW_AUTO_LOGIN=false
-LANGFLOW_LOG_LEVEL=ERROR
+FLOW_DATABASE_URL=sqlite:///{db_path}
+FLOW_AUTO_SAVING=false
+FLOW_AUTO_LOGIN=false
+FLOW_LOG_LEVEL=ERROR
         """.strip()
         )
 

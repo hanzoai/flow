@@ -27,7 +27,7 @@ class TestBuggyCode:
     def test_buggy_code_crashes_with_nullpool(self):
         """This test PROVES the bug exists.
 
-        When users set LANGFLOW_DB_CONNECTION_SETTINGS={"poolclass": "NullPool"},
+        When users set FLOW_DB_CONNECTION_SETTINGS={"poolclass": "NullPool"},
         the OLD code would crash with:
         TypeError: Pool.__init__() missing 1 required positional argument: 'creator'
         """

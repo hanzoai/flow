@@ -238,11 +238,11 @@ class JobQueueService(Service):
                     # User-initiated cancellation so we explicitly called task.cancel() above
                     await logger.adebug(f"Task for job_id {job_id} was successfully cancelled.")
                     # Re-raise with user cancellation message code
-                    exc.args = ("LANGFLOW_USER_CANCELLED",)
+                    exc.args = ("FLOW_USER_CANCELLED",)
                     raise
                 # System-initiated cancellation for other reasons
                 await logger.adebug(f"Task for job_id {job_id} was cancelled by system.")
-                exc.args = ("LANGFLOW_SYSTEM_CANCELLED",)
+                exc.args = ("FLOW_SYSTEM_CANCELLED",)
                 raise
             except Exception as exc:
                 await logger.aerror(f"Error in task for job_id {job_id} during cancellation: {exc}")

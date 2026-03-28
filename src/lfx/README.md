@@ -75,10 +75,10 @@ chat_output = cp.ChatOutput()
 
 Serve a Hanzo Flow workflow as a REST API.
 
-**Important:** You must set the `LANGFLOW_API_KEY` environment variable before running the serve command.
+**Important:** You must set the `FLOW_API_KEY` environment variable before running the serve command.
 
 ```bash
-export LANGFLOW_API_KEY=your-secret-key
+export FLOW_API_KEY=your-secret-key
 uv run lfx serve my_flow.json --port 8000
 ```
 
@@ -97,7 +97,7 @@ This creates a FastAPI server with your flow available at `/flows/{flow_id}/run`
 
 ```bash
 # Set API key (required)
-export LANGFLOW_API_KEY=your-secret-key
+export FLOW_API_KEY=your-secret-key
 
 # Start server
 uv run lfx serve simple_chat.json --host 0.0.0.0 --port 8000

@@ -139,7 +139,7 @@ def warn_about_future_cors_changes(settings):
     if using_defaults:
         logger.warning(
             "CORS: Using permissive defaults (all origins + credentials). "
-            "Set LANGFLOW_CORS_ORIGINS for production. Stricter defaults in v2.0."
+            "Set FLOW_CORS_ORIGINS for production. Stricter defaults in v2.0."
         )
 
 
@@ -331,7 +331,7 @@ def get_lifespan(*, fix_migration=False, version=None):
             from flow.__main__ import get_number_of_workers
             from flow.cli.progress import create_langflow_shutdown_progress
 
-            log_level = os.getenv("LANGFLOW_LOG_LEVEL", "info").lower()
+            log_level = os.getenv("FLOW_LOG_LEVEL", "info").lower()
             num_workers = get_number_of_workers(get_settings_service().settings.workers)
             shutdown_progress = create_langflow_shutdown_progress(
                 verbose=log_level == "debug", multiple_workers=num_workers > 1
@@ -493,7 +493,7 @@ def create_app():
 
         return await call_next(request)
 
-    if prome_port_str := os.environ.get("LANGFLOW_PROMETHEUS_PORT"):
+    if prome_port_str := os.environ.get("FLOW_PROMETHEUS_PORT"):
         # set here for create_app() entry point
         prome_port = int(prome_port_str)
         if prome_port > 0 or prome_port < MAX_PORT:

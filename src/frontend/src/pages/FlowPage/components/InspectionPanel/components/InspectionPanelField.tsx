@@ -7,7 +7,7 @@ import {
   CustomParameterLabel,
   getCustomParameterTitle,
 } from "@/customization/components/custom-parameter";
-import { LANGFLOW_AGENTIC_EXPERIENCE } from "@/customization/feature-flags";
+import { FLOW_AGENTIC_EXPERIENCE } from "@/customization/feature-flags";
 import { useIsAutoLogin } from "@/hooks/use-is-auto-login";
 import useAuthStore from "@/stores/authStore";
 import useFlowStore from "@/stores/flowStore";
@@ -154,7 +154,7 @@ export default function InspectionPanelField({
                 </ShadTooltip>
               )}
             </div>
-            {LANGFLOW_AGENTIC_EXPERIENCE &&
+            {FLOW_AGENTIC_EXPERIENCE &&
               data.node?.template[name]?.ai_enabled && (
                 <AssistantButton
                   compData={id}

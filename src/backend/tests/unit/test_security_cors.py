@@ -16,7 +16,7 @@ class TestCORSConfiguration:
 
     def test_default_cors_settings_current_behavior(self):
         """Test current CORS settings behavior (warns about security implications)."""
-        with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
+        with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"FLOW_CONFIG_DIR": temp_dir}):
             settings = Settings()
 
             # Current behavior: wildcard origins with credentials ENABLED (insecure)
@@ -31,7 +31,7 @@ class TestCORSConfiguration:
                 "WITH CREDENTIALS ENABLED! This allows any website to make authenticated requests "
                 "to your Langflow instance and potentially steal user credentials. "
                 "This will be changed to more secure defaults in v1.7. "
-                "Please configure LANGFLOW_CORS_ORIGINS with specific domains for production use.",
+                "Please configure FLOW_CORS_ORIGINS with specific domains for production use.",
                 UserWarning,
                 stacklevel=2,
             )
@@ -40,7 +40,7 @@ class TestCORSConfiguration:
     def test_default_cors_settings_secure_future(self):
         """Test future default CORS settings that will be secure (skip until v1.7)."""
         # This test represents the behavior we want in v1.7
-        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
+        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"FLOW_CONFIG_DIR": temp_dir}):
         #     settings = Settings()
         #     # Future secure defaults:
         #     assert settings.cors_origins == ["http://localhost:3000", "http://127.0.0.1:3000"]
@@ -55,8 +55,8 @@ class TestCORSConfiguration:
             patch.dict(
                 os.environ,
                 {
-                    "LANGFLOW_CONFIG_DIR": temp_dir,
-                    "LANGFLOW_CORS_ORIGINS": "https://app1.example.com,https://app2.example.com",
+                    "FLOW_CONFIG_DIR": temp_dir,
+                    "FLOW_CORS_ORIGINS": "https://app1.example.com,https://app2.example.com",
                 },
             ),
         ):
@@ -70,8 +70,8 @@ class TestCORSConfiguration:
             patch.dict(
                 os.environ,
                 {
-                    "LANGFLOW_CONFIG_DIR": temp_dir,
-                    "LANGFLOW_CORS_ORIGINS": "https://app.example.com",
+                    "FLOW_CONFIG_DIR": temp_dir,
+                    "FLOW_CORS_ORIGINS": "https://app.example.com",
                 },
             ),
         ):
@@ -85,9 +85,9 @@ class TestCORSConfiguration:
             patch.dict(
                 os.environ,
                 {
-                    "LANGFLOW_CONFIG_DIR": temp_dir,
-                    "LANGFLOW_CORS_ORIGINS": "*",
-                    "LANGFLOW_CORS_ALLOW_CREDENTIALS": "true",
+                    "FLOW_CONFIG_DIR": temp_dir,
+                    "FLOW_CORS_ORIGINS": "*",
+                    "FLOW_CORS_ALLOW_CREDENTIALS": "true",
                 },
             ),
         ):
@@ -113,9 +113,9 @@ class TestCORSConfiguration:
             patch.dict(
                 os.environ,
                 {
-                    "LANGFLOW_CONFIG_DIR": temp_dir,
-                    "LANGFLOW_CORS_ORIGINS": "https://app.example.com",
-                    "LANGFLOW_CORS_ALLOW_CREDENTIALS": "true",
+                    "FLOW_CONFIG_DIR": temp_dir,
+                    "FLOW_CORS_ORIGINS": "https://app.example.com",
+                    "FLOW_CORS_ALLOW_CREDENTIALS": "true",
                 },
             ),
         ):
@@ -318,7 +318,7 @@ class TestRefreshTokenSecurity:
         """Test current refresh token SameSite settings (warns about security)."""
         from lfx.services.settings.auth import AuthSettings
 
-        with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
+        with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"FLOW_CONFIG_DIR": temp_dir}):
             auth_settings = AuthSettings(CONFIG_DIR=temp_dir)
             # Current behavior: refresh token uses 'none' (allows cross-site)
             assert auth_settings.REFRESH_SAME_SITE == "none"  # Current: allows cross-site (less secure)
@@ -338,7 +338,7 @@ class TestRefreshTokenSecurity:
         """Test future secure refresh token SameSite settings (skip until v1.7)."""
         # Future secure behavior (uncomment in v1.7):
         # from flow.services.settings.auth import AuthSettings
-        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
+        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"FLOW_CONFIG_DIR": temp_dir}):
         #     auth_settings = AuthSettings(CONFIG_DIR=temp_dir)
         #     assert auth_settings.REFRESH_SAME_SITE == "lax"  # Secure default
         #     assert auth_settings.ACCESS_SAME_SITE == "lax"
@@ -446,7 +446,7 @@ class TestFutureSecureCORSBehavior:
     def test_future_secure_defaults(self):
         """Test that v1.7 will have secure CORS defaults."""
         # Future secure behavior (uncomment in v1.7):
-        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"LANGFLOW_CONFIG_DIR": temp_dir}):
+        # with tempfile.TemporaryDirectory() as temp_dir, patch.dict(os.environ, {"FLOW_CONFIG_DIR": temp_dir}):
         #     settings = Settings()
         #     # v1.7 secure defaults:
         #     assert settings.cors_origins == ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:7860"]
@@ -463,8 +463,8 @@ class TestFutureSecureCORSBehavior:
         #     patch.dict(
         #         os.environ,
         #         {
-        #             "LANGFLOW_CONFIG_DIR": temp_dir,
-        #             "LANGFLOW_CORS_ORIGINS": "*",
+        #             "FLOW_CONFIG_DIR": temp_dir,
+        #             "FLOW_CORS_ORIGINS": "*",
         #         },
         #     ),
         # ):
