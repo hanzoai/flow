@@ -22,7 +22,7 @@ from flow.services.database.models.transactions.model import TransactionTable
 from flow.services.database.models.user.model import User
 from flow.services.database.models.vertex_builds.model import VertexBuildTable
 from flow.services.store.utils import get_lf_version_from_pypi
-from flow.utils.constants import LANGFLOW_GLOBAL_VAR_HEADER_PREFIX
+from flow.utils.constants import FLOW_GLOBAL_VAR_HEADER_PREFIX
 
 if TYPE_CHECKING:
     from flow.services.chat.service import ChatService
@@ -421,8 +421,8 @@ def extract_global_variables_from_headers(headers) -> dict[str, str]:
     try:
         for header_name, header_value in headers.items():
             header_lower = header_name.lower()
-            if header_lower.startswith(LANGFLOW_GLOBAL_VAR_HEADER_PREFIX):
-                var_name = header_lower[len(LANGFLOW_GLOBAL_VAR_HEADER_PREFIX) :].upper()
+            if header_lower.startswith(FLOW_GLOBAL_VAR_HEADER_PREFIX):
+                var_name = header_lower[len(FLOW_GLOBAL_VAR_HEADER_PREFIX) :].upper()
                 variables[var_name] = header_value
     except Exception as exc:  # noqa: BLE001
         # Log the error but don't raise - we want to continue execution

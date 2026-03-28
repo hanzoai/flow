@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import type { AllNodeType } from "@/types/flow";
-import { LANGFLOW_SUPPORTED_TYPES } from "../../../constants/constants";
+import { HANZOFLOW_SUPPORTED_TYPES } from "../../../constants/constants";
 
 export const getNodesWithDefaultValue = (
   nodes: AllNodeType[],

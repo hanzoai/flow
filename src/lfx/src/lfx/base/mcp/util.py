@@ -82,7 +82,7 @@ ALLOWED_HEADERS = {
     "x-api-key",
     "x-auth-token",
     "x-custom-header",
-    "x-langflow-session",
+    "x-flow-session",
     "x-mcp-client",
     "x-requested-with",
 }

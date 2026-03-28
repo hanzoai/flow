@@ -48,7 +48,7 @@ def test_get_api_key_missing():
         patch.dict(os.environ, {}, clear=True),
         pytest.raises(
             ValueError,
-            match="LANGFLOW_API_KEY environment variable is not set",
+            match="FLOW_API_KEY environment variable is not set",
         ),
     ):
         get_api_key()
@@ -56,7 +56,7 @@ def test_get_api_key_missing():
 
 def test_get_api_key_present():
     """Test API key retrieval when set."""
-    with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
+    with patch.dict(os.environ, {"FLOW_API_KEY": "test-key-123"}):  # pragma: allowlist secret
         assert get_api_key() == "test-key-123"
 
 
@@ -99,7 +99,7 @@ def test_flow_meta():
 
 def test_create_multi_serve_app_single_flow(mock_graph, test_flow_meta):
     """Test creating app for single flow."""
-    with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key"}):  # pragma: allowlist secret
+    with patch.dict(os.environ, {"FLOW_API_KEY": "test-key"}):  # pragma: allowlist secret
         app = create_multi_serve_app(
             root_dir=Path("/tmp"),
             graphs={"test-flow-id": mock_graph},
@@ -136,7 +136,7 @@ def test_create_multi_serve_app_multiple_flows(mock_graph, test_flow_meta):
         description="Second flow",
     )
 
-    with patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key"}):  # pragma: allowlist secret
+    with patch.dict(os.environ, {"FLOW_API_KEY": "test-key"}):  # pragma: allowlist secret
         app = create_multi_serve_app(
             root_dir=Path("/tmp"),
             graphs={"test-flow-id": mock_graph, "flow-2": mock_graph},
@@ -188,7 +188,7 @@ def test_serve_command_json_file():
         with (
             patch("lfx.cli.commands.load_graph_from_path") as mock_load,
             patch("lfx.cli.commands.uvicorn.Server.serve", new=AsyncMock(return_value=None)) as mock_uvicorn,
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"FLOW_API_KEY": "test-key"}),  # pragma: allowlist secret
         ):
             import typer
             from lfx.cli.commands import serve_command
@@ -246,7 +246,7 @@ def test_serve_command_inline_json():
     with (
         patch("lfx.cli.commands.load_graph_from_path") as mock_load,
         patch("lfx.cli.commands.uvicorn.Server.serve", new=AsyncMock(return_value=None)) as mock_uvicorn,
-        patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-key"}),  # pragma: allowlist secret
+        patch.dict(os.environ, {"FLOW_API_KEY": "test-key"}),  # pragma: allowlist secret
     ):
         import typer
         from lfx.cli.commands import serve_command

@@ -215,42 +215,42 @@ class TestConfigure:
                 if isinstance(handler, logging.handlers.RotatingFileHandler):
                     logging.root.removeHandler(handler)
 
-    @patch.dict(os.environ, {"LANGFLOW_LOG_LEVEL": "WARNING"})
+    @patch.dict(os.environ, {"FLOW_LOG_LEVEL": "WARNING"})
     def test_configure_env_variable_override(self):
-        """Test configure() respects LANGFLOW_LOG_LEVEL environment variable."""
+        """Test configure() respects FLOW_LOG_LEVEL environment variable."""
         configure()  # Should use WARNING from env var
 
         config = structlog._config
         assert config is not None
         # The wrapper_class should be configured for WARNING level
 
-    @patch.dict(os.environ, {"LANGFLOW_LOG_FILE": "/tmp/test.log"})  # noqa: S108
+    @patch.dict(os.environ, {"FLOW_LOG_FILE": "/tmp/test.log"})  # noqa: S108
     def test_configure_env_log_file_override(self):
-        """Test configure() respects LANGFLOW_LOG_FILE environment variable."""
+        """Test configure() respects FLOW_LOG_FILE environment variable."""
         configure()
 
         config = structlog._config
         assert config is not None
 
-    @patch.dict(os.environ, {"LANGFLOW_LOG_ENV": "container"})
+    @patch.dict(os.environ, {"FLOW_LOG_ENV": "container"})
     def test_configure_env_log_env_override(self):
-        """Test configure() respects LANGFLOW_LOG_ENV environment variable."""
+        """Test configure() respects FLOW_LOG_ENV environment variable."""
         configure()
 
         config = structlog._config
         assert config is not None
 
-    @patch.dict(os.environ, {"LANGFLOW_LOG_FORMAT": "custom"})
+    @patch.dict(os.environ, {"FLOW_LOG_FORMAT": "custom"})
     def test_configure_env_log_format_override(self):
-        """Test configure() respects LANGFLOW_LOG_FORMAT environment variable."""
+        """Test configure() respects FLOW_LOG_FORMAT environment variable."""
         configure()
 
         config = structlog._config
         assert config is not None
 
-    @patch.dict(os.environ, {"LANGFLOW_PRETTY_LOGS": "false"})
+    @patch.dict(os.environ, {"FLOW_PRETTY_LOGS": "false"})
     def test_configure_env_pretty_logs_disabled(self):
-        """Test configure() respects LANGFLOW_PRETTY_LOGS=false."""
+        """Test configure() respects FLOW_PRETTY_LOGS=false."""
         configure()
 
         config = structlog._config
