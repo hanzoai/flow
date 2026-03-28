@@ -6,7 +6,7 @@ import platform
 
 from lfx.log.logger import logger
 
-LANGFLOW_DATABASE_URL = "LANGFLOW_DATABASE_URL"
+FLOW_DATABASE_URL = "FLOW_DATABASE_URL"
 POSTGRESQL_PREFIXES = ("postgresql", "postgres")
 
 
@@ -22,7 +22,7 @@ def configure_windows_postgres_event_loop(source: str | None = None) -> bool:
     if platform.system() != "Windows":
         return False
 
-    db_url = os.environ.get(LANGFLOW_DATABASE_URL, "")
+    db_url = os.environ.get(FLOW_DATABASE_URL, "")
     if not db_url or not any(db_url.startswith(prefix) for prefix in POSTGRESQL_PREFIXES):
         return False
 

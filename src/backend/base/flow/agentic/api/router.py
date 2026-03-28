@@ -24,7 +24,7 @@ from flow.agentic.services.assistant_service import (
 )
 from flow.agentic.services.flow_executor import execute_flow_file
 from flow.agentic.services.flow_types import (
-    LANGFLOW_ASSISTANT_FLOW,
+    FLOW_ASSISTANT_FLOW,
     MAX_VALIDATION_RETRIES,
 )
 from flow.agentic.services.provider_service import (
@@ -257,10 +257,10 @@ async def assist(
     """Chat with the Langflow Assistant."""
     ctx = await _resolve_assistant_context(request, current_user.id, session)
 
-    logger.info(f"Executing {LANGFLOW_ASSISTANT_FLOW} with {ctx.provider}/{ctx.model_name}")
+    logger.info(f"Executing {FLOW_ASSISTANT_FLOW} with {ctx.provider}/{ctx.model_name}")
 
     return await execute_flow_with_validation(
-        flow_filename=LANGFLOW_ASSISTANT_FLOW,
+        flow_filename=FLOW_ASSISTANT_FLOW,
         input_value=request.input_value or "",
         global_variables=ctx.global_vars,
         max_retries=ctx.max_retries,
@@ -283,7 +283,7 @@ async def assist_stream(
 
     return StreamingResponse(
         execute_flow_with_validation_streaming(
-            flow_filename=LANGFLOW_ASSISTANT_FLOW,
+            flow_filename=FLOW_ASSISTANT_FLOW,
             input_value=request.input_value or "",
             global_variables=ctx.global_vars,
             max_retries=ctx.max_retries,

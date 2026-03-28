@@ -22,7 +22,7 @@ export const useRefreshAccessToken: useMutationFunctionType<
 
   async function refreshAccess(): Promise<IRefreshAccessToken> {
     const res = await api.post<IRefreshAccessToken>(`${getURL("REFRESH")}`);
-    cookieManager.set(LANGFLOW_REFRESH_TOKEN, res.data.refresh_token);
+    cookieManager.set(HANZOFLOW_REFRESH_TOKEN, res.data.refresh_token);
 
     return res.data;
   }

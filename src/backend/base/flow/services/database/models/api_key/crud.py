@@ -82,9 +82,9 @@ async def delete_api_key(session: AsyncSession, api_key_id: UUID, user_id: UUID)
 async def check_key(session: AsyncSession, api_key: str) -> User | None:
     """Check if the API key is valid.
 
-    Validates API keys based on the LANGFLOW_API_KEY_SOURCE setting:
+    Validates API keys based on the FLOW_API_KEY_SOURCE setting:
     - 'db': Validates against database-stored API keys (default)
-    - 'env': Validates against the LANGFLOW_API_KEY environment variable,
+    - 'env': Validates against the FLOW_API_KEY environment variable,
              falls back to database if env validation fails
     """
     settings_service = get_settings_service()
@@ -142,11 +142,11 @@ async def _check_key_from_env(session: AsyncSession, api_key: str, settings_serv
     """Validate API key against the environment variable.
 
     When API_KEY_SOURCE='env', the x-api-key header is validated against
-    LANGFLOW_API_KEY environment variable. If valid, returns the superuser for authorization.
+    FLOW_API_KEY environment variable. If valid, returns the superuser for authorization.
     """
     from flow.services.database.models.user.crud import get_user_by_username
 
-    env_api_key = os.getenv("LANGFLOW_API_KEY")
+    env_api_key = os.getenv("FLOW_API_KEY")
     if not env_api_key:
         return None
 

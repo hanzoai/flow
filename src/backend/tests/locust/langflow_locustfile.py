@@ -17,7 +17,7 @@ Usage:
     locust -f locustfile.py --host http://localhost:7860 --worker --master-host=localhost
 
 Environment Variables:
-    - LANGFLOW_HOST: Base URL for the Langflow server (default: http://localhost:7860)
+    - FLOW_HOST: Base URL for the Langflow server (default: http://localhost:7860)
     - FLOW_ID: Flow ID to test (required)
     - API_KEY: API key for authentication (required)
     - MIN_WAIT: Minimum wait time between requests in ms (default: 2000)
@@ -54,13 +54,13 @@ MESSAGE_WEIGHTS = [("simple", 40), ("realistic", 25), ("medium", 20), ("minimal"
 
 # Enhanced error logging setup
 ERROR_LOG_FILE = None
-LANGFLOW_LOG_FILE = None
+FLOW_LOG_FILE = None
 DETAILED_ERRORS = []
 
 
 def setup_error_logging():
     """Set up detailed error logging for the load test."""
-    global ERROR_LOG_FILE, LANGFLOW_LOG_FILE
+    global ERROR_LOG_FILE, FLOW_LOG_FILE
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -86,13 +86,13 @@ def setup_error_logging():
 
     for log_path in langflow_log_paths:
         if Path(log_path).exists():
-            LANGFLOW_LOG_FILE = log_path
+            FLOW_LOG_FILE = log_path
             break
 
     print("📝 Error logging setup:")
     print(f"   • Detailed errors: {ERROR_LOG_FILE}")
-    if LANGFLOW_LOG_FILE:
-        print(f"   • Langflow logs: {LANGFLOW_LOG_FILE}")
+    if FLOW_LOG_FILE:
+        print(f"   • Langflow logs: {FLOW_LOG_FILE}")
     else:
         print("   • Langflow logs: Not found (will monitor common locations)")
 
@@ -176,12 +176,12 @@ def save_error_summary():
 
 def capture_langflow_logs():
     """Capture recent Langflow logs if available."""
-    if not LANGFLOW_LOG_FILE or not Path(LANGFLOW_LOG_FILE).exists():
+    if not FLOW_LOG_FILE or not Path(FLOW_LOG_FILE).exists():
         return None
 
     try:
         # Read last 1000 lines of Langflow log
-        with open(LANGFLOW_LOG_FILE) as f:
+        with open(FLOW_LOG_FILE) as f:
             lines = f.readlines()
             recent_lines = lines[-1000:] if len(lines) > 1000 else lines
 
@@ -190,7 +190,7 @@ def capture_langflow_logs():
 
         with open(captured_log_file, "w") as f:
             f.write("# Langflow server logs captured during load test\n")
-            f.write(f"# Original log file: {LANGFLOW_LOG_FILE}\n")
+            f.write(f"# Original log file: {FLOW_LOG_FILE}\n")
             f.write(f"# Capture time: {datetime.now().isoformat()}\n")
             f.write(f"# Lines captured: {len(recent_lines)}\n\n")
             f.writelines(recent_lines)
@@ -363,7 +363,7 @@ class BaseLangflowUser(FastHttpUser):
     REQUEST_TIMEOUT = float(os.getenv("REQUEST_TIMEOUT", "30.0"))
 
     # Use the host provided by environment variable or default
-    host = os.getenv("LANGFLOW_HOST", "http://localhost:7860")
+    host = os.getenv("FLOW_HOST", "http://localhost:7860")
 
     def on_start(self):
         """Called when a user starts before any task is scheduled."""
