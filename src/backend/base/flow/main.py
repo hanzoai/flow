@@ -2,9 +2,10 @@ import asyncio
 import json
 import os
 import re
+import sys
 import tempfile
 import warnings
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -38,6 +39,8 @@ from flow.initial_setup.setup import (
     sync_flows_from_fs,
 )
 from flow.middleware import ContentSizeLimitMiddleware
+from flow.plugin_routes import load_plugin_routes
+from flow.services.database.service import UnsupportedPostgreSQLVersionError
 from flow.services.deps import (
     get_queue_service,
     get_service,
@@ -315,6 +318,18 @@ def get_lifespan(*, fix_migration=False, version=None):
             yield
         except asyncio.CancelledError:
             await logger.adebug("Lifespan received cancellation signal")
+        except UnsupportedPostgreSQLVersionError:
+            # Normally caught by the pre-flight check in __main__.py
+            # before the server starts.  If we get here anyway (e.g.
+            # direct uvicorn invocation via ``make backend``), exit
+            # immediately and tell the parent (reloader) to stop.
+            import signal
+
+            sys.stdout.flush()
+            sys.stderr.flush()
+            with suppress(ProcessLookupError, PermissionError):
+                os.kill(os.getppid(), signal.SIGTERM)
+            os._exit(3)
         except Exception as exc:
             if "hanzoflow migration --fix" not in str(exc):
                 logger.exception(exc)
@@ -517,6 +532,9 @@ def create_app():
     app.include_router(router)
     app.include_router(health_check_router)
     app.include_router(log_router)
+
+    # Discover and register additional routers from plugins (langflow.plugins entry-point)
+    load_plugin_routes(app)
 
     @app.exception_handler(Exception)
     async def exception_handler(_request: Request, exc: Exception):
