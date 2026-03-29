@@ -743,7 +743,12 @@ async def upload_file(
     """Upload flows from a file."""
     contents = await file.read()
     data = orjson.loads(contents)
+
     flow_list = FlowListCreate(**data) if "flows" in data else FlowListCreate(flows=[FlowCreate(**data)])
+
+    # TODO: Full-version import is planned as a follow-up feature.
+    # When implemented, extract raw flow dicts here to read embedded "version"
+    # arrays and create FlowVersion entries for each imported flow.
 
     try:
         flow_reads = []
@@ -811,6 +816,9 @@ async def download_multiple_file(
     db: DbSession,
 ):
     """Download all flows as a zip file."""
+    # TODO: Full-version download (include_version parameter) is planned as a follow-up feature.
+    # When implemented, add an include_version: bool = False parameter and embed version
+    # entries in each flow dict using get_flow_version_list and strip_version_data.
     flows = (await db.exec(select(Flow).where(and_(Flow.user_id == user.id, Flow.id.in_(flow_ids))))).all()  # type: ignore[attr-defined]
 
     if not flows:

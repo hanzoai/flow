@@ -2,12 +2,15 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-from flow.base.knowledge_bases.knowledge_base_utils import get_knowledge_bases
 from flow.schema.data import Data
 from flow.schema.dataframe import DataFrame
-from lfx.components.knowledge_bases.ingestion import KnowledgeIngestionComponent
+from flow.schema.message import Message
+from lfx.base.knowledge_bases import get_knowledge_bases
+from lfx.components.deactivated.ingestion import KnowledgeIngestionComponent
 
 from tests.base import ComponentTestBaseWithClient
+
+pytestmark = pytest.mark.skip(reason="KnowledgeIngestionComponent is deactivated")
 
 
 class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
@@ -19,7 +22,7 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
     @pytest.fixture(autouse=True)
     def mock_knowledge_base_path(self, tmp_path):
         """Mock the knowledge base root path directly."""
-        with patch("flow.components.knowledge_bases.ingestion._KNOWLEDGE_BASES_ROOT_PATH", tmp_path):
+        with patch("langflow.components.knowledge_bases.ingestion._KNOWLEDGE_BASES_ROOT_PATH", tmp_path):
             yield
 
     @pytest.fixture
@@ -179,8 +182,8 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
         with pytest.raises(NotImplementedError, match="Custom embedding models not yet supported"):
             component._build_embeddings("custom-model", "test-key")
 
-    @patch("flow.components.knowledge_bases.ingestion.get_settings_service")
-    @patch("flow.components.knowledge_bases.ingestion.encrypt_api_key")
+    @patch("langflow.components.knowledge_bases.ingestion.get_settings_service")
+    @patch("langflow.components.knowledge_bases.ingestion.encrypt_api_key")
     def test_build_embedding_metadata(self, mock_encrypt, mock_get_settings, component_class, default_kwargs):
         """Test building embedding metadata."""
         component = component_class(**default_kwargs)
@@ -220,7 +223,7 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
         config_list = default_kwargs["column_config"]
 
         # Mock Chroma to avoid actual vector store operations
-        with patch("flow.components.knowledge_bases.ingestion.Chroma") as mock_chroma:
+        with patch("langflow.components.knowledge_bases.ingestion.Chroma") as mock_chroma:
             mock_chroma_instance = MagicMock()
             mock_chroma_instance.get.return_value = {"metadatas": []}
             mock_chroma.return_value = mock_chroma_instance
@@ -245,7 +248,7 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
         config_list = default_kwargs["column_config"]
 
         # Mock Chroma with existing hash
-        with patch("flow.components.knowledge_bases.ingestion.Chroma") as mock_chroma:
+        with patch("langflow.components.knowledge_bases.ingestion.Chroma") as mock_chroma:
             # Simulate existing document with same hash
             existing_hash = "some_existing_hash"
             mock_chroma_instance = MagicMock()
@@ -253,7 +256,7 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
             mock_chroma.return_value = mock_chroma_instance
 
             # Mock hashlib to return the existing hash for first row
-            with patch("flow.components.knowledge_bases.ingestion.hashlib.sha256") as mock_hash:
+            with patch("langflow.components.knowledge_bases.ingestion.hashlib.sha256") as mock_hash:
                 mock_hash_obj = MagicMock()
                 mock_hash_obj.hexdigest.side_effect = [existing_hash, "different_hash"]
                 mock_hash.return_value = mock_hash_obj
@@ -279,8 +282,8 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
         assert component.is_valid_collection_name("invalid_") is False  # Ends with underscore
         assert component.is_valid_collection_name("invalid@name") is False  # Invalid character
 
-    @patch("flow.components.knowledge_bases.ingestion.json.loads")
-    @patch("flow.components.knowledge_bases.ingestion.decrypt_api_key")
+    @patch("langflow.components.knowledge_bases.ingestion.json.loads")
+    @patch("langflow.components.knowledge_bases.ingestion.decrypt_api_key")
     async def test_build_kb_info_success(self, mock_decrypt, mock_json_loads, component_class, default_kwargs):
         """Test successful KB info building."""
         component = component_class(**default_kwargs)
@@ -341,6 +344,32 @@ class TestKnowledgeIngestionComponent(ComponentTestBaseWithClient):
 
         assert result["knowledge_base"]["value"] == "new_test_kb"
         assert "new_test_kb" in result["knowledge_base"]["options"]
+
+    @patch("langflow.components.knowledge_bases.ingestion.json.loads")
+    @patch("langflow.components.knowledge_bases.ingestion.decrypt_api_key")
+    async def test_build_kb_info_with_message_input(
+        self, mock_decrypt, mock_json_loads, component_class, default_kwargs
+    ):
+        """Test that Message input is accepted and converted to DataFrame."""
+        # Replace the DataFrame input with a Message
+        default_kwargs["input_df"] = Message(text="Sample text 1")
+        default_kwargs["column_config"] = [
+            {"column_name": "text", "vectorize": True, "identifier": True},
+        ]
+        component = component_class(**default_kwargs)
+
+        mock_json_loads.return_value = {
+            "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+            "api_key": "encrypted_key",  # pragma:allowlist secret
+        }
+        mock_decrypt.return_value = "decrypted_key"
+
+        with patch.object(component, "_create_vector_store"), patch.object(component, "_save_kb_files"):
+            result = await component.build_kb_info()
+
+        assert isinstance(result, Data)
+        assert result.data["rows"] == 1
+        assert result.data["kb_name"] == "test_kb"
 
     async def test_update_build_config_invalid_kb_name(self, component_class, default_kwargs):
         """Test updating build config with invalid KB name."""

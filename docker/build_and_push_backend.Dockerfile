@@ -55,7 +55,8 @@ RUN apt-get update \
         xz-utils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/uv
+COPY --from=builder /usr/local/bin/uvx /usr/local/bin/uvx
 # Install Node.js (required for npx-based MCP stdio servers)
 RUN ARCH=$(dpkg --print-architecture) \
     && if [ "$ARCH" = "amd64" ]; then NODE_ARCH="x64"; \
@@ -78,7 +79,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Create home directory and ensure proper ownership
 # The user needs write access to /app/data (home) and /app (workdir)
-RUN mkdir -p /app/data && chown -R 1000:0 /app/data && chown -R 1000:0 /app
+# Note: .venv is already owned by 1000:0 via COPY --chown above, so no recursive chown needed
+RUN mkdir -p /app/data && chown -R 1000:0 /app/data && chown 1000:0 /app
 
 LABEL org.opencontainers.image.title=langflow-backend
 LABEL org.opencontainers.image.authors=['Langflow']
