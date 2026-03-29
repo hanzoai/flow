@@ -284,13 +284,13 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
     # Mock the cancel_flow_build function to raise an unexpected exception
     import flow.api.v1.chat
 
-    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_error(*_args, **_kwargs):
         msg = "Unexpected error during cancellation"
         raise RuntimeError(msg)
 
-    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
+    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
 
     try:
         # Try to cancel the build - should return 500 Internal Server Error
@@ -303,7 +303,7 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
         assert "Unexpected error during cancellation" in response_data["detail"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -320,12 +320,12 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
     # Mock the cancel_flow_build function to simulate a successful cancellation
     import flow.api.v1.chat
 
-    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
 
     async def mock_successful_cancel_flow_build(*_args, **_kwargs):
         return True  # Return True to indicate successful cancellation
 
-    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
+    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return success)
@@ -340,7 +340,7 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
         assert "cancelled successfully" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -370,12 +370,12 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
     # The import path in monkeypatch should match exactly how it's imported in the application
     import flow.api.v1.chat
 
-    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build(*_args, **_kwargs):
         return False  # Return False to indicate cancellation failure
 
-    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
+    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return failure but success=False)
@@ -390,7 +390,7 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
         assert "Failed to cancel" in response_data["message"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -409,13 +409,13 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
 
     import flow.api.v1.chat
 
-    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_cancelled_error(*_args, **_kwargs):
         msg = "Task cancellation failed"
         raise asyncio.CancelledError(msg)
 
-    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
+    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
 
     try:
         # Try to cancel the build - should return failure when CancelledError is raised
@@ -431,4 +431,80 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
         assert "failed to cancel" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+
+
+@pytest.mark.benchmark
+async def test_build_public_tmp_ignores_data_parameter(client, json_memory_chatbot_no_llm, logged_in_headers):
+    """Test that build_public_tmp endpoint silently ignores data parameter for security.
+
+    Security Test: Verifies that when a user attempts to provide custom flow data
+    to the public flow endpoint, FastAPI silently ignores the extra parameter and
+    the endpoint functions normally using the stored flow data from the database.
+    """
+    # Create a flow
+    flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
+
+    # Make the flow public
+    response = await client.patch(
+        f"api/v1/flows/{flow_id}",
+        json={"access_type": "PUBLIC"},
+        headers=logged_in_headers,
+    )
+    assert response.status_code == codes.OK
+
+    # Create malicious flow data with different structure
+    malicious_data = {"nodes": [{"id": "malicious", "data": {"type": "CustomComponent"}}], "edges": []}
+
+    # Set a client_id cookie
+    client.cookies.set("client_id", "test-security-client-123")
+
+    # Attempt to build with malicious data - FastAPI will silently ignore it
+    response = await client.post(
+        f"api/v1/build_public_tmp/{flow_id}/flow",
+        json={
+            "inputs": {"session": "test_session"},
+            "data": malicious_data,  # This will be silently ignored by FastAPI
+        },
+        headers={"Content-Type": "application/json"},
+    )
+
+    # Verify the request succeeded - the data parameter is simply ignored
+    assert response.status_code == codes.OK
+    response_data = response.json()
+    assert "job_id" in response_data
+
+
+@pytest.mark.benchmark
+async def test_build_public_tmp_without_data_parameter(client, json_memory_chatbot_no_llm, logged_in_headers):
+    """Test that build_public_tmp endpoint works without data parameter.
+
+    Security Test: Verifies that when no data parameter is provided, the endpoint
+    works normally and returns a job_id. This proves the data parameter is optional
+    and the stored flow definition is always used.
+    """
+    # Create a flow
+    flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
+
+    # Make the flow public
+    response = await client.patch(
+        f"api/v1/flows/{flow_id}",
+        json={"access_type": "PUBLIC"},
+        headers=logged_in_headers,
+    )
+    assert response.status_code == codes.OK
+
+    # Set a client_id cookie
+    client.cookies.set("client_id", "test-no-data-client")
+
+    # Build without providing data parameter
+    response = await client.post(
+        f"api/v1/build_public_tmp/{flow_id}/flow",
+        json={"inputs": {"session": "test_session"}},
+        headers={"Content-Type": "application/json"},
+    )
+
+    # Verify the request succeeded
+    assert response.status_code == codes.OK
+    response_data = response.json()
+    assert "job_id" in response_data
