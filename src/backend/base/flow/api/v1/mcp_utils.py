@@ -36,7 +36,7 @@ MCP_SERVERS_FILE = "_mcp_servers"
 
 # Create context variables
 current_user_ctx: ContextVar[User] = ContextVar("current_user_ctx")
-# Carries per-request variables injected via HTTP headers (e.g., X-Langflow-Global-Var-*)
+# Carries per-request variables injected via HTTP headers (e.g., X-Flow-Global-Var-*)
 current_request_variables_ctx: ContextVar[dict[str, str] | None] = ContextVar(
     "current_request_variables_ctx", default=None
 )
