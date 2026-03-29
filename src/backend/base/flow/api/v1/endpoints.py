@@ -447,7 +447,7 @@ async def _run_flow_internal(
     if flow is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Flow not found")
 
-    # Extract request-level variables from headers with prefix X-LANGFLOW-GLOBAL-VAR-*
+    # Extract request-level variables from headers with prefix X-FLOW-GLOBAL-VAR-*
     request_variables = extract_global_variables_from_headers(http_request.headers)
 
     # Merge request variables with existing context
@@ -581,7 +581,7 @@ async def simplified_run_flow(
         - Tracks execution time and success/failure via telemetry
         - Handles graceful client disconnection in streaming mode
         - Provides detailed error handling with appropriate HTTP status codes
-        - Extracts global variables from HTTP headers with prefix X-LANGFLOW-GLOBAL-VAR-*
+        - Extracts global variables from HTTP headers with prefix X-FLOW-GLOBAL-VAR-*
         - Merges extracted variables with the context parameter as "request_variables"
         - In streaming mode, uses EventManager to handle events:
             - "add_message": New messages during execution
@@ -641,7 +641,7 @@ async def simplified_run_flow_session(
         - Tracks execution time and success/failure via telemetry
         - Handles graceful client disconnection in streaming mode
         - Provides detailed error handling with appropriate HTTP status codes
-        - Extracts global variables from HTTP headers with prefix X-LANGFLOW-GLOBAL-VAR-*
+        - Extracts global variables from HTTP headers with prefix X-FLOW-GLOBAL-VAR-*
         - Merges extracted variables with the context parameter as "request_variables"
         - In streaming mode, uses EventManager to handle events:
             - "add_message": New messages during execution

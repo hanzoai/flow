@@ -17,6 +17,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from flow.services.auth.utils import get_current_active_user, get_current_active_user_mcp
 from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
 from flow.services.database.models.message.model import MessageTable
 from flow.services.database.models.transactions.model import TransactionTable
 from flow.services.database.models.user.model import User
@@ -68,11 +69,29 @@ def has_api_terms(word: str):
     return "api" in word and ("key" in word or ("token" in word and "tokens" not in word))
 
 
+def _get_provider_from_template(template: dict) -> str | None:
+    """Return provider name from template's model field, if any."""
+    model_field = template.get("model")
+    if not isinstance(model_field, dict):
+        return None
+    raw = model_field.get("value")
+    if isinstance(raw, list) and len(raw) > 0 and isinstance(raw[0], dict):
+        return raw[0].get("provider")
+    return None
+
+
 def remove_api_keys(flow: dict):
     """Remove api keys from flow data."""
     for node in flow.get("data", {}).get("nodes", []):
-        node_data = node.get("data").get("node")
-        template = node_data.get("template")
+        node_data = node.get("data")
+        if not isinstance(node_data, dict):
+            continue
+        node_inner = node_data.get("node")
+        if not isinstance(node_inner, dict):
+            continue
+        template = node_inner.get("template")
+        if not isinstance(template, dict):
+            continue
         for value in template.values():
             if isinstance(value, dict) and "name" in value and has_api_terms(value["name"]) and value.get("password"):
                 value["value"] = None
@@ -327,6 +346,10 @@ async def cascade_delete_flow(session: AsyncSession, flow_id: uuid.UUID) -> None
         await session.exec(delete(MessageTable).where(MessageTable.flow_id == flow_id))
         await session.exec(delete(TransactionTable).where(TransactionTable.flow_id == flow_id))
         await session.exec(delete(VertexBuildTable).where(VertexBuildTable.flow_id == flow_id))
+        # Explicit delete despite FK CASCADE — SQLite doesn't enforce FK cascades
+        # by default (requires PRAGMA foreign_keys = ON), and this function follows
+        # the existing pattern of explicitly deleting all child records.
+        await session.exec(delete(FlowVersion).where(FlowVersion.flow_id == flow_id))
         await session.exec(delete(Flow).where(Flow.id == flow_id))
     except Exception as e:
         msg = f"Unable to cascade delete flow: {flow_id}"
@@ -403,7 +426,7 @@ async def verify_public_flow_and_get_user(flow_id: uuid.UUID, client_id: str | N
 
 
 def extract_global_variables_from_headers(headers) -> dict[str, str]:
-    """Extract global variables from HTTP headers with prefix X-LANGFLOW-GLOBAL-VAR-*.
+    """Extract global variables from HTTP headers with prefix X-FLOW-GLOBAL-VAR-*.
 
     Args:
         headers: HTTP headers object (e.g., from FastAPI Request.headers)
@@ -412,7 +435,7 @@ def extract_global_variables_from_headers(headers) -> dict[str, str]:
         Dictionary mapping variable names (uppercase) to their values
 
     Example:
-        headers = {"X-LANGFLOW-GLOBAL-VAR-API-KEY": "secret", "Content-Type": "application/json"}
+        headers = {"X-FLOW-GLOBAL-VAR-API-KEY": "secret", "Content-Type": "application/json"}
         result = extract_global_variables_from_headers(headers)
         # Returns: {"API_KEY": "secret"}
     """
