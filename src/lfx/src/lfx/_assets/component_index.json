@@ -61059,7 +61059,7 @@
               "dependencies": [
                 {
                   "name": "orjson",
-                  "version": "3.11.7"
+                  "version": "3.11.8"
                 },
                 {
                   "name": "lfx",
@@ -69501,7 +69501,7 @@
               "dependencies": [
                 {
                   "name": "orjson",
-                  "version": "3.11.7"
+                  "version": "3.11.8"
                 },
                 {
                   "name": "pandas",
@@ -77096,7 +77096,7 @@
               "dependencies": [
                 {
                   "name": "orjson",
-                  "version": "3.11.7"
+                  "version": "3.11.8"
                 },
                 {
                   "name": "fastapi",
@@ -117836,6 +117836,6 @@
     "num_components": 354,
     "num_modules": 97
   },
-  "sha256": "9c529ea66b60e8d3faa8972a4c123df1cc9ed66b32c3b74fac7d22fed00b7c74",
+  "sha256": "02f57aa656a8b35375b6ad34d68e4a054f582e7fece325ee538df9d183044bc7",
   "version": "0.4.0"
 }
