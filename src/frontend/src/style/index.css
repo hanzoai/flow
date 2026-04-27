@@ -206,25 +206,26 @@
   }
 
   .dark {
-    --foreground: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --background: 240 6% 10%; /* hsl(240, 6%, 10%) */
-    --muted: 240 4% 16%; /* hsl(240, 4%, 16%) */
-    --muted-foreground: 240 5% 65%; /* hsl(240, 5%, 65%) */
-    --card: 240 6% 10%; /* hsl(240, 6%, 10%) */
-    --card-foreground: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --popover: 240 6% 10%; /* hsl(240, 6%, 10%) */
-    --popover-foreground: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --border: 240 5% 26%; /* hsl(240, 5%, 26%) */
-    --input: 240 5% 34%; /* hsl(240, 5%, 34%) */
-    --primary-foreground: 0 0% 0%; /* hsl(0, 0%, 0%) */
-    --primary: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --secondary: 0 0% 0%; /* hsl(0, 0%, 0%) */
-    --secondary-foreground: 240 6% 90%; /* hsl(240, 6%, 90%) */
-    --accent: 240 4% 16%; /* hsl(240, 4%, 16%) */
-    --accent-foreground: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --destructive: 0 84% 60%; /* hsl(0, 84%, 60%) */
-    --destructive-foreground: 0 0% 100%; /* hsl(0, 0%, 100%) */
-    --ring: 0 0% 100%; /* hsl(0, 0%, 100%) */
+    /* Hanzo dark palette */
+    --foreground: 0 0% 95%;
+    --background: 222 47% 5%;
+    --muted: 222 30% 12%;
+    --muted-foreground: 215 16% 56%;
+    --card: 222 47% 7%;
+    --card-foreground: 0 0% 95%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 0 0% 95%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --primary-foreground: 222 47% 9%;
+    --primary: 0 0% 95%;
+    --secondary: 222 30% 18%;
+    --secondary-foreground: 0 0% 95%;
+    --accent: 222 30% 18%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 215 16% 56%;
     --primary-hover: 240 6% 90%; /* hsl(240, 6%, 90%) */
     --secondary-hover: 240 4% 16%; /* hsl(240, 4%, 16%) */
     --placeholder-foreground: 240 4% 46%; /* hsl(240, 4%, 46%) */
