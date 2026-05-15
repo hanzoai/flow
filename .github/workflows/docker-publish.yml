@@ -17,4 +17,9 @@ jobs:
     uses: hanzoai/.github/.github/workflows/docker-build.yml@main
     with:
       image: ghcr.io/hanzoai/flow
+      # arm64 paused — DOKS has no arm64 droplets, so `hanzo-build-linux-arm64`
+      # ARC scale set is offline. Without this pin the build queues for arm64
+      # indefinitely and the run hits GitHub's 24h workflow timeout.
+      # Mirrors hanzo/kms/.github/workflows/build.yml.
+      platforms: linux/amd64
     secrets: inherit
