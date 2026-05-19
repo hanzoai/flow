@@ -3,6 +3,8 @@
 ## Overview
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers.
 
+**Upstream**: Langflow (MIT). Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `LANGFLOW_*` retained only for backwards compatibility — do not introduce new `LANGFLOW_*` references).
+
 ## Tech Stack
 - **Backend**: Python (FastAPI, SQLModel, Alembic)
 - **Frontend**: TypeScript/React (Next.js)
