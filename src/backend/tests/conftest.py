@@ -484,7 +484,7 @@ async def test_user(client):
     user = response.json()
     yield user
     # Clean up
-    await client.delete(f"/api/v1/users/{user['id']}")
+    await client.delete(f"/v1/users/{user['id']}")
 
 
 @pytest.fixture

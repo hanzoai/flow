@@ -25,7 +25,7 @@ jest.mock("@/controllers/API/api", () => ({
   api: { get: (...args: any[]) => apiGetMock(...args), post: jest.fn() },
 }));
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: () => "/api/v1/flows",
+  getURL: () => "/v1/flows",
 }));
 
 // Query-hook mocks — returns the FlowVersionListResponse wrapper shape
@@ -215,7 +215,7 @@ describe("FlowVersionSidebarContent export", () => {
 
     await waitFor(() => {
       expect(apiGetMock).toHaveBeenCalledWith(
-        "/api/v1/flows/flow-1/versions/entry-1",
+        "/v1/flows/flow-1/versions/entry-1",
       );
     });
 

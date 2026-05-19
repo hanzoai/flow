@@ -27,7 +27,7 @@ export function withEventDeliveryModes(
       }
 
       // Intercept the config request and modify the event_delivery setting
-      await page.route("**/api/v1/config", async (route) => {
+      await page.route("**/v1/config", async (route) => {
         const response = await route.fetch();
         const json = await response.json();
         json.event_delivery = eventDelivery;

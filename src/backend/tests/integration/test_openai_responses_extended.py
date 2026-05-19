@@ -36,7 +36,7 @@ async def create_global_variable(client: AsyncClient, headers, name, value, vari
     """Create a global variable in Langflow."""
     payload = {"name": name, "value": value, "type": variable_type, "default_fields": []}
 
-    response = await client.post("/api/v1/variables/", json=payload, headers=headers)
+    response = await client.post("/v1/variables/", json=payload, headers=headers)
     if response.status_code != 201:
         logger.error(f"Failed to create global variable: {response.content}")
         return False
@@ -73,7 +73,7 @@ async def load_and_prepare_flow(client: AsyncClient, created_api_key):
     flow_data = await asyncio.to_thread(lambda: json.loads(pathlib.Path(template_path).read_text()))
 
     # Add the flow
-    response = await client.post("/api/v1/flows/", json=flow_data, headers=headers)
+    response = await client.post("/v1/flows/", json=flow_data, headers=headers)
     logger.info(f"Flow creation response: {response.status_code}")
 
     assert response.status_code == 201
@@ -83,7 +83,7 @@ async def load_and_prepare_flow(client: AsyncClient, created_api_key):
     max_attempts = 10
     for attempt in range(max_attempts):
         # Get the flow builds
-        builds_response = await client.get(f"/api/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
+        builds_response = await client.get(f"/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
 
         if builds_response.status_code == 200:
             builds = builds_response.json().get("vertex_builds", {})
@@ -135,14 +135,14 @@ async def load_and_prepare_agent_flow(client: AsyncClient, created_api_key):
     flow_data = await asyncio.to_thread(lambda: json.loads(pathlib.Path(template_path).read_text()))
 
     # Add the flow
-    response = await client.post("/api/v1/flows/", json=flow_data, headers=headers)
+    response = await client.post("/v1/flows/", json=flow_data, headers=headers)
     assert response.status_code == 201
     flow = response.json()
 
     # Poll for flow builds to complete
     max_attempts = 10
     for attempt in range(max_attempts):
-        builds_response = await client.get(f"/api/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
+        builds_response = await client.get(f"/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
 
         if builds_response.status_code == 200:
             builds = builds_response.json().get("vertex_builds", {})
@@ -170,7 +170,7 @@ async def test_openai_responses_invalid_flow_id(client: AsyncClient, created_api
     # Test with non-existent flow ID
     payload = {"model": "non-existent-flow-id", "input": "Hello", "stream": False}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200  # OpenAI errors are still 200 status
     data = response.json()
@@ -194,7 +194,7 @@ async def test_openai_responses_with_tools(client: AsyncClient, created_api_key)
         "tools": [{"type": "function", "function": {"name": "test", "parameters": {}}}],
     }
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200  # OpenAI errors are still 200 status
     data = response.json()
@@ -214,7 +214,7 @@ async def test_openai_responses_empty_input(client: AsyncClient, created_api_key
     # Test with empty input
     payload = {"model": flow["id"], "input": "", "stream": False}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
     logger.info(f"Empty input response status: {response.status_code}")
 
     # The flow might still process empty input, so we check for a valid response structure
@@ -242,7 +242,7 @@ async def test_openai_responses_long_input(client: AsyncClient, created_api_key)
     long_input = "Hello " * 1000  # ~6000 characters
     payload = {"model": flow["id"], "input": long_input, "stream": False}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200
     data = response.json()
@@ -262,7 +262,7 @@ async def test_openai_responses_streaming_error_handling(client: AsyncClient, cr
     # Test with invalid flow ID in streaming mode
     payload = {"model": "invalid-flow-id", "input": "Hello", "stream": True}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     # For streaming errors, we should still get a 200 status but with error in the response
     assert response.status_code == 200
@@ -288,7 +288,7 @@ async def test_openai_responses_concurrent_requests(client: AsyncClient, created
     payloads = [{"model": flow["id"], "input": f"Request {i}", "stream": False} for i in range(5)]
 
     # Send all requests concurrently
-    tasks = [client.post("/api/v1/responses", json=payload, headers=headers) for payload in payloads]
+    tasks = [client.post("/v1/responses", json=payload, headers=headers) for payload in payloads]
 
     responses = await asyncio.gather(*tasks)
 
@@ -315,7 +315,7 @@ async def test_openai_responses_unauthorized(client: AsyncClient):
     payload = {"model": "some-flow-id", "input": "Hello", "stream": False}
 
     # No headers = no authentication
-    response = await client.post("/api/v1/responses", json=payload)
+    response = await client.post("/v1/responses", json=payload)
 
     # Should get 403 Forbidden
     assert response.status_code == 403
@@ -328,7 +328,7 @@ async def test_openai_responses_invalid_api_key(client: AsyncClient):
     headers = {"x-api-key": "invalid-api-key-12345"}
     payload = {"model": "some-flow-id", "input": "Hello", "stream": False}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     # Should get 403 Forbidden
     assert response.status_code == 403
@@ -351,7 +351,7 @@ async def test_openai_responses_malformed_request(client: AsyncClient, created_a
     ]
 
     for payload in test_cases:
-        response = await client.post("/api/v1/responses", json=payload, headers=headers)
+        response = await client.post("/v1/responses", json=payload, headers=headers)
         # OpenAI API returns validation errors as 200 with error in body or 422
         if response.status_code == 200:
             data = response.json()
@@ -371,7 +371,7 @@ async def test_openai_responses_stream_interruption(client: AsyncClient, created
 
     payload = {"model": flow["id"], "input": "Tell me a long story", "stream": True}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
     assert response.status_code == 200
 
     # Read only first 500 bytes then close (streaming might need more bytes)
@@ -393,7 +393,7 @@ async def test_openai_responses_background_processing(client: AsyncClient, creat
     # Test with background=True
     payload = {"model": flow["id"], "input": "Hello", "background": True, "stream": False}
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
     assert response.status_code == 200
 
     data = response.json()
@@ -412,7 +412,7 @@ async def test_openai_responses_previous_response_id(client: AsyncClient, create
 
     # First request
     payload1 = {"model": flow["id"], "input": "Hello", "stream": False}
-    response1 = await client.post("/api/v1/responses", json=payload1, headers=headers)
+    response1 = await client.post("/v1/responses", json=payload1, headers=headers)
     assert response1.status_code == 200
 
     data1 = response1.json()
@@ -426,7 +426,7 @@ async def test_openai_responses_previous_response_id(client: AsyncClient, create
             "previous_response_id": first_response_id,
             "stream": False,
         }
-        response2 = await client.post("/api/v1/responses", json=payload2, headers=headers)
+        response2 = await client.post("/v1/responses", json=payload2, headers=headers)
         assert response2.status_code == 200
 
         data2 = response2.json()
@@ -445,7 +445,7 @@ async def test_openai_responses_response_format(client: AsyncClient, created_api
     flow, headers = await load_and_prepare_flow(client, created_api_key)
 
     payload = {"model": flow["id"], "input": "Hello", "stream": False}
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200
     data = response.json()
@@ -484,7 +484,7 @@ async def test_openai_responses_stream_chunk_format(client: AsyncClient, created
     flow, headers = await load_and_prepare_flow(client, created_api_key)
 
     payload = {"model": flow["id"], "input": "Hello", "stream": True}
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200
 
@@ -533,7 +533,7 @@ async def test_openai_responses_stream_has_non_empty_content(client: AsyncClient
     flow, headers = await load_and_prepare_agent_flow(client, created_api_key)
 
     payload = {"model": flow["id"], "input": "Say something concise", "stream": True}
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == 200
 
@@ -573,7 +573,7 @@ async def test_openai_responses_rate_limiting_simulation(client: AsyncClient, cr
     rapid_requests = []
     for i in range(10):
         payload = {"model": flow["id"], "input": f"Rapid request {i}", "stream": False}
-        rapid_requests.append(client.post("/api/v1/responses", json=payload, headers=headers))
+        rapid_requests.append(client.post("/v1/responses", json=payload, headers=headers))
 
     # Wait for all requests to complete
     responses = await asyncio.gather(*rapid_requests, return_exceptions=True)

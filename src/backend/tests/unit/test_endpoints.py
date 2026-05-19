@@ -267,13 +267,13 @@ async def test_various_prompts(client, logged_in_headers, prompt, expected_input
 
 async def test_get_vertices_flow_not_found(client, logged_in_headers):
     uuid = uuid4()
-    response = await client.post(f"/api/v1/build/{uuid}/vertices", headers=logged_in_headers)
+    response = await client.post(f"/v1/build/{uuid}/vertices", headers=logged_in_headers)
     assert response.status_code == 500
 
 
 async def test_get_vertices(client, added_flow_webhook_test, logged_in_headers):
     flow_id = added_flow_webhook_test["id"]
-    response = await client.post(f"/api/v1/build/{flow_id}/vertices", headers=logged_in_headers)
+    response = await client.post(f"/v1/build/{flow_id}/vertices", headers=logged_in_headers)
     assert response.status_code == 200
     assert "ids" in response.json()
     # The response should contain the list in this order
@@ -286,20 +286,20 @@ async def test_get_vertices(client, added_flow_webhook_test, logged_in_headers):
 
 async def test_build_vertex_invalid_flow_id(client, logged_in_headers):
     uuid = uuid4()
-    response = await client.post(f"/api/v1/build/{uuid}/vertices/vertex_id", headers=logged_in_headers)
+    response = await client.post(f"/v1/build/{uuid}/vertices/vertex_id", headers=logged_in_headers)
     assert response.status_code == 500
 
 
 async def test_build_vertex_invalid_vertex_id(client, added_flow_webhook_test, logged_in_headers):
     flow_id = added_flow_webhook_test["id"]
-    response = await client.post(f"/api/v1/build/{flow_id}/vertices/invalid_vertex_id", headers=logged_in_headers)
+    response = await client.post(f"/v1/build/{flow_id}/vertices/invalid_vertex_id", headers=logged_in_headers)
     assert response.status_code == 500
 
 
 async def test_successful_run_no_payload(client, simple_api_test, created_api_key):
     headers = {"x-api-key": created_api_key.api_key}
     flow_id = simple_api_test["id"]
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -329,7 +329,7 @@ async def test_successful_run_with_output_type_text(client, simple_api_test, cre
     payload = {
         "output_type": "text",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -360,7 +360,7 @@ async def test_successful_run_with_output_type_any(client, simple_api_test, crea
     payload = {
         "output_type": "any",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -392,7 +392,7 @@ async def test_successful_run_with_output_type_debug(client, simple_api_test, cr
     payload = {
         "output_type": "debug",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -417,7 +417,7 @@ async def test_successful_run_with_input_type_text(client, simple_api_test, crea
         "output_type": "debug",
         "input_value": "value1",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -458,7 +458,7 @@ async def test_successful_run_with_input_type_chat(client: AsyncClient, simple_a
         "output_type": "debug",
         "input_value": "value1",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -498,7 +498,7 @@ async def test_invalid_run_with_input_type_chat(client, simple_api_test, created
         "input_value": "value1",
         "tweaks": {"Chat Input": {"input_value": "value2"}},
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_400_BAD_REQUEST, response.text
     assert "If you pass an input_value to the chat input, you cannot pass a tweak with the same name." in response.text
 
@@ -512,7 +512,7 @@ async def test_successful_run_with_input_type_any(client, simple_api_test, creat
         "output_type": "debug",
         "input_value": "value1",
     }
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
     assert response.status_code == status.HTTP_200_OK, response.text
     # Add more assertions here to validate the response content
     json_response = response.json()
@@ -553,11 +553,11 @@ async def test_successful_run_with_input_type_any(client, simple_api_test, creat
 async def test_invalid_flow_id(client, created_api_key):
     headers = {"x-api-key": created_api_key.api_key}
     flow_id = "invalid-flow-id"
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers)
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.text
     headers = {"x-api-key": created_api_key.api_key}
     flow_id = UUID(int=0)
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers)
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.text
     # Check if the error detail is as expected
 
@@ -575,7 +575,7 @@ async def _run_single_stream_test(client: AsyncClient, flow_id: str, headers: di
     got_end_event = False
     final_result = None
 
-    async with client.stream("POST", f"/api/v1/run/{flow_id}?stream=true", headers=headers, json=payload) as response:
+    async with client.stream("POST", f"/v1/run/{flow_id}?stream=true", headers=headers, json=payload) as response:
         assert response.status_code == status.HTTP_200_OK, (
             f"Request failed with status {response.status_code}: {response.text}"
         )
@@ -689,7 +689,7 @@ async def test_user_can_run_own_flow(client: AsyncClient, simple_api_test, creat
     headers = {"x-api-key": created_api_key.api_key}
     flow_id = simple_api_test["id"]
 
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers)
 
     assert response.status_code == status.HTTP_200_OK, response.text
     json_response = response.json()
@@ -704,7 +704,7 @@ async def test_user_cannot_run_other_users_flow(client: AsyncClient, simple_api_
     headers = {"x-api-key": user_two_api_key}
     flow_id = simple_api_test["id"]
 
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN, response.text
     assert "You do not have permission to run this flow" in response.text
@@ -721,7 +721,7 @@ async def test_user_cannot_run_other_users_flow_with_payload(client: AsyncClient
         "input_value": "test message",
     }
 
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN, response.text
     assert "You do not have permission to run this flow" in response.text
@@ -738,7 +738,7 @@ async def test_user_can_run_own_flow_with_streaming(client: AsyncClient, simple_
         "input_value": "test",
     }
 
-    async with client.stream("POST", f"/api/v1/run/{flow_id}?stream=true", headers=headers, json=payload) as response:
+    async with client.stream("POST", f"/v1/run/{flow_id}?stream=true", headers=headers, json=payload) as response:
         assert response.status_code == status.HTTP_200_OK, response.text
         assert response.headers["content-type"].startswith("text/event-stream")
 
@@ -754,7 +754,7 @@ async def test_user_cannot_run_other_users_flow_with_streaming(client: AsyncClie
         "input_value": "test",
     }
 
-    response = await client.post(f"/api/v1/run/{flow_id}?stream=true", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}?stream=true", headers=headers, json=payload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN, response.text
     assert "You do not have permission to run this flow" in response.text
@@ -772,7 +772,7 @@ async def test_user_can_run_own_flow_advanced_endpoint(client: AsyncClient, simp
         "stream": False,
     }
 
-    response = await client.post(f"/api/v1/run/advanced/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/advanced/{flow_id}", headers=headers, json=payload)
 
     assert response.status_code == status.HTTP_200_OK, response.text
     json_response = response.json()
@@ -794,7 +794,7 @@ async def test_user_cannot_run_other_users_flow_advanced_endpoint(
         "stream": False,
     }
 
-    response = await client.post(f"/api/v1/run/advanced/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/advanced/{flow_id}", headers=headers, json=payload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN, response.text
     assert "You do not have permission to run this flow" in response.text
@@ -806,7 +806,7 @@ async def test_permission_check_with_nonexistent_flow(client: AsyncClient, creat
     headers = {"x-api-key": created_api_key.api_key}
     nonexistent_flow_id = uuid4()
 
-    response = await client.post(f"/api/v1/run/{nonexistent_flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{nonexistent_flow_id}", headers=headers)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.text
 
@@ -817,7 +817,7 @@ async def test_permission_check_with_invalid_flow_id(client: AsyncClient, create
     headers = {"x-api-key": created_api_key.api_key}
     invalid_flow_id = "not-a-valid-uuid"
 
-    response = await client.post(f"/api/v1/run/{invalid_flow_id}", headers=headers)
+    response = await client.post(f"/v1/run/{invalid_flow_id}", headers=headers)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.text
 
@@ -835,7 +835,7 @@ async def test_permission_check_blocks_before_execution(client: AsyncClient, sim
     }
 
     # This should fail immediately at permission check, not during execution
-    response = await client.post(f"/api/v1/run/{flow_id}", headers=headers, json=payload)
+    response = await client.post(f"/v1/run/{flow_id}", headers=headers, json=payload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN, response.text
     assert "You do not have permission to run this flow" in response.text
@@ -861,10 +861,10 @@ async def test_user_can_access_multiple_own_flows(
     headers = {"x-api-key": created_api_key.api_key}
 
     # User should be able to run both flows
-    response_flow1 = await client.post(f"/api/v1/run/{flow1_id}", headers=headers)
+    response_flow1 = await client.post(f"/v1/run/{flow1_id}", headers=headers)
     assert response_flow1.status_code == status.HTTP_200_OK, response_flow1.text
 
-    response_flow2 = await client.post(f"/api/v1/run/{flow2_id}", headers=headers)
+    response_flow2 = await client.post(f"/v1/run/{flow2_id}", headers=headers)
     assert response_flow2.status_code == status.HTTP_200_OK, response_flow2.text
 
     # Cleanup
@@ -886,7 +886,7 @@ async def test_openai_responses_invalid_flow_id(client: AsyncClient, created_api
         "stream": False,
     }
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == status.HTTP_200_OK  # Returns 200 with error in body
     json_response = response.json()
@@ -906,7 +906,7 @@ async def test_openai_responses_tools_not_supported(client: AsyncClient, simple_
         "tools": [{"type": "function", "function": {"name": "test"}}],
     }
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == status.HTTP_200_OK  # Returns 200 with error in body
     json_response = response.json()
@@ -925,7 +925,7 @@ async def test_openai_responses_nonexistent_flow_uuid(client: AsyncClient, creat
         "stream": False,
     }
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     assert response.status_code == status.HTTP_200_OK  # Returns 200 with error in body
     json_response = response.json()
@@ -944,7 +944,7 @@ async def test_openai_responses_response_schema_has_usage_field(client: AsyncCli
         "stream": False,
     }
 
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
 
     # simple_api_test may not have ChatInput/ChatOutput, so it might error
     # But if it succeeds, the response should have usage field

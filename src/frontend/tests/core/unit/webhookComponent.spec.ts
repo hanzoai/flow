@@ -76,7 +76,7 @@ test(
   "user should be able to poll a webhook",
   { tag: ["@release", "@workspace"] },
   async ({ page, request }) => {
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

@@ -82,7 +82,7 @@ def find_validation_error(exc):
 ################################################################################
 # SSE Transport
 ################################################################################
-sse = SseServerTransport("/api/v1/mcp/")
+sse = SseServerTransport("/v1/mcp/")
 
 
 @router.head(

@@ -35,7 +35,7 @@ describe("getNewPythonApiCode", () => {
 
       // Check URL construction
       expect(code).toContain(
-        'url = "https://localhost:3000/api/v1/run/test-endpoint"',
+        'url = "https://localhost:3000/v1/run/test-endpoint"',
       );
 
       // Check session ID generation
@@ -78,7 +78,7 @@ describe("getNewPythonApiCode", () => {
       });
 
       expect(code).toContain(
-        'url = "https://localhost:3000/api/v1/run/test-flow-123"',
+        'url = "https://localhost:3000/v1/run/test-flow-123"',
       );
     });
 
@@ -130,7 +130,7 @@ describe("getNewPythonApiCode", () => {
       // Check for file upload step
       expect(code).toContain("# Step 1: Upload file for ChatInput chatNode1");
       expect(code).toContain('with open("your_image_1.jpg", "rb") as f:');
-      expect(code).toContain('f"{base_url}/api/v1/files/upload/{flow_id}"');
+      expect(code).toContain('f"{base_url}/v1/files/upload/{flow_id}"');
       expect(code).toContain('files={"file": f}');
       expect(code).toContain('chat_file_path_1 = response.json()["file_path"]');
 
@@ -185,7 +185,7 @@ describe("getNewPythonApiCode", () => {
         "# Step 1: Upload file for File/VideoFile fileNode1",
       );
       expect(code).toContain('with open("your_file_1.pdf", "rb") as f:');
-      expect(code).toContain('f"{base_url}/api/v2/files"');
+      expect(code).toContain('f"{base_url}/v2/files"');
       expect(code).toContain('file_path_1 = response.json()["path"]');
 
       // Check for flow execution step
@@ -209,7 +209,7 @@ describe("getNewPythonApiCode", () => {
         "# Step 1: Upload file for File/VideoFile videoNode1",
       );
       expect(code).toContain('with open("your_file_1.pdf", "rb") as f:');
-      expect(code).toContain('f"{base_url}/api/v2/files"');
+      expect(code).toContain('f"{base_url}/v2/files"');
       expect(code).toContain('file_path_1 = response.json()["path"]');
 
       // Check for flow execution step
@@ -259,7 +259,7 @@ describe("getNewPythonApiCode", () => {
 
       // Check for ChatInput upload (v1 API)
       expect(code).toContain("# Step 1: Upload file for ChatInput chatNode1");
-      expect(code).toContain("/api/v1/files/upload/");
+      expect(code).toContain("/v1/files/upload/");
 
       // Check for File/VideoFile uploads (v2 API)
       expect(code).toContain(
@@ -268,7 +268,7 @@ describe("getNewPythonApiCode", () => {
       expect(code).toContain(
         "# Step 3: Upload file for File/VideoFile videoNode1",
       );
-      expect(code).toContain("/api/v2/files");
+      expect(code).toContain("/v2/files");
 
       // Check for flow execution step
       expect(code).toContain("# Step 4: Execute flow with all file paths");
@@ -371,7 +371,7 @@ describe("getNewPythonApiCode", () => {
         endpointName: "my-endpoint",
       });
 
-      expect(code).toContain("/api/v1/run/my-endpoint");
+      expect(code).toContain("/v1/run/my-endpoint");
     });
 
     it("should handle empty endpointName", () => {
@@ -380,7 +380,7 @@ describe("getNewPythonApiCode", () => {
         endpointName: "",
       });
 
-      expect(code).toContain("/api/v1/run/test-flow-123");
+      expect(code).toContain("/v1/run/test-flow-123");
     });
 
     it("should handle special characters in input_value", () => {

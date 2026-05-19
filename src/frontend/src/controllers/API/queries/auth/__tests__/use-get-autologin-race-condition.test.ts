@@ -57,7 +57,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((endpoint: string) => `/api/v1/${endpoint.toLowerCase()}`),
+  getURL: jest.fn((endpoint: string) => `/v1/${endpoint.toLowerCase()}`),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({

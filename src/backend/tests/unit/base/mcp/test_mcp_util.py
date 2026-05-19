@@ -399,7 +399,7 @@ class TestUpdateToolsStdioHeaders:
                 "--headers",
                 "x-api-key",
                 "sk-existing",
-                "http://localhost:7860/api/v1/mcp/project/test/streamable",
+                "http://localhost:7860/v1/mcp/project/test/streamable",
             ],
             "headers": {"Authorization": "Bearer token123"},
         }
@@ -412,7 +412,7 @@ class TestUpdateToolsStdioHeaders:
         # The injected --headers should appear before the existing --headers
         assert "--headers authorization 'Bearer token123' --headers x-api-key sk-existing" in full_command
         # URL should still be at the end
-        assert full_command.endswith("http://localhost:7860/api/v1/mcp/project/test/streamable")
+        assert full_command.endswith("http://localhost:7860/v1/mcp/project/test/streamable")
 
     @pytest.mark.asyncio
     async def test_stdio_headers_injected_without_existing_headers_flag(self):

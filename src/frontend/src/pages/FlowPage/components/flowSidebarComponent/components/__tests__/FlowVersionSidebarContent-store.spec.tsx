@@ -20,7 +20,7 @@ jest.mock("@/controllers/API/api", () => ({
   api: { get: jest.fn(), post: jest.fn() },
 }));
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: () => "/api/v1/flows",
+  getURL: () => "/v1/flows",
 }));
 
 // ---------------------------------------------------------------------------

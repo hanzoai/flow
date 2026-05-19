@@ -36,7 +36,7 @@ async def create_global_variable(client: AsyncClient, headers, name, value, vari
     """Create a global variable in Langflow."""
     payload = {"name": name, "value": value, "type": variable_type, "default_fields": []}
 
-    response = await client.post("/api/v1/variables/", json=payload, headers=headers)
+    response = await client.post("/v1/variables/", json=payload, headers=headers)
     if response.status_code != 201:
         logger.error(f"Failed to create global variable: {response.content}")
         return False
@@ -71,14 +71,14 @@ async def load_and_prepare_flow(client: AsyncClient, created_api_key):
     flow_data = await asyncio.to_thread(lambda: json.loads(pathlib.Path(template_path).read_text()))
 
     # Add the flow
-    response = await client.post("/api/v1/flows/", json=flow_data, headers=headers)
+    response = await client.post("/v1/flows/", json=flow_data, headers=headers)
     assert response.status_code == 201
     flow = response.json()
 
     # Poll for flow builds to complete
     max_attempts = 10
     for attempt in range(max_attempts):
-        builds_response = await client.get(f"/api/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
+        builds_response = await client.get(f"/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
 
         if builds_response.status_code == 200:
             builds = builds_response.json().get("vertex_builds", {})
@@ -162,7 +162,7 @@ async def test_openai_streaming_format_comparison(client: AsyncClient, created_a
 
     our_payload = {"model": flow["id"], "input": input_msg, "stream": True, "include": ["tool_call.results"]}
 
-    our_response = await client.post("/api/v1/responses", json=our_payload, headers=headers)
+    our_response = await client.post("/v1/responses", json=our_payload, headers=headers)
     assert our_response.status_code == 200
 
     our_content = await our_response.aread()

@@ -35,13 +35,13 @@ class TestGetRouteKeys:
         def health():
             return "ok"
 
-        @app.post("/api/action")
+        @app.post("/v1/action")
         def action():
             return None
 
         keys = _get_route_keys(app)
         assert ("/health", "GET") in keys
-        assert ("/api/action", "POST") in keys
+        assert ("/v1/action", "POST") in keys
         # HEAD is excluded to avoid false conflicts with GET
         assert ("/health", "HEAD") not in keys
 
@@ -80,21 +80,21 @@ class TestPluginAppWrapper:
         """Adding a route with same (path, method) as reserved raises ValueError."""
         app = FastAPI()
 
-        @app.get("/api/login")
+        @app.get("/v1/login")
         def core_login():
             return "core"
 
         reserved = _get_route_keys(app)
         wrapper = _PluginAppWrapper(app, reserved)
 
-        with pytest.raises(ValueError, match="Plugin route conflicts with existing route: /api/login \\[GET\\]"):
-            wrapper.get("/api/login")(lambda: "plugin")
+        with pytest.raises(ValueError, match="Plugin route conflicts with existing route: /v1/login \\[GET\\]"):
+            wrapper.get("/v1/login")(lambda: "plugin")
 
     def test_raises_on_conflicting_include_router(self):
         """include_router with a route that conflicts with reserved raises ValueError."""
         app = FastAPI()
 
-        @app.get("/api/v1/flow")
+        @app.get("/v1/flow")
         def core_flow():
             return "core"
 
@@ -108,7 +108,7 @@ class TestPluginAppWrapper:
             return "plugin"
 
         with pytest.raises(ValueError, match="Plugin route conflicts with existing route"):
-            wrapper.include_router(router, prefix="/api/v1")
+            wrapper.include_router(router, prefix="/v1")
 
     def test_include_router_allows_non_conflicting_prefix(self):
         """include_router with distinct prefix succeeds and reserves new paths."""
@@ -127,10 +127,10 @@ class TestPluginAppWrapper:
         def sso_login():
             return "sso"
 
-        wrapper.include_router(router, prefix="/api/v1")
+        wrapper.include_router(router, prefix="/v1")
 
         keys_after = _get_route_keys(app)
-        assert ("/api/v1/sso/login", "GET") in keys_after
+        assert ("/v1/sso/login", "GET") in keys_after
 
     def test_on_event_delegates_without_conflict_check(self):
         """on_event is delegated to the real app and does not check route conflicts."""
@@ -152,12 +152,12 @@ class TestPluginAppWrapper:
         reserved = _get_route_keys(app)
         wrapper = _PluginAppWrapper(app, reserved)
 
-        # First "plugin" adds /api/v1/sso/login
-        wrapper.get("/api/v1/sso/login")(lambda: "first")
+        # First "plugin" adds /v1/sso/login
+        wrapper.get("/v1/sso/login")(lambda: "first")
 
         # Second plugin trying same path should fail
-        with pytest.raises(ValueError, match=r"conflicts with existing route.*/api/v1/sso/login"):
-            wrapper.get("/api/v1/sso/login")(lambda: "second")
+        with pytest.raises(ValueError, match=r"conflicts with existing route.*/v1/sso/login"):
+            wrapper.get("/v1/sso/login")(lambda: "second")
 
 
 class TestLoadPluginRoutes:
@@ -186,7 +186,7 @@ class TestLoadPluginRoutes:
             return "ok"
 
         def register(app_like):
-            @app_like.get("/api/v1/sso/login")
+            @app_like.get("/v1/sso/login")
             def login():
                 return "sso"
 
@@ -198,18 +198,18 @@ class TestLoadPluginRoutes:
             load_plugin_routes(app)
 
         keys = _get_route_keys(app)
-        assert ("/api/v1/sso/login", "GET") in keys
+        assert ("/v1/sso/login", "GET") in keys
 
     def test_plugin_with_conflict_is_skipped_app_continues(self):
         """When a plugin tries to register a conflicting route, that plugin is skipped."""
         app = FastAPI()
 
-        @app.get("/api/v1/flow")
+        @app.get("/v1/flow")
         def core_flow():
             return "core"
 
         def conflicting_register(app_like):
-            app_like.get("/api/v1/flow")(lambda: "plugin")
+            app_like.get("/v1/flow")(lambda: "plugin")
 
         ep = MagicMock()
         ep.name = "bad_plugin"
@@ -220,7 +220,7 @@ class TestLoadPluginRoutes:
 
         # Core route must still be the only one at that path
         routes_at_path = [
-            r for r in app.router.routes if getattr(r, "path", None) == "/api/v1/flow" and hasattr(r, "methods")
+            r for r in app.router.routes if getattr(r, "path", None) == "/v1/flow" and hasattr(r, "methods")
         ]
         assert len(routes_at_path) == 1
 
