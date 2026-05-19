@@ -144,7 +144,7 @@ export function useWebhookEvents() {
     }
 
     const flowIdentifier = currentFlow.endpoint_name || currentFlow.id;
-    let sseUrl = `/api/v1/webhook-events/${flowIdentifier}`;
+    let sseUrl = `/v1/webhook-events/${flowIdentifier}`;
 
     if (apiKey) {
       sseUrl += `?x-api-key=${encodeURIComponent(apiKey)}`;

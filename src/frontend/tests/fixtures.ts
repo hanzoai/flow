@@ -27,7 +27,7 @@ export const test = base.extend({
 
       // Log 400/404/422/500 API errors (ignore auth endpoints)
       if (
-        url.includes("/api/") &&
+        url.includes("/v1/") &&
         (status === 400 || status === 404 || status === 422 || status === 500)
       ) {
         const isAuth =

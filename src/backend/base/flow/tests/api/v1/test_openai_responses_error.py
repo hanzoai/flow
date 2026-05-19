@@ -73,7 +73,7 @@ async def test_openai_response_stream_error_handling(client):
 
         # Make the request
         response = client.post(
-            "/api/v1/responses",
+            "/v1/responses",
             json={"model": "test-flow-id", "input": "test input", "stream": True},
             headers={"Authorization": "Bearer test-key"},
         )

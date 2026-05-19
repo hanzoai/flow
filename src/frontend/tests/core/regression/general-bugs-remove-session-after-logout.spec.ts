@@ -4,7 +4,7 @@ test(
   "user must not be able to login after logout and refresh the page when auto_login is false",
   { tag: ["@release", "@api"] },
   async ({ page }) => {
-    await page.route("**/api/v1/auto_login", (route) => {
+    await page.route("**/v1/auto_login", (route) => {
       route.fulfill({
         status: 500,
         contentType: "application/json",

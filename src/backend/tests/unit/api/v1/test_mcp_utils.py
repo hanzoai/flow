@@ -78,5 +78,5 @@ async def test_handle_list_resources_includes_flow_and_user_files(monkeypatch):
         mcp_utils.current_user_ctx.reset(token)
 
     uris = {str(resource.uri) for resource in resources}
-    assert f"http://localhost:4000/api/v1/files/download/{flow_id}/flow-doc.docx" in uris
-    assert f"http://localhost:4000/api/v1/files/download/{user_id}/uploaded-summary.pdf" in uris
+    assert f"http://localhost:4000/v1/files/download/{flow_id}/flow-doc.docx" in uris
+    assert f"http://localhost:4000/v1/files/download/{user_id}/uploaded-summary.pdf" in uris

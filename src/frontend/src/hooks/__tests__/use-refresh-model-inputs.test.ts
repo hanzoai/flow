@@ -24,7 +24,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/custom_component/update"),
+  getURL: jest.fn(() => "/v1/custom_component/update"),
 }));
 
 jest.mock("@/stores/alertStore", () => ({

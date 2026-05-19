@@ -471,7 +471,7 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock settings to enable MCP auto-add
@@ -522,8 +522,8 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock settings to enable MCP auto-add
@@ -571,7 +571,7 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock settings to enable MCP auto-add
@@ -617,8 +617,8 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock settings to enable MCP auto-add
@@ -664,7 +664,7 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks to trigger OAuth path
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock validation - no conflict but OAuth case will raise NotImplementedError
@@ -697,8 +697,8 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks to trigger OAuth path
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock validation - no conflict but OAuth case will raise NotImplementedError
@@ -810,8 +810,8 @@ class TestProjectMCPIntegration:
             mock_settings.auth_settings.AUTO_LOGIN = False
             mock_get_settings.return_value = mock_settings
 
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
 
             mock_validation_create = MagicMock()
             mock_validation_create.has_conflict = False
@@ -953,8 +953,8 @@ class TestProjectMCPIntegration:
             mock_settings.auth_settings.AUTO_LOGIN = False
             mock_get_settings.return_value = mock_settings
 
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
 
             mock_validation_create = MagicMock()
             mock_validation_create.has_conflict = False
@@ -1087,8 +1087,8 @@ class TestProjectMCPIntegration:
             mock_settings.auth_settings.AUTO_LOGIN = False
             mock_get_settings.return_value = mock_settings
 
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
 
             mock_validation_create = MagicMock()
             mock_validation_create.has_conflict = False
@@ -1216,8 +1216,8 @@ class TestProjectMCPIntegration:
             mock_settings.auth_settings.AUTO_LOGIN = False
             mock_get_settings.return_value = mock_settings
 
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
 
             mock_validation_create = MagicMock()
             mock_validation_create.has_conflict = False
@@ -1290,7 +1290,7 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock validation to raise an exception
@@ -1319,8 +1319,8 @@ class TestProjectMCPIntegration:
             patch("flow.api.v1.projects.get_storage_service") as mock_storage,
         ):
             # Setup mocks
-            mock_sse_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/sse"
-            mock_streamable_url.return_value = "http://localhost:7860/api/v1/mcp/project/test-id/streamable"
+            mock_sse_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/sse"
+            mock_streamable_url.return_value = "http://localhost:7860/v1/mcp/project/test-id/streamable"
             mock_storage.return_value = MagicMock()
 
             # Mock validation to raise an exception
