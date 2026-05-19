@@ -8,7 +8,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key) => `/v1/${key.toLowerCase()}`),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -49,7 +49,7 @@ describe("useGetEnabledModels", () => {
 
       useGetEnabledModels();
 
-      expect(mockApiGet).toHaveBeenCalledWith("/api/v1/models/enabled_models");
+      expect(mockApiGet).toHaveBeenCalledWith("/v1/models/enabled_models");
     });
 
     it("should return enabled models data", async () => {

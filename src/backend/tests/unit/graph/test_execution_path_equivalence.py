@@ -435,7 +435,7 @@ async def run_via_arun(
 ) -> ExecutionTrace:
     """Run graph using arun path and capture trace.
 
-    This mimics how the /api/v1/run endpoint executes graphs.
+    This mimics how the /v1/run endpoint executes graphs.
     """
     trace = ExecutionTrace(path_name="arun")
     tracer = ExecutionTracer(graph, trace)

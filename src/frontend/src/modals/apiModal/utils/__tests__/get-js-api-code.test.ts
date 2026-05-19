@@ -35,7 +35,7 @@ describe("getNewJsApiCode", () => {
 
       // Check fetch request
       expect(code).toContain("fetch(");
-      expect(code).toContain("/api/v1/run/test-endpoint");
+      expect(code).toContain("/v1/run/test-endpoint");
       expect(code).toContain("method: 'POST'");
 
       // Check error handling
@@ -58,7 +58,7 @@ describe("getNewJsApiCode", () => {
 
       // Check fetch request
       expect(code).toContain("fetch(");
-      expect(code).toContain("/api/v1/run/test-endpoint");
+      expect(code).toContain("/v1/run/test-endpoint");
     });
 
     it("should use flowId when endpointName is not provided", () => {
@@ -67,7 +67,7 @@ describe("getNewJsApiCode", () => {
         endpointName: "",
       });
 
-      expect(code).toContain("/api/v1/run/test-flow-123");
+      expect(code).toContain("/v1/run/test-flow-123");
     });
 
     it("should include Content-Type header", () => {
@@ -108,7 +108,7 @@ describe("getNewJsApiCode", () => {
       // Check for file upload step
       expect(code).toContain("// Step 1: Upload file for ChatInput chatNode1");
       expect(code).toContain("createFormData('your_image_1.jpg')");
-      expect(code).toContain("/api/v1/files/upload/");
+      expect(code).toContain("/v1/files/upload/");
       expect(code).toContain("chatFilePath1");
 
       // Check for flow execution step
@@ -159,7 +159,7 @@ describe("getNewJsApiCode", () => {
         "// Step 1: Upload file for File/VideoFile fileNode1",
       );
       expect(code).toContain("createFormData('your_file_1.pdf')");
-      expect(code).toContain("/api/v2/files");
+      expect(code).toContain("/v2/files");
       expect(code).toContain("filePath1");
     });
 
@@ -179,7 +179,7 @@ describe("getNewJsApiCode", () => {
         "// Step 1: Upload file for File/VideoFile videoNode1",
       );
       expect(code).toContain("createFormData('your_file_1.pdf')");
-      expect(code).toContain("/api/v2/files");
+      expect(code).toContain("/v2/files");
       expect(code).toContain("filePath1");
     });
 
@@ -223,7 +223,7 @@ describe("getNewJsApiCode", () => {
 
       // Check for ChatInput upload (v1 API)
       expect(code).toContain("// Step 1: Upload file for ChatInput chatNode1");
-      expect(code).toContain("/api/v1/files/upload/");
+      expect(code).toContain("/v1/files/upload/");
 
       // Check for File/VideoFile uploads (v2 API)
       expect(code).toContain(
@@ -232,7 +232,7 @@ describe("getNewJsApiCode", () => {
       expect(code).toContain(
         "// Step 3: Upload file for File/VideoFile videoNode1",
       );
-      expect(code).toContain("/api/v2/files");
+      expect(code).toContain("/v2/files");
 
       // Check for flow execution step
       expect(code).toContain("// Step 4: Execute flow with all file paths");
@@ -425,7 +425,7 @@ describe("getNewJsApiCode", () => {
         endpointName: "my-endpoint",
       });
 
-      expect(code).toContain("/api/v1/run/my-endpoint");
+      expect(code).toContain("/v1/run/my-endpoint");
     });
 
     it("should handle empty endpointName", () => {
@@ -434,7 +434,7 @@ describe("getNewJsApiCode", () => {
         endpointName: "",
       });
 
-      expect(code).toContain("/api/v1/run/test-flow-123");
+      expect(code).toContain("/v1/run/test-flow-123");
     });
 
     it("should handle special characters in input_value", () => {

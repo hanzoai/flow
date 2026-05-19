@@ -14,7 +14,7 @@ jest.mock("@/controllers/API/api", () => ({
   api: { post: (...args: any[]) => apiPostMock(...args) },
 }));
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: () => "/api/v1/flows",
+  getURL: () => "/v1/flows",
 }));
 
 const applyFlowToCanvasMock = jest.fn();
@@ -77,7 +77,7 @@ describe("useRestoreVersion", () => {
 
     // Should POST to the activate endpoint
     expect(apiPostMock).toHaveBeenCalledWith(
-      "/api/v1/flows/flow-1/versions/entry-1/activate",
+      "/v1/flows/flow-1/versions/entry-1/activate",
       null,
       { params: { save_draft: true } },
     );

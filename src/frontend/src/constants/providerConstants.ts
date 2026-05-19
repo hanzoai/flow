@@ -20,7 +20,7 @@ export interface ProviderVariable {
 }
 
 /**
- * @deprecated Use the API endpoint /api/v1/models/provider-variable-mapping instead.
+ * @deprecated Use the API endpoint /v1/models/provider-variable-mapping instead.
  * This static mapping only contains the primary variable for each provider.
  * For providers with multiple variables (like IBM WatsonX), use the API.
  */

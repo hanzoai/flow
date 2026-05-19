@@ -14,7 +14,7 @@ async def create_global_variable(client: AsyncClient, headers, name, value, vari
     """Create a global variable in Langflow."""
     payload = {"name": name, "value": value, "type": variable_type, "default_fields": []}
 
-    response = await client.post("/api/v1/variables/", json=payload, headers=headers)
+    response = await client.post("/v1/variables/", json=payload, headers=headers)
     if response.status_code != 201:
         logger.error(f"Failed to create global variable: {response.content}")
         return False
@@ -77,7 +77,7 @@ async def load_and_prepare_flow(client: AsyncClient, created_api_key):
             break
 
     # Add the flow
-    response = await client.post("/api/v1/flows/", json=flow_data, headers=headers)
+    response = await client.post("/v1/flows/", json=flow_data, headers=headers)
     logger.info(f"Flow creation response: {response.status_code}")
 
     assert response.status_code == 201
@@ -87,7 +87,7 @@ async def load_and_prepare_flow(client: AsyncClient, created_api_key):
     max_attempts = 10
     for attempt in range(max_attempts):
         # Get the flow builds
-        builds_response = await client.get(f"/api/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
+        builds_response = await client.get(f"/v1/monitor/builds?flow_id={flow['id']}", headers=headers)
 
         if builds_response.status_code == 200:
             builds = builds_response.json().get("vertex_builds", {})
@@ -122,7 +122,7 @@ async def test_openai_responses_non_streaming(client: AsyncClient, created_api_k
     payload = {"model": flow["id"], "input": "Hello, Langflow!", "stream": False}
 
     # Make the request
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
     logger.info(f"Response status: {response.status_code}")
     logger.info(f"Response content: {response.content}")
 
@@ -170,7 +170,7 @@ async def test_openai_responses_streaming(client: AsyncClient, created_api_key):
     payload = {"model": flow["id"], "input": "Hello, stream!", "stream": True}
 
     # Make the request
-    response = await client.post("/api/v1/responses", json=payload, headers=headers)
+    response = await client.post("/v1/responses", json=payload, headers=headers)
     logger.info(f"Response status: {response.status_code}")
 
     # Handle potential errors

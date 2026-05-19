@@ -128,7 +128,7 @@ async def test_data_consistency_after_update(client: AsyncClient, active_user, l
     user_id = active_user.id
     update_data = UserUpdate(is_active=False)
 
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=super_user_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=super_user_headers)
     assert response.status_code == 200, response.json()
 
     # Fetch the updated user from the database
@@ -140,7 +140,7 @@ async def test_data_consistency_after_update(client: AsyncClient, active_user, l
 @pytest.mark.api_key_required
 async def test_data_consistency_after_delete(client: AsyncClient, test_user, super_user_headers):
     user_id = test_user.get("id")
-    response = await client.delete(f"/api/v1/users/{user_id}", headers=super_user_headers)
+    response = await client.delete(f"/v1/users/{user_id}", headers=super_user_headers)
     assert response.status_code == 200, response.json()
 
     # Attempt to fetch the deleted user from the database
@@ -194,13 +194,13 @@ async def test_patch_user(client: AsyncClient, active_user, logged_in_headers):
         username="newname",
     )
 
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
     assert response.status_code == 200, response.json()
     update_data = UserUpdate(
         profile_image="new_image",
     )
 
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
     assert response.status_code == 200, response.json()
 
 
@@ -212,7 +212,7 @@ async def test_patch_reset_password(client: AsyncClient, active_user, logged_in_
     )
 
     response = await client.patch(
-        f"/api/v1/users/{user_id}/reset-password",
+        f"/v1/users/{user_id}/reset-password",
         json=update_data.model_dump(),
         headers=logged_in_headers,
     )
@@ -231,7 +231,7 @@ async def test_patch_user_wrong_id(client: AsyncClient, logged_in_headers):
         username="newname",
     )
 
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
     assert response.status_code == 422, response.json()
     json_response = response.json()
     detail = json_response["detail"]
@@ -243,7 +243,7 @@ async def test_patch_user_wrong_id(client: AsyncClient, logged_in_headers):
 @pytest.mark.api_key_required
 async def test_delete_user(client: AsyncClient, test_user, super_user_headers):
     user_id = test_user["id"]
-    response = await client.delete(f"/api/v1/users/{user_id}", headers=super_user_headers)
+    response = await client.delete(f"/v1/users/{user_id}", headers=super_user_headers)
     assert response.status_code == 200
     assert response.json() == {"detail": "User deleted"}
 
@@ -252,7 +252,7 @@ async def test_delete_user(client: AsyncClient, test_user, super_user_headers):
 @pytest.mark.usefixtures("test_user")
 async def test_delete_user_wrong_id(client: AsyncClient, super_user_headers):
     user_id = "wrong_id"
-    response = await client.delete(f"/api/v1/users/{user_id}", headers=super_user_headers)
+    response = await client.delete(f"/v1/users/{user_id}", headers=super_user_headers)
     assert response.status_code == 422
     json_response = response.json()
     detail = json_response["detail"]
@@ -339,7 +339,7 @@ async def test_delete_user_db_level_cascade(client):  # noqa: ARG001
 @pytest.mark.api_key_required
 async def test_normal_user_cant_delete_user(client: AsyncClient, test_user, logged_in_headers):
     user_id = test_user["id"]
-    response = await client.delete(f"/api/v1/users/{user_id}", headers=logged_in_headers)
+    response = await client.delete(f"/v1/users/{user_id}", headers=logged_in_headers)
     assert response.status_code == 403
     assert response.json() == {"detail": "The user doesn't have enough privileges"}
 
@@ -354,7 +354,7 @@ async def test_user_can_update_profile_picture(client: AsyncClient, active_user,
     profile_image = "Space/046-rocket.svg"
     update_data = UserUpdate(profile_image=profile_image)
 
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
     assert response.status_code == 200, f"Failed to update profile picture: {response.json()}"
 
     # Verify the profile image was updated
@@ -372,7 +372,7 @@ async def test_user_profile_picture_persists(client: AsyncClient, active_user, l
     update_data = UserUpdate(profile_image=profile_image)
 
     # Update profile picture
-    response = await client.patch(f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers)
     assert response.status_code == 200
 
     # Check it persists in multiple requests
@@ -395,7 +395,7 @@ async def test_user_can_change_profile_picture_multiple_times(client: AsyncClien
     for profile_image in profile_images:
         update_data = UserUpdate(profile_image=profile_image)
         response = await client.patch(
-            f"/api/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers
+            f"/v1/users/{user_id}", json=update_data.model_dump(), headers=logged_in_headers
         )
         assert response.status_code == 200
 

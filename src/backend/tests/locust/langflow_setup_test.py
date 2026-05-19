@@ -29,7 +29,7 @@ async def get_starter_projects_from_api(host: str, access_token: str) -> list[di
 
     # Ensure proper URL formatting
     base_host = host.rstrip("/")
-    url = f"{base_host}/api/v1/starter-projects/"
+    url = f"{base_host}/v1/starter-projects/"
     print(f"   🔍 Fetching starter projects from: {url}")
 
     try:
@@ -241,7 +241,7 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
 
         try:
             login_response = await client.post(
-                "/api/v1/login",
+                "/v1/login",
                 data=login_data,  # OAuth2PasswordRequestForm expects form data
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
@@ -262,7 +262,7 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
 
         try:
             api_key_data = {"name": f"Load Test Key - {int(time.time())}"}
-            api_key_response = await client.post("/api/v1/api_key/", json=api_key_data, headers=headers)
+            api_key_response = await client.post("/v1/api_key/", json=api_key_data, headers=headers)
 
             if api_key_response.status_code != 200:
                 raise Exception(f"API key creation failed: {api_key_response.status_code} - {api_key_response.text}")
@@ -331,7 +331,7 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
             sanitized_name = re.sub(r"[^a-zA-Z0-9_-]", "_", setup_state["flow_name"].lower())
             flow_upload_data["endpoint_name"] = f"loadtest_{int(time.time())}_{sanitized_name}"
 
-            flow_response = await client.post("/api/v1/flows/", json=flow_upload_data, headers=headers)
+            flow_response = await client.post("/v1/flows/", json=flow_upload_data, headers=headers)
 
             if flow_response.status_code != 201:
                 raise Exception(f"Flow upload failed: {flow_response.status_code} - {flow_response.text}")
@@ -487,7 +487,7 @@ Examples:
                 try:
                     login_data = {"username": username, "password": password}
                     login_response = await client.post(
-                        "/api/v1/login",
+                        "/v1/login",
                         data=login_data,
                         headers={"Content-Type": "application/x-www-form-urlencoded"},
                     )
