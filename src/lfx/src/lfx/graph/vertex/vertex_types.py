@@ -207,7 +207,7 @@ class InterfaceVertex(ComponentVertex):
         self.is_interface_component = True
 
     def build_stream_url(self) -> str:
-        return f"/api/v1/build/{self.graph.flow_id}/{self.id}/stream"
+        return f"/v1/build/{self.graph.flow_id}/{self.id}/stream"
 
     def built_object_repr(self):
         if self.task_id and self.is_task:

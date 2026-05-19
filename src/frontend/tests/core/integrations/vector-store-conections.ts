@@ -10,7 +10,7 @@ test(
     // Get authentication token
     const authToken = await getAuthToken(request);
 
-    const response = await request.get("/api/v1/starter-projects", {
+    const response = await request.get("/v1/starter-projects", {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -26,7 +26,7 @@ test(
       }
     });
 
-    await page.route("**/api/v1/flows/", async (route) => {
+    await page.route("**/v1/flows/", async (route) => {
       if (route.request().method() === "GET") {
         try {
           // Add authorization header to the request

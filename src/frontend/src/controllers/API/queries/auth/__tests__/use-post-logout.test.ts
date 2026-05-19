@@ -80,7 +80,7 @@ jest.mock("@/constants/constants", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key) => `/v1/${key.toLowerCase()}`),
 }));
 
 import { useLogout } from "../use-post-logout";

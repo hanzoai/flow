@@ -56,7 +56,7 @@ class AuthSettings(BaseSettings):
 
     # API Key to execute /process endpoint
     API_KEY_ALGORITHM: str = "HS256"
-    API_V1_STR: str = "/api/v1"
+    API_V1_STR: str = "/v1"
 
     # API Key Source Configuration
     API_KEY_SOURCE: Literal["db", "env"] = Field(

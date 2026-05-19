@@ -66,7 +66,7 @@ async def test_update_component_model_name_options(client: AsyncClient, logged_i
     assert "model" in template, f"model field not found. Available fields: {list(template.keys())}"
 
     # load the code from the file at lfx.components.models_and_agents.agent.py asynchronously
-    # we are at str/backend/tests/unit/api/v1/test_endpoints.py
+    # we are at str/backend/tests/unit/v1/test_endpoints.py
     # find the file by using the class AgentComponent
     agent_component_file = await asyncio.to_thread(inspect.getsourcefile, AgentComponent)
     code = await Path(agent_component_file).read_text(encoding="utf-8")
