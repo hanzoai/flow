@@ -34,7 +34,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/messages"),
+  getURL: jest.fn(() => "/v1/messages"),
 }));
 
 const mockFindLastBotMessage = jest.fn(() => null);

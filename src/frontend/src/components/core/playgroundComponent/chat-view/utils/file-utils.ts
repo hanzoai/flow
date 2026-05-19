@@ -122,7 +122,7 @@ export function getFilePreviewUrl(
       .split("/")
       .map((segment) => encodeURIComponent(segment))
       .join("/");
-    // Explicitly use /api/v1/files/images/ prefix for server file paths
+    // Explicitly use /v1/files/images/ prefix for server file paths
     return `${getBaseUrl()}files/images/${encodedPath}`;
   } else if ("path" in file) {
     // Server file path object - path format is "flow_id/filename" or "flow_id\filename" on Windows
@@ -133,7 +133,7 @@ export function getFilePreviewUrl(
       .split("/")
       .map((segment) => encodeURIComponent(segment))
       .join("/");
-    // Explicitly use /api/v1/files/images/ prefix for server file paths
+    // Explicitly use /v1/files/images/ prefix for server file paths
     return `${getBaseUrl()}files/images/${encodedPath}`;
   }
 

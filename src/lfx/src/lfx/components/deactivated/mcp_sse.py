@@ -30,7 +30,7 @@ class MCPSse(Component):
             name="url",
             display_name="mcp sse url",
             info="sse url",
-            value="http://localhost:7860/api/v1/mcp/sse",
+            value="http://localhost:7860/v1/mcp/sse",
             tool_mode=True,
         ),
     ]

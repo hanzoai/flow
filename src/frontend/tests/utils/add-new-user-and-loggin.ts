@@ -2,7 +2,7 @@ import { type Page } from "@playwright/test";
 import { expect } from "../fixtures";
 
 export const addNewUserAndLogin = async (page: Page) => {
-  await page.route("**/api/v1/auto_login", (route) => {
+  await page.route("**/v1/auto_login", (route) => {
     route.fulfill({
       status: 500,
       contentType: "application/json",

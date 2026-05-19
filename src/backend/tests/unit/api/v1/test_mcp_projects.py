@@ -582,7 +582,7 @@ async def test_update_project_auth_settings_encryption(
 
     # Send the update request
     response = await client.patch(
-        f"/api/v1/mcp/project/{user_test_project.id}",
+        f"/v1/mcp/project/{user_test_project.id}",
         json=json_payload,
         headers=logged_in_headers,
     )
@@ -604,7 +604,7 @@ async def test_update_project_auth_settings_encryption(
 
     # Now test that the GET endpoint returns the data (SecretStr will be masked)
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}",
+        f"/v1/mcp/project/{user_test_project.id}",
         headers=logged_in_headers,
     )
     assert response.status_code == 200
@@ -706,10 +706,10 @@ def _prepare_install_test_env(monkeypatch, tmp_path, filename="cursor.json"):
     monkeypatch.setattr("flow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/streamable"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/sse"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
 
     monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
     monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
@@ -735,7 +735,7 @@ async def test_install_mcp_config_defaults_to_sse_transport(
     config_path = _prepare_install_test_env(monkeypatch, tmp_path, "cursor_sse.json")
 
     response = await client.post(
-        f"/api/v1/mcp/project/{user_test_project.id}/install",
+        f"/v1/mcp/project/{user_test_project.id}/install",
         headers=logged_in_headers,
         json={"client": "cursor"},
     )
@@ -758,7 +758,7 @@ async def test_install_mcp_config_streamable_transport(
     config_path = _prepare_install_test_env(monkeypatch, tmp_path, "cursor_streamable.json")
 
     response = await client.post(
-        f"/api/v1/mcp/project/{user_test_project.id}/install",
+        f"/v1/mcp/project/{user_test_project.id}/install",
         headers=logged_in_headers,
         json={"client": "cursor", "transport": "streamablehttp"},
     )
@@ -884,7 +884,7 @@ async def test_list_project_tools_with_mcp_enabled_filter(
     try:
         # Test 1: With mcp_enabled=True (default), should only return enabled flows
         response = await client.get(
-            f"/api/v1/mcp/project/{user_test_project.id}",
+            f"/v1/mcp/project/{user_test_project.id}",
             headers=logged_in_headers,
         )
         assert response.status_code == 200
@@ -898,7 +898,7 @@ async def test_list_project_tools_with_mcp_enabled_filter(
 
         # Test 2: With mcp_enabled=True explicitly, should only return enabled flows
         response = await client.get(
-            f"/api/v1/mcp/project/{user_test_project.id}?mcp_enabled=true",
+            f"/v1/mcp/project/{user_test_project.id}?mcp_enabled=true",
             headers=logged_in_headers,
         )
         assert response.status_code == 200
@@ -909,7 +909,7 @@ async def test_list_project_tools_with_mcp_enabled_filter(
 
         # Test 3: With mcp_enabled=False, should return all flows
         response = await client.get(
-            f"/api/v1/mcp/project/{user_test_project.id}?mcp_enabled=false",
+            f"/v1/mcp/project/{user_test_project.id}?mcp_enabled=false",
             headers=logged_in_headers,
         )
         assert response.status_code == 200
@@ -935,7 +935,7 @@ async def test_list_project_tools_with_mcp_enabled_filter(
 async def test_list_project_tools_response_structure(client: AsyncClient, user_test_project, logged_in_headers):
     """Test that the list_project_tools endpoint returns the correct MCPProjectResponse structure."""
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}",
+        f"/v1/mcp/project/{user_test_project.id}",
         headers=logged_in_headers,
     )
     assert response.status_code == 200
@@ -1002,10 +1002,10 @@ def _prepare_installed_check_env(monkeypatch, tmp_path):
     monkeypatch.setattr("langflow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/streamable"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/sse"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
 
     monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
     monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
@@ -1029,7 +1029,7 @@ async def test_should_report_available_true_when_app_directory_exists_but_config
     _prepare_installed_check_env(monkeypatch, tmp_path)
 
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}/installed",
+        f"/v1/mcp/project/{user_test_project.id}/installed",
         headers=logged_in_headers,
     )
 
@@ -1064,11 +1064,11 @@ async def test_should_report_installed_true_when_config_file_contains_matching_u
     # Write config files with matching URLs for all clients
     project_id = user_test_project.id
     for path in client_paths.values():
-        config = {"mcpServers": {"lf-test": {"args": [f"https://langflow.local/api/v1/mcp/project/{project_id}/sse"]}}}
+        config = {"mcpServers": {"lf-test": {"args": [f"https://langflow.local/v1/mcp/project/{project_id}/sse"]}}}
         path.write_text(json.dumps(config))
 
     response = await client.get(
-        f"/api/v1/mcp/project/{project_id}/installed",
+        f"/v1/mcp/project/{project_id}/installed",
         headers=logged_in_headers,
     )
 
@@ -1100,7 +1100,7 @@ async def test_should_report_installed_false_when_config_file_has_no_matching_ur
         path.write_text(json.dumps(config))
 
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}/installed",
+        f"/v1/mcp/project/{user_test_project.id}/installed",
         headers=logged_in_headers,
     )
 
@@ -1139,16 +1139,16 @@ async def test_should_report_available_false_when_app_directory_does_not_exist(
     monkeypatch.setattr("langflow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/streamable"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/api/v1/mcp/project/{project_id}/sse"
+        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
 
     monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
     monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
 
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}/installed",
+        f"/v1/mcp/project/{user_test_project.id}/installed",
         headers=logged_in_headers,
     )
 
@@ -1179,7 +1179,7 @@ async def test_should_report_available_true_when_config_file_has_corrupt_json(
         path.write_text("{corrupt json content!!! not valid")
 
     response = await client.get(
-        f"/api/v1/mcp/project/{user_test_project.id}/installed",
+        f"/v1/mcp/project/{user_test_project.id}/installed",
         headers=logged_in_headers,
     )
 

@@ -27,7 +27,7 @@ export const customGetMCPUrl = (
   }
 
   const apiHost = api.defaults.baseURL || window.location.origin;
-  const baseUrl = `${apiHost}/api/v1/mcp/project/${projectId}`;
+  const baseUrl = `${apiHost}/v1/mcp/project/${projectId}`;
   return transport === "streamablehttp"
     ? `${baseUrl}/streamable`
     : `${baseUrl}/sse`;
