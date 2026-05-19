@@ -241,9 +241,9 @@ class TestTransformLocalhostUrl:
     def test_transforms_url_with_complex_path(self):
         """Test transforms URL with complex path and query parameters."""
         with patch("lfx.utils.util.get_container_host", return_value="host.docker.internal"):
-            url = "http://localhost:5001/api/v1/convert?format=json&timeout=30"
+            url = "http://localhost:5001/v1/convert?format=json&timeout=30"
             result = transform_localhost_url(url)
-            assert result == "http://host.docker.internal:5001/api/v1/convert?format=json&timeout=30"
+            assert result == "http://host.docker.internal:5001/v1/convert?format=json&timeout=30"
 
     def test_transforms_https_url(self):
         """Test transforms HTTPS URLs."""

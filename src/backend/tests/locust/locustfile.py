@@ -84,7 +84,7 @@ class FlowRunUser(FastHttpUser):
         if not self.flow_id:
             msg = "FLOW_ID environment variable is required for load testing"
             raise ValueError(msg)
-        endpoint = f"/api/v1/run/{self.flow_id}?stream=false"
+        endpoint = f"/v1/run/{self.flow_id}?stream=false"
 
         # Realistic payload that exercises the system
         payload = {

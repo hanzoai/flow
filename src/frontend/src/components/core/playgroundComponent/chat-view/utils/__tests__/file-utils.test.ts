@@ -9,13 +9,13 @@ import {
 
 // Mock the getBaseUrl function
 jest.mock("@/customization/utils/urls", () => ({
-  getBaseUrl: jest.fn(() => "http://localhost:3000/api/v1/"),
+  getBaseUrl: jest.fn(() => "http://localhost:3000/v1/"),
 }));
 
 const mockGetBaseUrl = getBaseUrl as jest.MockedFunction<typeof getBaseUrl>;
 
 beforeEach(() => {
-  mockGetBaseUrl.mockReturnValue("http://localhost:3000/api/v1/");
+  mockGetBaseUrl.mockReturnValue("http://localhost:3000/v1/");
 });
 
 describe("file-utils", () => {
@@ -232,7 +232,7 @@ describe("file-utils", () => {
       it("should_normalize_Windows_path_and_create_URL", () => {
         const windowsPath = "flow123\\subfolder\\image.jpg";
         const expected =
-          "http://localhost:3000/api/v1/files/images/flow123/subfolder/image.jpg";
+          "http://localhost:3000/v1/files/images/flow123/subfolder/image.jpg";
 
         expect(getFilePreviewUrl(windowsPath)).toBe(expected);
       });
@@ -241,7 +241,7 @@ describe("file-utils", () => {
         // Note: This tests the current behavior, but absolute paths shouldn't typically be used
         const windowsPath = "C:\\temp\\flow123\\image.png";
         const expected =
-          "http://localhost:3000/api/v1/files/images/C%3A/temp/flow123/image.png";
+          "http://localhost:3000/v1/files/images/C%3A/temp/flow123/image.png";
 
         expect(getFilePreviewUrl(windowsPath)).toBe(expected);
       });
@@ -249,7 +249,7 @@ describe("file-utils", () => {
       it("should_encode_special_characters_in_path_segments", () => {
         const pathWithSpaces = "flow 123\\folder name\\image file.jpg";
         const expected =
-          "http://localhost:3000/api/v1/files/images/flow%20123/folder%20name/image%20file.jpg";
+          "http://localhost:3000/v1/files/images/flow%20123/folder%20name/image%20file.jpg";
 
         expect(getFilePreviewUrl(pathWithSpaces)).toBe(expected);
       });
@@ -257,7 +257,7 @@ describe("file-utils", () => {
       it("should_handle_mixed_path_separators", () => {
         const mixedPath = "flow123/data\\images\\photo.png";
         const expected =
-          "http://localhost:3000/api/v1/files/images/flow123/data/images/photo.png";
+          "http://localhost:3000/v1/files/images/flow123/data/images/photo.png";
 
         expect(getFilePreviewUrl(mixedPath)).toBe(expected);
       });
@@ -267,7 +267,7 @@ describe("file-utils", () => {
       it("should_create_URL_for_Unix_path", () => {
         const unixPath = "flow123/images/photo.jpg";
         const expected =
-          "http://localhost:3000/api/v1/files/images/flow123/images/photo.jpg";
+          "http://localhost:3000/v1/files/images/flow123/images/photo.jpg";
 
         expect(getFilePreviewUrl(unixPath)).toBe(expected);
       });
@@ -280,7 +280,7 @@ describe("file-utils", () => {
           type: "image/jpeg",
         };
         const expected =
-          "http://localhost:3000/api/v1/files/images/flow123/images/photo.jpg";
+          "http://localhost:3000/v1/files/images/flow123/images/photo.jpg";
 
         expect(getFilePreviewUrl(fileObj)).toBe(expected);
       });

@@ -12,7 +12,7 @@ test.skip(
       "OPENAI_API_KEY required to run this test",
     );
 
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -78,7 +78,7 @@ test.skip(
   "user should not be able to see voice button if voice mode is not available",
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page, request }) => {
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -106,7 +106,7 @@ test.skip(
   "user should be able to see voice button if voice mode is available",
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page, request }) => {
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

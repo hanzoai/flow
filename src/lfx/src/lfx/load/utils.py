@@ -22,7 +22,7 @@ def upload(file_path: str, host: str, flow_id: str):
         UploadError: If an error occurs during the upload process.
     """
     try:
-        url = f"{host}/api/v1/upload/{flow_id}"
+        url = f"{host}/v1/upload/{flow_id}"
         with Path(file_path).open("rb") as file:
             response = httpx.post(url, files={"file": file})
             if response.status_code in {httpx.codes.OK, httpx.codes.CREATED}:

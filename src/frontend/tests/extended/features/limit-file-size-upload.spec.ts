@@ -15,7 +15,7 @@ test(
   { tag: ["@release", "@api", "@database"] },
   async ({ page }) => {
     const maxFileSizeUpload = 0.001;
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

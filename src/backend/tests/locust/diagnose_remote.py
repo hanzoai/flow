@@ -62,7 +62,7 @@ def test_flow_endpoint(host: str, api_key: str, flow_id: str) -> dict[str, Any]:
     }
 
     try:
-        url = f"{host}/api/v1/run/{flow_id}?stream=false"
+        url = f"{host}/v1/run/{flow_id}?stream=false"
         payload = {
             "input_value": "Hello, this is a diagnostic test",
             "output_type": "chat",
@@ -119,7 +119,7 @@ def run_load_simulation(host: str, api_key: str, flow_id: str, num_requests: int
         "errors": [],
     }
 
-    url = f"{host}/api/v1/run/{flow_id}?stream=false"
+    url = f"{host}/v1/run/{flow_id}?stream=false"
     payload = {
         "input_value": "Load test message",
         "output_type": "chat",

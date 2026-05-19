@@ -226,7 +226,7 @@ async def get_project_streamable_http_url(project_id: UUID) -> str:
     """Generate the Streamable HTTP endpoint for a project (no /sse suffix)."""
     host, port = await _get_project_base_url_components()
     base_url = f"http://{host}:{port}".rstrip("/")
-    project_url = f"{base_url}/api/v1/mcp/project/{project_id}/streamable"
+    project_url = f"{base_url}/v1/mcp/project/{project_id}/streamable"
     return await get_url_by_os(host, port, project_url)
 
 
@@ -234,7 +234,7 @@ async def get_project_sse_url(project_id: UUID) -> str:
     """Generate the legacy SSE URL for a project, including WSL handling."""
     host, port = await _get_project_base_url_components()
     base_url = f"http://{host}:{port}".rstrip("/")
-    project_sse_url = f"{base_url}/api/v1/mcp/project/{project_id}/sse"
+    project_sse_url = f"{base_url}/v1/mcp/project/{project_id}/sse"
     return await get_url_by_os(host, port, project_sse_url)
 
 

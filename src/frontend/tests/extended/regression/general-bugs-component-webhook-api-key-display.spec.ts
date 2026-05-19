@@ -13,7 +13,7 @@ test(
   "user must be able to see api key in webhook component when auto login is disabled",
   { tag: ["@release"] },
   async ({ page }) => {
-    await page.route("**/api/v1/auto_login", (route) => {
+    await page.route("**/v1/auto_login", (route) => {
       route.fulfill({
         status: 500,
         contentType: "application/json",
@@ -23,7 +23,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -89,7 +89,7 @@ test(
   "user must be able to not see api key in webhook component when auto login is enabled",
   { tag: ["@release"] },
   async ({ page }) => {
-    await page.route("**/api/v1/config", (route) => {
+    await page.route("**/v1/config", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

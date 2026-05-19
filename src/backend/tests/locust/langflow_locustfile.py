@@ -404,7 +404,7 @@ class BaseLangflowUser(FastHttpUser):
         }
 
         self.request_count += 1
-        endpoint = f"/api/v1/run/{self.flow_id}?stream=false"
+        endpoint = f"/v1/run/{self.flow_id}?stream=false"
         name = f"{endpoint} [{message_type}{tag_suffix}]"
 
         try:

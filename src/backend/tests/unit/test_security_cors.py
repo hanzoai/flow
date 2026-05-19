@@ -372,7 +372,7 @@ class TestCORSIntegration:
 
             # Make OPTIONS request (CORS preflight)
             response = client.options(
-                "/api/v1/version",
+                "/v1/version",
                 headers={
                     "Origin": "https://app.example.com",
                     "Access-Control-Request-Method": "GET",
@@ -420,7 +420,7 @@ class TestCORSIntegration:
 
             # Make OPTIONS request from unauthorized origin
             response = client.options(
-                "/api/v1/version",
+                "/v1/version",
                 headers={
                     "Origin": "https://evil.com",
                     "Access-Control-Request-Method": "GET",

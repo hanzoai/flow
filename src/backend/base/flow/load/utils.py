@@ -19,7 +19,7 @@ def get_flow(url: str, flow_id: str):
         UploadError: If an error occurs during the retrieval process.
     """
     try:
-        flow_url = f"{url}/api/v1/flows/{flow_id}"
+        flow_url = f"{url}/v1/flows/{flow_id}"
         response = httpx.get(flow_url)
         if response.status_code == httpx.codes.OK:
             json_response = response.json()

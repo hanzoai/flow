@@ -30,7 +30,7 @@ describe("getCurlWebhookCode", () => {
 
       expect(code).toContain("curl -X POST");
       expect(code).toContain(
-        "https://localhost:3000/api/v1/webhook/test-endpoint",
+        "https://localhost:3000/v1/webhook/test-endpoint",
       );
       expect(code).toContain("'Content-Type: application/json'");
       expect(code).toContain('\'{"any": "data"}\'');
@@ -46,7 +46,7 @@ describe("getCurlWebhookCode", () => {
 
       expect(code).toContain("curl -X POST");
       expect(code).toContain(
-        "https://localhost:3000/api/v1/webhook/test-endpoint",
+        "https://localhost:3000/v1/webhook/test-endpoint",
       );
       expect(code).toContain("'Content-Type: application/json'");
       expect(code).toContain("'x-api-key: <your api key>'");
@@ -61,7 +61,7 @@ describe("getCurlWebhookCode", () => {
 
       expect(code).toContain("curl -X POST");
       expect(code).toContain(
-        '"https://localhost:3000/api/v1/webhook/test-endpoint"',
+        '"https://localhost:3000/v1/webhook/test-endpoint"',
       );
       expect(code).toContain("'Content-Type: application/json'");
       expect(code).toContain('\'{"any": "data"}\'');
@@ -78,7 +78,7 @@ describe("getCurlWebhookCode", () => {
 
       expect(code).toContain("curl -X POST");
       expect(code).toContain(
-        '"https://localhost:3000/api/v1/webhook/test-endpoint"',
+        '"https://localhost:3000/v1/webhook/test-endpoint"',
       );
       expect(code).toContain("'Content-Type: application/json'");
       expect(code).toContain("-H 'x-api-key: <your api key>'");
@@ -93,7 +93,7 @@ describe("getCurlWebhookCode", () => {
       });
 
       expect(code).toContain(
-        "https://localhost:3000/api/v1/webhook/test-flow-123",
+        "https://localhost:3000/v1/webhook/test-flow-123",
       );
     });
 
@@ -120,7 +120,7 @@ describe("getCurlWebhookCode", () => {
         format: "multiline",
       });
 
-      expect(code).toContain("/api/v1/webhook/my-endpoint");
+      expect(code).toContain("/v1/webhook/my-endpoint");
     });
 
     it("should handle special characters in endpoint name", () => {
@@ -130,7 +130,7 @@ describe("getCurlWebhookCode", () => {
         format: "multiline" as const,
       });
 
-      expect(code).toContain("/api/v1/webhook/test-endpoint_v2.0");
+      expect(code).toContain("/v1/webhook/test-endpoint_v2.0");
     });
   });
 });
@@ -156,7 +156,7 @@ describe("getNewCurlCode", () => {
 
       expect(code).toContain("curl --request POST");
       expect(code).toContain(
-        "--url 'https://localhost:3000/api/v1/run/test-endpoint?stream=false'",
+        "--url 'https://localhost:3000/v1/run/test-endpoint?stream=false'",
       );
       expect(code).toContain("--header 'Content-Type: application/json'");
       expect(code).toContain('--header "x-api-key: YOUR_API_KEY_HERE"');
@@ -173,7 +173,7 @@ describe("getNewCurlCode", () => {
 
       expect(code).toContain("curl --request POST");
       expect(code).toContain(
-        "--url 'https://localhost:3000/api/v1/run/test-endpoint?stream=false'",
+        "--url 'https://localhost:3000/v1/run/test-endpoint?stream=false'",
       );
       expect(code).toContain("--header 'Content-Type: application/json'");
       expect(code).not.toContain("x-api-key: YOUR_API_KEY_HERE");
@@ -187,7 +187,7 @@ describe("getNewCurlCode", () => {
         platform: "unix",
       }) as string;
 
-      expect(code).toContain("/api/v1/run/test-flow-123");
+      expect(code).toContain("/v1/run/test-flow-123");
     });
   });
 
@@ -202,7 +202,7 @@ describe("getNewCurlCode", () => {
       expect(code).toContain("'@");
       expect(code).toContain("curl.exe --request POST");
       expect(code).toContain(
-        '--url "https://localhost:3000/api/v1/run/test-endpoint?stream=false"',
+        '--url "https://localhost:3000/v1/run/test-endpoint?stream=false"',
       );
       expect(code).toContain('--header "Content-Type: application/json"');
       expect(code).toContain('--header "x-api-key: YOUR_API_KEY_HERE"');
@@ -230,7 +230,7 @@ describe("getNewCurlCode", () => {
 
       // Should generate code (either Unix or PowerShell format)
       expect(code).toContain("curl");
-      expect(code).toContain("/api/v1/run/test-endpoint");
+      expect(code).toContain("/v1/run/test-endpoint");
     });
   });
 
@@ -255,13 +255,13 @@ describe("getNewCurlCode", () => {
       expect(result.steps[0].title).toContain("Upload files");
       expect(result.steps[0].code).toContain("curl --request POST");
       expect(result.steps[0].code).toContain(
-        "/api/v1/files/upload/test-flow-123",
+        "/v1/files/upload/test-flow-123",
       );
       expect(result.steps[0].code).toContain('--form "file=@your_image_1.jpg"');
 
       // Check execute step
       expect(result.steps[1].title).toContain("Execute");
-      expect(result.steps[1].code).toContain("/api/v1/run/test-endpoint");
+      expect(result.steps[1].code).toContain("/v1/run/test-endpoint");
       expect(result.steps[1].code).toContain(
         "REPLACE_WITH_FILE_PATH_FROM_UPLOAD_1",
       );
@@ -312,7 +312,7 @@ describe("getNewCurlCode", () => {
       expect(result.steps).toHaveLength(2);
 
       // Check upload step
-      expect(result.steps[0].code).toContain("/api/v2/files");
+      expect(result.steps[0].code).toContain("/v2/files");
       expect(result.steps[0].code).toContain('--form "file=@your_file_1.pdf"');
 
       // Check execute step
@@ -336,7 +336,7 @@ describe("getNewCurlCode", () => {
       expect(result.steps).toHaveLength(2);
 
       // Check upload step
-      expect(result.steps[0].code).toContain("/api/v2/files");
+      expect(result.steps[0].code).toContain("/v2/files");
       expect(result.steps[0].code).toContain('--form "file=@your_file_1.pdf"');
     });
 
@@ -358,7 +358,7 @@ describe("getNewCurlCode", () => {
       // Check both uploads
       expect(result.steps[0].code).toContain("your_file_1.pdf");
       expect(result.steps[0].code).toContain("your_file_2.pdf");
-      expect(result.steps[0].code).toContain("/api/v2/files");
+      expect(result.steps[0].code).toContain("/v2/files");
     });
   });
 
@@ -380,13 +380,13 @@ describe("getNewCurlCode", () => {
       // Check upload step uses curl.exe
       expect(result.steps[0].code).toContain("curl.exe --request POST");
       expect(result.steps[0].code).toContain(
-        "/api/v1/files/upload/test-flow-123",
+        "/v1/files/upload/test-flow-123",
       );
       expect(result.steps[0].code).toContain("`"); // PowerShell line continuation
 
       // Check execute step
       expect(result.steps[1].code).toContain("curl.exe -X POST");
-      expect(result.steps[1].code).toContain("/api/v1/run/test-endpoint");
+      expect(result.steps[1].code).toContain("/v1/run/test-endpoint");
     });
 
     it("should generate multi-step PowerShell code for File component", () => {
@@ -405,7 +405,7 @@ describe("getNewCurlCode", () => {
 
       // Check upload step
       expect(result.steps[0].code).toContain("curl.exe --request POST");
-      expect(result.steps[0].code).toContain("/api/v2/files");
+      expect(result.steps[0].code).toContain("/v2/files");
     });
   });
 
@@ -427,8 +427,8 @@ describe("getNewCurlCode", () => {
       expect(result.steps).toHaveLength(2);
 
       // Check for both v1 and v2 API uploads
-      expect(result.steps[0].code).toContain("/api/v1/files/upload/");
-      expect(result.steps[0].code).toContain("/api/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files/upload/");
+      expect(result.steps[0].code).toContain("/v2/files");
 
       // Check all upload counter placeholders
       expect(result.steps[1].code).toContain(
@@ -581,7 +581,7 @@ describe("getNewCurlCode", () => {
         platform: "unix",
       }) as string;
 
-      expect(code).toContain("/api/v1/run/my-endpoint");
+      expect(code).toContain("/v1/run/my-endpoint");
     });
 
     it("should handle empty endpointName", () => {
@@ -591,7 +591,7 @@ describe("getNewCurlCode", () => {
         platform: "unix",
       }) as string;
 
-      expect(code).toContain("/api/v1/run/test-flow-123");
+      expect(code).toContain("/v1/run/test-flow-123");
     });
 
     it("should handle special characters in input_value", () => {

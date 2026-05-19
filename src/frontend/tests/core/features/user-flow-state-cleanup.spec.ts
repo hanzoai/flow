@@ -6,7 +6,7 @@ test(
   { tag: ["@release", "@api", "@database"] },
   async ({ page }) => {
     // Disable auto login
-    await page.route("**/api/v1/auto_login", (route) => {
+    await page.route("**/v1/auto_login", (route) => {
       route.fulfill({
         status: 500,
         contentType: "application/json",

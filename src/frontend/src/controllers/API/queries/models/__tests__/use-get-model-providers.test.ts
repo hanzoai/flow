@@ -12,7 +12,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key) => `/v1/${key.toLowerCase()}`),
 }));
 
 import {
@@ -51,7 +51,7 @@ describe("useGetModelProviders", () => {
       renderHook(() => useGetModelProviders({}), { wrapper: createWrapper() });
 
       await waitFor(() => {
-        expect(mockApiGet).toHaveBeenCalledWith("/api/v1/models");
+        expect(mockApiGet).toHaveBeenCalledWith("/v1/models");
       });
     });
 
@@ -64,7 +64,7 @@ describe("useGetModelProviders", () => {
 
       await waitFor(() => {
         expect(mockApiGet).toHaveBeenCalledWith(
-          "/api/v1/models?include_deprecated=true",
+          "/v1/models?include_deprecated=true",
         );
       });
     });
@@ -78,7 +78,7 @@ describe("useGetModelProviders", () => {
 
       await waitFor(() => {
         expect(mockApiGet).toHaveBeenCalledWith(
-          "/api/v1/models?include_unsupported=true",
+          "/v1/models?include_unsupported=true",
         );
       });
     });
@@ -97,7 +97,7 @@ describe("useGetModelProviders", () => {
 
       await waitFor(() => {
         expect(mockApiGet).toHaveBeenCalledWith(
-          "/api/v1/models?include_deprecated=true&include_unsupported=true",
+          "/v1/models?include_deprecated=true&include_unsupported=true",
         );
       });
     });

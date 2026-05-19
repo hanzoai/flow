@@ -11,7 +11,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: () => "/api/v1/knowledge_bases",
+  getURL: () => "/v1/knowledge_bases",
 }));
 
 // ── Utilities ────────────────────────────────────────────────────────────────

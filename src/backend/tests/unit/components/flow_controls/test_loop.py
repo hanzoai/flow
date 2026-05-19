@@ -119,7 +119,7 @@ class TestLoopComponentWithAPI(ComponentTestBaseWithClient):
             "output_type": "chat",
             "tweaks": {},
         }
-        response = await client.post(f"/api/v1/run/{flow_id}", json=payload, headers=headers)
+        response = await client.post(f"/v1/run/{flow_id}", json=payload, headers=headers)
         data = response.json()
         assert "outputs" in data
         assert "session_id" in data
