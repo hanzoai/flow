@@ -29,7 +29,7 @@ export function getCurlWebhookCode({
   webhookAuthEnable: boolean;
   format?: "multiline" | "singleline";
 }) {
-  const baseUrl = `${getBaseUrl()}/api/v1/webhook/${endpointName || flowId}`;
+  const baseUrl = `${getBaseUrl()}/v1/webhook/${endpointName || flowId}`;
   const authHeader = webhookAuthEnable ? `-H 'x-api-key: <your api key>'` : "";
 
   if (format === "singleline") {
@@ -60,7 +60,7 @@ export function getNewCurlCode({
   shouldDisplayApiKey: boolean;
 }): { steps: { title: string; code: string }[] } | string {
   const baseUrl = getBaseUrl();
-  const apiUrl = `${baseUrl}/api/v1/run/${endpointName || flowId}`;
+  const apiUrl = `${baseUrl}/v1/run/${endpointName || flowId}`;
 
   // Auto-detect if no platform specified
   const detectedPlatform =
@@ -136,14 +136,14 @@ ${getApiSampleHeaders("curl")}
     if (detectedPlatform === "powershell") {
       uploadCommands.push(
         `curl.exe --request POST \`
-     --url "${baseUrl}/api/v1/files/upload/${flowId}" \`
+     --url "${baseUrl}/v1/files/upload/${flowId}" \`
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_image_${uploadCounter}.jpg"`,
       );
     } else {
       uploadCommands.push(
         `curl --request POST \\
-     --url "${baseUrl}/api/v1/files/upload/${flowId}" \\
+     --url "${baseUrl}/v1/files/upload/${flowId}" \\
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_image_${uploadCounter}.jpg"`,
       );
@@ -169,14 +169,14 @@ ${getApiSampleHeaders("curl")}
     if (detectedPlatform === "powershell") {
       uploadCommands.push(
         `curl.exe --request POST \`
-     --url "${baseUrl}/api/v2/files" \`
+     --url "${baseUrl}/v2/files" \`
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_file_${uploadCounter}.pdf"`,
       );
     } else {
       uploadCommands.push(
         `curl --request POST \\
-     --url "${baseUrl}/api/v2/files" \\
+     --url "${baseUrl}/v2/files" \\
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_file_${uploadCounter}.pdf"`,
       );

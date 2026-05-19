@@ -113,7 +113,7 @@ async def handle_list_resources(project_id=None):
                             # URL encode the filename
                             safe_filename = quote(file_name)
                             resource = types.Resource(
-                                uri=f"{base_url}/api/v1/files/download/{flow.id}/{safe_filename}",
+                                uri=f"{base_url}/v1/files/download/{flow.id}/{safe_filename}",
                                 name=file_name,
                                 description=f"File in flow: {flow.name}",
                                 mimeType=build_content_type_from_extension(file_name),
@@ -126,7 +126,7 @@ async def handle_list_resources(project_id=None):
             ####################################################
             # When a user uploads a file inside a flow
             # (e.g., via the File Read component),
-            # it hits /api/v2/files (POST),
+            # it hits /v2/files (POST),
             # which saves files at the user-level.
             # So the above query for flow files is not enough.
             # So we list all user files for the current user.
@@ -144,7 +144,7 @@ async def handle_list_resources(project_id=None):
                         continue
                     description = getattr(user_file, "provider", None) or "User file uploaded via File Manager"
                     resource = types.Resource(
-                        uri=f"{base_url}/api/v1/files/download/{current_user.id}/{safe_filename}",
+                        uri=f"{base_url}/v1/files/download/{current_user.id}/{safe_filename}",
                         name=stored_filename,
                         description=description,
                         mimeType=build_content_type_from_extension(stored_filename),
@@ -162,7 +162,7 @@ async def handle_read_resource(uri: str) -> bytes:
     try:
         # Parse the URI properly
         parsed_uri = urlparse(str(uri))
-        # Path will be like /api/v1/files/download/{namespace}/{filename}
+        # Path will be like /v1/files/download/{namespace}/{filename}
         path_parts = parsed_uri.path.split("/")
         # Remove empty strings from split
         path_parts = [p for p in path_parts if p]

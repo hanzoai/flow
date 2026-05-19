@@ -80,8 +80,9 @@ router_v2.include_router(mcp_router_v2)
 router_v2.include_router(registration_router_v2)
 router_v2.include_router(workflow_router_v2)
 
-router = APIRouter(
-    prefix="/api",
-)
+# API is mounted at the root — subdomain (api.*) already namespaces the
+# service so /api/ on top is redundant double-prefix. /v1 + /v2 hang off
+# the root directly, per the global /v1/ canonical-path rule.
+router = APIRouter()
 router.include_router(router_v1)
 router.include_router(router_v2)

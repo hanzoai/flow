@@ -20,7 +20,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key: string) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key: string) => `/v1/${key.toLowerCase()}`),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -59,7 +59,7 @@ describe("useGetTraceQuery", () => {
 
     await Promise.resolve();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/traces/trace-1");
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/traces/trace-1");
     expect(mockConvertTrace).toHaveBeenCalledWith(apiTrace);
   });
 });

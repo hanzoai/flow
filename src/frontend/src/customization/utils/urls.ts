@@ -4,7 +4,7 @@ import {
 } from "@/customization/config-constants";
 
 export function getBaseUrl(): string {
-  return BASE_URL_API || "/api/v1/";
+  return BASE_URL_API || "/v1/";
 }
 
 export function getHealthCheckUrl(): string {

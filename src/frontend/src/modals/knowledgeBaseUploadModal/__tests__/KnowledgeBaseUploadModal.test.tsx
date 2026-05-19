@@ -30,7 +30,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/knowledge_bases"),
+  getURL: jest.fn(() => "/v1/knowledge_bases"),
 }));
 
 const MODEL_PROVIDERS = [

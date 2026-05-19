@@ -19,7 +19,7 @@ from sqlmodel import select
 def _build_server_config(base_url: str, project_id, transport: str):
     """Return URL and server config for a given transport."""
     suffix = "streamable" if transport == "streamable" else "sse"
-    url = f"{base_url}/api/v1/mcp/project/{project_id}/{suffix}"
+    url = f"{base_url}/v1/mcp/project/{project_id}/{suffix}"
     if transport == "streamable":  # noqa: SIM108
         args = ["mcp-proxy", "--transport", "streamablehttp", url]
     else:
@@ -149,7 +149,7 @@ class TestValidateMcpServerForProject:
 
         # Create MCP server via API
         response = await client.post(
-            "/api/v2/mcp/servers/lf-test_project", json=server_config, headers={"x-api-key": created_api_key.api_key}
+            "/v2/mcp/servers/lf-test_project", json=server_config, headers={"x-api-key": created_api_key.api_key}
         )
         assert response.status_code == 200
 
@@ -170,7 +170,7 @@ class TestValidateMcpServerForProject:
             assert result.conflict_message == ""
 
         # Cleanup - delete the server
-        await client.delete("/api/v2/mcp/servers/lf-test_project", headers={"x-api-key": created_api_key.api_key})
+        await client.delete("/v2/mcp/servers/lf-test_project", headers={"x-api-key": created_api_key.api_key})
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("transport", ["streamable", "sse"])
@@ -184,7 +184,7 @@ class TestValidateMcpServerForProject:
 
         # Create MCP server with different project ID via API
         response = await client.post(
-            f"/api/v2/mcp/servers/{server_name}", json=server_config, headers={"x-api-key": created_api_key.api_key}
+            f"/v2/mcp/servers/{server_name}", json=server_config, headers={"x-api-key": created_api_key.api_key}
         )
         assert response.status_code == 200
 
@@ -206,7 +206,7 @@ class TestValidateMcpServerForProject:
             assert str(test_project.id) in result.conflict_message
 
         # Cleanup - delete the server
-        await client.delete(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": created_api_key.api_key})
+        await client.delete(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": created_api_key.api_key})
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize("transport", ["streamable", "sse"])
@@ -220,7 +220,7 @@ class TestValidateMcpServerForProject:
 
         # Create MCP server with different project ID via API
         response = await client.post(
-            f"/api/v2/mcp/servers/{server_name}", json=server_config, headers={"x-api-key": created_api_key.api_key}
+            f"/v2/mcp/servers/{server_name}", json=server_config, headers={"x-api-key": created_api_key.api_key}
         )
         assert response.status_code == 200
 
@@ -249,7 +249,7 @@ class TestValidateMcpServerForProject:
             assert "Cannot delete MCP server" in result.conflict_message
 
         # Cleanup - delete the server
-        await client.delete(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": created_api_key.api_key})
+        await client.delete(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": created_api_key.api_key})
 
     @pytest.mark.asyncio
     async def test_validate_server_exception_handling(self, active_user, test_project, client: AsyncClient):  # noqa: ARG002
@@ -483,7 +483,7 @@ class TestMultiUserMCPServerAccess:
 
         # User One creates a server
         response = await client.post(
-            f"/api/v2/mcp/servers/{server_name}",
+            f"/v2/mcp/servers/{server_name}",
             json=config_one,
             headers={"x-api-key": user_one_api_key},
         )
@@ -492,7 +492,7 @@ class TestMultiUserMCPServerAccess:
 
         # User Two creates a server with the same name
         response = await client.post(
-            f"/api/v2/mcp/servers/{server_name}",
+            f"/v2/mcp/servers/{server_name}",
             json=config_two,
             headers={"x-api-key": user_two_api_key},
         )
@@ -500,17 +500,17 @@ class TestMultiUserMCPServerAccess:
         assert response.json() == config_two
 
         # Verify each user gets their own server config
-        response_one = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
+        response_one = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
         assert response_one.status_code == 200
         assert response_one.json() == config_one
 
-        response_two = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
+        response_two = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
         assert response_two.status_code == 200
         assert response_two.json() == config_two
 
         # User One updates their server
         response = await client.patch(
-            f"/api/v2/mcp/servers/{server_name}",
+            f"/v2/mcp/servers/{server_name}",
             json=updated_config_one,
             headers={"x-api-key": user_one_api_key},
         )
@@ -518,32 +518,32 @@ class TestMultiUserMCPServerAccess:
         assert response.json() == updated_config_one
 
         # Verify User One's server is updated and User Two's is not
-        response_one = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
+        response_one = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
         assert response_one.status_code == 200
         assert response_one.json() == updated_config_one
 
-        response_two = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
+        response_two = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
         assert response_two.status_code == 200
         assert response_two.json() == config_two, "User Two's server should not be affected by User One's update"
 
         # User One tries to delete User Two's server (should only delete their own)
-        response = await client.delete(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
+        response = await client.delete(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
         assert response.status_code == 200
 
         # Verify User One's server is deleted
-        response_one = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
+        response_one = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_one_api_key})
         assert response_one.json() is None
 
         # Verify User Two's server still exists
-        response_two = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
+        response_two = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
         assert response_two.status_code == 200
         assert response_two.json() == config_two, "User Two's server should not be affected by User One's delete"
 
         # Cleanup: User Two deletes their server
-        response = await client.delete(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
+        response = await client.delete(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
         assert response.status_code == 200
 
-        response_two = await client.get(f"/api/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
+        response_two = await client.get(f"/v2/mcp/servers/{server_name}", headers={"x-api-key": user_two_api_key})
         assert response_two.json() is None
 
 

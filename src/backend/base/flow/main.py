@@ -465,7 +465,7 @@ def create_app():
 
     @app.middleware("http")
     async def check_boundary(request: Request, call_next):
-        if "/api/v1/files/upload" in request.url.path:
+        if "/v1/files/upload" in request.url.path:
             content_type = request.headers.get("Content-Type")
 
             if not content_type or "multipart/form-data" not in content_type or "boundary=" not in content_type:

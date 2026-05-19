@@ -29,7 +29,7 @@ export function getNewPythonApiCode({
 
   // If no file uploads, use existing logic
   if (!hasFiles) {
-    const apiUrl = `${baseUrl}/api/v1/run/${endpointName || flowId}`;
+    const apiUrl = `${baseUrl}/v1/run/${endpointName || flowId}`;
     const payloadString = JSON.stringify(processedPayload, null, 4)
       .replace(/true/g, "True")
       .replace(/false/g, "False")
@@ -103,7 +103,7 @@ except ValueError as e:
         uploadSteps.length + 1
       }: Upload file for ChatInput ${nodeId}\nwith open(\"your_image_${
         index + 1
-      }.jpg\", \"rb\") as f:\n    response = requests.post(\n        f\"{base_url}/api/v1/files/upload/{flow_id}\",\n        headers=headers,\n        files={\"file\": f}\n    )\n    response.raise_for_status()\n    chat_file_path_${
+      }.jpg\", \"rb\") as f:\n    response = requests.post(\n        f\"{base_url}/v1/files/upload/{flow_id}\",\n        headers=headers,\n        files={\"file\": f}\n    )\n    response.raise_for_status()\n    chat_file_path_${
         index + 1
       } = response.json()[\"file_path\"]`,
     );
@@ -125,7 +125,7 @@ except ValueError as e:
         uploadSteps.length + 1
       }: Upload file for File/VideoFile ${nodeId}\nwith open(\"your_file_${
         index + 1
-      }.pdf\", \"rb\") as f:\n    response = requests.post(\n        f\"{base_url}/api/v2/files\",\n        headers=headers,\n        files={\"file\": f}\n    )\n    response.raise_for_status()\n    file_path_${
+      }.pdf\", \"rb\") as f:\n    response = requests.post(\n        f\"{base_url}/v2/files\",\n        headers=headers,\n        files={\"file\": f}\n    )\n    response.raise_for_status()\n    file_path_${
         index + 1
       } = response.json()[\"path\"]`,
     );
@@ -179,7 +179,7 @@ ${allTweaks}
 }
 
 response = requests.post(
-    f"{base_url}/api/v1/run/{endpointName or flowId}",
+    f"{base_url}/v1/run/{endpointName or flowId}",
     headers={"Content-Type": "application/json", **headers},
     json=payload
 )

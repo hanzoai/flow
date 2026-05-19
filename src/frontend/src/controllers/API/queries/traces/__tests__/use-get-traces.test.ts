@@ -22,7 +22,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key: string) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key: string) => `/v1/${key.toLowerCase()}`),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -61,7 +61,7 @@ describe("useGetTracesQuery", () => {
 
     await Promise.resolve();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/traces", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/traces", {
       params: {
         flow_id: "flow1",
         session_id: "sess",

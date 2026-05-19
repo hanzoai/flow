@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
 
   const envHanzoflow = envHanzoflowResult.parsed || {};
 
-  const apiRoutes = API_ROUTES || ["^/api/v1/", "^/api/v2/", "/health"];
+  const apiRoutes = API_ROUTES || ["^/v1/", "^/v2/", "/health"];
 
   const target =
     env.VITE_PROXY_TARGET || PROXY_TARGET || "http://localhost:7860";
