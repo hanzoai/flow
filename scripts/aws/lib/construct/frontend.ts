@@ -91,8 +91,8 @@ export class Web extends Construct {
     ],
     defaultBehavior: { origin:  s3SpaOrigin },
     additionalBehaviors: {
-      '/api/v1/*': albBehaviorOptions,
-      '/api/v2/*': albBehaviorOptions,
+      '/v1/*': albBehaviorOptions,
+      '/v2/*': albBehaviorOptions,
       '/health' : albBehaviorOptions,
     },
     enableLogging: true, // ログ出力設定

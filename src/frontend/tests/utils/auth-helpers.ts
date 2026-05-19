@@ -5,7 +5,7 @@ export async function getAuthToken(request: any) {
   formData.append("username", "langflow");
   formData.append("password", "langflow");
 
-  const loginResponse = await request.post("/api/v1/login", {
+  const loginResponse = await request.post("/v1/login", {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },

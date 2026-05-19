@@ -60,7 +60,7 @@ async def test_read_flows(client: AsyncClient, logged_in_headers):
 
 
 async def test_get_flows_with_malformed_bearer_token_returns_401(client: AsyncClient):
-    """CT-010: GET /api/v1/flows with malformed Bearer token must return 401 Unauthorized."""
+    """CT-010: GET /v1/flows with malformed Bearer token must return 401 Unauthorized."""
     headers = {"Authorization": "Bearer invalid.token.here"}
     response = await client.get("api/v1/flows/", headers=headers)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

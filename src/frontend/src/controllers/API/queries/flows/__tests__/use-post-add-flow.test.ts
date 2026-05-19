@@ -22,7 +22,7 @@ jest.mock("@/controllers/API/api", () => ({
 import { usePostAddFlow } from "../use-post-add-flow";
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn((key: string) => `/api/v1/${key.toLowerCase()}`),
+  getURL: jest.fn((key: string) => `/v1/${key.toLowerCase()}`),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -63,7 +63,7 @@ describe("usePostAddFlow", () => {
     });
 
     expect(mockApiPost).toHaveBeenCalledWith(
-      expect.stringContaining("/api/v1/flows/"),
+      expect.stringContaining("/v1/flows/"),
       expect.objectContaining({ locked: true }),
     );
   });
@@ -87,7 +87,7 @@ describe("usePostAddFlow", () => {
     });
 
     expect(mockApiPost).toHaveBeenCalledWith(
-      expect.stringContaining("/api/v1/flows/"),
+      expect.stringContaining("/v1/flows/"),
       expect.objectContaining({ locked: null }),
     );
   });

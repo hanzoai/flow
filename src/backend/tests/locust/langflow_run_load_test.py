@@ -87,7 +87,7 @@ def test_single_request(host):
     # Now test the actual flow request
     print("   🎯 Testing flow request...")
     try:
-        url = f"{host}/api/v1/run/{flow_id}?stream=false"
+        url = f"{host}/v1/run/{flow_id}?stream=false"
         payload = {
             "input_value": "Hello, this is a test message",
             "output_type": "chat",
