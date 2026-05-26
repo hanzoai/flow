@@ -98006,6 +98006,335 @@
       }
     ],
     [
+      "perplexity",
+      {
+        "PerplexityModel": {
+          "base_classes": [
+            "LanguageModel",
+            "Message"
+          ],
+          "beta": false,
+          "conditional_paths": [],
+          "custom_fields": {},
+          "description": "Generate text using Perplexity LLMs.",
+          "display_name": "Perplexity",
+          "documentation": "https://python.langchain.com/v0.2/docs/integrations/chat/perplexity/",
+          "edited": false,
+          "field_order": [
+            "input_value",
+            "system_message",
+            "stream",
+            "model_name",
+            "max_tokens",
+            "api_key",
+            "temperature",
+            "top_p",
+            "n"
+          ],
+          "frozen": false,
+          "icon": "Perplexity",
+          "legacy": false,
+          "metadata": {
+            "code_hash": "df738acfd582",
+            "dependencies": {
+              "dependencies": [
+                {
+                  "name": "langchain_perplexity",
+                  "version": "1.2.0"
+                },
+                {
+                  "name": "pydantic",
+                  "version": "2.12.5"
+                },
+                {
+                  "name": "lfx",
+                  "version": null
+                }
+              ],
+              "total_dependencies": 3
+            },
+            "keywords": [
+              "model",
+              "llm",
+              "language model",
+              "large language model"
+            ],
+            "module": "lfx.components.perplexity.perplexity.PerplexityComponent"
+          },
+          "minimized": false,
+          "output_types": [],
+          "outputs": [
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Model Response",
+              "group_outputs": false,
+              "method": "text_response",
+              "name": "text_output",
+              "selected": "Message",
+              "tool_mode": true,
+              "types": [
+                "Message"
+              ],
+              "value": "__UNDEFINED__"
+            },
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Language Model",
+              "group_outputs": false,
+              "method": "build_model",
+              "name": "model_output",
+              "selected": "LanguageModel",
+              "tool_mode": true,
+              "types": [
+                "LanguageModel"
+              ],
+              "value": "__UNDEFINED__"
+            }
+          ],
+          "pinned": false,
+          "template": {
+            "_type": "Component",
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": false,
+              "display_name": "Perplexity API Key",
+              "dynamic": false,
+              "info": "The Perplexity API Key to use for the Perplexity model.",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "code": {
+              "advanced": true,
+              "dynamic": true,
+              "fileTypes": [],
+              "file_path": "",
+              "info": "",
+              "list": false,
+              "load_from_db": false,
+              "multiline": true,
+              "name": "code",
+              "password": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "type": "code",
+              "value": "from langchain_perplexity import ChatPerplexity\nfrom pydantic.v1 import SecretStr\n\nfrom lfx.base.models.model import LCModelComponent\nfrom lfx.field_typing import LanguageModel\nfrom lfx.field_typing.range_spec import RangeSpec\nfrom lfx.io import DropdownInput, FloatInput, IntInput, SecretStrInput, SliderInput\n\n\nclass PerplexityComponent(LCModelComponent):\n    display_name = \"Perplexity\"\n    description = \"Generate text using Perplexity LLMs.\"\n    documentation = \"https://python.langchain.com/v0.2/docs/integrations/chat/perplexity/\"\n    icon = \"Perplexity\"\n    name = \"PerplexityModel\"\n\n    inputs = [\n        *LCModelComponent.get_base_inputs(),\n        DropdownInput(\n            name=\"model_name\",\n            display_name=\"Model Name\",\n            advanced=False,\n            options=[\n                \"llama-3.1-sonar-small-128k-online\",\n                \"llama-3.1-sonar-large-128k-online\",\n                \"llama-3.1-sonar-huge-128k-online\",\n                \"llama-3.1-sonar-small-128k-chat\",\n                \"llama-3.1-sonar-large-128k-chat\",\n                \"llama-3.1-8b-instruct\",\n                \"llama-3.1-70b-instruct\",\n            ],\n            value=\"llama-3.1-sonar-small-128k-online\",\n        ),\n        IntInput(name=\"max_tokens\", display_name=\"Max Output Tokens\", info=\"The maximum number of tokens to generate.\"),\n        SecretStrInput(\n            name=\"api_key\",\n            display_name=\"Perplexity API Key\",\n            info=\"The Perplexity API Key to use for the Perplexity model.\",\n            advanced=False,\n            required=True,\n        ),\n        SliderInput(\n            name=\"temperature\", display_name=\"Temperature\", value=0.75, range_spec=RangeSpec(min=0, max=2, step=0.05)\n        ),\n        FloatInput(\n            name=\"top_p\",\n            display_name=\"Top P\",\n            info=\"The maximum cumulative probability of tokens to consider when sampling.\",\n            advanced=True,\n        ),\n        IntInput(\n            name=\"n\",\n            display_name=\"N\",\n            info=\"Number of chat completions to generate for each prompt. \"\n            \"Note that the API may not return the full n completions if duplicates are generated.\",\n            advanced=True,\n        ),\n    ]\n\n    def build_model(self) -> LanguageModel:  # type: ignore[type-var]\n        api_key = SecretStr(self.api_key).get_secret_value()\n        temperature = self.temperature\n        model = self.model_name\n        max_tokens = self.max_tokens\n        top_p = self.top_p\n        n = self.n\n\n        return ChatPerplexity(\n            model=model,\n            temperature=temperature or 0.75,\n            pplx_api_key=api_key,\n            top_p=top_p or None,\n            n=n or 1,\n            max_tokens=max_tokens,\n        )\n"
+            },
+            "input_value": {
+              "_input_type": "MessageInput",
+              "advanced": false,
+              "display_name": "Input",
+              "dynamic": false,
+              "info": "",
+              "input_types": [
+                "Message"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "input_value",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "max_tokens": {
+              "_input_type": "IntInput",
+              "advanced": false,
+              "display_name": "Max Output Tokens",
+              "dynamic": false,
+              "info": "The maximum number of tokens to generate.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "max_tokens",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 0
+            },
+            "model_name": {
+              "_input_type": "DropdownInput",
+              "advanced": false,
+              "combobox": false,
+              "dialog_inputs": {},
+              "display_name": "Model Name",
+              "dynamic": false,
+              "external_options": {},
+              "info": "",
+              "name": "model_name",
+              "options": [
+                "llama-3.1-sonar-small-128k-online",
+                "llama-3.1-sonar-large-128k-online",
+                "llama-3.1-sonar-huge-128k-online",
+                "llama-3.1-sonar-small-128k-chat",
+                "llama-3.1-sonar-large-128k-chat",
+                "llama-3.1-8b-instruct",
+                "llama-3.1-70b-instruct"
+              ],
+              "options_metadata": [],
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "toggle": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "str",
+              "value": "llama-3.1-sonar-small-128k-online"
+            },
+            "n": {
+              "_input_type": "IntInput",
+              "advanced": true,
+              "display_name": "N",
+              "dynamic": false,
+              "info": "Number of chat completions to generate for each prompt. Note that the API may not return the full n completions if duplicates are generated.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "n",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 0
+            },
+            "stream": {
+              "_input_type": "BoolInput",
+              "advanced": true,
+              "display_name": "Stream",
+              "dynamic": false,
+              "info": "Stream the response from the model. Streaming works only in Chat.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "stream",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "value": false
+            },
+            "system_message": {
+              "_input_type": "MultilineInput",
+              "advanced": false,
+              "ai_enabled": false,
+              "copy_field": false,
+              "display_name": "System Message",
+              "dynamic": false,
+              "info": "System message to pass to the model.",
+              "input_types": [
+                "Message"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "multiline": true,
+              "name": "system_message",
+              "override_skip": false,
+              "password": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "temperature": {
+              "_input_type": "SliderInput",
+              "advanced": false,
+              "display_name": "Temperature",
+              "dynamic": false,
+              "info": "",
+              "max_label": "",
+              "max_label_icon": "",
+              "min_label": "",
+              "min_label_icon": "",
+              "name": "temperature",
+              "override_skip": false,
+              "placeholder": "",
+              "range_spec": {
+                "max": 2.0,
+                "min": 0.0,
+                "step": 0.05,
+                "step_type": "float"
+              },
+              "required": false,
+              "show": true,
+              "slider_buttons": false,
+              "slider_buttons_options": [],
+              "slider_input": false,
+              "title_case": false,
+              "tool_mode": false,
+              "track_in_telemetry": false,
+              "type": "slider",
+              "value": 0.75
+            },
+            "top_p": {
+              "_input_type": "FloatInput",
+              "advanced": true,
+              "display_name": "Top P",
+              "dynamic": false,
+              "info": "The maximum cumulative probability of tokens to consider when sampling.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "top_p",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "float",
+              "value": ""
+            }
+          },
+          "tool_mode": false
+        }
+      }
+    ],
+    [
       "pgvector",
       {
         "pgvector": {
@@ -114607,6 +114936,328 @@
       }
     ],
     [
+      "weaviate",
+      {
+        "Weaviate": {
+          "base_classes": [
+            "JSON",
+            "Table"
+          ],
+          "beta": false,
+          "conditional_paths": [],
+          "custom_fields": {},
+          "description": "Weaviate Vector Store with search capabilities",
+          "display_name": "Weaviate",
+          "documentation": "",
+          "edited": false,
+          "field_order": [
+            "url",
+            "api_key",
+            "index_name",
+            "text_key",
+            "ingest_data",
+            "search_query",
+            "should_cache_vector_store",
+            "embedding",
+            "number_of_results",
+            "search_by_text"
+          ],
+          "frozen": false,
+          "icon": "Weaviate",
+          "legacy": false,
+          "metadata": {
+            "code_hash": "14aad330ac20",
+            "dependencies": {
+              "dependencies": [
+                {
+                  "name": "weaviate",
+                  "version": "4.16.2"
+                },
+                {
+                  "name": "langchain_weaviate",
+                  "version": "0.0.6"
+                },
+                {
+                  "name": "lfx",
+                  "version": null
+                }
+              ],
+              "total_dependencies": 3
+            },
+            "module": "lfx.components.weaviate.weaviate.WeaviateVectorStoreComponent"
+          },
+          "minimized": false,
+          "output_types": [],
+          "outputs": [
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Search Results",
+              "group_outputs": false,
+              "method": "search_documents",
+              "name": "search_results",
+              "selected": "JSON",
+              "tool_mode": true,
+              "types": [
+                "JSON"
+              ],
+              "value": "__UNDEFINED__"
+            },
+            {
+              "allows_loop": false,
+              "cache": true,
+              "display_name": "Table",
+              "group_outputs": false,
+              "method": "as_dataframe",
+              "name": "dataframe",
+              "selected": "Table",
+              "tool_mode": true,
+              "types": [
+                "Table"
+              ],
+              "value": "__UNDEFINED__"
+            }
+          ],
+          "pinned": false,
+          "template": {
+            "_type": "Component",
+            "api_key": {
+              "_input_type": "SecretStrInput",
+              "advanced": false,
+              "display_name": "API Key",
+              "dynamic": false,
+              "info": "",
+              "input_types": [],
+              "load_from_db": true,
+              "name": "api_key",
+              "override_skip": false,
+              "password": true,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "code": {
+              "advanced": true,
+              "dynamic": true,
+              "fileTypes": [],
+              "file_path": "",
+              "info": "",
+              "list": false,
+              "load_from_db": false,
+              "multiline": true,
+              "name": "code",
+              "password": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "type": "code",
+              "value": "import weaviate\nfrom langchain_weaviate import WeaviateVectorStore\n\nfrom lfx.base.vectorstores.model import LCVectorStoreComponent, check_cached_vector_store\nfrom lfx.helpers.data import docs_to_data\nfrom lfx.io import BoolInput, HandleInput, IntInput, SecretStrInput, StrInput\nfrom lfx.schema.data import Data\n\n\nclass WeaviateVectorStoreComponent(LCVectorStoreComponent):\n    display_name = \"Weaviate\"\n    description = \"Weaviate Vector Store with search capabilities\"\n    name = \"Weaviate\"\n    icon = \"Weaviate\"\n\n    inputs = [\n        StrInput(name=\"url\", display_name=\"Weaviate URL\", value=\"http://localhost:8080\", required=True),\n        SecretStrInput(name=\"api_key\", display_name=\"API Key\", required=False),\n        StrInput(\n            name=\"index_name\",\n            display_name=\"Index Name\",\n            required=True,\n            info=\"Requires capitalized index name.\",\n        ),\n        StrInput(name=\"text_key\", display_name=\"Text Key\", value=\"text\", advanced=True),\n        *LCVectorStoreComponent.inputs,\n        HandleInput(name=\"embedding\", display_name=\"Embedding\", input_types=[\"Embeddings\"]),\n        IntInput(\n            name=\"number_of_results\",\n            display_name=\"Number of Results\",\n            info=\"Number of results to return.\",\n            value=4,\n            advanced=True,\n        ),\n        BoolInput(name=\"search_by_text\", display_name=\"Search By Text\", advanced=True),\n    ]\n\n    @check_cached_vector_store\n    def build_vector_store(self) -> WeaviateVectorStore:\n        if self.api_key:\n            auth_config = weaviate.AuthApiKey(api_key=self.api_key)\n            client = weaviate.Client(url=self.url, auth_client_secret=auth_config)\n        else:\n            client = weaviate.Client(url=self.url)\n\n        if self.index_name != self.index_name.capitalize():\n            msg = f\"Weaviate requires the index name to be capitalized. Use: {self.index_name.capitalize()}\"\n            raise ValueError(msg)\n\n        # Convert DataFrame to Data if needed using parent's method\n        self.ingest_data = self._prepare_ingest_data()\n\n        documents = []\n        for _input in self.ingest_data or []:\n            if isinstance(_input, Data):\n                documents.append(_input.to_lc_document())\n            else:\n                documents.append(_input)\n\n        if documents and self.embedding:\n            return WeaviateVectorStore.from_documents(\n                client=client,\n                index_name=self.index_name,\n                documents=documents,\n                embedding=self.embedding,\n                by_text=self.search_by_text,\n            )\n\n        return WeaviateVectorStore(\n            client=client,\n            index_name=self.index_name,\n            text_key=self.text_key,\n            embedding=self.embedding,\n            by_text=self.search_by_text,\n        )\n\n    def search_documents(self) -> list[Data]:\n        vector_store = self.build_vector_store()\n\n        if self.search_query and isinstance(self.search_query, str) and self.search_query.strip():\n            docs = vector_store.similarity_search(\n                query=self.search_query,\n                k=self.number_of_results,\n            )\n\n            data = docs_to_data(docs)\n            self.status = data\n            return data\n        return []\n"
+            },
+            "embedding": {
+              "_input_type": "HandleInput",
+              "advanced": false,
+              "display_name": "Embedding",
+              "dynamic": false,
+              "info": "",
+              "input_types": [
+                "Embeddings"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "embedding",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "other",
+              "value": ""
+            },
+            "index_name": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "Index Name",
+              "dynamic": false,
+              "info": "Requires capitalized index name.",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "index_name",
+              "override_skip": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": ""
+            },
+            "ingest_data": {
+              "_input_type": "HandleInput",
+              "advanced": false,
+              "display_name": "Ingest Data",
+              "dynamic": false,
+              "info": "",
+              "input_types": [
+                "Data",
+                "DataFrame",
+                "Table"
+              ],
+              "list": true,
+              "list_add_label": "Add More",
+              "name": "ingest_data",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "other",
+              "value": ""
+            },
+            "number_of_results": {
+              "_input_type": "IntInput",
+              "advanced": true,
+              "display_name": "Number of Results",
+              "dynamic": false,
+              "info": "Number of results to return.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "number_of_results",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "int",
+              "value": 4
+            },
+            "search_by_text": {
+              "_input_type": "BoolInput",
+              "advanced": true,
+              "display_name": "Search By Text",
+              "dynamic": false,
+              "info": "",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "search_by_text",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "value": false
+            },
+            "search_query": {
+              "_input_type": "QueryInput",
+              "advanced": false,
+              "display_name": "Search Query",
+              "dynamic": false,
+              "info": "Enter a query to run a similarity search.",
+              "input_types": [
+                "Message"
+              ],
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "search_query",
+              "override_skip": false,
+              "placeholder": "Enter a query...",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": true,
+              "trace_as_input": true,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "query",
+              "value": ""
+            },
+            "should_cache_vector_store": {
+              "_input_type": "BoolInput",
+              "advanced": true,
+              "display_name": "Cache Vector Store",
+              "dynamic": false,
+              "info": "If True, the vector store will be cached for the current build of the component. This is useful for components that have multiple output methods and want to share the same vector store.",
+              "list": false,
+              "list_add_label": "Add More",
+              "name": "should_cache_vector_store",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": true,
+              "type": "bool",
+              "value": true
+            },
+            "text_key": {
+              "_input_type": "StrInput",
+              "advanced": true,
+              "display_name": "Text Key",
+              "dynamic": false,
+              "info": "",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "text_key",
+              "override_skip": false,
+              "placeholder": "",
+              "required": false,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": "text"
+            },
+            "url": {
+              "_input_type": "StrInput",
+              "advanced": false,
+              "display_name": "Weaviate URL",
+              "dynamic": false,
+              "info": "",
+              "list": false,
+              "list_add_label": "Add More",
+              "load_from_db": false,
+              "name": "url",
+              "override_skip": false,
+              "placeholder": "",
+              "required": true,
+              "show": true,
+              "title_case": false,
+              "tool_mode": false,
+              "trace_as_metadata": true,
+              "track_in_telemetry": false,
+              "type": "str",
+              "value": "http://localhost:8080"
+            }
+          },
+          "tool_mode": false
+        }
+      }
+    ],
+    [
       "wikipedia",
       {
         "WikidataComponent": {
@@ -117188,9 +117839,9 @@
     ]
   ],
   "metadata": {
-    "num_components": 352,
-    "num_modules": 95
+    "num_components": 354,
+    "num_modules": 97
   },
-  "sha256": "d60b45d05f808dc772d0cf7056ce022abec53ee15cdc5deb6c968804fb91a7a2",
+  "sha256": "790bbe7625c78d5d6e6f43ed8bf86504397b5cc8e702b6b4773f5b4e0b2968c5",
   "version": "0.4.4"
 }
