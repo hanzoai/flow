@@ -1,24 +1,53 @@
+"""Composed ``Settings`` class for Langflow.
+
+Fields live in per-group mixins under :mod:`lfx.services.settings.groups`.
+This module wires them together, configures env-var loading, and exposes the
+YAML helpers and a few model-level utilities (``update_settings``,
+``voice_mode_available``).
+
+Group order in the inheritance list matters: Pydantic collects fields from the
+rightmost base first, so cross-group validators see their dependencies in
+``info.data``. Specifically:
+
+- :class:`PathSettings` is rightmost so ``config_dir`` is validated before
+  ``database_url``.
+- :class:`ServerSettings` precedes :class:`RuntimeSettings` so ``workers`` is
+  validated before ``event_delivery``.
+"""
+
+from __future__ import annotations
+
 import asyncio
 import contextlib
 import json
-import os
 from pathlib import Path
-from shutil import copy2
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any
 
+import aiofiles
 import orjson
 import yaml
-from aiofile import async_open
-from pydantic import Field, field_validator
-from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, EnvSettingsSource, PydanticBaseSettingsSource, SettingsConfigDict
 from typing_extensions import override
 
-from lfx.constants import BASE_COMPONENTS_PATH
-from lfx.log.logger import logger
-from lfx.serialization.constants import MAX_ITEMS_LENGTH, MAX_TEXT_LENGTH
-from lfx.services.settings.constants import AGENTIC_VARIABLES, VARIABLES_TO_GET_FROM_ENVIRONMENT
-from lfx.utils.util_strings import is_valid_database_url, sanitize_database_url
+from lfx.constants import BASE_COMPONENTS_PATH as BASE_COMPONENTS_PATH  # noqa: PLC0414  # re-export for back-compat
+from lfx.services.settings.groups import (
+    CacheSettings,
+    ComponentsSettings,
+    DatabaseSettings,
+    McpSettings,
+    ObservabilitySettings,
+    PathSettings,
+    RuntimeSettings,
+    SecuritySettings,
+    ServerSettings,
+    StorageSettings,
+    TelemetrySettings,
+    UiSettings,
+    VariablesSettings,
+)
+
+if TYPE_CHECKING:
+    from pydantic.fields import FieldInfo
 
 
 def is_list_of_any(field: FieldInfo) -> bool:
@@ -672,6 +701,8 @@ def save_settings_to_yaml(settings: Settings, file_path: str) -> None:
 
 
 async def load_settings_from_yaml(file_path: str) -> Settings:
+    from lfx.log.logger import logger
+
     # Check if a string is a valid path or a file name
     if "/" not in file_path:
         # Get current path
@@ -680,7 +711,7 @@ async def load_settings_from_yaml(file_path: str) -> Settings:
     else:
         file_path_ = Path(file_path)
 
-    async with async_open(file_path_.name, encoding="utf-8") as f:
+    async with aiofiles.open(file_path_.name, encoding="utf-8") as f:
         content = await f.read()
         settings_dict = yaml.safe_load(content)
         settings_dict = {k.upper(): v for k, v in settings_dict.items()}

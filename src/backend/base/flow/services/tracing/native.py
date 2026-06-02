@@ -24,7 +24,7 @@ from flow.services.tracing.base import BaseTracer
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from langchain.callbacks.base import BaseCallbackHandler
+    from langchain_classic.callbacks.base import BaseCallbackHandler
     from lfx.graph.vertex.base import Vertex
 
     from flow.services.tracing.schema import Log
@@ -268,14 +268,12 @@ class NativeTracer(BaseTracer):
     async def _flush_to_database(self, error: Exception | None = None) -> None:
         """Persist the completed trace and all its spans in a single DB session to minimise round-trips."""
         try:
-            from uuid import UUID as UUID_
-
             from lfx.services.deps import session_scope
 
             from flow.services.database.models.traces.model import SpanTable, TraceTable
 
             try:
-                flow_uuid = UUID_(self.flow_id)
+                flow_uuid = UUID(self.flow_id)
             except (ValueError, TypeError):
                 # Deterministic fallback so malformed flow_ids don't silently discard trace data.
                 flow_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"invalid-flow-id:{self.flow_id}")
@@ -339,6 +337,7 @@ class NativeTracer(BaseTracer):
                             except (ValueError, TypeError):
                                 parent_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{self.trace_id}-{parent_id}")
 
+                for span_data, span_uuid, parent_uuid in resolved:
                     span = SpanTable(
                         id=span_uuid,
                         trace_id=self.trace_id,
