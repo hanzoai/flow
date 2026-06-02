@@ -11,6 +11,9 @@ class FakeResult:
     def all(self):
         return list(self._rows)
 
+    def first(self):
+        return self._rows[0] if self._rows else None
+
 
 class FakeSession:
     def __init__(self, flows, user_files):
@@ -39,11 +42,19 @@ class FakeSessionContext:
 
 
 class FakeStorageService:
-    def __init__(self, files_by_flow):
+    def __init__(self, files_by_flow, file_bytes: dict[str, bytes] | None = None):
         self._files_by_flow = files_by_flow
+        self._file_bytes = file_bytes or {}
 
     async def list_files(self, flow_id: str):
         return self._files_by_flow.get(flow_id, [])
+
+    async def get_file(self, flow_id: str, file_name: str) -> bytes:
+        key = f"{flow_id}/{file_name}"
+        if key not in self._file_bytes:
+            msg = f"File {file_name} not found in flow {flow_id}"
+            raise FileNotFoundError(msg)
+        return self._file_bytes[key]
 
 
 @pytest.mark.asyncio

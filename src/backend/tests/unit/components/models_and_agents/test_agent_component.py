@@ -298,26 +298,6 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
         # Verify the component has the attribute
         assert hasattr(component, "max_tokens"), "Component should have max_tokens attribute"
 
-    @pytest.mark.skip(reason="Test marked as skipped, agent dual output removed")
-    async def test_agent_has_correct_outputs(self, component_class, default_kwargs):
-        """Test that Agent component has the correct output configuration."""
-        component = await self.component_setup(component_class, default_kwargs)
-
-        assert len(component.outputs) == 2
-
-        # Test response output
-        response_output = component.outputs[0]
-        assert response_output.name == "response"
-        assert response_output.display_name == "Response"
-        assert response_output.method == "message_response"
-
-        # Test structured response output
-        structured_output = component.outputs[1]
-        assert structured_output.name == "structured_response"
-        assert structured_output.display_name == "Structured Response"
-        assert structured_output.method == "json_response"
-        assert structured_output.tool_mode is False
-
     async def test_agent_filters_empty_chat_history_messages(self):
         """Test that empty messages in chat history are filtered out."""
         from lfx.base.agents.utils import data_to_messages
@@ -437,15 +417,10 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
         assert watsonx_url_input.show is False
         assert project_id_input.show is False
 
-    async def test_update_build_config_shows_watsonx_fields(self, component_class, default_kwargs):
+    @patch("lfx.components.models_and_agents.agent.get_language_model_options")
+    async def test_update_build_config_shows_watsonx_fields(self, mock_opts, component_class, default_kwargs):
         """Test that update_build_config shows WatsonX fields when IBM WatsonX is selected."""
         from lfx.schema.dotdict import dotdict
-
-        component = await self.component_setup(component_class, default_kwargs)
-
-        # Get the frontend node to get the build_config
-        frontend_node = component.to_frontend_node()
-        build_config = frontend_node["data"]["node"]["template"]
 
         # Simulate selecting an IBM WatsonX model
         watsonx_model_value = [
@@ -460,6 +435,13 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
                 },
             }
         ]
+        mock_opts.return_value = watsonx_model_value
+
+        component = await self.component_setup(component_class, default_kwargs)
+
+        # Get the frontend node to get the build_config
+        frontend_node = component.to_frontend_node()
+        build_config = frontend_node["data"]["node"]["template"]
 
         # Call update_build_config with WatsonX model selected
         updated_config = await component.update_build_config(
@@ -472,15 +454,12 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
         assert updated_config["base_url_ibm_watsonx"]["required"] is False
         assert updated_config["project_id"]["required"] is False
 
-    async def test_update_build_config_hides_watsonx_fields_for_other_providers(self, component_class, default_kwargs):
+    @patch("lfx.components.models_and_agents.agent.get_language_model_options")
+    async def test_update_build_config_hides_watsonx_fields_for_other_providers(
+        self, mock_opts, component_class, default_kwargs
+    ):
         """Test that update_build_config hides WatsonX fields when other providers are selected."""
         from lfx.schema.dotdict import dotdict
-
-        component = await self.component_setup(component_class, default_kwargs)
-
-        # Get the frontend node to get the build_config
-        frontend_node = component.to_frontend_node()
-        build_config = frontend_node["data"]["node"]["template"]
 
         # Simulate selecting an OpenAI model
         openai_model_value = [
@@ -495,6 +474,13 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
                 },
             }
         ]
+        mock_opts.return_value = openai_model_value
+
+        component = await self.component_setup(component_class, default_kwargs)
+
+        # Get the frontend node to get the build_config
+        frontend_node = component.to_frontend_node()
+        build_config = frontend_node["data"]["node"]["template"]
 
         # Call update_build_config with OpenAI model selected
         updated_config = await component.update_build_config(
@@ -544,6 +530,58 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
             assert call_kwargs.get("watsonx_url") == "https://us-south.ml.cloud.ibm.com"
             assert call_kwargs.get("watsonx_project_id") == "test-project-id"
 
+    @patch("lfx.components.models_and_agents.agent.get_language_model_options")
+    @patch("lfx.components.models_and_agents.agent.get_llm")
+    async def test_get_agent_requirements_supports_legacy_agent_llm_model_name(
+        self, mock_get_llm, mock_get_options, component_class, default_kwargs
+    ):
+        """Legacy agent_llm/model_name inputs should still resolve to a valid model selection."""
+        from unittest.mock import AsyncMock
+
+        default_kwargs["model"] = ""
+        component = await self.component_setup(component_class, default_kwargs)
+        component.agent_llm = "OpenAI"
+        component.model_name = "gpt-4o"
+        component.get_memory_data = AsyncMock(return_value=[])
+        component._get_shared_callbacks = list
+        component.set_tools_callbacks = lambda *_: None
+        mock_get_options.return_value = [
+            {
+                "name": "gpt-4o",
+                "provider": "OpenAI",
+                "metadata": {
+                    "model_class": "ChatOpenAI",
+                    "model_name_param": "model",
+                    "api_key_param": "api_key",
+                },
+            }
+        ]
+        mock_get_llm.return_value = MockLanguageModel()
+
+        await component.get_agent_requirements()
+
+        assert mock_get_llm.call_args.kwargs["model"] == [mock_get_options.return_value[0]]
+
+    @patch("lfx.components.models_and_agents.agent.get_llm")
+    async def test_get_agent_requirements_accepts_connected_model_instance(
+        self, mock_get_llm, component_class, default_kwargs
+    ):
+        """Connected BaseLanguageModel instances should bypass model-selection validation."""
+        from unittest.mock import AsyncMock
+
+        connected_model = MockLanguageModel()
+        default_kwargs["model"] = connected_model
+        component = await self.component_setup(component_class, default_kwargs)
+        component.get_memory_data = AsyncMock(return_value=[])
+        component._get_shared_callbacks = list
+        component.set_tools_callbacks = lambda *_: None
+        mock_get_llm.return_value = connected_model
+
+        llm_model, _, _ = await component.get_agent_requirements()
+
+        assert llm_model is connected_model
+        assert mock_get_llm.call_args.kwargs["model"] is connected_model
+
     @patch("lfx.components.models_and_agents.agent.AgentComponent.get_memory_data")
     @patch("lfx.components.models_and_agents.agent.get_llm")
     async def test_agent_passes_max_tokens_to_get_llm(
@@ -562,6 +600,9 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
         default_kwargs["max_tokens"] = 500
 
         component = await self.component_setup(component_class, default_kwargs)
+
+        # validate_model_selection requires a list — set a valid model selection
+        component.model = [{"name": "gpt-4o", "provider": "OpenAI", "metadata": {}}]
 
         # Call get_agent_requirements which internally calls get_llm
         await component.get_agent_requirements()
@@ -592,6 +633,9 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
             del default_kwargs["max_tokens"]
 
         component = await self.component_setup(component_class, default_kwargs)
+
+        # validate_model_selection requires a list — set a valid model selection
+        component.model = [{"name": "gpt-4o", "provider": "OpenAI", "metadata": {}}]
 
         # Call get_agent_requirements which internally calls get_llm
         await component.get_agent_requirements()
@@ -625,6 +669,9 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
 
         component = await self.component_setup(component_class, default_kwargs)
 
+        # validate_model_selection requires a list — set a valid model selection
+        component.model = [{"name": "gpt-4o", "provider": "OpenAI", "metadata": {}}]
+
         # Call get_agent_requirements which internally calls get_llm
         await component.get_agent_requirements()
 
@@ -636,6 +683,92 @@ class TestAgentComponent(ComponentTestBaseWithoutClient):
         assert call_kwargs["max_tokens"] == 1000
         # Note: The provider-specific field name mapping happens inside get_llm,
         # so we just verify max_tokens is passed correctly
+
+    @patch("lfx.components.models_and_agents.agent.AgentComponent.get_memory_data")
+    @patch("lfx.components.models_and_agents.agent.get_llm")
+    async def test_should_force_stream_true_when_agent_builds_llm(
+        self, mock_get_llm, mock_get_memory_data, component_class, default_kwargs
+    ):
+        """Agent must always instantiate its LLM with stream=True so token-level streaming fires.
+
+        Regression guard: without stream=True, get_llm() instantiates ChatOpenAI/ChatAnthropic/etc.
+        with streaming=False, and runnable.astream_events() never emits on_chat_model_stream chunks.
+        The Playground then receives the whole response in a single batch, which matches the
+        reported bug. Streaming is mandatory for the Agent (unlike the LanguageModel component,
+        where it is an opt-in toggle).
+        """
+        from unittest.mock import AsyncMock, MagicMock
+
+        mock_get_memory_data.return_value = AsyncMock(return_value=[])
+        mock_get_llm.return_value = MagicMock()
+
+        component = await self.component_setup(component_class, default_kwargs)
+        component.model = [{"name": "gpt-4o", "provider": "OpenAI", "metadata": {}}]
+
+        await component.get_agent_requirements()
+
+        mock_get_llm.assert_called_once()
+        call_kwargs = mock_get_llm.call_args.kwargs
+        assert call_kwargs.get("stream") is True, (
+            "Agent must call get_llm with stream=True so the underlying LLM "
+            "(ChatOpenAI/ChatAnthropic/ChatGoogleGenerativeAI/...) is instantiated with "
+            "streaming=True. Without this, token-level streaming is disabled and the "
+            "Playground receives the whole response in a single batch."
+        )
+
+    async def test_should_force_streaming_true_when_legacy_serialized_agent_skips_stream_kwarg(
+        self, component_class, default_kwargs
+    ):
+        """Backward-compat: legacy serialized AgentComponent flows must still stream.
+
+        Repro for the openrag_agent.json bug (code_hash 154c71cf7441): the flow embeds
+        the pre-PR-13356 ``AgentComponent`` class body whose ``_get_llm()`` does NOT
+        pass ``stream=True`` to ``get_llm()``. When the flow loads, ``exec()`` rebinds
+        the old ``_get_llm`` onto a class that still inherits from the LIVE
+        ``ToolCallingAgentComponent`` (Python resolves parent classes at exec time).
+        ``ToolCallingAgentComponent.create_agent_runnable()`` MUST therefore force
+        ``streaming=True`` on the resolved LLM, otherwise ``runnable.astream_events()``
+        never emits ``on_chat_model_stream`` chunks and the Playground/API receive the
+        whole response in a single batch.
+        """
+        from unittest.mock import Mock, patch
+
+        component = await self.component_setup(component_class, default_kwargs)
+        component.tools = []
+        component.system_prompt = "Test prompt"
+
+        # Simulate legacy serialized _get_llm(): returns a chat model that get_llm
+        # built with streaming=False (no stream kwarg was passed).
+        legacy_llm = Mock()
+        legacy_llm.__class__.__name__ = "ChatOpenAI"
+        legacy_llm.__class__.__module__ = "langchain_openai"
+        legacy_llm.model_id = "gpt-4o"
+        legacy_llm.model_name = "gpt-4o"
+        legacy_llm.streaming = False
+        legacy_llm.bind_tools = Mock(return_value=legacy_llm)
+
+        captured: dict[str, object] = {}
+
+        def _capture(llm, _tools, _prompt):
+            captured["llm"] = llm
+            return Mock()
+
+        with (
+            patch.object(component, "_get_llm", return_value=legacy_llm),
+            patch(
+                "lfx.components.langchain_utilities.tool_calling.create_tool_calling_agent",
+                side_effect=_capture,
+            ),
+        ):
+            component.create_agent_runnable()
+
+        assert captured["llm"] is legacy_llm, "create_tool_calling_agent should receive the resolved LLM"
+        assert legacy_llm.streaming is True, (
+            "ToolCallingAgentComponent.create_agent_runnable() must force streaming=True "
+            "on the resolved LLM so serialized flows whose embedded AgentComponent code "
+            "predates PR #13356 (e.g. openrag_agent.json with code_hash 154c71cf7441) "
+            "still emit token-level events through astream_events()."
+        )
 
 
 class TestAgentComponentWithClient(ComponentTestBaseWithClient):

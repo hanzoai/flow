@@ -15,7 +15,11 @@ pytestmark = pytest.mark.asyncio
 @pytest.fixture
 def mock_user():
     return User(
-        id=uuid4(), username="testuser", password=get_password_hash("testpassword"), is_active=True, is_superuser=False
+        id=uuid4(),
+        username="testuser",
+        password="fake-hashed-password",  # noqa: S106
+        is_active=True,
+        is_superuser=False,
     )
 
 
