@@ -1,5 +1,6 @@
 import { api } from "@/controllers/API/api";
 import type { MCPTransport } from "@/controllers/API/queries/mcp/use-patch-install-mcp";
+import { useUtilityStore } from "@/stores/utilityStore";
 
 type ComposerConnectionOptions = {
   useComposer?: boolean;

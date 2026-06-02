@@ -6,8 +6,8 @@ This security policy applies to the Hanzo Flow project on GitHub. We prioritize 
 
 ### Security/Bugfix Versions
 
-- Fixes are released either as part of the next minor version (e.g., 1.3.0 → 1.4.0) or as an on-demand patch version (e.g., 1.3.0 → 1.3.1)
-- Security fixes are given priority and might be enough to cause a new version to be released
+- Fixes are released either as part of the next minor version (e.g., 1.3.0 → 1.4.0) or as an on-demand patch version (e.g., 1.3.0 → 1.3.1).
+- Security fixes are given priority and might be enough to cause a new version to be released.
 
 ## Reporting a Vulnerability
 

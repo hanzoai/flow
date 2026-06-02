@@ -6,6 +6,7 @@ import pytest
 from lfx.inputs.inputs import BoolInput, DictInput, FloatInput, InputTypes, IntInput, MessageTextInput
 from lfx.io.schema import schema_to_flow_inputs
 from lfx.schema.data import Data
+from lfx.schema.json_schema import create_input_schema_from_json_schema
 from lfx.template import Input, Output
 from lfx.template.field.base import UNDEFINED
 from lfx.type_extraction.type_extraction import post_process_type
