@@ -17,6 +17,50 @@ class SampleBaseModel(BaseModel):
     value: int
 
 
+class TestResultDataResponseTokenUsageValidator:
+    """Tests for the token_usage field_validator on ResultDataResponse."""
+
+    def test_converts_usage_pydantic_model_to_dict(self):
+        # Verify that a Usage (Pydantic BaseModel) is converted to a plain dict
+        usage = Usage(input_tokens=10, output_tokens=20, total_tokens=30)
+
+        response = ResultDataResponse(token_usage=usage)
+
+        assert isinstance(response.token_usage, dict)
+        assert response.token_usage == {"input_tokens": 10, "output_tokens": 20, "total_tokens": 30}
+
+    def test_passes_through_plain_dict_unchanged(self):
+        # A plain dict should not be modified
+        usage_dict = {"input_tokens": 5, "output_tokens": 15, "total_tokens": 20}
+
+        response = ResultDataResponse(token_usage=usage_dict)
+
+        assert response.token_usage == usage_dict
+
+    def test_passes_through_none_as_none(self):
+        response = ResultDataResponse(token_usage=None)
+
+        assert response.token_usage is None
+
+    def test_token_usage_included_in_serialize_model_output(self):
+        # Verify token_usage appears in the serialized model output
+        usage = Usage(input_tokens=100, output_tokens=200, total_tokens=300)
+        response = ResultDataResponse(token_usage=usage)
+
+        serialized = response.serialize_model()
+
+        assert "token_usage" in serialized
+        assert serialized["token_usage"] == {"input_tokens": 100, "output_tokens": 200, "total_tokens": 300}
+
+    def test_token_usage_none_in_serialize_model_output(self):
+        response = ResultDataResponse()
+
+        serialized = response.serialize_model()
+
+        assert "token_usage" in serialized
+        assert serialized["token_usage"] is None
+
+
 @given(st.text(min_size=TEST_TEXT_LENGTH + 1, max_size=TEST_TEXT_LENGTH * 2))
 @settings(max_examples=10)
 def test_result_data_response_truncation(long_string):

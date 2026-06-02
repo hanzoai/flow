@@ -197,7 +197,7 @@ async def _delete_transactions_and_vertex_builds(session, flows: list[Flow]):
                 await session.delete(job)
             await session.flush()
 
-            await delete_vertex_builds_by_flow_id(session, flow_id)
+            await delete_vertex_builds_by_flow_id_unchecked(session, flow_id)
         except Exception as e:
             logger.debug(f"Error deleting jobs/vertex builds for flow {flow_id}: {e}")
         try:
@@ -577,7 +577,7 @@ async def flow(
     loaded_json = json.loads(json_flow)
     flow_data = FlowCreate(name="test_flow", data=loaded_json.get("data"), user_id=active_user.id)
 
-    flow = Flow.model_validate(flow_data)
+    flow = Flow.model_validate(flow_data.model_dump(exclude={"id"}))
     async with session_scope() as session:
         session.add(flow)
         await session.flush()
