@@ -48,7 +48,7 @@ Volumes:
 
 ### PostgreSQL Service
 
-The `postgres` service uses the `postgres:16` Docker image and exposes port 5432.
+The `postgres` service uses the `postgres:16-trixie` Docker image and exposes port 5432. The image is pinned to a specific Debian base (`trixie`, Debian 13) so the `postgres:16` tag cannot silently roll its underlying OS, which would otherwise produce a glibc collation version mismatch warning on existing data volumes.
 
 Environment variables:
 

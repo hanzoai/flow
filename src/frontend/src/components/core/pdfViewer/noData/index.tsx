@@ -1,6 +1,7 @@
-import { PDFErrorTitle, PDFLoadError } from "../../../../constants/constants";
+import { useTranslation } from "react-i18next";
 
 export default function NoDataPdf(): JSX.Element {
+  const { t } = useTranslation();
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
       <div className="chat-alert-box">
