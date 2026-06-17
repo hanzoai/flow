@@ -26,7 +26,7 @@ on:
 jobs:
   build-if-needed:
     name: Build Packages (if no artifacts provided)
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: inputs.langflow-version == '' && contains(github.workflow_ref, 'cross-platform-test.yml')
     outputs:
       base-artifact-name: ${{ steps.set-names.outputs.base-artifact-name }}
@@ -136,11 +136,11 @@ jobs:
           # Linux AMD64
           - os: linux
             arch: amd64
-            runner: ubuntu-latest
+            runner: hanzo-build-linux-amd64
             python-version: "3.10"
           - os: linux
             arch: amd64
-            runner: ubuntu-latest
+            runner: hanzo-build-linux-amd64
             python-version: "3.12"
           # macOS AMD64
           - os: macos
@@ -448,7 +448,7 @@ jobs:
           # Python 3.13 - Experimental
           - os: linux
             arch: amd64
-            runner: ubuntu-latest
+            runner: hanzo-build-linux-amd64
             python-version: "3.13"
           - os: windows
             arch: amd64
@@ -801,7 +801,7 @@ jobs:
   test-summary:
     name: Cross-Platform Test Summary
     needs: [test-installation-stable, test-installation-experimental]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: always()
     steps:
       - name: Check test results

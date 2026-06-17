@@ -54,7 +54,7 @@ jobs:
   build-nightly-lfx:
     name: Build LFX Nightly
     if: ${{ inputs.build_lfx }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.verify.outputs.version }}
     defaults:
@@ -146,7 +146,7 @@ jobs:
     name: Build Langflow Nightly Base
     needs: [build-nightly-lfx]
     if: ${{ always() && (needs.build-nightly-lfx.result == 'success' || inputs.build_lfx == false) }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     defaults:
       run:
         shell: bash
@@ -247,7 +247,7 @@ jobs:
   build-nightly-main:
     name: Build Langflow Nightly Main
     needs: [build-nightly-base]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.verify.outputs.version }}
     defaults:
@@ -394,7 +394,7 @@ jobs:
     name: Publish LFX Nightly to PyPI
     needs: [build-nightly-lfx, test-cross-platform, publish-nightly-sdk]
     if: ${{ inputs.build_lfx }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Check out the code
         uses: actions/checkout@v6
@@ -422,7 +422,7 @@ jobs:
     name: Publish SDK Nightly to PyPI
     needs: [build-nightly-lfx, test-cross-platform]
     if: ${{ inputs.build_lfx }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Check out the code
         uses: actions/checkout@v6
@@ -450,7 +450,7 @@ jobs:
     name: Publish Langflow Base Nightly to PyPI
     needs: [build-nightly-base, test-cross-platform, publish-nightly-lfx]
     if: ${{ always() && needs.build-nightly-base.result == 'success' && needs.test-cross-platform.result == 'success' && (needs.publish-nightly-lfx.result == 'success' || inputs.build_lfx == false) }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -483,7 +483,7 @@ jobs:
     # publish too (or skip it when lfx isn't being rebuilt).
     needs: [build-nightly-main, test-cross-platform, publish-nightly-lfx]
     if: ${{ always() && needs.build-nightly-main.result == 'success' && needs.test-cross-platform.result == 'success' && (needs.publish-nightly-lfx.result == 'success' || inputs.build_lfx == false) }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download bundles artifact
         uses: actions/download-artifact@v8
@@ -529,7 +529,7 @@ jobs:
     name: Publish Langflow Main Nightly to PyPI
     needs: [build-nightly-main, test-cross-platform, publish-nightly-base, publish-nightly-bundles]
     if: ${{ always() && needs.build-nightly-main.result == 'success' && needs.test-cross-platform.result == 'success' && needs.publish-nightly-base.result == 'success' && needs.publish-nightly-bundles.result == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

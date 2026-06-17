@@ -14,7 +14,7 @@ jobs:
   lint:
     name: Run Ruff Check and Format
     if: github.event.action != 'labeled' && github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - uses: actions/checkout@v6
       - name: "Setup Environment"
@@ -32,7 +32,7 @@ jobs:
   update-starter-projects:
     name: Update Starter Projects
     if: github.event.action != 'labeled' && github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - uses: actions/checkout@v6
       - name: "Setup Environment"
@@ -59,7 +59,7 @@ jobs:
     if: >-
       github.actor != 'github-actions[bot]'
       && (github.event.action != 'labeled' || github.event.label.name == 'fix-index')
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - uses: actions/checkout@v6
         with:

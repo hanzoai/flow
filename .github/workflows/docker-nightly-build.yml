@@ -331,7 +331,7 @@ jobs:
   create-nightly-manifest:
     name: Create Multi-Arch Nightly Manifest
     needs: [build-nightly-base, build-nightly-main, build-nightly-main-all]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: ${{ always() && inputs.push_to_registry && (needs.build-nightly-base.result == 'success' || needs.build-nightly-main.result == 'success' || needs.build-nightly-main-all.result == 'success') }}
     steps:
       - name: Setup Environment

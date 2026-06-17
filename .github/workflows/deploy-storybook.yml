@@ -14,7 +14,7 @@ on:
 jobs:
   deploy:
     name: Deploy Storybook
-    runs-on: ubuntu-latest
+    runs-on: hanzo-deploy-linux-amd64
     permissions:
       contents: read
       pages: write

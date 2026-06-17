@@ -18,7 +18,7 @@ on:
 jobs:
   create_release:
     name: Create Release Job
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - uses: actions/download-artifact@v8
         with:

@@ -67,7 +67,7 @@ on:
 jobs:
   echo-inputs:
     name: Echo Workflow Inputs
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Echo workflow inputs
         run: |
@@ -85,7 +85,7 @@ jobs:
 
   validate-tag:
     name: Validate Tag Input
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -111,7 +111,7 @@ jobs:
 
   validate-tag-format:
     name: Validate Tag Format and Check for Duplicates
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs: [validate-tag]
     steps:
       - name: Checkout code
@@ -151,7 +151,7 @@ jobs:
 
   validate-dependencies:
     name: Validate Release Dependencies
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: ${{ inputs.release_package_base || inputs.release_package_main || inputs.release_lfx || inputs.release_sdk || inputs.build_docker_base || inputs.build_docker_main }}
     needs: [validate-tag]
     steps:
@@ -180,7 +180,7 @@ jobs:
   determine-base-version:
     name: Determine Base Version
     needs: [validate-tag, validate-dependencies]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -233,7 +233,7 @@ jobs:
   determine-main-version:
     name: Determine Main Version
     needs: [validate-tag, validate-dependencies]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -282,7 +282,7 @@ jobs:
   determine-lfx-version:
     name: Determine LFX Version
     needs: [validate-tag, validate-dependencies]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -332,7 +332,7 @@ jobs:
     name: Determine SDK Version
     needs: [validate-tag, validate-dependencies]
     if: ${{ inputs.release_sdk || inputs.release_lfx }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -399,14 +399,14 @@ jobs:
       frontend-tests-folder: "tests"
       release: true
       run-all-tests: true
-      runs-on: ubuntu-latest
+      runs-on: hanzo-build-linux-amd64
     secrets: inherit
 
   build-sdk:
     name: Build langflow-sdk
     needs: [determine-sdk-version]
     if: ${{ needs.determine-sdk-version.outputs.skipped == 'false' }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -475,7 +475,7 @@ jobs:
       !cancelled() &&
       needs.determine-lfx-version.result == 'success' &&
       needs.determine-lfx-version.outputs.skipped == 'false'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -585,7 +585,7 @@ jobs:
       needs.determine-base-version.result == 'success' &&
       needs.determine-base-version.outputs.skipped == 'false' &&
       needs.build-lfx.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -728,7 +728,7 @@ jobs:
       needs.determine-main-version.outputs.skipped == 'false' &&
       needs.build-base.result == 'success' &&
       needs.build-lfx.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -864,7 +864,7 @@ jobs:
       !cancelled() &&
       inputs.release_bundles &&
       needs.build-lfx.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     defaults:
       run:
         shell: bash
@@ -927,7 +927,7 @@ jobs:
     name: Publish Langflow Base to PyPI
     if: ${{ inputs.release_package_base }}
     needs: [build-base, test-cross-platform]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download base artifact
         uses: actions/download-artifact@v8
@@ -958,7 +958,7 @@ jobs:
       needs.test-cross-platform.result == 'success' &&
       needs.ci.result == 'success' &&
       (needs.publish-lfx.result == 'success' || needs.publish-lfx.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download bundles artifact
         uses: actions/download-artifact@v8
@@ -990,7 +990,7 @@ jobs:
     name: Publish Langflow Main to PyPI
     if: ${{ inputs.release_package_main }}
     needs: [build-main, test-cross-platform, publish-base]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download main artifact
         uses: actions/download-artifact@v8
@@ -1019,7 +1019,7 @@ jobs:
       needs.build-sdk.result == 'success' &&
       needs.ci.result == 'success' &&
       (needs.test-cross-platform.result == 'success' || needs.test-cross-platform.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -1046,7 +1046,7 @@ jobs:
     name: Publish LFX to PyPI
     if: ${{ inputs.release_lfx }}
     needs: [build-lfx, test-cross-platform]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download LFX artifact
         uses: actions/download-artifact@v8
@@ -1139,7 +1139,7 @@ jobs:
 
   create_release:
     name: Create Release
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs:
       [determine-main-version, build-main, publish-main, validate-tag-format]
     if: |

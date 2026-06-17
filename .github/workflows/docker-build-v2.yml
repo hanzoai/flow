@@ -57,7 +57,7 @@ jobs:
   determine-base-version:
     name: Determine Base Version
     if: ${{ inputs.release_type == 'base' }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -103,7 +103,7 @@ jobs:
   determine-main-version:
     name: Determine Main Version
     if: ${{ inputs.release_type != 'base' }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.version.outputs.version }}
       skipped: ${{ steps.version.outputs.skipped }}
@@ -590,7 +590,7 @@ jobs:
         determine-base-version,
         determine-main-version,
       ]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: ${{ always() && inputs.push_to_registry && (needs.build-base.result == 'success' || needs.build-main.result == 'success' || needs.build-main-backend.result == 'success' || needs.build-main-frontend.result == 'success' || needs.build-main-ep.result == 'success' || needs.build-main-all.result == 'success') }}
     steps:
       - name: Check out the code

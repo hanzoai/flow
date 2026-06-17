@@ -23,7 +23,7 @@ env:
 jobs:
   jest-unit-tests:
     name: Frontend Jest Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     permissions:
       contents: read
       pull-requests: write
