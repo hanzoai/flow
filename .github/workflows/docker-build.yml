@@ -65,7 +65,7 @@ env:
 jobs:
   get-version:
     name: Get Version
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.get-version-input.outputs.version || steps.get-version-base.outputs.version || steps.get-version-main.outputs.version }}
     steps:
@@ -154,7 +154,7 @@ jobs:
           echo version=$version
           echo version=$version >> $GITHUB_OUTPUT
   setup:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs: get-version
     outputs:
       docker_tags: ${{ steps.set-vars.outputs.docker_tags }}
@@ -377,7 +377,7 @@ jobs:
   restart-space:
     name: Restart HuggingFace Spaces
     if: ${{ inputs.release_type == 'main' }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs: [build, get-version]
     strategy:
       matrix:

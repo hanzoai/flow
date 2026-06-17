@@ -9,7 +9,7 @@ on:
 jobs:
   validate-pr:
     name: Validate PR
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Validate the pull request
         id: validate
@@ -21,7 +21,7 @@ jobs:
   label:
     needs: validate-pr
     name: Label PR
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     if: ${{ github.event.pull_request.user.type != 'Bot'}}
     steps:
       - uses: bcoe/conventional-release-labels@v1

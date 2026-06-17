@@ -12,7 +12,7 @@ on:
 jobs:
   model-migration-consistency:
     name: Model/Migration Consistency
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
 
     services:
       postgres:
@@ -56,7 +56,7 @@ jobs:
 
   validate-migration:
     name: Migration Pattern Validation
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
 
     steps:
       - name: Checkout code

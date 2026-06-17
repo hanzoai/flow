@@ -22,7 +22,7 @@ jobs:
     name: Test Coverage Advisor
     # Skip drafts to avoid noise; they re-run on "ready_for_review".
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

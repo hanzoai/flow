@@ -6,7 +6,7 @@ on:
 jobs:
   request-docs-review:
     if: github.event.label.name == 'needs-docs'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     permissions:
       pull-requests: write
     steps:

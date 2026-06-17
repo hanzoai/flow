@@ -47,7 +47,7 @@ env:
 
 jobs:
   validate-inputs:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Validate inputs
         if: inputs.push_to_registry && (inputs.skip_frontend_tests || inputs.skip_backend_tests)
@@ -57,7 +57,7 @@ jobs:
 
   create-nightly-tag:
     if: github.repository == 'hanzoai/flow'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     defaults:
       run:
         shell: bash -ex -o pipefail {0}
@@ -197,7 +197,7 @@ jobs:
     if: github.repository == 'hanzoai/flow'
     name: Build Nightly Hash History
     needs: create-nightly-tag
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     defaults:
       run:
         shell: bash -ex -o pipefail {0}
@@ -349,7 +349,7 @@ jobs:
     name: Send Slack Notification
     needs: [frontend-tests, backend-unit-tests, release-nightly-build, merge-hash-history-to-main]
     if: ${{ github.repository == 'hanzoai/flow' && !inputs.skip_slack && always() && (needs.release-nightly-build.result == 'failure' || needs.frontend-tests.result == 'failure' || needs.backend-unit-tests.result == 'failure' || needs.merge-hash-history-to-main.result == 'failure' || needs.release-nightly-build.result == 'success') }}
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Send failure notification to Slack
         if: ${{ needs.release-nightly-build.result == 'failure' || needs.frontend-tests.result == 'failure' || needs.backend-unit-tests.result == 'failure' || needs.merge-hash-history-to-main.result == 'failure' }}
@@ -408,7 +408,7 @@ jobs:
     # When triggered by schedule, inputs.auto_merge_hash_history is not set, so default to true
     # Only run when the base branch is 'main' to prevent PRs from feature branches
     if: github.repository == 'hanzoai/flow' && github.ref == 'refs/heads/main' && always() && needs.build-hash-history.result == 'success' && needs.release-nightly-build.result == 'success' && (github.event_name == 'schedule' || inputs.auto_merge_hash_history != false)
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     permissions:
       contents: write
       pull-requests: write

@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   test-starter-projects:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
 
     steps:
     - name: Checkout code

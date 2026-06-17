@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-deploy-linux-amd64
     if: "! github.event.pull_request.head.repo.fork"
 
     steps:

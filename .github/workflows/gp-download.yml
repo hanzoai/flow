@@ -7,7 +7,7 @@ on:
 
 jobs:
   download:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     name: Download translations from Globalization Pipeline
     environment: GP-test
     permissions:

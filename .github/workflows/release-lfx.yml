@@ -39,7 +39,7 @@ permissions:
 jobs:
   validate-version:
     name: Validate Version
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       should_release: ${{ steps.check.outputs.should_release }}
       current_version: ${{ steps.check.outputs.current_version }}
@@ -88,7 +88,7 @@ jobs:
     name: Run Tests
     needs: validate-version
     if: needs.validate-version.outputs.should_release == 'true'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     strategy:
       fail-fast: false
       matrix:
@@ -121,7 +121,7 @@ jobs:
   release-lfx:
     name: Build and Release LFX
     needs: [validate-version, run-tests]
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       version: ${{ steps.check-version.outputs.version }}
     steps:
@@ -203,7 +203,7 @@ jobs:
     name: Build Docker Images
     needs: [validate-version, run-tests]
     if: github.event.inputs.build_docker == 'true'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     strategy:
       matrix:
         variant: [production, alpine]
@@ -278,7 +278,7 @@ jobs:
     name: Create GitHub Release
     needs: [release-lfx, build-docker]
     if: always() && github.event.inputs.create_github_release == 'true' && needs.release-lfx.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -349,7 +349,7 @@ jobs:
     name: Test Release
     needs: [release-lfx, build-docker]
     if: always() && (needs.release-lfx.result == 'success' || needs.build-docker.result == 'success')
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Wait for PyPI propagation
         if: needs.release-lfx.result == 'success'
@@ -386,7 +386,7 @@ jobs:
     name: Notify Release Status
     needs: [create-release, test-release]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Notify success
         if: needs.create-release.result == 'success'
