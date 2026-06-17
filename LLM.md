@@ -1,4 +1,4 @@
-# LLM.md - Hanzo Flow
+# Hanzo Flow
 
 ## Overview
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers.
