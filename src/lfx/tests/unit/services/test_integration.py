@@ -11,7 +11,7 @@ from .conftest import MockSessionService
 
 
 class TestStandaloneLFX:
-    """Test LFX running standalone without langflow."""
+    """Test LFX running standalone without flow."""
 
     @pytest.fixture
     def clean_manager(self):

@@ -1,7 +1,7 @@
 """Unit tests for cross-module isinstance functionality.
 
 These tests verify that isinstance checks work correctly when classes are
-re-exported from different modules (e.g., lfx.schema.Message vs langflow.schema.Message).
+re-exported from different modules (e.g., lfx.schema.Message vs flow.schema.Message).
 """
 
 from flow.schema import Data as LangflowData
@@ -14,12 +14,12 @@ class TestDuckTypingData:
     """Tests for duck-typing Data class across module boundaries."""
 
     def test_lfx_data_isinstance_langflow_data(self):
-        """Test that lfx.Data instance is recognized as langflow.Data."""
+        """Test that lfx.Data instance is recognized as flow.Data."""
         lfx_data = LfxData(data={"key": "value"})
         assert isinstance(lfx_data, LangflowData)
 
     def test_langflow_data_isinstance_lfx_data(self):
-        """Test that langflow.Data instance is recognized as lfx.Data."""
+        """Test that flow.Data instance is recognized as lfx.Data."""
         langflow_data = LangflowData(data={"key": "value"})
         assert isinstance(langflow_data, LfxData)
 
@@ -51,12 +51,12 @@ class TestDuckTypingMessage:
     """Tests for duck-typing Message class across module boundaries."""
 
     def test_lfx_message_isinstance_langflow_message(self):
-        """Test that lfx.Message instance is recognized as langflow.Message."""
+        """Test that lfx.Message instance is recognized as flow.Message."""
         lfx_message = LfxMessage(text="hello")
         assert isinstance(lfx_message, LangflowMessage)
 
     def test_langflow_message_isinstance_lfx_message(self):
-        """Test that langflow.Message instance is recognized as lfx.Message."""
+        """Test that flow.Message instance is recognized as lfx.Message."""
         langflow_message = LangflowMessage(text="hello")
         assert isinstance(langflow_message, LfxMessage)
 

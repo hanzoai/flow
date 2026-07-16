@@ -37,7 +37,7 @@ class VariableService(Service):
         Args:
             name: Variable name
             **kwargs: Additional arguments (ignored; user_id/field/session
-                from langflow's call signature are absorbed and not used,
+                from flow's call signature are absorbed and not used,
                 since this implementation has no per-user scope).
 
         Returns:

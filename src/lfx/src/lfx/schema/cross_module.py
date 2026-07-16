@@ -3,7 +3,7 @@
 This module provides a metaclass and base model that enable isinstance checks
 to work across module boundaries for Pydantic models. This is particularly useful
 when the same class is re-exported from different modules (e.g., lfx.Message vs
-langflow.schema.Message) but Python's isinstance() checks fail due to different
+flow.schema.Message) but Python's isinstance() checks fail due to different
 module paths.
 """
 

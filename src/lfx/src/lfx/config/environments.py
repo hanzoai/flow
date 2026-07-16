@@ -19,11 +19,11 @@ YAML file format
         api_key_env: LANGFLOW_LOCAL_API_KEY
 
       staging:
-        url: https://staging.langflow.example.com
+        url: https://staging.flow.example.com
         api_key_env: LANGFLOW_STAGING_API_KEY
 
       production:
-        url: https://langflow.example.com
+        url: https://flow.example.com
         api_key_env: LANGFLOW_PROD_API_KEY
 
     defaults:

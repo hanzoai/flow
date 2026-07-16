@@ -149,11 +149,11 @@ def mock_tracers():
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_native_tracer",
+            "flow.services.tracing.service._get_native_tracer",
             return_value=MockTracer,
         ),
         patch(
-            "langflow.services.tracing.service._get_openlayer_tracer",
+            "flow.services.tracing.service._get_openlayer_tracer",
             return_value=MockTracer,
         ),
     ):

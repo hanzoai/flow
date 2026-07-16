@@ -1,3 +1,3 @@
-"""Backwards compatibility module for langflow.base.prompts.api_utils."""
+"""Backwards compatibility module for flow.base.prompts.api_utils."""
 
 from lfx.base.prompts.api_utils import *  # noqa: F403

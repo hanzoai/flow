@@ -589,11 +589,11 @@ async def test_detect_env_vars_endpoint__returns_detected_names(client: AsyncCli
 
     with (
         mock.patch(
-            "langflow.api.v1.variable.get_flow_version_entries_by_ids",
+            "flow.api.v1.variable.get_flow_version_entries_by_ids",
             new_callable=mock.AsyncMock,
             return_value={flow_version_id: flow_version},
         ),
-        mock.patch("langflow.api.v1.variable.get_variable_service", return_value=variable_service),
+        mock.patch("flow.api.v1.variable.get_variable_service", return_value=variable_service),
     ):
         response = await client.post(
             "api/v1/variables/detections",
@@ -613,11 +613,11 @@ async def test_detect_env_vars_endpoint__rejects_missing_nodes(client: AsyncClie
 
     with (
         mock.patch(
-            "langflow.api.v1.variable.get_flow_version_entries_by_ids",
+            "flow.api.v1.variable.get_flow_version_entries_by_ids",
             new_callable=mock.AsyncMock,
             return_value={flow_version_id: flow_version},
         ),
-        mock.patch("langflow.api.v1.variable.get_variable_service", return_value=variable_service),
+        mock.patch("flow.api.v1.variable.get_variable_service", return_value=variable_service),
     ):
         response = await client.post(
             "api/v1/variables/detections",

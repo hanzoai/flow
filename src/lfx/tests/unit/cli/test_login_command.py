@@ -17,7 +17,7 @@ import typer
 # Shared constants
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _API_KEY = "abcdefghijklmnop"  # pragma: allowlist secret  (16 chars — longer than 8)
 _SHORT_KEY = "short"  # pragma: allowlist secret  (5 chars — at or under the 8-char mask threshold)
 _EXACT_KEY = "exactly8"  # pragma: allowlist secret  (exactly 8 chars)

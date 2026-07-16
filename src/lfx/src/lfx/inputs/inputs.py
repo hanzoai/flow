@@ -314,7 +314,7 @@ class MessageInput(StrInput, InputTraceMixin):
             return Message(**v)
         # Duck-typed Message check - works across module boundaries
         if isinstance(v, Message):
-            # If it's from a different module (e.g., langflow.schema.Message),
+            # If it's from a different module (e.g., flow.schema.Message),
             # convert it to ensure we have the right type
             if type(v).__module__ != Message.__module__:
                 return Message(**v.model_dump())

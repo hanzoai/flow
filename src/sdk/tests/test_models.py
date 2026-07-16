@@ -9,7 +9,7 @@ from pathlib import Path
 from uuid import UUID
 
 import pytest
-from langflow_sdk.models import Flow, FlowCreate, FlowUpdate, Project, RunOutput, RunRequest, RunResponse
+from flow_sdk.models import Flow, FlowCreate, FlowUpdate, Project, RunOutput, RunRequest, RunResponse
 
 # ---------------------------------------------------------------------------
 # Model round-trip tests
@@ -231,7 +231,7 @@ def test_load_environments(tmp_path: Path):
     fake_key = "test-key-not-a-real-secret"  # pragma: allowlist secret
     os.environ["TEST_KEY_STAGING"] = fake_key
 
-    from langflow_sdk.environments import get_environment, load_environments
+    from flow_sdk.environments import get_environment, load_environments
 
     try:
         envs = load_environments(config)
@@ -250,8 +250,8 @@ def test_environment_not_found(tmp_path: Path):
     config = tmp_path / "langflow-environments.toml"
     config.write_text("[environments.staging]\nurl = 'https://x.com'\n")
 
-    from langflow_sdk.environments import get_environment
-    from langflow_sdk.exceptions import EnvironmentNotFoundError
+    from flow_sdk.environments import get_environment
+    from flow_sdk.exceptions import EnvironmentNotFoundError
 
     with pytest.raises(EnvironmentNotFoundError, match="production"):
         get_environment("production", config_file=config)
@@ -262,8 +262,8 @@ def test_missing_url_raises(tmp_path: Path):
     # Intentionally omit 'url' to trigger the validation error
     config.write_text("[environments.bad]\ndescription = 'oops'\n")
 
-    from langflow_sdk.environments import load_environments
-    from langflow_sdk.exceptions import EnvironmentConfigError
+    from flow_sdk.environments import load_environments
+    from flow_sdk.exceptions import EnvironmentConfigError
 
     with pytest.raises(EnvironmentConfigError, match="url"):
         load_environments(config)

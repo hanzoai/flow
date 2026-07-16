@@ -94,7 +94,7 @@ async def test_should_not_return_403_on_sse_endpoint_when_webhook_auth_enable_is
     execution). It must not interfere with SSE subscription: the SSE endpoint always
     requires a logged-in user who owns the flow, regardless of the flag.
     """
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     original = settings_service.auth_settings.WEBHOOK_AUTH_ENABLE

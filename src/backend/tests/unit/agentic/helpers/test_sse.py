@@ -320,7 +320,7 @@ class TestBugsAndEdgeCases:
 
     def test_format_cancelled_event_structure(self):
         """format_cancelled_event should return well-formed SSE event."""
-        from langflow.agentic.helpers.sse import format_cancelled_event
+        from flow.agentic.helpers.sse import format_cancelled_event
 
         result = format_cancelled_event()
         assert result.startswith("data: ")

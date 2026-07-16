@@ -9,9 +9,9 @@ import pytest
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from httpx import ASGITransport, AsyncClient
-from langflow.api.utils import cascade_delete_flow
-from langflow.api.v1.projects import delete_project
-from langflow.services.database.models.deployment.exceptions import DeploymentGuardError
+from flow.api.utils import cascade_delete_flow
+from flow.api.v1.projects import delete_project
+from flow.services.database.models.deployment.exceptions import DeploymentGuardError
 
 
 class _ExecResult:
@@ -39,11 +39,11 @@ async def test_delete_project_raises_guard_error_from_app_level_check(monkeypatc
     user_id = uuid4()
 
     monkeypatch.setattr(
-        "langflow.api.v1.projects.get_settings_service",
+        "flow.api.v1.projects.get_settings_service",
         lambda: SimpleNamespace(settings=SimpleNamespace(add_projects_to_mcp_servers=False)),
     )
-    monkeypatch.setattr("langflow.api.v1.projects.cleanup_mcp_on_delete", AsyncMock())
-    monkeypatch.setattr("langflow.api.v1.mappers.deployments.sync.sync_project_deployments", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.projects.cleanup_mcp_on_delete", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.mappers.deployments.sync.sync_project_deployments", AsyncMock())
 
     session = AsyncMock()
     project = SimpleNamespace(id=project_id, name="Test Project", auth_settings=None)
@@ -83,13 +83,13 @@ async def test_delete_project_remaps_flow_guard_to_project_guard(monkeypatch):
     flow_id = uuid4()
 
     monkeypatch.setattr(
-        "langflow.api.v1.projects.get_settings_service",
+        "flow.api.v1.projects.get_settings_service",
         lambda: SimpleNamespace(settings=SimpleNamespace(add_projects_to_mcp_servers=False)),
     )
-    monkeypatch.setattr("langflow.api.v1.projects.cleanup_mcp_on_delete", AsyncMock())
-    monkeypatch.setattr("langflow.api.v1.mappers.deployments.sync.sync_project_deployments", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.projects.cleanup_mcp_on_delete", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.mappers.deployments.sync.sync_project_deployments", AsyncMock())
     monkeypatch.setattr(
-        "langflow.api.v1.projects.cascade_delete_flow",
+        "flow.api.v1.projects.cascade_delete_flow",
         AsyncMock(
             side_effect=DeploymentGuardError(
                 code="FLOW_HAS_DEPLOYED_VERSIONS",
@@ -182,15 +182,15 @@ async def test_cascade_delete_flow_prunes_orphan_attachments_before_delete_state
 
 @pytest.mark.asyncio
 async def test_delete_flow_remaps_guard_error_to_flow_delete_message(monkeypatch):
-    from langflow.api.v1.flows import delete_flow
+    from flow.api.v1.flows import delete_flow
 
     flow_id = uuid4()
     user_id = uuid4()
 
     fake_flow = SimpleNamespace(id=flow_id, user_id=user_id)
-    monkeypatch.setattr("langflow.api.v1.flows._read_flow", AsyncMock(return_value=fake_flow))
+    monkeypatch.setattr("flow.api.v1.flows._read_flow", AsyncMock(return_value=fake_flow))
     monkeypatch.setattr(
-        "langflow.api.v1.flows.retry_flow_operation_on_deployment_guard",
+        "flow.api.v1.flows.retry_flow_operation_on_deployment_guard",
         AsyncMock(
             side_effect=DeploymentGuardError(
                 code="FLOW_HAS_DEPLOYED_VERSIONS",
@@ -226,8 +226,8 @@ async def test_delete_flow_remaps_guard_error_to_flow_delete_message(monkeypatch
 @pytest.mark.asyncio
 async def test_update_flow_translates_guard_error_from_flush(monkeypatch):
     """update_flow must propagate DeploymentGuardError from guarded operations."""
-    from langflow.api.v1.flows import update_flow
-    from langflow.services.database.models.flow.model import FlowUpdate
+    from flow.api.v1.flows import update_flow
+    from flow.services.database.models.flow.model import FlowUpdate
 
     flow_id = uuid4()
     user_id = uuid4()
@@ -244,9 +244,9 @@ async def test_update_flow_translates_guard_error_from_flush(monkeypatch):
         updated_at=None,
     )
 
-    monkeypatch.setattr("langflow.api.v1.flows._read_flow", AsyncMock(return_value=fake_flow))
+    monkeypatch.setattr("flow.api.v1.flows._read_flow", AsyncMock(return_value=fake_flow))
     monkeypatch.setattr(
-        "langflow.api.v1.flows._patch_flow",
+        "flow.api.v1.flows._patch_flow",
         AsyncMock(
             side_effect=DeploymentGuardError(
                 code="FLOW_DEPLOYED_IN_PROJECT",
@@ -260,9 +260,9 @@ async def test_update_flow_translates_guard_error_from_flush(monkeypatch):
             )
         ),
     )
-    monkeypatch.setattr("langflow.api.v1.mappers.deployments.sync.sync_flow_deployment_state", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.mappers.deployments.sync.sync_flow_deployment_state", AsyncMock())
     monkeypatch.setattr(
-        "langflow.api.v1.flows.get_settings_service",
+        "flow.api.v1.flows.get_settings_service",
         lambda: SimpleNamespace(settings=SimpleNamespace(remove_api_keys=False)),
     )
 
@@ -292,7 +292,7 @@ async def test_update_flow_translates_guard_error_from_flush(monkeypatch):
 @pytest.mark.asyncio
 async def test_delete_multiple_flows_propagates_guard_error(monkeypatch):
     """delete_multiple_flows must let DeploymentGuardError propagate to the caller."""
-    from langflow.api.v1.flows import delete_multiple_flows
+    from flow.api.v1.flows import delete_multiple_flows
 
     flow_id = uuid4()
     user_id = uuid4()
@@ -300,7 +300,7 @@ async def test_delete_multiple_flows_propagates_guard_error(monkeypatch):
     fake_flow = SimpleNamespace(id=flow_id)
 
     monkeypatch.setattr(
-        "langflow.api.v1.flows.cascade_delete_flow",
+        "flow.api.v1.flows.cascade_delete_flow",
         AsyncMock(
             side_effect=DeploymentGuardError(
                 code="FLOW_HAS_DEPLOYED_VERSIONS",
@@ -315,7 +315,7 @@ async def test_delete_multiple_flows_propagates_guard_error(monkeypatch):
             )
         ),
     )
-    monkeypatch.setattr("langflow.api.v1.mappers.deployments.sync.sync_flow_deployment_state", AsyncMock())
+    monkeypatch.setattr("flow.api.v1.mappers.deployments.sync.sync_flow_deployment_state", AsyncMock())
 
     session = AsyncMock()
     session.exec = AsyncMock(return_value=_ExecResult([fake_flow]))

@@ -34,7 +34,7 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
-from langflow.utils import migration
+from flow.utils import migration
 from sqlmodel.sql.sqltypes import AutoString
 
 # revision identifiers, used by Alembic.

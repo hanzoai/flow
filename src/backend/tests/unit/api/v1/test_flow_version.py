@@ -858,7 +858,7 @@ async def test_rapid_snapshots_with_low_limit(client: AsyncClient, logged_in_hea
 
 async def _attach_version_to_deployment(session, *, user_id, flow_version_id, deployment_id, provider_snapshot_id=None):
     """Create a FlowVersionDeploymentAttachment row directly in the DB."""
-    from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+    from flow.services.database.models.flow_version_deployment_attachment.crud import (
         create_deployment_attachment,
     )
 
@@ -873,7 +873,7 @@ async def _attach_version_to_deployment(session, *, user_id, flow_version_id, de
 
 async def _create_deployment_row(session, *, user_id, project_id, provider_account_id, name, resource_key):
     """Create a Deployment row directly in the DB."""
-    from langflow.services.database.models.deployment.crud import create_deployment
+    from flow.services.database.models.deployment.crud import create_deployment
     from lfx.services.adapters.deployment.schema import DeploymentType
 
     return await create_deployment(
@@ -891,7 +891,7 @@ async def _create_provider_account_row(session, *, user_id):
     """Create a DeploymentProviderAccount row directly in the DB."""
     from uuid import uuid4
 
-    from langflow.services.database.models.deployment_provider_account.crud import create_provider_account
+    from flow.services.database.models.deployment_provider_account.crud import create_provider_account
 
     suffix = uuid4()
     return await create_provider_account(
@@ -922,7 +922,7 @@ async def test_list_versions_is_deployed_scoped_to_provider(client: AsyncClient,
     """Provider-scoped status only reflects deployments under the selected provider."""
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
@@ -930,7 +930,7 @@ async def test_list_versions_is_deployed_scoped_to_provider(client: AsyncClient,
     snap2 = await _create_snapshot(client, logged_in_headers, flow["id"], description="undeployed")
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -981,7 +981,7 @@ async def test_list_versions_plain_mode_returns_all(client: AsyncClient, logged_
     """Without provider scoping, all versions are returned without deployment status."""
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
@@ -989,7 +989,7 @@ async def test_list_versions_plain_mode_returns_all(client: AsyncClient, logged_
     await _create_snapshot(client, logged_in_headers, flow["id"], description="draft")
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1035,14 +1035,14 @@ async def test_list_versions_hides_deployment_state_when_feature_disabled(
 ):
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=False)
     flow = await _create_flow(client, logged_in_headers)
     snap = await _create_snapshot(client, logged_in_headers, flow["id"])
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1109,8 +1109,8 @@ async def test_list_versions_rejects_unknown_provider_id(client: AsyncClient, lo
 async def test_list_versions_rejects_foreign_provider_id(client: AsyncClient, logged_in_headers, monkeypatch):
     from uuid import uuid4
 
-    from langflow.services.database.models.user.model import User
-    from langflow.services.deps import session_scope
+    from flow.services.database.models.user.model import User
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
@@ -1141,7 +1141,7 @@ async def test_list_versions_rejects_foreign_provider_id(client: AsyncClient, lo
 # Sync-on-read: stale attachment pruning via provider verification
 # ---------------------------------------------------------------------------
 
-SYNC_MODULE = "langflow.api.v1.flow_version.sync_flow_version_attachments"
+SYNC_MODULE = "flow.api.v1.flow_version.sync_flow_version_attachments"
 
 
 async def test_list_versions_sync_prunes_stale_attachment(client: AsyncClient, logged_in_headers, monkeypatch):
@@ -1149,7 +1149,7 @@ async def test_list_versions_sync_prunes_stale_attachment(client: AsyncClient, l
     from unittest.mock import AsyncMock, patch
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
@@ -1157,7 +1157,7 @@ async def test_list_versions_sync_prunes_stale_attachment(client: AsyncClient, l
 
     # Set up a deployed version with a provider_snapshot_id.
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1193,7 +1193,7 @@ async def test_list_versions_sync_prunes_stale_attachment(client: AsyncClient, l
         assert entries[0]["is_deployed"] is True
 
     async def _prune_sync(*_args, **_kwargs):
-        from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+        from flow.services.database.models.flow_version_deployment_attachment.crud import (
             delete_deployment_attachment,
         )
 
@@ -1221,13 +1221,13 @@ async def test_list_versions_sync_failure_does_not_block_response(client: AsyncC
     from unittest.mock import AsyncMock, patch
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
     await _create_snapshot(client, logged_in_headers, flow["id"])
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1263,14 +1263,14 @@ async def test_get_single_version_reports_unknown_deployment_status_when_attache
     """Single-version reads return unknown deployment status even when attached."""
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
     snap = await _create_snapshot(client, logged_in_headers, flow["id"])
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1301,14 +1301,14 @@ async def test_get_single_version_reports_unknown_deployment_status_when_feature
     """Feature-flag state does not change single-version deployment status behavior."""
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=False)
     flow = await _create_flow(client, logged_in_headers)
     snap = await _create_snapshot(client, logged_in_headers, flow["id"])
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
 
         flow_row = (await session.exec(select(Flow).where(Flow.id == UUID(flow["id"])))).one()
@@ -1356,15 +1356,15 @@ async def test_get_single_version_does_not_trigger_sync_prune(client: AsyncClien
     from unittest.mock import AsyncMock, patch
     from uuid import UUID
 
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
 
     _set_deployments_feature_flag(monkeypatch, enabled=True)
     flow = await _create_flow(client, logged_in_headers)
     snap = await _create_snapshot(client, logged_in_headers, flow["id"])
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow.model import Flow
-        from langflow.services.database.models.flow_version_deployment_attachment.model import (
+        from flow.services.database.models.flow.model import Flow
+        from flow.services.database.models.flow_version_deployment_attachment.model import (
             FlowVersionDeploymentAttachment,
         )
         from sqlmodel import select
@@ -1395,7 +1395,7 @@ async def test_get_single_version_does_not_trigger_sync_prune(client: AsyncClien
         mock_sync.assert_not_awaited()
 
     async with session_scope() as session:
-        from langflow.services.database.models.flow_version_deployment_attachment.model import (
+        from flow.services.database.models.flow_version_deployment_attachment.model import (
             FlowVersionDeploymentAttachment,
         )
         from sqlmodel import select
@@ -1414,7 +1414,7 @@ async def test_get_flow_version_entries_by_ids_rejects_oversized_batch():
     from unittest.mock import AsyncMock
     from uuid import uuid4
 
-    from langflow.services.database.models.flow_version.crud import get_flow_version_entries_by_ids
+    from flow.services.database.models.flow_version.crud import get_flow_version_entries_by_ids
 
     session = AsyncMock()
     version_ids = [uuid4() for _ in range(51)]

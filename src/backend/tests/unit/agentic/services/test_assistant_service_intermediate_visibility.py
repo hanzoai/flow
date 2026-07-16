@@ -8,12 +8,12 @@ import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from langflow.agentic.services.assistant_service import (
+from flow.agentic.services.assistant_service import (
     execute_flow_with_validation_streaming,
 )
-from langflow.agentic.services.flow_types import IntentResult
+from flow.agentic.services.flow_types import IntentResult
 
-MODULE = "langflow.agentic.services.assistant_service"
+MODULE = "flow.agentic.services.assistant_service"
 
 
 def _make_intent(intent="generate_component", translation="test"):
@@ -56,7 +56,7 @@ class TestValidatingStepIncludesCode:
 
     @pytest.mark.asyncio
     async def test_should_include_component_code_in_validating_event(self):
-        component_code = "from langflow.custom import Component\n\nclass MyComp(Component):\n    inputs = []\n"
+        component_code = "from flow.custom import Component\n\nclass MyComp(Component):\n    inputs = []\n"
         mock_validation = MagicMock()
         mock_validation.is_valid = True
         mock_validation.class_name = "MyComp"

@@ -12,7 +12,7 @@ class TelemetrySettings(BaseModel):
     # Telemetry
     do_not_track: bool = False
     """If set to True, Langflow will not track telemetry."""
-    telemetry_base_url: str = "https://langflow.gateway.scarf.sh"
+    telemetry_base_url: str = "https://flow.gateway.scarf.sh"
 
     transactions_storage_enabled: bool = True
     """If set to True, Langflow will track transactions between flows."""

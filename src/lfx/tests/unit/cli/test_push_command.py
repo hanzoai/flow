@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 # Shared constants
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _API_KEY = "test-key"  # pragma: allowlist secret
 _FLOW_ID = UUID("aaaaaaaa-0000-0000-0000-000000000001")
 _FLOW_ID_2 = UUID("aaaaaaaa-0000-0000-0000-000000000002")
@@ -97,7 +97,7 @@ def _make_sdk_mock(client_mock: MagicMock | None = None) -> MagicMock:
     """Return a mock langflow_sdk module wired to client_mock.
 
     SDK exception and model types are replaced with lightweight fakes so
-    the test file has zero imports from langflow_sdk.
+    the test file has zero imports from flow_sdk.
     """
     if client_mock is None:
         client_mock = _make_client_mock()

@@ -424,11 +424,11 @@ class TestStreamingValidationFlow:
 
         with (
             patch(
-                "langflow.agentic.services.assistant_service.classify_intent",
+                "flow.agentic.services.assistant_service.classify_intent",
                 side_effect=_mock_intent_classification("question"),
             ),
             patch(
-                "langflow.agentic.services.assistant_service.execute_flow_file_streaming",
+                "flow.agentic.services.assistant_service.execute_flow_file_streaming",
                 side_effect=mock_streaming_error,
             ),
         ):

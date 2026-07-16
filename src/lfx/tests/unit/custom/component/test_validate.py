@@ -23,7 +23,7 @@ class TestComponent(Component):
 
 
 def test_importing_langflow_logging_in_lfx():
-    """Test that langflow.logging can be imported in lfx context without errors."""
+    """Test that flow.logging can be imported in lfx context without errors."""
     code = dedent("""
 from flow.logging import logger, configure
 from flow.custom import Component
@@ -137,12 +137,12 @@ class TestGetModuleFallbacks:
         assert _get_module_fallbacks("requests") == ["requests"]
 
     def test_langflow_falls_back_to_lfx(self):
-        result = _get_module_fallbacks("langflow.custom")
-        assert result == ["langflow.custom", "lfx.custom"]
+        result = _get_module_fallbacks("flow.custom")
+        assert result == ["flow.custom", "lfx.custom"]
 
     def test_langflow_deep_path(self):
-        result = _get_module_fallbacks("langflow.custom.validate")
-        assert result == ["langflow.custom.validate", "lfx.custom.validate"]
+        result = _get_module_fallbacks("flow.custom.validate")
+        assert result == ["flow.custom.validate", "lfx.custom.validate"]
 
     def test_langchain_falls_back_to_langchain_classic(self):
         result = _get_module_fallbacks("langchain.memory")
@@ -170,7 +170,7 @@ class TestGetModuleFallbacks:
 
     def test_original_always_first(self):
         """The original module is always tried first."""
-        for name in ["langflow.custom", "langchain.agents", "requests"]:
+        for name in ["flow.custom", "langchain.agents", "requests"]:
             assert _get_module_fallbacks(name)[0] == name
 
 
@@ -250,7 +250,7 @@ class TestLangchainClassicBackwardsCompat:
     def test_from_langchain_memory(self):
         code = dedent("""
 from langchain.memory import ConversationBufferMemory
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -262,7 +262,7 @@ class Comp(Component):
     def test_from_langchain_schema(self):
         code = dedent("""
 from langchain.schema import AgentAction
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -274,7 +274,7 @@ class Comp(Component):
     def test_from_langchain_chains(self):
         code = dedent("""
 from langchain.chains.base import Chain
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -286,7 +286,7 @@ class Comp(Component):
     def test_from_langchain_callbacks(self):
         code = dedent("""
 from langchain.callbacks.base import BaseCallbackHandler
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -298,7 +298,7 @@ class Comp(Component):
     def test_from_langchain_llms(self):
         code = dedent("""
 from langchain.llms.base import BaseLLM
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -310,7 +310,7 @@ class Comp(Component):
     def test_from_langchain_prompts(self):
         code = dedent("""
 from langchain.prompts import PromptTemplate
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -322,7 +322,7 @@ class Comp(Component):
     def test_from_langchain_output_parsers(self):
         code = dedent("""
 from langchain.output_parsers import PydanticOutputParser
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -334,7 +334,7 @@ class Comp(Component):
     def test_from_langchain_text_splitter(self):
         code = dedent("""
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -346,7 +346,7 @@ class Comp(Component):
     def test_from_langchain_document_loaders(self):
         code = dedent("""
 from langchain.document_loaders.base import BaseLoader
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -358,7 +358,7 @@ class Comp(Component):
     def test_from_langchain_retrievers(self):
         code = dedent("""
 from langchain.retrievers import ContextualCompressionRetriever
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -370,7 +370,7 @@ class Comp(Component):
     def test_from_langchain_vectorstores(self):
         code = dedent("""
 from langchain.vectorstores.base import VectorStore
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -384,7 +384,7 @@ class Comp(Component):
     def test_from_langchain_agents_agent_executor(self):
         code = dedent("""
 from langchain.agents import AgentExecutor
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -396,7 +396,7 @@ class Comp(Component):
     def test_from_langchain_tools_structured_tool(self):
         code = dedent("""
 from langchain.tools import StructuredTool
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -410,7 +410,7 @@ class Comp(Component):
     def test_multiple_imports_from_removed_module(self):
         code = dedent("""
 from langchain.schema import AgentAction, AgentFinish
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -425,7 +425,7 @@ class Comp(Component):
         code = dedent("""
 from langchain.agents import create_react_agent
 from langchain.memory import ConversationBufferMemory
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -439,7 +439,7 @@ class Comp(Component):
     def test_langchain_1_0_agents_import(self):
         code = dedent("""
 from langchain.agents import create_react_agent
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -451,7 +451,7 @@ class Comp(Component):
     def test_langchain_1_0_tools_import(self):
         code = dedent("""
 from langchain.tools import tool
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):
@@ -465,7 +465,7 @@ class Comp(Component):
     def test_langchain_core_import_unaffected(self):
         code = dedent("""
 from langchain_core.messages import HumanMessage
-from langflow.custom import Component
+from flow.custom import Component
 
 class Comp(Component):
     def run(self):

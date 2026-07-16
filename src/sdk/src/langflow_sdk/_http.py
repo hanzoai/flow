@@ -7,7 +7,7 @@ from http import HTTPStatus
 
 import httpx
 
-from langflow_sdk.exceptions import (
+from flow_sdk.exceptions import (
     LangflowAuthError,
     LangflowConnectionError,
     LangflowHTTPError,

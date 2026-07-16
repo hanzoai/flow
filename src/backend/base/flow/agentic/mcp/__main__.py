@@ -1,7 +1,7 @@
 """Entry point for running the Langflow Agentic MCP server.
 
 This allows running the server with:
-    python -m langflow.agentic.mcp
+    python -m flow.agentic.mcp
 """
 
 from flow.agentic.mcp.server import mcp

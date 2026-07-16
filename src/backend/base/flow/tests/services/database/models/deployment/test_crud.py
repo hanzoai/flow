@@ -15,18 +15,18 @@ from flow.services.database.models.deployment.crud import (
     list_deployments_page,
     update_deployment,
 )
-from langflow.services.database.models.deployment.model import Deployment
-from langflow.services.database.models.deployment_provider_account.model import (
+from flow.services.database.models.deployment.model import Deployment
+from flow.services.database.models.deployment_provider_account.model import (
     DeploymentProviderAccount,
     DeploymentProviderKey,
 )
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.database.models.flow_version.model import FlowVersion
-from langflow.services.database.models.flow_version_deployment_attachment.model import (
+from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.flow_version_deployment_attachment.model import (
     FlowVersionDeploymentAttachment,
 )
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.database.models.user.model import User
+from flow.services.database.models.folder.model import Folder
+from flow.services.database.models.user.model import User
 from lfx.services.adapters.deployment.schema import DeploymentType
 from sqlalchemy import event
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -245,7 +245,7 @@ async def test_delete_by_resource_key_none_rowcount_logs_error():
     mock_result.rowcount = None
     db.exec.side_effect = [lookup_result, attachment_delete_result, mock_result]
 
-    with patch("langflow.services.database.models.deployment.crud.logger") as mock_logger:
+    with patch("flow.services.database.models.deployment.crud.logger") as mock_logger:
         mock_logger.aerror = AsyncMock()
         count = await delete_deployment_by_resource_key(
             db,
@@ -274,7 +274,7 @@ async def test_delete_by_resource_key_missing_row_skips_attachment_delete():
     deployment_delete_result.rowcount = 0
     db.exec.side_effect = [lookup_result, deployment_delete_result]
 
-    with patch("langflow.services.database.models.deployment.crud.logger") as mock_logger:
+    with patch("flow.services.database.models.deployment.crud.logger") as mock_logger:
         mock_logger.aerror = AsyncMock()
         count = await delete_deployment_by_resource_key(
             db,
@@ -302,7 +302,7 @@ async def test_delete_by_id_none_rowcount_logs_error():
     mock_result.rowcount = None
     db.exec.side_effect = [attachment_delete_result, mock_result]
 
-    with patch("langflow.services.database.models.deployment.crud.logger") as mock_logger:
+    with patch("flow.services.database.models.deployment.crud.logger") as mock_logger:
         mock_logger.aerror = AsyncMock()
         count = await delete_deployment_by_id(
             db,

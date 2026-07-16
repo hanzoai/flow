@@ -17,7 +17,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from langflow.main import create_app
+from flow.main import create_app
 
 
 def _clean_descriptions(spec: dict[str, Any]) -> None:

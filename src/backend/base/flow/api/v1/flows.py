@@ -36,7 +36,7 @@ from flow.services.deps import get_settings_service, get_storage_service
 from flow.services.storage.service import StorageService
 from flow.utils.compression import compress_response
 
-# Re-export helpers so existing ``from langflow.api.v1.flows import ...`` still works.
+# Re-export helpers so existing ``from flow.api.v1.flows import ...`` still works.
 __all__ = [
     "_get_safe_flow_path",
     "_new_flow",

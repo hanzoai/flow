@@ -775,7 +775,7 @@ async def test_upload_zip_with_invalid_json(client: AsyncClient, json_flow: str,
 @pytest.mark.usefixtures("session")
 async def test_upload_zip_exceeding_max_entries(client: AsyncClient, json_flow: str, logged_in_headers, monkeypatch):
     """ZIP with more JSON entries than the limit raises 400."""
-    import langflow.api.utils.zip_utils as zip_utils_mod
+    import flow.api.utils.zip_utils as zip_utils_mod
 
     monkeypatch.setattr(zip_utils_mod, "MAX_ZIP_ENTRIES", 3)
 
@@ -800,7 +800,7 @@ async def test_upload_zip_exceeding_max_entries(client: AsyncClient, json_flow: 
 @pytest.mark.usefixtures("session")
 async def test_upload_zip_with_oversized_entry(client: AsyncClient, json_flow: str, logged_in_headers, monkeypatch):
     """Entries exceeding size limit are skipped; smaller valid entries are processed."""
-    import langflow.api.utils.zip_utils as zip_utils_mod
+    import flow.api.utils.zip_utils as zip_utils_mod
 
     flow = orjson.loads(json_flow)
     data = flow["data"]
@@ -834,7 +834,7 @@ async def test_upload_zip_with_oversized_entry(client: AsyncClient, json_flow: s
 @pytest.mark.usefixtures("session")
 async def test_upload_zip_with_mixed_valid_invalid(client: AsyncClient, json_flow: str, logged_in_headers, monkeypatch):
     """Mix of valid flows, invalid JSON, and oversized entries → only valid flows returned."""
-    import langflow.api.utils.zip_utils as zip_utils_mod
+    import flow.api.utils.zip_utils as zip_utils_mod
 
     flow = orjson.loads(json_flow)
     data = flow["data"]

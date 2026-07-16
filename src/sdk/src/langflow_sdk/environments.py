@@ -15,11 +15,11 @@ File format
 .. code-block:: toml
 
     [environments.staging]
-    url = "https://staging.langflow.example.com"
+    url = "https://staging.flow.example.com"
     api_key_env = "LANGFLOW_STAGING_API_KEY"   # env-var that holds the key  # pragma: allowlist secret
 
     [environments.production]
-    url = "https://langflow.example.com"
+    url = "https://flow.example.com"
     api_key_env = "LANGFLOW_PROD_API_KEY"  # pragma: allowlist secret
 
     # Optional: set a default so callers don't have to name an environment
@@ -33,7 +33,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from langflow_sdk.exceptions import EnvironmentConfigError, EnvironmentNotFoundError
+from flow_sdk.exceptions import EnvironmentConfigError, EnvironmentNotFoundError
 
 try:
     import tomllib  # Python 3.11+
@@ -51,11 +51,11 @@ _EXAMPLE_CONFIG = """\
 # of an environment variable that holds the API key for that instance.
 #
 # [environments.staging]
-# url = "https://staging.langflow.example.com"
+# url = "https://staging.flow.example.com"
 # api_key_env = "LANGFLOW_STAGING_API_KEY"  # pragma: allowlist secret
 #
 # [environments.production]
-# url = "https://langflow.example.com"
+# url = "https://flow.example.com"
 # api_key_env = "LANGFLOW_PROD_API_KEY"  # pragma: allowlist secret
 #
 # [defaults]
@@ -223,12 +223,12 @@ def get_client(
 
     Example::
 
-        from langflow_sdk import get_client
+        from flow_sdk import get_client
 
         client = get_client("staging")
         flows  = client.list_flows()
     """
-    from langflow_sdk.client import Client
+    from flow_sdk.client import Client
 
     env = get_environment(environment, config_file=config_file)
     return Client(base_url=env.url, api_key=env.api_key, timeout=timeout)
@@ -244,12 +244,12 @@ def get_async_client(
 
     Example::
 
-        from langflow_sdk import get_async_client
+        from flow_sdk import get_async_client
 
         async with get_async_client("staging") as client:
             flows = await client.list_flows()
     """
-    from langflow_sdk.client import AsyncClient
+    from flow_sdk.client import AsyncClient
 
     env = get_environment(environment, config_file=config_file)
     return AsyncClient(base_url=env.url, api_key=env.api_key, timeout=timeout)

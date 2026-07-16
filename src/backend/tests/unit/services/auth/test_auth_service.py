@@ -128,7 +128,7 @@ def test_encrypt_and_decrypt_api_key_roundtrip(auth_service: AuthService):
 
 def test_add_padding_no_extra_chars_when_divisible_by_4():
     """add_base64_padding must not add characters when length is already a multiple of 4."""
-    from langflow.services.auth.utils import add_base64_padding
+    from flow.services.auth.utils import add_base64_padding
 
     assert add_base64_padding("ABCD") == "ABCD"
     assert add_base64_padding("ABCDEFGH") == "ABCDEFGH"
@@ -137,7 +137,7 @@ def test_add_padding_no_extra_chars_when_divisible_by_4():
 
 def test_add_padding_pads_correctly():
     """add_base64_padding must add the right number of = characters."""
-    from langflow.services.auth.utils import add_base64_padding
+    from flow.services.auth.utils import add_base64_padding
 
     assert add_base64_padding("ABC") == "ABC="
     assert add_base64_padding("AB") == "AB=="
@@ -223,7 +223,7 @@ def test_ensure_fernet_key_with_44_char_key():
     import os
 
     from cryptography.fernet import Fernet
-    from langflow.services.auth.utils import ensure_fernet_key
+    from flow.services.auth.utils import ensure_fernet_key
 
     raw_key = base64.urlsafe_b64encode(os.urandom(32)).decode()  # 44 chars, len % 4 == 0
     assert len(raw_key) == 44

@@ -1,4 +1,4 @@
-"""Transaction service implementation for langflow."""
+"""Transaction service implementation for flow."""
 
 from __future__ import annotations
 

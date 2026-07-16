@@ -1,4 +1,4 @@
-"""Unit tests for the langflow.helpers.flow module."""
+"""Unit tests for the flow.helpers.flow module."""
 
 import pytest
 from lfx.utils.langflow_utils import has_langflow_memory

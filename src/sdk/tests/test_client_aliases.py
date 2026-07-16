@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import pytest
-from langflow_sdk import AsyncClient, AsyncLangflowClient, Client, LangflowClient
-from langflow_sdk.client import AsyncClient as AsyncClientFromModule
-from langflow_sdk.client import Client as ClientFromModule
+from flow_sdk import AsyncClient, AsyncLangflowClient, Client, LangflowClient
+from flow_sdk.client import AsyncClient as AsyncClientFromModule
+from flow_sdk.client import Client as ClientFromModule
 
 
 @pytest.mark.unit
@@ -52,10 +52,10 @@ async def test_async_client_instantiation_uses_short_name() -> None:
 @pytest.mark.unit
 def test_client_ticket_api_surface() -> None:
     """Reproduce the exact import path from the ticket spec."""
-    # from langflow_sdk import Client
-    # client = Client("https://langflow.example.com", api_key="...")
+    # from flow_sdk import Client
+    # client = Client("https://flow.example.com", api_key="...")
     # should have .list_flows(), .get_flow(), .run_flow()
-    client = Client("https://langflow.example.com", api_key="test-key")  # pragma: allowlist secret
+    client = Client("https://flow.example.com", api_key="test-key")  # pragma: allowlist secret
     assert hasattr(client, "list_flows")
     assert hasattr(client, "get_flow")
     assert hasattr(client, "run_flow")
