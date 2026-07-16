@@ -128,8 +128,57 @@ class AuthService(BaseAuthService):
         msg = "No authentication credentials provided"
         raise MissingCredentialsError(msg)
 
+    async def _authenticate_with_iam(self, token: str, db: AsyncSession) -> User | None:
+        """Hanzo IAM auth seam: validate `token` as a Hanzo IAM access token (JWKS-
+        verified) and resolve it to the org-scoped flow user. Returns None when IAM is
+        not configured or the token isn't for our IAM issuer (caller falls back to local
+        auth). A token that IS for our issuer but fails verification RAISES — it must
+        never fall through to the weaker local SECRET_KEY path.
+        """
+        import secrets
+
+        from flow.services.auth.iam import iam_enabled, try_validate
+
+        if not iam_enabled():
+            return None
+        try:
+            principal = try_validate(token)
+        except InvalidTokenError as e:  # our-issuer token, bad signature/claims -> reject
+            logger.info("Hanzo IAM token failed verification")
+            msg = "Invalid IAM token"
+            raise AuthInvalidTokenError(msg) from e
+        if principal is None:
+            return None
+        # Get-or-create the flow user for this IAM identity; org_id carries the tenant.
+        username = principal.email or principal.username or principal.user_id
+        user = await get_user_by_username(db, username)
+        if user is None:
+            user = User(
+                username=username,
+                password=self.get_password_hash(secrets.token_urlsafe(32)),  # unused: IAM is the authority
+                is_active=True,
+                is_superuser=principal.is_admin,
+                org_id=principal.org,
+                last_login_at=None,
+            )
+            db.add(user)
+            await db.commit()
+            await db.refresh(user)
+        elif user.org_id != principal.org or user.is_superuser != principal.is_admin:
+            user.org_id = principal.org
+            user.is_superuser = principal.is_admin
+            await db.commit()
+            await db.refresh(user)
+        return user
+
     async def _authenticate_with_token(self, token: str, db: AsyncSession) -> User:
         """Internal method to authenticate with token (raises generic exceptions)."""
+        # Hanzo IAM auth seam: a Hanzo IAM token (issuer configured) is validated against
+        # the IAM JWKS and resolved to the org-scoped user before any local decode. A bad
+        # IAM token is rejected inside; it never reaches the local SECRET_KEY path.
+        iam_user = await self._authenticate_with_iam(token, db)
+        if iam_user is not None:
+            return iam_user
         from flow.services.auth.utils import ACCESS_TOKEN_TYPE, get_jwt_verification_key
 
         settings_service = self.settings
