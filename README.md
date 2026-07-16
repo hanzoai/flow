@@ -6,6 +6,8 @@
 [![PyPI - License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/MIT)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/hanzoflow?style=flat-square)](https://pypistats.org/packages/hanzoflow)
 
+Forked from [langflow-ai/langflow](https://github.com/langflow-ai/langflow) (MIT).
+
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers that turn every workflow into a tool that can be integrated into applications built on any framework or stack. Hanzo Flow comes with batteries included and supports all major LLMs, vector databases and a growing library of AI tools.
 
 ## Highlight features
@@ -64,3 +66,4 @@ Hanzo Flow is completely open source and you can deploy it to all major deployme
 ## Contribute
 
 We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Hanzo Flow more accessible.
+
