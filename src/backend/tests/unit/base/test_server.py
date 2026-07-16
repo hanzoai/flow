@@ -1,11 +1,11 @@
-from flow.server import LangflowApplication
+from flow.server import FlowApplication
 
 
 def _make_app(options=None, env_args=None, monkeypatch=None):
-    """Create a LangflowApplication with a dummy WSGI app.
+    """Create a FlowApplication with a dummy WSGI app.
 
     Args:
-        options: Programmatic options passed to LangflowApplication.
+        options: Programmatic options passed to FlowApplication.
         env_args: If provided, set GUNICORN_CMD_ARGS env var before construction.
         monkeypatch: pytest monkeypatch fixture for env manipulation.
     """
@@ -15,7 +15,7 @@ def _make_app(options=None, env_args=None, monkeypatch=None):
     def dummy_app(environ, start_response):
         pass
 
-    return LangflowApplication(dummy_app, options=options)
+    return FlowApplication(dummy_app, options=options)
 
 
 class TestGunicornEnvArgs:
@@ -50,4 +50,4 @@ class TestGunicornEnvArgs:
             monkeypatch=monkeypatch,
         )
 
-        assert app.cfg.settings["worker_class"].get() == "flow.server.LangflowUvicornWorker"
+        assert app.cfg.settings["worker_class"].get() == "flow.server.FlowUvicornWorker"

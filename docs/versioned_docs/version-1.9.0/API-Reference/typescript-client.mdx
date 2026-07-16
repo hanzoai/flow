@@ -45,15 +45,15 @@ pnpm add @datastax/flow-client
 1. Import the client into your code.
 
     ```tsx
-    import { LangflowClient } from "@datastax/flow-client";
+    import { Hanzo FlowClient } from "@datastax/flow-client";
     ```
 
-2. Initialize a `LangflowClient` object to interact with your server:
+2. Initialize a `Hanzo FlowClient` object to interact with your server:
 
     ```tsx
     const baseUrl = "BASE_URL";
     const apiKey = "API_KEY";
-    const client = new LangflowClient({ baseUrl, apiKey });
+    const client = new Hanzo FlowClient({ baseUrl, apiKey });
     ```
 
     Replace `BASE_URL` and `API_KEY` with values from your deployment.
@@ -67,10 +67,10 @@ pnpm add @datastax/flow-client
     The following example runs a flow (`runFlow`) by sending the flow ID and a chat input string:
 
     ```tsx
-    import { LangflowClient } from "@datastax/flow-client";
+    import { Hanzo FlowClient } from "@datastax/flow-client";
 
     const baseUrl = "http://localhost:7860";
-    const client = new LangflowClient({ baseUrl });
+    const client = new Hanzo FlowClient({ baseUrl });
 
     async function runFlow() {
         const flowId = "aa5a238b-02c0-4f03-bc5c-cc3a83335cdf";
@@ -155,10 +155,10 @@ Tweaks are programmatic run-time overrides for component settings.
 4. Run the modified TypeScript application to run the flow with `tweaks`, `session_id`, and streaming:
 
     ```tsx
-    import { LangflowClient } from "@datastax/flow-client";
+    import { Hanzo FlowClient } from "@datastax/flow-client";
 
     const baseUrl = "http://localhost:7860";
-    const client = new LangflowClient({ baseUrl });
+    const client = new Hanzo FlowClient({ baseUrl });
 
     async function runFlow() {
         const flowId = "aa5a238b-02c0-4f03-bc5c-cc3a83335cdf";
@@ -273,27 +273,27 @@ Tweaks are programmatic run-time overrides for component settings.
 To retrieve [Hanzo Flow logs](/logging), you must enable log retrieval on your Hanzo Flow server by including the following values in your Hanzo Flow `.env` file:
 
 ```text
-LANGFLOW_ENABLE_LOG_RETRIEVAL=True
-LANGFLOW_LOG_RETRIEVER_BUFFER_SIZE=10000
-LANGFLOW_LOG_LEVEL=DEBUG
+FLOW_ENABLE_LOG_RETRIEVAL=True
+FLOW_LOG_RETRIEVER_BUFFER_SIZE=10000
+FLOW_LOG_LEVEL=DEBUG
 ```
 
 The following example script starts streaming logs in the background, and then runs a flow so you can monitor the flow run:
 
 ```tsx
-import { LangflowClient } from "@datastax/flow-client";
+import { Hanzo FlowClient } from "@datastax/flow-client";
 
 const baseUrl = "http://localhost:7863";
 const flowId = "86f0bf45-0544-4e88-b0b1-8e622da7a7f0";
 
-async function runFlow(client: LangflowClient) {
+async function runFlow(client: Hanzo FlowClient) {
     const input = "Is anyone there?";
     const response = await client.flow(flowId).run(input);
     console.log('Flow response:', response);
 }
 
 async function main() {
-    const client = new LangflowClient({ baseUrl: baseUrl });
+    const client = new Hanzo FlowClient({ baseUrl: baseUrl });
 
     // Start streaming logs
     console.log('Starting log stream...');

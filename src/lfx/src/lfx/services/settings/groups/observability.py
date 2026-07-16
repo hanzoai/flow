@@ -5,9 +5,9 @@ class ObservabilitySettings(BaseModel):
     """Metrics exposure and historical record retention."""
 
     prometheus_enabled: bool = False
-    """If set to True, Hanzo Flow will expose Prometheus metrics."""
+    """If set to True, Flow will expose Prometheus metrics."""
     prometheus_port: int = 9090
-    """The port on which Hanzo Flow will expose Prometheus metrics. 9090 is the default port."""
+    """The port on which Flow will expose Prometheus metrics. 9090 is the default port."""
 
     max_transactions_to_keep: int = 3000
     """The maximum number of transactions to keep in the database."""

@@ -183,8 +183,8 @@ const config = {
     ],
   ],
   plugins: [
-    // Alias so MDX can import code from the Hanzo Flow repo with !!raw-loader!@flow/src/...
-    function langflowCodeImportPlugin(context) {
+    // Alias so MDX can import code from the Flow repo with !!raw-loader!@flow/src/...
+    function flowCodeImportPlugin(context) {
       return {
         name: "flow-code-import",
         configureWebpack() {
@@ -209,7 +209,7 @@ const config = {
             to: "/",
             from: [
               "/whats-new-a-new-chapter-flow",
-              "/👋 Welcome-to-Hanzo Flow",
+              "/👋 Welcome-to-Flow",
               "/getting-started-welcome-to-flow",
               "/guides-new-to-llms",
               "/about-flow",
@@ -438,7 +438,7 @@ const config = {
       navbar: {
         hideOnScroll: false,
         logo: {
-          alt: "Hanzo Flow",
+          alt: "Flow",
           src: "img/lf-docs-light.svg",
           srcDark: "img/lf-docs-dark.svg",
         },
@@ -460,7 +460,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-github',
             'data-namespace': 'header',
-            'data-platform-title': 'Hanzo Flow'
+            'data-platform-title': 'Flow'
           },
           {
             position: "right",
@@ -474,7 +474,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-twitter',
             'data-namespace': 'header',
-            'data-platform-title': 'Hanzo Flow'
+            'data-platform-title': 'Flow'
           },
           {
             position: "right",
@@ -488,7 +488,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-discord',
             'data-namespace': 'header',
-            'data-platform-title': 'Hanzo Flow'
+            'data-platform-title': 'Flow'
           },
         ],
       },
@@ -523,7 +523,7 @@ const config = {
             items: [
               {
                 html: `<div class="footer-links">
-                  <span>© ${new Date().getFullYear()} Hanzo Flow</span>
+                  <span>© ${new Date().getFullYear()} Flow</span>
                   <span id="preferenceCenterContainer"> ·&nbsp; <a href="#" onclick="if(typeof window !== 'undefined' && window.truste && window.truste.eu && window.truste.eu.clickListener) { window.truste.eu.clickListener(); } return false;" style="cursor: pointer;">Manage Privacy Choices</a></span>
                   </div>`,
               },

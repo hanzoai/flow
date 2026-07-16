@@ -1,3 +1,3 @@
-"""LangFlow document loaders components."""
+"""Flow document loaders components."""
 
 __all__: list[str] = []

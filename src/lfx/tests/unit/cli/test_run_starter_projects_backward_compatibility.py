@@ -91,7 +91,7 @@ class TestRunStarterProjectsBackwardCompatibility:
                     if "flow" in line and ("No module named" in line or "Module" in line):
                         error_line = line.strip()
                         break
-                pytest.fail(f"Langflow import error found in 1.6.0 template {template_file.name}.\nError: {error_line}")
+                pytest.fail(f"Flow import error found in 1.6.0 template {template_file.name}.\nError: {error_line}")
 
             # Check for lfx import errors (these indicate structural issues)
             if "No module named 'lfx." in all_output or "Module lfx." in all_output:
@@ -246,7 +246,7 @@ class TestRunStarterProjectsBackwardCompatibility:
 
             # More specific checks for these basic templates
             if "No module named 'flow'" in all_output:
-                pytest.fail(f"Langflow import error in 1.6.0 template {template_name}")
+                pytest.fail(f"Flow import error in 1.6.0 template {template_name}")
 
             # Check for module not found errors specifically related to flow
             # (Settings service errors are runtime errors, not import errors)
@@ -273,7 +273,7 @@ class TestRunStarterProjectsBackwardCompatibility:
         # Verify no import errors
         all_output = result.output
         if "No module named 'flow'" in all_output:
-            pytest.fail("Langflow import error in 1.6.0 stdin test")
+            pytest.fail("Flow import error in 1.6.0 stdin test")
 
     @pytest.mark.parametrize("template_file", get_starter_project_files(), ids=lambda x: x.name)
     def test_run_1_6_0_starter_project_inline_json(self, template_file):
@@ -293,4 +293,4 @@ class TestRunStarterProjectsBackwardCompatibility:
         # Verify no import errors
         all_output = result.output
         if "No module named 'flow'" in all_output:
-            pytest.fail("Langflow import error in 1.6.0 inline JSON test")
+            pytest.fail("Flow import error in 1.6.0 inline JSON test")

@@ -158,9 +158,9 @@ def get_lifespan(*, fix_migration=False, version=None):
 
         # Startup message
         if version:
-            await logger.adebug(f"Starting Langflow v{version}...")
+            await logger.adebug(f"Starting Flow v{version}...")
         else:
-            await logger.adebug("Starting Langflow...")
+            await logger.adebug("Starting Flow...")
 
         temp_dirs: list[TemporaryDirectory] = []
         sync_flows_from_fs_task = None
@@ -213,7 +213,7 @@ def get_lifespan(*, fix_migration=False, version=None):
             current_time = asyncio.get_event_loop().time()
             await logger.adebug("Creating/updating starter projects")
 
-            lock_file = Path(tempfile.gettempdir()) / "langflow_starter_projects.lock"
+            lock_file = Path(tempfile.gettempdir()) / "flow_starter_projects.lock"
             lock = FileLock(lock_file, timeout=1)
             try:
                 with lock:
@@ -344,11 +344,11 @@ def get_lifespan(*, fix_migration=False, version=None):
             # Clean shutdown with progress indicator
             # Create shutdown progress (show verbose timing if log level is DEBUG)
             from flow.__main__ import get_number_of_workers
-            from flow.cli.progress import create_langflow_shutdown_progress
+            from flow.cli.progress import create_flow_shutdown_progress
 
             log_level = os.getenv("FLOW_LOG_LEVEL", "info").lower()
             num_workers = get_number_of_workers(get_settings_service().settings.workers)
-            shutdown_progress = create_langflow_shutdown_progress(
+            shutdown_progress = create_flow_shutdown_progress(
                 verbose=log_level == "debug", multiple_workers=num_workers > 1
             )
 
@@ -407,7 +407,7 @@ def get_lifespan(*, fix_migration=False, version=None):
 
                 # Step 4: Finalizing Shutdown
                 with shutdown_progress.step(4):
-                    await logger.adebug("Langflow shutdown complete")
+                    await logger.adebug("Flow shutdown complete")
 
                 # Show completion summary and farewell
                 shutdown_progress.print_shutdown_summary()
@@ -436,7 +436,7 @@ def create_app():
     settings = get_settings_service().settings
 
     app = FastAPI(
-        title="Langflow",
+        title="Flow",
         version=__version__,
         lifespan=lifespan,
         root_path=settings.root_path,

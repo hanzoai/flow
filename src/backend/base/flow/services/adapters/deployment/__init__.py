@@ -1,1 +1,1 @@
-"""Hanzo Flow deployment adapter implementations."""
+"""Flow deployment adapter implementations."""

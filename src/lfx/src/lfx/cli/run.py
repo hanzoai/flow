@@ -110,9 +110,9 @@ async def run(
         ),
     ),
 ) -> None:
-    """Execute a Hanzo Flow graph script or JSON flow and return the result.
+    """Execute a Flow graph script or JSON flow and return the result.
 
-    This command analyzes and executes either a Python script containing a Hanzo Flow graph,
+    This command analyzes and executes either a Python script containing a Flow graph,
     a JSON flow file, inline JSON, or JSON from stdin, returning the result in the specified format.
     By default, output is minimal for use in containers and serverless environments.
 

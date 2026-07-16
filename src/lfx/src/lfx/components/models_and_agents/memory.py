@@ -15,7 +15,7 @@ from lfx.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_NAME_AI, MESSA
 
 class MemoryComponent(Component):
     display_name = "Message History"
-    description = "Stores or retrieves stored chat messages from Hanzo Flow tables or an external memory."
+    description = "Stores or retrieves stored chat messages from Flow tables or an external memory."
     documentation: str = "https://docs.hanzo.ai/flow/message-history"
     icon = "message-square-more"
     name = "Memory"
@@ -46,7 +46,7 @@ class MemoryComponent(Component):
             name="memory",
             display_name="External Memory",
             input_types=["Memory"],
-            info="Retrieve messages from an external memory. If empty, it will use the Hanzo Flow tables.",
+            info="Retrieve messages from an external memory. If empty, it will use the Flow tables.",
             advanced=True,
         ),
         DropdownInput(

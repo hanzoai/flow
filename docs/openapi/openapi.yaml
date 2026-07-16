@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Hanzo Flow
+  title: Flow
   version: 1.7.0
 paths:
   /api/v1/build/{flow_id}/vertices:
@@ -435,7 +435,7 @@ paths:
         \ execution time and success/failure via telemetry\n    - Handles graceful\
         \ client disconnection in streaming mode\n    - Provides detailed error handling\
         \ with appropriate HTTP status codes\n    - Extracts global variables from\
-        \ HTTP headers with prefix X-LANGFLOW-GLOBAL-VAR-*\n    - Merges extracted\
+        \ HTTP headers with prefix X-FLOW-GLOBAL-VAR-*\n    - Merges extracted\
         \ variables with the context parameter as \"request_variables\"\n    - In\
         \ streaming mode, uses EventManager to handle events:\n        - \"add_message\"\
         : New messages during execution\n        - \"token\": Individual tokens during\
@@ -711,7 +711,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/langflow__api__v1__schemas__UploadFileResponse'
+                $ref: '#/components/schemas/flow__api__v1__schemas__UploadFileResponse'
         '422':
           description: Validation Error
           content:
@@ -2087,7 +2087,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/langflow__api__v1__schemas__UploadFileResponse'
+                $ref: '#/components/schemas/flow__api__v1__schemas__UploadFileResponse'
         '422':
           description: Validation Error
           content:
@@ -3542,7 +3542,7 @@ paths:
       summary: Create Response
       description: "Create a response using OpenAI Responses API format.\n\nThis endpoint\
         \ accepts a flow_id in the model parameter and processes\nthe input through\
-        \ the specified Hanzo Flow flow.\n\nArgs:\n    request: OpenAI Responses API\
+        \ the specified Flow flow.\n\nArgs:\n    request: OpenAI Responses API\
         \ request with model (flow_id) and input\n    background_tasks: FastAPI background\
         \ task manager\n    api_key_user: Authenticated user from API key\n    http_request:\
         \ The incoming HTTP request\n    telemetry_service: Telemetry service for\
@@ -3609,7 +3609,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/langflow__api__schemas__UploadFileResponse'
+                $ref: '#/components/schemas/flow__api__schemas__UploadFileResponse'
         '422':
           description: Validation Error
           content:
@@ -3675,7 +3675,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/langflow__api__schemas__UploadFileResponse'
+                $ref: '#/components/schemas/flow__api__schemas__UploadFileResponse'
         '422':
           description: Validation Error
           content:
@@ -3840,7 +3840,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/langflow__api__schemas__UploadFileResponse'
+                $ref: '#/components/schemas/flow__api__schemas__UploadFileResponse'
         '422':
           description: Validation Error
           content:
@@ -6348,7 +6348,7 @@ components:
           title: Edit
           default: false
         properties:
-          $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          $ref: '#/components/schemas/flow__schema__properties__Properties'
         category:
           type: string
           title: Category
@@ -6424,7 +6424,7 @@ components:
           title: Duration
         properties:
           anyOf:
-          - $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          - $ref: '#/components/schemas/flow__schema__properties__Properties'
           - type: 'null'
         category:
           anyOf:
@@ -6493,7 +6493,7 @@ components:
           title: Duration
         properties:
           anyOf:
-          - $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          - $ref: '#/components/schemas/flow__schema__properties__Properties'
           - type: 'null'
         category:
           anyOf:
@@ -6556,7 +6556,7 @@ components:
           title: Error
         properties:
           anyOf:
-          - $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          - $ref: '#/components/schemas/flow__schema__properties__Properties'
           - type: 'null'
       type: object
       title: MessageUpdate
@@ -6863,7 +6863,7 @@ components:
       properties:
         properties:
           anyOf:
-          - $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          - $ref: '#/components/schemas/flow__schema__properties__Properties'
           - type: 'null'
         sender_name:
           anyOf:
@@ -6915,7 +6915,7 @@ components:
       properties:
         properties:
           anyOf:
-          - $ref: '#/components/schemas/langflow__schema__properties__Properties'
+          - $ref: '#/components/schemas/flow__schema__properties__Properties'
           - type: 'null'
         sender_name:
           anyOf:
@@ -8013,7 +8013,7 @@ components:
       - y
       - zoom
       title: ViewPort
-    langflow__api__schemas__UploadFileResponse:
+    flow__api__schemas__UploadFileResponse:
       properties:
         id:
           type: string
@@ -8042,7 +8042,7 @@ components:
       - size
       title: UploadFileResponse
       description: File upload response schema.
-    langflow__api__v1__schemas__UploadFileResponse:
+    flow__api__v1__schemas__UploadFileResponse:
       properties:
         flowId:
           type: string
@@ -8057,7 +8057,7 @@ components:
       - file_path
       title: UploadFileResponse
       description: Upload file response schema.
-    langflow__schema__content_block__ContentBlock-Input:
+    flow__schema__content_block__ContentBlock-Input:
       properties:
         title:
           type: string
@@ -8065,9 +8065,9 @@ components:
         contents:
           items:
             oneOf:
-            - $ref: '#/components/schemas/langflow__schema__content_types__ToolContent'
+            - $ref: '#/components/schemas/flow__schema__content_types__ToolContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__ErrorContent'
-            - $ref: '#/components/schemas/langflow__schema__content_types__TextContent'
+            - $ref: '#/components/schemas/flow__schema__content_types__TextContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__MediaContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__CodeContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__JSONContent'
@@ -8090,7 +8090,7 @@ components:
       - contents
       title: ContentBlock
       description: A block of content that can contain different types of content.
-    langflow__schema__content_types__TextContent:
+    flow__schema__content_types__TextContent:
       properties:
         type:
           type: string
@@ -8114,7 +8114,7 @@ components:
       - text
       title: TextContent
       description: Content type for simple text content.
-    langflow__schema__content_types__ToolContent:
+    flow__schema__content_types__ToolContent:
       properties:
         type:
           type: string
@@ -8151,7 +8151,7 @@ components:
       type: object
       title: ToolContent
       description: Content type for tool start content.
-    langflow__schema__properties__Properties:
+    flow__schema__properties__Properties:
       properties:
         text_color:
           anyOf:
@@ -8168,7 +8168,7 @@ components:
           title: Edited
           default: false
         source:
-          $ref: '#/components/schemas/langflow__schema__properties__Source'
+          $ref: '#/components/schemas/flow__schema__properties__Source'
         icon:
           anyOf:
           - type: string
@@ -8197,7 +8197,7 @@ components:
           default: []
       type: object
       title: Properties
-    langflow__schema__properties__Source:
+    flow__schema__properties__Source:
       properties:
         id:
           anyOf:
@@ -8228,9 +8228,9 @@ components:
         contents:
           items:
             oneOf:
-            - $ref: '#/components/schemas/langflow__schema__content_types__ToolContent'
+            - $ref: '#/components/schemas/flow__schema__content_types__ToolContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__ErrorContent'
-            - $ref: '#/components/schemas/langflow__schema__content_types__TextContent'
+            - $ref: '#/components/schemas/flow__schema__content_types__TextContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__MediaContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__CodeContent'
             - $ref: '#/components/schemas/lfx__schema__content_types__JSONContent'

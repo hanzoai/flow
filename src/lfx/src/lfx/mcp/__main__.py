@@ -1,4 +1,4 @@
-"""Entry point for the Hanzo Flow MCP server.
+"""Entry point for the Flow MCP server.
 
 Usage:
     python -m lfx.mcp
@@ -6,8 +6,8 @@ Usage:
     lfx-mcp
 
 Environment variables:
-    LANGFLOW_SERVER_URL: Hanzo Flow server URL (default: http://localhost:7860)
-    LANGFLOW_API_KEY: API key for authentication (skips login)
+    FLOW_SERVER_URL: Flow server URL (default: http://localhost:7860)
+    FLOW_API_KEY: API key for authentication (skips login)
 """
 
 from lfx.mcp.server import mcp

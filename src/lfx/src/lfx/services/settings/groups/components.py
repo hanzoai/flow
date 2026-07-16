@@ -14,7 +14,7 @@ class ComponentsSettings(BaseModel):
     """List of paths to custom components.
 
     Security: This setting defines an allow-list of custom components
-    permitted to execute, even when LANGFLOW_ALLOW_CUSTOM_COMPONENTS is False.
+    permitted to execute, even when FLOW_ALLOW_CUSTOM_COMPONENTS is False.
     """
     components_index_path: str | None = None
     """Path or URL to a prebuilt component index JSON file.
@@ -28,38 +28,38 @@ class ComponentsSettings(BaseModel):
     bundle_urls: list[str] = []
 
     lazy_load_components: bool = False
-    """If set to True, Hanzo Flow will only partially load components at startup and fully load them on demand.
+    """If set to True, Flow will only partially load components at startup and fully load them on demand.
     This significantly reduces startup time but may cause a slight delay when a component is first used."""
 
     # Starter Projects
     create_starter_projects: bool = True
-    """If set to True, Hanzo Flow will create starter projects. If False, skips all starter project setup.
+    """If set to True, Flow will create starter projects. If False, skips all starter project setup.
     Note that this doesn't check if the starter projects are already loaded in the db;
     this is intended to be used to skip all startup project logic."""
     update_starter_projects: bool = True
-    """If set to True, Hanzo Flow will update starter projects."""
+    """If set to True, Flow will update starter projects."""
 
     @field_validator("components_path", mode="before")
     @classmethod
     def set_components_path(cls, value):
         """Processes and updates the components path list, incorporating environment variable overrides.
 
-        If the `LANGFLOW_COMPONENTS_PATH` environment variable is set and points to an existing path, it is
+        If the `FLOW_COMPONENTS_PATH` environment variable is set and points to an existing path, it is
         appended to the provided list if not already present. If the input list is empty or missing, it is
         set to an empty list.
         """
-        if os.getenv("LANGFLOW_COMPONENTS_PATH"):
-            logger.debug("Adding LANGFLOW_COMPONENTS_PATH to components_path")
-            langflow_component_path = os.getenv("LANGFLOW_COMPONENTS_PATH")
-            if Path(langflow_component_path).exists() and langflow_component_path not in value:
-                if isinstance(langflow_component_path, list):
-                    for path in langflow_component_path:
+        if os.getenv("FLOW_COMPONENTS_PATH"):
+            logger.debug("Adding FLOW_COMPONENTS_PATH to components_path")
+            flow_component_path = os.getenv("FLOW_COMPONENTS_PATH")
+            if Path(flow_component_path).exists() and flow_component_path not in value:
+                if isinstance(flow_component_path, list):
+                    for path in flow_component_path:
                         if path not in value:
                             value.append(path)
-                    logger.debug(f"Extending {langflow_component_path} to components_path")
-                elif langflow_component_path not in value:
-                    value.append(langflow_component_path)
-                    logger.debug(f"Appending {langflow_component_path} to components_path")
+                    logger.debug(f"Extending {flow_component_path} to components_path")
+                elif flow_component_path not in value:
+                    value.append(flow_component_path)
+                    logger.debug(f"Appending {flow_component_path} to components_path")
 
         if not value:
             value = [BASE_COMPONENTS_PATH]

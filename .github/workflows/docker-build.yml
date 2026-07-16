@@ -170,28 +170,28 @@ jobs:
           fi
 
           if [[ "${{ inputs.release_type }}" == "base" || "${{ inputs.release_type }}" == "nightly-base" ]]; then
-            # LANGFLOW-BASE RELEASE
+            # FLOW-BASE RELEASE
             echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
             echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:base-${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:base-latest" >> $GITHUB_OUTPUT
             echo "file=./docker/build_and_push_base.Dockerfile" >> $GITHUB_OUTPUT
           else
             if [[ "${{ inputs.pre_release }}" == "true" ]]; then
-              # LANGFLOW-MAIN PRE-RELEASE
+              # FLOW-MAIN PRE-RELEASE
               echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
               echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }}" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main-ep" ]]; then
-              # LANGFLOW-MAIN (ENTRYPOINT) RELEASE
+              # FLOW-MAIN (ENTRYPOINT) RELEASE
               echo "docker_tags=ghcr.io/hanzoai/flow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "ghcr_tags=ghcr.io/hanzoai/flow-ep${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-ep${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push_ep.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main" || "${{ inputs.release_type }}" == "nightly-main" ]]; then
-              # LANGFLOW-MAIN RELEASE
+              # FLOW-MAIN RELEASE
               echo "docker_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "ghcr_tags=ghcr.io/hanzoai/flow${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push.Dockerfile" >> $GITHUB_OUTPUT
             elif [[ "${{ inputs.release_type }}" == "main-all" || "${{ inputs.release_type }}" == "nightly-main-all" ]]; then
-              # LANGFLOW-MAIN (ALL OPTIONAL DEPS) RELEASE
+              # FLOW-MAIN (ALL OPTIONAL DEPS) RELEASE
               echo "docker_tags=ghcr.io/hanzoai/flow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "ghcr_tags=ghcr.io/hanzoai/flow-all${nightly_suffix}:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-all${nightly_suffix}:latest" >> $GITHUB_OUTPUT
               echo "file=./docker/build_and_push_with_extras.Dockerfile" >> $GITHUB_OUTPUT
@@ -300,19 +300,19 @@ jobs:
           - component: docker-backend
             dockerfile: ./docker/build_and_push_backend.Dockerfile
             tags: ghcr.io/hanzoai/flow-backend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-backend:latest
-            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
+            flow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: docker-frontend
             dockerfile: ./docker/frontend/build_and_push_frontend.Dockerfile
             tags: ghcr.io/hanzoai/flow-frontend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-frontend:latest
-            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
+            flow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: ghcr-backend
             dockerfile: ./docker/build_and_push_backend.Dockerfile
             tags: ghcr.io/hanzoai/flow-backend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-backend:latest
-            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
+            flow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
           - component: ghcr-frontend
             dockerfile: ./docker/frontend/build_and_push_frontend.Dockerfile
             tags: ghcr.io/hanzoai/flow-frontend:${{ needs.get-version.outputs.version }},ghcr.io/hanzoai/flow-frontend:latest
-            langflow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
+            flow_image: ghcr.io/hanzoai/flow:${{ needs.get-version.outputs.version }}
     steps:
       - name: Check out the code at a specific ref
         uses: actions/checkout@v6
@@ -368,7 +368,7 @@ jobs:
             context: .
             push: true
             build-args: |
-              LANGFLOW_IMAGE=${{ matrix.langflow_image }}
+              FLOW_IMAGE=${{ matrix.flow_image }}
             file: ${{ matrix.dockerfile }}
             tags: ${{ matrix.tags }}
             # provenance: false will result in a single manifest for all platforms which makes the image pullable from arm64 machines via the emulation (e.g. Apple Silicon machines)
@@ -398,4 +398,4 @@ jobs:
 
       - name: Restart HuggingFace Spaces Build
         run: |
-          uv run ./scripts/factory_restart_space.py --space "Hanzo Flow/Hanzo Flow" --token ${{ secrets.HUGGINGFACE_API_TOKEN }}
+          uv run ./scripts/factory_restart_space.py --space "Flow/Flow" --token ${{ secrets.HUGGINGFACE_API_TOKEN }}

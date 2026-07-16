@@ -1,7 +1,7 @@
 {
-  "name": "Hanzo Flow",
-  "short_name": "Hanzo Flow",
-  "description": "Hanzo Flow is a low-code builder that makes it easier to build powerful AIs that can use any API, model, or database.",
+  "name": "Flow",
+  "short_name": "Flow",
+  "description": "Flow is a low-code builder that makes it easier to build powerful AIs that can use any API, model, or database.",
   "icons": [
     {
       "src": "icons/32x32.png",

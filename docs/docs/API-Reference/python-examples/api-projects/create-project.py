@@ -2,11 +2,11 @@ import os
 
 import requests
 
-url = f"{os.getenv('LANGFLOW_URL', '')}/api/v1/projects/"
+url = f"{os.getenv('FLOW_URL', '')}/api/v1/projects/"
 
 headers = {
     "Content-Type": "application/json",
-    "x-api-key": f"{os.getenv('LANGFLOW_API_KEY', '')}",
+    "x-api-key": f"{os.getenv('FLOW_API_KEY', '')}",
 }
 
 payload = {"name": "new_project_name", "description": "string", "components_list": [], "flows_list": []}

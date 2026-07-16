@@ -7,7 +7,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Link from '@docusaurus/Link';
 
-In general, environment variables, like `LANGFLOW_PORT` or `LANGFLOW_LOG_LEVEL`, configure how Hanzo Flow runs.
+In general, environment variables, like `FLOW_PORT` or `FLOW_LOG_LEVEL`, configure how Hanzo Flow runs.
 These are broad settings that apply to your entire Hanzo Flow deployment.
 
 In contrast, global variables are user-defined values stored in Hanzo Flow's database for use in flows, such as `OPENAI_API_KEY`.
@@ -35,8 +35,8 @@ When running a Hanzo Flow Docker image, the `-e` flag can be used to set additio
 
 For example:
 
-* If you set `LANGFLOW_PORT=8080` in your system environment and `LANGFLOW_PORT=7860` in `.env`, Hanzo Flow uses `7860` from `.env`.
-* If you use the Hanzo Flow CLI to run `flow run --env-file .env --port 9000`, and you set `LANGFLOW_PORT=7860` in `.env`, then Hanzo Flow uses `9000` from the CLI option.
+* If you set `FLOW_PORT=8080` in your system environment and `FLOW_PORT=7860` in `.env`, Hanzo Flow uses `7860` from `.env`.
+* If you use the Hanzo Flow CLI to run `flow run --env-file .env --port 9000`, and you set `FLOW_PORT=7860` in `.env`, then Hanzo Flow uses `9000` from the CLI option.
 
 ### Set environment variables in your terminal {#configure-variables-terminal}
 
@@ -63,7 +63,7 @@ set VARIABLE_NAME='VALUE'
 docker run -it --rm \
     -p 7860:7860 \
     -e VARIABLE_NAME='VALUE' \
-    langflowai/flow:latest
+    flowai/flow:latest
 ```
 
 </TabItem>
@@ -85,35 +85,35 @@ If it detects a supported environment variable, then it automatically adopts the
 
     ```text
     DO_NOT_TRACK=True
-    LANGFLOW_AUTO_LOGIN=False
-    LANGFLOW_AUTO_SAVING=True
-    LANGFLOW_AUTO_SAVING_INTERVAL=1000
-    LANGFLOW_BACKEND_ONLY=False
-    LANGFLOW_BUNDLE_URLS=["https://github.com/user/repo/commit/hash"]
-    LANGFLOW_CACHE_TYPE=async
-    LANGFLOW_COMPONENTS_PATH=/path/to/components/
-    LANGFLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json
-    LANGFLOW_CONFIG_DIR=/path/to/config/
-    LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
-    LANGFLOW_DEV=False
-    LANGFLOW_FALLBACK_TO_ENV_VAR=False
-    LANGFLOW_HEALTH_CHECK_MAX_RETRIES=5
-    LANGFLOW_HOST=localhost
-    LANGFLOW_LANGCHAIN_CACHE=InMemoryCache
-    LANGFLOW_MAX_FILE_SIZE_UPLOAD=10000
-    LANGFLOW_MAX_ITEMS_LENGTH=100
-    LANGFLOW_MAX_TEXT_LENGTH=1000
-    LANGFLOW_LOG_LEVEL=error
-    LANGFLOW_OPEN_BROWSER=False
-    LANGFLOW_PORT=7860
-    LANGFLOW_REMOVE_API_KEYS=False
-    LANGFLOW_SAVE_DB_IN_CONFIG_DIR=True
-    LANGFLOW_SECRET_KEY=somesecretkey
-    LANGFLOW_STORE_ENVIRONMENT_VARIABLES=True
-    LANGFLOW_SUPERUSER=adminuser
-    LANGFLOW_SUPERUSER_PASSWORD=adminpass
-    LANGFLOW_WORKER_TIMEOUT=60000
-    LANGFLOW_WORKERS=3
+    FLOW_AUTO_LOGIN=False
+    FLOW_AUTO_SAVING=True
+    FLOW_AUTO_SAVING_INTERVAL=1000
+    FLOW_BACKEND_ONLY=False
+    FLOW_BUNDLE_URLS=["https://github.com/user/repo/commit/hash"]
+    FLOW_CACHE_TYPE=async
+    FLOW_COMPONENTS_PATH=/path/to/components/
+    FLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json
+    FLOW_CONFIG_DIR=/path/to/config/
+    FLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
+    FLOW_DEV=False
+    FLOW_FALLBACK_TO_ENV_VAR=False
+    FLOW_HEALTH_CHECK_MAX_RETRIES=5
+    FLOW_HOST=localhost
+    FLOW_LANGCHAIN_CACHE=InMemoryCache
+    FLOW_MAX_FILE_SIZE_UPLOAD=10000
+    FLOW_MAX_ITEMS_LENGTH=100
+    FLOW_MAX_TEXT_LENGTH=1000
+    FLOW_LOG_LEVEL=error
+    FLOW_OPEN_BROWSER=False
+    FLOW_PORT=7860
+    FLOW_REMOVE_API_KEYS=False
+    FLOW_SAVE_DB_IN_CONFIG_DIR=True
+    FLOW_SECRET_KEY=somesecretkey
+    FLOW_STORE_ENVIRONMENT_VARIABLES=True
+    FLOW_SUPERUSER=adminuser
+    FLOW_SUPERUSER_PASSWORD=adminpass
+    FLOW_WORKER_TIMEOUT=60000
+    FLOW_WORKERS=3
     ```
 
     For additional examples, see [`.env.example`](https://github.com/hanzoai/flow/blob/main/.env.example) in the Hanzo Flow repository.
@@ -138,7 +138,7 @@ If it detects a supported environment variable, then it automatically adopts the
     docker run -it --rm \
         -p 7860:7860 \
         --env-file .env \
-        langflowai/flow:latest
+        flowai/flow:latest
     ```
 
     </TabItem>
@@ -164,35 +164,35 @@ Create or edit a `.env` file in the root directory of your application or Hanzo 
 
 ```text title=".env"
 DO_NOT_TRACK=True
-LANGFLOW_AUTO_LOGIN=False
-LANGFLOW_AUTO_SAVING=True
-LANGFLOW_AUTO_SAVING_INTERVAL=1000
-LANGFLOW_BACKEND_ONLY=False
-LANGFLOW_BUNDLE_URLS=["https://github.com/user/repo/commit/hash"]
-LANGFLOW_CACHE_TYPE=async
-LANGFLOW_COMPONENTS_PATH=/path/to/components/
-LANGFLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json
-LANGFLOW_CONFIG_DIR=/path/to/config/
-LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
-LANGFLOW_DEV=False
-LANGFLOW_FALLBACK_TO_ENV_VAR=False
-LANGFLOW_HEALTH_CHECK_MAX_RETRIES=5
-LANGFLOW_HOST=localhost
-LANGFLOW_LANGCHAIN_CACHE=InMemoryCache
-LANGFLOW_MAX_FILE_SIZE_UPLOAD=10000
-LANGFLOW_MAX_ITEMS_LENGTH=100
-LANGFLOW_MAX_TEXT_LENGTH=1000
-LANGFLOW_LOG_LEVEL=error
-LANGFLOW_OPEN_BROWSER=False
-LANGFLOW_PORT=7860
-LANGFLOW_REMOVE_API_KEYS=False
-LANGFLOW_SAVE_DB_IN_CONFIG_DIR=True
-LANGFLOW_SECRET_KEY=somesecretkey
-LANGFLOW_STORE_ENVIRONMENT_VARIABLES=True
-LANGFLOW_SUPERUSER=adminuser
-LANGFLOW_SUPERUSER_PASSWORD=adminpass
-LANGFLOW_WORKER_TIMEOUT=60000
-LANGFLOW_WORKERS=3
+FLOW_AUTO_LOGIN=False
+FLOW_AUTO_SAVING=True
+FLOW_AUTO_SAVING_INTERVAL=1000
+FLOW_BACKEND_ONLY=False
+FLOW_BUNDLE_URLS=["https://github.com/user/repo/commit/hash"]
+FLOW_CACHE_TYPE=async
+FLOW_COMPONENTS_PATH=/path/to/components/
+FLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json
+FLOW_CONFIG_DIR=/path/to/config/
+FLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
+FLOW_DEV=False
+FLOW_FALLBACK_TO_ENV_VAR=False
+FLOW_HEALTH_CHECK_MAX_RETRIES=5
+FLOW_HOST=localhost
+FLOW_LANGCHAIN_CACHE=InMemoryCache
+FLOW_MAX_FILE_SIZE_UPLOAD=10000
+FLOW_MAX_ITEMS_LENGTH=100
+FLOW_MAX_TEXT_LENGTH=1000
+FLOW_LOG_LEVEL=error
+FLOW_OPEN_BROWSER=False
+FLOW_PORT=7860
+FLOW_REMOVE_API_KEYS=False
+FLOW_SAVE_DB_IN_CONFIG_DIR=True
+FLOW_SECRET_KEY=somesecretkey
+FLOW_STORE_ENVIRONMENT_VARIABLES=True
+FLOW_SUPERUSER=adminuser
+FLOW_SUPERUSER_PASSWORD=adminpass
+FLOW_WORKER_TIMEOUT=60000
+FLOW_WORKERS=3
 ```
 
 </details>
@@ -210,37 +210,37 @@ To add environment variables, create or edit a service configuration file and ad
 ```ini title="override.conf"
 [Service]
 Environment="DO_NOT_TRACK=true"
-Environment="LANGFLOW_AUTO_LOGIN=false"
-Environment="LANGFLOW_AUTO_SAVING=true"
-Environment="LANGFLOW_AUTO_SAVING_INTERVAL=1000"
-Environment="LANGFLOW_BACKEND_ONLY=false"
-Environment="LANGFLOW_BUNDLE_URLS=[\"https://github.com/user/repo/commit/hash\"]"
-Environment="LANGFLOW_CACHE_TYPE=async"
-Environment="LANGFLOW_COMPONENTS_PATH=/path/to/components/"
-Environment="LANGFLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json"
-Environment="LANGFLOW_CONFIG_DIR=/path/to/config"
-Environment="LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow"
-Environment="LANGFLOW_DEV=false"
-Environment="LANGFLOW_FALLBACK_TO_ENV_VAR=false"
-Environment="LANGFLOW_HEALTH_CHECK_MAX_RETRIES=5"
-Environment="LANGFLOW_HOST=localhost"
-Environment="LANGFLOW_LANGCHAIN_CACHE=InMemoryCache"
-Environment="LANGFLOW_MAX_FILE_SIZE_UPLOAD=10000"
-Environment="LANGFLOW_MAX_ITEMS_LENGTH=100"
-Environment="LANGFLOW_MAX_TEXT_LENGTH=1000"
-Environment="LANGFLOW_LOG_ENV=container_json"
-Environment="LANGFLOW_LOG_FILE=logs/flow.log"
-Environment="LANGFLOW_LOG_LEVEL=error"
-Environment="LANGFLOW_OPEN_BROWSER=false"
-Environment="LANGFLOW_PORT=7860"
-Environment="LANGFLOW_REMOVE_API_KEYS=false"
-Environment="LANGFLOW_SAVE_DB_IN_CONFIG_DIR=true"
-Environment="LANGFLOW_SECRET_KEY=somesecretkey"
-Environment="LANGFLOW_STORE_ENVIRONMENT_VARIABLES=true"
-Environment="LANGFLOW_SUPERUSER=adminuser"
-Environment="LANGFLOW_SUPERUSER_PASSWORD=adminpass"
-Environment="LANGFLOW_WORKER_TIMEOUT=60000"
-Environment="LANGFLOW_WORKERS=3"
+Environment="FLOW_AUTO_LOGIN=false"
+Environment="FLOW_AUTO_SAVING=true"
+Environment="FLOW_AUTO_SAVING_INTERVAL=1000"
+Environment="FLOW_BACKEND_ONLY=false"
+Environment="FLOW_BUNDLE_URLS=[\"https://github.com/user/repo/commit/hash\"]"
+Environment="FLOW_CACHE_TYPE=async"
+Environment="FLOW_COMPONENTS_PATH=/path/to/components/"
+Environment="FLOW_COMPONENTS_INDEX_PATH=/path/to/component_index.json"
+Environment="FLOW_CONFIG_DIR=/path/to/config"
+Environment="FLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow"
+Environment="FLOW_DEV=false"
+Environment="FLOW_FALLBACK_TO_ENV_VAR=false"
+Environment="FLOW_HEALTH_CHECK_MAX_RETRIES=5"
+Environment="FLOW_HOST=localhost"
+Environment="FLOW_LANGCHAIN_CACHE=InMemoryCache"
+Environment="FLOW_MAX_FILE_SIZE_UPLOAD=10000"
+Environment="FLOW_MAX_ITEMS_LENGTH=100"
+Environment="FLOW_MAX_TEXT_LENGTH=1000"
+Environment="FLOW_LOG_ENV=container_json"
+Environment="FLOW_LOG_FILE=logs/flow.log"
+Environment="FLOW_LOG_LEVEL=error"
+Environment="FLOW_OPEN_BROWSER=false"
+Environment="FLOW_PORT=7860"
+Environment="FLOW_REMOVE_API_KEYS=false"
+Environment="FLOW_SAVE_DB_IN_CONFIG_DIR=true"
+Environment="FLOW_SECRET_KEY=somesecretkey"
+Environment="FLOW_STORE_ENVIRONMENT_VARIABLES=true"
+Environment="FLOW_SUPERUSER=adminuser"
+Environment="FLOW_SUPERUSER_PASSWORD=adminpass"
+Environment="FLOW_WORKER_TIMEOUT=60000"
+Environment="FLOW_WORKERS=3"
 ```
 
 </details>
@@ -263,44 +263,44 @@ Create or edit the `.vscode/tasks.json` file in your project root.
     "options": {
         "env": {
             "DO_NOT_TRACK": "true",
-            "LANGFLOW_AUTO_LOGIN": "false",
-            "LANGFLOW_AUTO_SAVING": "true",
-            "LANGFLOW_AUTO_SAVING_INTERVAL": "1000",
-            "LANGFLOW_BACKEND_ONLY": "false",
-            "LANGFLOW_BUNDLE_URLS": "[\"https://github.com/user/repo/commit/hash\"]",
-            "LANGFLOW_CACHE_TYPE": "async",
-            "LANGFLOW_COMPONENTS_PATH": "D:/path/to/components/",
-            "LANGFLOW_COMPONENTS_INDEX_PATH": "D:/path/to/component_index.json",
-            "LANGFLOW_CONFIG_DIR": "D:/path/to/config/",
-            "LANGFLOW_DATABASE_URL": "postgresql://postgres:password@localhost:5432/flow",
-            "LANGFLOW_DEV": "false",
-            "LANGFLOW_FALLBACK_TO_ENV_VAR": "false",
-            "LANGFLOW_HEALTH_CHECK_MAX_RETRIES": "5",
-            "LANGFLOW_HOST": "localhost",
-            "LANGFLOW_LANGCHAIN_CACHE": "InMemoryCache",
-            "LANGFLOW_MAX_FILE_SIZE_UPLOAD": "10000",
-            "LANGFLOW_MAX_ITEMS_LENGTH": "100",
-            "LANGFLOW_MAX_TEXT_LENGTH": "1000",
-            "LANGFLOW_LOG_ENV": "container_csv",
-            "LANGFLOW_LOG_FILE": "flow.log",
-            "LANGFLOW_LOG_LEVEL": "error",
-            "LANGFLOW_OPEN_BROWSER": "false",
-            "LANGFLOW_PORT": "7860",
-            "LANGFLOW_REMOVE_API_KEYS": "true",
-            "LANGFLOW_SAVE_DB_IN_CONFIG_DIR": "false",
-            "LANGFLOW_SECRET_KEY": "somesecretkey",
-            "LANGFLOW_STORE_ENVIRONMENT_VARIABLES": "true",
-            "LANGFLOW_SUPERUSER": "adminuser",
-            "LANGFLOW_SUPERUSER_PASSWORD": "adminpass",
-            "LANGFLOW_WORKER_TIMEOUT": "60000",
-            "LANGFLOW_WORKERS": "3"
+            "FLOW_AUTO_LOGIN": "false",
+            "FLOW_AUTO_SAVING": "true",
+            "FLOW_AUTO_SAVING_INTERVAL": "1000",
+            "FLOW_BACKEND_ONLY": "false",
+            "FLOW_BUNDLE_URLS": "[\"https://github.com/user/repo/commit/hash\"]",
+            "FLOW_CACHE_TYPE": "async",
+            "FLOW_COMPONENTS_PATH": "D:/path/to/components/",
+            "FLOW_COMPONENTS_INDEX_PATH": "D:/path/to/component_index.json",
+            "FLOW_CONFIG_DIR": "D:/path/to/config/",
+            "FLOW_DATABASE_URL": "postgresql://postgres:password@localhost:5432/flow",
+            "FLOW_DEV": "false",
+            "FLOW_FALLBACK_TO_ENV_VAR": "false",
+            "FLOW_HEALTH_CHECK_MAX_RETRIES": "5",
+            "FLOW_HOST": "localhost",
+            "FLOW_LANGCHAIN_CACHE": "InMemoryCache",
+            "FLOW_MAX_FILE_SIZE_UPLOAD": "10000",
+            "FLOW_MAX_ITEMS_LENGTH": "100",
+            "FLOW_MAX_TEXT_LENGTH": "1000",
+            "FLOW_LOG_ENV": "container_csv",
+            "FLOW_LOG_FILE": "flow.log",
+            "FLOW_LOG_LEVEL": "error",
+            "FLOW_OPEN_BROWSER": "false",
+            "FLOW_PORT": "7860",
+            "FLOW_REMOVE_API_KEYS": "true",
+            "FLOW_SAVE_DB_IN_CONFIG_DIR": "false",
+            "FLOW_SECRET_KEY": "somesecretkey",
+            "FLOW_STORE_ENVIRONMENT_VARIABLES": "true",
+            "FLOW_SUPERUSER": "adminuser",
+            "FLOW_SUPERUSER_PASSWORD": "adminpass",
+            "FLOW_WORKER_TIMEOUT": "60000",
+            "FLOW_WORKERS": "3"
         }
     },
     "tasks": [
         {
             "label": "flow backend",
             "type": "shell",
-            "command": ". ./langflownightly/Scripts/activate && flow run",
+            "command": ". ./flownightly/Scripts/activate && flow run",
             "isBackground": true,
             "problemMatcher": []
         }
@@ -330,8 +330,8 @@ To modify the macOS `.env` file, do the following:
 2. Add your Hanzo Flow environment variables, for example:
 
     ```text
-    LANGFLOW_LOG_LEVEL=info
-    LANGFLOW_DOCLING=true
+    FLOW_LOG_LEVEL=info
+    FLOW_DOCLING=true
     ```
 
 3. Save the file.
@@ -342,12 +342,12 @@ To modify the macOS `.env` file, do the following:
 
 To modify the Windows `.env` file, do the following:
 
-1. Create or edit `%APPDATA%\com.LangflowDesktop\data\.env`.
+1. Create or edit `%APPDATA%\com.Hanzo FlowDesktop\data\.env`.
 2. Add your Hanzo Flow environment variables, for example:
 
     ```text
-    LANGFLOW_LOG_LEVEL=info
-    LANGFLOW_DOCLING=true
+    FLOW_LOG_LEVEL=info
+    FLOW_DOCLING=true
     ```
 
 3. Save the file.
@@ -358,7 +358,7 @@ To modify the Windows `.env` file, do the following:
 
 Windows supports two sources for Hanzo Flow Desktop environment variables: a Hanzo Flow application `.env` file, and Windows user environment variables.
 
-The `.env` file at `%APPDATA%\com.LangflowDesktop\data\.env` is the recommended approach, but
+The `.env` file at `%APPDATA%\com.Hanzo FlowDesktop\data\.env` is the recommended approach, but
 Windows user variables are useful for single-sourcing API keys between Hanzo Flow and other Windows applications.
 If the same variable is defined in both the Hanzo Flow application `.env` file and as a Windows user environment variable, the `.env` file takes precedence.
 
@@ -403,19 +403,19 @@ The following environment variables set base Hanzo Flow server configuration, su
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_HOST` | String | `localhost` | The host on which the Hanzo Flow server will run. |
-| `LANGFLOW_PORT` | Integer | `7860` | The port on which the Hanzo Flow server runs. The server automatically selects a free port if the specified port is in use. |
-| `LANGFLOW_BACKEND_ONLY` | Boolean | `False` | Run only the Hanzo Flow backend service (no frontend). |
-| `LANGFLOW_DEV` | Boolean | `False` | Whether to run Hanzo Flow in development mode (may contain bugs). |
-| `LANGFLOW_OPEN_BROWSER` | Boolean | `False` | Open the system web browser on startup. |
-| `LANGFLOW_HEALTH_CHECK_MAX_RETRIES` | Integer | `5` | Set the maximum number of retries for Hanzo Flow's server status health checks. |
-| `LANGFLOW_WORKERS` | Integer | `1` | Number of worker processes. |
-| `LANGFLOW_WORKER_TIMEOUT` | Integer | `300` | Worker timeout in seconds. |
-| `LANGFLOW_SSL_CERT_FILE` | String | Not set | Path to the SSL certificate file for enabling HTTPS on the Hanzo Flow web server. This is separate from [database SSL connections](/configuration-custom-database#connect-flow-to-a-local-postgresql-database). |
-| `LANGFLOW_SSL_KEY_FILE` | String | Not set | Path to the SSL key file for enabling HTTPS on the Hanzo Flow web server. This is separate from [database SSL connections](/configuration-custom-database#connect-flow-to-a-local-postgresql-database). |
-| `LANGFLOW_DEACTIVATE_TRACING` | Boolean | `False` | Deactivate tracing functionality. |
-| `LANGFLOW_CELERY_ENABLED` | Boolean | `False` | Enable Celery for distributed task processing. |
-| `LANGFLOW_ALEMBIC_LOG_TO_STDOUT` | Boolean | `False` | Whether to log Alembic database migration output to stdout instead of a log file. If `true`, Alembic logs to `stdout` and the default log file is ignored. |
+| `FLOW_HOST` | String | `localhost` | The host on which the Hanzo Flow server will run. |
+| `FLOW_PORT` | Integer | `7860` | The port on which the Hanzo Flow server runs. The server automatically selects a free port if the specified port is in use. |
+| `FLOW_BACKEND_ONLY` | Boolean | `False` | Run only the Hanzo Flow backend service (no frontend). |
+| `FLOW_DEV` | Boolean | `False` | Whether to run Hanzo Flow in development mode (may contain bugs). |
+| `FLOW_OPEN_BROWSER` | Boolean | `False` | Open the system web browser on startup. |
+| `FLOW_HEALTH_CHECK_MAX_RETRIES` | Integer | `5` | Set the maximum number of retries for Hanzo Flow's server status health checks. |
+| `FLOW_WORKERS` | Integer | `1` | Number of worker processes. |
+| `FLOW_WORKER_TIMEOUT` | Integer | `300` | Worker timeout in seconds. |
+| `FLOW_SSL_CERT_FILE` | String | Not set | Path to the SSL certificate file for enabling HTTPS on the Hanzo Flow web server. This is separate from [database SSL connections](/configuration-custom-database#connect-flow-to-a-local-postgresql-database). |
+| `FLOW_SSL_KEY_FILE` | String | Not set | Path to the SSL key file for enabling HTTPS on the Hanzo Flow web server. This is separate from [database SSL connections](/configuration-custom-database#connect-flow-to-a-local-postgresql-database). |
+| `FLOW_DEACTIVATE_TRACING` | Boolean | `False` | Deactivate tracing functionality. |
+| `FLOW_CELERY_ENABLED` | Boolean | `False` | Enable Celery for distributed task processing. |
+| `FLOW_ALEMBIC_LOG_TO_STDOUT` | Boolean | `False` | Whether to log Alembic database migration output to stdout instead of a log file. If `true`, Alembic logs to `stdout` and the default log file is ignored. |
 
 #### Gunicorn configuration
 
@@ -447,22 +447,22 @@ See [Telemetry](/contributing-telemetry).
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_AUTO_SAVING` | Boolean | `True` | Whether to automatically save the current flow draft. Auto-save only updates the live draft, and doesn't create [saved flow versions](/concepts-flows#save-and-restore-flow-versions). |
-| `LANGFLOW_AUTO_SAVING_INTERVAL` | Integer | `1000` | Set the auto-save interval in milliseconds if `LANGFLOW_AUTO_SAVING=True`. |
-| `LANGFLOW_BUNDLE_URLS` | List[String] | `[]` | A list of URLs from which to load custom bundles. Supports GitHub URLs. If `LANGFLOW_AUTO_LOGIN=True`, flows from these bundles are loaded into the database. |
-| `LANGFLOW_COMPONENTS_PATH` | String | Not set | Path to a directory containing custom components. Typically used if you have local custom components or you are building a Docker image with custom components. |
-| `LANGFLOW_COMPONENTS_INDEX_PATH` | String | Not set | File path or URL (`http://` or `https://`) to a prebuilt component index JSON file used to populate built-in components in the visual editor. When not set, Hanzo Flow uses the included index. Useful for supplying a curated component index, for example in airgapped deployments. For more information, see [Block custom components](../Deployment/deployment-block-custom-components.mdx). |
-| `LANGFLOW_ALLOW_CUSTOM_COMPONENTS` | Boolean | `True` | If `false`, disables custom components and in-editor editing of component code. This feature is in beta. For more information, see [Block custom components](../Deployment/deployment-block-custom-components.mdx). |
-| `LANGFLOW_LOAD_FLOWS_PATH` | String | Not set | Path to a directory containing flow JSON files to be loaded on startup. Typically used when creating a Docker image with prepackaged flows. Requires `LANGFLOW_AUTO_LOGIN=True`. |
-| `LANGFLOW_CREATE_STARTER_PROJECTS` | Boolean | `True` | Whether to create templates during initialization. If `false`, Hanzo Flow doesn't create templates, and `LANGFLOW_UPDATE_STARTER_PROJECTS` is treated as `false`. |
-| `LANGFLOW_UPDATE_STARTER_PROJECTS` | Boolean | `True` | Whether to update templates with the latest component versions when initializing after an upgrade. |
-| `LANGFLOW_LAZY_LOAD_COMPONENTS` | Boolean | `False` | If `true`, Hanzo Flow only partially loads components at startup and fully loads them on demand. This significantly reduces startup time but can cause a slight delay when a component is first used. |
-| `LANGFLOW_EVENT_DELIVERY` | String | `streaming` | How to deliver build events to the frontend: `polling`, `streaming` or `direct`. |
-| `LANGFLOW_FRONTEND_PATH` | String | `./frontend` | Path to the frontend directory containing build files. For development purposes only when you need to serve specific frontend code. |
-| `LANGFLOW_MAX_ITEMS_LENGTH` | Integer | `100` | Maximum number of items to store and display in the visual editor. Lists longer than this will be truncated when displayed in the visual editor. Doesn't affect outputs or data passed between components. |
-| `LANGFLOW_MAX_TEXT_LENGTH` | Integer | `1000` | Maximum number of characters to store and display in the visual editor. Responses longer than this will be truncated when displayed in the visual editor. Doesn't truncate outputs or responses passed between components. |
-| `LANGFLOW_MAX_TRANSACTIONS_TO_KEEP` | Integer | `3000` | Maximum number of flow transaction events to keep in the database. |
-| `LANGFLOW_MAX_VERTEX_BUILDS_TO_KEEP` | Integer | `3000` | Maximum number of vertex builds to keep in the database. Relates to [Playground](/concepts-playground) functionality. |
-| `LANGFLOW_MAX_VERTEX_BUILDS_PER_VERTEX` | Integer | `2` | Maximum number of builds to keep per vertex. Older builds are deleted. Relates to [Playground](/concepts-playground) functionality. |
-| `LANGFLOW_PUBLIC_FLOW_CLEANUP_INTERVAL` | Integer | `3600` | The interval in seconds at which data for [shared Playground](/concepts-playground#share-a-flows-playground) flows are cleaned up. Default: 3600 seconds (1 hour). Minimum: 600 seconds (10 minutes). |
-| `LANGFLOW_PUBLIC_FLOW_EXPIRATION` | Integer | `86400` | The time in seconds after which a [shared Playground](/concepts-playground#share-a-flows-playground) flow is considered expired and eligible for cleanup. Default: 86400 seconds (24 hours). Minimum: 600 seconds (10 minutes). |
+| `FLOW_AUTO_SAVING` | Boolean | `True` | Whether to automatically save the current flow draft. Auto-save only updates the live draft, and doesn't create [saved flow versions](/concepts-flows#save-and-restore-flow-versions). |
+| `FLOW_AUTO_SAVING_INTERVAL` | Integer | `1000` | Set the auto-save interval in milliseconds if `FLOW_AUTO_SAVING=True`. |
+| `FLOW_BUNDLE_URLS` | List[String] | `[]` | A list of URLs from which to load custom bundles. Supports GitHub URLs. If `FLOW_AUTO_LOGIN=True`, flows from these bundles are loaded into the database. |
+| `FLOW_COMPONENTS_PATH` | String | Not set | Path to a directory containing custom components. Typically used if you have local custom components or you are building a Docker image with custom components. |
+| `FLOW_COMPONENTS_INDEX_PATH` | String | Not set | File path or URL (`http://` or `https://`) to a prebuilt component index JSON file used to populate built-in components in the visual editor. When not set, Hanzo Flow uses the included index. Useful for supplying a curated component index, for example in airgapped deployments. For more information, see [Block custom components](../Deployment/deployment-block-custom-components.mdx). |
+| `FLOW_ALLOW_CUSTOM_COMPONENTS` | Boolean | `True` | If `false`, disables custom components and in-editor editing of component code. This feature is in beta. For more information, see [Block custom components](../Deployment/deployment-block-custom-components.mdx). |
+| `FLOW_LOAD_FLOWS_PATH` | String | Not set | Path to a directory containing flow JSON files to be loaded on startup. Typically used when creating a Docker image with prepackaged flows. Requires `FLOW_AUTO_LOGIN=True`. |
+| `FLOW_CREATE_STARTER_PROJECTS` | Boolean | `True` | Whether to create templates during initialization. If `false`, Hanzo Flow doesn't create templates, and `FLOW_UPDATE_STARTER_PROJECTS` is treated as `false`. |
+| `FLOW_UPDATE_STARTER_PROJECTS` | Boolean | `True` | Whether to update templates with the latest component versions when initializing after an upgrade. |
+| `FLOW_LAZY_LOAD_COMPONENTS` | Boolean | `False` | If `true`, Hanzo Flow only partially loads components at startup and fully loads them on demand. This significantly reduces startup time but can cause a slight delay when a component is first used. |
+| `FLOW_EVENT_DELIVERY` | String | `streaming` | How to deliver build events to the frontend: `polling`, `streaming` or `direct`. |
+| `FLOW_FRONTEND_PATH` | String | `./frontend` | Path to the frontend directory containing build files. For development purposes only when you need to serve specific frontend code. |
+| `FLOW_MAX_ITEMS_LENGTH` | Integer | `100` | Maximum number of items to store and display in the visual editor. Lists longer than this will be truncated when displayed in the visual editor. Doesn't affect outputs or data passed between components. |
+| `FLOW_MAX_TEXT_LENGTH` | Integer | `1000` | Maximum number of characters to store and display in the visual editor. Responses longer than this will be truncated when displayed in the visual editor. Doesn't truncate outputs or responses passed between components. |
+| `FLOW_MAX_TRANSACTIONS_TO_KEEP` | Integer | `3000` | Maximum number of flow transaction events to keep in the database. |
+| `FLOW_MAX_VERTEX_BUILDS_TO_KEEP` | Integer | `3000` | Maximum number of vertex builds to keep in the database. Relates to [Playground](/concepts-playground) functionality. |
+| `FLOW_MAX_VERTEX_BUILDS_PER_VERTEX` | Integer | `2` | Maximum number of builds to keep per vertex. Older builds are deleted. Relates to [Playground](/concepts-playground) functionality. |
+| `FLOW_PUBLIC_FLOW_CLEANUP_INTERVAL` | Integer | `3600` | The interval in seconds at which data for [shared Playground](/concepts-playground#share-a-flows-playground) flows are cleaned up. Default: 3600 seconds (1 hour). Minimum: 600 seconds (10 minutes). |
+| `FLOW_PUBLIC_FLOW_EXPIRATION` | Integer | `86400` | The time in seconds after which a [shared Playground](/concepts-playground#share-a-flows-playground) flow is considered expired and eligible for cleanup. Default: 86400 seconds (24 hours). Minimum: 600 seconds (10 minutes). |

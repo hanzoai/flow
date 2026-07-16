@@ -12,7 +12,7 @@ from unittest.mock import patch
 class TestDatabasePathResolution:
     """Test database path resolution in Settings."""
 
-    def test_database_path_uses_langflow_package_when_save_db_in_config_dir_false(self, tmp_path):
+    def test_database_path_uses_flow_package_when_save_db_in_config_dir_false(self, tmp_path):
         """When save_db_in_config_dir=False, database should be in flow package dir."""
         import flow
         from lfx.services.settings.base import Settings
@@ -54,7 +54,7 @@ class TestDatabasePathResolution:
         assert settings.database_url is not None
         assert str(config_dir) in settings.database_url
 
-    def test_database_path_falls_back_to_lfx_when_langflow_not_importable(self, tmp_path):
+    def test_database_path_falls_back_to_lfx_when_flow_not_importable(self, tmp_path):
         """When flow is not importable, should fall back to lfx package path."""
         import builtins
 

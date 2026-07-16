@@ -10,17 +10,17 @@ on:
   workflow_dispatch:
     inputs:
       nightly_tag:
-        description: "Nightly tag to test migration to (e.g., langflowai/flow-nightly:latest)"
+        description: "Nightly tag to test migration to (e.g., flowai/flow-nightly:latest)"
         required: false
         type: string
-        default: "langflowai/flow-nightly:latest"
+        default: "flowai/flow-nightly:latest"
   # Note: This workflow is called by nightly_build.yml after Docker images are built
 
 env:
   PYTHON_VERSION: "3.13"
-  POSTGRES_DB: langflow_test
+  POSTGRES_DB: flow_test
   POSTGRES_USER: flow
-  POSTGRES_PASSWORD: langflow_test_pass  # pragma: allowlist secret
+  POSTGRES_PASSWORD: flow_test_pass  # pragma: allowlist secret
 
 jobs:
   migration-pip-venv:
@@ -59,7 +59,7 @@ jobs:
           mkdir -p migration-test
           cd migration-test
 
-      - name: Install latest stable Hanzo Flow with PostgreSQL
+      - name: Install latest stable Flow with PostgreSQL
         working-directory: migration-test
         run: |
           echo "Installing latest stable flow[postgresql]..."
@@ -68,27 +68,27 @@ jobs:
           uv pip install "flow[postgresql]"
 
           # Verify installation
-          python -c 'from importlib.metadata import version; print("Installed Hanzo Flow version:", version("flow"))'
+          python -c 'from importlib.metadata import version; print("Installed Flow version:", version("flow"))'
 
       - name: Initialize database with stable version
         working-directory: migration-test
         env:
-          LANGFLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}  # pragma: allowlist secret
+          FLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}  # pragma: allowlist secret
         run: |
           source .venv/bin/activate
 
-          echo "Starting Hanzo Flow to initialize database..."
+          echo "Starting Flow to initialize database..."
           # shellcheck disable=SC2016
           timeout 120 bash -c '
             python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
-            LANGFLOW_PID=$!
+            FLOW_PID=$!
             until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do
               sleep 2
             done
-            kill $LANGFLOW_PID
-            wait $LANGFLOW_PID 2>/dev/null || true
+            kill $FLOW_PID
+            wait $FLOW_PID 2>/dev/null || true
           ' || {
-            echo "Failed to start Hanzo Flow stable version"
+            echo "Failed to start Flow stable version"
             exit 1
           }
 
@@ -97,13 +97,13 @@ jobs:
       - name: Create witness flow
         working-directory: migration-test
         env:
-          LANGFLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
+          FLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
         run: |
           source .venv/bin/activate
 
-          # Start Hanzo Flow briefly to create test data
+          # Start Flow briefly to create test data
           python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
-          LANGFLOW_PID=$!
+          FLOW_PID=$!
 
           # Wait for startup
           timeout 60 bash -c 'until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do sleep 2; done'
@@ -112,7 +112,7 @@ jobs:
           TOKEN=$(curl -fsS http://127.0.0.1:7860/api/v1/auto_login | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])")
           if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
             echo "❌ Failed to get authentication token"
-            kill $LANGFLOW_PID
+            kill $FLOW_PID
             exit 1
           fi
           echo "✅ Authentication token obtained"
@@ -147,9 +147,9 @@ jobs:
           fi
           echo "✅ Witness credential created successfully"
 
-          # Stop Hanzo Flow
-          kill $LANGFLOW_PID
-          wait $LANGFLOW_PID 2>/dev/null || true
+          # Stop Flow
+          kill $FLOW_PID
+          wait $FLOW_PID 2>/dev/null || true
 
           echo "Witness data created (flow + credential)"
 
@@ -158,7 +158,7 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/flow-nightly:latest' }}"
+          NIGHTLY_TAG="${{ inputs.nightly_tag || 'flowai/flow-nightly:latest' }}"
           echo "Upgrading to nightly version: $NIGHTLY_TAG"
 
           # Remove stable distributions before installing nightly.
@@ -169,7 +169,7 @@ jobs:
           echo "Removing stable flow to avoid namespace collision with nightly..."
           uv pip uninstall -y flow flow-base || true
 
-          # Extract version from Docker tag (format: langflowai/flow-nightly:v1.10.0.dev20260522)
+          # Extract version from Docker tag (format: flowai/flow-nightly:v1.10.0.dev20260522)
           if [[ "$NIGHTLY_TAG" == *":"* ]]; then
             VERSION="${NIGHTLY_TAG##*:}"
             echo "Extracted version from tag: $VERSION"
@@ -192,49 +192,49 @@ jobs:
           fi
 
           # Verify upgrade
-          python -c 'from importlib.metadata import version; print("Upgraded to Hanzo Flow Nightly version:", version("flow-nightly"))'
+          python -c 'from importlib.metadata import version; print("Upgraded to Flow Nightly version:", version("flow-nightly"))'
 
       - name: Run migration and verify startup
         working-directory: migration-test
         env:
-          LANGFLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}  # pragma: allowlist secret
+          FLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}  # pragma: allowlist secret
         run: |
           source .venv/bin/activate
 
-          echo "Starting Hanzo Flow nightly to run migrations..."
+          echo "Starting Flow nightly to run migrations..."
           # shellcheck disable=SC2016
           timeout 180 bash -c '
-            python -m flow run --host 127.0.0.1 --port 7860 --backend-only > langflow_nightly.log 2>&1 &
-            LANGFLOW_PID=$!
+            python -m flow run --host 127.0.0.1 --port 7860 --backend-only > flow_nightly.log 2>&1 &
+            FLOW_PID=$!
 
             until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do
-              if ! kill -0 $LANGFLOW_PID 2>/dev/null; then
-                echo "Hanzo Flow process died during startup"
-                cat langflow_nightly.log
+              if ! kill -0 $FLOW_PID 2>/dev/null; then
+                echo "Flow process died during startup"
+                cat flow_nightly.log
                 exit 1
               fi
               sleep 2
             done
 
-            echo "Hanzo Flow nightly started successfully"
-            kill $LANGFLOW_PID
-            wait $LANGFLOW_PID 2>/dev/null || true
+            echo "Flow nightly started successfully"
+            kill $FLOW_PID
+            wait $FLOW_PID 2>/dev/null || true
           ' || {
-            echo "Failed to start Hanzo Flow nightly version"
-            cat langflow_nightly.log || true
+            echo "Failed to start Flow nightly version"
+            cat flow_nightly.log || true
             exit 1
           }
 
       - name: Verify witness data persisted
         working-directory: migration-test
         env:
-          LANGFLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
+          FLOW_DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
         run: |
           source .venv/bin/activate
 
-          # Start Hanzo Flow to query data
+          # Start Flow to query data
           python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
-          LANGFLOW_PID=$!
+          FLOW_PID=$!
 
           timeout 60 bash -c 'until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do sleep 2; done'
 
@@ -242,7 +242,7 @@ jobs:
           TOKEN=$(curl -fsS http://127.0.0.1:7860/api/v1/auto_login | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])")
           if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
             echo "❌ Failed to get authentication token"
-            kill $LANGFLOW_PID
+            kill $FLOW_PID
             exit 1
           fi
           echo "✅ Authentication token obtained"
@@ -256,7 +256,7 @@ jobs:
           else
             echo "❌ Witness flow NOT found after migration"
             cat flows_after_migration.json
-            kill $LANGFLOW_PID
+            kill $FLOW_PID
             exit 1
           fi
 
@@ -269,12 +269,12 @@ jobs:
           else
             echo "❌ Witness credential NOT found after migration"
             cat variables_after_migration.json
-            kill $LANGFLOW_PID
+            kill $FLOW_PID
             exit 1
           fi
 
-          kill $LANGFLOW_PID
-          wait $LANGFLOW_PID 2>/dev/null || true
+          kill $FLOW_PID
+          wait $FLOW_PID 2>/dev/null || true
 
       - name: Upload logs on failure
         if: failure()
@@ -306,11 +306,11 @@ jobs:
           cat > docker-compose.yml <<'EOF'
           services:
             flow:
-              image: langflowai/flow:latest
+              image: flowai/flow:latest
               ports:
                 - "7860:7860"
               environment:  # pragma: allowlist secret
-                - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow  # pragma: allowlist secret
+                - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow  # pragma: allowlist secret
               depends_on:
                 postgres:
                   condition: service_healthy
@@ -327,7 +327,7 @@ jobs:
                 - POSTGRES_PASSWORD=flow  # pragma: allowlist secret
                 - POSTGRES_DB=flow
               volumes:
-                - langflow_postgres_data:/var/lib/postgresql/data
+                - flow_postgres_data:/var/lib/postgresql/data
               healthcheck:
                 test: ["CMD-SHELL", "pg_isready -U flow"]
                 interval: 10s
@@ -335,23 +335,23 @@ jobs:
                 retries: 5
 
           volumes:
-            langflow_postgres_data:
+            flow_postgres_data:
           EOF
 
-      - name: Start stable Hanzo Flow with Docker Compose
+      - name: Start stable Flow with Docker Compose
         working-directory: docker-migration-test
         run: |
-          echo "Starting Hanzo Flow stable version..."
+          echo "Starting Flow stable version..."
           docker compose up -d
 
-          echo "Waiting for Hanzo Flow to be healthy..."
+          echo "Waiting for Flow to be healthy..."
           timeout 180 bash -c 'until docker compose exec -T flow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
-            echo "Hanzo Flow stable failed to start"
+            echo "Flow stable failed to start"
             docker compose logs
             exit 1
           }
 
-          echo "Hanzo Flow stable is running"
+          echo "Flow stable is running"
 
       - name: Create witness flow via API
         working-directory: docker-migration-test
@@ -394,43 +394,43 @@ jobs:
           fi
           echo "✅ Witness credential created successfully"
 
-      - name: Stop stable Hanzo Flow (keep PostgreSQL volume)
+      - name: Stop stable Flow (keep PostgreSQL volume)
         working-directory: docker-migration-test
         run: |
-          echo "Stopping Hanzo Flow stable..."
+          echo "Stopping Flow stable..."
           docker compose stop flow
           docker compose rm -f flow
 
       - name: Update to nightly image
         working-directory: docker-migration-test
         run: |
-          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/flow-nightly:latest' }}"
+          NIGHTLY_TAG="${{ inputs.nightly_tag || 'flowai/flow-nightly:latest' }}"
           # Strip 'v' prefix from version part — Docker images are published without it
-          # e.g. langflowai/flow-nightly:v1.10.0.dev20260522 → langflowai/flow-nightly:1.10.0.dev20260522
+          # e.g. flowai/flow-nightly:v1.10.0.dev20260522 → flowai/flow-nightly:1.10.0.dev20260522
           VERSION_PART="${NIGHTLY_TAG##*:}"
           IMAGE_NAME="${NIGHTLY_TAG%%:*}"
           DOCKER_TAG="${IMAGE_NAME}:${VERSION_PART#v}"
           echo "Updating to nightly: $DOCKER_TAG"
 
           # Update docker-compose.yml to use nightly image
-          sed -i "s|image: langflowai/flow:latest|image: $DOCKER_TAG|" docker-compose.yml
+          sed -i "s|image: flowai/flow:latest|image: $DOCKER_TAG|" docker-compose.yml
 
           cat docker-compose.yml
 
-      - name: Start nightly Hanzo Flow with same PostgreSQL volume
+      - name: Start nightly Flow with same PostgreSQL volume
         working-directory: docker-migration-test
         run: |
-          echo "Starting Hanzo Flow nightly version..."
+          echo "Starting Flow nightly version..."
           docker compose up -d flow
 
-          echo "Waiting for Hanzo Flow nightly to be healthy..."
+          echo "Waiting for Flow nightly to be healthy..."
           timeout 180 bash -c 'until docker compose exec -T flow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
-            echo "Hanzo Flow nightly failed to start"
+            echo "Flow nightly failed to start"
             docker compose logs flow
             exit 1
           }
 
-          echo "Hanzo Flow nightly started successfully"
+          echo "Flow nightly started successfully"
 
       - name: Verify witness data persisted
         working-directory: docker-migration-test

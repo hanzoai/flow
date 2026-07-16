@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Hanzo Flow Load Test Runner
+"""Flow Load Test Runner
 
-This script provides an easy way to run Hanzo Flow load tests.
-For first-time setup, use setup_langflow_test.py to create test credentials.
+This script provides an easy way to run Flow load tests.
+For first-time setup, use setup_flow_test.py to create test credentials.
 
 Usage:
     # First time setup (run once):
-    python setup_langflow_test.py --interactive
+    python setup_flow_test.py --interactive
 
     # Then run load tests:
     python run_load_test.py --help
@@ -40,8 +40,8 @@ def run_command(cmd, check=True, capture_output=False):
             sys.exit(1)
 
 
-def check_langflow_running(host):
-    """Check if Hanzo Flow is already running."""
+def check_flow_running(host):
+    """Check if Flow is already running."""
     try:
         import httpx
 
@@ -122,30 +122,30 @@ def test_single_request(host):
         return False
 
 
-def wait_for_langflow(host, timeout=60):
-    """Wait for Hanzo Flow to be ready."""
-    print(f"Waiting for Hanzo Flow to be ready at {host}...")
+def wait_for_flow(host, timeout=60):
+    """Wait for Flow to be ready."""
+    print(f"Waiting for Flow to be ready at {host}...")
     start_time = time.time()
 
     while time.time() - start_time < timeout:
-        if check_langflow_running(host):
-            print("✅ Hanzo Flow is ready!")
+        if check_flow_running(host):
+            print("✅ Flow is ready!")
             return True
         time.sleep(2)
 
-    print(f"❌ Hanzo Flow did not start within {timeout} seconds")
+    print(f"❌ Flow did not start within {timeout} seconds")
     return False
 
 
-def start_langflow(host, port):
-    """Start Hanzo Flow server if not already running."""
-    if check_langflow_running(host):
-        print(f"✅ Hanzo Flow is already running at {host}")
+def start_flow(host, port):
+    """Start Flow server if not already running."""
+    if check_flow_running(host):
+        print(f"✅ Flow is already running at {host}")
         return None
 
-    print(f"Starting Hanzo Flow server on port {port}...")
+    print(f"Starting Flow server on port {port}...")
 
-    # Start Hanzo Flow in the background
+    # Start Flow in the background
     cmd = [
         sys.executable,
         "-m",
@@ -163,7 +163,7 @@ def start_langflow(host, port):
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     # Wait for it to be ready
-    if wait_for_langflow(host, timeout=60):
+    if wait_for_flow(host, timeout=60):
         return process
     process.terminate()
     return None
@@ -171,17 +171,17 @@ def start_langflow(host, port):
 
 def run_locust_test(args):
     """Run the Locust load test."""
-    locust_file = Path(__file__).parent / "langflow_locustfile.py"
+    locust_file = Path(__file__).parent / "flow_locustfile.py"
 
     # Check for required environment variables
     if not os.getenv("API_KEY"):
         print("❌ API_KEY environment variable not found!")
-        print("Run langflow_setup_test.py first to create test credentials.")
+        print("Run flow_setup_test.py first to create test credentials.")
         sys.exit(1)
 
     if not os.getenv("FLOW_ID"):
         print("❌ FLOW_ID environment variable not found!")
-        print("Run langflow_setup_test.py first to create test credentials.")
+        print("Run flow_setup_test.py first to create test credentials.")
         sys.exit(1)
 
     cmd = [
@@ -240,7 +240,7 @@ def run_locust_test(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run Hanzo Flow load tests with automatic setup",
+        description="Run Flow load tests with automatic setup",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -253,7 +253,7 @@ Examples:
   # Run with specific load shape
   python run_load_test.py --shape ramp100 --headless --users 100 --duration 180
 
-  # Run against existing Hanzo Flow instance
+  # Run against existing Flow instance
   python run_load_test.py --host http://localhost:8000 --no-start-flow
 
   # Save results to CSV
@@ -261,17 +261,17 @@ Examples:
         """,
     )
 
-    # Hanzo Flow options
+    # Flow options
     parser.add_argument(
         "--host",
         default="http://localhost:7860",
-        help="Hanzo Flow host URL (default: http://localhost:7860, use https:// for remote instances)",
+        help="Flow host URL (default: http://localhost:7860, use https:// for remote instances)",
     )
-    parser.add_argument("--port", type=int, default=7860, help="Port to start Hanzo Flow on (default: 7860)")
+    parser.add_argument("--port", type=int, default=7860, help="Port to start Flow on (default: 7860)")
     parser.add_argument(
         "--no-start-flow",
         action="store_true",
-        help="Don't start Hanzo Flow automatically (assume it's already running)",
+        help="Don't start Flow automatically (assume it's already running)",
     )
 
     # Load test options
@@ -296,31 +296,31 @@ Examples:
         print("Install with: pip install locust httpx")
         sys.exit(1)
 
-    langflow_process = None
+    flow_process = None
 
     try:
-        # Start Hanzo Flow if needed
-        if not args.no_start_langflow:
+        # Start Flow if needed
+        if not args.no_start_flow:
             if args.host.startswith("https://") or not args.host.startswith("http://localhost"):
                 print(f"⚠️  Remote host detected: {args.host}")
                 print("   For remote instances, use --no-start-flow flag")
                 print("   Example: --host https://your-remote-instance.com --no-start-flow")
                 sys.exit(1)
 
-            langflow_process = start_langflow(args.host, args.port)
-            if not langflow_process:
-                print("❌ Failed to start Hanzo Flow")
+            flow_process = start_flow(args.host, args.port)
+            if not flow_process:
+                print("❌ Failed to start Flow")
                 sys.exit(1)
         # Just check if it's running
-        elif not check_langflow_running(args.host):
-            print(f"❌ Hanzo Flow is not running at {args.host}")
+        elif not check_flow_running(args.host):
+            print(f"❌ Flow is not running at {args.host}")
             if args.host.startswith("https://"):
-                print("   Make sure your remote Hanzo Flow instance is accessible")
+                print("   Make sure your remote Flow instance is accessible")
             else:
-                print("Either start Hanzo Flow manually or remove --no-start-flow flag")
+                print("Either start Flow manually or remove --no-start-flow flag")
             sys.exit(1)
         else:
-            print(f"🔗 Using existing Hanzo Flow instance at {args.host}")
+            print(f"🔗 Using existing Flow instance at {args.host}")
             if args.host.startswith("https://"):
                 print("   ✅ Remote instance mode")
 
@@ -338,15 +338,15 @@ Examples:
         print(f"❌ Error: {e}")
         sys.exit(1)
     finally:
-        # Clean up Hanzo Flow process
-        if langflow_process:
-            print("\nStopping Hanzo Flow server...")
-            langflow_process.terminate()
+        # Clean up Flow process
+        if flow_process:
+            print("\nStopping Flow server...")
+            flow_process.terminate()
             try:
-                langflow_process.wait(timeout=10)
+                flow_process.wait(timeout=10)
             except subprocess.TimeoutExpired:
-                langflow_process.kill()
-            print("✅ Hanzo Flow server stopped")
+                flow_process.kill()
+            print("✅ Flow server stopped")
 
 
 if __name__ == "__main__":

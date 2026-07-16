@@ -1,6 +1,6 @@
-"""Unit tests for langflow_sdk.testing and RunResponse helpers.
+"""Unit tests for flow_sdk.testing and RunResponse helpers.
 
-Uses respx to mock HTTP so no live Hanzo Flow instance is needed.
+Uses respx to mock HTTP so no live Flow instance is needed.
 """
 # pragma: allowlist secret -- all credentials in this file are fake test data
 
@@ -9,7 +9,7 @@ from __future__ import annotations
 import httpx
 import respx
 from _pytest.config.argparsing import Parser
-from flow_sdk.client import AsyncLangflowClient, LangflowClient
+from flow_sdk.client import AsyncFlowClient, FlowClient
 from flow_sdk.models import RunOutput, RunResponse
 from flow_sdk.testing import AsyncFlowRunner, FlowRunner, pytest_addoption
 
@@ -19,7 +19,7 @@ _BASE = "http://flow.test"
 # Shared fixtures
 # ---------------------------------------------------------------------------
 
-# Minimal RunResponse payload matching the standard Hanzo Flow chat shape
+# Minimal RunResponse payload matching the standard Flow chat shape
 _CHAT_RUN_RESPONSE = {
     "session_id": "sess-abc",
     "outputs": [
@@ -89,12 +89,12 @@ _MULTI_RUN_RESPONSE = {
 _EMPTY_RUN_RESPONSE = {"session_id": None, "outputs": []}
 
 
-def _sync_client() -> LangflowClient:
-    return LangflowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
+def _sync_client() -> FlowClient:
+    return FlowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
 
 
-def _async_client() -> AsyncLangflowClient:
-    return AsyncLangflowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
+def _async_client() -> AsyncFlowClient:
+    return AsyncFlowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
 
 
 # ---------------------------------------------------------------------------

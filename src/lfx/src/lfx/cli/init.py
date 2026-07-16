@@ -29,35 +29,35 @@ console = Console()
 _ENVIRONMENTS_YAML = """\
 # .lfx/environments.yaml
 #
-# Configure your Hanzo Flow instances here.
+# Configure your Flow instances here.
 # Safe to commit — API keys are NEVER stored in this file.
 # The api_key_env value is the NAME of an environment variable that holds
 # the actual API key; set that variable in your shell or CI secrets.
 #
 # Quick start:
-#   1. Open Hanzo Flow → Settings → API Keys → Create a new key
-#   2. export LANGFLOW_LOCAL_API_KEY=<your key>
+#   1. Open Flow → Settings → API Keys → Create a new key
+#   2. export FLOW_LOCAL_API_KEY=<your key>
 #   3. lfx export --env local --flow-id <uuid> --output-dir flows/
 
 environments:
   local:
     url: http://localhost:7860
-    api_key_env: LANGFLOW_LOCAL_API_KEY
+    api_key_env: FLOW_LOCAL_API_KEY
 
   staging:
     url: https://staging.flow.example.com
-    api_key_env: LANGFLOW_STAGING_API_KEY
+    api_key_env: FLOW_STAGING_API_KEY
 
   production:
     url: https://flow.example.com
-    api_key_env: LANGFLOW_PROD_API_KEY
+    api_key_env: FLOW_PROD_API_KEY
 
 defaults:
   environment: local
 """
 
 _TEST_FLOWS_PY = '''\
-"""Integration tests for Hanzo Flow flows.
+"""Integration tests for Flow flows.
 
 Run against a local instance (started with ``lfx serve``):
 
@@ -85,14 +85,14 @@ def test_flow_responds(flow_runner):
 @pytest.mark.integration
 def test_flow_output_quality(flow_runner):
     """Example: assert on the content of the response."""
-    result = flow_runner("my-flow-endpoint", "What is Hanzo Flow?")
+    result = flow_runner("my-flow-endpoint", "What is Flow?")
     text = result.first_text_output()
     assert text is not None
     assert len(text) > 20, f"Response seems too short: {text!r}"
 '''
 
 _GITIGNORE = """\
-# Hanzo Flow credentials -- never commit API keys
+# Flow credentials -- never commit API keys
 # (flow-environments.toml may contain literal keys; .lfx/environments.yaml is safe to commit)
 flow-environments.toml
 """
@@ -245,11 +245,11 @@ def init_command(
     console.print()
     console.print("[bold green]✓ Project scaffolded.[/bold green]  Next steps:\n")
     console.print("  1. Edit [bold].lfx/environments.yaml[/bold] with your instance URL")
-    console.print("  2. [bold]export LANGFLOW_LOCAL_API_KEY=<key>[/bold]   (Settings → API Keys)")
+    console.print("  2. [bold]export FLOW_LOCAL_API_KEY=<key>[/bold]   (Settings → API Keys)")
     if example:
         console.print("  3. [bold]lfx validate flows/hello-world.json[/bold]  (check the starter flow)")
         console.print("  4. [bold]lfx serve flows/hello-world.json[/bold]     (run it locally)")
-        console.print("  5. [bold]lfx push --dir flows/ --env local[/bold]    (deploy to Hanzo Flow)")
+        console.print("  5. [bold]lfx push --dir flows/ --env local[/bold]    (deploy to Flow)")
     else:
         console.print("  3. [bold]lfx create my-flow --template hello-world[/bold]")
         console.print("  4. [bold]lfx push --dir flows/ --env local[/bold]")

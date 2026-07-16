@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       flow-version:
-        description: "Hanzo Flow version to test from PyPI (leave empty to test from source)"
+        description: "Flow version to test from PyPI (leave empty to test from source)"
         required: false
         type: string
         default: ""
@@ -50,12 +50,12 @@ jobs:
       - name: Build frontend
         run: make build_frontend
       - name: Build base package
-        run: make build_langflow_base args="--wheel"
+        run: make build_flow_base args="--wheel"
       - name: Move base package to correct directory
         run: |
           # Base package builds to dist/ but should be in src/backend/base/dist/
           mkdir -p src/backend/base/dist
-          mv dist/langflow_base*.whl src/backend/base/dist/
+          mv dist/flow_base*.whl src/backend/base/dist/
       - name: Build LFX package
         run: |
           cd src/lfx
@@ -65,7 +65,7 @@ jobs:
           cd src/sdk
           uv build --wheel --out-dir dist
       - name: Build main package
-        run: make build_langflow args="--wheel"
+        run: make build_flow args="--wheel"
       - name: Build bundle wheels
         id: build-bundles
         run: |
@@ -305,7 +305,7 @@ jobs:
           MAIN_WHEELS=()
           while IFS= read -r wheel; do
             MAIN_WHEELS+=("$wheel")
-          done < <(find ./main-dist -name "flow*.whl" ! -name "langflow_base*.whl" -type f | sort)
+          done < <(find ./main-dist -name "flow*.whl" ! -name "flow_base*.whl" -type f | sort)
           if [ ${#MAIN_WHEELS[@]} -ne 1 ]; then
             echo "Expected exactly one flow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
             find ./main-dist -name "*.whl" -type f | sort
@@ -594,7 +594,7 @@ jobs:
           MAIN_WHEELS=()
           while IFS= read -r wheel; do
             MAIN_WHEELS+=("$wheel")
-          done < <(find ./main-dist -name "flow*.whl" ! -name "langflow_base*.whl" -type f | sort)
+          done < <(find ./main-dist -name "flow*.whl" ! -name "flow_base*.whl" -type f | sort)
           if [ ${#MAIN_WHEELS[@]} -ne 1 ]; then
             echo "Expected exactly one flow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
             find ./main-dist -name "*.whl" -type f | sort

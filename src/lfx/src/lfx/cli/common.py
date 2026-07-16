@@ -626,7 +626,7 @@ def download_and_extract_repo(url: str, verbose_print, *, timeout: float = 60.0)
 
 
 def load_sdk(command_name: str) -> Any:
-    """Lazily import ``langflow_sdk`` to keep CLI startup fast.
+    """Lazily import ``flow_sdk`` to keep CLI startup fast.
 
     Raises :class:`typer.BadParameter` with install guidance when the package
     is not available.
@@ -641,7 +641,7 @@ def load_sdk(command_name: str) -> Any:
         msg = f"flow-sdk is required for lfx {command_name}. Install it with: pip install flow-sdk"
         raise typer.BadParameter(msg) from exc
     else:
-        return langflow_sdk
+        return flow_sdk
 
 
 def safe_filename(name: str) -> str:

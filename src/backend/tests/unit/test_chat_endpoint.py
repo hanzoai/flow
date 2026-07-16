@@ -15,7 +15,7 @@ from tests.unit.build_utils import build_flow, consume_and_assert_stream, create
 
 @pytest.fixture(autouse=True)
 def allow_custom_components_by_default(monkeypatch):
-    monkeypatch.setenv("LANGFLOW_ALLOW_CUSTOM_COMPONENTS", "true")
+    monkeypatch.setenv("FLOW_ALLOW_CUSTOM_COMPONENTS", "true")
 
 
 @pytest.mark.benchmark

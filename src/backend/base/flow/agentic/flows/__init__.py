@@ -1,13 +1,13 @@
-"""Hanzo Flow Agentic Flows.
+"""Flow Agentic Flows.
 
-This package contains flow definitions for the Hanzo Flow Assistant feature.
+This package contains flow definitions for the Flow Assistant feature.
 
 Available flows:
 - translation_flow: Intent classification and translation flow (Python)
-- LangflowAssistant.json: Main assistant flow for Q&A and component generation (JSON)
+- FlowAssistant.json: Main assistant flow for Q&A and component generation (JSON)
 """
 
-from flow.agentic.flows.langflow_assistant import get_graph as get_langflow_assistant_graph
+from flow.agentic.flows.flow_assistant import get_graph as get_flow_assistant_graph
 from flow.agentic.flows.translation_flow import get_graph as get_translation_flow_graph
 
 __all__ = [

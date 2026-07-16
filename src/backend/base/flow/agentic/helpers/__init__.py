@@ -1,1 +1,1 @@
-"""Helper utilities for the Hanzo Flow Assistant."""
+"""Helper utilities for the Flow Assistant."""

@@ -570,7 +570,7 @@ async def download_files_batch(
 
         # Generate the filename with the current datetime
         current_time = datetime.now(tz=ZoneInfo("UTC")).astimezone().strftime("%Y%m%d_%H%M%S")
-        filename = f"{current_time}_langflow_files.zip"
+        filename = f"{current_time}_flow_files.zip"
 
         return StreamingResponse(
             zip_stream,

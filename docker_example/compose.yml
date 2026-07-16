@@ -7,9 +7,9 @@ services:
     depends_on:
       - postgres
     environment:
-      - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
+      - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
       # This variable defines where the logs, file storage, monitor data and secret keys are stored.
-      - LANGFLOW_CONFIG_DIR=/app/flow
+      - FLOW_CONFIG_DIR=/app/flow
     volumes:
       - flow-data:/app/flow
 

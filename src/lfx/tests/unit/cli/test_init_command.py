@@ -1,6 +1,6 @@
 """Unit tests for ``lfx init`` — init_command and helpers.
 
-All tests run entirely in-process; no running Hanzo Flow instance required.
+All tests run entirely in-process; no running Flow instance required.
 Filesystem operations use ``tmp_path`` so every test gets a fresh sandbox.
 """
 
@@ -265,7 +265,7 @@ class TestInitCommandRequiredFiles:
         _run_init(tmp_path)
         assert (tmp_path / ".gitignore").exists()
 
-    def test_gitignore_has_langflow_entry(self, tmp_path: Path) -> None:
+    def test_gitignore_has_flow_entry(self, tmp_path: Path) -> None:
         _run_init(tmp_path)
         content = (tmp_path / ".gitignore").read_text(encoding="utf-8")
         assert "flow-environments.toml" in content

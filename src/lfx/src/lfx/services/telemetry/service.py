@@ -43,7 +43,7 @@ class TelemetryService(BaseTelemetryService):
         do_not_track: bool | None = None,
     ):
         super().__init__()
-        self.base_url = base_url or os.environ.get("LANGFLOW_TELEMETRY_BASE_URL", _DEFAULT_BASE_URL)
+        self.base_url = base_url or os.environ.get("FLOW_TELEMETRY_BASE_URL", _DEFAULT_BASE_URL)
 
         if do_not_track is None:
             do_not_track = os.environ.get("DO_NOT_TRACK", "false").lower() in {"1", "true"}
@@ -57,7 +57,7 @@ class TelemetryService(BaseTelemetryService):
         self._start_time = datetime.now(timezone.utc)
 
         self._common_fields = {
-            "langflow_version": self._get_version(),
+            "flow_version": self._get_version(),
             "platform": "mcp",
             "os": platform.system().lower(),
         }

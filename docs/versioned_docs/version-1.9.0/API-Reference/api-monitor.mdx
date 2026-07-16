@@ -321,8 +321,8 @@ Use `GET /monitor/traces` and filter by `flow_id`:
 <TabItem value="typescript" label="TypeScript">
 
 ```ts
-const baseUrl = process.env.LANGFLOW_SERVER_URL ?? "http://localhost:7860";
-const apiKey = process.env.LANGFLOW_API_KEY!;
+const baseUrl = process.env.FLOW_SERVER_URL ?? "http://localhost:7860";
+const apiKey = process.env.FLOW_API_KEY!;
 const flowId = "YOUR_FLOW_ID";
 
 async function listTraces() {

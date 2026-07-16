@@ -22,7 +22,7 @@ class _FlowModule:
         cls._available = value
 
 
-def has_langflow_memory():
+def has_flow_memory():
     """Check if flow.memory (with database support) and MessageTable are available."""
     # Use cached check from previous invocation (if applicable)
 

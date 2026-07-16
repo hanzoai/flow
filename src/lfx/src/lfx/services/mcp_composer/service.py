@@ -729,7 +729,7 @@ class MCPComposerService(Service):
             else:
                 # Port is in use by unknown process - don't kill it (security concern)
                 await logger.aerror(
-                    f"Port {port} is in use by an unknown process (not owned by Hanzo Flow). "
+                    f"Port {port} is in use by an unknown process (not owned by Flow). "
                     f"Will not kill external application for security reasons."
                 )
                 port_error_msg = (
@@ -838,7 +838,7 @@ class MCPComposerService(Service):
     def _normalize_oauth_callback_aliases(cls, auth_config: dict[str, Any] | None) -> dict[str, Any]:
         """Normalize OAuth callback aliases to a canonical full callback URL value.
 
-        `oauth_callback_url` is the canonical field name in Hanzo Flow. For compatibility,
+        `oauth_callback_url` is the canonical field name in Flow. For compatibility,
         we also accept `oauth_callback_path` and mirror the effective value to both keys so
         comparisons and subprocess env var mapping stay consistent.
         """
@@ -988,7 +988,7 @@ class MCPComposerService(Service):
 
         Args:
             project_id: The project ID
-            streamable_http_url: Streamable HTTP endpoint for the remote Hanzo Flow MCP server
+            streamable_http_url: Streamable HTTP endpoint for the remote Flow MCP server
             auth_config: Authentication configuration
             max_retries: Maximum number of retry attempts (default: 3)
             max_startup_checks: Number of checks per retry attempt (default: 40)
@@ -1052,7 +1052,7 @@ class MCPComposerService(Service):
 
         Args:
             project_id: The project ID
-            streamable_http_url: Streamable HTTP endpoint for the remote Hanzo Flow MCP server
+            streamable_http_url: Streamable HTTP endpoint for the remote Flow MCP server
             auth_config: Authentication configuration
             max_retries: Maximum number of retry attempts (default: 3)
             max_startup_checks: Number of checks per retry attempt (default: 40)

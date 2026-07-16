@@ -7,20 +7,20 @@
 #
 # USAGE
 #   chmod +x ci-push.sh
-#   export LANGFLOW_URL=https://staging.flow.example.com
-#   export LANGFLOW_API_KEY=<your-api-key>
+#   export FLOW_URL=https://staging.flow.example.com
+#   export FLOW_API_KEY=<your-api-key>
 #   ./ci-push.sh
 #
 # ENVIRONMENT VARIABLES — connection (pick one approach)
 #
 #   Approach A: direct URL + key (simplest)
-#     LANGFLOW_URL        URL of the target Hanzo Flow instance.
-#     LANGFLOW_API_KEY    API key for that instance.
+#     FLOW_URL        URL of the target Hanzo Flow instance.
+#     FLOW_API_KEY    API key for that instance.
 #
 #   Approach B: named environment from a TOML config
-#     LANGFLOW_ENV                 Name of the environment block.
+#     FLOW_ENV                 Name of the environment block.
 #                                  e.g. staging  or  production
-#     LANGFLOW_ENVIRONMENTS_FILE   Path to environments TOML.
+#     FLOW_ENVIRONMENTS_FILE   Path to environments TOML.
 #                                  Default: flow-environments.toml
 #     <api_key_env var>            The env var named in api_key_env inside the
 #                                  TOML block.  Must be exported separately.
@@ -29,18 +29,18 @@
 #
 #     [environments.staging]
 #     url         = "https://staging.flow.example.com"
-#     api_key_env  = "LANGFLOW_STAGING_API_KEY"
+#     api_key_env  = "FLOW_STAGING_API_KEY"
 #
 #     [environments.production]
 #     url         = "https://flow.example.com"
-#     api_key_env  = "LANGFLOW_PROD_API_KEY"
+#     api_key_env  = "FLOW_PROD_API_KEY"
 #
 # ENVIRONMENT VARIABLES — behaviour
 #   FLOWS_DIR            Directory containing flow JSON files.
 #                        Default: flows/
-#   LANGFLOW_PROJECT     Project (folder) name on the remote instance.
+#   FLOW_PROJECT     Project (folder) name on the remote instance.
 #                        Default: (no project — flows go to the default folder)
-#   LANGFLOW_PROJECT_ID  Project UUID.  Takes precedence over LANGFLOW_PROJECT.
+#   FLOW_PROJECT_ID  Project UUID.  Takes precedence over FLOW_PROJECT.
 #   DRY_RUN              Set to "true" to show what would be pushed without
 #                        making any changes.  Default: false
 #   LFX_VERSION          lfx PEP 508 version specifier suffix appended directly
@@ -62,12 +62,12 @@ set -euo pipefail
 # ── Configuration ─────────────────────────────────────────────────────────── #
 
 FLOWS_DIR="${FLOWS_DIR:-flows/}"
-LANGFLOW_ENV="${LANGFLOW_ENV:-}"
-LANGFLOW_ENVIRONMENTS_FILE="${LANGFLOW_ENVIRONMENTS_FILE:-flow-environments.toml}"
-LANGFLOW_URL="${LANGFLOW_URL:-}"
-LANGFLOW_API_KEY="${LANGFLOW_API_KEY:-}"
-LANGFLOW_PROJECT="${LANGFLOW_PROJECT:-}"
-LANGFLOW_PROJECT_ID="${LANGFLOW_PROJECT_ID:-}"
+FLOW_ENV="${FLOW_ENV:-}"
+FLOW_ENVIRONMENTS_FILE="${FLOW_ENVIRONMENTS_FILE:-flow-environments.toml}"
+FLOW_URL="${FLOW_URL:-}"
+FLOW_API_KEY="${FLOW_API_KEY:-}"
+FLOW_PROJECT="${FLOW_PROJECT:-}"
+FLOW_PROJECT_ID="${FLOW_PROJECT_ID:-}"
 DRY_RUN="${DRY_RUN:-false}"
 LFX_VERSION="${LFX_VERSION:-}"
 
@@ -84,39 +84,39 @@ pip install --quiet "lfx${LFX_VERSION}" flow-sdk
 
 # ── Build environments file if using Approach B ───────────────────────────── #
 
-if [[ -n "${LANGFLOW_ENV}" && ! -f "${LANGFLOW_ENVIRONMENTS_FILE}" ]]; then
-  ENV_UPPER="${LANGFLOW_ENV^^}"
+if [[ -n "${FLOW_ENV}" && ! -f "${FLOW_ENVIRONMENTS_FILE}" ]]; then
+  ENV_UPPER="${FLOW_ENV^^}"
   ENV_UPPER="${ENV_UPPER//-/_}"
-  URL_VAR="LANGFLOW_${ENV_UPPER}_URL"
-  KEY_VAR="LANGFLOW_${ENV_UPPER}_API_KEY"
+  URL_VAR="FLOW_${ENV_UPPER}_URL"
+  KEY_VAR="FLOW_${ENV_UPPER}_API_KEY"
 
-  echo "==> Writing ${LANGFLOW_ENVIRONMENTS_FILE} for environment '${LANGFLOW_ENV}' ..."
+  echo "==> Writing ${FLOW_ENVIRONMENTS_FILE} for environment '${FLOW_ENV}' ..."
   printf '[environments.%s]\nurl = "%s"\napi_key_env = "%s"\n' \
-    "${LANGFLOW_ENV}" \
+    "${FLOW_ENV}" \
     "${!URL_VAR:-}" \
     "${KEY_VAR}" \
-    > "${LANGFLOW_ENVIRONMENTS_FILE}"
-  export LANGFLOW_ENVIRONMENTS_FILE
+    > "${FLOW_ENVIRONMENTS_FILE}"
+  export FLOW_ENVIRONMENTS_FILE
 fi
 
 # ── Build lfx push command ────────────────────────────────────────────────── #
 
 PUSH_CMD=(lfx push --dir "${FLOWS_DIR}")
 
-if [[ -n "${LANGFLOW_ENV}" ]]; then
-  PUSH_CMD+=(--env "${LANGFLOW_ENV}")
-elif [[ -n "${LANGFLOW_URL}" ]]; then
-  PUSH_CMD+=(--target "${LANGFLOW_URL}")
-  [[ -n "${LANGFLOW_API_KEY}" ]] && PUSH_CMD+=(--api-key "${LANGFLOW_API_KEY}")
+if [[ -n "${FLOW_ENV}" ]]; then
+  PUSH_CMD+=(--env "${FLOW_ENV}")
+elif [[ -n "${FLOW_URL}" ]]; then
+  PUSH_CMD+=(--target "${FLOW_URL}")
+  [[ -n "${FLOW_API_KEY}" ]] && PUSH_CMD+=(--api-key "${FLOW_API_KEY}")
 else
-  echo "ERROR: set LANGFLOW_ENV (Approach B) or LANGFLOW_URL (Approach A)" >&2
+  echo "ERROR: set FLOW_ENV (Approach B) or FLOW_URL (Approach A)" >&2
   exit 1
 fi
 
-if [[ -n "${LANGFLOW_PROJECT_ID}" ]]; then
-  PUSH_CMD+=(--project-id "${LANGFLOW_PROJECT_ID}")
-elif [[ -n "${LANGFLOW_PROJECT}" ]]; then
-  PUSH_CMD+=(--project "${LANGFLOW_PROJECT}")
+if [[ -n "${FLOW_PROJECT_ID}" ]]; then
+  PUSH_CMD+=(--project-id "${FLOW_PROJECT_ID}")
+elif [[ -n "${FLOW_PROJECT}" ]]; then
+  PUSH_CMD+=(--project "${FLOW_PROJECT}")
 fi
 
 [[ "${DRY_RUN}" == "true" ]] && PUSH_CMD+=(--dry-run)

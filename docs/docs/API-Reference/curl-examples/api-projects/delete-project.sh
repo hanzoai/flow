@@ -1,4 +1,4 @@
 curl -X DELETE \
-  "$LANGFLOW_URL/api/v1/projects/$PROJECT_ID" \
+  "$FLOW_URL/api/v1/projects/$PROJECT_ID" \
   -H "accept: */*" \
-  -H "x-api-key: $LANGFLOW_API_KEY"
+  -H "x-api-key: $FLOW_API_KEY"

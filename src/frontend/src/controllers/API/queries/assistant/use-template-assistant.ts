@@ -28,9 +28,9 @@ export const useGetTemplateAssistantQuery: useQueryFunctionType<
       },
       {
         headers: {
-          "X-Hanzo Flow-Global-Var-COMPONENT_ID": compId,
-          "X-Hanzo Flow-Global-Var-FLOW_ID": flowId,
-          "X-Hanzo Flow-Global-Var-FIELD_NAME": fieldName,
+          "X-Flow-Global-Var-COMPONENT_ID": compId,
+          "X-Flow-Global-Var-FLOW_ID": flowId,
+          "X-Flow-Global-Var-FIELD_NAME": fieldName,
         },
       },
     );

@@ -27,9 +27,9 @@ def main():
         _launch_with_exec()
     else:
         # On non-macOS systems, call the main function directly
-        from flow.__main__ import main as langflow_main
+        from flow.__main__ import main as flow_main
 
-        langflow_main()
+        flow_main()
 
 
 def _launch_with_exec():

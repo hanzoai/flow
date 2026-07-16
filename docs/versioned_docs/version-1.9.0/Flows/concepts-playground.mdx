@@ -104,9 +104,9 @@ When you trigger a flow with the Hanzo Flow API, include the `session_id` parame
 For example:
 
 ```bash
-curl -X POST "http://$LANGFLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID" \
+curl -X POST "http://$FLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID" \
 -H "Content-Type: application/json" \
--H "x-api-key: $LANGFLOW_API_KEY" \
+-H "x-api-key: $FLOW_API_KEY" \
 -d '{
     "session_id": "CUSTOM_SESSION_ID",
     "input_value": "message",

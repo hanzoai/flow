@@ -237,8 +237,8 @@ class MCPToolsComponent(ComponentWithCache):
                 from lfx.services.deps import get_settings_service
             except ImportError as e:
                 msg = (
-                    "Hanzo Flow MCP server functionality is not available. "
-                    "This feature requires the full Hanzo Flow installation."
+                    "Flow MCP server functionality is not available. "
+                    "This feature requires the full Flow installation."
                 )
                 raise ImportError(msg) from e
 
@@ -635,8 +635,8 @@ class MCPToolsComponent(ComponentWithCache):
             try:
                 flat_schema = flatten_schema(tool.args_schema.schema())
                 input_schema = create_input_schema_from_json_schema(flat_schema)
-                langflow_inputs = schema_to_flow_inputs(input_schema)
-                inputs[tool.name] = langflow_inputs
+                flow_inputs = schema_to_flow_inputs(input_schema)
+                inputs[tool.name] = flow_inputs
             except (AttributeError, ValueError, TypeError, KeyError) as e:
                 msg = f"Error getting inputs for tool {getattr(tool, 'name', 'unknown')}: {e!s}"
                 logger.exception(msg)
@@ -720,7 +720,7 @@ class MCPToolsComponent(ComponentWithCache):
         try:
             self.tools, _ = await self.update_tool_list()
             if self.tool != "":
-                # Set session context for persistent MCP sessions using Hanzo Flow session ID
+                # Set session context for persistent MCP sessions using Flow session ID
                 session_context = self._get_session_context()
                 if session_context:
                     self.stdio_client.set_session_context(session_context)
@@ -761,7 +761,7 @@ class MCPToolsComponent(ComponentWithCache):
         return item_dict
 
     def _get_session_context(self) -> str | None:
-        """Get the Hanzo Flow session ID for MCP session caching."""
+        """Get the Flow session ID for MCP session caching."""
         # Try to get session ID from the component's execution context
         if hasattr(self, "graph") and hasattr(self.graph, "session_id"):
             session_id = self.graph.session_id

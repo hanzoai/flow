@@ -19,7 +19,7 @@ class WatsonxFlowArtifactProviderData(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    project_id: NormalizedId = Field(description="Hanzo Flow project id carried for watsonx snapshot creation.")
+    project_id: NormalizedId = Field(description="Flow project id carried for watsonx snapshot creation.")
     source_ref: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)] = Field(
         description="Adapter-neutral source reference used for create/update snapshot correlation.",
     )
@@ -241,7 +241,7 @@ class WatsonxUnbindOperation(BaseModel):
 
 
 class WatsonxRenameToolOperation(BaseModel):
-    """Rename a Hanzo Flow-managed tool on the provider."""
+    """Rename a Flow-managed tool on the provider."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -550,7 +550,7 @@ class WatsonxAgentExecutionResultData(BaseModel):
     execution_id: NormalizedId | None = None
     agent_id: NormalizedId | None = Field(
         default=None,
-        description="WXO agent identifier (resource_key in Hanzo Flow DB).",
+        description="WXO agent identifier (resource_key in Flow DB).",
     )
     thread_id: NormalizedId | None = None
     status: str | None = None

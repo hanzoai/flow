@@ -1,7 +1,7 @@
 """Unit tests for the flow.helpers.flow module."""
 
 import pytest
-from lfx.utils.langflow_utils import has_langflow_memory
+from lfx.utils.flow_utils import has_flow_memory
 
 # Globals
 
@@ -20,11 +20,11 @@ def is_helper_module(module, module_name):
 class TestDynamicImport:
     """Test dynamic imports of the flow implementation."""
 
-    def test_langflow_available(self):
+    def test_flow_available(self):
         """Test whether the flow implementation is available."""
-        # Hanzo Flow implementation should be available
-        if not has_langflow_memory():
-            pytest.fail("Hanzo Flow implementation is not available")
+        # Flow implementation should be available
+        if not has_flow_memory():
+            pytest.fail("Flow implementation is not available")
 
     def test_helpers_import_build_schema_from_inputs(self):
         """Test the lfx.helpers.build_schema_from_inputs import."""

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Any
 from cachetools import func
 from fastapi import HTTPException
 from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-from ibm_watsonx_orchestrate_core.types.tools.langflow_tool import create_langflow_tool
+from ibm_watsonx_orchestrate_core.types.tools.flow_tool import create_flow_tool
 from lfx.log.logger import logger
 from lfx.services.adapters.deployment.exceptions import (
     InvalidContentError,
@@ -38,7 +38,7 @@ from flow.services.adapters.deployment.watsonx_orchestrate.utils import (
 from flow.utils.version import get_version_info
 
 if TYPE_CHECKING:
-    from ibm_watsonx_orchestrate_core.types.tools.langflow_tool import LangflowTool
+    from ibm_watsonx_orchestrate_core.types.tools.flow_tool import FlowTool
     from lfx.services.adapters.deployment.schema import BaseFlowArtifact, SnapshotItems, SnapshotListResult
 
     from flow.services.adapters.deployment.watsonx_orchestrate.types import WxOClient
@@ -95,7 +95,7 @@ def _ensure_dict(parent: dict[str, Any], key: str) -> dict[str, Any]:
     return value
 
 
-def ensure_langflow_connections_binding(tool_payload: dict[str, Any]) -> dict[str, str]:
+def ensure_flow_connections_binding(tool_payload: dict[str, Any]) -> dict[str, str]:
     """Ensure ``binding.flow.connections`` exists in *tool_payload* and return the mutable dict.
 
     Non-dict values at any nesting level are silently replaced with ``{}``.
@@ -110,20 +110,20 @@ def ensure_langflow_connections_binding(tool_payload: dict[str, Any]) -> dict[st
     return _ensure_dict(flow, "connections")
 
 
-def verify_langflow_owned(tool: dict[str, Any], *, tool_id: str) -> None:
+def verify_flow_owned(tool: dict[str, Any], *, tool_id: str) -> None:
     """Raise ``InvalidContentError`` if the tool lacks ``binding.flow``.
 
     Call before any mutating operation on an existing tool to ensure
-    Hanzo Flow created it.  Tools created manually in the wxO console or
+    Flow created it.  Tools created manually in the wxO console or
     by other integrations will not have this marker.
     """
     binding = tool.get("binding")
     if not isinstance(binding, dict) or "flow" not in binding:
-        msg = f"Cannot modify tool '{tool_id}': it does not have a Hanzo Flow binding and may not be managed by Hanzo Flow."
+        msg = f"Cannot modify tool '{tool_id}': it does not have a Flow binding and may not be managed by Flow."
         raise InvalidContentError(message=msg)
 
 
-def extract_langflow_connections_binding(tool_payload: dict[str, Any]) -> dict[str, str]:
+def extract_flow_connections_binding(tool_payload: dict[str, Any]) -> dict[str, str]:
     """Extract ``binding.flow.connections`` from a provider tool payload.
 
     Read-path helper: returns ``{}`` for missing or malformed nested shapes
@@ -165,12 +165,12 @@ async def update_existing_tool_connection_bindings(
     tool_updates: list[tuple[str, dict[str, Any]]] = []
     for tool_id in existing_target_tool_ids:
         tool = tool_by_id[tool_id]
-        verify_langflow_owned(tool, tool_id=tool_id)
+        verify_flow_owned(tool, tool_id=tool_id)
 
         original_tool = to_writable_tool_payload(tool)
         original_tools[tool_id] = original_tool
         writable_tool = copy.deepcopy(original_tool)
-        connections = ensure_langflow_connections_binding(writable_tool)
+        connections = ensure_flow_connections_binding(writable_tool)
         connections.update(resolved_connections)
         tool_updates.append((tool_id, writable_tool))
 
@@ -182,8 +182,8 @@ async def update_existing_tool_connection_bindings(
     )
 
 
-def extract_langflow_artifact_from_zip(artifact_zip_bytes: bytes, *, snapshot_id: str) -> dict[str, Any]:
-    """Read and parse the Hanzo Flow flow JSON from a wxO snapshot artifact zip."""
+def extract_flow_artifact_from_zip(artifact_zip_bytes: bytes, *, snapshot_id: str) -> dict[str, Any]:
+    """Read and parse the Flow flow JSON from a wxO snapshot artifact zip."""
     try:
         with zipfile.ZipFile(io.BytesIO(artifact_zip_bytes), "r") as zip_artifact:
             json_members = [name for name in zip_artifact.namelist() if name.lower().endswith(".json")]
@@ -209,9 +209,9 @@ def extract_langflow_artifact_from_zip(artifact_zip_bytes: bytes, *, snapshot_id
         raise InvalidContentError(message=msg) from exc
 
 
-def build_langflow_artifact_bytes(
+def build_flow_artifact_bytes(
     *,
-    tool: LangflowTool,
+    tool: FlowTool,
     flow_definition: dict[str, Any],
     flow_filename: str | None = None,
 ) -> bytes:
@@ -226,7 +226,7 @@ def build_langflow_artifact_bytes(
     requirements = [lfx_requirement, *requirements]
     requirements = dedupe_list(requirements)
     requirements_content = "\n".join(requirements) + "\n"
-    logger.debug("build_langflow_artifact_bytes: filename='%s', requirements=%s", filename, requirements)
+    logger.debug("build_flow_artifact_bytes: filename='%s', requirements=%s", filename, requirements)
 
     flow_content = json.dumps(flow_definition, indent=2)
 
@@ -299,11 +299,11 @@ def create_wxo_flow_tool(
     if not flow_definition.get("last_tested_version"):
         detected_version = (get_version_info() or {}).get("version")
         if not detected_version:
-            msg = "Unable to determine running Hanzo Flow version for snapshot creation."
+            msg = "Unable to determine running Flow version for snapshot creation."
             raise InvalidContentError(message=msg)
         flow_definition["last_tested_version"] = detected_version
 
-    tool: LangflowTool = create_langflow_tool(
+    tool: FlowTool = create_flow_tool(
         tool_definition=flow_definition,
         connections=connections,
         show_details=False,
@@ -328,7 +328,7 @@ def create_wxo_flow_tool(
         tool_payload.get("binding", {}).get("flow"),
     )
 
-    artifacts: bytes = build_langflow_artifact_bytes(
+    artifacts: bytes = build_flow_artifact_bytes(
         tool=tool,
         flow_definition=flow_definition,
     )
@@ -546,7 +546,7 @@ async def verify_tools_by_ids(
     for tool in tools or []:
         if not isinstance(tool, dict) or not tool.get("id"):
             continue
-        connections = extract_langflow_connections_binding(tool)
+        connections = extract_flow_connections_binding(tool)
         normalized_connections: dict[str, str] = {
             key: value
             for raw_key, raw_value in connections.items()

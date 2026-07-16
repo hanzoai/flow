@@ -1,4 +1,4 @@
-"""Entry point for running the Hanzo Flow Agentic MCP server.
+"""Entry point for running the Flow Agentic MCP server.
 
 This allows running the server with:
     python -m flow.agentic.mcp

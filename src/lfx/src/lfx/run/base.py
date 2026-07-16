@@ -1,4 +1,4 @@
-"""Core run functionality for executing Hanzo Flow graphs."""
+"""Core run functionality for executing Flow graphs."""
 
 import json
 import re
@@ -73,9 +73,9 @@ async def run_flow(
     session_id: str | None = None,
     event_manager: "EventManager | None" = None,
 ) -> dict:
-    """Execute a Hanzo Flow graph script or JSON flow and return the result.
+    """Execute a Flow graph script or JSON flow and return the result.
 
-    This function analyzes and executes either a Python script containing a Hanzo Flow graph,
+    This function analyzes and executes either a Python script containing a Flow graph,
     a JSON flow file, inline JSON, or JSON from stdin, returning the result as a dict.
 
     Args:

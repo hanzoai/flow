@@ -1,4 +1,4 @@
-"""Async HTTP client for the Hanzo Flow REST API.
+"""Async HTTP client for the Flow REST API.
 
 Preferred usage via the short alias::
 
@@ -46,8 +46,8 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-class AsyncLangflowClient(_ClientCommon):
-    """Async client for the Hanzo Flow REST API.
+class AsyncFlowClient(_ClientCommon):
+    """Async client for the Flow REST API.
 
     Prefer the short alias :data:`AsyncClient` for new code::
 
@@ -234,8 +234,8 @@ class AsyncLangflowClient(_ClientCommon):
         Args:
             flow_id_or_endpoint: Flow UUID or named endpoint.
             input_value: Text input passed to the flow.
-            input_type: Hanzo Flow input type (default ``"chat"``).
-            output_type: Hanzo Flow output type (default ``"chat"``).
+            input_type: Flow input type (default ``"chat"``).
+            output_type: Flow output type (default ``"chat"``).
             tweaks: Optional component tweaks dict.
 
         Returns:
@@ -400,7 +400,7 @@ class AsyncLangflowClient(_ClientCommon):
 
         .. note::
             Flows with duplicate names overwrite each other.  See
-            :meth:`LangflowClient.pull_project` for details.
+            :meth:`FlowClient.pull_project` for details.
 
         ::
 
@@ -413,11 +413,11 @@ class AsyncLangflowClient(_ClientCommon):
 # Short alias  (preferred for new code)
 # ---------------------------------------------------------------------------
 
-#: Short alias for :class:`AsyncLangflowClient`.
+#: Short alias for :class:`AsyncFlowClient`.
 #:
 #: Example::
 #:
 #:     from flow_sdk import AsyncClient
 #:     async with AsyncClient("https://flow.example.com", api_key="...") as c:
 #:         flows = await c.list_flows()
-AsyncClient = AsyncLangflowClient
+AsyncClient = AsyncFlowClient

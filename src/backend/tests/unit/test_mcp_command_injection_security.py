@@ -244,7 +244,7 @@ class TestMCPCommandInjectionSecurity:
     def test_poc_touch_command_rejected(self):
         """Test that the PoC 'touch' command from the security advisory is rejected."""
         with pytest.raises(ValidationError) as exc_info:
-            MCPServerConfig(command="touch", args=["/tmp/pwned_langflow"])  # noqa: S108
+            MCPServerConfig(command="touch", args=["/tmp/pwned_flow"])  # noqa: S108
 
         error_msg = str(exc_info.value)
         assert "touch" in error_msg

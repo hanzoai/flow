@@ -169,8 +169,8 @@ for file in "${PY_FILES[@]}"; do
       continue
     fi
 
-    if [[ -z "${LANGFLOW_API_KEY:-}" || ( -z "${LANGFLOW_URL:-}" && -z "${LANGFLOW_SERVER_URL:-}" ) ]]; then
-      echo "SKIP  $rel (set LANGFLOW_API_KEY and LANGFLOW_URL or LANGFLOW_SERVER_URL to execute)"
+    if [[ -z "${FLOW_API_KEY:-}" || ( -z "${FLOW_URL:-}" && -z "${FLOW_SERVER_URL:-}" ) ]]; then
+      echo "SKIP  $rel (set FLOW_API_KEY and FLOW_URL or FLOW_SERVER_URL to execute)"
       ((SKIP+=1))
       continue
     fi

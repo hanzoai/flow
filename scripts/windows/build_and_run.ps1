@@ -100,5 +100,5 @@ try {
     exit 1
 }
 
-Write-Host "`nLangflow build and run process completed!" -ForegroundColor Green
+Write-Host "`nHanzo Flow build and run process completed!" -ForegroundColor Green
 Read-Host "Press Enter to exit"

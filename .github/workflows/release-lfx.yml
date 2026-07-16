@@ -249,15 +249,15 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            langflowai/lfx
+            flowai/lfx
             ghcr.io/flow-ai/lfx
           tags: |
             type=raw,value=${{ github.event.inputs.version }}${{ matrix.variant == 'alpine' && '-alpine' || '' }}
             type=raw,value=latest${{ matrix.variant == 'alpine' && '-alpine' || '' }},enable=${{ github.event.inputs.pre_release == 'false' }}
           labels: |
             org.opencontainers.image.title=LFX
-            org.opencontainers.image.description=Hanzo Flow Executor - CLI tool for running Hanzo Flow AI workflows
-            org.opencontainers.image.vendor=Hanzo Flow
+            org.opencontainers.image.description=Flow Executor - CLI tool for running Flow AI workflows
+            org.opencontainers.image.vendor=Flow
             org.opencontainers.image.version=${{ github.event.inputs.version }}
 
       - name: Build and push Docker image
@@ -309,13 +309,13 @@ jobs:
           ### Docker
           \`\`\`bash
           # Standard image
-          docker pull langflowai/lfx:${{ github.event.inputs.version }}
+          docker pull flowai/lfx:${{ github.event.inputs.version }}
 
           # Alpine image (smaller)
-          docker pull langflowai/lfx:${{ github.event.inputs.version }}-alpine
+          docker pull flowai/lfx:${{ github.event.inputs.version }}-alpine
 
           # Run a flow
-          docker run --rm -v \$(pwd):/app/data langflowai/lfx:${{ github.event.inputs.version }} lfx run flow.json --input-value "Hello"
+          docker run --rm -v \$(pwd):/app/data flowai/lfx:${{ github.event.inputs.version }} lfx run flow.json --input-value "Hello"
           \`\`\`
 
           ## 📦 What's New
@@ -366,10 +366,10 @@ jobs:
         if: needs.build-docker.result == 'success'
         run: |
           # Test standard image
-          docker run --rm langflowai/lfx:${{ github.event.inputs.version }} lfx --help
+          docker run --rm flowai/lfx:${{ github.event.inputs.version }} lfx --help
 
           # Test alpine image
-          docker run --rm langflowai/lfx:${{ github.event.inputs.version }}-alpine lfx --help
+          docker run --rm flowai/lfx:${{ github.event.inputs.version }}-alpine lfx --help
 
           # Test with a simple flow
           cat > test_flow.json << 'EOF'
@@ -379,7 +379,7 @@ jobs:
           }
           EOF
 
-          docker run --rm -v $(pwd):/app/data langflowai/lfx:${{ github.event.inputs.version }} \
+          docker run --rm -v $(pwd):/app/data flowai/lfx:${{ github.event.inputs.version }} \
             lfx run /app/data/test_flow.json --input-value "test" || true
 
   notify:
@@ -393,7 +393,7 @@ jobs:
         run: |
           echo "✅ LFX ${{ github.event.inputs.version }} released successfully!"
           echo "PyPI: https://pypi.org/project/lfx/${{ github.event.inputs.version }}/"
-          echo "Docker Hub: https://hub.docker.com/r/langflowai/lfx/tags"
+          echo "Docker Hub: https://hub.docker.com/r/flowai/lfx/tags"
           echo "GitHub Release: https://github.com/${{ github.repository }}/releases/tag/lfx-v${{ github.event.inputs.version }}"
 
       - name: Notify failure

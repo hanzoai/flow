@@ -366,7 +366,7 @@ class WatsonxApiDeploymentCreatePayload(BaseModel):
 
 
 class WatsonxApiCreatedTool(BaseModel):
-    """API response shape for a tool created from a Hanzo Flow flow version."""
+    """API response shape for a tool created from a Flow flow version."""
 
     model_config = {"extra": "forbid"}
 
@@ -611,8 +611,8 @@ class _WatsonxApiAgentExecutionResultBase(BaseModel):
     """Shared fields for API-facing agent execution result payloads.
 
     All provider-owned identifiers and metadata live here inside
-    ``provider_data``.  The enclosing response only carries Hanzo Flow-owned
-    fields (``deployment_id``).  ``deployment_id`` (Hanzo Flow DB UUID) is
+    ``provider_data``.  The enclosing response only carries Flow-owned
+    fields (``deployment_id``).  ``deployment_id`` (Flow DB UUID) is
     intentionally omitted from this schema to avoid ownership confusion.
     """
 

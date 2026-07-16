@@ -1,5 +1,5 @@
 /**
- * Test template for React components in Hanzo Flow.
+ * Test template for React components in Flow.
  *
  * Usage:
  * 1. Copy this file to `__tests__/ComponentName.test.tsx`

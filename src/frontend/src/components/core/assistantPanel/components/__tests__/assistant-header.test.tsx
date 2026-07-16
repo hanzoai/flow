@@ -25,10 +25,10 @@ describe("AssistantHeader", () => {
   });
 
   describe("rendering", () => {
-    it("should display 'Hanzo Flow Assistant' title", () => {
+    it("should display 'Flow Assistant' title", () => {
       render(<AssistantHeader {...defaultProps} />);
 
-      expect(screen.getByText("Hanzo Flow Assistant")).toBeInTheDocument();
+      expect(screen.getByText("Flow Assistant")).toBeInTheDocument();
     });
 
     it("should render New session button", () => {

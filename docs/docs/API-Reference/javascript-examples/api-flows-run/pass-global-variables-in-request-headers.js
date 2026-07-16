@@ -1,13 +1,13 @@
-const url = `${process.env.LANGFLOW_SERVER_URL ?? ""}/api/v1/run/${process.env.FLOW_ID ?? ""}`;
+const url = `${process.env.FLOW_SERVER_URL ?? ""}/api/v1/run/${process.env.FLOW_ID ?? ""}`;
 
 const options = {
   method: 'POST',
   headers: {
     "Content-Type": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
-    "X-LANGFLOW-GLOBAL-VAR-OPENAI_API_KEY": `sk-...`,
-    "X-LANGFLOW-GLOBAL-VAR-USER_ID": `user123`,
-    "X-LANGFLOW-GLOBAL-VAR-ENVIRONMENT": `production`,
+    "x-api-key": `${process.env.FLOW_API_KEY ?? ""}`,
+    "X-FLOW-GLOBAL-VAR-OPENAI_API_KEY": `sk-...`,
+    "X-FLOW-GLOBAL-VAR-USER_ID": `user123`,
+    "X-FLOW-GLOBAL-VAR-ENVIRONMENT": `production`,
   },
   body: JSON.stringify({
   "input_value": "Tell me about something interesting!",

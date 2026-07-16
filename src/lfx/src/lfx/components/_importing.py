@@ -1,4 +1,4 @@
-"""Import utilities for LangFlow components."""
+"""Import utilities for Flow components."""
 
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_FLOW } from "@/customization/feature-flags";
 import { useGenerateToken } from "@/customization/hooks/use-custom-generate-token";
 import { createApiKey } from "../../controllers/API";
 import useAlertStore from "../../stores/alertStore";
@@ -84,7 +84,7 @@ export default function SecretKeyModal({
 
   async function handleSubmitForm() {
     if (apiKeyValue) setOpen(false);
-    if (ENABLE_DATASTAX_LANGFLOW) {
+    if (ENABLE_DATASTAX_FLOW) {
       handleDataStaxKey();
     } else {
       handleOSSKey();
@@ -143,7 +143,7 @@ export default function SecretKeyModal({
             textCopied={textCopied}
             renderKey={renderKey}
           />
-        ) : ENABLE_DATASTAX_LANGFLOW ? (
+        ) : ENABLE_DATASTAX_FLOW ? (
           <></>
         ) : (
           <FormKeyRender

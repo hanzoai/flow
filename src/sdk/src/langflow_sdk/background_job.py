@@ -3,7 +3,7 @@
 Wraps an :class:`asyncio.Task` so callers can start a flow run and poll or
 await it without blocking the event loop.  Mirrors the ``BackgroundJob`` API
 from flow-ai/sdk PR #1 (Janardan Singh Kavia, IBM Corp., Apache 2.0)
-adapted for the Hanzo Flow V1 ``/api/v1/run/{id}`` endpoint.
+adapted for the Flow V1 ``/api/v1/run/{id}`` endpoint.
 
 Typical usage::
 
@@ -25,16 +25,16 @@ import asyncio
 import contextlib
 from typing import TYPE_CHECKING
 
-from flow_sdk.exceptions import LangflowTimeoutError
+from flow_sdk.exceptions import FlowTimeoutError
 
 if TYPE_CHECKING:
     from flow_sdk.models import RunResponse
 
 
 class BackgroundJob:
-    """Non-blocking handle for an in-flight :meth:`AsyncLangflowClient.run` call.
+    """Non-blocking handle for an in-flight :meth:`AsyncFlowClient.run` call.
 
-    Returned by :meth:`AsyncLangflowClient.run_background`.  The underlying
+    Returned by :meth:`AsyncFlowClient.run_background`.  The underlying
     network request runs in an :class:`asyncio.Task` so the caller's event
     loop remains free.
 
@@ -74,14 +74,14 @@ class BackgroundJob:
 
         Args:
             timeout: Maximum seconds to wait.  ``None`` (default) means wait
-                     indefinitely.  Raises :exc:`LangflowTimeoutError` on
+                     indefinitely.  Raises :exc:`FlowTimeoutError` on
                      expiry.
 
         Returns:
             The :class:`RunResponse` from the completed flow run.
 
         Raises:
-            LangflowTimeoutError: If *timeout* elapses before the run finishes.
+            FlowTimeoutError: If *timeout* elapses before the run finishes.
             Exception: Any exception raised by the underlying flow run is
                 re-raised as-is.
         """
@@ -93,7 +93,7 @@ class BackgroundJob:
                 "The run is still in flight — call wait_for_completion() again "
                 "or cancel() to abort."
             )
-            raise LangflowTimeoutError(msg) from exc
+            raise FlowTimeoutError(msg) from exc
 
     async def cancel(self) -> bool:
         """Request cancellation of the background task.

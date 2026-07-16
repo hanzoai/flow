@@ -1,5 +1,5 @@
-name: Hanzo Flow Release
-run-name: Hanzo Flow Release by @${{ github.actor }}
+name: Flow Release
+run-name: Flow Release by @${{ github.actor }}
 
 on:
   workflow_dispatch:
@@ -9,12 +9,12 @@ on:
         required: true
         type: string
       release_package_base:
-        description: "Release Hanzo Flow Base"
+        description: "Release Flow Base"
         required: true
         type: boolean
         default: false
       release_package_main:
-        description: "Release Hanzo Flow"
+        description: "Release Flow"
         required: true
         type: boolean
         default: false
@@ -34,12 +34,12 @@ on:
         type: boolean
         default: false
       build_docker_base:
-        description: "Build Docker Image for Hanzo Flow Base"
+        description: "Build Docker Image for Flow Base"
         required: true
         type: boolean
         default: false
       build_docker_main:
-        description: "Build Docker Image for Hanzo Flow"
+        description: "Build Docker Image for Flow"
         required: true
         type: boolean
         default: false
@@ -158,7 +158,7 @@ jobs:
       - name: Validate that build-base is enabled if build-main is enabled
         run: |
           if [ "${{ inputs.release_package_main }}" = "true" ] && [ "${{ inputs.release_package_base }}" = "false" ]; then
-            echo "Error: Cannot release Hanzo Flow Main without releasing Hanzo Flow Base."
+            echo "Error: Cannot release Flow Main without releasing Flow Base."
             echo "Please enable 'release_package_base' or disable 'release_package_main'."
             exit 1
           fi
@@ -170,8 +170,8 @@ jobs:
           fi
 
           if [ "${{ inputs.release_package_main }}" = "true" ] && [ "${{ inputs.release_bundles }}" = "false" ]; then
-            echo "Error: Cannot release Hanzo Flow Main without releasing bundles."
-            echo "Hanzo Flow Main pins exact bundle versions (lfx-arxiv, lfx-duckduckgo, ...). Please enable 'release_bundles' or disable 'release_package_main'."
+            echo "Error: Cannot release Flow Main without releasing bundles."
+            echo "Flow Main pins exact bundle versions (lfx-arxiv, lfx-duckduckgo, ...). Please enable 'release_bundles' or disable 'release_package_main'."
             exit 1
           fi
 
@@ -213,7 +213,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://pypi.org/pypi/flow-base/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest base pre-release version: $last_released_version"
             echo "Base pre-release version to be released: $version"
           else
@@ -262,7 +262,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://pypi.org/pypi/flow/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest main pre-release version: $last_released_version"
             echo "Main pre-release version to be released: $version"
           else
@@ -311,7 +311,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://pypi.org/pypi/lfx/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest LFX pre-release version: $last_released_version"
             echo "LFX pre-release version to be released: $version"
           else
@@ -371,7 +371,7 @@ jobs:
           else
             if [ ${{inputs.pre_release}} == "true" ]; then
               last_released_version=$(curl -s "https://pypi.org/pypi/flow-sdk/json" | jq -r '.releases | keys | .[]' | grep -E '(a|b|rc|dev|alpha|beta)' | sort -V | tail -n 1)
-              version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+              version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
               echo "Latest SDK pre-release version: $last_released_version"
               echo "SDK pre-release version to be released: $version"
             else
@@ -460,7 +460,7 @@ jobs:
           # importlib.metadata returns the PEP 440 canonical form, so normalize
           # the expected version the same way the wheel filename check does.
           NORMALIZED_VERSION=$(echo "$EXPECTED_VERSION" | sed 's/\.rc/rc/g; s/\.a/a/g; s/\.b/b/g; s/\.dev/dev/g')
-          ./test-env/bin/python -c "from importlib.metadata import version; import langflow_sdk; installed_version = version('flow-sdk'); print(f'flow-sdk {installed_version} imported successfully'); assert installed_version == '$NORMALIZED_VERSION', f'Installed version {installed_version} does not match expected version $NORMALIZED_VERSION'"
+          ./test-env/bin/python -c "from importlib.metadata import version; import flow_sdk; installed_version = version('flow-sdk'); print(f'flow-sdk {installed_version} imported successfully'); assert installed_version == '$NORMALIZED_VERSION', f'Installed version {installed_version} does not match expected version $NORMALIZED_VERSION'"
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
         with:
@@ -576,7 +576,7 @@ jobs:
           path: src/lfx/dist
 
   build-base:
-    name: Build Hanzo Flow Base
+    name: Build Flow Base
     needs: [build-lfx, build-sdk, determine-base-version, determine-lfx-version]
     if: |
       always() &&
@@ -710,7 +710,7 @@ jobs:
           path: src/backend/base/dist
 
   build-main:
-    name: Build Hanzo Flow Main
+    name: Build Flow Main
     needs:
       [
         build-base,
@@ -857,7 +857,7 @@ jobs:
           path: dist
 
   build-bundles:
-    name: Build Hanzo Flow Bundles
+    name: Build Flow Bundles
     needs: [build-lfx, determine-lfx-version]
     if: |
       always() &&
@@ -924,7 +924,7 @@ jobs:
       lfx-artifact-name: "dist-lfx"
 
   publish-base:
-    name: Publish Hanzo Flow Base to PyPI
+    name: Publish Flow Base to PyPI
     if: ${{ inputs.release_package_base }}
     needs: [build-base, test-cross-platform]
     runs-on: ubuntu-latest
@@ -987,7 +987,7 @@ jobs:
           done
 
   publish-main:
-    name: Publish Hanzo Flow Main to PyPI
+    name: Publish Flow Main to PyPI
     if: ${{ inputs.release_package_main }}
     needs: [build-main, test-cross-platform, publish-base]
     runs-on: ubuntu-latest
@@ -1066,7 +1066,7 @@ jobs:
           cd src/lfx && uv publish dist/*.whl
 
   call_docker_build_base:
-    name: Call Docker Build Workflow for Hanzo Flow Base
+    name: Call Docker Build Workflow for Flow Base
     if: ${{ inputs.build_docker_base }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1078,7 +1078,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main:
-    name: Call Docker Build Workflow for Hanzo Flow
+    name: Call Docker Build Workflow for Flow
     if: ${{ inputs.build_docker_main }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1090,7 +1090,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_backend:
-    name: Call Docker Build Workflow for Hanzo Flow Backend
+    name: Call Docker Build Workflow for Flow Backend
     if: ${{ inputs.build_docker_main && !inputs.dry_run }}
     needs: [call_docker_build_main]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1102,7 +1102,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_frontend:
-    name: Call Docker Build Workflow for Hanzo Flow Frontend
+    name: Call Docker Build Workflow for Flow Frontend
     if: ${{ inputs.build_docker_main && !inputs.dry_run }}
     needs: [call_docker_build_main]
     uses: ./.github/workflows/docker-build-v2.yml
@@ -1114,7 +1114,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main_ep:
-    name: Call Docker Build Workflow for Hanzo Flow with Entrypoint
+    name: Call Docker Build Workflow for Flow with Entrypoint
     if: ${{ inputs.build_docker_main }}
     needs: [ci]
     uses: ./.github/workflows/docker-build-v2.yml

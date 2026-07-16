@@ -3,7 +3,7 @@
 Based on the weakness-focused stress test scripts with additional user behaviors.
 Includes production-ready fixes for timing, error handling, and reporting.
 
-This file tests the LFX API (complex serve), not the Hanzo Flow API.
+This file tests the LFX API (complex serve), not the Flow API.
 
 Usage:
     # Run with web UI (recommended)

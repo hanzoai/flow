@@ -1,3 +1,3 @@
-"""LangFlow link extractors components."""
+"""Flow link extractors components."""
 
 __all__: list[str] = []

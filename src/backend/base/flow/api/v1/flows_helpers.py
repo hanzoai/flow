@@ -595,7 +595,7 @@ def _build_flows_download_response(
 
         zip_stream.seek(0)
         current_time = datetime.now(tz=timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
-        filename = f"{current_time}_langflow_flows.zip"
+        filename = f"{current_time}_flow_flows.zip"
 
         return StreamingResponse(
             zip_stream,

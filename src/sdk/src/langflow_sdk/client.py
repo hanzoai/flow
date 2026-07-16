@@ -1,4 +1,4 @@
-"""Sync HTTP client for the Hanzo Flow REST API.
+"""Sync HTTP client for the Flow REST API.
 
 Preferred usage via the short alias::
 
@@ -8,7 +8,7 @@ Preferred usage via the short alias::
     flows  = client.list_flows()
     result = client.run_flow("my-endpoint", RunRequest(input_value="Hello"))
 
-The async counterpart lives in :mod:`langflow_sdk._async_client`.
+The async counterpart lives in :mod:`flow_sdk._async_client`.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ import httpx
 
 # Re-export async client so that existing ``from flow_sdk.client import ...``
 # statements continue to work without changes.
-from flow_sdk._async_client import AsyncClient, AsyncLangflowClient
+from flow_sdk._async_client import AsyncClient, AsyncFlowClient
 from flow_sdk._client_common import _ClientCommon
 from flow_sdk._http import (
     _DEFAULT_TIMEOUT,
@@ -55,8 +55,8 @@ if TYPE_CHECKING:
 # ---------------------------------------------------------------------------
 
 
-class LangflowClient(_ClientCommon):
-    """Synchronous client for the Hanzo Flow REST API.
+class FlowClient(_ClientCommon):
+    """Synchronous client for the Flow REST API.
 
     Prefer the short alias :data:`Client` for new code::
 
@@ -398,7 +398,7 @@ class LangflowClient(_ClientCommon):
 # Short alias  (preferred for new code)
 # ---------------------------------------------------------------------------
 
-#: Short alias for :class:`LangflowClient`.
+#: Short alias for :class:`FlowClient`.
 #:
 #: Example::
 #:
@@ -406,6 +406,6 @@ class LangflowClient(_ClientCommon):
 #:     client = Client("https://flow.example.com", api_key="...")
 #:     flows  = client.list_flows()
 #:     result = client.run_flow("my-endpoint", RunRequest(input_value="Hello"))
-Client = LangflowClient
+Client = FlowClient
 
-__all__ = ["AsyncClient", "AsyncLangflowClient", "Client", "LangflowClient"]
+__all__ = ["AsyncClient", "AsyncFlowClient", "Client", "FlowClient"]

@@ -7,7 +7,7 @@ conflicts with the new lfx.logging backwards compatibility module.
 import pytest
 
 
-def test_langflow_logging_imports():
+def test_flow_logging_imports():
     """Test that flow.logging can be imported and works correctly."""
     try:
         from flow.logging import configure, logger
@@ -19,7 +19,7 @@ def test_langflow_logging_imports():
         pytest.fail(f"flow.logging should be importable: {e}")
 
 
-def test_langflow_logging_functionality():
+def test_flow_logging_functionality():
     """Test that flow.logging functions work correctly."""
     from flow.logging import configure, logger
 
@@ -36,7 +36,7 @@ def test_langflow_logging_functionality():
         pytest.fail(f"logger should work: {e}")
 
 
-def test_langflow_logging_has_expected_exports():
+def test_flow_logging_has_expected_exports():
     """Test that flow.logging has the expected exports."""
     import flow.logging
 
@@ -51,7 +51,7 @@ def test_langflow_logging_has_expected_exports():
     assert set(flow.logging.__all__) == expected_exports
 
 
-def test_langflow_logging_specific_functions():
+def test_flow_logging_specific_functions():
     """Test flow.logging specific functions (disable_logging, enable_logging)."""
     from flow.logging import disable_logging, enable_logging
 
@@ -88,7 +88,7 @@ def test_no_conflict_with_lfx_logging():
     lfx_logger.info("Test from lfx.logging")
 
 
-def test_langflow_logging_imports_from_lfx():
+def test_flow_logging_imports_from_lfx():
     """Test that flow.logging correctly imports from lfx."""
     from flow.logging import configure, logger
     from lfx.log.logger import configure as lfx_configure
@@ -142,10 +142,10 @@ def test_backwards_compatibility_scenario():
     orig_logger.debug("Message from lfx.log.logger")
 
 
-def test_importing_langflow_logging_in_langflow():
+def test_importing_flow_logging_in_flow():
     """Test that flow.logging can be imported and used in flow context without errors.
 
-    This is similar to test_importing_langflow_logging_in_lfx but tests the flow side
+    This is similar to test_importing_flow_logging_in_lfx but tests the flow side
     using create_class to validate component creation with flow.logging imports.
     """
     from textwrap import dedent
@@ -158,7 +158,7 @@ from flow.logging import logger, configure
 from flow.logging.logger import logger
 from flow.custom import Component
 
-class TestLangflowLoggingComponent(Component):
+class TestFlowLoggingComponent(Component):
     def some_method(self):
         # Test that both logger and configure work in flow context
         configure(log_level="INFO")
@@ -169,8 +169,8 @@ class TestLangflowLoggingComponent(Component):
         logger.warning("Warning message")
         logger.error("Error message")
 
-        return "langflow_logging_success"
+        return "flow_logging_success"
     """)
 
-    result = create_class(code, "TestLangflowLoggingComponent")
-    assert result.__name__ == "TestLangflowLoggingComponent"
+    result = create_class(code, "TestFlowLoggingComponent")
+    assert result.__name__ == "TestFlowLoggingComponent"

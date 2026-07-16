@@ -1,7 +1,7 @@
 """Plugin route discovery and registration with conflict protection.
 
 Plugins register via the ``flow.plugins`` entry-point group. They receive
-a wrapper so they cannot overwrite or shadow existing Langflow routes.
+a wrapper so they cannot overwrite or shadow existing Flow routes.
 """
 
 from importlib.metadata import entry_points
@@ -14,7 +14,7 @@ def _get_route_keys(app: FastAPI) -> set[tuple[str, str]]:
     """Collect (path, method) for all routes already on the app.
 
     Used to build the reserved set before loading plugins so that plugin
-    routes cannot overwrite or shadow existing Langflow routes.
+    routes cannot overwrite or shadow existing Flow routes.
     """
     keys: set[tuple[str, str]] = set()
     for route in app.router.routes:

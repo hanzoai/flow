@@ -52,17 +52,17 @@ def mock_settings_service():
     the S3StorageService properly respects these settings.
     """
     settings_service = Mock()
-    settings_service.settings.config_dir = str(Path(tempfile.gettempdir()) / "langflow_test")
+    settings_service.settings.config_dir = str(Path(tempfile.gettempdir()) / "flow_test")
 
     # Bucket name from env or default
     settings_service.settings.object_storage_bucket_name = os.environ.get(
         "FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci"
     )
 
-    # Prefix from env - using standard LANGFLOW env var name
+    # Prefix from env - using standard FLOW env var name
     settings_service.settings.object_storage_prefix = os.environ.get("FLOW_OBJECT_STORAGE_PREFIX", "test-files-1")
 
-    # Tags from env - using standard LANGFLOW env var name
+    # Tags from env - using standard FLOW env var name
     default_tags = {"env": "test-1"}
     tags_str = os.environ.get("FLOW_OBJECT_STORAGE_TAGS")
     if tags_str:
