@@ -15,11 +15,11 @@ import {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  const envHanzoflowResult = dotenv.config({
+  const envHanzoFlowResult = dotenv.config({
     path: path.resolve(__dirname, "../../.env"),
   });
 
-  const envHanzoflow = envHanzoflowResult.parsed || {};
+  const envHanzoFlow = envHanzoFlowResult.parsed || {};
 
   const apiRoutes = API_ROUTES || ["^/v1/", "^/v2/", "/health"];
 

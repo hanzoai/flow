@@ -52,15 +52,15 @@ export class BackEndCluster extends Construct {
     );
     backendTaskDefinition.addContainer('backendContainer', {
       image: ecs.ContainerImage.fromEcrRepository(props.ecrBackEndRepository, "latest"),
-      containerName:'hanzoflow-back-container',
+      containerName:'flow-back-container',
       logging: ecs.LogDriver.awsLogs({
         streamPrefix: 'my-stream',
         logGroup: props.backendLogGroup,
       }),
       environment:{
-        "HANZOFLOW_AUTO_LOGIN" : process.env.HANZOFLOW_AUTO_LOGIN ?? 'false',
-        "HANZOFLOW_SUPERUSER" : process.env.HANZOFLOW_SUPERUSER ?? "admin",
-        "HANZOFLOW_SUPERUSER_PASSWORD" : process.env.HANZOFLOW_SUPERUSER_PASSWORD ?? "123456"
+        "FLOW_AUTO_LOGIN" : process.env.FLOW_AUTO_LOGIN ?? 'false',
+        "FLOW_SUPERUSER" : process.env.FLOW_SUPERUSER ?? "admin",
+        "FLOW_SUPERUSER_PASSWORD" : process.env.FLOW_SUPERUSER_PASSWORD ?? "123456"
       },
       portMappings: [
           {

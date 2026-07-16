@@ -20,7 +20,7 @@ class MCPStdio(Component):
     tool_names = [str]
     display_name = "MCP Tools (stdio) [DEPRECATED]"
     description = (
-        "Connects to an MCP server over stdio and exposes it's tools as hanzoflow tools to be used by an Agent."
+        "Connects to an MCP server over stdio and exposes it's tools as flow tools to be used by an Agent."
     )
     documentation: str = "https://docs.hanzo.ai/flow/components-custom-components"
     icon = "code"

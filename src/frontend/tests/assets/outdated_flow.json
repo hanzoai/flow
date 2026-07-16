@@ -1004,7 +1004,7 @@
       },
       {
         "data": {
-          "description": "Retrieves stored chat messages from Hanzoflow tables or an external memory.",
+          "description": "Retrieves stored chat messages from HanzoFlow tables or an external memory.",
           "display_name": "Chat Memory",
           "id": "Memory-hrM7A",
           "node": {
@@ -1012,7 +1012,7 @@
             "beta": false,
             "conditional_paths": [],
             "custom_fields": {},
-            "description": "Retrieves stored chat messages from Hanzoflow tables or an external memory.",
+            "description": "Retrieves stored chat messages from HanzoFlow tables or an external memory.",
             "display_name": "Chat Memory",
             "documentation": "",
             "edited": false,
@@ -1083,7 +1083,7 @@
                 "advanced": false,
                 "display_name": "External Memory",
                 "dynamic": false,
-                "info": "Retrieve messages from an external memory. If empty, it will use the Hanzoflow tables.",
+                "info": "Retrieve messages from an external memory. If empty, it will use the HanzoFlow tables.",
                 "input_types": ["BaseChatMessageHistory"],
                 "list": false,
                 "name": "memory",

@@ -289,7 +289,7 @@ async def test_load_bundles_from_urls():
 
     try:
         assert len(components_paths) == 1
-        assert "hanzoflow-bundles-68428ce16729a385fe1bcc0f1ec91fd5f5f420b9/components" in components_paths[0]
+        assert "flow-bundles-68428ce16729a385fe1bcc0f1ec91fd5f5f420b9/components" in components_paths[0]
 
         content = await (Path(components_paths[0]) / "embeddings" / "openai2.py").read_text(encoding="utf-8")
         assert "OpenAIEmbeddings2Component" in content

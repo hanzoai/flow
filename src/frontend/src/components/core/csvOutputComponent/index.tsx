@@ -35,8 +35,8 @@ function CsvOutputComponent({
           {t("output.csvTitle")}
         </div>
         <div className="align-center flex w-full justify-center">
-          <div className="hanzoflow-chat-desc align-center flex justify-center px-6 py-8">
-            <div className="hanzoflow-chat-desc-span">{CSVError}</div>
+          <div className="flow-chat-desc align-center flex justify-center px-6 py-8">
+            <div className="flow-chat-desc-span">{CSVError}</div>
           </div>
         </div>
       </div>
@@ -86,8 +86,8 @@ function CsvOutputComponent({
             {t("output.csvTitle")}
           </div>
           <div className="align-center flex w-full justify-center">
-            <div className="hanzoflow-chat-desc align-center flex justify-center px-6 py-8">
-              <div className="hanzoflow-chat-desc-span">{CSVNoDataError}</div>
+            <div className="flow-chat-desc align-center flex justify-center px-6 py-8">
+              <div className="flow-chat-desc-span">{CSVNoDataError}</div>
             </div>
           </div>
         </div>
@@ -99,8 +99,8 @@ function CsvOutputComponent({
             {t("output.csvTitle")}
           </div>
           <div className="align-center flex w-full justify-center">
-            <div className="hanzoflow-chat-desc align-center flex justify-center px-6 py-8">
-              <div className="hanzoflow-chat-desc-span">{CSVError}</div>
+            <div className="flow-chat-desc align-center flex justify-center px-6 py-8">
+              <div className="flow-chat-desc-span">{CSVError}</div>
             </div>
           </div>
         </div>

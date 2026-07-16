@@ -26,8 +26,8 @@ class HealthResponse(BaseModel):
 
 
 # /health is also supported by uvicorn
-# it means uvicorn's /health serves first before the hanzoflow instance is up
-# therefore it's not a reliable health check for a hanzoflow instance
+# it means uvicorn's /health serves first before the flow instance is up
+# therefore it's not a reliable health check for a flow instance
 # we keep this for backward compatibility
 @health_check_router.get("/health")
 async def health():
@@ -35,7 +35,7 @@ async def health():
 
 
 # /health_check evaluates key services
-# It's a reliable health check for a hanzoflow instance
+# It's a reliable health check for a flow instance
 @health_check_router.get("/health_check")
 async def health_check(
     session: DbSession,

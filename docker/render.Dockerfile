@@ -1,3 +1,3 @@
-FROM hanzoflowai/hanzoflow:latest
+FROM flowai/flow:latest
 
-ENTRYPOINT ["python", "-m", "hanzoflow", "run"]
+ENTRYPOINT ["python", "-m", "flow", "run"]

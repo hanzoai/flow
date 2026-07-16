@@ -1,4 +1,4 @@
-# Path: src/backend/hanzoflow/services/database/models/flow/model.py
+# Path: src/backend/flow/services/database/models/flow/model.py
 
 import re
 from datetime import datetime, timezone

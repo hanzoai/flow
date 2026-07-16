@@ -54,7 +54,7 @@ export default function ShortcutsPage() {
       const fixedName = toCamelCase(name);
       updateUniqueShortcut(fixedName, shortcut);
     });
-    localStorage.removeItem("hanzoflow-shortcuts");
+    localStorage.removeItem("flow-shortcuts");
   }
 
   return (

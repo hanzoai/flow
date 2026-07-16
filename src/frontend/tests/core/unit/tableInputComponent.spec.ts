@@ -41,16 +41,16 @@ test.skip(
     await page.getByTestId("code-button-modal").last().click();
 
     const customCodeWithError = `
-# from hanzoflow.field_typing import Data
-from hanzoflow.custom import Component
-from hanzoflow.io import TableInput, Output
-from hanzoflow.schema import Data
+# from flow.field_typing import Data
+from flow.custom import Component
+from flow.io import TableInput, Output
+from flow.schema import Data
 
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
+    documentation: str = "https://docs.flow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 

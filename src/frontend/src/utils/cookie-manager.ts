@@ -1,9 +1,9 @@
 import { Cookies } from "react-cookie";
 import {
-  HANZOFLOW_ACCESS_TOKEN,
-  HANZOFLOW_API_TOKEN,
-  HANZOFLOW_AUTO_LOGIN_OPTION,
-  HANZOFLOW_REFRESH_TOKEN,
+  FLOW_ACCESS_TOKEN,
+  FLOW_API_TOKEN,
+  FLOW_AUTO_LOGIN_OPTION,
+  FLOW_REFRESH_TOKEN,
 } from "@/constants/constants";
 
 class CookieManager {
@@ -69,10 +69,10 @@ class CookieManager {
   }
 
   public clearAuthCookies(): void {
-    this.remove(HANZOFLOW_ACCESS_TOKEN);
-    this.remove(HANZOFLOW_API_TOKEN);
-    this.remove(HANZOFLOW_REFRESH_TOKEN);
-    this.remove(HANZOFLOW_AUTO_LOGIN_OPTION);
+    this.remove(FLOW_ACCESS_TOKEN);
+    this.remove(FLOW_API_TOKEN);
+    this.remove(FLOW_REFRESH_TOKEN);
+    this.remove(FLOW_AUTO_LOGIN_OPTION);
   }
 }
 

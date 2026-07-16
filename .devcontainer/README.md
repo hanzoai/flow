@@ -20,7 +20,7 @@ After the codespace is opened, there will be two phases to the process. It will 
 ```
 ✔ Finishing up...
 ⠸ Running postCreateCommand...
-  › sudo chown -R hanzoflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/hanzoflow/frontend && make install_frontend && mak…
+  › sudo chown -R flow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/flow/frontend && make install_frontend && mak…
 ```
 
 Once completed, this terminal window will close.
@@ -37,7 +37,7 @@ Installation is now complete.
 
 ## Start up the Service
 
-Open a new Terminal, and type `uv run hanzoflow run`.
+Open a new Terminal, and type `uv run flow run`.
 
 The service will start, and you will may notice a dialog in the lower right indicating there is a port available to connect to. However, the service will not be ready until the startup completes.
 

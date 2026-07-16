@@ -74,7 +74,7 @@ const StoreApiKeyPage = () => {
             />
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage access to the Hanzoflow Store.
+            Manage access to the HanzoFlow Store.
           </p>
         </div>
       </div>

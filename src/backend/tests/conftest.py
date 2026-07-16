@@ -68,7 +68,7 @@ def blockbuster(request):
             (
                 bb.functions["os.stat"]
                 # TODO: make set_class_code async
-                .can_block_in("hanzoflow/custom/custom_component/component.py", "set_class_code")
+                .can_block_in("flow/custom/custom_component/component.py", "set_class_code")
                 # TODO: follow discussion in https://github.com/encode/httpx/discussions/3456
                 .can_block_in("httpx/_client.py", "_init_transport")
                 .can_block_in("rich/traceback.py", "_render_stack")
@@ -268,12 +268,12 @@ def load_flows_dir():
 
 @pytest.fixture(name="distributed_env")
 def _setup_env(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_CACHE_TYPE", "redis")
-    monkeypatch.setenv("HANZOFLOW_REDIS_HOST", "result_backend")
-    monkeypatch.setenv("HANZOFLOW_REDIS_PORT", "6379")
-    monkeypatch.setenv("HANZOFLOW_REDIS_DB", "0")
-    monkeypatch.setenv("HANZOFLOW_REDIS_EXPIRE", "3600")
-    monkeypatch.setenv("HANZOFLOW_REDIS_PASSWORD", "")
+    monkeypatch.setenv("FLOW_CACHE_TYPE", "redis")
+    monkeypatch.setenv("FLOW_REDIS_HOST", "result_backend")
+    monkeypatch.setenv("FLOW_REDIS_PORT", "6379")
+    monkeypatch.setenv("FLOW_REDIS_DB", "0")
+    monkeypatch.setenv("FLOW_REDIS_EXPIRE", "3600")
+    monkeypatch.setenv("FLOW_REDIS_PASSWORD", "")
     monkeypatch.setenv("FLOWER_UNAUTHENTICATED_API", "True")
     monkeypatch.setenv("BROKER_URL", "redis://result_backend:6379/0")
     monkeypatch.setenv("RESULT_BACKEND", "redis://result_backend:6379/0")
@@ -292,9 +292,9 @@ def distributed_client_fixture(
     db_dir = tempfile.mkdtemp()
     try:
         db_path = Path(db_dir) / "test.db"
-        monkeypatch.setenv("HANZOFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-        monkeypatch.setenv("HANZOFLOW_AUTO_LOGIN", "false")
-        # monkeypatch hanzoflow.services.task.manager.USE_CELERY to True
+        monkeypatch.setenv("FLOW_DATABASE_URL", f"sqlite:///{db_path}")
+        monkeypatch.setenv("FLOW_AUTO_LOGIN", "false")
+        # monkeypatch flow.services.task.manager.USE_CELERY to True
         # monkeypatch.setattr(manager, "USE_CELERY", True)
         monkeypatch.setattr(celery_app, "celery_app", celery_app.make_celery("flow", Config))
 
@@ -404,7 +404,7 @@ def json_loop_test():
 
 @pytest.fixture(autouse=True)
 def deactivate_tracing(monkeypatch):
-    monkeypatch.setenv("HANZOFLOW_DEACTIVATE_TRACING", "true")
+    monkeypatch.setenv("FLOW_DEACTIVATE_TRACING", "true")
     yield
     monkeypatch.undo()
 
@@ -434,14 +434,14 @@ async def client_fixture(
         def init_app():
             db_dir = tempfile.mkdtemp()
             db_path = Path(db_dir) / "test.db"
-            monkeypatch.setenv("HANZOFLOW_DATABASE_URL", f"sqlite:///{db_path}")
-            monkeypatch.setenv("HANZOFLOW_AUTO_LOGIN", "false")
+            monkeypatch.setenv("FLOW_DATABASE_URL", f"sqlite:///{db_path}")
+            monkeypatch.setenv("FLOW_AUTO_LOGIN", "false")
             if "load_flows" in request.keywords:
                 shutil.copyfile(
                     pytest.BASIC_EXAMPLE_PATH, Path(load_flows_dir) / "c54f9130-f2fa-4a3e-b22a-3856d946351b.json"
                 )
-                monkeypatch.setenv("HANZOFLOW_LOAD_FLOWS_PATH", load_flows_dir)
-                monkeypatch.setenv("HANZOFLOW_AUTO_LOGIN", "true")
+                monkeypatch.setenv("FLOW_LOAD_FLOWS_PATH", load_flows_dir)
+                monkeypatch.setenv("FLOW_AUTO_LOGIN", "true")
             # Clear the services cache
             from lfx.services.manager import get_service_manager
 
@@ -469,7 +469,7 @@ async def client_fixture(
 
 @pytest.fixture
 def runner(tmp_path):
-    env = {"HANZOFLOW_DATABASE_URL": f"sqlite:///{tmp_path}/test.db"}
+    env = {"FLOW_DATABASE_URL": f"sqlite:///{tmp_path}/test.db"}
     return CliRunner(env=env)
 
 

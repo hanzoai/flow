@@ -1,1 +1,1 @@
-FROM hanzoflowai/hanzoflow:1.0-alpha
+FROM flowai/flow:1.0-alpha

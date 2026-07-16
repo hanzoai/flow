@@ -1,6 +1,6 @@
 {
   "name": "Lonely Stonebraker",
-  "description": "Design Dialogues with Hanzoflow.",
+  "description": "Design Dialogues with HanzoFlow.",
   "data": {
     "nodes": [
       {
@@ -39,7 +39,7 @@
                 "list": false,
                 "show": true,
                 "multiline": false,
-                "value": "/home/vazz/.cache/hanzoflow/text.t1.txt",
+                "value": "/home/vazz/.cache/flow/text.t1.txt",
                 "fileTypes": [],
                 "file_path": "",
                 "password": false,
@@ -71,7 +71,7 @@
             },
             "base_classes": ["str"],
             "display_name": "text checkpoint",
-            "documentation": "https://docs.hanzoflow.org/components-custom-components",
+            "documentation": "https://docs.flow.org/components-custom-components",
             "custom_fields": {
               "save_path": null,
               "text_input": null
@@ -110,7 +110,7 @@
                 "show": true,
                 "multiline": false,
                 "fileTypes": [],
-                "file_path": "/home/vazz/.cache/hanzoflow/1b0814b7-2964-4e09-9b4b-f7413c4fb50b/b56b043d8940daecbdec03b97ad4346488c58d7cc62016560dd333aa7a6a12ce.m4a",
+                "file_path": "/home/vazz/.cache/flow/1b0814b7-2964-4e09-9b4b-f7413c4fb50b/b56b043d8940daecbdec03b97ad4346488c58d7cc62016560dd333aa7a6a12ce.m4a",
                 "password": false,
                 "name": "audio",
                 "display_name": "audio",

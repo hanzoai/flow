@@ -5,7 +5,7 @@ export const API_ROUTES = ["^/v1/", "^/v2/", "/health"];
 export const BASE_URL_API = "/v1/";
 export const BASE_URL_API_V2 = "/v2/";
 export const HEALTH_CHECK_URL = "/health_check";
-export const DOCS_LINK = "https://docs.hanzoflow.org";
+export const DOCS_LINK = "https://docs.flow.org";
 
 export default {
   DOCS_LINK,

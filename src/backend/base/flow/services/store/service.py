@@ -62,7 +62,7 @@ def get_id_from_search_string(search_string: str) -> str | None:
         Optional[str]: The extracted ID, or None if no ID is found.
     """
     possible_id: str | None = search_string
-    if "www.hanzoflow.store/store/" in search_string:
+    if "www.flow.store/store/" in search_string:
         possible_id = search_string.split("/")[-1]
 
     try:
@@ -73,7 +73,7 @@ def get_id_from_search_string(search_string: str) -> str | None:
 
 
 class StoreService(Service):
-    """This is a service that integrates hanzoflow with the store which is a Directus instance.
+    """This is a service that integrates flow with the store which is a Directus instance.
 
     It allows to search, get and post components to the store.
     """

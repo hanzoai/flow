@@ -251,11 +251,11 @@
   .flow-page-positioning {
     @apply h-full w-full overflow-hidden;
   }
-  .hanzoflow-page-icon {
+  .flow-page-icon {
     @apply absolute bottom-2 left-7 flex h-6 cursor-pointer flex-col items-center justify-start overflow-hidden rounded-lg bg-foreground px-2 text-center font-sans text-xs tracking-wide text-secondary transition-all duration-500 ease-in-out;
   }
 
-  .hanzoflow-page-icon:hover {
+  .flow-page-icon:hover {
     @apply hover:h-12;
   }
 
@@ -1052,22 +1052,22 @@
   .chat-alert-box {
     @apply flex-max-width h-full flex-col items-center justify-center text-center align-middle;
   }
-  .hanzoflow-chat-span {
+  .flow-chat-span {
     @apply text-lg text-foreground;
   }
   .card-filter {
     @apply bg-background bg-fixed opacity-20;
   }
-  .hanzoflow-chat-desc {
+  .flow-chat-desc {
     @apply w-2/4 rounded-md border border-border bg-muted px-6 py-8;
   }
-  .hanzoflow-chat-desc-span {
+  .flow-chat-desc-span {
     @apply text-base text-muted-foreground;
   }
-  .hanzoflow-chat-input-div {
+  .flow-chat-input-div {
     @apply flex-max-width flex-col items-center justify-between px-8 pb-3;
   }
-  .hanzoflow-chat-input {
+  .flow-chat-input {
     @apply relative w-full rounded-md shadow-sm;
   }
 

@@ -31,17 +31,17 @@ test(
     await page.getByTestId("code-button-modal").last().click();
 
     const waitTimeoutCode = `
-# from hanzoflow.field_typing import Data
-from hanzoflow.custom import Component
-from hanzoflow.io import MessageTextInput, Output
-from hanzoflow.schema import Data
+# from flow.field_typing import Data
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema import Data
 from time import sleep
-from hanzoflow.schema.message import Message
+from flow.schema.message import Message
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
+    documentation: str = "https://docs.flow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 
