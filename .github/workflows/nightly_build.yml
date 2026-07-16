@@ -10,7 +10,7 @@ on:
         options:
           - ubuntu-latest
           - self-hosted
-          - '["self-hosted", "linux", "ARM64", "langflow-ai-arm64-40gb-ephemeral"]'
+          - '["self-hosted", "linux", "ARM64", "flow-ai-arm64-40gb-ephemeral"]'
         default: ubuntu-latest
       skip_frontend_tests:
         description: "Skip frontend tests. Only do this for testing purposes."
@@ -87,7 +87,7 @@ jobs:
       - name: Generate main nightly tag
         id: generate_main_tag
         run: |
-          # langflow-nightly pins langflow-base-nightly[complete]==<exact dev>, so both tags
+          # flow-nightly pins flow-base-nightly[complete]==<exact dev>, so both tags
           # MUST be identical. Compute them in ONE invocation (single PyPI snapshot) so they
           # cannot drift across separate calls.
           # NOTE: This outputs the tag with the `v` prefix.
@@ -124,8 +124,8 @@ jobs:
         run: |
           # If the main tag does not exist in GH, we create the base tag from the existing codebase.
 
-          git config --global user.email "bot-nightly-builds@langflow.org"
-          git config --global user.name "Langflow Bot"
+          git config --global user.email "bot-nightly-builds@flow.org"
+          git config --global user.name "Hanzo Flow Bot"
 
           MAIN_TAG="${{ steps.generate_main_tag.outputs.main_tag }}"
           BASE_TAG="${{ steps.generate_base_tag.outputs.base_tag }}"
@@ -151,7 +151,7 @@ jobs:
           git commit -m "Update version and project name"
 
           echo "Tagging main with $MAIN_TAG"
-          if ! git tag -a $MAIN_TAG -m "Langflow nightly $MAIN_TAG"; then
+          if ! git tag -a $MAIN_TAG -m "Hanzo Flow nightly $MAIN_TAG"; then
             echo "Tag creation failed. Exiting the workflow."
             exit 1
           fi
@@ -173,7 +173,7 @@ jobs:
         working-directory: src/backend/base
         run: |
           # If the main tag already exists, we need to retrieve the base version from the main tag codebase.
-          version=$(uv tree | grep 'langflow-base' | awk '{print $3}' | head -n 1)
+          version=$(uv tree | grep 'flow-base' | awk '{print $3}' | head -n 1)
           echo "base_tag=$version" >> $GITHUB_OUTPUT
           echo "base_tag=$version"
 
@@ -240,8 +240,8 @@ jobs:
       - name: Commit and push hash history changes
         run: |
           echo "=== Configuring git ==="
-          git config --global user.email "bot-nightly-builds@langflow.org"
-          git config --global user.name "Langflow Bot"
+          git config --global user.email "bot-nightly-builds@flow.org"
+          git config --global user.name "Hanzo Flow Bot"
 
           echo "=== Checking for hash history changes ==="
           # Check if there are changes to commit (handles if it's a new file for first run)
@@ -317,7 +317,7 @@ jobs:
 
   release-nightly-build:
     if: github.repository == 'hanzoai/flow' && always() && needs.frontend-tests.result != 'failure' && needs.backend-unit-tests.result != 'failure' && needs.build-hash-history.result != 'failure'
-    name: Run Nightly Langflow Build
+    name: Run Nightly Hanzo Flow Build
     needs: [create-nightly-tag, frontend-tests, backend-unit-tests, build-hash-history]
     uses: ./.github/workflows/release_nightly.yml
     with:
@@ -336,13 +336,13 @@ jobs:
   db-migration-validation:
     name: Run DB Migration Validation
     needs: [create-nightly-tag, release-nightly-build]
-    if: ${{ github.repository == 'langflow-ai/langflow' && always() && needs.release-nightly-build.result == 'success' }}
+    if: ${{ github.repository == 'hanzoai/flow' && always() && needs.release-nightly-build.result == 'success' }}
     uses: ./.github/workflows/db-migration-validation.yml
     with:
       # Pass Docker image reference for docker-compose and version without 'v' prefix for pip
       # release_tag format: v1.10.0.dev20260522
-      # We need: langflowai/langflow-nightly:1.10.0.dev20260522 for Docker
-      nightly_tag: langflowai/langflow-nightly:${{ needs.create-nightly-tag.outputs.release_tag }}
+      # We need: langflowai/flow-nightly:1.10.0.dev20260522 for Docker
+      nightly_tag: langflowai/flow-nightly:${{ needs.create-nightly-tag.outputs.release_tag }}
     secrets: inherit
 
   slack-notification:
@@ -422,8 +422,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "bot-nightly-builds@langflow.org"
-          git config --global user.name "Langflow Bot"
+          git config --global user.email "bot-nightly-builds@flow.org"
+          git config --global user.name "Hanzo Flow Bot"
 
       - name: "Setup Environment"
         uses: astral-sh/setup-uv@v6

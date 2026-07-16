@@ -2,8 +2,8 @@
 # ci-test.sh
 #
 # PURPOSE
-#   Run pytest flow-integration tests against a live Langflow instance
-#   using the langflow-sdk `flow_runner` fixture.
+#   Run pytest flow-integration tests against a live Hanzo Flow instance
+#   using the flow-sdk `flow_runner` fixture.
 #
 # USAGE
 #   chmod +x ci-test.sh
@@ -12,29 +12,29 @@
 # ENVIRONMENT VARIABLES — connection (pick one approach)
 #
 #   Approach A: direct URL + key (simplest)
-#     LANGFLOW_URL        URL of the target Langflow instance.
-#                         e.g. https://staging.langflow.example.com
+#     LANGFLOW_URL        URL of the target Hanzo Flow instance.
+#                         e.g. https://staging.flow.example.com
 #     LANGFLOW_API_KEY    API key for that instance.
 #
 #   Approach B: named environment from a TOML config
 #     LANGFLOW_ENV                 Name of the environment block in the TOML.
 #                                  e.g. staging
 #     LANGFLOW_ENVIRONMENTS_FILE   Path to the environments TOML.
-#                                  Default: langflow-environments.toml
+#                                  Default: flow-environments.toml
 #     <api_key_env var>            The env var named in api_key_env inside the
 #                                  TOML block, e.g. LANGFLOW_STAGING_API_KEY.
 #
 #   The TOML format (see also ci-push.sh):
 #
 #     [environments.staging]
-#     url        = "https://staging.langflow.example.com"
+#     url        = "https://staging.flow.example.com"
 #     api_key_env = "LANGFLOW_STAGING_API_KEY"
 #
 # ENVIRONMENT VARIABLES — behaviour
 #   TESTS_DIR        Directory containing test files.  Default: tests/
 #   PYTEST_MARKERS   Markers to pass to -m.  Default: integration
 #   PYTEST_ARGS      Extra arguments forwarded verbatim to pytest.
-#   SDK_VERSION      langflow-sdk PEP 508 version specifier suffix appended
+#   SDK_VERSION      flow-sdk PEP 508 version specifier suffix appended
 #                    directly to the package name, e.g. ">=0.4,<1" or "==1.2.3".
 #                    Default: installs latest.
 #
@@ -62,7 +62,7 @@ PYTEST_MARKERS="${PYTEST_MARKERS:-integration}"
 PYTEST_ARGS="${PYTEST_ARGS:-}"
 SDK_VERSION="${SDK_VERSION:-}"
 LANGFLOW_ENV="${LANGFLOW_ENV:-}"
-LANGFLOW_ENVIRONMENTS_FILE="${LANGFLOW_ENVIRONMENTS_FILE:-langflow-environments.toml}"
+LANGFLOW_ENVIRONMENTS_FILE="${LANGFLOW_ENVIRONMENTS_FILE:-flow-environments.toml}"
 
 # ── Install dependencies ───────────────────────────────────────────────────── #
 
@@ -72,9 +72,9 @@ if [[ -n "${SDK_VERSION}" && "${SDK_VERSION}" =~ ^[0-9] ]]; then
   SDK_VERSION="==${SDK_VERSION}"
 fi
 
-echo "==> Installing langflow-sdk[testing] and pytest ..."
+echo "==> Installing flow-sdk[testing] and pytest ..."
 pip install --quiet \
-  "langflow-sdk[testing]${SDK_VERSION}" \
+  "flow-sdk[testing]${SDK_VERSION}" \
   pytest
 
 # ── Build environments file if using Approach B ───────────────────────────── #
@@ -104,11 +104,11 @@ if [[ -n "${PYTEST_MARKERS}" ]]; then
 fi
 
 if [[ -n "${LANGFLOW_ENV}" ]]; then
-  PYTEST_CMD+=(--langflow-env "${LANGFLOW_ENV}")
+  PYTEST_CMD+=(--flow-env "${LANGFLOW_ENV}")
   export LANGFLOW_ENVIRONMENTS_FILE
 elif [[ -n "${LANGFLOW_URL:-}" ]]; then
-  PYTEST_CMD+=(--langflow-url "${LANGFLOW_URL}")
-  [[ -n "${LANGFLOW_API_KEY:-}" ]] && PYTEST_CMD+=(--langflow-api-key "${LANGFLOW_API_KEY}")
+  PYTEST_CMD+=(--flow-url "${LANGFLOW_URL}")
+  [[ -n "${LANGFLOW_API_KEY:-}" ]] && PYTEST_CMD+=(--flow-api-key "${LANGFLOW_API_KEY}")
 fi
 
 # Append any extra user-supplied args

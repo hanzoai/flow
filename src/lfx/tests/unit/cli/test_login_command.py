@@ -1,6 +1,6 @@
 """Unit tests for lfx login -- login_command and helpers.
 
-All tests run entirely in-process; no real Langflow instance or SDK required.
+All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the login logic
 (key masking, connection probing, success/failure output) is under test.
 """
@@ -462,7 +462,7 @@ class TestLoginCommandSdkNotInstalled:
         with (
             patch(
                 "lfx.cli.login.load_sdk",
-                side_effect=typer.BadParameter("langflow-sdk is required for lfx login"),
+                side_effect=typer.BadParameter("flow-sdk is required for lfx login"),
             ),
             pytest.raises(typer.BadParameter),
         ):
@@ -479,7 +479,7 @@ class TestLoginCommandSdkNotInstalled:
         with (
             patch(
                 "lfx.cli.login.load_sdk",
-                side_effect=typer.BadParameter("langflow-sdk is required"),
+                side_effect=typer.BadParameter("flow-sdk is required"),
             ),
             pytest.raises(typer.BadParameter) as exc_info,
         ):
@@ -489,7 +489,7 @@ class TestLoginCommandSdkNotInstalled:
                 target=None,
                 api_key=None,
             )
-        assert "langflow-sdk" in str(exc_info.value)
+        assert "flow-sdk" in str(exc_info.value)
 
 
 # ---------------------------------------------------------------------------

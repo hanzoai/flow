@@ -5,7 +5,7 @@ import ThinkingMessage from "../thinking-message";
 // Mock SVG imports
 jest.mock("@/assets/LangflowLogo.svg?react", () => ({
   __esModule: true,
-  default: () => <div data-testid="langflow-logo" />,
+  default: () => <div data-testid="flow-logo" />,
 }));
 
 // Mock ES modules that Jest can't handle

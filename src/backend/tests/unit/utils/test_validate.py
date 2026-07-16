@@ -153,7 +153,7 @@ class TestCreateLangflowExecutionContext:
     """Test cases for _create_langflow_execution_context function."""
 
     def test_creates_context_with_langflow_imports(self):
-        """Test that context includes langflow imports."""
+        """Test that context includes flow imports."""
         # The function imports modules inside try/except blocks
         # We don't need to patch anything, just test it works
         context = _create_langflow_execution_context()
@@ -190,7 +190,7 @@ class TestCreateLangflowExecutionContext:
         assert "Union" in context
 
     def test_does_not_include_pandas(self):
-        """Test that pandas is not included in the langflow execution context."""
+        """Test that pandas is not included in the flow execution context."""
         context = _create_langflow_execution_context()
         assert "pd" not in context
 
@@ -638,7 +638,7 @@ class TestGetDefaultImports:
             assert "Union" in imports
 
     def test_includes_langflow_imports(self):
-        """Test that langflow imports are included when found in code."""
+        """Test that flow imports are included when found in code."""
         # Use an actual type from CUSTOM_COMPONENT_SUPPORTED_TYPES
         code = "Chain is used here"
 

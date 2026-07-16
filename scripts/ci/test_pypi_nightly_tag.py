@@ -77,7 +77,7 @@ def _run(main=None, base=None, *, base_version="1.10.0", build_type="both"):
 
 
 def test_main_and_base_return_identical_version_given_offset_histories():
-    # Live-state analog: langflow-nightly latest dev54, langflow-base-nightly latest dev48.
+    # Live-state analog: flow-nightly latest dev54, flow-base-nightly latest dev48.
     main_hist = [f"1.10.0.dev{n}" for n in range(55)]
     base_hist = [f"1.10.0.dev{n}" for n in range(49)]
     main_tag = _run(main_hist, base_hist, build_type="main")
@@ -141,8 +141,8 @@ def test_server_error_raises():
 
 
 def test_higher_package_lookup_failure_aborts():
-    # P1 regression: langflow-nightly (dev54) lookup fails transiently while
-    # langflow-base-nightly reports dev48. Must NOT emit v1.10.0.dev49 -- must raise so the job
+    # P1 regression: flow-nightly (dev54) lookup fails transiently while
+    # flow-base-nightly reports dev48. Must NOT emit v1.10.0.dev49 -- must raise so the job
     # stops before deleting/recreating tags or republishing an already-existing version.
     with pytest.raises(requests.HTTPError):
         _run(503, [f"1.10.0.dev{n}" for n in range(49)])

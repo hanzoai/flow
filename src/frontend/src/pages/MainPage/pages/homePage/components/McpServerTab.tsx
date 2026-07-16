@@ -75,7 +75,7 @@ const McpServerTab = ({ folderName }: { folderName: string }) => {
             in our
             <a
               className="text-accent-pink-foreground"
-              href="https://docs.langflow.org/mcp-server"
+              href="https://docs.flow.org/mcp-server"
               target="_blank"
               rel="noreferrer"
             >

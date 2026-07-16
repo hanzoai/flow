@@ -3,8 +3,8 @@ name: Cross-Platform Installation Test
 on:
   workflow_dispatch:
     inputs:
-      langflow-version:
-        description: "Langflow version to test from PyPI (leave empty to test from source)"
+      flow-version:
+        description: "Hanzo Flow version to test from PyPI (leave empty to test from source)"
         required: false
         type: string
         default: ""
@@ -27,7 +27,7 @@ jobs:
   build-if-needed:
     name: Build Packages (if no artifacts provided)
     runs-on: ubuntu-latest
-    if: inputs.langflow-version == '' && contains(github.workflow_ref, 'cross-platform-test.yml')
+    if: inputs.flow-version == '' && contains(github.workflow_ref, 'cross-platform-test.yml')
     outputs:
       base-artifact-name: ${{ steps.set-names.outputs.base-artifact-name }}
       main-artifact-name: ${{ steps.set-names.outputs.main-artifact-name }}
@@ -175,7 +175,7 @@ jobs:
         id: install-method
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            if [ -n "${{ inputs.langflow-version }}" ]; then
+            if [ -n "${{ inputs.flow-version }}" ]; then
               echo "method=pypi" >> $GITHUB_OUTPUT
             else
               echo "method=wheel" >> $GITHUB_OUTPUT
@@ -209,7 +209,7 @@ jobs:
         shell: bash
 
       # Download artifacts for wheel installation
-      - name: Download langflow-sdk package artifact
+      - name: Download flow-sdk package artifact
         if: steps.install-method.outputs.method == 'wheel' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         uses: actions/download-artifact@v8
         with:
@@ -280,7 +280,7 @@ jobs:
             printf 'Installing %s wheel(s):\n' "$label"
             printf '%s\n' "$@"
             refresh_find_links
-            # Use `if-necessary-or-explicit` (not `allow`): nightly langflow* wheels
+            # Use `if-necessary-or-explicit` (not `allow`): nightly flow* wheels
             # are .dev pre-releases so we need to allow them explicitly, but `allow`
             # leaks to transitive deps and resolves pre-release pydantic alphas
             # (e.g. 2.14.0a1) which break langchain-core's module-level
@@ -305,9 +305,9 @@ jobs:
           MAIN_WHEELS=()
           while IFS= read -r wheel; do
             MAIN_WHEELS+=("$wheel")
-          done < <(find ./main-dist -name "langflow*.whl" ! -name "langflow_base*.whl" -type f | sort)
+          done < <(find ./main-dist -name "flow*.whl" ! -name "langflow_base*.whl" -type f | sort)
           if [ ${#MAIN_WHEELS[@]} -ne 1 ]; then
-            echo "Expected exactly one langflow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
+            echo "Expected exactly one flow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
             find ./main-dist -name "*.whl" -type f | sort
             exit 1
           fi
@@ -315,23 +315,23 @@ jobs:
         shell: bash
 
       # PyPI installation steps
-      - name: Install langflow from PyPI (Windows)
+      - name: Install flow from PyPI (Windows)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os == 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/Scripts/python.exe langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.flow-version }}" ]; then
+            uv pip install --python ./test-env/Scripts/python.exe flow==${{ inputs.flow-version }}
           else
-            uv pip install --python ./test-env/Scripts/python.exe langflow
+            uv pip install --python ./test-env/Scripts/python.exe flow
           fi
         shell: bash
 
-      - name: Install langflow from PyPI (Unix)
+      - name: Install flow from PyPI (Unix)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os != 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/bin/python langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.flow-version }}" ]; then
+            uv pip install --python ./test-env/bin/python flow==${{ inputs.flow-version }}
           else
-            uv pip install --python ./test-env/bin/python langflow
+            uv pip install --python ./test-env/bin/python flow
           fi
         shell: bash
 
@@ -352,13 +352,13 @@ jobs:
       - name: Test CLI help command
         if: matrix.os == 'windows'
         run: |
-          uv run --python ./test-env/Scripts/python.exe python -m langflow --help
+          uv run --python ./test-env/Scripts/python.exe python -m flow --help
         shell: cmd
 
       - name: Test CLI help command (Unix)
         if: matrix.os != 'windows'
         run: |
-          uv run --python ./test-env/bin/python python -m langflow --help
+          uv run --python ./test-env/bin/python python -m flow --help
         shell: bash
 
       - name: Test server startup (Windows)
@@ -366,7 +366,7 @@ jobs:
         timeout-minutes: 5
         run: |
           # Start server in background
-          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "langflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
+          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "flow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
           do {
@@ -392,7 +392,7 @@ jobs:
           OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
         run: |
           # Start server in background
-          ./test-env/bin/python -m langflow run --host localhost --port 7860 --backend-only &
+          ./test-env/bin/python -m flow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
@@ -414,10 +414,10 @@ jobs:
         run: |
           test-env\Scripts\python.exe -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import flow
+              print('✅ flow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ flow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: cmd
@@ -427,10 +427,10 @@ jobs:
         run: |
           ./test-env/bin/python -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import flow
+              print('✅ flow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ flow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: bash
@@ -468,7 +468,7 @@ jobs:
         id: install-method
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            if [ -n "${{ inputs.langflow-version }}" ]; then
+            if [ -n "${{ inputs.flow-version }}" ]; then
               echo "method=pypi" >> $GITHUB_OUTPUT
             else
               echo "method=wheel" >> $GITHUB_OUTPUT
@@ -502,7 +502,7 @@ jobs:
         shell: bash
 
       # Download artifacts for wheel installation
-      - name: Download langflow-sdk package artifact
+      - name: Download flow-sdk package artifact
         if: steps.install-method.outputs.method == 'wheel' && (inputs.sdk-artifact-name != '' || needs.build-if-needed.outputs.sdk-artifact-name != '')
         uses: actions/download-artifact@v8
         with:
@@ -594,9 +594,9 @@ jobs:
           MAIN_WHEELS=()
           while IFS= read -r wheel; do
             MAIN_WHEELS+=("$wheel")
-          done < <(find ./main-dist -name "langflow*.whl" ! -name "langflow_base*.whl" -type f | sort)
+          done < <(find ./main-dist -name "flow*.whl" ! -name "langflow_base*.whl" -type f | sort)
           if [ ${#MAIN_WHEELS[@]} -ne 1 ]; then
-            echo "Expected exactly one langflow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
+            echo "Expected exactly one flow wheel in ./main-dist, found ${#MAIN_WHEELS[@]}"
             find ./main-dist -name "*.whl" -type f | sort
             exit 1
           fi
@@ -617,7 +617,7 @@ jobs:
                 SDK_WHEEL=$(find ./sdk-dist -name "*.whl" -type f | head -1)
               fi
               if [ -n "$SDK_WHEEL" ]; then
-                echo "Force reinstalling langflow-sdk with LFX: $SDK_WHEEL"
+                echo "Force reinstalling flow-sdk with LFX: $SDK_WHEEL"
                 INSTALL_WHEELS=("$SDK_WHEEL" "$LFX_WHEEL")
               fi
               NO_DEPS="--no-deps"
@@ -631,7 +631,7 @@ jobs:
           # Reinstall base
           BASE_WHEEL=$(find ./base-dist -name "*.whl" -type f | head -1)
           if [ -n "$BASE_WHEEL" ]; then
-            echo "Force reinstalling langflow-base: $BASE_WHEEL"
+            echo "Force reinstalling flow-base: $BASE_WHEEL"
             NO_DEPS="--no-deps"
             if [ "${{ inputs.pre_release }}" = "true" ]; then
               NO_DEPS=""
@@ -654,7 +654,7 @@ jobs:
                 SDK_WHEEL=$(find ./sdk-dist -name "*.whl" -type f | head -1)
               fi
               if [ -n "$SDK_WHEEL" ]; then
-                echo "Force reinstalling langflow-sdk with LFX: $SDK_WHEEL"
+                echo "Force reinstalling flow-sdk with LFX: $SDK_WHEEL"
                 INSTALL_WHEELS=("$SDK_WHEEL" "$LFX_WHEEL")
               fi
               NO_DEPS="--no-deps"
@@ -668,7 +668,7 @@ jobs:
           # Reinstall base
           BASE_WHEEL=$(find ./base-dist -name "*.whl" -type f | head -1)
           if [ -n "$BASE_WHEEL" ]; then
-            echo "Force reinstalling langflow-base: $BASE_WHEEL"
+            echo "Force reinstalling flow-base: $BASE_WHEEL"
             NO_DEPS="--no-deps"
             if [ "${{ inputs.pre_release }}" = "true" ]; then
               NO_DEPS=""
@@ -678,23 +678,23 @@ jobs:
         shell: bash
 
       # PyPI installation steps
-      - name: Install langflow from PyPI (Windows)
+      - name: Install flow from PyPI (Windows)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os == 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/Scripts/python.exe langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.flow-version }}" ]; then
+            uv pip install --python ./test-env/Scripts/python.exe flow==${{ inputs.flow-version }}
           else
-            uv pip install --python ./test-env/Scripts/python.exe langflow
+            uv pip install --python ./test-env/Scripts/python.exe flow
           fi
         shell: bash
 
-      - name: Install langflow from PyPI (Unix)
+      - name: Install flow from PyPI (Unix)
         if: steps.install-method.outputs.method == 'pypi' && matrix.os != 'windows'
         run: |
-          if [ -n "${{ inputs.langflow-version }}" ]; then
-            uv pip install --python ./test-env/bin/python langflow==${{ inputs.langflow-version }}
+          if [ -n "${{ inputs.flow-version }}" ]; then
+            uv pip install --python ./test-env/bin/python flow==${{ inputs.flow-version }}
           else
-            uv pip install --python ./test-env/bin/python langflow
+            uv pip install --python ./test-env/bin/python flow
           fi
         shell: bash
 
@@ -715,13 +715,13 @@ jobs:
       - name: Test CLI help command (Windows)
         if: matrix.os == 'windows'
         run: |
-          uv run --python ./test-env/Scripts/python.exe python -m langflow --help
+          uv run --python ./test-env/Scripts/python.exe python -m flow --help
         shell: cmd
 
       - name: Test CLI help command (Unix)
         if: matrix.os != 'windows'
         run: |
-          uv run --python ./test-env/bin/python python -m langflow --help
+          uv run --python ./test-env/bin/python python -m flow --help
         shell: bash
 
       - name: Test server startup (Windows)
@@ -729,7 +729,7 @@ jobs:
         timeout-minutes: 5
         run: |
           # Start server in background
-          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "langflow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
+          $serverProcess = Start-Process -FilePath ".\test-env\Scripts\python.exe" -ArgumentList "-m", "flow", "run", "--host", "localhost", "--port", "7860", "--backend-only" -PassThru -WindowStyle Hidden
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
           do {
@@ -755,7 +755,7 @@ jobs:
           OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
         run: |
           # Start server in background
-          ./test-env/bin/python -m langflow run --host localhost --port 7860 --backend-only &
+          ./test-env/bin/python -m flow run --host localhost --port 7860 --backend-only &
           SERVER_PID=$!
 
           # Wait for server to be ready (GitHub Actions will timeout after 5 minutes)
@@ -777,10 +777,10 @@ jobs:
         run: |
           test-env\Scripts\python.exe -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import flow
+              print('✅ flow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ flow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: cmd
@@ -790,10 +790,10 @@ jobs:
         run: |
           ./test-env/bin/python -c "
           try:
-              import langflow
-              print('✅ langflow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
+              import flow
+              print('✅ flow import successful on ${{ matrix.os }}-${{ matrix.arch }}')
           except Exception as e:
-              print(f'❌ langflow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
+              print(f'❌ flow import failed on ${{ matrix.os }}-${{ matrix.arch }}: {e}')
               exit(1)
           "
         shell: bash
@@ -816,7 +816,7 @@ jobs:
           if [ "$stable_result" = "success" ]; then
             if [ "$experimental_result" = "success" ]; then
               if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-                if [ -n "${{ inputs.langflow-version }}" ]; then
+                if [ -n "${{ inputs.flow-version }}" ]; then
                   echo "✅ All PyPI installation tests passed (including Python 3.13)"
                 else
                   echo "✅ All source build and installation tests passed (including Python 3.13)"
@@ -826,7 +826,7 @@ jobs:
               fi
             else
               if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-                if [ -n "${{ inputs.langflow-version }}" ]; then
+                if [ -n "${{ inputs.flow-version }}" ]; then
                   echo "✅ PyPI installation tests passed (Python 3.13 experimental failures are acceptable)"
                 else
                   echo "✅ Source build and installation tests passed (Python 3.13 experimental failures are acceptable)"

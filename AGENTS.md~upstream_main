@@ -4,25 +4,25 @@ Guidance for AI coding agents working in this repository.
 
 > **Before you write code, read [docs/agents/PHILOSOPHY.md](./docs/agents/PHILOSOPHY.md).** Most off-narrative work comes from skipping it.
 
-## What Langflow is
+## What Hanzo Flow is
 
-Langflow is a **visual flow builder first**. Users drag components onto a canvas, wire them together, and either run the resulting flow in the Playground, deploy it as an API, or expose it as an MCP server. Saved flows are persistent JSON artifacts running in production — backwards compatibility for components is non-negotiable.
+Hanzo Flow is a **visual flow builder first**. Users drag components onto a canvas, wire them together, and either run the resulting flow in the Playground, deploy it as an API, or expose it as an MCP server. Saved flows are persistent JSON artifacts running in production — backwards compatibility for components is non-negotiable.
 
 The repo is three Python packages and one frontend:
 
-- **`lfx`** (`src/lfx/`): the executor core. Component base classes, the graph engine, and built-in components live here. Should not depend on `langflow` or `langflow-base` — see [docs/agents/ARCHITECTURE.md](./docs/agents/ARCHITECTURE.md) for the ~14 known violations to fix-not-extend.
-- **`langflow-base`** (`src/backend/base/langflow/`): the platform. FastAPI routes, auth, persistence, alembic, services. May import `lfx`.
-- **`langflow`**: the integration distribution that ships everything together.
+- **`lfx`** (`src/lfx/`): the executor core. Component base classes, the graph engine, and built-in components live here. Should not depend on `flow` or `flow-base` — see [docs/agents/ARCHITECTURE.md](./docs/agents/ARCHITECTURE.md) for the ~14 known violations to fix-not-extend.
+- **`flow-base`** (`src/backend/base/flow/`): the platform. FastAPI routes, auth, persistence, alembic, services. May import `lfx`.
+- **`flow`**: the integration distribution that ships everything together.
 - **`frontend`** (`src/frontend/`): React 19 + TypeScript + Vite + Zustand + `@xyflow/react`. Talks to the backend over HTTP/WebSocket only.
 
-Dependencies flow one way: `frontend → langflow → langflow-base → lfx`. See [docs/agents/ARCHITECTURE.md](./docs/agents/ARCHITECTURE.md).
+Dependencies flow one way: `frontend → flow → flow-base → lfx`. See [docs/agents/ARCHITECTURE.md](./docs/agents/ARCHITECTURE.md).
 
 ## Non-negotiable tenets
 
 These are extracted from [PHILOSOPHY.md](./docs/agents/PHILOSOPHY.md). The full file has the rest; these are the ones every change must respect.
 
 1. **Flows are user artifacts.** Component class names, `name` attributes, input/output names, and input types are frozen once shipped. Mark old components `legacy=True` instead of editing.
-2. **Every backend feature must land on the canvas.** If it can't be a component or a property of one, it's an SDK feature and belongs in `lfx`, not `langflow-base`.
+2. **Every backend feature must land on the canvas.** If it can't be a component or a property of one, it's an SDK feature and belongs in `lfx`, not `flow-base`.
 3. **Components are the unit of work.** Don't add a route, store, or service unless a component or UI page consumes it.
 4. **Visible data flow beats clever magic.** Pass data through inputs and outputs. No hidden globals or side-channel state.
 5. **Composition over capability.** One job per component. Split before you add a tenth input.
@@ -55,7 +55,7 @@ Read the file that matches your task before you write code.
 
 ```bash
 make init              # Install all dependencies + pre-commit hooks
-make run_cli           # Build and run Langflow (http://localhost:7860)
+make run_cli           # Build and run Hanzo Flow (http://localhost:7860)
 make run_clic          # Clean build and run (use when frontend issues occur)
 ```
 
@@ -96,9 +96,9 @@ make tests_frontend                        # Playwright e2e tests
 # lfx tests specifically — run uv sync inside src/lfx (not src/lfx/src/lfx)
 cd src/lfx && uv sync && uv run pytest
 
-# Sub-package tests (langflow-base, lfx) — sync that package's dev group first,
+# Sub-package tests (flow-base, lfx) — sync that package's dev group first,
 # otherwise dev-only deps like fakeredis stay uninstalled.
-uv sync --group dev --package langflow-base
+uv sync --group dev --package flow-base
 ```
 
 See [docs/agents/TESTING.md](./docs/agents/TESTING.md) for fixtures, base classes, and the graph testing pattern.

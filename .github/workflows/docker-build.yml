@@ -139,7 +139,7 @@ jobs:
         if: ${{ inputs.base_version == '' && (inputs.release_type == 'base' || inputs.release_type == 'nightly-base') }}
         id: get-version-base
         run: |
-          version=$(uv tree | grep 'langflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
+          version=$(uv tree | grep 'flow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
           if [ -z "$version" ]; then
             echo "Failed to extract version from uv tree output"
             exit 1
@@ -150,7 +150,7 @@ jobs:
         if: ${{ inputs.main_version == '' && (inputs.release_type == 'main' || inputs.release_type == 'main-ep' || inputs.release_type == 'nightly-main' || inputs.release_type == 'main-all' || inputs.release_type == 'nightly-main-all') }}
         id: get-version-main
         run: |
-          version=$(uv tree | grep -E '^langflow(-nightly)?[[:space:]]' | awk '{print $2}' | sed 's/^v//')
+          version=$(uv tree | grep -E '^flow(-nightly)?[[:space:]]' | awk '{print $2}' | sed 's/^v//')
           echo version=$version
           echo version=$version >> $GITHUB_OUTPUT
   setup:
@@ -201,7 +201,7 @@ jobs:
             fi
           fi
   build:
-    runs-on: [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+    runs-on: [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     needs: [get-version, setup]
     steps:
       - name: Check out the code at a specific ref
@@ -288,7 +288,7 @@ jobs:
 
   build_components:
     if: ${{ inputs.release_type == 'main' }}
-    runs-on: [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+    runs-on: [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     permissions:
       packages: write
     needs: [build, get-version]
@@ -398,4 +398,4 @@ jobs:
 
       - name: Restart HuggingFace Spaces Build
         run: |
-          uv run ./scripts/factory_restart_space.py --space "Langflow/Langflow" --token ${{ secrets.HUGGINGFACE_API_TOKEN }}
+          uv run ./scripts/factory_restart_space.py --space "Hanzo Flow/Hanzo Flow" --token ${{ secrets.HUGGINGFACE_API_TOKEN }}

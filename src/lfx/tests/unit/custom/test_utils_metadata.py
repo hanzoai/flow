@@ -451,11 +451,11 @@ class TestComponent(CustomComponent):
 
         # Verify dependency analysis results
         dep_info = mock_frontend.metadata["dependencies"]
-        assert dep_info["total_dependencies"] == 1  # Only langflow (os is stdlib, filtered out)
+        assert dep_info["total_dependencies"] == 1  # Only flow (os is stdlib, filtered out)
 
         # Check for dependencies
         package_names = [pkg["name"] for pkg in dep_info["dependencies"]]
-        assert "langflow" in package_names  # langflow should be detected as external
+        assert "flow" in package_names  # flow should be detected as external
         assert "os" not in package_names  # os is stdlib, should be filtered out
 
     def test_build_component_metadata_with_optional_dependencies(self):
@@ -546,7 +546,7 @@ class LMStudioModelComponent(LCModelComponent):
         # External packages should be found
         assert "httpx" in package_names  # external
         assert "langchain_openai" in package_names  # external
-        assert "langflow" in package_names  # project dependency
+        assert "flow" in package_names  # project dependency
 
         # Stdlib imports should be filtered out
         assert "typing" not in package_names

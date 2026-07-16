@@ -1,4 +1,4 @@
-# langflow.yml  --  GitLab CI template for the Flow DevOps Toolkit
+# flow.yml  --  GitLab CI template for the Flow DevOps Toolkit
 #
 # PURPOSE
 #   Drop-in GitLab CI fragment providing three stages:
@@ -10,7 +10,7 @@
 #   Option A: include the whole file in your .gitlab-ci.yml:
 #
 #       include:
-#         - local: .gitlab/ci/langflow.yml
+#         - local: .gitlab/ci/flow.yml
 #
 #   Option B: copy the individual job definitions you need directly
 #             into your existing .gitlab-ci.yml.
@@ -20,9 +20,9 @@
 #
 #   Variable name               Type     Protected  Masked  Example value
 #   ──────────────────────────  ───────  ─────────  ──────  ─────────────────────────────
-#   LANGFLOW_STAGING_URL        Variable     ✓         ✗    https://staging.langflow.example.com
+#   LANGFLOW_STAGING_URL        Variable     ✓         ✗    https://staging.flow.example.com
 #   LANGFLOW_STAGING_API_KEY    Variable     ✓         ✓    <staging api key>
-#   LANGFLOW_PROD_URL           Variable     ✓         ✗    https://langflow.example.com
+#   LANGFLOW_PROD_URL           Variable     ✓         ✗    https://flow.example.com
 #   LANGFLOW_PROD_API_KEY       Variable     ✓         ✓    <production api key>
 #   LANGFLOW_PROJECT_NAME       Variable     ✗         ✗    Production Flows
 #
@@ -39,25 +39,25 @@ stages:
 
 # ── Shared config ─────────────────────────────────────────────────────────── #
 
-.langflow-base:
+.flow-base:
   image: python:3.12-slim
   before_script:
-    - pip install --quiet lfx langflow-sdk "langflow-sdk[testing]" pytest
+    - pip install --quiet lfx flow-sdk "flow-sdk[testing]" pytest
 
 .write-staging-env: &write-staging-env
   - >-
     printf '[environments.staging]\nurl = "%s"\napi_key_env = "LANGFLOW_STAGING_API_KEY"\n'
-    "$LANGFLOW_STAGING_URL" > langflow-environments.toml
+    "$LANGFLOW_STAGING_URL" > flow-environments.toml
 
 .write-prod-env: &write-prod-env
   - >-
     printf '[environments.production]\nurl = "%s"\napi_key_env = "LANGFLOW_PROD_API_KEY"\n'
-    "$LANGFLOW_PROD_URL" > langflow-environments.toml
+    "$LANGFLOW_PROD_URL" > flow-environments.toml
 
 # ── validate ──────────────────────────────────────────────────────────────── #
 
-langflow:validate:
-  extends: .langflow-base
+flow:validate:
+  extends: .flow-base
   stage: validate
   rules:
     # Run on every MR that touches a flow file
@@ -75,8 +75,8 @@ langflow:validate:
 
 # ── test ──────────────────────────────────────────────────────────────────── #
 
-langflow:test:
-  extends: .langflow-base
+flow:test:
+  extends: .flow-base
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -89,20 +89,20 @@ langflow:test:
     - *write-staging-env
     - >-
       pytest tests/
-      --langflow-env staging
+      --flow-env staging
       -m integration
       -v
       --tb=short
   variables:
-    LANGFLOW_ENVIRONMENTS_FILE: langflow-environments.toml
+    LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
   # Tests auto-skip when LANGFLOW_STAGING_URL is absent, so this job never
   # hard-fails on feature branches that lack staging access.
   allow_failure: false
 
 # ── deploy ────────────────────────────────────────────────────────────────── #
 
-langflow:deploy:
-  extends: .langflow-base
+flow:deploy:
+  extends: .flow-base
   stage: deploy
   rules:
     # Auto-deploy when flow files change on main
@@ -122,7 +122,7 @@ langflow:deploy:
       --env production
       --project "${LANGFLOW_PROJECT_NAME:-Main}"
   variables:
-    LANGFLOW_ENVIRONMENTS_FILE: langflow-environments.toml
+    LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
   environment:
     name: production
     url: $LANGFLOW_PROD_URL
@@ -132,8 +132,8 @@ langflow:deploy:
 
 # ── optional: dry-run ─────────────────────────────────────────────────────── #
 
-langflow:deploy:dry-run:
-  extends: langflow:deploy
+flow:deploy:dry-run:
+  extends: flow:deploy
   stage: deploy
   rules:
     - when: manual

@@ -42,7 +42,7 @@ We appreciate your efforts in helping us maintain a secure platform and look for
 
 ## Known Vulnerabilities
 
-> **Note**: Hanzo Flow is based on the upstream Langflow project. The CVEs and GitHub Advisories below link to the original upstream disclosures for reference.
+> **Note**: Hanzo Flow is based on the upstream Hanzo Flow project. The CVEs and GitHub Advisories below link to the original upstream disclosures for reference.
 
 ### Server-Side Request Forgery (SSRF) in API Request Component (Fixed in 1.7.1)
 
@@ -54,7 +54,7 @@ The API Request component allows arbitrary HTTP requests within a flow. In versi
 - Non-blind SSRF: Response bodies are returned to the client, enabling immediate data exfiltration
 
 **CVE**: [CVE-2025-68477](https://nvd.nist.gov/vuln/detail/CVE-2025-68477)
-**GitHub Advisory**: [GHSA-5993-7p27-66g5](https://github.com/langflow-ai/langflow/security/advisories/GHSA-5993-7p27-66g5)
+**GitHub Advisory**: [GHSA-5993-7p27-66g5](https://github.com/hanzoai/flow/security/advisories/GHSA-5993-7p27-66g5)
 **Fixed in**: >= 1.7.1
 
 ### External Control of File Name or Path (Fixed in 1.7.1)
@@ -68,7 +68,7 @@ When creating a flow through the `/api/v1/flows/` endpoint, if an arbitrary path
 - File content is limited to Flow JSON, but impact is severe if the target file is parsed by a JSON parser or subject to subsequent processing
 
 **CVE**: [CVE-2025-68478](https://nvd.nist.gov/vuln/detail/CVE-2025-68478)
-**GitHub Advisory**: [GHSA-f43r-cc68-gpx4](https://github.com/langflow-ai/langflow/security/advisories/GHSA-f43r-cc68-gpx4)
+**GitHub Advisory**: [GHSA-f43r-cc68-gpx4](https://github.com/hanzoai/flow/security/advisories/GHSA-f43r-cc68-gpx4)
 **Fixed in**: >= 1.7.1
 
 ### Environment Variable Loading Bug (Fixed in 1.6.4)
@@ -95,9 +95,9 @@ This means an attacker could send malicious code to the endpoint and have it exe
 
 ### Privilege Escalation via CLI Superuser Creation (Fixed in 1.5.1)
 
-A privilege escalation vulnerability exists in containers where an authenticated user with RCE access can invoke the internal CLI command `langflow superuser` to create a new administrative user. This results in full superuser access, even if the user initially registered through the UI as a regular (non-admin) account.
+A privilege escalation vulnerability exists in containers where an authenticated user with RCE access can invoke the internal CLI command `flow superuser` to create a new administrative user. This results in full superuser access, even if the user initially registered through the UI as a regular (non-admin) account.
 
-**CVE**: [CVE-2025-57760](https://github.com/langflow-ai/langflow/security/advisories/GHSA-4gv9-mp8m-592r)
+**CVE**: [CVE-2025-57760](https://github.com/hanzoai/flow/security/advisories/GHSA-4gv9-mp8m-592r)
 **Fixed in**: >= 1.5.1
 
 ### No API key required when running with `LANGFLOW_AUTO_LOGIN=true` and `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=true`
@@ -115,7 +115,7 @@ For more information, see the API keys and authentication documentation.
 
 ### Superuser Creation Security
 
-The `langflow superuser` CLI command can present a privilege escalation risk if not properly secured.
+The `flow superuser` CLI command can present a privilege escalation risk if not properly secured.
 
 #### Security Measures
 
@@ -129,7 +129,7 @@ The `langflow superuser` CLI command can present a privilege escalation risk if 
 
 3. **Secure AUTO_LOGIN Setting**
    - Default is `true` for <=1.5. This may change in a future release.
-   - When `true`, creates default superuser `langflow/langflow` - **ONLY USE IN DEVELOPMENT**
+   - When `true`, creates default superuser `flow/flow` - **ONLY USE IN DEVELOPMENT**
 
 #### Production Security Configuration
 
@@ -139,6 +139,6 @@ export LANGFLOW_AUTO_LOGIN=false
 export LANGFLOW_ENABLE_SUPERUSER_CLI=false
 export LANGFLOW_SUPERUSER="<your-superuser-username>"
 export LANGFLOW_SUPERUSER_PASSWORD="<your-superuser-password>"
-export LANGFLOW_DATABASE_URL="<your-production-database-url>" # e.g. "postgresql+psycopg://langflow:secure_pass@db.internal:5432/langflow"
+export LANGFLOW_DATABASE_URL="<your-production-database-url>" # e.g. "postgresql+psycopg://flow:secure_pass@db.internal:5432/flow"
 export LANGFLOW_SECRET_KEY="your-strong-random-secret-key"
 ```

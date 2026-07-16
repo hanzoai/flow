@@ -1,6 +1,6 @@
-"""Langflow API Locust Load Testing File.
+"""Hanzo Flow API Locust Load Testing File.
 
-Comprehensive load testing for Langflow API with multiple user behaviors and performance analysis.
+Comprehensive load testing for Hanzo Flow API with multiple user behaviors and performance analysis.
 Based on production-ready patterns with proper error handling, metrics tracking, and reporting.
 
 Usage:
@@ -17,7 +17,7 @@ Usage:
     locust -f locustfile.py --host http://localhost:7860 --worker --master-host=localhost
 
 Environment Variables:
-    - FLOW_HOST: Base URL for the Langflow server (default: http://localhost:7860)
+    - FLOW_HOST: Base URL for the Hanzo Flow server (default: http://localhost:7860)
     - FLOW_ID: Flow ID to test (required)
     - API_KEY: API key for authentication (required)
     - MIN_WAIT: Minimum wait time between requests in ms (default: 2000)
@@ -81,7 +81,7 @@ def setup_error_logging():
 
     error_logger.addHandler(error_handler)
 
-    # Try to capture Langflow logs
+    # Try to capture Hanzo Flow logs
     langflow_log_paths = ["flow.log", "logs/flow.log", "../../../flow.log", "../../../../flow.log"]
 
     for log_path in langflow_log_paths:
@@ -92,9 +92,9 @@ def setup_error_logging():
     print("📝 Error logging setup:")
     print(f"   • Detailed errors: {ERROR_LOG_FILE}")
     if FLOW_LOG_FILE:
-        print(f"   • Langflow logs: {FLOW_LOG_FILE}")
+        print(f"   • Hanzo Flow logs: {FLOW_LOG_FILE}")
     else:
-        print("   • Langflow logs: Not found (will monitor common locations)")
+        print("   • Hanzo Flow logs: Not found (will monitor common locations)")
 
 
 def log_detailed_error(
@@ -175,12 +175,12 @@ def save_error_summary():
 
 
 def capture_langflow_logs():
-    """Capture recent Langflow logs if available."""
+    """Capture recent Hanzo Flow logs if available."""
     if not FLOW_LOG_FILE or not Path(FLOW_LOG_FILE).exists():
         return None
 
     try:
-        # Read last 1000 lines of Langflow log
+        # Read last 1000 lines of Hanzo Flow log
         with open(FLOW_LOG_FILE) as f:
             lines = f.readlines()
             recent_lines = lines[-1000:] if len(lines) > 1000 else lines
@@ -189,17 +189,17 @@ def capture_langflow_logs():
         captured_log_file = f"langflow_server_logs_during_test_{timestamp}.log"
 
         with open(captured_log_file, "w") as f:
-            f.write("# Langflow server logs captured during load test\n")
+            f.write("# Hanzo Flow server logs captured during load test\n")
             f.write(f"# Original log file: {FLOW_LOG_FILE}\n")
             f.write(f"# Capture time: {datetime.now().isoformat()}\n")
             f.write(f"# Lines captured: {len(recent_lines)}\n\n")
             f.writelines(recent_lines)
 
-        print(f"📋 Langflow logs captured: {captured_log_file}")
+        print(f"📋 Hanzo Flow logs captured: {captured_log_file}")
         return captured_log_file
 
     except Exception as e:
-        print(f"⚠️  Could not capture Langflow logs: {e}")
+        print(f"⚠️  Could not capture Hanzo Flow logs: {e}")
         return None
 
 
@@ -345,7 +345,7 @@ def on_test_stop(environment, **_kwargs):
     # Save detailed error information
     save_error_summary()
 
-    # Capture Langflow logs
+    # Capture Hanzo Flow logs
     capture_langflow_logs()
 
     # Set exit code for CI/CD
@@ -357,7 +357,7 @@ def on_test_stop(environment, **_kwargs):
 
 
 class BaseLangflowUser(FastHttpUser):
-    """Base class for all Langflow API load testing user types."""
+    """Base class for all Hanzo Flow API load testing user types."""
 
     abstract = True
     REQUEST_TIMEOUT = float(os.getenv("REQUEST_TIMEOUT", "30.0"))
@@ -389,7 +389,7 @@ class BaseLangflowUser(FastHttpUser):
         """Make a request with proper error handling and timing."""
         message = TEST_MESSAGES.get(message_type, TEST_MESSAGES["simple"])
 
-        # Langflow API payload structure
+        # Hanzo Flow API payload structure
         payload = {
             "input_value": message,
             "output_type": "chat",
@@ -426,7 +426,7 @@ class BaseLangflowUser(FastHttpUser):
                 if response.status_code == 200:
                     try:
                         data = response.json()
-                        # Langflow API success check - look for outputs
+                        # Hanzo Flow API success check - look for outputs
                         if data.get("outputs"):
                             return response.success()
                         # Check for error messages in the response

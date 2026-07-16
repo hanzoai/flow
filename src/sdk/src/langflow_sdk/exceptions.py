@@ -1,14 +1,14 @@
-"""Exceptions raised by the Langflow SDK."""
+"""Exceptions raised by the Hanzo Flow SDK."""
 
 from __future__ import annotations
 
 
 class LangflowError(Exception):
-    """Base class for all Langflow SDK errors."""
+    """Base class for all Hanzo Flow SDK errors."""
 
 
 class LangflowHTTPError(LangflowError):
-    """An HTTP error was returned by the Langflow API."""
+    """An HTTP error was returned by the Hanzo Flow API."""
 
     def __init__(self, status_code: int, detail: str) -> None:
         self.status_code = status_code
@@ -29,13 +29,13 @@ class LangflowValidationError(LangflowHTTPError):
 
 
 class LangflowConnectionError(LangflowError):
-    """Could not connect to the Langflow instance."""
+    """Could not connect to the Hanzo Flow instance."""
 
 
 class LangflowTimeoutError(LangflowError):
     """A background job or polling operation exceeded its timeout.
 
-    Adapted from ``LangflowV2TimeoutError`` in langflow-ai/sdk PR #1
+    Adapted from ``LangflowV2TimeoutError`` in flow-ai/sdk PR #1
     (Janardan Singh Kavia, IBM Corp., Apache 2.0).
     """
 
@@ -46,7 +46,7 @@ class EnvironmentNotFoundError(LangflowError):
     def __init__(self, name: str) -> None:
         self.name = name
         super().__init__(
-            f"Environment {name!r} not found. Check your langflow-environments.toml (or LANGFLOW_ENV variable)."
+            f"Environment {name!r} not found. Check your flow-environments.toml (or LANGFLOW_ENV variable)."
         )
 
 

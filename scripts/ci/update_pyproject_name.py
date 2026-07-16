@@ -28,8 +28,8 @@ def update_pyproject_name(pyproject_path: str, new_project_name: str) -> None:
         # Replace flow-base[extra] with flow-base-nightly[extra] in optional dependencies
         content = re.sub(r'"flow-base\[([^\]]+)\]"', r'"flow-base-nightly[\1]"', content)
     elif new_project_name == "flow-nightly":
-        # Replace langflow[extra] with flow-nightly[extra] in optional dependencies
-        content = re.sub(r'"langflow\[([^\]]+)\]"', r'"flow-nightly[\1]"', content)
+        # Replace flow[extra] with flow-nightly[extra] in optional dependencies
+        content = re.sub(r'"flow\[([^\]]+)\]"', r'"flow-nightly[\1]"', content)
 
     filepath.write_text(content, encoding="utf-8")
 

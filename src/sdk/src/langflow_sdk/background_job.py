@@ -3,7 +3,7 @@
 Wraps an :class:`asyncio.Task` so callers can start a flow run and poll or
 await it without blocking the event loop.  Mirrors the ``BackgroundJob`` API
 from flow-ai/sdk PR #1 (Janardan Singh Kavia, IBM Corp., Apache 2.0)
-adapted for the Langflow V1 ``/api/v1/run/{id}`` endpoint.
+adapted for the Hanzo Flow V1 ``/api/v1/run/{id}`` endpoint.
 
 Typical usage::
 
@@ -38,7 +38,7 @@ class BackgroundJob:
     network request runs in an :class:`asyncio.Task` so the caller's event
     loop remains free.
 
-    Adapted from ``BackgroundJob`` in langflow-ai/sdk PR #1
+    Adapted from ``BackgroundJob`` in flow-ai/sdk PR #1
     (Janardan Singh Kavia, IBM Corp., Apache 2.0).
     """
 

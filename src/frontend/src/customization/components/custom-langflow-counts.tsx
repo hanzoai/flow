@@ -1,4 +1,4 @@
-import { LangflowCounts } from "@/components/core/appHeaderComponent/components/langflow-counts";
+import { LangflowCounts } from "@/components/core/appHeaderComponent/components/flow-counts";
 
 export function CustomLangflowCounts() {
   return <LangflowCounts />;

@@ -11,7 +11,7 @@ maintainers = [
 ]
 # Define your main dependencies here
 dependencies = [
-    "langflow-base[complete]>=0.9.6",
+    "flow-base[complete]>=0.9.6",
 ]
 
 
@@ -62,9 +62,9 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [tool.uv.sources]
-langflow-base = { workspace = true }
+flow-base = { workspace = true }
 lfx = { workspace = true }
-langflow-sdk = { workspace = true }
+flow-sdk = { workspace = true }
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
 
@@ -85,7 +85,7 @@ Documentation = "https://docs.hanzo.ai/flow"
 
 [project.optional-dependencies]
 docling = [
-    "langflow-base[docling]>=0.9.5",
+    "flow-base[docling]>=0.9.5",
     "tesserocr>=2.8.0",
     "rapidocr-onnxruntime>=1.4.4",
     "ocrmac>=1.0.0; sys_platform == 'darwin'",
@@ -97,11 +97,11 @@ docling = [
 ]
 
 docling-chunking = [
-    "langflow-base[docling-chunking]>=0.9.6",
+    "flow-base[docling-chunking]>=0.9.6",
 ]
 
 docling-image-description = [
-    "langflow-base[docling-image-description]>=0.9.6",
+    "flow-base[docling-image-description]>=0.9.6",
     "langchain-docling>=1.1.0",
 ]
 
@@ -142,7 +142,7 @@ override-dependencies = [
     # temporary force a newer python-pptx
     "python-pptx>=1.0.2",
     # hanzo-llm 1.81.15 wants openai>=2.8.0 but mem0ai, nv-ingest, and
-    # other langflow deps cap at <2.0.0. Force openai 1.x until ecosystem catches up.
+    # other flow deps cap at <2.0.0. Force openai 1.x until ecosystem catches up.
     "openai>=1.68.2,<2.0.0",
 ]
 
@@ -354,7 +354,7 @@ external = ["RUF027"]
     "FBT001", # Bool flags are the standard typer pattern
     "FBT003", # Boolean positional values in typer.Option() calls
 ]
-"src/backend/base/langflow/api/utils/*" = [
+"src/backend/base/flow/api/utils/*" = [
     "TCH",  # Imports are used at runtime (FastAPI deps, SQLAlchemy queries, model constructors)
 ]
 "src/sdk/src/langflow_sdk/_http.py" = [
@@ -404,7 +404,7 @@ external = ["RUF027"]
     "T201",    # Print statements (needed for CLI output)
     "S603",    # Subprocess calls (needed for running commands)
     "S607",    # Starting process with partial executable path
-    "S104",    # Binding to all interfaces (needed for Langflow server)
+    "S104",    # Binding to all interfaces (needed for Hanzo Flow server)
     "S105",    # Hardcoded passwords (test credentials)
     "FBT001",  # Boolean-typed positional arguments (common in CLI)
     "FBT002",  # Boolean default arguments (common in CLI tools)

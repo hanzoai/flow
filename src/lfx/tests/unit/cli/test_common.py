@@ -316,7 +316,7 @@ class TestGraphExecution:
     async def test_execute_graph_does_not_overwrite_hardcoded_session_id(self):
         """Hardcoded session_id on a Memory component (set in flow JSON) wins over the request value.
 
-        Mirrors Langflow's playground precedence in ``build_graph_from_data``.
+        Mirrors Hanzo Flow's playground precedence in ``build_graph_from_data``.
         """
 
         async def mock_async_start(inputs, **kwargs):  # noqa: ARG001
@@ -375,7 +375,7 @@ class TestGraphExecution:
         """Default settings (fallback_to_env_var=True) reach async_start.
 
         Lets components fall through to os.environ when a load_from_db variable
-        has no DB row — matching langflow's API path behavior.
+        has no DB row — matching flow's API path behavior.
         """
         captured: dict = {}
 

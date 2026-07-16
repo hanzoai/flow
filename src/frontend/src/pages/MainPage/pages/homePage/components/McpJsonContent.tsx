@@ -179,7 +179,7 @@ export const McpJsonContent = ({
     <div className="px-2 text-mmd text-muted-foreground">
       Add this config to your client of choice. Need help? See the{" "}
       <a
-        href="https://docs.langflow.org/mcp-server#connect-clients-to-use-the-servers-actions"
+        href="https://docs.flow.org/mcp-server#connect-clients-to-use-the-servers-actions"
         target="_blank"
         rel="noreferrer"
         className="text-accent-pink-foreground"

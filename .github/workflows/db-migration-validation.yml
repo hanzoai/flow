@@ -10,16 +10,16 @@ on:
   workflow_dispatch:
     inputs:
       nightly_tag:
-        description: "Nightly tag to test migration to (e.g., langflowai/langflow-nightly:latest)"
+        description: "Nightly tag to test migration to (e.g., langflowai/flow-nightly:latest)"
         required: false
         type: string
-        default: "langflowai/langflow-nightly:latest"
+        default: "langflowai/flow-nightly:latest"
   # Note: This workflow is called by nightly_build.yml after Docker images are built
 
 env:
   PYTHON_VERSION: "3.13"
   POSTGRES_DB: langflow_test
-  POSTGRES_USER: langflow
+  POSTGRES_USER: flow
   POSTGRES_PASSWORD: langflow_test_pass  # pragma: allowlist secret
 
 jobs:
@@ -59,16 +59,16 @@ jobs:
           mkdir -p migration-test
           cd migration-test
 
-      - name: Install latest stable Langflow with PostgreSQL
+      - name: Install latest stable Hanzo Flow with PostgreSQL
         working-directory: migration-test
         run: |
-          echo "Installing latest stable langflow[postgresql]..."
+          echo "Installing latest stable flow[postgresql]..."
           uv venv
           source .venv/bin/activate
-          uv pip install "langflow[postgresql]"
+          uv pip install "flow[postgresql]"
 
           # Verify installation
-          python -c 'from importlib.metadata import version; print("Installed Langflow version:", version("langflow"))'
+          python -c 'from importlib.metadata import version; print("Installed Hanzo Flow version:", version("flow"))'
 
       - name: Initialize database with stable version
         working-directory: migration-test
@@ -77,10 +77,10 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          echo "Starting Langflow to initialize database..."
+          echo "Starting Hanzo Flow to initialize database..."
           # shellcheck disable=SC2016
           timeout 120 bash -c '
-            python -m langflow run --host 127.0.0.1 --port 7860 --backend-only &
+            python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
             LANGFLOW_PID=$!
             until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do
               sleep 2
@@ -88,7 +88,7 @@ jobs:
             kill $LANGFLOW_PID
             wait $LANGFLOW_PID 2>/dev/null || true
           ' || {
-            echo "Failed to start Langflow stable version"
+            echo "Failed to start Hanzo Flow stable version"
             exit 1
           }
 
@@ -101,8 +101,8 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          # Start Langflow briefly to create test data
-          python -m langflow run --host 127.0.0.1 --port 7860 --backend-only &
+          # Start Hanzo Flow briefly to create test data
+          python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
           LANGFLOW_PID=$!
 
           # Wait for startup
@@ -147,7 +147,7 @@ jobs:
           fi
           echo "✅ Witness credential created successfully"
 
-          # Stop Langflow
+          # Stop Hanzo Flow
           kill $LANGFLOW_PID
           wait $LANGFLOW_PID 2>/dev/null || true
 
@@ -158,18 +158,18 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/langflow-nightly:latest' }}"
+          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/flow-nightly:latest' }}"
           echo "Upgrading to nightly version: $NIGHTLY_TAG"
 
           # Remove stable distributions before installing nightly.
-          # langflow and langflow-nightly share langflow-base which writes to the
-          # same site-packages/langflow/ namespace. If stable stays installed,
-          # python -m langflow still boots the stable version and no real
+          # flow and flow-nightly share flow-base which writes to the
+          # same site-packages/flow/ namespace. If stable stays installed,
+          # python -m flow still boots the stable version and no real
           # nightly migration is exercised (false-positive test).
-          echo "Removing stable langflow to avoid namespace collision with nightly..."
-          uv pip uninstall -y langflow langflow-base || true
+          echo "Removing stable flow to avoid namespace collision with nightly..."
+          uv pip uninstall -y flow flow-base || true
 
-          # Extract version from Docker tag (format: langflowai/langflow-nightly:v1.10.0.dev20260522)
+          # Extract version from Docker tag (format: langflowai/flow-nightly:v1.10.0.dev20260522)
           if [[ "$NIGHTLY_TAG" == *":"* ]]; then
             VERSION="${NIGHTLY_TAG##*:}"
             echo "Extracted version from tag: $VERSION"
@@ -180,19 +180,19 @@ jobs:
 
             if [[ "$VERSION" == "latest" ]]; then
               # Install latest nightly from PyPI
-              uv pip install --upgrade 'langflow-nightly[postgresql]'
+              uv pip install --upgrade 'flow-nightly[postgresql]'
             else
               # Install specific version
-              uv pip install --upgrade "langflow-nightly[postgresql]==$VERSION"
+              uv pip install --upgrade "flow-nightly[postgresql]==$VERSION"
             fi
           else
             # Direct version string (strip 'v' prefix if present)
             VERSION="${NIGHTLY_TAG#v}"
-            uv pip install --upgrade "langflow-nightly[postgresql]==$VERSION"
+            uv pip install --upgrade "flow-nightly[postgresql]==$VERSION"
           fi
 
           # Verify upgrade
-          python -c 'from importlib.metadata import version; print("Upgraded to Langflow Nightly version:", version("langflow-nightly"))'
+          python -c 'from importlib.metadata import version; print("Upgraded to Hanzo Flow Nightly version:", version("flow-nightly"))'
 
       - name: Run migration and verify startup
         working-directory: migration-test
@@ -201,26 +201,26 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          echo "Starting Langflow nightly to run migrations..."
+          echo "Starting Hanzo Flow nightly to run migrations..."
           # shellcheck disable=SC2016
           timeout 180 bash -c '
-            python -m langflow run --host 127.0.0.1 --port 7860 --backend-only > langflow_nightly.log 2>&1 &
+            python -m flow run --host 127.0.0.1 --port 7860 --backend-only > langflow_nightly.log 2>&1 &
             LANGFLOW_PID=$!
 
             until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do
               if ! kill -0 $LANGFLOW_PID 2>/dev/null; then
-                echo "Langflow process died during startup"
+                echo "Hanzo Flow process died during startup"
                 cat langflow_nightly.log
                 exit 1
               fi
               sleep 2
             done
 
-            echo "Langflow nightly started successfully"
+            echo "Hanzo Flow nightly started successfully"
             kill $LANGFLOW_PID
             wait $LANGFLOW_PID 2>/dev/null || true
           ' || {
-            echo "Failed to start Langflow nightly version"
+            echo "Failed to start Hanzo Flow nightly version"
             cat langflow_nightly.log || true
             exit 1
           }
@@ -232,8 +232,8 @@ jobs:
         run: |
           source .venv/bin/activate
 
-          # Start Langflow to query data
-          python -m langflow run --host 127.0.0.1 --port 7860 --backend-only &
+          # Start Hanzo Flow to query data
+          python -m flow run --host 127.0.0.1 --port 7860 --backend-only &
           LANGFLOW_PID=$!
 
           timeout 60 bash -c 'until curl -f http://127.0.0.1:7860/health_check 2>/dev/null; do sleep 2; done'
@@ -305,12 +305,12 @@ jobs:
         run: |  # pragma: allowlist secret
           cat > docker-compose.yml <<'EOF'
           services:
-            langflow:
-              image: langflowai/langflow:latest
+            flow:
+              image: langflowai/flow:latest
               ports:
                 - "7860:7860"
               environment:  # pragma: allowlist secret
-                - LANGFLOW_DATABASE_URL=postgresql://langflow:langflow@postgres:5432/langflow  # pragma: allowlist secret
+                - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow  # pragma: allowlist secret
               depends_on:
                 postgres:
                   condition: service_healthy
@@ -323,13 +323,13 @@ jobs:
             postgres:
               image: postgres:16
               environment:  # pragma: allowlist secret
-                - POSTGRES_USER=langflow
-                - POSTGRES_PASSWORD=langflow  # pragma: allowlist secret
-                - POSTGRES_DB=langflow
+                - POSTGRES_USER=flow
+                - POSTGRES_PASSWORD=flow  # pragma: allowlist secret
+                - POSTGRES_DB=flow
               volumes:
                 - langflow_postgres_data:/var/lib/postgresql/data
               healthcheck:
-                test: ["CMD-SHELL", "pg_isready -U langflow"]
+                test: ["CMD-SHELL", "pg_isready -U flow"]
                 interval: 10s
                 timeout: 5s
                 retries: 5
@@ -338,20 +338,20 @@ jobs:
             langflow_postgres_data:
           EOF
 
-      - name: Start stable Langflow with Docker Compose
+      - name: Start stable Hanzo Flow with Docker Compose
         working-directory: docker-migration-test
         run: |
-          echo "Starting Langflow stable version..."
+          echo "Starting Hanzo Flow stable version..."
           docker compose up -d
 
-          echo "Waiting for Langflow to be healthy..."
-          timeout 180 bash -c 'until docker compose exec -T langflow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
-            echo "Langflow stable failed to start"
+          echo "Waiting for Hanzo Flow to be healthy..."
+          timeout 180 bash -c 'until docker compose exec -T flow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
+            echo "Hanzo Flow stable failed to start"
             docker compose logs
             exit 1
           }
 
-          echo "Langflow stable is running"
+          echo "Hanzo Flow stable is running"
 
       - name: Create witness flow via API
         working-directory: docker-migration-test
@@ -394,43 +394,43 @@ jobs:
           fi
           echo "✅ Witness credential created successfully"
 
-      - name: Stop stable Langflow (keep PostgreSQL volume)
+      - name: Stop stable Hanzo Flow (keep PostgreSQL volume)
         working-directory: docker-migration-test
         run: |
-          echo "Stopping Langflow stable..."
-          docker compose stop langflow
-          docker compose rm -f langflow
+          echo "Stopping Hanzo Flow stable..."
+          docker compose stop flow
+          docker compose rm -f flow
 
       - name: Update to nightly image
         working-directory: docker-migration-test
         run: |
-          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/langflow-nightly:latest' }}"
+          NIGHTLY_TAG="${{ inputs.nightly_tag || 'langflowai/flow-nightly:latest' }}"
           # Strip 'v' prefix from version part — Docker images are published without it
-          # e.g. langflowai/langflow-nightly:v1.10.0.dev20260522 → langflowai/langflow-nightly:1.10.0.dev20260522
+          # e.g. langflowai/flow-nightly:v1.10.0.dev20260522 → langflowai/flow-nightly:1.10.0.dev20260522
           VERSION_PART="${NIGHTLY_TAG##*:}"
           IMAGE_NAME="${NIGHTLY_TAG%%:*}"
           DOCKER_TAG="${IMAGE_NAME}:${VERSION_PART#v}"
           echo "Updating to nightly: $DOCKER_TAG"
 
           # Update docker-compose.yml to use nightly image
-          sed -i "s|image: langflowai/langflow:latest|image: $DOCKER_TAG|" docker-compose.yml
+          sed -i "s|image: langflowai/flow:latest|image: $DOCKER_TAG|" docker-compose.yml
 
           cat docker-compose.yml
 
-      - name: Start nightly Langflow with same PostgreSQL volume
+      - name: Start nightly Hanzo Flow with same PostgreSQL volume
         working-directory: docker-migration-test
         run: |
-          echo "Starting Langflow nightly version..."
-          docker compose up -d langflow
+          echo "Starting Hanzo Flow nightly version..."
+          docker compose up -d flow
 
-          echo "Waiting for Langflow nightly to be healthy..."
-          timeout 180 bash -c 'until docker compose exec -T langflow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
-            echo "Langflow nightly failed to start"
-            docker compose logs langflow
+          echo "Waiting for Hanzo Flow nightly to be healthy..."
+          timeout 180 bash -c 'until docker compose exec -T flow curl -f http://localhost:7860/health_check 2>/dev/null; do sleep 5; done' || {
+            echo "Hanzo Flow nightly failed to start"
+            docker compose logs flow
             exit 1
           }
 
-          echo "Langflow nightly started successfully"
+          echo "Hanzo Flow nightly started successfully"
 
       - name: Verify witness data persisted
         working-directory: docker-migration-test

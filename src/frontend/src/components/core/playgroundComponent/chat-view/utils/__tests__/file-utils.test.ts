@@ -264,9 +264,9 @@ describe("file-utils", () => {
       });
 
       it("should_not_treat_langflow_substrings_as_special_path_segments", () => {
-        const windowsPath = "C:\\temp\\langflow-report\\flow123\\image.png";
+        const windowsPath = "C:\\temp\\flow-report\\flow123\\image.png";
         const expected =
-          "http://localhost:3000/api/v1/files/images/C%3A/temp/langflow-report/flow123/image.png";
+          "http://localhost:3000/api/v1/files/images/C%3A/temp/flow-report/flow123/image.png";
 
         expect(getFilePreviewUrl(windowsPath)).toBe(expected);
       });

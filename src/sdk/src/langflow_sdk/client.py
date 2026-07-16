@@ -1,4 +1,4 @@
-"""Sync HTTP client for the Langflow REST API.
+"""Sync HTTP client for the Hanzo Flow REST API.
 
 Preferred usage via the short alias::
 
@@ -56,7 +56,7 @@ if TYPE_CHECKING:
 
 
 class LangflowClient(_ClientCommon):
-    """Synchronous client for the Langflow REST API.
+    """Synchronous client for the Hanzo Flow REST API.
 
     Prefer the short alias :data:`Client` for new code::
 

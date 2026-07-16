@@ -15,7 +15,7 @@ import { useAssistantChat, useEnabledModels, useSessionHistory } from "./hooks";
 // Module-level draft cache — survives panel unmount/remount
 let draftMessageCache = "";
 
-const PANEL_SIZE_KEY = "langflow-assistant-panel-size";
+const PANEL_SIZE_KEY = "flow-assistant-panel-size";
 const DEFAULT_SIZE = { width: 620, height: 600 };
 const MIN_SIZE = { width: 456, height: 400 };
 const MAX_SIZE = { width: 900, height: 800 };

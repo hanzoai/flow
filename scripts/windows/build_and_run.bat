@@ -1,5 +1,5 @@
 @echo off
-echo Starting Langflow build and run process...
+echo Starting Hanzo Flow build and run process...
 
 REM Check if .env file exists and set env file flag
 set "USE_ENV_FILE="
@@ -11,7 +11,7 @@ if exist "%ENV_PATH%" (
     set "USE_ENV_FILE=1"
 ) else (
     echo .env file not found at: %ENV_PATH%
-    echo Langflow will use default configuration
+    echo Hanzo Flow will use default configuration
 )
 
 echo.
@@ -57,21 +57,21 @@ if not exist "src\frontend\build" (
     set BUILD_DIR=src\frontend\build
 )
 
-echo Copying from %BUILD_DIR% to src\backend\base\langflow\frontend\
+echo Copying from %BUILD_DIR% to src\backend\base\flow\frontend\
 REM Create target directory if it doesn't exist
-if not exist "src\backend\base\langflow\frontend" (
-    mkdir "src\backend\base\langflow\frontend"
+if not exist "src\backend\base\flow\frontend" (
+    mkdir "src\backend\base\flow\frontend"
 )
 
 REM Remove existing files in target directory (FORCES CLEAN REPLACEMENT)
 echo Removing existing files from target directory...
-if exist "src\backend\base\langflow\frontend\*" (
-    del /q /s "src\backend\base\langflow\frontend\*"
-    for /d %%d in ("src\backend\base\langflow\frontend\*") do rmdir /s /q "%%d"
+if exist "src\backend\base\flow\frontend\*" (
+    del /q /s "src\backend\base\flow\frontend\*"
+    for /d %%d in ("src\backend\base\flow\frontend\*") do rmdir /s /q "%%d"
 )
 
 REM Copy all files from build directory
-xcopy "%BUILD_DIR%\*" "src\backend\base\langflow\frontend\" /e /i /y
+xcopy "%BUILD_DIR%\*" "src\backend\base\flow\frontend\" /e /i /y
 if errorlevel 1 (
     echo Error: Failed to copy build files
     pause
@@ -81,7 +81,7 @@ if errorlevel 1 (
 echo Build files copied successfully!
 
 echo.
-echo Step 4: Running Langflow...
+echo Step 4: Running Hanzo Flow...
 echo.
 echo Attention: Wait until uvicorn is running before opening the browser
 echo.
@@ -89,16 +89,16 @@ REM Change to project root directory for uv
 cd "%PROJECT_ROOT%"
 if defined USE_ENV_FILE (
     echo Using env file: .env
-    uv run --env-file ".env" langflow run
+    uv run --env-file ".env" flow run
 ) else (
-    uv run langflow run
+    uv run flow run
 )
 if errorlevel 1 (
-    echo Error: Failed to run langflow
+    echo Error: Failed to run flow
     pause
     exit /b 1
 )
 
 echo.
-echo Langflow build and run process completed!
+echo Hanzo Flow build and run process completed!
 pause

@@ -75,26 +75,26 @@ class TestGetVersionInfo:
 
     @patch("flow.utils.version.metadata")
     def test_get_version_info_langflow_package(self, mock_metadata):
-        """Test getting version info for langflow package."""
+        """Test getting version info for flow package."""
         mock_metadata.version.return_value = "1.0.0"
 
         result = _get_version_info()
 
         assert result["version"] == "1.0.0"
         assert result["main_version"] == "1.0.0"
-        assert result["package"] == "Langflow"
+        assert result["package"] == "Hanzo Flow"
 
     @patch("flow.utils.version.metadata")
     def test_get_version_info_langflow_base_package(self, mock_metadata):
-        """Test getting version info for langflow-base package."""
+        """Test getting version info for flow-base package."""
         from importlib import metadata as real_metadata
 
         mock_metadata.PackageNotFoundError = real_metadata.PackageNotFoundError
 
         def mock_version(pkg_name):
-            if pkg_name == "langflow":
+            if pkg_name == "flow":
                 raise mock_metadata.PackageNotFoundError
-            if pkg_name == "langflow-base":
+            if pkg_name == "flow-base":
                 return "1.0.0.dev123"
             raise mock_metadata.PackageNotFoundError
 
@@ -104,7 +104,7 @@ class TestGetVersionInfo:
 
         assert result["version"] == "1.0.0.dev123"
         assert result["main_version"] == "1.0.0"
-        assert result["package"] == "Langflow Base"
+        assert result["package"] == "Hanzo Flow Base"
 
     @patch("flow.utils.version.metadata")
     def test_get_version_info_nightly_package(self, mock_metadata):
@@ -114,9 +114,9 @@ class TestGetVersionInfo:
         mock_metadata.PackageNotFoundError = real_metadata.PackageNotFoundError
 
         def mock_version(pkg_name):
-            if pkg_name in ["langflow", "langflow-base"]:
+            if pkg_name in ["flow", "flow-base"]:
                 raise mock_metadata.PackageNotFoundError
-            if pkg_name == "langflow-nightly":
+            if pkg_name == "flow-nightly":
                 return "1.0.0.dev456"
             raise mock_metadata.PackageNotFoundError
 
@@ -126,7 +126,7 @@ class TestGetVersionInfo:
 
         assert result["version"] == "1.0.0.dev456"
         assert result["main_version"] == "1.0.0"
-        assert result["package"] == "Langflow Nightly"
+        assert result["package"] == "Hanzo Flow Nightly"
 
     @patch("flow.utils.version.metadata")
     def test_get_version_info_base_nightly_package(self, mock_metadata):
@@ -136,9 +136,9 @@ class TestGetVersionInfo:
         mock_metadata.PackageNotFoundError = real_metadata.PackageNotFoundError
 
         def mock_version(pkg_name):
-            if pkg_name in ["langflow", "langflow-base", "langflow-nightly"]:
+            if pkg_name in ["flow", "flow-base", "flow-nightly"]:
                 raise mock_metadata.PackageNotFoundError
-            if pkg_name == "langflow-base-nightly":
+            if pkg_name == "flow-base-nightly":
                 return "1.0.0.a1"
             raise mock_metadata.PackageNotFoundError
 
@@ -148,7 +148,7 @@ class TestGetVersionInfo:
 
         assert result["version"] == "1.0.0.a1"
         assert result["main_version"] == "1.0.0"
-        assert result["package"] == "Langflow Base Nightly"
+        assert result["package"] == "Hanzo Flow Base Nightly"
 
     @patch("flow.utils.version.metadata")
     def test_get_version_info_no_package_found(self, mock_metadata):
@@ -338,7 +338,7 @@ class TestGetVersionInfoFunction:
     @patch("flow.utils.version.VERSION_INFO")
     def test_get_version_info_returns_version_info(self, mock_version_info):
         """Test that get_version_info returns VERSION_INFO."""
-        mock_version_info = {"version": "1.0.0", "main_version": "1.0.0", "package": "Langflow"}
+        mock_version_info = {"version": "1.0.0", "main_version": "1.0.0", "package": "Hanzo Flow"}
 
         with patch("flow.utils.version.VERSION_INFO", mock_version_info):
             result = get_version_info()

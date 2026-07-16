@@ -162,7 +162,7 @@ class TestGetModuleFallbacks:
         assert _get_module_fallbacks("langchain") == ["langchain"]
 
     def test_bare_langflow_no_fallback(self):
-        assert _get_module_fallbacks("langflow") == ["langflow"]
+        assert _get_module_fallbacks("flow") == ["flow"]
 
     def test_only_first_occurrence_replaced(self):
         result = _get_module_fallbacks("langchain.langchain.nested")

@@ -1,16 +1,16 @@
-# langflow-push.yml
+# flow-push.yml
 #
 # PURPOSE
-#   Deploy (upsert) all flows to a remote Langflow instance whenever
+#   Deploy (upsert) all flows to a remote Hanzo Flow instance whenever
 #   flow files are merged to main.  Uses stable flow IDs so re-running
 #   this workflow always converges to the same state.
 #
 # PREREQUISITES
-#   pip install lfx langflow-sdk
+#   pip install lfx flow-sdk
 #
 # GITHUB SETUP  (Settings → Environments → New environment → "production")
 #   Variables  (plain text):
-#     LANGFLOW_PROD_URL        e.g. https://langflow.example.com
+#     LANGFLOW_PROD_URL        e.g. https://flow.example.com
 #     LANGFLOW_PROJECT_NAME    e.g. "Production Flows"   (optional)
 #   Secrets    (masked):
 #     LANGFLOW_PROD_API_KEY    your production API key
@@ -19,11 +19,11 @@
 #   each production deploy (Settings → Environments → Required reviewers).
 #
 # USAGE
-#   Copy to .github/workflows/langflow-push.yml in your repo.
+#   Copy to .github/workflows/flow-push.yml in your repo.
 #   The workflow triggers automatically on merges to main that touch
 #   flows/ and can also be triggered manually from the Actions tab.
 
-name: Deploy Langflow Flows
+name: Deploy Hanzo Flow Flows
 
 on:
   push:
@@ -61,17 +61,17 @@ jobs:
       # Install lfx + the SDK it needs to push flows.                      #
       # ------------------------------------------------------------------ #
       - name: Install dependencies
-        run: pip install lfx langflow-sdk
+        run: pip install lfx flow-sdk
 
       # ------------------------------------------------------------------ #
       # Write environments config at CI time.                              #
       # The URL is a plain variable; the API key stays in secrets and is   #
-      # resolved by langflow-sdk via the api_key_env pointer at runtime.  #
+      # resolved by flow-sdk via the api_key_env pointer at runtime.  #
       # ------------------------------------------------------------------ #
       - name: Write environments config
         run: >-
           printf '[environments.production]\nurl = "%s"\napi_key_env = "LANGFLOW_PROD_API_KEY"\n'
-          "$LANGFLOW_PROD_URL" > langflow-environments.toml
+          "$LANGFLOW_PROD_URL" > flow-environments.toml
         env:
           LANGFLOW_PROD_URL: ${{ vars.LANGFLOW_PROD_URL }}
 
@@ -83,7 +83,7 @@ jobs:
         env:
           # Resolved from the GitHub variable; falls back to "Main" if unset
           LANGFLOW_PROJECT_NAME: ${{ vars.LANGFLOW_PROJECT_NAME || 'Main' }}
-          LANGFLOW_ENVIRONMENTS_FILE: langflow-environments.toml
+          LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
           LANGFLOW_PROD_API_KEY: ${{ secrets.LANGFLOW_PROD_API_KEY }}
         run: |
           lfx push \

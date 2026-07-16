@@ -18,13 +18,13 @@ def is_helper_module(module, module_name):
 
 
 class TestDynamicImport:
-    """Test dynamic imports of the langflow implementation."""
+    """Test dynamic imports of the flow implementation."""
 
     def test_langflow_available(self):
-        """Test whether the langflow implementation is available."""
-        # Langflow implementation should be available
+        """Test whether the flow implementation is available."""
+        # Hanzo Flow implementation should be available
         if not has_langflow_memory():
-            pytest.fail("Langflow implementation is not available")
+            pytest.fail("Hanzo Flow implementation is not available")
 
     def test_helpers_import_build_schema_from_inputs(self):
         """Test the lfx.helpers.build_schema_from_inputs import."""
@@ -33,7 +33,7 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.build_schema_from_inputs: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(build_schema_from_inputs, _FLOW_HELPER_MODULE_FLOW)
 
     def test_helpers_import_get_arg_names(self):
@@ -43,7 +43,7 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.get_arg_names: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(get_arg_names, _FLOW_HELPER_MODULE_FLOW)
 
     def test_helpers_import_get_flow_inputs(self):
@@ -53,7 +53,7 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.get_flow_inputs: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(get_flow_inputs, _FLOW_HELPER_MODULE_FLOW)
 
     def test_helpers_import_list_flows(self):
@@ -63,7 +63,7 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.list_flows: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(list_flows, _FLOW_HELPER_MODULE_FLOW)
 
     def test_helpers_import_load_flow(self):
@@ -73,7 +73,7 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.load_flow: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(load_flow, _FLOW_HELPER_MODULE_FLOW)
 
     def test_helpers_import_run_flow(self):
@@ -83,5 +83,5 @@ class TestDynamicImport:
         except (ImportError, ModuleNotFoundError) as e:
             pytest.fail(f"Failed to dynamically import lfx.helpers.run_flow: {e}")
 
-        # Helper module should be the langflow implementation
+        # Helper module should be the flow implementation
         assert is_helper_module(run_flow, _FLOW_HELPER_MODULE_FLOW)

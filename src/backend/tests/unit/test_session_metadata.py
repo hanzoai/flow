@@ -19,7 +19,7 @@ def sample_session_metadata():
         "region": "us-east-1",
         "retention_profile": "standard",
         "data_flags": {"pii": True, "sensitive": False},
-        "custom_fields": {"department": "engineering", "project": "langflow"},
+        "custom_fields": {"department": "engineering", "project": "flow"},
     }
 
 

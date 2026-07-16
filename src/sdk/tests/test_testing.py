@@ -1,6 +1,6 @@
 """Unit tests for langflow_sdk.testing and RunResponse helpers.
 
-Uses respx to mock HTTP so no live Langflow instance is needed.
+Uses respx to mock HTTP so no live Hanzo Flow instance is needed.
 """
 # pragma: allowlist secret -- all credentials in this file are fake test data
 
@@ -19,7 +19,7 @@ _BASE = "http://flow.test"
 # Shared fixtures
 # ---------------------------------------------------------------------------
 
-# Minimal RunResponse payload matching the standard Langflow chat shape
+# Minimal RunResponse payload matching the standard Hanzo Flow chat shape
 _CHAT_RUN_RESPONSE = {
     "session_id": "sess-abc",
     "outputs": [
@@ -298,14 +298,14 @@ def test_flow_runner_and_async_runner_are_importable():
 
 
 def test_pytest_addoption_registers_options(pytestconfig):
-    """The plugin registers all --langflow-* options (verified via public getoption API)."""
+    """The plugin registers all --flow-* options (verified via public getoption API)."""
     # getoption() returns None for unset options; raises ValueError if the
     # option was never registered -- so a clean return proves registration.
     for name in (
-        "--langflow-url",
-        "--langflow-env",
-        "--langflow-api-key",
-        "--langflow-environments-file",
+        "--flow-url",
+        "--flow-env",
+        "--flow-api-key",
+        "--flow-environments-file",
     ):
         assert pytestconfig.getoption(name) is None, f"Option {name!r} missing or has unexpected default"
 

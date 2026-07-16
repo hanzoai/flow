@@ -142,9 +142,9 @@ class EmptyComponent(Component):
 
   it("should parse a realistic full component", () => {
     const code = `
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema.message import Message
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema.message import Message
 
 class TextUppercaseComponent(Component):
     description = "Converts text to uppercase"

@@ -172,7 +172,7 @@ const config = {
           },
           {
             id: "workflow",
-            spec: "openapi/langflow-workflows-openapi.json",
+            spec: "openapi/flow-workflows-openapi.json",
             route: "/api/workflow",
           },
         ],
@@ -183,15 +183,15 @@ const config = {
     ],
   ],
   plugins: [
-    // Alias so MDX can import code from the Langflow repo with !!raw-loader!@langflow/src/...
+    // Alias so MDX can import code from the Hanzo Flow repo with !!raw-loader!@flow/src/...
     function langflowCodeImportPlugin(context) {
       return {
-        name: "langflow-code-import",
+        name: "flow-code-import",
         configureWebpack() {
           return {
             resolve: {
               alias: {
-                "@langflow": path.resolve(context.siteDir, ".."),
+                "@flow": path.resolve(context.siteDir, ".."),
               },
             },
           };
@@ -208,11 +208,11 @@ const config = {
           {
             to: "/",
             from: [
-              "/whats-new-a-new-chapter-langflow",
-              "/👋 Welcome-to-Langflow",
-              "/getting-started-welcome-to-langflow",
+              "/whats-new-a-new-chapter-flow",
+              "/👋 Welcome-to-Hanzo Flow",
+              "/getting-started-welcome-to-flow",
               "/guides-new-to-llms",
-              "/about-langflow",
+              "/about-flow",
             ],
           },
           {
@@ -358,13 +358,13 @@ const config = {
           {
             to: "/bundles-google",
             from: [
-              "/integrations-setup-google-oauth-langflow",
+              "/integrations-setup-google-oauth-flow",
               "/integrations-google-big-query",
             ],
           },
           {
             to: "/bundles-vertexai",
-            from: "/integrations-setup-google-cloud-vertex-ai-langflow",
+            from: "/integrations-setup-google-cloud-vertex-ai-flow",
           },
           {
             to: "/develop-application",
@@ -438,7 +438,7 @@ const config = {
       navbar: {
         hideOnScroll: false,
         logo: {
-          alt: "Langflow",
+          alt: "Hanzo Flow",
           src: "img/lf-docs-light.svg",
           srcDark: "img/lf-docs-dark.svg",
         },
@@ -460,7 +460,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-github',
             'data-namespace': 'header',
-            'data-platform-title': 'Langflow'
+            'data-platform-title': 'Hanzo Flow'
           },
           {
             position: "right",
@@ -474,7 +474,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-twitter',
             'data-namespace': 'header',
-            'data-platform-title': 'Langflow'
+            'data-platform-title': 'Hanzo Flow'
           },
           {
             position: "right",
@@ -488,7 +488,7 @@ const config = {
             'data-channel': 'docs',
             'data-element-id': 'social-discord',
             'data-namespace': 'header',
-            'data-platform-title': 'Langflow'
+            'data-platform-title': 'Hanzo Flow'
           },
         ],
       },
@@ -523,7 +523,7 @@ const config = {
             items: [
               {
                 html: `<div class="footer-links">
-                  <span>© ${new Date().getFullYear()} Langflow</span>
+                  <span>© ${new Date().getFullYear()} Hanzo Flow</span>
                   <span id="preferenceCenterContainer"> ·&nbsp; <a href="#" onclick="if(typeof window !== 'undefined' && window.truste && window.truste.eu && window.truste.eu.clickListener) { window.truste.eu.clickListener(); } return false;" style="cursor: pointer;">Manage Privacy Choices</a></span>
                   </div>`,
               },
@@ -535,7 +535,7 @@ const config = {
         appId: "UZK6BDPCVY",
         // public key, safe to commit
         apiKey: "adbd7686dceb1cd510d5ce20d04bf74c",
-        indexName: "langflow",
+        indexName: "flow",
         contextualSearch: true,
         searchParameters: {},
         searchPagePath: "search",

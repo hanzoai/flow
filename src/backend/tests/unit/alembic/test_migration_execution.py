@@ -157,7 +157,7 @@ def _get_main_branch_head() -> str | None:
                     pattern,
                     "origin/main",
                     "--",
-                    "src/backend/base/langflow/alembic/versions/",
+                    "src/backend/base/flow/alembic/versions/",
                 ],
                 capture_output=True,
                 text=True,
