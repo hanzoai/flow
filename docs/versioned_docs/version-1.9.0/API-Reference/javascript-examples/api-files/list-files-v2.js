@@ -1,10 +1,10 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v2/files`;
+const url = `${process.env.FLOW_URL ?? ""}/api/v2/files`;
 
 const options = {
   method: 'GET',
   headers: {
     "accept": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.FLOW_API_KEY ?? ""}`,
   },
 };
 

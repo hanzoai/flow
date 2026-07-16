@@ -1,4 +1,4 @@
-"""Hanzo Flow Assistant API module."""
+"""Flow Assistant API module."""
 
 # Note: router is imported directly via flow.agentic.api.router to avoid circular imports
 # Use: from flow.agentic.api.router import router

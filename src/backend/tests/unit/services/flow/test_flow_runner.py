@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 import pytest
-from flow.services.flow.flow_runner import LangflowRunnerExperimental
+from flow.services.flow.flow_runner import FlowRunnerExperimental
 
 
 @pytest.fixture
@@ -18,7 +18,7 @@ def sample_flow_dict():
 
 @pytest.fixture
 def flow_runner():
-    return LangflowRunnerExperimental()
+    return FlowRunnerExperimental()
 
 
 @pytest.mark.asyncio

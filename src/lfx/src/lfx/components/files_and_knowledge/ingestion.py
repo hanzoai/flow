@@ -63,11 +63,11 @@ def _get_knowledge_bases_root_path() -> Path:
 
 
 class KnowledgeIngestionComponent(Component):
-    """Create or append to Hanzo Flow Knowledge from a DataFrame."""
+    """Create or append to Flow Knowledge from a DataFrame."""
 
     # ------ UI metadata ---------------------------------------------------
     display_name = "Knowledge Ingestion"
-    description = "Create or update knowledge in Hanzo Flow."
+    description = "Create or update knowledge in Flow."
     icon = "upload"
     name = "KnowledgeIngestion"
 
@@ -83,7 +83,7 @@ class KnowledgeIngestionComponent(Component):
                 "data": {
                     "node": {
                         "name": "create_knowledge_base",
-                        "description": "Create new knowledge in Hanzo Flow.",
+                        "description": "Create new knowledge in Flow.",
                         "display_name": "Create new knowledge",
                         "field_order": [
                             "01_new_kb_name",
@@ -101,7 +101,7 @@ class KnowledgeIngestionComponent(Component):
                                 display_name="Choose Embedding Model",
                                 info=(
                                     "Select the embedding model to use for this knowledge base. "
-                                    "Hanzo Flow uses the configured credentials for that model provider."
+                                    "Flow uses the configured credentials for that model provider."
                                 ),
                                 required=True,
                                 model_type="embedding",

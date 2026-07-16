@@ -1,4 +1,4 @@
-"""FastMCP server for Hanzo Flow Agentic tools.
+"""FastMCP server for Flow Agentic tools.
 
 This module exposes template search and creation functions as MCP tools using FastMCP decorators.
 """

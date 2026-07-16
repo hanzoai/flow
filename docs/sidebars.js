@@ -13,12 +13,12 @@ module.exports = {
         {
           type: "doc",
           id: "Get-Started/about-flow",
-          label: "About Hanzo Flow"
+          label: "About Flow"
         },
         {
           type: "doc",
           id: "Get-Started/get-started-installation",
-          label: "Install Hanzo Flow"
+          label: "Install Flow"
         },
         {
           type: "doc",
@@ -59,7 +59,7 @@ module.exports = {
             {
               type: "doc",
               id: "Flows/concepts-publish",
-              label: "Trigger flows with the Hanzo Flow API"
+              label: "Trigger flows with the Flow API"
             },
             {
               type: "doc",
@@ -81,7 +81,7 @@ module.exports = {
         {
           type: "doc",
           id: "Flows/flow-assistant",
-          label: "Build components with Hanzo Flow Assistant"
+          label: "Build components with Flow Assistant"
         },
       ],
     },
@@ -173,7 +173,7 @@ module.exports = {
         {
           type: "doc",
           id: "Develop/data-types",
-          label: "Use Hanzo Flow data types"
+          label: "Use Flow data types"
         },
         {
           type: "doc",
@@ -183,7 +183,7 @@ module.exports = {
         {
           type: "doc",
           id: "Develop/configuration-cli",
-          label: "Use the Hanzo Flow CLI"
+          label: "Use the Flow CLI"
         },
       ],
     },
@@ -195,17 +195,17 @@ module.exports = {
         {
           type:"doc",
           id: "Deployment/deployment-overview",
-          label: "Hanzo Flow deployment overview"
+          label: "Flow deployment overview"
         },
         {
           type: "doc",
           id: "Deployment/deployment-public-server",
-          label: "Deploy a public Hanzo Flow server"
+          label: "Deploy a public Flow server"
         },
         {
           type: "doc",
           id: "Deployment/deployment-nginx-ssl",
-          label: "Deploy Hanzo Flow with Nginx and SSL"
+          label: "Deploy Flow with Nginx and SSL"
         },
         {
           type: "category",
@@ -215,12 +215,12 @@ module.exports = {
             {
               type: "doc",
               id: "Deployment/deployment-docker",
-              label: "Hanzo Flow Docker images"
+              label: "Flow Docker images"
             },
             {
               type: "doc",
               id: "Deployment/deployment-caddyfile",
-              label: "Deploy Hanzo Flow on a remote server"
+              label: "Deploy Flow on a remote server"
             },
             {
               type: "category",
@@ -479,7 +479,7 @@ module.exports = {
         {
           type: "doc",
           id: "API-Reference/api-reference-api-examples",
-          label: "Get started with the Hanzo Flow API",
+          label: "Get started with the Flow API",
         },
         {
           type: "doc",
@@ -518,7 +518,7 @@ module.exports = {
         "API-Reference/api-users",
         {
           type: "link",
-          label: "Hanzo Flow API specification",
+          label: "Flow API specification",
           href: "/api",
         },
       ],
@@ -559,7 +559,7 @@ module.exports = {
         {
           type: "doc",
           id: "Support/luna-for-flow",
-          label: "IBM Elite Support for Hanzo Flow",
+          label: "IBM Elite Support for Flow",
         },
         {
           type: "doc",
@@ -585,7 +585,7 @@ module.exports = {
           </svg>
           <div class="sidebar-ad-text-container">
             <span class="sidebar-ad-text">Get started in minutes</span>
-            <span class="sidebar-ad-text sidebar-ad-text-gradient">Download Hanzo Flow Desktop</span>
+            <span class="sidebar-ad-text sidebar-ad-text-gradient">Download Flow Desktop</span>
           </div>
         </a>
       `,

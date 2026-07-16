@@ -1,19 +1,19 @@
-# Hanzo Flow Documentation
+# Flow Documentation
 
-> Official documentation for Hanzo Flow, a low-code platform for building and deploying AI-powered agents and workflows with a visual builder, API, and MCP server. Technical documentation for developers, data scientists, and teams building RAG and multi-agent applications.
+> Official documentation for Flow, a low-code platform for building and deploying AI-powered agents and workflows with a visual builder, API, and MCP server. Technical documentation for developers, data scientists, and teams building RAG and multi-agent applications.
 
-Hanzo Flow is open source (MIT). Run locally with `uv run hanzoflow run` (Python 3.10-3.13, default http://127.0.0.1:7860). Key areas: get started (installation, quickstart, tutorials), flows (build, run via API or webhooks, test, import/export), agents and MCP, develop (config, storage, observability), deploy (Docker, Kubernetes, cloud), components reference, and API reference.
+Flow is open source (MIT). Run locally with `uv run hanzoflow run` (Python 3.10-3.13, default http://127.0.0.1:7860). Key areas: get started (installation, quickstart, tutorials), flows (build, run via API or webhooks, test, import/export), agents and MCP, develop (config, storage, observability), deploy (Docker, Kubernetes, cloud), components reference, and API reference.
 
 ## Docs
 
-- [About Hanzo Flow](https://docs.hanzo.ai/flow/about): Platform overview and introduction
-- [Install Hanzo Flow](https://docs.hanzo.ai/flow/get-started-installation): Installation options (OSS, Docker, from source)
+- [About Flow](https://docs.hanzo.ai/flow/about): Platform overview and introduction
+- [Install Flow](https://docs.hanzo.ai/flow/get-started-installation): Installation options (OSS, Docker, from source)
 - [Quickstart](https://docs.hanzo.ai/flow/get-started-quickstart): Get up and running quickly
 - [Use the visual editor](https://docs.hanzo.ai/flow/concepts-overview): Visual flow builder overview
-- [Trigger flows with the API](https://docs.hanzo.ai/flow/concepts-publish): Run flows via the Hanzo Flow API
+- [Trigger flows with the API](https://docs.hanzo.ai/flow/concepts-publish): Run flows via the Flow API
 - [Agents](https://docs.hanzo.ai/flow/agents): Agents and tools
 - [MCP client and server](https://docs.hanzo.ai/flow/mcp-client): Model Context Protocol integration
-- [Deployment overview](https://docs.hanzo.ai/flow/deployment-overview): How to deploy Hanzo Flow
+- [Deployment overview](https://docs.hanzo.ai/flow/deployment-overview): How to deploy Flow
 - [Security](https://docs.hanzo.ai/flow/security): Deployment and security guidance
 - [Release notes](https://docs.hanzo.ai/flow/release-notes): Version history and release notes
 
@@ -28,5 +28,5 @@ Hanzo Flow is open source (MIT). Run locally with `uv run hanzoflow run` (Python
 - [Build flows](https://docs.hanzo.ai/flow/concepts-flows): Concepts for building flows
 - [Test flows](https://docs.hanzo.ai/flow/concepts-playground): Playground and testing
 - [Components overview](https://docs.hanzo.ai/flow/concepts-components): Component reference introduction
-- [API reference](https://docs.hanzo.ai/flow/api-reference-api-examples): Get started with the Hanzo Flow API
+- [API reference](https://docs.hanzo.ai/flow/api-reference-api-examples): Get started with the Flow API
 - [Troubleshooting](https://docs.hanzo.ai/flow/troubleshoot): Troubleshooting guide

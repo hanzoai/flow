@@ -8,7 +8,7 @@
 #
 # Lookup order for this file:
 #   1. Explicit path passed to get_client() / load_environments()
-#   2. LANGFLOW_ENVIRONMENTS_FILE environment variable
+#   2. FLOW_ENVIRONMENTS_FILE environment variable
 #   3. flow-environments.toml in the current working directory
 #   4. ~/.config/flow/environments.toml
 
@@ -18,11 +18,11 @@ url = "http://localhost:7860"
 
 [environments.staging]
 url = "https://staging.flow.example.com"
-api_key_env = "LANGFLOW_STAGING_API_KEY" # pragma: allowlist secret
+api_key_env = "FLOW_STAGING_API_KEY" # pragma: allowlist secret
 
 [environments.production]
 url = "https://flow.example.com"
-api_key_env = "LANGFLOW_PROD_API_KEY" # pragma: allowlist secret
+api_key_env = "FLOW_PROD_API_KEY" # pragma: allowlist secret
 
 # Which environment is used when no name is specified
 [defaults]

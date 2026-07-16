@@ -12,7 +12,7 @@ def extract_python_code(text: str) -> str | None:
     """Extract Python code from markdown code blocks.
 
     Handles both closed (```python ... ```) and unclosed blocks.
-    Returns the first code block that appears to be a Hanzo Flow component.
+    Returns the first code block that appears to be a Flow component.
     """
     matches = _find_code_blocks(text)
     if not matches:
@@ -46,7 +46,7 @@ def _find_unclosed_code_block(text: str) -> list[str]:
 
 
 def _find_component_code(matches: list[str]) -> str | None:
-    """Find the first match that looks like a Hanzo Flow component."""
+    """Find the first match that looks like a Flow component."""
     for match in matches:
         if "class " in match and "Component" in match:
             return match.strip()

@@ -63,17 +63,17 @@ The default storage location depends on your operating system and installation m
 
 - **Hanzo Flow Desktop**:
     - **macOS**: `/Users/<username>/.flow/knowledge_bases`
-    - **Windows**: `C:\Users\<name>\AppData\Roaming\com.LangflowDesktop\knowledge_bases`
+    - **Windows**: `C:\Users\<name>\AppData\Roaming\com.Hanzo FlowDesktop\knowledge_bases`
 - **Hanzo Flow OSS**:
     - **macOS/Windows/Linux/WSL with `uv pip install`**: `<path_to_venv>/lib/python3.12/site-packages/flow/knowledge_bases` (Python version can vary. Knowledge bases aren't shared between virtual environments.)
     - **macOS/Windows/Linux/WSL with `git clone`**: `<path_to_clone>/src/backend/base/flow/knowledge_bases`
 
-If you set the `LANGFLOW_CONFIG_DIR` environment variable, the `knowledge_bases` subdirectory is created relative to that path.
+If you set the `FLOW_CONFIG_DIR` environment variable, the `knowledge_bases` subdirectory is created relative to that path.
 
-To change the default `knowledge_bases` directory path, set the `LANGFLOW_KNOWLEDGE_BASES_DIR` environment variable:
+To change the default `knowledge_bases` directory path, set the `FLOW_KNOWLEDGE_BASES_DIR` environment variable:
 
 ```bash
-export LANGFLOW_KNOWLEDGE_BASES_DIR="/path/to/parent/directory"
+export FLOW_KNOWLEDGE_BASES_DIR="/path/to/parent/directory"
 ```
 
 ### Create a knowledge base

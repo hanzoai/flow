@@ -59,7 +59,7 @@ class TelemetryService(Service):
         # Initialize static telemetry fields
         version_info = get_version_info()
         self.common_telemetry_fields = {
-            "langflow_version": version_info["version"],
+            "flow_version": version_info["version"],
             "platform": "desktop" if self._get_flow_desktop() else "python_package",
             "os": platform.system().lower(),
         }

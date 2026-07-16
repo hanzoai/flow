@@ -20,8 +20,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await page.route("**/api/v1/deployments/providers*", (route) => {
@@ -51,8 +51,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await page.route("**/api/v1/deployments/providers*", (route) => {
@@ -85,8 +85,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await page.route("**/api/v1/deployments/providers*", (route) => {
@@ -128,8 +128,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let postCalled = false;
@@ -197,8 +197,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await page.route("**/api/v1/deployments*", (route) => {
@@ -258,8 +258,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let deleteRequestCount = 0;

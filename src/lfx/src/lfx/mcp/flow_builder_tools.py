@@ -126,7 +126,7 @@ def _find_node(flow: dict, component_id: str) -> dict | None:
 
 class SearchComponentTypes(Component):
     display_name = "Search Components"
-    description = "Search available Hanzo Flow component types by name, category, or output type."
+    description = "Search available Flow component types by name, category, or output type."
     icon = "Search"
     name = "SearchComponentTypes"
 

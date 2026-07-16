@@ -1,4 +1,4 @@
-"""lfx environment configuration — resolve Hanzo Flow instance URL and API key.
+"""lfx environment configuration — resolve Flow instance URL and API key.
 
 Config file lookup order
 ------------------------
@@ -16,15 +16,15 @@ YAML file format
     environments:
       local:
         url: http://localhost:7860
-        api_key_env: LANGFLOW_LOCAL_API_KEY
+        api_key_env: FLOW_LOCAL_API_KEY
 
       staging:
         url: https://staging.flow.example.com
-        api_key_env: LANGFLOW_STAGING_API_KEY
+        api_key_env: FLOW_STAGING_API_KEY
 
       production:
         url: https://flow.example.com
-        api_key_env: LANGFLOW_PROD_API_KEY
+        api_key_env: FLOW_PROD_API_KEY
 
     defaults:
       environment: local
@@ -52,19 +52,19 @@ class ConfigError(Exception):
     """Raised when the config file is missing, malformed, or an environment name cannot be resolved.
 
     Note: a missing API key env var is *not* a ``ConfigError`` — ``api_key``
-    will simply be ``None`` on the returned :class:`LangflowEnvironment`.
+    will simply be ``None`` on the returned :class:`FlowEnvironment`.
     Commands that require a key validate it themselves and raise an appropriate
     error with actionable guidance.
     """
 
 
 @dataclass
-class LangflowEnvironment:
-    """A fully-resolved Hanzo Flow target instance.
+class FlowEnvironment:
+    """A fully-resolved Flow target instance.
 
     Attributes:
         name:    Human-readable label (environment name or ``"__inline__"``).
-        url:     Base URL of the Hanzo Flow instance.
+        url:     Base URL of the Flow instance.
         api_key: Resolved API key value, or ``None`` if not configured.
     """
 
@@ -183,7 +183,7 @@ def _load_raw(path: Path) -> dict[str, Any]:
         return _parse_toml(path)
 
 
-def _parse_env_block(name: str, block: Any, config_path: Path) -> LangflowEnvironment:
+def _parse_env_block(name: str, block: Any, config_path: Path) -> FlowEnvironment:
     if not isinstance(block, dict):
         msg = f"Environment {name!r} in {config_path} must be a mapping, got {type(block).__name__}"
         raise ConfigError(msg)
@@ -208,10 +208,10 @@ def _parse_env_block(name: str, block: Any, config_path: Path) -> LangflowEnviro
         )
         api_key = str(block["api_key"])
 
-    return LangflowEnvironment(name=name, url=url, api_key=api_key)
+    return FlowEnvironment(name=name, url=url, api_key=api_key)
 
 
-def _load_config(path: Path) -> tuple[dict[str, LangflowEnvironment], str | None]:
+def _load_config(path: Path) -> tuple[dict[str, FlowEnvironment], str | None]:
     """Return ``(environments_dict, default_env_name)`` from the config at *path*."""
     raw = _load_raw(path)
 
@@ -220,7 +220,7 @@ def _load_config(path: Path) -> tuple[dict[str, LangflowEnvironment], str | None
         msg = f"'environments' in {path} must be a mapping, got {type(raw_envs).__name__}"
         raise ConfigError(msg)
 
-    envs: dict[str, LangflowEnvironment] = {}
+    envs: dict[str, FlowEnvironment] = {}
     for env_name, block in raw_envs.items():
         envs[str(env_name)] = _parse_env_block(str(env_name), block, path)
 
@@ -241,8 +241,8 @@ def resolve_environment(
     target: str | None = None,
     api_key: str | None = None,
     environments_file: str | None = None,
-) -> LangflowEnvironment:
-    """Resolve an environment name (or inline flags) to a :class:`LangflowEnvironment`.
+) -> FlowEnvironment:
+    """Resolve an environment name (or inline flags) to a :class:`FlowEnvironment`.
 
     Precedence
     ----------
@@ -252,7 +252,7 @@ def resolve_environment(
     2. **Named env** — look up *env* (or the configured default) in the config
        file discovered by the lookup order described in this module's docstring.
     3. **Env-var fallback** — if no config file exists and no *env* was
-       requested, fall back to ``LANGFLOW_URL`` / ``LANGFLOW_API_KEY`` (or
+       requested, fall back to ``FLOW_URL`` / ``FLOW_API_KEY`` (or
        ``LFX_URL`` / ``LFX_API_KEY``) env vars before raising.
 
     Parameters
@@ -270,7 +270,7 @@ def resolve_environment(
 
     Returns:
     -------
-    LangflowEnvironment:
+    FlowEnvironment:
         Fully-resolved environment with ``url`` and ``api_key``.
 
     Raises:
@@ -284,7 +284,7 @@ def resolve_environment(
     # -----------------------------------------------------------------------
     if target is not None:
         name = env or "__inline__"
-        return LangflowEnvironment(name=name, url=target, api_key=api_key)
+        return FlowEnvironment(name=name, url=target, api_key=api_key)
 
     # -----------------------------------------------------------------------
     # Mode 2: config file
@@ -294,10 +294,10 @@ def resolve_environment(
 
     if config_path is None:
         # No config file found — try env-var fallback before giving up
-        lf_url = os.environ.get("LANGFLOW_URL") or os.environ.get("LFX_URL")
+        lf_url = os.environ.get("FLOW_URL") or os.environ.get("LFX_URL")
         if lf_url and env is None:
-            lf_key = api_key or os.environ.get("LANGFLOW_API_KEY") or os.environ.get("LFX_API_KEY")
-            return LangflowEnvironment(name="__env__", url=lf_url, api_key=lf_key)
+            lf_key = api_key or os.environ.get("FLOW_API_KEY") or os.environ.get("LFX_API_KEY")
+            return FlowEnvironment(name="__env__", url=lf_url, api_key=lf_key)
 
         if env is not None:
             msg = (
@@ -313,7 +313,7 @@ def resolve_environment(
             "Options:\n"
             "  • lfx <cmd> --env <name>              (requires .lfx/environments.yaml)\n"
             "  • lfx <cmd> --target <url>             (inline, no config file needed)\n"
-            "  • export LANGFLOW_URL=<url>            (env-var fallback)\n"
+            "  • export FLOW_URL=<url>            (env-var fallback)\n"
             "  • lfx init                             (scaffold a project with a template)"
         )
         raise ConfigError(msg)
@@ -339,6 +339,6 @@ def resolve_environment(
 
     # --api-key overrides the key resolved from the config file
     if api_key is not None:
-        resolved = LangflowEnvironment(name=resolved.name, url=resolved.url, api_key=api_key)
+        resolved = FlowEnvironment(name=resolved.name, url=resolved.url, api_key=api_key)
 
     return resolved

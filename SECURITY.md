@@ -100,14 +100,14 @@ A privilege escalation vulnerability exists in containers where an authenticated
 **CVE**: [CVE-2025-57760](https://github.com/hanzoai/flow/security/advisories/GHSA-4gv9-mp8m-592r)
 **Fixed in**: >= 1.5.1
 
-### No API key required when running with `LANGFLOW_AUTO_LOGIN=true` and `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=true`
+### No API key required when running with `FLOW_AUTO_LOGIN=true` and `FLOW_SKIP_AUTH_AUTO_LOGIN=true`
 
-In versions earlier than 1.5, if `LANGFLOW_AUTO_LOGIN=true`, then Hanzo Flow automatically logs users in as a superuser without requiring authentication. In this case, API requests don't require an API key.
+In versions earlier than 1.5, if `FLOW_AUTO_LOGIN=true`, then Hanzo Flow automatically logs users in as a superuser without requiring authentication. In this case, API requests don't require an API key.
 
 In version 1.5, an API key is required to authenticate requests.
-Setting `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=true` and `LANGFLOW_AUTO_LOGIN=true` skips authentication for API requests. However, the `LANGFLOW_SKIP_AUTH_AUTO_LOGIN` option will be removed in v1.6.
+Setting `FLOW_SKIP_AUTH_AUTO_LOGIN=true` and `FLOW_AUTO_LOGIN=true` skips authentication for API requests. However, the `FLOW_SKIP_AUTH_AUTO_LOGIN` option will be removed in v1.6.
 
-`LANGFLOW_SKIP_AUTH_AUTO_LOGIN=true` is the default behavior, so users do not need to change existing workflows in 1.5. To update your workflows to require authentication, set `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=false`.
+`FLOW_SKIP_AUTH_AUTO_LOGIN=true` is the default behavior, so users do not need to change existing workflows in 1.5. To update your workflows to require authentication, set `FLOW_SKIP_AUTH_AUTO_LOGIN=false`.
 
 For more information, see the API keys and authentication documentation.
 
@@ -120,11 +120,11 @@ The `flow superuser` CLI command can present a privilege escalation risk if not 
 #### Security Measures
 
 1. **Authentication Required in Production**
-   - When `LANGFLOW_AUTO_LOGIN=false`, superuser creation requires authentication
+   - When `FLOW_AUTO_LOGIN=false`, superuser creation requires authentication
    - Use `--auth-token` parameter with a valid superuser API key or JWT token
 
 2. **Disable CLI Superuser Creation**
-   - Set `LANGFLOW_ENABLE_SUPERUSER_CLI=false` to disable the command entirely
+   - Set `FLOW_ENABLE_SUPERUSER_CLI=false` to disable the command entirely
    - Strongly recommended for production environments
 
 3. **Secure AUTO_LOGIN Setting**
@@ -135,10 +135,10 @@ The `flow superuser` CLI command can present a privilege escalation risk if not 
 
 ```bash
 # Recommended production settings
-export LANGFLOW_AUTO_LOGIN=false
-export LANGFLOW_ENABLE_SUPERUSER_CLI=false
-export LANGFLOW_SUPERUSER="<your-superuser-username>"
-export LANGFLOW_SUPERUSER_PASSWORD="<your-superuser-password>"
-export LANGFLOW_DATABASE_URL="<your-production-database-url>" # e.g. "postgresql+psycopg://flow:secure_pass@db.internal:5432/flow"
-export LANGFLOW_SECRET_KEY="your-strong-random-secret-key"
+export FLOW_AUTO_LOGIN=false
+export FLOW_ENABLE_SUPERUSER_CLI=false
+export FLOW_SUPERUSER="<your-superuser-username>"
+export FLOW_SUPERUSER_PASSWORD="<your-superuser-password>"
+export FLOW_DATABASE_URL="<your-production-database-url>" # e.g. "postgresql+psycopg://flow:secure_pass@db.internal:5432/flow"
+export FLOW_SECRET_KEY="your-strong-random-secret-key"
 ```

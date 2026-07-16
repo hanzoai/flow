@@ -48,12 +48,12 @@ class Deployment(SQLModel, table=True):  # type: ignore[call-arg]
     )
     # ``DeploymentType`` is imported from LFX
     # (``lfx.services.adapters.deployment.schema``).  The DB-level
-    # ``deployment_type_enum`` constraint is defined by a Hanzo Flow alembic
+    # ``deployment_type_enum`` constraint is defined by a Flow alembic
     # migration, **not** by LFX code.  This decoupling is intentional:
     #
     # LFX adds a new member  -> INSERT/UPDATE with the new value is rejected
-    #                           by the DB until a Hanzo Flow migration adds it
-    #                           to the enum type.  Hanzo Flow explicitly opts
+    #                           by the DB until a Flow migration adds it
+    #                           to the enum type.  Flow explicitly opts
     #                           in to new deployment types.
     #
     # LFX renames a value    -> Existing rows are unaffected (the DB stores
@@ -72,7 +72,7 @@ class Deployment(SQLModel, table=True):  # type: ignore[call-arg]
     #
     # To add a new value to ``deployment_type_enum``:
     #   1. Add the member to ``DeploymentType`` in LFX (or confirm it exists).
-    #   2. Create a Hanzo Flow alembic migration that runs:
+    #   2. Create a Flow alembic migration that runs:
     #        op.execute("ALTER TYPE deployment_type_enum ADD VALUE '<new>'")
     #      For SQLite (dev/test) this is a no-op; the CHECK constraint is
     #      recreated automatically by ``batch_alter_table``.

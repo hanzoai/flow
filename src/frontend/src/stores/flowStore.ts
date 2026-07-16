@@ -11,7 +11,7 @@ import { create } from "zustand";
 import { checkCodeValidity } from "@/CustomNodes/helpers/check-code-validity";
 import i18n from "../i18n";
 import {
-  ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_DATASTAX_FLOW,
   ENABLE_INSPECTION_PANEL,
 } from "@/customization/feature-flags";
 import {

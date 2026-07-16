@@ -1,4 +1,4 @@
-"""pytest plugin providing fixtures for integration-testing Hanzo Flow flows.
+"""pytest plugin providing fixtures for integration-testing Flow flows.
 
 Install with the ``testing`` extra::
 
@@ -15,13 +15,13 @@ command line or via environment variables::
     pytest --flow-env staging tests/
 
     # Via environment variables (useful in CI)
-    LANGFLOW_URL=http://localhost:7860 pytest tests/
+    FLOW_URL=http://localhost:7860 pytest tests/
 
 Usage inside a test file::
 
     def test_my_rag_flow(flow_runner):
-        response = flow_runner("rag-endpoint", "What is Hanzo Flow?")
-        assert "Hanzo Flow" in response.first_text_output()
+        response = flow_runner("rag-endpoint", "What is Flow?")
+        assert "Flow" in response.first_text_output()
 
     async def test_my_async_flow(async_flow_runner):
         response = await async_flow_runner("rag-endpoint", "Hello")
@@ -37,7 +37,7 @@ from typing import TYPE_CHECKING, Any
 try:
     import pytest
 except ImportError as exc:
-    msg = "pytest is required for langflow_sdk.testing. Install it with: pip install 'flow-sdk[testing]'"
+    msg = "pytest is required for flow_sdk.testing. Install it with: pip install 'flow-sdk[testing]'"
     raise ImportError(msg) from exc
 
 if TYPE_CHECKING:
@@ -53,29 +53,29 @@ if TYPE_CHECKING:
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
-    """Register Hanzo Flow-specific CLI options."""
-    group = parser.getgroup("flow", "Hanzo Flow integration testing options")
+    """Register Flow-specific CLI options."""
+    group = parser.getgroup("flow", "Flow integration testing options")
     options = {
         "--flow-env": {
-            "dest": "langflow_env",
+            "dest": "flow_env",
             "default": None,
             "metavar": "NAME",
             "help": "Environment name from flow-environments.toml to use for integration tests.",
         },
         "--flow-url": {
-            "dest": "langflow_url",
+            "dest": "flow_url",
             "default": None,
             "metavar": "URL",
-            "help": "Base URL of the Hanzo Flow instance (overrides --flow-env).",
+            "help": "Base URL of the Flow instance (overrides --flow-env).",
         },
         "--flow-api-key": {
-            "dest": "langflow_api_key",
+            "dest": "flow_api_key",
             "default": None,
             "metavar": "KEY",
-            "help": "API key for the Hanzo Flow instance (overrides environment config).",
+            "help": "API key for the Flow instance (overrides environment config).",
         },
         "--flow-environments-file": {
-            "dest": "langflow_environments_file",
+            "dest": "flow_environments_file",
             "default": None,
             "metavar": "PATH",
             "help": "Path to flow-environments.toml (overrides default discovery).",
@@ -97,16 +97,16 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 def _resolve_url_credentials(request: pytest.FixtureRequest) -> tuple[str, str | None] | None:
     """Extract (url, api_key) from CLI options / env vars, or return None."""
-    url: str | None = request.config.getoption("langflow_url") or os.getenv("LANGFLOW_URL")
+    url: str | None = request.config.getoption("flow_url") or os.getenv("FLOW_URL")
     if not url:
         return None
     # pragma: allowlist secret
-    api_key: str | None = request.config.getoption("langflow_api_key") or os.getenv("LANGFLOW_API_KEY")
+    api_key: str | None = request.config.getoption("flow_api_key") or os.getenv("FLOW_API_KEY")
     return url, api_key
 
 
 def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
-    """Return a sync client from --flow-url / LANGFLOW_URL, or None."""
+    """Return a sync client from --flow-url / FLOW_URL, or None."""
     from flow_sdk.client import Client
 
     creds = _resolve_url_credentials(request)
@@ -114,7 +114,7 @@ def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
 
 
 def _resolve_async_url_client(request: pytest.FixtureRequest) -> AsyncClient | None:
-    """Return an async client from --flow-url / LANGFLOW_URL, or None."""
+    """Return an async client from --flow-url / FLOW_URL, or None."""
     from flow_sdk.client import AsyncClient
 
     creds = _resolve_url_credentials(request)
@@ -122,15 +122,15 @@ def _resolve_async_url_client(request: pytest.FixtureRequest) -> AsyncClient | N
 
 
 def _env_name(request: pytest.FixtureRequest) -> str | None:
-    return request.config.getoption("langflow_env") or os.getenv("LANGFLOW_ENV")
+    return request.config.getoption("flow_env") or os.getenv("FLOW_ENV")
 
 
 def _env_file(request: pytest.FixtureRequest) -> str | None:
-    return request.config.getoption("langflow_environments_file") or os.getenv("LANGFLOW_ENVIRONMENTS_FILE")
+    return request.config.getoption("flow_environments_file") or os.getenv("FLOW_ENVIRONMENTS_FILE")
 
 
 _SKIP_MSG = (
-    "No Hanzo Flow connection configured. Pass --flow-url <URL> or --flow-env <NAME> to enable integration tests."
+    "No Flow connection configured. Pass --flow-url <URL> or --flow-env <NAME> to enable integration tests."
 )
 
 
@@ -140,17 +140,17 @@ _SKIP_MSG = (
 
 
 @pytest.fixture(scope="session")
-def langflow_client(request: pytest.FixtureRequest) -> Client:
-    """Session-scoped fixture that returns a configured :class:`~langflow_sdk.Client`.
+def flow_client(request: pytest.FixtureRequest) -> Client:
+    """Session-scoped fixture that returns a configured :class:`~flow_sdk.Client`.
 
     The fixture skips the test session automatically when no connection
     information is available.  Configure via CLI options or environment
     variables (in priority order):
 
-    1. ``--flow-url`` / ``LANGFLOW_URL`` — direct base URL
-    2. ``--flow-api-key`` / ``LANGFLOW_API_KEY`` — API key  # pragma: allowlist secret
-    3. ``--flow-env`` / ``LANGFLOW_ENV`` — named environment from TOML file
-    4. ``--flow-environments-file`` / ``LANGFLOW_ENVIRONMENTS_FILE`` — TOML path
+    1. ``--flow-url`` / ``FLOW_URL`` — direct base URL
+    2. ``--flow-api-key`` / ``FLOW_API_KEY`` — API key  # pragma: allowlist secret
+    3. ``--flow-env`` / ``FLOW_ENV`` — named environment from TOML file
+    4. ``--flow-environments-file`` / ``FLOW_ENVIRONMENTS_FILE`` — TOML path
     """
     client = _resolve_url_client(request)
     if not client:
@@ -171,10 +171,10 @@ def langflow_client(request: pytest.FixtureRequest) -> Client:
 
 
 @pytest.fixture(scope="session")
-async def async_langflow_client(request: pytest.FixtureRequest) -> AsyncClient:
-    """Session-scoped fixture returning a configured :class:`~langflow_sdk.AsyncClient`.
+async def async_flow_client(request: pytest.FixtureRequest) -> AsyncClient:
+    """Session-scoped fixture returning a configured :class:`~flow_sdk.AsyncClient`.
 
-    Same configuration resolution as :func:`langflow_client`.
+    Same configuration resolution as :func:`flow_client`.
     """
     client = _resolve_async_url_client(request)
     if not client:
@@ -203,14 +203,14 @@ class FlowRunner:
     """Callable returned by the :func:`flow_runner` fixture.
 
     Call it like a function to execute a flow and receive a
-    :class:`~langflow_sdk.RunResponse`::
+    :class:`~flow_sdk.RunResponse`::
 
         def test_greeting(flow_runner):
             response = flow_runner("my-endpoint", "Hello!")
             assert response.first_text_output() is not None
 
     Keyword-only arguments mirror the fields of
-    :class:`~langflow_sdk.RunRequest`.
+    :class:`~flow_sdk.RunRequest`.
     """
 
     def __init__(self, client: Client) -> None:
@@ -226,7 +226,7 @@ class FlowRunner:
         tweaks: dict[str, Any] | None = None,
         stream: bool = False,
     ) -> RunResponse:
-        """Run *flow_id_or_endpoint* and return the full :class:`~langflow_sdk.RunResponse`."""
+        """Run *flow_id_or_endpoint* and return the full :class:`~flow_sdk.RunResponse`."""
         from flow_sdk.models import RunRequest
 
         return self._client.run_flow(
@@ -285,29 +285,29 @@ class AsyncFlowRunner:
 
 
 @pytest.fixture
-def flow_runner(langflow_client: Client) -> FlowRunner:
+def flow_runner(flow_client: Client) -> FlowRunner:
     """Fixture that returns a :class:`FlowRunner` for running flows in tests.
 
-    Depends on the session-scoped :func:`langflow_client` fixture, so the
+    Depends on the session-scoped :func:`flow_client` fixture, so the
     test is automatically skipped when no connection is configured.
 
     Example::
 
         def test_rag_flow(flow_runner):
-            response = flow_runner("rag-endpoint", "What is Hanzo Flow?")
-            assert "Hanzo Flow" in response.first_text_output()
+            response = flow_runner("rag-endpoint", "What is Flow?")
+            assert "Flow" in response.first_text_output()
     """
-    return FlowRunner(langflow_client)
+    return FlowRunner(flow_client)
 
 
 @pytest.fixture
-def async_flow_runner(async_langflow_client: AsyncClient) -> AsyncFlowRunner:
+def async_flow_runner(async_flow_client: AsyncClient) -> AsyncFlowRunner:
     """Fixture that returns an :class:`AsyncFlowRunner` for async tests.
 
     Example::
 
         async def test_rag_flow(async_flow_runner):
-            response = await async_flow_runner("rag-endpoint", "What is Hanzo Flow?")
-            assert "Hanzo Flow" in response.first_text_output()
+            response = await async_flow_runner("rag-endpoint", "What is Flow?")
+            assert "Flow" in response.first_text_output()
     """
-    return AsyncFlowRunner(async_langflow_client)
+    return AsyncFlowRunner(async_flow_client)

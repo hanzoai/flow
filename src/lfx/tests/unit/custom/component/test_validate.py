@@ -12,7 +12,7 @@ from lfx.custom.validate import (
 )
 
 
-def test_importing_langflow_module_in_lfx():
+def test_importing_flow_module_in_lfx():
     code = dedent("""from flow.custom import   Component
 class TestComponent(Component):
     def some_method(self):
@@ -22,7 +22,7 @@ class TestComponent(Component):
     assert result.__name__ == "TestComponent"
 
 
-def test_importing_langflow_logging_in_lfx():
+def test_importing_flow_logging_in_lfx():
     """Test that flow.logging can be imported in lfx context without errors."""
     code = dedent("""
 from flow.logging import logger, configure
@@ -136,11 +136,11 @@ class TestGetModuleFallbacks:
     def test_no_fallback_for_unrelated_module(self):
         assert _get_module_fallbacks("requests") == ["requests"]
 
-    def test_langflow_falls_back_to_lfx(self):
+    def test_flow_falls_back_to_lfx(self):
         result = _get_module_fallbacks("flow.custom")
         assert result == ["flow.custom", "lfx.custom"]
 
-    def test_langflow_deep_path(self):
+    def test_flow_deep_path(self):
         result = _get_module_fallbacks("flow.custom.validate")
         assert result == ["flow.custom.validate", "lfx.custom.validate"]
 
@@ -161,7 +161,7 @@ class TestGetModuleFallbacks:
     def test_bare_langchain_no_fallback(self):
         assert _get_module_fallbacks("langchain") == ["langchain"]
 
-    def test_bare_langflow_no_fallback(self):
+    def test_bare_flow_no_fallback(self):
         assert _get_module_fallbacks("flow") == ["flow"]
 
     def test_only_first_occurrence_replaced(self):

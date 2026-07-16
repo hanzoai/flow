@@ -64,7 +64,7 @@ jest.mock("../HelpDropdown", () => ({
   default: () => <div data-testid="help-dropdown" />,
 }));
 
-jest.mock("@/assets/langflow_assistant.svg", () => "mock-assistant-icon.svg");
+jest.mock("@/assets/flow_assistant.svg", () => "mock-assistant-icon.svg");
 
 jest.mock("@/stores/assistantManagerStore", () => ({
   __esModule: true,
@@ -107,7 +107,7 @@ describe("CanvasControls", () => {
     render(<CanvasControls selectedNode={null} />);
 
     expect(screen.getByText("New")).toBeInTheDocument();
-    expect(screen.getByAltText("Hanzo Flow Assistant")).toBeInTheDocument();
+    expect(screen.getByAltText("Flow Assistant")).toBeInTheDocument();
   });
 
   it("should_render_sticky_note_button", () => {

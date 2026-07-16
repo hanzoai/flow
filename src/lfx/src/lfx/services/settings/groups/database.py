@@ -16,17 +16,17 @@ class DatabaseSettings(BaseModel):
     """
 
     save_db_in_config_dir: bool = False
-    """Define if flow database should be saved in LANGFLOW_CONFIG_DIR or in the flow directory
+    """Define if flow database should be saved in FLOW_CONFIG_DIR or in the flow directory
     (i.e. in the package directory)."""
 
     database_url: str | None = None
-    """Database URL for Hanzo Flow. If not provided, Hanzo Flow will use a SQLite database.
+    """Database URL for Flow. If not provided, Flow will use a SQLite database.
     The driver shall be an async one like `sqlite+aiosqlite` (`sqlite` and `postgresql`
     will be automatically converted to the async drivers `sqlite+aiosqlite` and
     `postgresql+psycopg` respectively)."""
 
     database_connection_retry: bool = False
-    """If True, Hanzo Flow will retry to connect to the database if it fails."""
+    """If True, Flow will retry to connect to the database if it fails."""
 
     pool_size: int = 20
     """The number of connections to keep open in the connection pool.
@@ -42,7 +42,7 @@ class DatabaseSettings(BaseModel):
 
     migration_lock_namespace: str | None = None
     """Optional namespace identifier for PostgreSQL advisory lock during migrations.
-    If not provided, a hash of the database URL will be used. Useful when multiple Hanzo Flow
+    If not provided, a hash of the database URL will be used. Useful when multiple Flow
     instances share the same database and need coordinated migration locking."""
 
     sqlite_pragmas: dict | None = {"synchronous": "NORMAL", "journal_mode": "WAL", "busy_timeout": 30000}
@@ -76,7 +76,7 @@ class DatabaseSettings(BaseModel):
 
     use_noop_database: bool = False
     """If True, disables all database operations and uses a no-op session.
-    Controlled by LANGFLOW_USE_NOOP_DATABASE env variable."""
+    Controlled by FLOW_USE_NOOP_DATABASE env variable."""
 
     @field_validator("use_noop_database", mode="before")
     @classmethod
@@ -93,19 +93,19 @@ class DatabaseSettings(BaseModel):
             msg = f"Invalid database_url provided: '{sanitized}'"
             raise ValueError(msg)
 
-        if langflow_database_url := os.getenv("LANGFLOW_DATABASE_URL"):
-            value = langflow_database_url
-            logger.debug("Using LANGFLOW_DATABASE_URL env variable")
+        if flow_database_url := os.getenv("FLOW_DATABASE_URL"):
+            value = flow_database_url
+            logger.debug("Using FLOW_DATABASE_URL env variable")
         else:
             if not info.data.get("config_dir"):
                 msg = "config_dir not set, please set it or provide a database_url"
                 raise ValueError(msg)
 
             from lfx.utils.version import get_version_info
-            from lfx.utils.version import is_pre_release as langflow_is_pre_release
+            from lfx.utils.version import is_pre_release as flow_is_pre_release
 
             version = get_version_info()["version"]
-            is_pre_release = langflow_is_pre_release(version)
+            is_pre_release = flow_is_pre_release(version)
 
             if info.data["save_db_in_config_dir"]:
                 database_dir = info.data["config_dir"]

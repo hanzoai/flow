@@ -68,7 +68,7 @@ Instead of manually exporting, sharing, and importing flow JSON files from the H
 
     ✔ Project scaffolded. Next steps:
       1. Edit `.lfx/environments.yaml` with your instance URL
-      2. export LANGFLOW_LOCAL_API_KEY=<key>   (Settings -> API Keys)
+      2. export FLOW_LOCAL_API_KEY=<key>   (Settings -> API Keys)
       3. lfx pull --env local --output-dir flows/
     ```
 
@@ -86,7 +86,7 @@ Instead of manually exporting, sharing, and importing flow JSON files from the H
     For example, to add a Hanzo Flow API key to a local Hanzo Flow server, set:
 
     ```text
-    export LANGFLOW_LOCAL_API_KEY=LANGFLOW_API_KEY
+    export FLOW_LOCAL_API_KEY=FLOW_API_KEY
     ```
 
 5. To test server authentication with your API key, run:
@@ -180,7 +180,7 @@ Generate a `requirements.txt` file to capture the minimal Python dependencies, s
 
    4. To set a Hanzo Flow API key, run:
    ```
-   export LANGFLOW_API_KEY=LANGFLOW_API_KEY
+   export FLOW_API_KEY=FLOW_API_KEY
    ```
 
    5. To serve the flow without the Hanzo Flow UI, pass the flow JSON path to the `lfx serve` command:
@@ -198,13 +198,13 @@ The `environments.yaml` file created at initialization contains three example en
 ```yaml
 local:
   url: http://127.0.0.1:7860
-  api_key_env: LANGFLOW_LOCAL_API_KEY
+  api_key_env: FLOW_LOCAL_API_KEY
 staging:
   url: https://staging.example.com
-  api_key_env: LANGFLOW_STAGING_API_KEY
+  api_key_env: FLOW_STAGING_API_KEY
 production:
   url: https://flow.example.com
-  api_key_env: LANGFLOW_PRODUCTION_API_KEY
+  api_key_env: FLOW_PRODUCTION_API_KEY
 ```
 
 Each entry contains a `url` for the Hanzo Flow base URL, and an `api_key_env` field.
@@ -224,4 +224,4 @@ For example, to send a `push` request to a server named `local` in `environments
 lfx push --env local
 ```
 
-This command will send the request to the Hanzo Flow base URL at `http://127.0.0.1:7860` using a Hanzo Flow API key named `LANGFLOW_LOCAL_API_KEY`.
+This command will send the request to the Hanzo Flow base URL at `http://127.0.0.1:7860` using a Hanzo Flow API key named `FLOW_LOCAL_API_KEY`.

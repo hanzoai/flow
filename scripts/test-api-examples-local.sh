@@ -4,15 +4,15 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-HOST="${LANGFLOW_HOST:-127.0.0.1}"
-PORT="${LANGFLOW_PORT:-7860}"
+HOST="${FLOW_HOST:-127.0.0.1}"
+PORT="${FLOW_PORT:-7860}"
 SUITES="${SUITES:-curl,python,javascript}"
 EXECUTE_MODE="${EXECUTE_MODE:-true}"
 
-export LANGFLOW_AUTO_LOGIN="${LANGFLOW_AUTO_LOGIN:-true}"
+export FLOW_AUTO_LOGIN="${FLOW_AUTO_LOGIN:-true}"
 # /api/v2/workflows (docs Python workflow examples) requires this. Always enable for this
-# harness so a user-wide LANGFLOW_DEVELOPER_API_ENABLED=false does not break the suite.
-export LANGFLOW_DEVELOPER_API_ENABLED=true
+# harness so a user-wide FLOW_DEVELOPER_API_ENABLED=false does not break the suite.
+export FLOW_DEVELOPER_API_ENABLED=true
 
 cleanup() {
   if [[ -f /tmp/flow-server.pid ]]; then
@@ -71,12 +71,12 @@ PY
 REQUESTED_PORT="$PORT"
 if port_is_in_use "$HOST" "$PORT"; then
   PORT="$(pick_free_port)"
-  echo "Port $REQUESTED_PORT was in use; using $PORT for this run (set LANGFLOW_PORT to pin a port)."
+  echo "Port $REQUESTED_PORT was in use; using $PORT for this run (set FLOW_PORT to pin a port)."
 fi
 
 echo "Starting Hanzo Flow on http://$HOST:$PORT (developer API enabled for /api/v2/workflows)"
 # Set on the command line so the server process always sees it (macOS launcher/exec paths).
-LANGFLOW_DEVELOPER_API_ENABLED=true uv run flow run --backend-only --host "$HOST" --port "$PORT" >/tmp/flow-server.log 2>&1 &
+FLOW_DEVELOPER_API_ENABLED=true uv run flow run --backend-only --host "$HOST" --port "$PORT" >/tmp/flow-server.log 2>&1 &
 echo $! >/tmp/flow-server.pid
 
 echo "Waiting for Hanzo Flow readiness (DB + services via /health_check)..."
@@ -98,7 +98,7 @@ echo "Creating API key for local examples..."
 # Use HTTP only: a second process opening the same SQLite DB while the server runs
 # causes "database is locked" during Alembic/initialize_services.
 export BASE_URL="http://$HOST:$PORT"
-LANGFLOW_API_KEY="$(
+FLOW_API_KEY="$(
   uv run python - <<'PY'
 import os
 import time
@@ -108,8 +108,8 @@ from requests import RequestException
 
 base = os.environ["BASE_URL"]
 session = requests.Session()
-user = os.environ.get("LANGFLOW_SUPERUSER", "flow")
-password = os.environ.get("LANGFLOW_SUPERUSER_PASSWORD", "flow")
+user = os.environ.get("FLOW_SUPERUSER", "flow")
+password = os.environ.get("FLOW_SUPERUSER_PASSWORD", "flow")
 
 token = None
 last_status = None
@@ -152,14 +152,14 @@ print(key_resp.json()["api_key"])
 PY
 )"
 
-if [[ -z "$LANGFLOW_API_KEY" ]]; then
+if [[ -z "$FLOW_API_KEY" ]]; then
   echo "Failed to create API key."
   exit 1
 fi
 
-export LANGFLOW_URL="http://$HOST:$PORT"
-export LANGFLOW_SERVER_URL="http://$HOST:$PORT"
-export LANGFLOW_API_KEY
+export FLOW_URL="http://$HOST:$PORT"
+export FLOW_SERVER_URL="http://$HOST:$PORT"
+export FLOW_API_KEY
 
 if [[ "$EXECUTE_MODE" == "true" ]]; then
   echo "Bootstrapping PROJECT_ID/FLOW_ID/FOLDER_ID for examples..."
@@ -173,8 +173,8 @@ from pathlib import Path
 
 import requests
 
-base_url = os.environ["LANGFLOW_URL"]
-api_key = os.environ["LANGFLOW_API_KEY"]
+base_url = os.environ["FLOW_URL"]
+api_key = os.environ["FLOW_API_KEY"]
 headers = {"accept": "application/json", "Content-Type": "application/json", "x-api-key": api_key}
 
 try:

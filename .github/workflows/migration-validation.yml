@@ -50,7 +50,7 @@ jobs:
       - name: Check model/migration consistency
         env:
           MIGRATION_VALIDATION_CI: "true"
-          LANGFLOW_TEST_DATABASE_URI: "postgresql://flow:flow@localhost:5432/flow"
+          FLOW_TEST_DATABASE_URI: "postgresql://flow:flow@localhost:5432/flow"
         run: |
           uv run pytest src/backend/tests/unit/alembic/test_migration_execution.py -x -v
 

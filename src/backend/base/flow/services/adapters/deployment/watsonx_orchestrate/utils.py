@@ -177,7 +177,7 @@ def build_agent_payload_from_values(
     return {
         "name": agent_name,
         "display_name": agent_display_name,
-        "description": str(description).strip() or f"Hanzo Flow deployment {deployment_name}",
+        "description": str(description).strip() or f"Flow deployment {deployment_name}",
         "tools": list(tool_ids),
         "style": "default",
         "llm": str(llm).strip(),

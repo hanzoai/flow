@@ -1,11 +1,11 @@
-# Hanzo Flow Documentation (full)
+# Flow Documentation (full)
 
-> Comprehensive guide for AI language models: Hanzo Flow documentation at docs.hanzo.ai/flow. Covers the visual flow builder, API and webhook triggers, MCP, deployment, components, and API reference. Use this file for deeper context than llms.txt.
+> Comprehensive guide for AI language models: Flow documentation at docs.hanzo.ai/flow. Covers the visual flow builder, API and webhook triggers, MCP, deployment, components, and API reference. Use this file for deeper context than llms.txt.
 
 **Platform overview**
-Official documentation for Hanzo Flow, a low-code platform for building and deploying AI-powered agents and workflows. Type: Technical Documentation - AI Development Platform. URL: https://docs.hanzo.ai/flow. Category: Developer Documentation, AI/ML, Workflow Automation, RAG, MCP. Target: developers and teams adopting Hanzo Flow for AI applications.
+Official documentation for Flow, a low-code platform for building and deploying AI-powered agents and workflows. Type: Technical Documentation - AI Development Platform. URL: https://docs.hanzo.ai/flow. Category: Developer Documentation, AI/ML, Workflow Automation, RAG, MCP. Target: developers and teams adopting Flow for AI applications.
 
-**Technical specifications (Hanzo Flow product)**
+**Technical specifications (Flow product)**
 Application type: Python web application (OSS). Supported platforms: Windows, macOS, Linux. Minimum requirements: Windows 10 (64-bit), macOS 10.15 Catalina, Ubuntu 18.04 LTS or equivalent; 4GB RAM minimum (8GB recommended), 2GB storage, internet for model integrations; Python 3.10-3.13 for OSS. Architecture: modular component system. License: MIT. Runtime: Python 3.10-3.13 (OSS). Package format: pip/uv (OSS), Docker image. Default URL: http://127.0.0.1:7860. Repository: https://github.com/hanzoai/flow.
 
 **Core features (by doc section)**
@@ -33,27 +33,27 @@ Default port 7860; observability docs (LangSmith, LangFuse, etc.); deployment be
 Documentation URL: https://docs.hanzo.ai/flow. llms.txt: https://docs.hanzo.ai/flow/llms.txt. llms-full.txt: https://docs.hanzo.ai/flow/llms-full.txt. Release notes: https://docs.hanzo.ai/flow/release-notes.
 
 **Roadmap**
-Follow Hanzo Flow releases and GitHub for product direction; release notes at docs.
+Follow Flow releases and GitHub for product direction; release notes at docs.
 
 ## Docs
 
-- [About Hanzo Flow](https://docs.hanzo.ai/flow/about): Platform overview and introduction
-- [Install Hanzo Flow](https://docs.hanzo.ai/flow/get-started-installation): Installation options (OSS, Docker, from source)
+- [About Flow](https://docs.hanzo.ai/flow/about): Platform overview and introduction
+- [Install Flow](https://docs.hanzo.ai/flow/get-started-installation): Installation options (OSS, Docker, from source)
 - [Quickstart](https://docs.hanzo.ai/flow/get-started-quickstart): Get up and running quickly
 - [Use the visual editor](https://docs.hanzo.ai/flow/concepts-overview): Visual flow builder overview
 - [Build flows](https://docs.hanzo.ai/flow/concepts-flows): Concepts for building flows
-- [Trigger flows with the API](https://docs.hanzo.ai/flow/concepts-publish): Run flows via the Hanzo Flow API
+- [Trigger flows with the API](https://docs.hanzo.ai/flow/concepts-publish): Run flows via the Flow API
 - [Trigger flows with webhooks](https://docs.hanzo.ai/flow/webhook): Webhook triggers
 - [Test flows](https://docs.hanzo.ai/flow/concepts-playground): Playground and testing
 - [Import and export flows](https://docs.hanzo.ai/flow/concepts-flows-import): Import/export
 - [Agents](https://docs.hanzo.ai/flow/agents): Agents and tools
 - [MCP client](https://docs.hanzo.ai/flow/mcp-client): Model Context Protocol client and server
 - [API keys and authentication](https://docs.hanzo.ai/flow/api-keys-and-authentication): Configure API keys and auth
-- [Deployment overview](https://docs.hanzo.ai/flow/deployment-overview): How to deploy Hanzo Flow
-- [Docker deployment](https://docs.hanzo.ai/flow/deployment-docker): Hanzo Flow Docker images
+- [Deployment overview](https://docs.hanzo.ai/flow/deployment-overview): How to deploy Flow
+- [Docker deployment](https://docs.hanzo.ai/flow/deployment-docker): Flow Docker images
 - [Security](https://docs.hanzo.ai/flow/security): Deployment and security guidance
 - [Components overview](https://docs.hanzo.ai/flow/concepts-components): Component reference introduction
-- [API reference - get started](https://docs.hanzo.ai/flow/api-reference-api-examples): Get started with the Hanzo Flow API
+- [API reference - get started](https://docs.hanzo.ai/flow/api-reference-api-examples): Get started with the Flow API
 - [Troubleshooting](https://docs.hanzo.ai/flow/troubleshoot): Troubleshooting guide
 - [Release notes](https://docs.hanzo.ai/flow/release-notes): Version history and release notes
 

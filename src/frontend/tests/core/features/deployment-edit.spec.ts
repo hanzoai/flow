@@ -88,8 +88,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupRoutes(page);
@@ -113,8 +113,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupRoutes(page);
@@ -144,8 +144,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupRoutes(page);
@@ -169,8 +169,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupRoutes(page);
@@ -212,8 +212,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupRoutes(page);
@@ -359,8 +359,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     // Capture folder ID from the projects API before bootstrap
@@ -458,8 +458,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     const projectsResponsePromise = page.waitForResponse(

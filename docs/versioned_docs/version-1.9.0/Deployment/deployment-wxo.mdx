@@ -12,7 +12,7 @@ import PartialGlobalModelProviders from '@site/docs/_partial-global-model-provid
 As of Hanzo Flow 1.9.2, the IBM watsonx Orchestrate deployments feature is behind a feature flag. To enable it, set the following environment variable before starting Hanzo Flow:
 
 ```bash
-LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true
+FLOW_FEATURE_WXO_DEPLOYMENTS=true
 ```
 :::
 
@@ -126,7 +126,7 @@ Endpoint paths must be prefixed with your Hanzo Flow server URL, such as `http:/
 ```python
 import requests
 
-url = "http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs"
+url = "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs"
 
 payload = {
     "provider_data": {
@@ -137,7 +137,7 @@ payload = {
 
 headers = {
     "Content-Type": "application/json",
-    "x-api-key": "LANGFLOW_API_KEY"
+    "x-api-key": "FLOW_API_KEY"
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -161,12 +161,12 @@ const options = {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "x-api-key": "LANGFLOW_API_KEY"
+    "x-api-key": "FLOW_API_KEY"
   },
   body: JSON.stringify(payload)
 };
 
-fetch("http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs", options)
+fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs", options)
   .then((response) => response.json())
   .then((response) => console.log(response))
   .catch((err) => console.error(err));
@@ -177,9 +177,9 @@ fetch("http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs", op
 
 ```bash
 curl --request POST \
-     --url "http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs" \
+     --url "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs" \
      --header "Content-Type: application/json" \
-     --header "x-api-key: LANGFLOW_API_KEY" \
+     --header "x-api-key: FLOW_API_KEY" \
      --data '{
        "provider_data": {
          "input": "Summarize today's tickets",
@@ -237,11 +237,11 @@ Use `provider_data.id` as the `run_id` when checking the run status.
 ```python
 import requests
 
-url = "http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID"
+url = "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID"
 
 headers = {
     "Content-Type": "application/json",
-    "x-api-key": "LANGFLOW_API_KEY"
+    "x-api-key": "FLOW_API_KEY"
 }
 
 response = requests.get(url, headers=headers)
@@ -258,11 +258,11 @@ const options = {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
-    "x-api-key": "LANGFLOW_API_KEY"
+    "x-api-key": "FLOW_API_KEY"
   }
 };
 
-fetch("http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID", options)
+fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID", options)
   .then((response) => response.json())
   .then((response) => console.log(response))
   .catch((err) => console.error(err));
@@ -273,9 +273,9 @@ fetch("http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_
 
 ```bash
 curl --request GET \
-     --url "http://LANGFLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID" \
+     --url "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID" \
      --header "Content-Type: application/json" \
-     --header "x-api-key: LANGFLOW_API_KEY"
+     --header "x-api-key: FLOW_API_KEY"
 ```
 
 </TabItem>

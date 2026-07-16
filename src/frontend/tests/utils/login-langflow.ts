@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-export const loginLangflow = async (page: Page) => {
+export const loginFlow = async (page: Page) => {
   await page.goto("/");
   await page.getByPlaceholder("Username").fill("flow");
   await page.getByPlaceholder("Password").fill("flow");

@@ -30,7 +30,7 @@ from lfx.services.adapters.payload import AdapterPayloadMissingError, AdapterPay
 
 from flow.services.adapters.deployment.watsonx_orchestrate.client import resolve_runtime_credentials
 from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import extract_langflow_connections_binding
+from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import extract_flow_connections_binding
 from flow.services.adapters.deployment.watsonx_orchestrate.utils import (
     raise_as_deployment_error,
     require_single_deployment_id,
@@ -271,7 +271,7 @@ def _collect_tool_connection_ids(
     for tool in tools:
         tool_id = tool.get("id")
         resolved_tool_ids.add(tool_id)
-        connections = extract_langflow_connections_binding(tool)
+        connections = extract_flow_connections_binding(tool)
         all_tool_connection_ids.update(connections.values())
     return all_tool_connection_ids, resolved_tool_ids
 
@@ -461,7 +461,7 @@ async def validate_connection(connections_client: ConnectionsClient, *, app_id: 
         raise InvalidContentError(message=msg)
 
     if config.security_scheme != ConnectionSecurityScheme.KEY_VALUE:
-        msg = f"Connection '{app_id}' must use key-value credentials for Hanzo Flow flows."
+        msg = f"Connection '{app_id}' must use key-value credentials for Flow flows."
         raise InvalidContentError(message=msg)
 
     runtime_credentials = await asyncio.to_thread(

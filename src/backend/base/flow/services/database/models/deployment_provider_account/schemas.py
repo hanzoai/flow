@@ -9,11 +9,11 @@ from enum import Enum
 
 
 class DeploymentProviderKey(str, Enum):
-    """Deployment provider identifiers recognised by Hanzo Flow.
+    """Deployment provider identifiers recognised by Flow.
 
     Each member value must match the adapter registry key used by
     ``get_deployment_adapter(adapter_key)`` in LFX and the corresponding
-    mapper registration in the Hanzo Flow mapper registry.
+    mapper registration in the Flow mapper registry.
     """
 
     WATSONX_ORCHESTRATE = "watsonx-orchestrate"

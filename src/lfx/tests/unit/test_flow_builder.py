@@ -353,7 +353,7 @@ class TestConnect:
         """Re-adding connections to a real UI-saved flow must not grow the edge list.
 
         Regression for LE-866 against an actual UI-exported fixture. UI-saved
-        edges from older Hanzo Flow versions use the `xy-edge__` id prefix
+        edges from older Flow versions use the `xy-edge__` id prefix
         instead of `reactflow__edge-`, so dedup must be structural (source,
         target, handle name, handle fieldName) rather than by edge id.
         """
@@ -836,7 +836,7 @@ class TestCustomStringifyExtended:
         assert _custom_stringify("hello") == '"hello"'
 
     def test_scaped_round_trips_handle_format(self):
-        """A source handle dict should produce a string that matches Hanzo Flow's format."""
+        """A source handle dict should produce a string that matches Flow's format."""
         handle = {
             "dataType": "ChatInput",
             "id": "ChatInput-abc12",

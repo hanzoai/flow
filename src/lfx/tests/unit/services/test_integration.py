@@ -71,11 +71,11 @@ class TestStandaloneLFX:
         assert settings.ready is True
 
 
-class TestLFXWithLangflowConfig:
+class TestLFXWithFlowConfig:
     """Test LFX with flow configuration."""
 
     @pytest.fixture
-    def langflow_config_dir(self, tmp_path):
+    def flow_config_dir(self, tmp_path):
         """Create a temporary flow-style config directory."""
         config_dir = tmp_path / "config"
         config_dir.mkdir()
@@ -104,10 +104,10 @@ cache_service = "lfx.services.cache.service:ThreadingInMemoryCache"
 
         asyncio.run(manager.teardown())
 
-    def test_config_overrides_defaults(self, clean_manager, langflow_config_dir):
+    def test_config_overrides_defaults(self, clean_manager, flow_config_dir):
         """Test that config file overrides default services."""
         # Discover plugins from config
-        clean_manager.discover_plugins(langflow_config_dir)
+        clean_manager.discover_plugins(flow_config_dir)
 
         # Storage should be loaded from config
         assert ServiceType.STORAGE_SERVICE in clean_manager.service_classes
@@ -116,9 +116,9 @@ cache_service = "lfx.services.cache.service:ThreadingInMemoryCache"
 
         assert clean_manager.service_classes[ServiceType.STORAGE_SERVICE] == LocalStorageService
 
-    def test_multiple_services_from_config(self, clean_manager, langflow_config_dir):
+    def test_multiple_services_from_config(self, clean_manager, flow_config_dir):
         """Test loading multiple services from config."""
-        clean_manager.discover_plugins(langflow_config_dir)
+        clean_manager.discover_plugins(flow_config_dir)
 
         # Both services should be registered
         assert ServiceType.STORAGE_SERVICE in clean_manager.service_classes

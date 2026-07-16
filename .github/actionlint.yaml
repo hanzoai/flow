@@ -1,4 +1,4 @@
 self-hosted-runner:
   labels:
     - flow-ai-arm64-40gb-ephemeral
-    - Hanzo Flow-runner
+    - Flow-runner

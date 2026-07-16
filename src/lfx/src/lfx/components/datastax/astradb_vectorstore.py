@@ -341,11 +341,11 @@ class AstraDBVectorStoreComponent(AstraDBBaseComponent, LCVectorStoreComponent):
         # Get the additional parameters
         additional_params = self.astradb_vectorstore_kwargs or {}
 
-        # Get Hanzo Flow version and platform information
+        # Get Flow version and platform information
         __version__ = get_version_info()["version"]
-        langflow_prefix = ""
+        flow_prefix = ""
         # if os.getenv("AWS_EXECUTION_ENV") == "AWS_ECS_FARGATE":  # TODO: More precise way of detecting
-        #     langflow_prefix = "ds-"
+        #     flow_prefix = "ds-"
 
         # Get the database object
         database = self.get_database_object()
@@ -382,7 +382,7 @@ class AstraDBVectorStoreComponent(AstraDBBaseComponent, LCVectorStoreComponent):
                 # Hybrid Search Parameters
                 hybrid_search=hybrid_search_mode,
                 # Astra DB Usage Tracking Parameters
-                ext_callers=[(f"{langflow_prefix}flow", __version__)],
+                ext_callers=[(f"{flow_prefix}flow", __version__)],
                 # Astra DB Vector Store Parameters
                 **autodetect_params,
                 **embedding_params,

@@ -194,7 +194,7 @@ class SnapshotDeploymentBindingUpdate(BaseModel, Generic[T_FlowProviderData]):
             raise ValueError(msg)
 
         # Overlap check covers add_ids vs remove_ids only.
-        # add_raw_payloads carry flow-artifact IDs (Hanzo Flow domain),
+        # add_raw_payloads carry flow-artifact IDs (Flow domain),
         # while add_ids/remove_ids carry snapshot IDs (provider domain).
         overlap = set(add_values).intersection(remove_values)
         if overlap:

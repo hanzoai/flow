@@ -9,7 +9,7 @@ import Icon from "@site/src/components/icon";
 
 :::warning
 Never expose Hanzo Flow ports directly to the internet without proper security measures.
-Set `LANGFLOW_AUTO_LOGIN=False`, use a non-default `LANGFLOW_SECRET_KEY`, and deploy your Hanzo Flow server behind a reverse proxy with authentication enabled.
+Set `FLOW_AUTO_LOGIN=False`, use a non-default `FLOW_SECRET_KEY`, and deploy your Hanzo Flow server behind a reverse proxy with authentication enabled.
 For more information, see [Start a Hanzo Flow server with authentication enabled](#start-a-flow-server-with-authentication-enabled).
 :::
 
@@ -28,9 +28,9 @@ You can use Hanzo Flow API keys to interact with Hanzo Flow programmatically.
 By default, most Hanzo Flow API endpoints, such as `/v1/run/$FLOW_ID`, require authentication with a Hanzo Flow API key.
 
 Hanzo Flow validates API keys against keys stored in the database, but you can configure Hanzo Flow to validate API keys against an environment variable instead.
-For more information, see [`LANGFLOW_API_KEY_SOURCE`](#flow-api-key-source).
+For more information, see [`FLOW_API_KEY_SOURCE`](#flow-api-key-source).
 
-To require API key authentication for flow webhook endpoints, use the [`LANGFLOW_WEBHOOK_AUTH_ENABLE`](/webhook#require-authentication-for-webhooks) environment variable.
+To require API key authentication for flow webhook endpoints, use the [`FLOW_WEBHOOK_AUTH_ENABLE`](/webhook#require-authentication-for-webhooks) environment variable.
 To configure authentication for Hanzo Flow MCP servers, see [Use Hanzo Flow as an MCP server](/mcp-server).
 
 ### Hanzo Flow API key permissions
@@ -68,7 +68,7 @@ In this case, you must create API keys with the Hanzo Flow CLI.
 1. Recommended: [Start your Hanzo Flow server with authentication enabled](#start-a-flow-server-with-authentication-enabled).
 
     The Hanzo Flow team recommends enabling authentication for security reasons to prevent unauthorized creation of API keys and superusers, especially in production environments.
-    If authentication isn't enabled (`LANGFLOW_AUTO_LOGIN=True`), all users are effectively superusers, and they can create API keys with the Hanzo Flow CLI.
+    If authentication isn't enabled (`FLOW_AUTO_LOGIN=True`), all users are effectively superusers, and they can create API keys with the Hanzo Flow CLI.
 
 2. Create an API key with [`flow api-key`](/configuration-cli#flow-api-key):
 
@@ -90,9 +90,9 @@ To authenticate Hanzo Flow API requests, pass your Hanzo Flow API key an `x-api-
 
 ```shell
 curl -X POST \
-  "http://$LANGFLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID?stream=false" \
+  "http://$FLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID?stream=false" \
   -H "Content-Type: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY" \
+  -H "x-api-key: $FLOW_API_KEY" \
   -d '{"inputs": {"text":""}, "tweaks": {}}'
 ```
 
@@ -101,7 +101,7 @@ curl -X POST \
 
 ```shell
 curl -X POST \
-  "http://$LANGFLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID?x-api-key=$LANGFLOW_API_KEY" \
+  "http://$FLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID?x-api-key=$FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"inputs": {"text":""}, "tweaks": {}}'
 ```
@@ -115,7 +115,7 @@ For more information about forming Hanzo Flow API requests, see [Get started wit
 
 By default, Hanzo Flow tracks API key usage through `total_uses` and `last_used_at` records in your [Hanzo Flow database](/memory).
 
-To disable API key tracking, set `LANGFLOW_DISABLE_TRACK_APIKEY_USAGE=True` in your [Hanzo Flow environment variables](/environment-variables).
+To disable API key tracking, set `FLOW_DISABLE_TRACK_APIKEY_USAGE=True` in your [Hanzo Flow environment variables](/environment-variables).
 This can help avoid database contention during periods of high concurrency.
 
 ### Revoke an API key
@@ -141,7 +141,7 @@ Hanzo Flow only stores the encrypted key value or a secure reference to a key st
 This means that deleting a global variable from Hanzo Flow doesn't delete or invalidate the actual API key in the service provider's system.
 You must delete or rotate component API keys directly using the service provider's interface or API.
 
-For added security, you can set `LANGFLOW_REMOVE_API_KEYS=True` to omit API keys and tokens from flow data in your [Hanzo Flow database](/memory).
+For added security, you can set `FLOW_REMOVE_API_KEYS=True` to omit API keys and tokens from flow data in your [Hanzo Flow database](/memory).
 Additionally, when [exporting flows](/concepts-flows-import), you can choose to omit API keys from the exported flow JSON.
 
 ## Authentication environment variables
@@ -152,62 +152,62 @@ You can use the [`.env.example`](https://github.com/hanzoai/flow/blob/main/.env.
 
 For JWT authentication configuration, including algorithm selection and key management, see [JWT authentication](/jwt-authentication).
 
-### LANGFLOW_AUTO_LOGIN {#flow-auto-login}
+### FLOW_AUTO_LOGIN {#flow-auto-login}
 
 This variable controls whether authentication is required to access your Hanzo Flow server, including the visual editor, API, and Hanzo Flow CLI:
 
-* If `LANGFLOW_AUTO_LOGIN=False`, automatic login is disabled. Users must sign in to the visual editor, authenticate as a superuser to run certain Hanzo Flow CLI commands, and use a Hanzo Flow API key for Hanzo Flow API requests.
-If `false`, the Hanzo Flow team recommends that you also explicitly set [`LANGFLOW_SUPERUSER` and `LANGFLOW_SUPERUSER_PASSWORD`](#flow-superuser) to avoid using the insecure default values.
+* If `FLOW_AUTO_LOGIN=False`, automatic login is disabled. Users must sign in to the visual editor, authenticate as a superuser to run certain Hanzo Flow CLI commands, and use a Hanzo Flow API key for Hanzo Flow API requests.
+If `false`, the Hanzo Flow team recommends that you also explicitly set [`FLOW_SUPERUSER` and `FLOW_SUPERUSER_PASSWORD`](#flow-superuser) to avoid using the insecure default values.
 
-* If `LANGFLOW_AUTO_LOGIN=True` (default), all API requests require authentication with a Hanzo Flow API key, but the visual editor automatically signs in all users as superusers, and Hanzo Flow uses _only_ the default [superuser credentials](/api-keys-and-authentication#flow-superuser).
+* If `FLOW_AUTO_LOGIN=True` (default), all API requests require authentication with a Hanzo Flow API key, but the visual editor automatically signs in all users as superusers, and Hanzo Flow uses _only_ the default [superuser credentials](/api-keys-and-authentication#flow-superuser).
 All users access the same visual editor environment without password protection, they can run all Hanzo Flow CLI commands as superusers, and Hanzo Flow automatically authenticates internal requests between the backend and frontend based on the users' superuser privileges.
-If you also want to bypass authentication for Hanzo Flow API requests in addition to other bypassed authentication, see [`LANGFLOW_SKIP_AUTH_AUTO_LOGIN`](/api-keys-and-authentication#flow-skip-auth-auto-login).
+If you also want to bypass authentication for Hanzo Flow API requests in addition to other bypassed authentication, see [`FLOW_SKIP_AUTH_AUTO_LOGIN`](/api-keys-and-authentication#flow-skip-auth-auto-login).
 
 Hanzo Flow doesn't allow users to simultaneously edit the same flow in real time.
 If two users edit the same flow, Hanzo Flow saves only the work of the most recent editor based on the state of that user's [workspace](/concepts-overview#workspace). Any changes made by the other user in the interim are overwritten.
 
-#### Default authentication enforcement and LANGFLOW_SKIP_AUTH_AUTO_LOGIN {#flow-skip-auth-auto-login}
+#### Default authentication enforcement and FLOW_SKIP_AUTH_AUTO_LOGIN {#flow-skip-auth-auto-login}
 
-In Hanzo Flow version 1.6, the default settings are `LANGFLOW_AUTO_LOGIN=True` and `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=False`.
+In Hanzo Flow version 1.6, the default settings are `FLOW_AUTO_LOGIN=True` and `FLOW_SKIP_AUTH_AUTO_LOGIN=False`.
 This enforces authentication for API requests only, as explained in the preceding section.
 
 For temporary backwards compatibility, you can revert to the fully unauthenticated behavior from earlier versions by setting both variables to `true`.
-However, a future release will set `LANGFLOW_AUTO_LOGIN=False` and remove `LANGFLOW_SKIP_AUTH_AUTO_LOGIN`.
-At that point, Hanzo Flow will strictly enforce API key authentication for API requests, and you can manually disable authentication for some features, like the visual editor, by setting `LANGFLOW_AUTO_LOGIN=True`.
+However, a future release will set `FLOW_AUTO_LOGIN=False` and remove `FLOW_SKIP_AUTH_AUTO_LOGIN`.
+At that point, Hanzo Flow will strictly enforce API key authentication for API requests, and you can manually disable authentication for some features, like the visual editor, by setting `FLOW_AUTO_LOGIN=True`.
 
 <details>
 <summary>Authentication enforcement in earlier versions</summary>
 
-Hanzo Flow version 1.5 was the first version that could enforce authentication for Hanzo Flow API requests, regardless of the value of `LANGFLOW_AUTO_LOGIN`.
-As a temporary bypass for backwards compatibility, this version added the `LANGFLOW_SKIP_AUTH_AUTO_LOGIN` environment variable and set both variables to `true` by default to preserve the fully unauthenticated behavior from earlier versions.
+Hanzo Flow version 1.5 was the first version that could enforce authentication for Hanzo Flow API requests, regardless of the value of `FLOW_AUTO_LOGIN`.
+As a temporary bypass for backwards compatibility, this version added the `FLOW_SKIP_AUTH_AUTO_LOGIN` environment variable and set both variables to `true` by default to preserve the fully unauthenticated behavior from earlier versions.
 This allowed users to upgrade to version 1.5 with no change in the authentication behavior.
 
 In Hanzo Flow versions earlier than 1.5, Hanzo Flow API requests didn't require authentication.
-Additionally, the default setting of `LANGFLOW_AUTO_LOGIN=True` automatically granted all users superuser privileges in the visual editor, and it allowed all users to run all Hanzo Flow CLI commands as superusers.
+Additionally, the default setting of `FLOW_AUTO_LOGIN=True` automatically granted all users superuser privileges in the visual editor, and it allowed all users to run all Hanzo Flow CLI commands as superusers.
 </details>
 
-### LANGFLOW_ENABLE_SUPERUSER_CLI {#flow-enable-superuser-cli}
+### FLOW_ENABLE_SUPERUSER_CLI {#flow-enable-superuser-cli}
 
 Controls the availability of the `flow superuser` command in the Hanzo Flow CLI.
 The default is `true`, but `false` is recommended to prevent unrestricted superuser creation.
 For more information, see [`flow superuser`](/configuration-cli#flow-superuser).
 
-### LANGFLOW_SUPERUSER and LANGFLOW_SUPERUSER_PASSWORD {#flow-superuser}
+### FLOW_SUPERUSER and FLOW_SUPERUSER_PASSWORD {#flow-superuser}
 
 These variables specify the username and password for the Hanzo Flow server's superuser.
 
 ```text
-LANGFLOW_SUPERUSER=administrator
-LANGFLOW_SUPERUSER_PASSWORD=securepassword
+FLOW_SUPERUSER=administrator
+FLOW_SUPERUSER_PASSWORD=securepassword
 ```
 
-They are required if `LANGFLOW_AUTO_LOGIN=False`.
+They are required if `FLOW_AUTO_LOGIN=False`.
 Otherwise, they aren't relevant.
 
 When you [start a Hanzo Flow server with authentication enabled](#start-a-flow-server-with-authentication-enabled), if these variables are required but _not_ set, then Hanzo Flow uses the default values of `flow` and `flow`.
 These defaults don't apply when using the Hanzo Flow CLI command [`flow superuser`](/configuration-cli#flow-superuser).
 
-### LANGFLOW_SECRET_KEY {#flow-secret-key}
+### FLOW_SECRET_KEY {#flow-secret-key}
 
 This environment variable stores a secret key used for encrypting sensitive data like API keys and for JWT signing when using the HS256 algorithm.
 Hanzo Flow uses the [Fernet](https://pypi.org/project/cryptography/) library for secret key encryption.
@@ -218,7 +218,7 @@ If no secret key is provided, Hanzo Flow automatically generates one.
 However, you should generate and explicitly set your own key in production environments.
 This is particularly important for multi-instance deployments like Kubernetes to ensure consistent encryption across instances.
 
-To generate a secret encryption key for `LANGFLOW_SECRET_KEY`, do the following:
+To generate a secret encryption key for `FLOW_SECRET_KEY`, do the following:
 
 1. Run the command to generate and copy a secret to the clipboard.
 
@@ -228,19 +228,19 @@ To generate a secret encryption key for `LANGFLOW_SECRET_KEY`, do the following:
     * **macOS**: Generate a secret key and copy it to the clipboard:
 
         ```bash
-        python3 -c "from secrets import token_urlsafe; print(f'LANGFLOW_SECRET_KEY={token_urlsafe(32)}')" | pbcopy
+        python3 -c "from secrets import token_urlsafe; print(f'FLOW_SECRET_KEY={token_urlsafe(32)}')" | pbcopy
         ```
 
     * **Linux**: Generate a secret key and copy it to the clipboard:
 
         ```bash
-        python3 -c "from secrets import token_urlsafe; print(f'LANGFLOW_SECRET_KEY={token_urlsafe(32)}')" | xclip -selection clipboard
+        python3 -c "from secrets import token_urlsafe; print(f'FLOW_SECRET_KEY={token_urlsafe(32)}')" | xclip -selection clipboard
         ```
 
     * **Unix**: Generate a secret key and print it to the terminal to manually copy it:
 
         ```bash
-        python3 -c "from secrets import token_urlsafe; print(f'LANGFLOW_SECRET_KEY={token_urlsafe(32)}')"
+        python3 -c "from secrets import token_urlsafe; print(f'FLOW_SECRET_KEY={token_urlsafe(32)}')"
         ```
 
     </TabItem>
@@ -249,7 +249,7 @@ To generate a secret encryption key for `LANGFLOW_SECRET_KEY`, do the following:
     * Generate a secret key and copy it to the clipboard:
 
         ```bash
-        python -c "from secrets import token_urlsafe; print(f'LANGFLOW_SECRET_KEY={token_urlsafe(32)}')"
+        python -c "from secrets import token_urlsafe; print(f'FLOW_SECRET_KEY={token_urlsafe(32)}')"
         ```
 
     * Generate a secret key and print it to the terminal to manually copy it:
@@ -257,7 +257,7 @@ To generate a secret encryption key for `LANGFLOW_SECRET_KEY`, do the following:
         ```bash
 
         # Or just print
-        python -c "from secrets import token_urlsafe; print(f'LANGFLOW_SECRET_KEY={token_urlsafe(32)}')"
+        python -c "from secrets import token_urlsafe; print(f'FLOW_SECRET_KEY={token_urlsafe(32)}')"
         ```
 
     </TabItem>
@@ -266,53 +266,53 @@ To generate a secret encryption key for `LANGFLOW_SECRET_KEY`, do the following:
 2. Paste the value into your `.env` file:
 
     ```text
-    LANGFLOW_SECRET_KEY=dBuu...2kM2_fb
+    FLOW_SECRET_KEY=dBuu...2kM2_fb
     ```
 
-    If you're running Hanzo Flow on Docker, reference the `LANGFLOW_SECRET_KEY` from your `.env` file in the `docker-compose.yml` file like this:
+    If you're running Hanzo Flow on Docker, reference the `FLOW_SECRET_KEY` from your `.env` file in the `docker-compose.yml` file like this:
 
         ```yaml
         environment:
-          - LANGFLOW_SECRET_KEY=${LANGFLOW_SECRET_KEY}
+          - FLOW_SECRET_KEY=${FLOW_SECRET_KEY}
         ```
 
 #### Rotate the secret key {#rotating-the-secret-key}
 
-Rotate `LANGFLOW_SECRET_KEY` if the key might have been compromised and as part of your routine credential management practices.
+Rotate `FLOW_SECRET_KEY` if the key might have been compromised and as part of your routine credential management practices.
 Hanzo Flow provides a migration script that re-encrypts stored credentials and other sensitive data with a new key so you can rotate without losing access.
 
 For more information, see [Secret Key Rotation](https://github.com/hanzoai/flow/blob/main/SECURITY.md#secret-key-rotation) in the Hanzo Flow Security Policy.
 
-### LANGFLOW_NEW_USER_IS_ACTIVE {#flow-new-user-is-active}
+### FLOW_NEW_USER_IS_ACTIVE {#flow-new-user-is-active}
 
-When `LANGFLOW_NEW_USER_IS_ACTIVE=False` (default), accounts created by superusers are inactive by default and must be explicitly activated before users can sign in to the visual editor.
+When `FLOW_NEW_USER_IS_ACTIVE=False` (default), accounts created by superusers are inactive by default and must be explicitly activated before users can sign in to the visual editor.
 The superuser can also deactivate a user's account as needed.
 
-When `LANGFLOW_NEW_USER_IS_ACTIVE=True`, accounts created by superusers are automatically activated.
+When `FLOW_NEW_USER_IS_ACTIVE=True`, accounts created by superusers are automatically activated.
 
 ```text
-LANGFLOW_NEW_USER_IS_ACTIVE=False
+FLOW_NEW_USER_IS_ACTIVE=False
 ```
 
 Only superusers can manage user accounts for a Hanzo Flow server, but user management only matters if your server has authentication enabled.
 For more information, see [Start a Hanzo Flow server with authentication enabled](#start-a-flow-server-with-authentication-enabled).
 
-### LANGFLOW_API_KEY_SOURCE {#flow-api-key-source}
+### FLOW_API_KEY_SOURCE {#flow-api-key-source}
 
 This variable controls how Hanzo Flow validates API keys.
 
 | Value | Description |
 |-------|-------------|
 | `db` (default) | Validates API keys against [Hanzo Flow API keys](#flow-api-keys) stored in the database. This is the standard behavior where users create and manage API keys through the Hanzo Flow UI or CLI. |
-| `env` | Validates API keys against the `LANGFLOW_API_KEY` environment variable. Useful for Kubernetes deployments, CI/CD pipelines, or any environment where you want to inject a pre-defined API key without database configuration. |
+| `env` | Validates API keys against the `FLOW_API_KEY` environment variable. Useful for Kubernetes deployments, CI/CD pipelines, or any environment where you want to inject a pre-defined API key without database configuration. |
 
-By default, Hanzo Flow validates the `x-api-key` header against the Hanzo Flow database with `LANGFLOW_API_KEY_SOURCE=db`.
+By default, Hanzo Flow validates the `x-api-key` header against the Hanzo Flow database with `FLOW_API_KEY_SOURCE=db`.
 When using database-based validation, you can create multiple keys with per-user permissions, track usage, and manage keys through the Hanzo Flow UI or CLI.
 
-When `LANGFLOW_API_KEY_SOURCE=env`, Hanzo Flow validates the `x-api-key` header against the value of the `LANGFLOW_API_KEY` environment variable.
+When `FLOW_API_KEY_SOURCE=env`, Hanzo Flow validates the `x-api-key` header against the value of the `FLOW_API_KEY` environment variable.
 This means Hanzo Flow runs securely in stateless environments, such as with LFX or Kubernetes secrets.
 
-When `LANGFLOW_API_KEY_SOURCE=env`, only a single API key can be used for the deployment. All authenticated requests use the same API key, and successful authentication grants superuser privileges.
+When `FLOW_API_KEY_SOURCE=env`, only a single API key can be used for the deployment. All authenticated requests use the same API key, and successful authentication grants superuser privileges.
 This mode is designed for single-tenant deployments or automated systems, not multi-user environments where different users need different access levels. To rotate your keys, update the environment variable and restart the Hanzo Flow server.
 
 To enable environment-based API key validation:
@@ -320,26 +320,26 @@ To enable environment-based API key validation:
 1. In the Hanzo Flow `.env` file, set the API key source to `env`:
 
     ```text
-    LANGFLOW_API_KEY_SOURCE=env
+    FLOW_API_KEY_SOURCE=env
     ```
 
 2. In the Hanzo Flow `.env` file, set the API key value:
 
     ```text
-    LANGFLOW_API_KEY=your-secure-api-key
+    FLOW_API_KEY=your-secure-api-key
     ```
 
 3. Use the API key in your requests:
 
     ```shell
     curl -X POST \
-      "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false" \
+      "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false" \
       -H "Content-Type: application/json" \
-      -H "x-api-key: LANGFLOW_API_KEY" \
+      -H "x-api-key: FLOW_API_KEY" \
       -d '{"inputs": {"text":""}, "tweaks": {}}'
     ```
 
-    Replace `LANGFLOW_SERVER_ADDRESS`, `FLOW_ID`, and `LANGFLOW_API_KEY` with the values from your deployment.
+    Replace `FLOW_SERVER_ADDRESS`, `FLOW_ID`, and `FLOW_API_KEY` with the values from your deployment.
 
 <details>
 <summary>Kubernetes deployment example</summary>
@@ -358,7 +358,7 @@ To configure an environment-based API key in a Kubernetes Secret, do the followi
       api-key: "YOUR_API_KEY"
     ```
 
-    Replace `YOUR_API_KEY` with the `LANGFLOW_API_KEY` value from the Hanzo Flow `.env` file.
+    Replace `YOUR_API_KEY` with the `FLOW_API_KEY` value from the Hanzo Flow `.env` file.
 
 2. Reference the `flow-api-key` Secret in your Kubernetes deployment:
 
@@ -372,11 +372,11 @@ To configure an environment-based API key in a Kubernetes Secret, do the followi
         spec:
           containers:
           - name: flow
-            image: langflowai/flow:latest
+            image: flowai/flow:latest
             env:
-            - name: LANGFLOW_API_KEY_SOURCE
+            - name: FLOW_API_KEY_SOURCE
               value: "env"
-            - name: LANGFLOW_API_KEY
+            - name: FLOW_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: flow-api-key
@@ -393,59 +393,59 @@ To configure an environment-based API key in Docker Compose, do the following:
 1. Set the API key in your Hanzo Flow `.env` file.
 
     ```text
-    LANGFLOW_API_KEY=your-secure-api-key
+    FLOW_API_KEY=your-secure-api-key
     ```
 
     Replace `YOUR_API_KEY` with your actual Hanzo Flow API key value.
 
-2. Create or update your `docker-compose.yml` file to set `LANGFLOW_API_KEY_SOURCE=env` and reference the `LANGFLOW_API_KEY`.
+2. Create or update your `docker-compose.yml` file to set `FLOW_API_KEY_SOURCE=env` and reference the `FLOW_API_KEY`.
 
     ```yaml
     services:
       flow:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         environment:
-          - LANGFLOW_API_KEY_SOURCE=env
-          - LANGFLOW_API_KEY=${LANGFLOW_API_KEY}
+          - FLOW_API_KEY_SOURCE=env
+          - FLOW_API_KEY=${FLOW_API_KEY}
         ports:
           - "7860:7860"
     ```
 
 </details>
 
-### LANGFLOW_CORS_* {#cors-configuration-for-authentication}
+### FLOW_CORS_* {#cors-configuration-for-authentication}
 
 Cross-Origin Resource Sharing (CORS) configuration controls how authentication credentials are handled when your Hanzo Flow frontend and backend are served from different origins.
-The following `LANGFLOW_CORS_*` environment variables are available:
+The following `FLOW_CORS_*` environment variables are available:
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_CORS_ALLOW_CREDENTIALS` | Boolean | `True` | Whether to allow credentials, such as cookies and authorization headers, in CORS requests. |
-| `LANGFLOW_CORS_ALLOW_HEADERS` | List[String] or String | `*` | The allowed headers for CORS requests. Provide a comma-separated list of headers or use `*` to allow all headers. |
-| `LANGFLOW_CORS_ALLOW_METHODS` | List[String] or String | `*` | The allowed HTTP methods for CORS requests. Provide a comma-separated list of methods or use `*` to allow all methods. |
-| `LANGFLOW_CORS_ORIGINS` | String | `*` | The allowed CORS origins. Provide a comma-separated list of origins or use `*` for all origins. |
+| `FLOW_CORS_ALLOW_CREDENTIALS` | Boolean | `True` | Whether to allow credentials, such as cookies and authorization headers, in CORS requests. |
+| `FLOW_CORS_ALLOW_HEADERS` | List[String] or String | `*` | The allowed headers for CORS requests. Provide a comma-separated list of headers or use `*` to allow all headers. |
+| `FLOW_CORS_ALLOW_METHODS` | List[String] or String | `*` | The allowed HTTP methods for CORS requests. Provide a comma-separated list of methods or use `*` to allow all methods. |
+| `FLOW_CORS_ORIGINS` | String | `*` | The allowed CORS origins. Provide a comma-separated list of origins or use `*` for all origins. |
 
 The default configuration enables CORS credentials and uses wildcards (`*`) to allow all origins, headers, and methods:
 
 ```text
-LANGFLOW_CORS_ORIGINS=*
-LANGFLOW_CORS_ALLOW_CREDENTIALS=True
-LANGFLOW_CORS_ALLOW_HEADERS=*
-LANGFLOW_CORS_ALLOW_METHODS=*
+FLOW_CORS_ORIGINS=*
+FLOW_CORS_ALLOW_CREDENTIALS=True
+FLOW_CORS_ALLOW_HEADERS=*
+FLOW_CORS_ALLOW_METHODS=*
 ```
 
 :::danger
 Hanzo Flow's default CORS settings can be a security risk in production environments because any website can make requests to your Hanzo Flow API, and any website can include credentials in cross-origin requests, including authentication cookies and authorization headers.
 
-In production deployments, specify exact origins in `LANGFLOW_CORS_ORIGINS`.
+In production deployments, specify exact origins in `FLOW_CORS_ORIGINS`.
 You can also specify allowed headers and methods, if needed.
 For example:
 
 ```text
-LANGFLOW_CORS_ORIGINS=["https://yourdomain.com","https://app.yourdomain.com"]
-LANGFLOW_CORS_ALLOW_CREDENTIALS=True
-LANGFLOW_CORS_ALLOW_HEADERS=["Content-Type","Authorization"]
-LANGFLOW_CORS_ALLOW_METHODS=["GET","POST","PUT"]
+FLOW_CORS_ORIGINS=["https://yourdomain.com","https://app.yourdomain.com"]
+FLOW_CORS_ALLOW_CREDENTIALS=True
+FLOW_CORS_ALLOW_HEADERS=["Content-Type","Authorization"]
+FLOW_CORS_ALLOW_METHODS=["GET","POST","PUT"]
 ```
 :::
 
@@ -457,25 +457,25 @@ SSRF protection prevents requests to internal or private network resources, such
 :::warning
 As of Hanzo Flow 1.9.3, SSRF protection is enabled by default and includes DNS rebinding prevention through IP pinning.
 
-If you are upgrading to Hanzo Flow 1.9.3 and your flows use the [**API Request** component](/api-request) to call resources that would be blocked by SSRF protection, add those hosts to `LANGFLOW_SSRF_ALLOWED_HOSTS` before upgrading to avoid disruption.
+If you are upgrading to Hanzo Flow 1.9.3 and your flows use the [**API Request** component](/api-request) to call resources that would be blocked by SSRF protection, add those hosts to `FLOW_SSRF_ALLOWED_HOSTS` before upgrading to avoid disruption.
 :::
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_SSRF_PROTECTION_ENABLED` | Boolean | `True` | Enable SSRF protection for the **API Request** component. When enabled, the component blocks requests to private IP addresses. When disabled, requests are not blocked. |
-| `LANGFLOW_SSRF_ALLOWED_HOSTS` | List[String] | Not set | A comma-separated list of allowed hosts, IP addresses, or CIDR ranges that can bypass SSRF protection checks. For example: `192.168.1.0/24,10.0.0.5,*.internal.company.local`.|
+| `FLOW_SSRF_PROTECTION_ENABLED` | Boolean | `True` | Enable SSRF protection for the **API Request** component. When enabled, the component blocks requests to private IP addresses. When disabled, requests are not blocked. |
+| `FLOW_SSRF_ALLOWED_HOSTS` | List[String] | Not set | A comma-separated list of allowed hosts, IP addresses, or CIDR ranges that can bypass SSRF protection checks. For example: `192.168.1.0/24,10.0.0.5,*.internal.company.local`.|
 
-### LANGFLOW_WEBHOOK_AUTH_ENABLE {#flow-webhook-auth-enable}
+### FLOW_WEBHOOK_AUTH_ENABLE {#flow-webhook-auth-enable}
 
 This variable controls whether API key authentication is required for webhook endpoints.
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_WEBHOOK_AUTH_ENABLE` | Boolean | `False` | When `True`, webhook endpoints require API key authentication and validate that the authenticated user owns the flow being executed. When `False`, no Hanzo Flow API key is required and all requests to the webhook endpoint are treated as being sent by the flow owner. |
+| `FLOW_WEBHOOK_AUTH_ENABLE` | Boolean | `False` | When `True`, webhook endpoints require API key authentication and validate that the authenticated user owns the flow being executed. When `False`, no Hanzo Flow API key is required and all requests to the webhook endpoint are treated as being sent by the flow owner. |
 
-By default, webhooks run as the flow owner without authentication with `LANGFLOW_WEBHOOK_AUTH_ENABLE=False`.
+By default, webhooks run as the flow owner without authentication with `FLOW_WEBHOOK_AUTH_ENABLE=False`.
 
-To require API key authentication for webhooks, in your Hanzo Flow `.env` file, set `LANGFLOW_WEBHOOK_AUTH_ENABLE=True`.
+To require API key authentication for webhooks, in your Hanzo Flow `.env` file, set `FLOW_WEBHOOK_AUTH_ENABLE=True`.
 
 When webhook authentication is enabled, you must provide a Hanzo Flow API key with each webhook request as an HTTP header or query parameter. For more information, see [Require authentication for webhooks](/webhook#require-authentication-for-webhooks).
 
@@ -494,37 +494,37 @@ Additionally, you must sign in as a superuser to manage users and [create a Hanz
 1. Create a `.env` file with the following variables:
 
     ```text
-    LANGFLOW_AUTO_LOGIN=False
-    LANGFLOW_SUPERUSER=
-    LANGFLOW_SUPERUSER_PASSWORD=
-    LANGFLOW_SECRET_KEY=
-    LANGFLOW_NEW_USER_IS_ACTIVE=False
-    LANGFLOW_ENABLE_SUPERUSER_CLI=False
+    FLOW_AUTO_LOGIN=False
+    FLOW_SUPERUSER=
+    FLOW_SUPERUSER_PASSWORD=
+    FLOW_SECRET_KEY=
+    FLOW_NEW_USER_IS_ACTIVE=False
+    FLOW_ENABLE_SUPERUSER_CLI=False
     ```
 
     Your `.env` file can have other environment variables.
     This example focuses on authentication variables.
 
-2. Set `LANGFLOW_SUPERUSER` and `LANGFLOW_SUPERUSER_PASSWORD` to your desired superuser credentials.
+2. Set `FLOW_SUPERUSER` and `FLOW_SUPERUSER_PASSWORD` to your desired superuser credentials.
 
     For a one-time test, you can use basic credentials like `administrator` and `password`.
     Strong, securely-stored credentials are recommended in genuine development and production environments.
 
-3. Recommended: Generate and set a `LANGFLOW_SECRET_KEY` for encrypting sensitive data.
+3. Recommended: Generate and set a `FLOW_SECRET_KEY` for encrypting sensitive data.
 
     If you don't set a secret key, Hanzo Flow generates one automatically, but this isn't recommended for production environments.
 
-    For instructions on generating and setting a secret key, see [`LANGFLOW_SECRET_KEY`](#flow-secret-key).
+    For instructions on generating and setting a secret key, see [`FLOW_SECRET_KEY`](#flow-secret-key).
 
 4. Save your `.env` file with the populated variables. For example:
 
     ```text
-    LANGFLOW_AUTO_LOGIN=False
-    LANGFLOW_SUPERUSER=administrator
-    LANGFLOW_SUPERUSER_PASSWORD=securepassword
-    LANGFLOW_SECRET_KEY=dBuu...2kM2_fb
-    LANGFLOW_NEW_USER_IS_ACTIVE=False
-    LANGFLOW_ENABLE_SUPERUSER_CLI=False
+    FLOW_AUTO_LOGIN=False
+    FLOW_SUPERUSER=administrator
+    FLOW_SUPERUSER_PASSWORD=securepassword
+    FLOW_SECRET_KEY=dBuu...2kM2_fb
+    FLOW_NEW_USER_IS_ACTIVE=False
+    FLOW_ENABLE_SUPERUSER_CLI=False
     ```
 
 5. Start Hanzo Flow with the configuration from your `.env` file:
@@ -533,7 +533,7 @@ Additionally, you must sign in as a superuser to manage users and [create a Hanz
     uv run flow run --env-file .env
     ```
 
-    Starting Hanzo Flow with a `.env` file automatically authenticates you as the superuser set in `LANGFLOW_SUPERUSER` and `LANGFLOW_SUPERUSER_PASSWORD`.
+    Starting Hanzo Flow with a `.env` file automatically authenticates you as the superuser set in `FLOW_SUPERUSER` and `FLOW_SUPERUSER_PASSWORD`.
     If you don't explicitly set these variables, the default values are `flow` and `flow` for system auto-login.
 
 6. Verify the server is running. The default location is `http://localhost:7860`.
@@ -546,7 +546,7 @@ Next, you can add users to your Hanzo Flow server to collaborate with others on 
 
     If you aren't using the default location, replace `localhost:7860` with your server's address.
 
-2. Log in with the superuser credentials you set in your `.env` (`LANGFLOW_SUPERUSER` and `LANGFLOW_SUPERUSER_PASSWORD`).
+2. Log in with the superuser credentials you set in your `.env` (`FLOW_SUPERUSER` and `FLOW_SUPERUSER_PASSWORD`).
 
 3. To manage users on your server, navigate to `/admin`, such as `http://localhost:7860/admin`, click your profile icon, and then click **Admin Page**.
 

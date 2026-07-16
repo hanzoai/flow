@@ -102,9 +102,9 @@ Effective monitoring ensures Hanzo Flow operates reliably and performs well unde
 * **Application logs**: Collect and analyze logs for errors, warnings, and flow execution issues. Centralize logs using tools like ELK Stack or Fluentd. You can also inspect [Hanzo Flow logs](/logging).
 * **Resource usage**: Track CPU, memory, and disk usage of Hanzo Flow instances. Use Prometheus and Grafana for real-time metrics collection and monitoring in Kubernetes.
 
-    To expose your Hanzo Flow server's Prometheus metrics, set `LANGFLOW_PROMETHEUS_ENABLED=True` (the default is `false`).
+    To expose your Hanzo Flow server's Prometheus metrics, set `FLOW_PROMETHEUS_ENABLED=True` (the default is `false`).
     The default port for the Prometheus metrics is 9090.
-    To change the port, set `LANGFLOW_PROMETHEUS_PORT`.
+    To change the port, set `FLOW_PROMETHEUS_PORT`.
 
 * **API performance**: Monitor response times, error rates, and request throughput. Set alerts for high latency or error spikes.
 * **Observability tools**: Integrate with [LangWatch](/integrations-langwatch) or [Opik](/integrations-opik) for detailed flow tracing and metrics. Use these tools to debug flow performance and optimize execution.

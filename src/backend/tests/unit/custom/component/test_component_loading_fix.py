@@ -36,7 +36,7 @@ class TestComponentLoadingFix:
         return ["/custom/path1", "/custom/path2"]
 
     @pytest.fixture
-    def mock_langflow_components(self):
+    def mock_flow_components(self):
         """Create mock flow components response."""
         return {
             "components": {
@@ -69,7 +69,7 @@ class TestComponentLoadingFix:
 
     @pytest.mark.asyncio
     async def test_base_components_path_filtering(
-        self, mock_settings_service, mock_langflow_components, mock_custom_components
+        self, mock_settings_service, mock_flow_components, mock_custom_components
     ):
         """Test that BASE_COMPONENTS_PATH is properly filtered out from custom components paths."""
         # Setup: Include BASE_COMPONENTS_PATH in the components_path list
@@ -77,7 +77,7 @@ class TestComponentLoadingFix:
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict") as mock_aget_all_types_dict,
         ):
             # Mock aget_all_types_dict to return custom components
@@ -97,14 +97,14 @@ class TestComponentLoadingFix:
             assert "CustomComponent1" in result["custom_category"]
 
     @pytest.mark.asyncio
-    async def test_only_base_components_path_in_list(self, mock_settings_service, mock_langflow_components):
+    async def test_only_base_components_path_in_list(self, mock_settings_service, mock_flow_components):
         """Test behavior when components_path contains only BASE_COMPONENTS_PATH."""
         # Setup: Only BASE_COMPONENTS_PATH in the list
         mock_settings_service.settings.components_path = [BASE_COMPONENTS_PATH]
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict") as mock_aget_all_types_dict,
         ):
             # Execute the function
@@ -120,14 +120,14 @@ class TestComponentLoadingFix:
             assert "Component3" in result["category2"]
 
     @pytest.mark.asyncio
-    async def test_empty_components_path(self, mock_settings_service, mock_langflow_components):
+    async def test_empty_components_path(self, mock_settings_service, mock_flow_components):
         """Test behavior when components_path is empty."""
         # Setup: Empty components_path
         mock_settings_service.settings.components_path = []
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict") as mock_aget_all_types_dict,
         ):
             # Execute the function
@@ -142,14 +142,14 @@ class TestComponentLoadingFix:
             assert "Component1" in result["category1"]
 
     @pytest.mark.asyncio
-    async def test_none_components_path(self, mock_settings_service, mock_langflow_components):
+    async def test_none_components_path(self, mock_settings_service, mock_flow_components):
         """Test behavior when components_path is None."""
         # Setup: None components_path
         mock_settings_service.settings.components_path = None
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict") as mock_aget_all_types_dict,
         ):
             # Execute the function
@@ -163,7 +163,7 @@ class TestComponentLoadingFix:
             assert "category2" in result
 
     @pytest.mark.asyncio
-    async def test_lazy_loading_mode_with_base_path_filtering(self, mock_settings_service, mock_langflow_components):
+    async def test_lazy_loading_mode_with_base_path_filtering(self, mock_settings_service, mock_flow_components):
         """Test that lazy loading mode uses aget_component_metadata with filtered paths."""
         # Setup: Enable lazy loading and include BASE_COMPONENTS_PATH
         mock_settings_service.settings.lazy_load_components = True
@@ -176,7 +176,7 @@ class TestComponentLoadingFix:
         }
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_component_metadata", return_value=mock_metadata) as mock_aget_metadata,
         ):
             # Execute the function
@@ -191,7 +191,7 @@ class TestComponentLoadingFix:
 
     @pytest.mark.asyncio
     async def test_multiple_custom_paths_with_base_path(
-        self, mock_settings_service, mock_langflow_components, mock_custom_components
+        self, mock_settings_service, mock_flow_components, mock_custom_components
     ):
         """Test filtering with multiple custom paths and BASE_COMPONENTS_PATH."""
         # Setup: Multiple paths including BASE_COMPONENTS_PATH
@@ -200,7 +200,7 @@ class TestComponentLoadingFix:
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch(
                 "lfx.interface.components.aget_all_types_dict", return_value=mock_custom_components
             ) as mock_aget_all_types_dict,
@@ -218,7 +218,7 @@ class TestComponentLoadingFix:
             assert "custom_category" in result  # From custom components
 
     @pytest.mark.asyncio
-    async def test_component_merging_logic(self, mock_settings_service, mock_langflow_components):
+    async def test_component_merging_logic(self, mock_settings_service, mock_flow_components):
         """Test that flow and custom components are properly merged."""
         # Setup
         mock_settings_service.settings.components_path = ["/custom/path1"]
@@ -236,7 +236,7 @@ class TestComponentLoadingFix:
         }
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value=overlapping_custom_components),
         ):
             # Execute the function
@@ -251,7 +251,7 @@ class TestComponentLoadingFix:
             assert result["category1"]["Component1"]["display_name"] == "CustomComponent1"
 
             # Only components from custom category should remain in category1
-            assert "Component2" not in result["category1"]  # Hanzo Flow component is replaced by custom category
+            assert "Component2" not in result["category1"]  # Flow component is replaced by custom category
             assert "Component4" in result["category1"]  # New custom component
 
             # New custom component should be added
@@ -261,14 +261,14 @@ class TestComponentLoadingFix:
             assert result["new_category"]["NewComponent"]["display_name"] == "NewComponent"
 
     @pytest.mark.asyncio
-    async def test_component_cache_behavior(self, mock_settings_service, mock_langflow_components):
+    async def test_component_cache_behavior(self, mock_settings_service, mock_flow_components):
         """Test that component cache is properly used and populated."""
         # Setup
         mock_settings_service.settings.components_path = ["/custom/path1"]
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value={}),
         ):
             # First call - should populate cache
@@ -286,14 +286,14 @@ class TestComponentLoadingFix:
             assert result1 is result2  # Same object reference
 
     @pytest.mark.asyncio
-    async def test_logging_behavior(self, mock_settings_service, mock_langflow_components, mock_custom_components):
+    async def test_logging_behavior(self, mock_settings_service, mock_flow_components, mock_custom_components):
         """Test that appropriate logging messages are generated."""
         # Setup
         mock_settings_service.settings.components_path = ["/custom/path1"]
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value=mock_custom_components),
             patch("lfx.interface.components.logger") as mock_logger,
         ):
@@ -312,14 +312,14 @@ class TestComponentLoadingFix:
             assert len(total_count_logs) >= 1
 
     @pytest.mark.asyncio
-    async def test_error_handling_in_custom_component_loading(self, mock_settings_service, mock_langflow_components):
+    async def test_error_handling_in_custom_component_loading(self, mock_settings_service, mock_flow_components):
         """Test error handling when custom component loading fails."""
         # Setup
         mock_settings_service.settings.components_path = ["/custom/path1"]
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", side_effect=Exception("Custom loading failed")),
             pytest.raises(Exception, match="Custom loading failed"),
         ):
@@ -339,7 +339,7 @@ class TestComponentLoadingFix:
         assert "components" in BASE_COMPONENTS_PATH.lower()
 
     @pytest.mark.asyncio
-    async def test_path_filtering_edge_cases(self, mock_settings_service, mock_langflow_components):
+    async def test_path_filtering_edge_cases(self, mock_settings_service, mock_flow_components):
         """Test edge cases in path filtering logic."""
         # Setup
         mock_settings_service.settings.lazy_load_components = False
@@ -348,7 +348,7 @@ class TestComponentLoadingFix:
         mock_settings_service.settings.components_path = [BASE_COMPONENTS_PATH, "/custom/path", BASE_COMPONENTS_PATH]
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value={}) as mock_aget_all_types_dict,
         ):
             # Clear cache for fresh test
@@ -361,7 +361,7 @@ class TestComponentLoadingFix:
             mock_aget_all_types_dict.assert_called_once_with(["/custom/path"])
 
     @pytest.mark.asyncio
-    async def test_component_count_calculation(self, mock_settings_service, mock_langflow_components):
+    async def test_component_count_calculation(self, mock_settings_service, mock_flow_components):
         """Test that component count calculation works correctly."""
         # Setup with known component counts
         mock_settings_service.settings.components_path = ["/custom/path1"]
@@ -379,7 +379,7 @@ class TestComponentLoadingFix:
         }
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value=mock_custom_components),
         ):
             # Execute the function
@@ -396,7 +396,7 @@ class TestComponentLoadingFix:
 
     @pytest.mark.asyncio
     async def test_async_concurrency_safety(
-        self, mock_settings_service, mock_langflow_components, mock_custom_components
+        self, mock_settings_service, mock_flow_components, mock_custom_components
     ):
         """Test that concurrent calls to get_and_cache_all_types_dict are safe."""
         # Setup
@@ -404,7 +404,7 @@ class TestComponentLoadingFix:
         mock_settings_service.settings.lazy_load_components = False
 
         with (
-            patch("lfx.interface.components.import_langflow_components", return_value=mock_langflow_components),
+            patch("lfx.interface.components.import_flow_components", return_value=mock_flow_components),
             patch("lfx.interface.components.aget_all_types_dict", return_value=mock_custom_components),
         ):
             # Execute multiple concurrent calls

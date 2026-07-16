@@ -1,7 +1,7 @@
 [project]
 name = "hanzo-flow-sdk"
 version = "0.1.6"
-description = "Python SDK for the Hanzo Flow REST API"
+description = "Python SDK for the Flow REST API"
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
 license = "MIT"
@@ -22,14 +22,14 @@ testing = [
 ]
 
 [project.entry-points."pytest11"]
-flow = "langflow_sdk.testing"
+flow = "flow_sdk.testing"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/langflow_sdk"]
+packages = ["src/flow_sdk"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -40,7 +40,7 @@ python_functions = "test_*"
 addopts = "-v --tb=short --strict-markers --disable-warnings --color=yes"
 markers = [
     "unit: Unit tests",
-    "integration: Integration tests (require a live Hanzo Flow instance)",
+    "integration: Integration tests (require a live Flow instance)",
 ]
 
 [dependency-groups]

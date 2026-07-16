@@ -3,7 +3,7 @@
 ## Overview
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers.
 
-**Upstream**: Hanzo Flow (MIT). Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `LANGFLOW_*` retained only for backwards compatibility — do not introduce new `LANGFLOW_*` references).
+**Upstream**: Hanzo Flow (MIT). Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `FLOW_*` retained only for backwards compatibility — do not introduce new `FLOW_*` references).
 
 ## Tech Stack
 - **Backend**: Python (FastAPI, SQLModel, Alembic)
@@ -41,7 +41,7 @@ Three Python packages in a uv workspace:
 - `lfx` -- executor package name
 
 ### Environment variables (backwards compat)
-- `LANGFLOW_*` env vars are kept for backwards compatibility (e.g. `LANGFLOW_DATABASE_URL`, `LANGFLOW_LOG_LEVEL`)
+- `FLOW_*` env vars are kept for backwards compatibility (e.g. `FLOW_DATABASE_URL`, `FLOW_LOG_LEVEL`)
 - These are defined in `lfx/src/lfx/services/settings/base.py` via pydantic-settings
 
 ### Key classes
@@ -51,7 +51,7 @@ Three Python packages in a uv workspace:
 ## Key Files
 - `pyproject.toml` -- Root project config (PyPI name: hanzoflow)
 - `src/backend/base/pyproject.toml` -- Base package config (PyPI name: flow-base)
-- `src/backend/base/flow/launcher.py` -- Main entry point (was langflow_launcher.py)
+- `src/backend/base/flow/launcher.py` -- Main entry point (was flow_launcher.py)
 - `src/backend/base/flow/__main__.py` -- CLI commands (typer app)
 - `src/backend/base/flow/main.py` -- FastAPI app factory
 - `src/backend/base/flow/alembic/` -- Database migrations

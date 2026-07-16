@@ -35,7 +35,7 @@ def register(app: typer.Typer) -> None:
             help="Overwrite the destination file if it already exists.",
         ),
     ) -> None:
-        """Scaffold a new Hanzo Flow flow JSON from a built-in template (lazy-loaded)."""
+        """Scaffold a new Flow flow JSON from a built-in template (lazy-loaded)."""
         from pathlib import Path
 
         from lfx.cli.create import create_command, print_templates
@@ -58,7 +58,7 @@ def register(app: typer.Typer) -> None:
         rich_help_panel="Authoring",
     )
     def requirements_command_wrapper(
-        flow_path: str = typer.Argument(help="Path to the Hanzo Flow flow JSON file"),
+        flow_path: str = typer.Argument(help="Path to the Flow flow JSON file"),
         output: str | None = typer.Option(
             None,
             "--output",
@@ -82,7 +82,7 @@ def register(app: typer.Typer) -> None:
             help="Do not pin package versions (default: pin to currently installed versions)",
         ),
     ) -> None:
-        """Generate requirements.txt from a Hanzo Flow flow JSON (lazy-loaded)."""
+        """Generate requirements.txt from a Flow flow JSON (lazy-loaded)."""
         import json
         from pathlib import Path
 
@@ -120,7 +120,7 @@ def register(app: typer.Typer) -> None:
     def validate_command_wrapper(
         flow_paths: list[str] = typer.Argument(
             default=None,
-            help="Path(s) to Hanzo Flow flow JSON file(s) or directories to validate. Defaults to flows/.",
+            help="Path(s) to Flow flow JSON file(s) or directories to validate. Defaults to flows/.",
         ),
         dir_path: str | None = typer.Option(
             None,
@@ -185,7 +185,7 @@ def register(app: typer.Typer) -> None:
             help="Output format: text (default) or json",
         ),
     ) -> None:
-        """Validate Hanzo Flow flow JSON files without executing them (lazy-loaded)."""
+        """Validate Flow flow JSON files without executing them (lazy-loaded)."""
         from lfx.cli.validate import validate_command
 
         # Merge --dir into positional paths for a consistent interface with push

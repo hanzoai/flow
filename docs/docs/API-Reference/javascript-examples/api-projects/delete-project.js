@@ -1,10 +1,10 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v1/projects/${process.env.PROJECT_ID ?? ""}`;
+const url = `${process.env.FLOW_URL ?? ""}/api/v1/projects/${process.env.PROJECT_ID ?? ""}`;
 
 const options = {
   method: 'DELETE',
   headers: {
     "accept": `*/*`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.FLOW_API_KEY ?? ""}`,
   },
 };
 

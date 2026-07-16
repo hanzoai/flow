@@ -31,10 +31,10 @@ URL_REGEX = re.compile(
 USER_AGENT = None
 # Check if flow is installed using importlib.util.find_spec(name))
 if importlib.util.find_spec("flow"):
-    langflow_installed = True
+    flow_installed = True
     USER_AGENT = get_user_agent()
 else:
-    langflow_installed = False
+    flow_installed = False
     USER_AGENT = "lfx"
 
 
@@ -239,7 +239,7 @@ class URLComponent(Component):
 
         # SSRF Protection: Validate URL to prevent access to internal resources
         # Blocks requests to private IPs, localhost, and cloud metadata endpoints
-        # when LANGFLOW_SSRF_PROTECTION_ENABLED=true
+        # when FLOW_SSRF_PROTECTION_ENABLED=true
         try:
             validate_url_for_ssrf(url, warn_only=False)
         except SSRFProtectionError as e:

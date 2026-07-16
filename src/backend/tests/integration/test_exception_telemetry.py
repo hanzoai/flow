@@ -27,7 +27,7 @@ class TestExceptionTelemetryIntegration:
         telemetry_service.do_not_track = False
         telemetry_service.client_type = "oss"
         telemetry_service.common_telemetry_fields = {
-            "langflow_version": "1.0.0",
+            "flow_version": "1.0.0",
             "platform": "python_package",
             "os": "darwin",
         }
@@ -84,7 +84,7 @@ class TestExceptionTelemetryIntegration:
         telemetry_service.do_not_track = False
         telemetry_service.client_type = "oss"
         telemetry_service.common_telemetry_fields = {
-            "langflow_version": "1.0.0",
+            "flow_version": "1.0.0",
             "platform": "python_package",
             "os": "darwin",
         }

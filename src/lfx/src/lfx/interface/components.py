@@ -203,11 +203,11 @@ def _save_generated_index(modules_dict: dict) -> None:
         # Get version
         from importlib.metadata import version
 
-        langflow_version = version("flow")
+        flow_version = version("flow")
 
         # Build index structure
         index = {
-            "version": langflow_version,
+            "version": flow_version,
             "metadata": {
                 "num_modules": num_modules,
                 "num_components": num_components,
@@ -475,11 +475,11 @@ async def _load_production_mode(
     return modules_dict, index_source
 
 
-async def import_langflow_components(
+async def import_flow_components(
     settings_service: Optional["SettingsService"] = None,
     telemetry_service: Any | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Asynchronously discovers and loads all built-in Hanzo Flow components.
+    """Asynchronously discovers and loads all built-in Flow components.
 
     Loading Strategy:
     - Production mode: Load from prebuilt index -> cache -> build dynamically (with caching)
@@ -633,7 +633,7 @@ async def get_and_cache_all_types_dict(
 ):
     """Retrieves and caches the complete dictionary of component types and templates.
 
-    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in Hanzo Flow
+    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in Flow
     components and either fully loads all components or loads only their metadata, depending on the
     lazy loading setting. Merges built-in and custom components into the cache and returns the
     resulting dictionary.
@@ -645,7 +645,7 @@ async def get_and_cache_all_types_dict(
     if component_cache.all_types_dict is None:
         await logger.adebug("Building components cache")
 
-        langflow_components = await import_langflow_components(settings_service, telemetry_service)
+        flow_components = await import_flow_components(settings_service, telemetry_service)
         custom_components_dict = await _determine_loading_strategy(settings_service)
 
         # Flatten custom dict if it has a "components" wrapper
@@ -653,7 +653,7 @@ async def get_and_cache_all_types_dict(
 
         # Merge built-in and custom components (no wrapper at cache level)
         component_cache.all_types_dict = {
-            **langflow_components["components"],
+            **flow_components["components"],
             **custom_flat,
         }
         component_count = sum(len(comps) for comps in component_cache.all_types_dict.values())

@@ -9,9 +9,9 @@
 #
 # GITHUB SETUP  (Settings → Environments → New environment → "staging")
 #   Variables  (plain text, visible in logs):
-#     LANGFLOW_STAGING_URL   e.g. https://staging.flow.example.com
+#     FLOW_STAGING_URL   e.g. https://staging.flow.example.com
 #   Secrets    (masked, never logged):
-#     LANGFLOW_STAGING_API_KEY   your staging API key
+#     FLOW_STAGING_API_KEY   your staging API key
 #
 # USAGE
 #   Copy to .github/workflows/flow-test.yml in your repo.
@@ -25,7 +25,7 @@
 #   Tests are automatically skipped when no connection is configured,
 #   so PRs from external contributors (who lack secrets) still pass.
 
-name: Test Hanzo Flow Flows
+name: Test Flow Flows
 
 on:
   pull_request:
@@ -69,17 +69,17 @@ jobs:
       # ------------------------------------------------------------------ #
       - name: Write environments config
         run: >-
-          printf '[environments.staging]\nurl = "%s"\napi_key_env = "LANGFLOW_STAGING_API_KEY"\n'
-          "$LANGFLOW_STAGING_URL" > flow-environments.toml
+          printf '[environments.staging]\nurl = "%s"\napi_key_env = "FLOW_STAGING_API_KEY"\n'
+          "$FLOW_STAGING_URL" > flow-environments.toml
         env:
-          LANGFLOW_STAGING_URL: ${{ vars.LANGFLOW_STAGING_URL }}
+          FLOW_STAGING_URL: ${{ vars.FLOW_STAGING_URL }}
 
       - name: Run flow tests
         env:
           # URL for the flow_runner --flow-env option
-          LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
+          FLOW_ENVIRONMENTS_FILE: flow-environments.toml
           # API key resolved by api_key_env in the environments file
-          LANGFLOW_STAGING_API_KEY: ${{ secrets.LANGFLOW_STAGING_API_KEY }}
+          FLOW_STAGING_API_KEY: ${{ secrets.FLOW_STAGING_API_KEY }}
         run: |
           pytest tests/ \
             --flow-env staging \

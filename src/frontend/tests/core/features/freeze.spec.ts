@@ -1,5 +1,5 @@
 import { expect, test } from "../../fixtures";
-import { addFlowToTestOnEmptyLangflow } from "../../utils/add-flow-to-test-on-empty-flow";
+import { addFlowToTestOnEmptyFlow } from "../../utils/add-flow-to-test-on-empty-flow";
 import { addLegacyComponents } from "../../utils/add-legacy-components";
 import { adjustScreenView } from "../../utils/adjust-screen-view";
 import { awaitBootstrapTest } from "../../utils/await-bootstrap-test";
@@ -11,12 +11,12 @@ test(
   async ({ page }) => {
     await awaitBootstrapTest(page);
 
-    const firstRunLangflow = await page
+    const firstRunFlow = await page
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunLangflow > 0) {
-      await addFlowToTestOnEmptyLangflow(page);
+    if (firstRunFlow > 0) {
+      await addFlowToTestOnEmptyFlow(page);
     }
 
     await page.getByTestId("blank-flow").click();

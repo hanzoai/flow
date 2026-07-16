@@ -25,7 +25,7 @@ class SplitVideoComponent(Component):
     description = "Split a video into multiple clips of specified duration."
     icon = "TwelveLabs"
     name = "SplitVideo"
-    documentation = "https://github.com/twelvelabs-io/twelvelabs-developer-experience/blob/main/integrations/Hanzo Flow/TWELVE_LABS_COMPONENTS_README.md"
+    documentation = "https://github.com/twelvelabs-io/twelvelabs-developer-experience/blob/main/integrations/Flow/TWELVE_LABS_COMPONENTS_README.md"
 
     inputs = [
         HandleInput(

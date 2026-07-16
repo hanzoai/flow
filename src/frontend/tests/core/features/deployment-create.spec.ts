@@ -200,8 +200,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await awaitBootstrapTest(page, { skipModal: true });
@@ -223,8 +223,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -248,8 +248,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -287,8 +287,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -334,8 +334,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -364,8 +364,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -417,8 +417,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page);
@@ -454,8 +454,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page, SNAPSHOTS_DUPLICATE_MOCK);
@@ -479,8 +479,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page, SNAPSHOTS_EMPTY_MOCK);
@@ -504,8 +504,8 @@ test(
   { tag: ["@deployment", "@workspace"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await openDeploymentStepper(page, SNAPSHOTS_DUPLICATE_MOCK);

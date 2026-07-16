@@ -1,5 +1,5 @@
 curl -X GET \
-  "$LANGFLOW_URL/api/v1/projects/download/$PROJECT_ID" \
+  "$FLOW_URL/api/v1/projects/download/$PROJECT_ID" \
   -H "accept: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY" \
+  -H "x-api-key: $FLOW_API_KEY" \
   --output flow-project.zip

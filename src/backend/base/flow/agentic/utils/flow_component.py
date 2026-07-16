@@ -1,4 +1,4 @@
-"""Flow component operations utilities for Hanzo Flow."""
+"""Flow component operations utilities for Flow."""
 
 from typing import Any
 from uuid import UUID

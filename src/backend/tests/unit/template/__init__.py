@@ -1,1 +1,1 @@
-"""Template testing module for Hanzo Flow."""
+"""Template testing module for Flow."""

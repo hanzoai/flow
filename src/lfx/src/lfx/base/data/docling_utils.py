@@ -299,7 +299,7 @@ def docling_worker(
 
     except ModuleNotFoundError:
         msg = (
-            "Docling is an optional dependency of Hanzo Flow. "
+            "Docling is an optional dependency of Flow. "
             "Install with `uv pip install 'flow[docling]'` "
             "or refer to the documentation"
         )

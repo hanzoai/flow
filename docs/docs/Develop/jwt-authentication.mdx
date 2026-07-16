@@ -11,7 +11,7 @@ Hanzo Flow supports symmetric or asymmetric JSON Web Tokens (JWT) for user authe
 JWT is an [open standard](https://tools.ietf.org/html/rfc7519) for securely transmitting information between parties as a JSON object.
 Use JWT to create credentials that automatically expire, enable stateless authentication without database storage, and work across distributed systems.
 
-JWT authentication with the HS256 algorithm is enabled by default, but can be configured further with the `LANGFLOW_ALGORITHM` environment variable.
+JWT authentication with the HS256 algorithm is enabled by default, but can be configured further with the `FLOW_ALGORITHM` environment variable.
 
 <details closed>
 <summary>About the JWT structure and contents</summary>
@@ -39,12 +39,12 @@ Configure JWT authentication in Hanzo Flow using the following environment varia
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `LANGFLOW_ALGORITHM` | JWT signing algorithm (`HS256`, `RS256`, or `RS512`) | `HS256` |
-| `LANGFLOW_SECRET_KEY` | Secret key for HS256 signing | Auto-generated |
-| `LANGFLOW_PRIVATE_KEY` | RSA private key for RS256/RS512 signing | Auto-generated |
-| `LANGFLOW_PUBLIC_KEY` | RSA public key for RS256/RS512 verification | Derived from private key |
-| `LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS` | Access token expiration time | `3600` (1 hour) |
-| `LANGFLOW_REFRESH_TOKEN_EXPIRE_SECONDS` | Refresh token expiration time | `604800` (7 days) |
+| `FLOW_ALGORITHM` | JWT signing algorithm (`HS256`, `RS256`, or `RS512`) | `HS256` |
+| `FLOW_SECRET_KEY` | Secret key for HS256 signing | Auto-generated |
+| `FLOW_PRIVATE_KEY` | RSA private key for RS256/RS512 signing | Auto-generated |
+| `FLOW_PUBLIC_KEY` | RSA public key for RS256/RS512 verification | Derived from private key |
+| `FLOW_ACCESS_TOKEN_EXPIRE_SECONDS` | Access token expiration time | `3600` (1 hour) |
+| `FLOW_REFRESH_TOKEN_EXPIRE_SECONDS` | Refresh token expiration time | `604800` (7 days) |
 
 ## Configure signing algorithms
 
@@ -56,7 +56,7 @@ Which method you choose depends upon your deployment's requirements.
 
 HS256 is the default JWT algorithm, with a good security level for single-server deployments.
 Hanzo Flow automatically generates and persists a secret key.
-No configuration is necessary, but if you want to explicitly set it in the Hanzo Flow `.env`, the default value is `LANGFLOW_ALGORITHM=HS256`.
+No configuration is necessary, but if you want to explicitly set it in the Hanzo Flow `.env`, the default value is `FLOW_ALGORITHM=HS256`.
 
 To generate a custom secure key instead of using the Hanzo Flow-generated secret key, do the following:
 
@@ -75,10 +75,10 @@ To generate a custom secure key instead of using the Hanzo Flow-generated secret
     openssl rand -base64 32
     ```
 
-2. Set the value for `LANGFLOW_SECRET_KEY` in your `.env` file.
+2. Set the value for `FLOW_SECRET_KEY` in your `.env` file.
     ```bash
-    LANGFLOW_ALGORITHM="HS256"
-    LANGFLOW_SECRET_KEY="your-custom-secret-key"
+    FLOW_ALGORITHM="HS256"
+    FLOW_SECRET_KEY="your-custom-secret-key"
     ```
 
 ### RS256
@@ -87,7 +87,7 @@ The RS256 signing algorithm provides better security for production deployments 
 The private key signs tokens, and the public verifies them.
 The private key must be kept secret, while the public key can be safely shared.
 
-To automatically generate a private and public key pair and store it in the Hanzo Flow [`LANGFLOW_CONFIG_DIR`](/logging), set `LANGFLOW_ALGORITHM="RS256"` in your Hanzo Flow `.env`.
+To automatically generate a private and public key pair and store it in the Hanzo Flow [`FLOW_CONFIG_DIR`](/logging), set `FLOW_ALGORITHM="RS256"` in your Hanzo Flow `.env`.
 When Hanzo Flow starts, it will:
 1. Check if RSA keys exist in the configuration directory.
 2. If not, generate a new 2048-bit RSA key pair.
@@ -95,11 +95,11 @@ When Hanzo Flow starts, it will:
 4. Reuse the same keys on subsequent startups.
 
 To use a custom private key instead of the auto-generated keys, set the following in your `.env` file.
-The `LANGFLOW_PUBLIC_KEY` will be automatically derived from the private key.
+The `FLOW_PUBLIC_KEY` will be automatically derived from the private key.
 
 ```bash
-LANGFLOW_ALGORITHM=RS256
-LANGFLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+FLOW_ALGORITHM=RS256
+FLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEF...
 -----END PRIVATE KEY-----"
 ```
@@ -107,11 +107,11 @@ MIIEvgIBADANBgkqhkiG9w0BAQEF...
 To use a custom key pair, set both keys in your Hanzo Flow `.env` file.
 
 ```bash
-LANGFLOW_ALGORITHM=RS256
-LANGFLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+FLOW_ALGORITHM=RS256
+FLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEF...
 -----END PRIVATE KEY-----"
-LANGFLOW_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+FLOW_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOC...
 -----END PUBLIC KEY-----"
 ```
@@ -140,7 +140,7 @@ RS512 uses the same RSA format of private and public keys as RS256, but uses the
 The private key signs tokens, and the public verifies them.
 The private key must be kept secret, while the public key can be safely shared.
 
-To automatically generate a private and public key pair and store it in the Hanzo Flow [`LANGFLOW_CONFIG_DIR`](/logging), set `LANGFLOW_ALGORITHM="RS512"` in your Hanzo Flow `.env`.
+To automatically generate a private and public key pair and store it in the Hanzo Flow [`FLOW_CONFIG_DIR`](/logging), set `FLOW_ALGORITHM="RS512"` in your Hanzo Flow `.env`.
 When Hanzo Flow starts, it does the following:
 1. Check if RSA keys exist in the configuration directory.
 2. If not, generate a new 2048-bit RSA key pair.
@@ -148,11 +148,11 @@ When Hanzo Flow starts, it does the following:
 4. Reuse the same keys on subsequent startups.
 
 To use a custom private key instead of the auto-generated keys, set the following in your `.env` file.
-The `LANGFLOW_PUBLIC_KEY` will be automatically derived from the private key.
+The `FLOW_PUBLIC_KEY` will be automatically derived from the private key.
 
 ```bash
-LANGFLOW_ALGORITHM=RS512
-LANGFLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+FLOW_ALGORITHM=RS512
+FLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEF...
 -----END PRIVATE KEY-----"
 ```
@@ -160,11 +160,11 @@ MIIEvgIBADANBgkqhkiG9w0BAQEF...
 To use a custom key pair, set both keys in your Hanzo Flow `.env` file.
 
 ```bash
-LANGFLOW_ALGORITHM=RS512
-LANGFLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+FLOW_ALGORITHM=RS512
+FLOW_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEF...
 -----END PRIVATE KEY-----"
-LANGFLOW_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+FLOW_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOC...
 -----END PUBLIC KEY-----"
 ```
@@ -205,15 +205,15 @@ Use Docker or Kubernetes with RS256 (asymmetric) for production deployments requ
     version: "3.8"
     services:
       flow:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         environment:
-          - LANGFLOW_ALGORITHM=HS256
-          - LANGFLOW_SECRET_KEY=${JWT_SECRET_KEY}  # Set in .env file
+          - FLOW_ALGORITHM=HS256
+          - FLOW_SECRET_KEY=${JWT_SECRET_KEY}  # Set in .env file
         volumes:
-          - langflow_data:/app/flow
+          - flow_data:/app/flow
 
     volumes:
-      langflow_data:
+      flow_data:
     ```
 
 ### Docker with RS256
@@ -225,14 +225,14 @@ To use Hanzo Flow's automatically generated key pair, set the `RS256` signing al
 version: "3.8"
 services:
   flow:
-    image: langflowai/flow:latest
+    image: flowai/flow:latest
     environment:
-      - LANGFLOW_ALGORITHM=RS256
+      - FLOW_ALGORITHM=RS256
     volumes:
-      - langflow_data:/app/flow  # Keys stored here
+      - flow_data:/app/flow  # Keys stored here
 
 volumes:
-  langflow_data:
+  flow_data:
 ```
 
 To mount an existing key pair, set the `RS256` signing algorithm and mount the private and public keys as volumes.
@@ -242,16 +242,16 @@ To mount an existing key pair, set the `RS256` signing algorithm and mount the p
 version: "3.8"
 services:
   flow:
-    image: langflowai/flow:latest
+    image: flowai/flow:latest
     environment:
-      - LANGFLOW_ALGORITHM=RS256
+      - FLOW_ALGORITHM=RS256
     volumes:
       - ./keys/private_key.pem:/app/flow/private_key.pem:ro
       - ./keys/public_key.pem:/app/flow/public_key.pem:ro
-      - langflow_data:/app/flow
+      - flow_data:/app/flow
 
 volumes:
-  langflow_data:
+  flow_data:
 ```
 
 ### Kubernetes with RS256
@@ -286,19 +286,19 @@ spec:
     spec:
       containers:
         - name: flow
-          image: langflowai/flow:latest
+          image: flowai/flow:latest
           env:
-            - name: LANGFLOW_ALGORITHM
+            - name: FLOW_ALGORITHM
               valueFrom:
                 secretKeyRef:
                   name: flow-jwt-keys
                   key: algorithm
-            - name: LANGFLOW_PRIVATE_KEY
+            - name: FLOW_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                   name: flow-jwt-keys
                   key: private-key
-            - name: LANGFLOW_PUBLIC_KEY
+            - name: FLOW_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
                   name: flow-jwt-keys
@@ -310,8 +310,8 @@ spec:
 To configure access and refresh token expiration times, set the values in the Hanzo Flow `.env`.
 
 ```bash
-LANGFLOW_ACCESS_TOKEN_EXPIRE_SECONDS=3600  # 1 hour
-LANGFLOW_REFRESH_TOKEN_EXPIRE_SECONDS=604800  # 7 days
+FLOW_ACCESS_TOKEN_EXPIRE_SECONDS=3600  # 1 hour
+FLOW_REFRESH_TOKEN_EXPIRE_SECONDS=604800  # 7 days
 ```
 
 Access tokens authenticate API requests and typically expire within 15 minutes to 1 hour to limit security risks.

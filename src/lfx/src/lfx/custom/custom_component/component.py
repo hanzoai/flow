@@ -1667,7 +1667,7 @@ class Component(CustomComponent):
     async def send_message(self, message: Message, id_: str | None = None, *, skip_db_update: bool = False):
         """Send a message with optional database update control.
 
-        This is the central method for sending messages in Hanzo Flow. It handles:
+        This is the central method for sending messages in Flow. It handles:
         - Message storage in the database (unless skipped)
         - Event emission to the frontend
         - Streaming support

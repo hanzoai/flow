@@ -12,9 +12,9 @@ class ServerSettings(BaseModel):
     """ASGI server, process, and logging settings."""
 
     host: str = "localhost"
-    """The host on which Hanzo Flow will run."""
+    """The host on which Flow will run."""
     port: int = 7860
-    """The port on which Hanzo Flow will run."""
+    """The port on which Flow will run."""
     runtime_port: int | None = Field(default=None, exclude=True)
     """TEMPORARY: The port detected at runtime after checking for conflicts.
     This field is system-managed only and will be removed in future versions
@@ -22,9 +22,9 @@ class ServerSettings(BaseModel):
     workers: int = 1
     """The number of workers to run."""
     log_level: str = "critical"
-    """The log level for Hanzo Flow."""
+    """The log level for Flow."""
     log_file: str | None = "logs/flow.log"
-    """The path to log file for Hanzo Flow."""
+    """The path to log file for Flow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""
     alembic_log_to_stdout: bool = False
@@ -32,9 +32,9 @@ class ServerSettings(BaseModel):
     frontend_path: str | None = None
     """The path to the frontend directory containing build files. This is for development purposes only."""
     open_browser: bool = False
-    """If set to True, Hanzo Flow will open the browser on startup."""
+    """If set to True, Flow will open the browser on startup."""
     backend_only: bool = False
-    """If set to True, Hanzo Flow will not serve the frontend."""
+    """If set to True, Flow will not serve the frontend."""
     ssl_cert_file: str | None = None
     """Path to the SSL certificate file on the local system."""
     ssl_key_file: str | None = None
@@ -43,7 +43,7 @@ class ServerSettings(BaseModel):
     """ASGI root_path for deployments behind a reverse proxy that strips a URL
     prefix (e.g. '/flow').  When set, the MCP SSE transport includes this
     prefix in the POST-back URL so clients can reach the correct endpoint.
-    Can also be set via the LANGFLOW_ROOT_PATH environment variable."""
+    Can also be set via the FLOW_ROOT_PATH environment variable."""
     user_agent: str = "flow"
     """User agent for the API calls."""
 
@@ -74,8 +74,8 @@ class ServerSettings(BaseModel):
     def validate_runtime_port(cls, value):
         """Parse port from Kubernetes service discovery env vars.
 
-        Kubernetes auto-creates env vars like LANGFLOW_RUNTIME_PORT=tcp://<ip>:<port>
-        for services, which collides with the LANGFLOW_ env prefix. Extract the port
+        Kubernetes auto-creates env vars like FLOW_RUNTIME_PORT=tcp://<ip>:<port>
+        for services, which collides with the FLOW_ env prefix. Extract the port
         number from URL-like values instead of failing.
         """
         if value is None:
@@ -105,7 +105,7 @@ class ServerSettings(BaseModel):
     @classmethod
     def set_user_agent(cls, value):
         if not value:
-            value = "Hanzo Flow"
+            value = "Flow"
         os.environ["USER_AGENT"] = value
         logger.debug(f"Setting user agent to {value}")
         return value

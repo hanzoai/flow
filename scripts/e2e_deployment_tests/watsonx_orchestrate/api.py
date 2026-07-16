@@ -2058,8 +2058,8 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run deployments API create/update matrix against /api/v1/deployments."
     )
-    parser.add_argument("--base-url", default=os.getenv("LANGFLOW_BASE_URL", "http://localhost:7860"))
-    parser.add_argument("--api-key", default=os.getenv("LANGFLOW_API_KEY", ""))
+    parser.add_argument("--base-url", default=os.getenv("FLOW_BASE_URL", "http://localhost:7860"))
+    parser.add_argument("--api-key", default=os.getenv("FLOW_API_KEY", ""))
     parser.add_argument("--instance-url", default=os.getenv("WXO_INSTANCE_URL", ""))
     parser.add_argument("--provider-api-key", default=os.getenv("WXO_API_KEY", ""))
     parser.add_argument("--provider-tenant-id", default=os.getenv("WXO_TENANT_ID"))
@@ -2069,7 +2069,7 @@ def _parse_args() -> argparse.Namespace:
         default=os.getenv("WXO_E2E_FLOW_VERSION_IDS", ""),
         help="Comma-separated flow version UUIDs. First is required; second enables add/remove patch scenario.",
     )
-    parser.add_argument("--project-id", default=os.getenv("LANGFLOW_PROJECT_ID"))
+    parser.add_argument("--project-id", default=os.getenv("FLOW_PROJECT_ID"))
     parser.add_argument(
         "--starter-project-files",
         default=os.getenv("WXO_E2E_STARTER_PROJECT_FILES", ""),
@@ -2118,7 +2118,7 @@ def _require(value: str, env_name: str) -> str:
 async def _main() -> int:
     load_dotenv()
     args = _parse_args()
-    api_key = _require(args.api_key, "LANGFLOW_API_KEY/--api-key")
+    api_key = _require(args.api_key, "FLOW_API_KEY/--api-key")
     instance_url = _require(args.instance_url, "WXO_INSTANCE_URL/--instance-url")
     provider_api_key = _require(args.provider_api_key, "WXO_API_KEY/--provider-api-key")
     flow_version_ids = _parse_uuid_list(args.flow_version_ids)

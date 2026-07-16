@@ -1,15 +1,15 @@
 services:
   flow:
-    image: langflowai/flow:latest # or another version tag on https://hub.docker.com/r/langflowai/flow
+    image: flowai/flow:latest # or another version tag on https://hub.docker.com/r/flowai/flow
     pull_policy: always               # set to 'always' when using 'latest' image
     ports:
       - "7860:7860"
     depends_on:
       - postgres
     environment:
-      - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
+      - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
       # This variable defines where the logs, file storage, monitor data and secret keys are stored.
-      - LANGFLOW_CONFIG_DIR=/app/flow
+      - FLOW_CONFIG_DIR=/app/flow
     volumes:
       - flow-data:/app/flow
 

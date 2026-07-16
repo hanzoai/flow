@@ -33,10 +33,10 @@ from flow.services.adapters.deployment.watsonx_orchestrate.core.shared import (
 from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
     ToolUploadBatchError,
     create_and_upload_wxo_flow_tools_with_bindings,
-    ensure_langflow_connections_binding,
-    extract_langflow_connections_binding,
+    ensure_flow_connections_binding,
+    extract_flow_connections_binding,
     to_writable_tool_payload,
-    verify_langflow_owned,
+    verify_flow_owned,
 )
 from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
     WatsonxAttachToolOperation,
@@ -293,13 +293,13 @@ async def _update_existing_tool_connection_deltas(
     tool_updates: list[tuple[str, dict[str, Any]]] = []
     for tool_id in tool_ids:
         tool = tool_by_id[tool_id]
-        verify_langflow_owned(tool, tool_id=tool_id)
+        verify_flow_owned(tool, tool_id=tool_id)
 
         delta = existing_tool_deltas[tool_id]
         original_tool = to_writable_tool_payload(tool)
         original_tools[tool_id] = original_tool
         writable_tool = copy.deepcopy(original_tool)
-        connections = ensure_langflow_connections_binding(writable_tool)
+        connections = ensure_flow_connections_binding(writable_tool)
 
         for app_id in delta.unbind:
             provider_app_id = operation_to_provider_app_id.get(app_id, app_id)
@@ -335,7 +335,7 @@ async def _apply_tool_renames(
 
     Guards against destructive operations on tools we don't own:
     1. Tool must be attached to this agent (tool_id in agent_tool_ids).
-    2. Tool must be a Hanzo Flow-managed tool (has ``binding.flow``).
+    2. Tool must be a Flow-managed tool (has ``binding.flow``).
     3. Tool must exist on the provider.
 
     Captures original tool payloads in ``original_tools`` for rollback.
@@ -362,7 +362,7 @@ async def _apply_tool_renames(
     for tool_id, new_name in tool_renames.items():
         tool = tool_by_id[tool_id]
 
-        verify_langflow_owned(tool, tool_id=tool_id)
+        verify_flow_owned(tool, tool_id=tool_id)
 
         # Capture original for rollback (if not already captured by delta updates)
         if tool_id not in original_tools:
@@ -482,7 +482,7 @@ async def apply_provider_update_plan_with_rollback(
         for tool in existing_tools or []:
             if not isinstance(tool, dict):
                 continue
-            for app_id, connection_id in extract_langflow_connections_binding(tool).items():
+            for app_id, connection_id in extract_flow_connections_binding(tool).items():
                 if app_id and connection_id:
                     operation_to_provider_app_id.setdefault(app_id, app_id)
                     resolved_connections.setdefault(app_id, connection_id)

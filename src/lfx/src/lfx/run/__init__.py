@@ -1,4 +1,4 @@
-"""Run module for executing Hanzo Flow graphs."""
+"""Run module for executing Flow graphs."""
 
 from lfx.run.base import RunError, run_flow
 

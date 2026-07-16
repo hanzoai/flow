@@ -3,36 +3,36 @@
 from __future__ import annotations
 
 import pytest
-from flow_sdk import AsyncClient, AsyncLangflowClient, Client, LangflowClient
+from flow_sdk import AsyncClient, AsyncFlowClient, Client, FlowClient
 from flow_sdk.client import AsyncClient as AsyncClientFromModule
 from flow_sdk.client import Client as ClientFromModule
 
 
 @pytest.mark.unit
-def test_client_alias_is_langflow_client() -> None:
-    assert Client is LangflowClient
+def test_client_alias_is_flow_client() -> None:
+    assert Client is FlowClient
 
 
 @pytest.mark.unit
-def test_async_client_alias_is_async_langflow_client() -> None:
-    assert AsyncClient is AsyncLangflowClient
+def test_async_client_alias_is_async_flow_client() -> None:
+    assert AsyncClient is AsyncFlowClient
 
 
 @pytest.mark.unit
 def test_client_importable_from_module_directly() -> None:
-    assert ClientFromModule is LangflowClient
+    assert ClientFromModule is FlowClient
 
 
 @pytest.mark.unit
 def test_async_client_importable_from_module_directly() -> None:
-    assert AsyncClientFromModule is AsyncLangflowClient
+    assert AsyncClientFromModule is AsyncFlowClient
 
 
 @pytest.mark.unit
 def test_client_instantiation_uses_short_name() -> None:
-    """Client() should produce a LangflowClient instance."""
+    """Client() should produce a FlowClient instance."""
     client = Client("http://localhost:7860")
-    assert isinstance(client, LangflowClient)
+    assert isinstance(client, FlowClient)
     assert isinstance(client, Client)
     client.close()
 
@@ -40,10 +40,10 @@ def test_client_instantiation_uses_short_name() -> None:
 @pytest.mark.unit
 @pytest.mark.asyncio
 async def test_async_client_instantiation_uses_short_name() -> None:
-    """AsyncClient() should produce an AsyncLangflowClient instance."""
+    """AsyncClient() should produce an AsyncFlowClient instance."""
     client = AsyncClient("http://localhost:7860")
     try:
-        assert isinstance(client, AsyncLangflowClient)
+        assert isinstance(client, AsyncFlowClient)
         assert isinstance(client, AsyncClient)
     finally:
         await client.aclose()

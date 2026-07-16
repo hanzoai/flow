@@ -63,7 +63,7 @@ def validate_code(code):
             code_obj = compile(ast.Module(body=[node], type_ignores=[]), "<string>", "exec")
             try:
                 # Create execution context with common flow imports
-                exec_globals = _create_langflow_execution_context()
+                exec_globals = _create_flow_execution_context()
                 exec(code_obj, exec_globals)
             except Exception as e:  # noqa: BLE001
                 logger.debug("Error executing function code", exc_info=True)
@@ -73,7 +73,7 @@ def validate_code(code):
     return errors
 
 
-def _create_langflow_execution_context():
+def _create_flow_execution_context():
     """Create execution context with common flow imports."""
     context = {}
 
@@ -543,10 +543,10 @@ def get_default_imports(code_string):
         "Dict": dict,
         "Union": Union,
     }
-    langflow_imports = list(CUSTOM_COMPONENT_SUPPORTED_TYPES.keys())
-    necessary_imports = find_names_in_code(code_string, langflow_imports)
-    langflow_module = importlib.import_module("lfx.field_typing")
-    default_imports.update({name: getattr(langflow_module, name) for name in necessary_imports})
+    flow_imports = list(CUSTOM_COMPONENT_SUPPORTED_TYPES.keys())
+    necessary_imports = find_names_in_code(code_string, flow_imports)
+    flow_module = importlib.import_module("lfx.field_typing")
+    default_imports.update({name: getattr(flow_module, name) for name in necessary_imports})
 
     return default_imports
 

@@ -46,7 +46,7 @@ For more information, see [Configure an external PostgreSQL database](/configura
     2. Add the connection string to the `.env` file:
 
         ```text
-        LANGFLOW_DATABASE_URL="postgresql://flow:securepassword@postgres:5432/flow"
+        FLOW_DATABASE_URL="postgresql://flow:securepassword@postgres:5432/flow"
         ```
 
     For more environment variables, see the `.env.example` file in the Hanzo Flow repository.
@@ -61,11 +61,11 @@ For more information, see [Configure an external PostgreSQL database](/configura
     version: '3'
     services:
       flow:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         ports:
           - "7860:7860"
         environment:
-          - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
+          - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
       postgres:
         # Pinned to a specific Debian base (trixie) so the postgres:16 tag does
         # not silently roll its OS, which triggers a glibc collation mismatch
@@ -222,11 +222,11 @@ spec:
     spec:
       containers:
       - name: flow
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         ports:
         - containerPort: 7860
         env:
-        - name: LANGFLOW_DATABASE_URL
+        - name: FLOW_DATABASE_URL
           value: "postgresql://flow:securepassword@db-proxy:5432/flow?sslmode=require"
 ---
 apiVersion: v1
@@ -246,7 +246,7 @@ spec:
 </Tabs>
 
 After implementing HA or Active-Active HA, monitor failover events and ensure replicas are in sync.
-Hanzo Flow, through [SQLAlchemy](https://docs.sqlalchemy.org/en/20/), supports reconnection attempts if `LANGFLOW_DATABASE_CONNECTION_RETRY=True`, ensures recovery after failover, and reduces disruption once the database is back online.
+Hanzo Flow, through [SQLAlchemy](https://docs.sqlalchemy.org/en/20/), supports reconnection attempts if `FLOW_DATABASE_CONNECTION_RETRY=True`, ensures recovery after failover, and reduces disruption once the database is back online.
 
 Although PostgreSQL handles concurrent connections well, you must still monitor for contention, deadlocks, or other performance degradation during high load.
 

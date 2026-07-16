@@ -51,7 +51,7 @@ class CollectingSpanProcessor(SpanProcessor):
                 self.correlation_id = str(uuid.uuid4())
 
         # Inject into the CHAIN & LLM spans
-        if span.name in ("Hanzo Flow", "Language Model"):
+        if span.name in ("Flow", "Language Model"):
             span.set_attribute("flow.correlation_id", self.correlation_id)
 
     def on_end(self, span):
@@ -94,7 +94,7 @@ class ArizePhoenixTracer(BaseTracer):
             self.carrier: dict[Any, CarrierT] = {}
 
             self.root_span = self.tracer.start_span(
-                name="Hanzo Flow",
+                name="Flow",
                 start_time=self._get_current_timestamp(),
             )
             self.root_span.set_attribute(SpanAttributes.SESSION_ID, self.session_id or self.flow_id)

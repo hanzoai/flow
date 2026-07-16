@@ -180,18 +180,18 @@ class ProgressIndicator:
 
 
 def create_flow_progress(*, verbose: bool = False) -> ProgressIndicator:
-    """Create a progress indicator with predefined Hanzo Flow initialization steps."""
+    """Create a progress indicator with predefined Flow initialization steps."""
     progress = ProgressIndicator(verbose=verbose)
 
     # Define the initialization steps matching the order in main.py
     steps = [
-        ("Initializing Hanzo Flow", "Setting up basic configuration"),
+        ("Initializing Flow", "Setting up basic configuration"),
         ("Checking Environment", "Loading environment variables and settings"),
         ("Starting Core Services", "Initializing database and core services"),
         ("Connecting Database", "Setting up database connection and migrations"),
         ("Loading Components", "Caching component types and custom components"),
         ("Adding Starter Projects", "Creating or updating starter project templates"),
-        ("Launching Hanzo Flow", "Starting server and final setup"),
+        ("Launching Flow", "Starting server and final setup"),
     ]
 
     for title, description in steps:
@@ -200,8 +200,8 @@ def create_flow_progress(*, verbose: bool = False) -> ProgressIndicator:
     return progress
 
 
-def create_langflow_shutdown_progress(*, verbose: bool = False, multiple_workers: bool = False) -> ProgressIndicator:
-    """Create a progress indicator with predefined Hanzo Flow shutdown steps."""
+def create_flow_shutdown_progress(*, verbose: bool = False, multiple_workers: bool = False) -> ProgressIndicator:
+    """Create a progress indicator with predefined Flow shutdown steps."""
     progress = ProgressIndicator(verbose=verbose)
 
     # Define the shutdown steps in reverse order of initialization

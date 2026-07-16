@@ -390,7 +390,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"FLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch(
                 "lfx.services.deps.get_settings_service",
                 return_value=_make_settings_service(allow_custom_components=False),
@@ -504,7 +504,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"FLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.serve_app.execute_graph_with_capture", mock_execute_capture),
         ):
             response = app_client.post(
@@ -526,7 +526,7 @@ class TestServeAppEndpoints:
         headers = {"x-api-key": "test-api-key"}
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
+            patch.dict(os.environ, {"FLOW_API_KEY": "test-api-key"}),  # pragma: allowlist secret
             patch("lfx.cli.serve_app.execute_graph_with_capture", mock_execute_capture),
             # Drain the streaming response so the background task completes before we assert.
             app_client.stream(

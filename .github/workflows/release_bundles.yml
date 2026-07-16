@@ -25,7 +25,7 @@ env:
 
 jobs:
   build-bundles:
-    name: Build Hanzo Flow Bundles
+    name: Build Flow Bundles
     runs-on: ubuntu-latest
     defaults:
       run:

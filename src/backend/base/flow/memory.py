@@ -132,7 +132,7 @@ async def aadd_messages(messages: Message | list[Message], flow_id: str | UUID |
 
     # Check if all messages are Message instances (either from flow or lfx)
     for message in messages:
-        # Accept Message instances from both langflow and lfx packages
+        # Accept Message instances from both flow and lfx packages
         is_valid_message = isinstance(message, Message) or (
             hasattr(message, "__class__") and message.__class__.__name__ in ["Message", "ErrorMessage"]
         )

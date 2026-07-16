@@ -1,4 +1,4 @@
-"""Component search and metadata utilities for Hanzo Flow."""
+"""Component search and metadata utilities for Flow."""
 
 from typing import Any
 

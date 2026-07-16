@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from fastapi import HTTPException, status
 from ibm_cloud_sdk_core import ApiException
 from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-from ibm_watsonx_orchestrate_core.types.tools.langflow_tool import create_langflow_tool
+from ibm_watsonx_orchestrate_core.types.tools.flow_tool import create_flow_tool
 from lfx.services.adapters.deployment.base import BaseDeploymentService
 from lfx.services.adapters.deployment.exceptions import (
     AuthenticationError,
@@ -91,8 +91,8 @@ from flow.services.adapters.deployment.watsonx_orchestrate.core.status import (
     get_deployment_metadata,
 )
 from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-    build_langflow_artifact_bytes,
-    extract_langflow_connections_binding,
+    build_flow_artifact_bytes,
+    extract_flow_connections_binding,
     upload_tool_artifact_bytes,
     verify_tools_by_ids,
 )
@@ -765,7 +765,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
                     id=tool["id"],
                     name=tool.get("name") or tool["id"],
                     provider_data=self._validate_snapshot_item_provider_data(
-                        {"connections": extract_langflow_connections_binding(tool)}
+                        {"connections": extract_flow_connections_binding(tool)}
                     ),
                 )
                 for tool in (raw_tools or [])
@@ -789,7 +789,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
                     id=tool["id"],
                     name=tool.get("name") or tool["id"],
                     provider_data=self._validate_snapshot_item_provider_data(
-                        {"connections": extract_langflow_connections_binding(tool)}
+                        {"connections": extract_flow_connections_binding(tool)}
                     ),
                 )
                 for tool in (raw_tools or [])
@@ -832,7 +832,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
                 id=tool["id"],
                 name=tool.get("name") or tool["id"],
                 provider_data=self._validate_snapshot_item_provider_data(
-                    {"connections": extract_langflow_connections_binding(tool)}
+                    {"connections": extract_flow_connections_binding(tool)}
                 ),
             )
             for tool in (tools or [])
@@ -982,7 +982,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
         without touching the tool's name, metadata, or connection bindings.
 
         The tool name is fetched from wxO at call time, not derived from the
-        Hanzo Flow flow name. This is intentional: the user may have set a
+        Flow flow name. This is intentional: the user may have set a
         custom tool name during initial deployment, or renamed the tool
         directly in the wxO console. Either way, the provider is the source
         of truth for the tool name.
@@ -991,7 +991,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
 
         * **Tool renamed in wxO console** — The new name is picked up
           automatically on the next update since we always fetch it fresh.
-          Hanzo Flow never stores the tool name locally.
+          Flow never stores the tool name locally.
         * **Tool deleted in wxO** — ``get_drafts_by_ids`` returns empty
           and we raise ``InvalidContentError`` before any mutation.
         * **Tool exists but name is empty/null** — Defensive check raises
@@ -1012,7 +1012,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
         by name.  A rename preserves identity; a delete+recreate does not.
 
         **Blast-radius boundary:** callers must verify that ``snapshot_id``
-        is tracked by a Hanzo Flow attachment record before calling this
+        is tracked by a Flow attachment record before calling this
         method; this prevents accidental overwrites of externally managed
         WXO tools.
         """
@@ -1021,7 +1021,7 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
         clients = await self._get_provider_clients(user_id=user_id, db=db)
 
         # Fetch the existing tool to preserve its wxO name — the tool may have
-        # been deployed with a custom name that differs from the Hanzo Flow flow
+        # been deployed with a custom name that differs from the Flow flow
         # name, and we must not overwrite it with the flow name.
         existing_tools = await asyncio.to_thread(clients.tool.get_drafts_by_ids, [snapshot_id])
         if not existing_tools or not isinstance(existing_tools[0], dict):
@@ -1045,13 +1045,13 @@ class WatsonxOrchestrateDeploymentService(BaseDeploymentService):
             if detected_version:
                 flow_definition["last_tested_version"] = detected_version
 
-        tool = create_langflow_tool(
+        tool = create_flow_tool(
             tool_definition=flow_definition,
             connections={},
             show_details=False,
         )
 
-        artifact_bytes = build_langflow_artifact_bytes(
+        artifact_bytes = build_flow_artifact_bytes(
             tool=tool,
             flow_definition=flow_definition,
         )

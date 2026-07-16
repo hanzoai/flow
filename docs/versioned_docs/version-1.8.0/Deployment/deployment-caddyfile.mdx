@@ -90,12 +90,12 @@ Now that your local machine is connected to your remote server with SSH, you can
 
     services:
       flow:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         ports:
           - "7860:7860"
         environment:
-          - LANGFLOW_HOST=0.0.0.0
-          - LANGFLOW_PORT=7860
+          - FLOW_HOST=0.0.0.0
+          - FLOW_PORT=7860
 
       caddy:
         image: caddy:latest

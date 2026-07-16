@@ -8,14 +8,14 @@ from http import HTTPStatus
 import httpx
 
 from flow_sdk.exceptions import (
-    LangflowAuthError,
-    LangflowConnectionError,
-    LangflowHTTPError,
-    LangflowNotFoundError,
-    LangflowValidationError,
+    FlowAuthError,
+    FlowConnectionError,
+    FlowHTTPError,
+    FlowNotFoundError,
+    FlowValidationError,
 )
 
-_logger = logging.getLogger("langflow_sdk.client")
+_logger = logging.getLogger("flow_sdk.client")
 
 _DEFAULT_TIMEOUT = 60.0
 _HTTP_201_CREATED = HTTPStatus.CREATED.value
@@ -24,12 +24,12 @@ _HTTP_201_CREATED = HTTPStatus.CREATED.value
 def _raise_for_status_code(status: int, detail: str) -> None:
     """Raise a typed SDK exception for the given HTTP status code and detail."""
     if status in (HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN):
-        raise LangflowAuthError(status, detail)
+        raise FlowAuthError(status, detail)
     if status == HTTPStatus.NOT_FOUND:
-        raise LangflowNotFoundError(status, detail)
+        raise FlowNotFoundError(status, detail)
     if status == HTTPStatus.UNPROCESSABLE_ENTITY:
-        raise LangflowValidationError(status, detail)
-    raise LangflowHTTPError(status, detail)
+        raise FlowValidationError(status, detail)
+    raise FlowHTTPError(status, detail)
 
 
 def _raise_for_status(response: httpx.Response) -> None:
@@ -50,6 +50,6 @@ def _build_headers(api_key: str | None) -> dict[str, str]:
     return headers
 
 
-def _connection_error(base_url: str, exc: Exception) -> LangflowConnectionError:
-    msg = f"Could not connect to Hanzo Flow at {base_url}: {exc}"
-    return LangflowConnectionError(msg)
+def _connection_error(base_url: str, exc: Exception) -> FlowConnectionError:
+    msg = f"Could not connect to Flow at {base_url}: {exc}"
+    return FlowConnectionError(msg)

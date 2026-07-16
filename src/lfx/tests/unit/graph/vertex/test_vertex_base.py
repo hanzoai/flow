@@ -300,13 +300,13 @@ def test_vertex_before_callback_event():
     assert "flow" in event.raw_event
 
     # Assert the flow metrics contain expected fields
-    langflow_metrics = event.raw_event["flow"]
-    assert isinstance(langflow_metrics, dict)
-    assert "timestamp" in langflow_metrics
-    assert isinstance(langflow_metrics["timestamp"], float)
-    assert "component_id" in langflow_metrics
-    assert langflow_metrics["component_id"] == vertex.id
-    assert langflow_metrics["component_id"] == "test_vertex_id"
+    flow_metrics = event.raw_event["flow"]
+    assert isinstance(flow_metrics, dict)
+    assert "timestamp" in flow_metrics
+    assert isinstance(flow_metrics["timestamp"], float)
+    assert "component_id" in flow_metrics
+    assert flow_metrics["component_id"] == vertex.id
+    assert flow_metrics["component_id"] == "test_vertex_id"
 
 
 def test_vertex_after_callback_event():
@@ -338,13 +338,13 @@ def test_vertex_after_callback_event():
     assert "flow" in event.raw_event
 
     # Assert the flow metrics contain expected fields
-    langflow_metrics = event.raw_event["flow"]
-    assert isinstance(langflow_metrics, dict)
-    assert "timestamp" in langflow_metrics
-    assert isinstance(langflow_metrics["timestamp"], float)
-    assert "component_id" in langflow_metrics
-    assert langflow_metrics["component_id"] == vertex.id
-    assert langflow_metrics["component_id"] == "test_vertex_id"
+    flow_metrics = event.raw_event["flow"]
+    assert isinstance(flow_metrics, dict)
+    assert "timestamp" in flow_metrics
+    assert isinstance(flow_metrics["timestamp"], float)
+    assert "component_id" in flow_metrics
+    assert flow_metrics["component_id"] == vertex.id
+    assert flow_metrics["component_id"] == "test_vertex_id"
 
 
 def test_vertex_raw_event_metrics():
