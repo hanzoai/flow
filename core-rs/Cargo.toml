@@ -1,0 +1,15 @@
+[package]
+name = "flow-core"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "The one parametric step-DAG engine — Rust core. Std-only, embeddable: runs flows natively in hanzo-desktop (local/private) and the cloud, with pluggable backends (hanzo-ml/hanzo-fusion on hanzo-engine for GPU)."
+license = "MIT"
+
+[lib]
+name = "flow_core"
+
+# Intentionally dependency-free: the core is a small, embeddable library so it drops
+# into hanzo-desktop (low memory) and the cloud unchanged. Compute (hanzo-ml,
+# hanzo-fusion, hanzo-engine) plugs in via the Backend trait, not as a core dep.
+[dependencies]
