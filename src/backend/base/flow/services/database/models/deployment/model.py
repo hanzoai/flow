@@ -32,6 +32,7 @@ class Deployment(SQLModel, table=True):  # type: ignore[call-arg]
     user_id: UUIDstr = Field(
         sa_column=Column(sa.Uuid(), ForeignKey("user.id", ondelete="CASCADE"), nullable=False, index=True)
     )
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     # "project" is represented by a Folder row in the existing schema.
     project_id: UUIDstr = Field(
         sa_column=Column(sa.Uuid(), ForeignKey("folder.id", ondelete="CASCADE"), nullable=False, index=True)
