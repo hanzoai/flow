@@ -59,6 +59,7 @@ class JobBase(SQLModel):
         ),
     )
     user_id: UUID | None = Field(index=True, nullable=True)
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     asset_id: UUID | None = Field(index=True, nullable=True)
     asset_type: str | None = Field(
         index=False, nullable=True

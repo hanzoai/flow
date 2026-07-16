@@ -42,6 +42,7 @@ class Variable(VariableBase, table=True):  # type: ignore[call-arg]
     default_fields: list[str] | None = Field(sa_column=Column(JSON))
     # foreign key to user table
     user_id: UUID = Field(description="User ID associated with this variable", foreign_key="user.id")
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     user: "User" = Relationship(back_populates="variables")
 
 

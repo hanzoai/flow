@@ -22,6 +22,7 @@ class FlowVersionDeploymentAttachment(SQLModel, table=True):  # type: ignore[cal
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     user_id: UUID = Field(sa_column=Column(ForeignKey("user.id", ondelete="CASCADE"), index=True, nullable=False))
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     flow_version_id: UUID = Field(
         sa_column=Column(ForeignKey("flow_version.id", ondelete="CASCADE"), index=True, nullable=False),
     )

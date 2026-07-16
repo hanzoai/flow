@@ -20,6 +20,7 @@ class FlowVersion(SQLModel, table=True):  # type: ignore[call-arg]
     user_id: UUID | None = Field(
         sa_column=Column(ForeignKey("user.id", ondelete="SET NULL"), index=True, nullable=True),
     )
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     data: dict | None = Field(default=None, sa_column=Column(JSON))
     version_number: int = Field(nullable=False, ge=1)
     description: str | None = Field(default=None, nullable=True, max_length=500)
