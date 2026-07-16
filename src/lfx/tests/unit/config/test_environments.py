@@ -1,6 +1,6 @@
 """Unit tests for lfx.config.environments — environment resolution.
 
-All tests run entirely in-process; no real Langflow instance or SDK required.
+All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
 """
 
 from __future__ import annotations
@@ -228,7 +228,7 @@ class TestFindConfigFile:
 
     def test_toml_fallback_when_no_yaml(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
-        p = _write(tmp_path, "langflow-environments.toml", _MINIMAL_TOML)
+        p = _write(tmp_path, "flow-environments.toml", _MINIMAL_TOML)
         assert _find_config_file(None) == p
 
     def test_returns_none_when_nothing_found(self, tmp_path, monkeypatch):
@@ -371,7 +371,7 @@ class TestResolveConfigMode:
     def test_toml_file_also_works(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
         monkeypatch.setenv("MY_LOCAL_KEY", "local-secret")  # pragma: allowlist secret
-        _write(tmp_path, "langflow-environments.toml", _MINIMAL_TOML)
+        _write(tmp_path, "flow-environments.toml", _MINIMAL_TOML)
         result = resolve_environment("local")
         assert result.url == "http://localhost:7860"
         assert result.api_key == "local-secret"  # pragma: allowlist secret

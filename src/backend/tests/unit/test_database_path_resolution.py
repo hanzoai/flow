@@ -1,7 +1,7 @@
 """Tests for database path resolution in settings.
 
 These tests verify that the database path is correctly resolved
-based on the save_db_in_config_dir setting and langflow package availability.
+based on the save_db_in_config_dir setting and flow package availability.
 """
 
 import os
@@ -13,7 +13,7 @@ class TestDatabasePathResolution:
     """Test database path resolution in Settings."""
 
     def test_database_path_uses_langflow_package_when_save_db_in_config_dir_false(self, tmp_path):
-        """When save_db_in_config_dir=False, database should be in langflow package dir."""
+        """When save_db_in_config_dir=False, database should be in flow package dir."""
         import flow
         from lfx.services.settings.base import Settings
 
@@ -30,7 +30,7 @@ class TestDatabasePathResolution:
 
         expected_dir = Path(flow.__file__).parent.resolve()
         assert settings.database_url is not None
-        # The database_url should contain the langflow package path
+        # The database_url should contain the flow package path
         assert str(expected_dir) in settings.database_url
 
     def test_database_path_uses_config_dir_when_save_db_in_config_dir_true(self, tmp_path):
@@ -55,7 +55,7 @@ class TestDatabasePathResolution:
         assert str(config_dir) in settings.database_url
 
     def test_database_path_falls_back_to_lfx_when_langflow_not_importable(self, tmp_path):
-        """When langflow is not importable, should fall back to lfx package path."""
+        """When flow is not importable, should fall back to lfx package path."""
         import builtins
 
         import lfx.services.settings.base as settings_module
@@ -64,7 +64,7 @@ class TestDatabasePathResolution:
         original_import = builtins.__import__
 
         def mock_import(name, *args, **kwargs):
-            if name == "langflow":
+            if name == "flow":
                 raise ImportError(name)
             return original_import(name, *args, **kwargs)
 

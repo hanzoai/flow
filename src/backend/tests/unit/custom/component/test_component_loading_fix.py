@@ -37,7 +37,7 @@ class TestComponentLoadingFix:
 
     @pytest.fixture
     def mock_langflow_components(self):
-        """Create mock langflow components response."""
+        """Create mock flow components response."""
         return {
             "components": {
                 "category1": {
@@ -89,7 +89,7 @@ class TestComponentLoadingFix:
             # Verify that aget_all_types_dict was called with filtered paths (BASE_COMPONENTS_PATH excluded)
             mock_aget_all_types_dict.assert_called_once_with(["/custom/path1", "/custom/path2"])
 
-            # Verify result contains both langflow and custom components
+            # Verify result contains both flow and custom components
             assert "category1" in result
             assert "category2" in result
             assert "custom_category" in result
@@ -113,7 +113,7 @@ class TestComponentLoadingFix:
             # Verify that aget_all_types_dict was NOT called (no custom paths after filtering)
             mock_aget_all_types_dict.assert_not_called()
 
-            # Verify result contains only langflow components
+            # Verify result contains only flow components
             assert "category1" in result
             assert "category2" in result
             assert "Component1" in result["category1"]
@@ -136,7 +136,7 @@ class TestComponentLoadingFix:
             # Verify that aget_all_types_dict was NOT called
             mock_aget_all_types_dict.assert_not_called()
 
-            # Verify result contains only langflow components
+            # Verify result contains only flow components
             assert "category1" in result
             assert "category2" in result
             assert "Component1" in result["category1"]
@@ -158,7 +158,7 @@ class TestComponentLoadingFix:
             # Verify that aget_all_types_dict was NOT called
             mock_aget_all_types_dict.assert_not_called()
 
-            # Verify result contains only langflow components
+            # Verify result contains only flow components
             assert "category1" in result
             assert "category2" in result
 
@@ -185,7 +185,7 @@ class TestComponentLoadingFix:
             # Verify that aget_component_metadata was called with the full path (not filtered in lazy mode)
             mock_aget_metadata.assert_called_once_with([BASE_COMPONENTS_PATH, "/custom/path1"])
 
-            # Verify result contains both langflow and custom components
+            # Verify result contains both flow and custom components
             assert "category1" in result
             assert "custom_category" in result
 
@@ -214,20 +214,20 @@ class TestComponentLoadingFix:
 
             # Verify result structure
             assert isinstance(result, dict)
-            assert "category1" in result  # From langflow components
+            assert "category1" in result  # From flow components
             assert "custom_category" in result  # From custom components
 
     @pytest.mark.asyncio
     async def test_component_merging_logic(self, mock_settings_service, mock_langflow_components):
-        """Test that langflow and custom components are properly merged."""
+        """Test that flow and custom components are properly merged."""
         # Setup
         mock_settings_service.settings.components_path = ["/custom/path1"]
         mock_settings_service.settings.lazy_load_components = False
 
         # Create overlapping component names to test merging behavior
         overlapping_custom_components = {
-            "category1": {  # Same category as langflow
-                "Component1": {"display_name": "CustomComponent1", "type": "category1"},  # Same name as langflow
+            "category1": {  # Same category as flow
+                "Component1": {"display_name": "CustomComponent1", "type": "category1"},  # Same name as flow
                 "Component4": {"display_name": "Component4", "type": "category1"},  # New component
             },
             "new_category": {
@@ -242,16 +242,16 @@ class TestComponentLoadingFix:
             # Execute the function
             result = await get_and_cache_all_types_dict(mock_settings_service)
 
-            # Verify that custom components override langflow components with same name
+            # Verify that custom components override flow components with same name
             assert "category1" in result
-            assert "category2" in result  # From langflow
+            assert "category2" in result  # From flow
             assert "new_category" in result  # From custom
 
-            # Custom category should completely override langflow category
+            # Custom category should completely override flow category
             assert result["category1"]["Component1"]["display_name"] == "CustomComponent1"
 
             # Only components from custom category should remain in category1
-            assert "Component2" not in result["category1"]  # Langflow component is replaced by custom category
+            assert "Component2" not in result["category1"]  # Hanzo Flow component is replaced by custom category
             assert "Component4" in result["category1"]  # New custom component
 
             # New custom component should be added
@@ -334,8 +334,8 @@ class TestComponentLoadingFix:
         assert isinstance(BASE_COMPONENTS_PATH, str)
         assert len(BASE_COMPONENTS_PATH) > 0
 
-        # Should be an absolute path containing "langflow" and "components"
-        assert "langflow" in BASE_COMPONENTS_PATH.lower()
+        # Should be an absolute path containing "flow" and "components"
+        assert "flow" in BASE_COMPONENTS_PATH.lower()
         assert "components" in BASE_COMPONENTS_PATH.lower()
 
     @pytest.mark.asyncio
@@ -386,7 +386,7 @@ class TestComponentLoadingFix:
             result = await get_and_cache_all_types_dict(mock_settings_service)
 
             # Verify result structure
-            assert len(result) >= 2  # At least langflow categories + custom categories
+            assert len(result) >= 2  # At least flow categories + custom categories
 
             # Verify custom components are present
             assert "custom_cat1" in result
@@ -424,7 +424,7 @@ class TestComponentLoadingFix:
         mock_settings_service.settings.components_path = [BASE_COMPONENTS_PATH, "/custom/test"]
         mock_settings_service.settings.lazy_load_components = False
 
-        # This test should work with real langflow components
+        # This test should work with real flow components
         with patch("lfx.interface.components.aget_all_types_dict", return_value={}) as mock_aget_all_types_dict:
             # Execute the function
             result = await get_and_cache_all_types_dict(mock_settings_service)
@@ -432,6 +432,6 @@ class TestComponentLoadingFix:
             # Verify BASE_COMPONENTS_PATH was filtered out
             mock_aget_all_types_dict.assert_called_once_with(["/custom/test"])
 
-            # Verify we got real langflow components
+            # Verify we got real flow components
             assert isinstance(result, dict)
-            assert len(result) >= 0  # Should not have langflow components
+            assert len(result) >= 0  # Should not have flow components

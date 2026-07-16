@@ -17,9 +17,9 @@ class TestRunCommand:
     @pytest.fixture
     def simple_chat_script(self, tmp_path):
         """Create a simple chat script for testing."""
-        script_content = '''"""A simple chat flow example for Langflow.
+        script_content = '''"""A simple chat flow example for Hanzo Flow.
 
-This script demonstrates how to set up a basic conversational flow using Langflow's ChatInput and ChatOutput components.
+This script demonstrates how to set up a basic conversational flow using Hanzo Flow's ChatInput and ChatOutput components.
 
 Features:
 - Configures logging to 'flow.log' at INFO level
@@ -29,7 +29,7 @@ Features:
 Usage:
     python simple_chat.py
 
-You can use this script as a template for building more complex conversational flows in Langflow.
+You can use this script as a template for building more complex conversational flows in Hanzo Flow.
 """
 
 from pathlib import Path

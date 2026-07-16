@@ -140,7 +140,7 @@ PY
 for file in "${JS_FILES[@]}"; do
   rel="${file#"$ROOT_DIR"/}"
 
-  if ! node --check "$file" >/tmp/langflow-js-check.out 2>/tmp/langflow-js-check.err; then
+  if ! node --check "$file" >/tmp/flow-js-check.out 2>/tmp/flow-js-check.err; then
     echo "FAIL  $rel (node --check)"
     ((FAIL+=1))
     continue
@@ -166,9 +166,9 @@ for file in "${JS_FILES[@]}"; do
       continue
     fi
 
-    if ! node "$file" >/tmp/langflow-js-example.out 2>/tmp/langflow-js-example.err; then
+    if ! node "$file" >/tmp/flow-js-example.out 2>/tmp/flow-js-example.err; then
       echo "FAIL  $rel (execution)"
-      print_failure_logs "/tmp/langflow-js-example.out" "/tmp/langflow-js-example.err"
+      print_failure_logs "/tmp/flow-js-example.out" "/tmp/flow-js-example.err"
       ((FAIL+=1))
       continue
     fi

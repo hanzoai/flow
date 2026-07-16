@@ -494,7 +494,7 @@ async def test_update_rejects_legacy_top_level_snapshot_or_config(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_clients = SimpleNamespace(
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]}),
-        tool=FakeToolClient([{"id": "tool-1", "binding": {"langflow": {"connections": {}}}}]),
+        tool=FakeToolClient([{"id": "tool-1", "binding": {"flow": {"connections": {}}}}]),
         connections=FakeConnectionsClient(),
     )
 
@@ -516,7 +516,7 @@ async def test_update_rejects_legacy_top_level_config_section(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_clients = SimpleNamespace(
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]}),
-        tool=FakeToolClient([{"id": "tool-1", "binding": {"langflow": {"connections": {}}}}]),
+        tool=FakeToolClient([{"id": "tool-1", "binding": {"flow": {"connections": {}}}}]),
         connections=FakeConnectionsClient(),
     )
 
@@ -539,8 +539,8 @@ async def test_update_provider_data_binds_existing_tool_and_updates_agent_tools(
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]})
     fake_tool = FakeToolClient(
         [
-            {"id": "tool-1", "name": "tool-1", "binding": {"langflow": {"connections": {}}}},
-            {"id": "tool-3", "name": "tool-3", "binding": {"langflow": {"connections": {}}}},
+            {"id": "tool-1", "name": "tool-1", "binding": {"flow": {"connections": {}}}},
+            {"id": "tool-3", "name": "tool-3", "binding": {"flow": {"connections": {}}}},
         ]
     )
     fake_clients = SimpleNamespace(
@@ -585,7 +585,7 @@ async def test_update_provider_data_binds_existing_tool_and_updates_agent_tools(
     assert result.provider_result.added_snapshot_ids == ["tool-3"]
     assert [tool_id for tool_id, _payload in fake_tool.update_calls] == ["tool-3"]
     _, updated_tool_payload = fake_tool.update_calls[0]
-    assert updated_tool_payload["binding"]["langflow"]["connections"]["cfg-new"] == "conn-new"
+    assert updated_tool_payload["binding"]["flow"]["connections"]["cfg-new"] == "conn-new"
     _, agent_payload = fake_agent.update_calls[0]
     assert agent_payload["tools"] == ["tool-1", "tool-3"]
     assert agent_payload["llm"] == TEST_WXO_LLM
@@ -602,7 +602,7 @@ async def test_update_provider_data_bind_unbind_and_rename_preserves_connection_
                 "name": "tool-1",
                 "display_name": "tool-1",
                 "binding": {
-                    "langflow": {
+                    "flow": {
                         "connections": {"cfg-keep": "conn-keep", "cfg-remove": "conn-remove"},
                     }
                 },
@@ -653,7 +653,7 @@ async def test_update_provider_data_bind_unbind_and_rename_preserves_connection_
     _, rename_payload = fake_tool.update_calls[1]
     assert rename_payload["name"] == "renamed_tool"
     assert rename_payload["display_name"] == "renamed_tool"
-    assert rename_payload["binding"]["langflow"]["connections"] == {
+    assert rename_payload["binding"]["flow"]["connections"] == {
         "cfg-keep": "conn-keep",
         "cfg-add": "conn-add",
     }
@@ -690,7 +690,7 @@ async def test_update_provider_data_llm_only_updates_agent(monkeypatch):
 async def test_update_provider_data_accepts_missing_llm(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]})
-    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"langflow": {"connections": {}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"flow": {"connections": {}}}}])
     fake_connections = FakeConnectionsClient(existing_app_id="cfg-1")
 
     async def mock_get_provider_clients(*, user_id, db):  # noqa: ARG001
@@ -953,7 +953,7 @@ async def test_update_provider_data_put_tools_with_llm_updates_agent(monkeypatch
 async def test_update_provider_data_creates_raw_tools_without_operations(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]})
-    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"langflow": {"connections": {}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"flow": {"connections": {}}}}])
     fake_connections = FakeConnectionsClient()
     fake_clients = SimpleNamespace(
         agent=fake_agent,
@@ -1014,7 +1014,7 @@ async def test_update_provider_data_creates_raw_tools_without_operations(monkeyp
 async def test_update_provider_data_creates_raw_connection_and_raw_tool(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]})
-    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"langflow": {"connections": {}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"flow": {"connections": {}}}}])
     fake_connections = FakeConnectionsClient()
     fake_clients = SimpleNamespace(
         agent=fake_agent,
@@ -1102,7 +1102,7 @@ async def test_update_provider_data_creates_raw_connection_and_raw_tool(monkeypa
 async def test_update_provider_data_binds_existing_tool_using_provider_app_id_for_raw_connection(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]})
-    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"langflow": {"connections": {}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-1", "name": "tool-1", "binding": {"flow": {"connections": {}}}}])
     fake_connections = FakeConnectionsClient()
     fake_clients = SimpleNamespace(
         agent=fake_agent,
@@ -1155,7 +1155,7 @@ async def test_update_provider_data_binds_existing_tool_using_provider_app_id_fo
 
     assert [tool_id for tool_id, _payload in fake_tool.update_calls] == ["tool-1"]
     _, updated_tool_payload = fake_tool.update_calls[0]
-    assert updated_tool_payload["binding"]["langflow"]["connections"] == {"cfg": "conn-cfg"}
+    assert updated_tool_payload["binding"]["flow"]["connections"] == {"cfg": "conn-cfg"}
     assert captured["created_app_id"] == "cfg"
 
 
@@ -1168,10 +1168,10 @@ async def test_update_provider_data_mixed_operations_preserve_encounter_order(mo
             {
                 "id": "tool-1",
                 "name": "tool-1",
-                "binding": {"langflow": {"connections": {"cfg-1": "conn-old-1", "cfg-2": "conn-old-2"}}},
+                "binding": {"flow": {"connections": {"cfg-1": "conn-old-1", "cfg-2": "conn-old-2"}}},
             },
-            {"id": "tool-2", "name": "tool-2", "binding": {"langflow": {"connections": {}}}},
-            {"id": "tool-3", "name": "tool-3", "binding": {"langflow": {"connections": {}}}},
+            {"id": "tool-2", "name": "tool-2", "binding": {"flow": {"connections": {}}}},
+            {"id": "tool-3", "name": "tool-3", "binding": {"flow": {"connections": {}}}},
         ]
     )
     fake_clients = SimpleNamespace(
@@ -1222,11 +1222,11 @@ async def test_update_provider_data_mixed_operations_preserve_encounter_order(mo
     assert set(update_calls_by_id) == {"tool-3", "tool-1"}
 
     tool3_payload = update_calls_by_id["tool-3"]
-    assert list(tool3_payload["binding"]["langflow"]["connections"]) == ["cfg-2", "cfg-1"]
-    assert tool3_payload["binding"]["langflow"]["connections"] == {"cfg-2": "conn-cfg-2", "cfg-1": "conn-cfg-1"}
+    assert list(tool3_payload["binding"]["flow"]["connections"]) == ["cfg-2", "cfg-1"]
+    assert tool3_payload["binding"]["flow"]["connections"] == {"cfg-2": "conn-cfg-2", "cfg-1": "conn-cfg-1"}
 
     tool1_payload = update_calls_by_id["tool-1"]
-    assert tool1_payload["binding"]["langflow"]["connections"] == {}
+    assert tool1_payload["binding"]["flow"]["connections"] == {}
 
     _, agent_payload = fake_agent.update_calls[0]
     assert agent_payload["tools"] == ["tool-1", "tool-3"]
@@ -1464,7 +1464,7 @@ def test_build_provider_create_plan_attaches_existing_tool_without_connection_up
 
 @pytest.mark.anyio
 async def test_update_existing_tool_connection_deltas_uses_bind_order_in_errors():
-    fake_tool = FakeToolClient([{"id": "tool-c", "name": "tool-c", "binding": {"langflow": {"connections": {}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-c", "name": "tool-c", "binding": {"flow": {"connections": {}}}}])
     clients = SimpleNamespace(tool=fake_tool)
     delta = update_core_module.ToolConnectionOps()
     delta.bind.extend(["cfg-missing-first", "cfg-present"])
@@ -1577,7 +1577,7 @@ async def test_apply_provider_create_plan_rolls_back_mutated_existing_tools_with
                 "name": "tool-1",
                 "display_name": "Tool 1",
                 "description": "desc",
-                "binding": {"langflow": {"connections": {"old": "conn-old"}}},
+                "binding": {"flow": {"connections": {"old": "conn-old"}}},
                 "created_at": "read-only-field",
             }
         ]
@@ -1625,8 +1625,8 @@ async def test_apply_provider_create_plan_rolls_back_mutated_existing_tools_with
     rollback_payload = fake_tool.update_calls[1][1]
     assert "id" not in first_payload
     assert "created_at" not in first_payload
-    assert first_payload["binding"]["langflow"]["connections"]["cfg-1"] == "conn-new"
-    assert rollback_payload["binding"]["langflow"]["connections"] == {"old": "conn-old"}
+    assert first_payload["binding"]["flow"]["connections"]["cfg-1"] == "conn-new"
+    assert rollback_payload["binding"]["flow"]["connections"] == {"old": "conn-old"}
 
 
 @pytest.mark.anyio
@@ -2333,7 +2333,7 @@ async def test_update_provider_data_maps_raw_connection_conflict_to_deployment_c
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_clients = SimpleNamespace(
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]}),
-        tool=FakeToolClient([{"id": "tool-1", "binding": {"langflow": {"connections": {}}}}]),
+        tool=FakeToolClient([{"id": "tool-1", "binding": {"flow": {"connections": {}}}}]),
         connections=FakeConnectionsClient(),
     )
 
@@ -2496,7 +2496,7 @@ async def test_update_provider_data_validation_errors_raise_invalid_content(
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_clients = SimpleNamespace(
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]}),
-        tool=FakeToolClient([{"id": "tool-1", "binding": {"langflow": {"connections": {}}}}]),
+        tool=FakeToolClient([{"id": "tool-1", "binding": {"flow": {"connections": {}}}}]),
         connections=FakeConnectionsClient(),
     )
 
@@ -2531,7 +2531,7 @@ async def test_update_provider_data_rolls_back_mutated_tools_with_writable_paylo
                 "name": "tool-1",
                 "display_name": "Tool 1",
                 "description": "desc",
-                "binding": {"langflow": {"connections": {"old": "conn-old"}}},
+                "binding": {"flow": {"connections": {"old": "conn-old"}}},
                 "created_at": "read-only-field",
             }
         ]
@@ -2578,8 +2578,8 @@ async def test_update_provider_data_rolls_back_mutated_tools_with_writable_paylo
     rollback_payload = fake_tool.update_calls[1][1]
     assert "id" not in first_payload
     assert "created_at" not in first_payload
-    assert first_payload["binding"]["langflow"]["connections"]["cfg-1"] == "conn-new"
-    assert rollback_payload["binding"]["langflow"]["connections"] == {"old": "conn-old"}
+    assert first_payload["binding"]["flow"]["connections"]["cfg-1"] == "conn-new"
+    assert rollback_payload["binding"]["flow"]["connections"] == {"old": "conn-old"}
 
 
 @pytest.mark.anyio
@@ -3182,7 +3182,7 @@ def test_create_wxo_flow_tool_normalizes_name_for_raw_payload(monkeypatch):
     )
 
     assert tool_payload["name"] == "basicllmwxo"
-    assert tool_payload["binding"]["langflow"]["project_id"] == "project-123"
+    assert tool_payload["binding"]["flow"]["project_id"] == "project-123"
     assert artifact_bytes == b"artifact"
 
 
@@ -3417,7 +3417,7 @@ async def test_list_configs_single_deployment_scope(monkeypatch):
                 "id": "tool-1",
                 "name": "tool-one",
                 "binding": {
-                    "langflow": {
+                    "flow": {
                         "connections": {
                             "cfg-1": "conn-1",
                         }
@@ -3464,8 +3464,8 @@ async def test_list_configs_deployment_scope_filters_to_key_value_creds(monkeypa
     fake_agent = FakeAgentClient({"id": "dep-1", "tools": ["tool-1", "tool-2"]})
     fake_tool = FakeToolClient(
         [
-            {"id": "tool-1", "name": "tool-one", "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}}},
-            {"id": "tool-2", "name": "tool-two", "binding": {"langflow": {"connections": {"cfg-2": "conn-2"}}}},
+            {"id": "tool-1", "name": "tool-one", "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}}},
+            {"id": "tool-2", "name": "tool-two", "binding": {"flow": {"connections": {"cfg-2": "conn-2"}}}},
         ]
     )
     connections_client = FakeConnectionsClient()
@@ -3512,7 +3512,7 @@ async def test_list_configs_deployment_scope_warns_on_stale_tool_ids(monkeypatch
             {
                 "id": "tool-1",
                 "name": "tool-one",
-                "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
             }
         ]
     )
@@ -3562,7 +3562,7 @@ async def test_list_configs_deployment_scope_fails_fast_when_type_enrichment_fai
             {
                 "id": "tool-1",
                 "name": "tool-one",
-                "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
             }
         ]
     )
@@ -3600,7 +3600,7 @@ async def test_list_configs_deployment_scope_accepts_schema_compatible_detailed_
             {
                 "id": "tool-1",
                 "name": "tool-one",
-                "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
             }
         ]
     )
@@ -3639,7 +3639,7 @@ async def test_list_configs_deployment_scope_warns_when_referenced_connection_mi
             {
                 "id": "tool-1",
                 "name": "tool-one",
-                "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
             }
         ]
     )
@@ -3808,7 +3808,7 @@ async def test_list_configs_deployment_scope_trusts_non_list_tools_payload(monke
             [
                 {
                     "id": "tool-1",
-                    "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                    "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
                 }
             ]
         ),
@@ -3922,8 +3922,8 @@ async def test_list_configs_deployment_scope_uses_latest_binding_for_same_app(mo
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1", "tool-2"]}),
         tool=FakeToolClient(
             [
-                {"id": "tool-1", "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}}},
-                {"id": "tool-2", "binding": {"langflow": {"connections": {"cfg-1": "conn-2"}}}},
+                {"id": "tool-1", "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}}},
+                {"id": "tool-2", "binding": {"flow": {"connections": {"cfg-1": "conn-2"}}}},
             ]
         ),
         connections=connections_client,
@@ -3977,7 +3977,7 @@ async def test_list_configs_deployment_scope_skips_enrichment_when_no_connection
 @pytest.mark.anyio
 async def test_list_configs_deployment_scope_raises_on_malformed_detailed_connection(monkeypatch):
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
-    fake_tool = FakeToolClient([{"id": "tool-1", "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}}}])
+    fake_tool = FakeToolClient([{"id": "tool-1", "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}}}])
     connections_client = FakeConnectionsClient()
     monkeypatch.setattr(
         connections_client,
@@ -4036,7 +4036,7 @@ async def test_list_configs_scopes_return_same_normalized_item_shape(monkeypatch
                 {
                     "id": "tool-1",
                     "name": "Tool One",
-                    "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                    "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
                 }
             ]
         ),
@@ -4154,7 +4154,7 @@ async def test_list_snapshots_single_deployment_scope_extracts_connections(monke
                 {
                     "id": "tool-1",
                     "name": "Tool One",
-                    "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                    "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
                 }
             ]
         ),
@@ -4408,7 +4408,7 @@ async def test_list_snapshots_without_deployment_id_lists_tenant_scope(monkeypat
     fake_base = FakeBaseClient(
         get_payloads={
             "/tools": [
-                {"id": "tool-1", "name": "Tool One", "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}}},
+                {"id": "tool-1", "name": "Tool One", "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}}},
                 {"id": "tool-2"},
             ]
         }
@@ -4537,7 +4537,7 @@ async def test_list_snapshots_snapshot_names_returns_matching_tools(monkeypatch)
         agent=FakeAgentClient({"id": "dep-1", "tools": []}),
         tool=FakeToolClient(
             [
-                {"id": "tool-1", "name": "my_tool", "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}}},
+                {"id": "tool-1", "name": "my_tool", "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}}},
                 {"id": "tool-2", "name": "other_tool"},
             ]
         ),
@@ -4596,7 +4596,7 @@ async def test_list_snapshots_snapshot_names_ignored_when_deployment_ids_present
         agent=FakeAgentClient({"id": "dep-1", "tools": ["tool-1"]}),
         tool=FakeToolClient(
             [
-                {"id": "tool-1", "name": "agent_tool", "binding": {"langflow": {"connections": {}}}},
+                {"id": "tool-1", "name": "agent_tool", "binding": {"flow": {"connections": {}}}},
                 {"id": "tool-2", "name": "my_tool"},
             ]
         ),
@@ -4659,13 +4659,13 @@ async def test_verify_tools_by_ids_returns_only_connections_provider_data():
                 {
                     "id": "tool-1",
                     "name": "Tool One",
-                    "binding": {"langflow": {"connections": {"cfg-1": "conn-1"}}},
+                    "binding": {"flow": {"connections": {"cfg-1": "conn-1"}}},
                     "extra": "ignored",
                 },
                 {
                     "id": "tool-2",
                     "name": "Tool Two",
-                    "binding": {"langflow": {"connections": {}}},
+                    "binding": {"flow": {"connections": {}}},
                     "extra": "ignored",
                 },
             ]
@@ -4687,7 +4687,7 @@ async def test_verify_tools_by_ids_tolerates_malformed_connections_payload():
                 {
                     "id": "tool-1",
                     "name": "Tool One",
-                    "binding": {"langflow": {"connections": ["not-a-dict"]}},
+                    "binding": {"flow": {"connections": ["not-a-dict"]}},
                 }
             ]
         )
@@ -4708,7 +4708,7 @@ async def test_verify_tools_by_ids_tolerates_malformed_connection_values():
                 {
                     "id": "tool-1",
                     "name": "Tool One",
-                    "binding": {"langflow": {"connections": {"cfg-1": "   "}}},
+                    "binding": {"flow": {"connections": {"cfg-1": "   "}}},
                 }
             ]
         )
@@ -4730,7 +4730,7 @@ async def test_verify_tools_by_ids_rejects_mixed_connections_payload():
                     "id": "tool-1",
                     "name": "Tool One",
                     "binding": {
-                        "langflow": {
+                        "flow": {
                             "connections": {
                                 "cfg-1": "conn-1",
                                 "cfg-2": "   ",
@@ -5160,11 +5160,11 @@ async def test_delete_only_deletes_agent_not_tools_or_configs(monkeypatch):
         [
             {
                 "id": "tool-1",
-                "binding": {"langflow": {"connections": {"app-1": {}}}},
+                "binding": {"flow": {"connections": {"app-1": {}}}},
             },
             {
                 "id": "tool-2",
-                "binding": {"langflow": {"connections": {"app-2": {}}}},
+                "binding": {"flow": {"connections": {"app-2": {}}}},
             },
         ]
     )
@@ -6586,7 +6586,7 @@ async def test_create_maps_409_conflict_to_deployment_conflict_error():
                 response=SimpleNamespace(status_code=409, text='{"detail":"already exists"}')
             ),
         ),
-        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"langflow": {}}}]),
+        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"flow": {}}}]),
         connections=FakeConnectionsClient(existing_app_id="app-existing-1"),
     )
     _attach_provider_clients(service, clients)
@@ -6664,7 +6664,7 @@ async def test_create_maps_422_to_invalid_content_error():
                 response=SimpleNamespace(status_code=422, text='{"detail":"validation error"}')
             ),
         ),
-        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"langflow": {}}}]),
+        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"flow": {}}}]),
         connections=FakeConnectionsClient(existing_app_id="app-existing-1"),
     )
     _attach_provider_clients(service, clients)
@@ -6945,7 +6945,7 @@ async def test_create_preserves_exception_chain_on_unexpected_error():
     original_error = RuntimeError("unexpected db error")
     clients = FakeWXOClients(
         agent=FakeAgentClient({"id": "dep-1", "tools": []}, create_exception=original_error),
-        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"langflow": {}}}]),
+        tool=FakeToolClient([{"id": "tool-existing-1", "binding": {"flow": {}}}]),
         connections=FakeConnectionsClient(existing_app_id="app-existing-1"),
     )
     _attach_provider_clients(service, clients)
@@ -7276,7 +7276,7 @@ def test_api_execution_schemas_have_no_run_id_field():
 
 
 def test_api_execution_schemas_omit_langflow_owned_fields():
-    """deployment_id (Langflow DB UUID) belongs on the top-level response, not in provider_data."""
+    """deployment_id (Hanzo Flow DB UUID) belongs on the top-level response, not in provider_data."""
     from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
         WatsonxApiAgentExecutionStatusResultData,
@@ -7630,17 +7630,17 @@ async def test_verify_credentials_provider_unreachable(monkeypatch):
 
 
 # ---------------------------------------------------------------------------
-# Ownership checks: binding.langflow verification
+# Ownership checks: binding.flow verification
 # ---------------------------------------------------------------------------
 
 
 def _make_langflow_tool(tool_id: str, *, connections: dict[str, str] | None = None) -> dict[str, Any]:
-    """Build a tool dict that looks Langflow-managed (has binding.langflow)."""
+    """Build a tool dict that looks Hanzo Flow-managed (has binding.flow)."""
     return {
         "id": tool_id,
         "name": f"tool_{tool_id}",
         "binding": {
-            "langflow": {
+            "flow": {
                 "project_id": "proj-1",
                 "connections": connections or {},
             }
@@ -7649,7 +7649,7 @@ def _make_langflow_tool(tool_id: str, *, connections: dict[str, str] | None = No
 
 
 def _make_external_tool(tool_id: str) -> dict[str, Any]:
-    """Build a tool dict that is NOT Langflow-managed (no binding.langflow)."""
+    """Build a tool dict that is NOT Hanzo Flow-managed (no binding.flow)."""
     return {
         "id": tool_id,
         "name": f"external_{tool_id}",
@@ -7671,7 +7671,7 @@ async def test_update_connection_deltas_rejects_non_langflow_tool():
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
     ops = ToolConnectionOps(bind=OrderedUniqueStrs.from_values(["app-1"]))
-    with pytest.raises(InvalidContentError, match="does not have a Langflow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
         await _update_deltas(
             clients=clients,
             existing_tool_deltas={"ext-1": ops},
@@ -7710,7 +7710,7 @@ async def test_bind_existing_tools_for_create_rejects_non_langflow_tool():
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Langflow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
         await _bind_existing(
             clients=clients,
             existing_tool_bindings={"ext-1": ["app-1"]},
@@ -7748,7 +7748,7 @@ async def test_update_existing_tool_connection_bindings_rejects_non_langflow_too
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Langflow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
         await _update_bindings(
             clients=clients,
             existing_target_tool_ids=["ext-1"],
@@ -7765,7 +7765,7 @@ async def test_update_existing_tool_connection_bindings_rejects_unbound_tool():
     bare_tool = _make_unbound_tool("bare-1")
     clients = FakeWXOClients(tool=FakeToolClient([bare_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Langflow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
         await _update_bindings(
             clients=clients,
             existing_target_tool_ids=["bare-1"],
@@ -7781,7 +7781,7 @@ async def test_update_existing_tool_connection_bindings_rejects_unbound_tool():
 
 @pytest.mark.anyio
 async def test_apply_tool_renames_succeeds_for_langflow_tool():
-    """_apply_tool_renames renames a Langflow-owned tool on the agent."""
+    """_apply_tool_renames renames a Hanzo Flow-owned tool on the agent."""
     _apply_renames = update_core_module._apply_tool_renames
 
     lf_tool = _make_langflow_tool("lf-1")
@@ -7810,7 +7810,7 @@ async def test_apply_tool_renames_rejects_non_langflow_tool():
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Langflow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
         await _apply_renames(
             clients=clients,
             agent_tool_ids=["ext-1"],
@@ -7890,7 +7890,7 @@ async def test_apply_tool_renames_preserves_latest_connections_when_original_alr
             "id": "lf-1",
             "name": "pre_delta_name",
             "display_name": "pre_delta_name",
-            "binding": {"langflow": {"project_id": "proj-1", "connections": {"app-1": "conn-1"}}},
+            "binding": {"flow": {"project_id": "proj-1", "connections": {"app-1": "conn-1"}}},
         }
     }
     await _apply_renames(
@@ -7903,10 +7903,10 @@ async def test_apply_tool_renames_preserves_latest_connections_when_original_alr
     _, payload = clients.tool.update_calls[0]
     assert payload["name"] == "new_name"
     assert payload["display_name"] == "new_name"
-    assert payload["binding"]["langflow"]["connections"] == {"app-1": "conn-1", "app-2": "conn-2"}
+    assert payload["binding"]["flow"]["connections"] == {"app-1": "conn-1", "app-2": "conn-2"}
     # Pre-captured rollback state must remain unchanged.
     assert original_tools["lf-1"]["name"] == "pre_delta_name"
-    assert original_tools["lf-1"]["binding"]["langflow"]["connections"] == {"app-1": "conn-1"}
+    assert original_tools["lf-1"]["binding"]["flow"]["connections"] == {"app-1": "conn-1"}
 
 
 @pytest.mark.anyio
@@ -7927,7 +7927,7 @@ async def test_apply_tool_renames_preserves_latest_connections_for_add_and_remov
             "name": "pre_delta_name",
             "display_name": "pre_delta_name",
             "binding": {
-                "langflow": {
+                "flow": {
                     "project_id": "proj-1",
                     "connections": {"cfg-keep": "conn-keep", "cfg-remove": "conn-remove"},
                 }
@@ -7944,9 +7944,9 @@ async def test_apply_tool_renames_preserves_latest_connections_for_add_and_remov
     _, payload = clients.tool.update_calls[0]
     assert payload["name"] == "renamed_tool"
     assert payload["display_name"] == "renamed_tool"
-    assert payload["binding"]["langflow"]["connections"] == {"cfg-keep": "conn-keep", "cfg-add": "conn-add"}
+    assert payload["binding"]["flow"]["connections"] == {"cfg-keep": "conn-keep", "cfg-add": "conn-add"}
     # Rollback snapshot remains pre-delta.
-    assert original_tools["lf-1"]["binding"]["langflow"]["connections"] == {
+    assert original_tools["lf-1"]["binding"]["flow"]["connections"] == {
         "cfg-keep": "conn-keep",
         "cfg-remove": "conn-remove",
     }

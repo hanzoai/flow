@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Langflow Load Test Setup CLI
+"""Hanzo Flow Load Test Setup CLI
 
-This script sets up a complete Langflow test environment by:
-1. Starting Langflow (optional)
+This script sets up a complete Hanzo Flow test environment by:
+1. Starting Hanzo Flow (optional)
 2. Creating a test user account
 3. Authenticating and getting JWT tokens
 4. Creating API keys
@@ -24,7 +24,7 @@ import time
 
 
 async def get_starter_projects_from_api(host: str, access_token: str) -> list[dict]:
-    """Get starter projects from Langflow API."""
+    """Get starter projects from Hanzo Flow API."""
     import httpx
 
     # Ensure proper URL formatting
@@ -72,10 +72,10 @@ async def get_starter_projects_from_api(host: str, access_token: str) -> list[di
 
 
 async def list_available_flows(host: str, access_token: str) -> list[tuple[str, str, str]]:
-    """List all available starter project flows from Langflow API.
+    """List all available starter project flows from Hanzo Flow API.
 
     Args:
-        host: Langflow host URL
+        host: Hanzo Flow host URL
         access_token: JWT access token for authentication
 
     Returns:
@@ -131,7 +131,7 @@ async def get_flow_data_by_name(host: str, access_token: str, flow_name: str) ->
     """Get flow data for a specific starter project by name.
 
     Args:
-        host: Langflow host URL
+        host: Hanzo Flow host URL
         access_token: JWT access token for authentication
         flow_name: Name of the flow to retrieve
 
@@ -192,7 +192,7 @@ async def select_flow_interactive(host: str, access_token: str) -> str | None:
 
 
 async def setup_langflow_environment(host: str, flow_name: str | None = None, interactive: bool = False) -> dict:
-    """Set up complete Langflow environment with real starter project flows."""
+    """Set up complete Hanzo Flow environment with real starter project flows."""
     try:
         import httpx
     except ImportError:
@@ -200,9 +200,9 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
         print("Install with: pip install httpx")
         sys.exit(1)
 
-    # Configuration - use default Langflow credentials
-    username = "langflow"
-    password = "langflow"
+    # Configuration - use default Hanzo Flow credentials
+    username = "flow"
+    password = "flow"
 
     setup_state = {
         "host": host,
@@ -218,18 +218,18 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
 
     async with httpx.AsyncClient(base_url=host, timeout=60.0) as client:
         # Step 1: Health check
-        print(f"\n1. Checking Langflow health at {host}...")
+        print(f"\n1. Checking Hanzo Flow health at {host}...")
         try:
             health_response = await client.get("/health")
             if health_response.status_code != 200:
                 raise Exception(f"Health check failed: {health_response.status_code}")
-            print("   ✅ Langflow is running and accessible")
+            print("   ✅ Hanzo Flow is running and accessible")
         except Exception as e:
             print(f"   ❌ Health check failed: {e}")
             raise
 
         # Step 2: Skip user creation, use default credentials
-        print("2. Using default Langflow credentials...")
+        print("2. Using default Hanzo Flow credentials...")
         print(f"   ✅ Using username: {username}")
 
         # Step 3: Login to get JWT token
@@ -320,7 +320,7 @@ async def setup_langflow_environment(host: str, flow_name: str | None = None, in
 
         try:
             # Prepare flow data for upload
-            # Remove the id to let Langflow generate a new one
+            # Remove the id to let Hanzo Flow generate a new one
             flow_upload_data = flow_data.copy()
             if "id" in flow_upload_data:
                 del flow_upload_data["id"]
@@ -390,13 +390,13 @@ def print_setup_results(setup_state: dict):
 
     print("# Or use the runner script:")
     print(
-        f"python run_load_test.py --host {setup_state['host']} --no-start-langflow --headless --users 25 --duration 120"
+        f"python run_load_test.py --host {setup_state['host']} --no-start-flow --headless --users 25 --duration 120"
     )
     print()
 
     print("# Generate HTML report:")
     print(
-        f"python run_load_test.py --host {setup_state['host']} --no-start-langflow --headless --users 50 --duration 180 --html report.html"
+        f"python run_load_test.py --host {setup_state['host']} --no-start-flow --headless --users 50 --duration 180 --html report.html"
     )
 
     print(f"\n{'=' * 80}")
@@ -425,7 +425,7 @@ def save_credentials(setup_state: dict, output_file: str):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Set up Langflow load test environment with real starter project flows",
+        description="Set up Hanzo Flow load test environment with real starter project flows",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -449,7 +449,7 @@ Examples:
     parser.add_argument(
         "--host",
         default="http://localhost:7860",
-        help="Langflow host URL (default: http://localhost:7860, use https:// for remote instances)",
+        help="Hanzo Flow host URL (default: http://localhost:7860, use https:// for remote instances)",
     )
     parser.add_argument("--flow", help="Name of the starter project flow to use")
     parser.add_argument("--interactive", action="store_true", help="Interactive flow selection")
@@ -470,17 +470,17 @@ Examples:
                 sys.exit(1)
 
             # Quick authentication to access the API
-            username = "langflow"
-            password = "langflow"
+            username = "flow"
+            password = "flow"
 
             async with httpx.AsyncClient(base_url=args.host, timeout=30.0) as client:
                 # Health check
                 try:
                     health_response = await client.get("/health")
                     if health_response.status_code != 200:
-                        raise Exception(f"Langflow not available at {args.host}")
+                        raise Exception(f"Hanzo Flow not available at {args.host}")
                 except Exception as e:
-                    print(f"❌ Cannot connect to Langflow at {args.host}: {e}")
+                    print(f"❌ Cannot connect to Hanzo Flow at {args.host}: {e}")
                     sys.exit(1)
 
                 # Login to get access token
@@ -500,7 +500,7 @@ Examples:
 
                 except Exception as e:
                     print(f"❌ Authentication failed: {e}")
-                    print("Make sure Langflow is running with default credentials (langflow/langflow)")
+                    print("Make sure Hanzo Flow is running with default credentials (flow/flow)")
                     sys.exit(1)
 
                 # Get flows from API

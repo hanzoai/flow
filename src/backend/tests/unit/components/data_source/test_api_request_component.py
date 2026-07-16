@@ -487,7 +487,7 @@ class TestAPIRequestSSRFProtection:
         """Test that SSRF protection allows legitimate public URLs."""
         public_urls = [
             "https://api.openai.com/v1/chat/completions",
-            "https://api.github.com/repos/langflow-ai/langflow",
+            "https://api.github.com/repos/hanzoai/flow",
             "https://www.google.com",
         ]
 

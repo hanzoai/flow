@@ -1,7 +1,7 @@
 """Tests for plugin route discovery and conflict protection.
 
 Ensures that plugins loaded via the flow.plugins entry-point group
-cannot overwrite or shadow existing Langflow routes.
+cannot overwrite or shadow existing Hanzo Flow routes.
 """
 
 from unittest.mock import MagicMock, patch

@@ -9,9 +9,9 @@ import Icon from "@site/src/components/icon";
 import PartialDevModeWindows from '@site/docs/_partial-dev-mode-windows.mdx';
 import PartialDockerDoclingDeps from '@site/docs/_partial-docker-docling-deps.mdx';
 
-<Icon name="Blocks" aria-hidden="true" /> [**Bundles**](/components-bundle-components) contain custom components that support specific third-party integrations with Langflow.
+<Icon name="Blocks" aria-hidden="true" /> [**Bundles**](/components-bundle-components) contain custom components that support specific third-party integrations with Hanzo Flow.
 
-Langflow integrates with [Docling](https://docling-project.github.io/docling/) through a bundle of components for parsing and chunking documents.
+Hanzo Flow integrates with [Docling](https://docling-project.github.io/docling/) through a bundle of components for parsing and chunking documents.
 
 ## Prerequisites
 
@@ -20,18 +20,18 @@ Langflow integrates with [Docling](https://docling-project.github.io/docling/) t
     <PartialDevModeWindows />
 
 * **Install Docling dependency**:
-The Docling dependency is required to use the Docling components in Langflow.
+The Docling dependency is required to use the Docling components in Hanzo Flow.
 
-    * **Langflow Desktop**: Set `LANGFLOW_DOCLING=True` in your `.env` file to enable Docling dependency installation. For more information, see [Set environment variables for Langflow Desktop](/environment-variables#set-environment-variables-for-langflow-desktop).
+    * **Hanzo Flow Desktop**: Set `LANGFLOW_DOCLING=True` in your `.env` file to enable Docling dependency installation. For more information, see [Set environment variables for Hanzo Flow Desktop](/environment-variables#set-environment-variables-for-flow-desktop).
 
-    * **Langflow OSS**:
-        * If you installed `langflow` (`uv pip install langflow`), Docling is included automatically through bundled extras, without Docling's optional chunking dependencies.
-        * If you installed `langflow-base` directly, install Docling with an extra, for example `uv pip install "langflow-base[docling]"`.
-        * To use the **Chunk DoclingDocument** component, install the chunking extra with `uv pip install "langflow[docling-chunking]"` or `uv pip install "langflow-base[docling-chunking]"`.
+    * **Hanzo Flow OSS**:
+        * If you installed `flow` (`uv pip install flow`), Docling is included automatically through bundled extras, without Docling's optional chunking dependencies.
+        * If you installed `flow-base` directly, install Docling with an extra, for example `uv pip install "flow-base[docling]"`.
+        * To use the **Chunk DoclingDocument** component, install the chunking extra with `uv pip install "flow[docling-chunking]"` or `uv pip install "flow-base[docling-chunking]"`.
 
     * **macOS Intel (x86_64)**: Use the [Docling installation guide](https://docling-project.github.io/docling/installation/) to install the Docling dependency.
 
-    * **Earlier versions**: Langflow versions earlier than 1.6 don't include the Docling dependency by default.
+    * **Earlier versions**: Hanzo Flow versions earlier than 1.6 don't include the Docling dependency by default.
 
     For more information, see [Install custom dependencies](/install-custom-dependencies).
 
@@ -40,7 +40,7 @@ The Docling dependency is required to use the Docling components in Langflow.
 ## Use Docling components in a flow
 
 :::tip
-To learn more about content extraction with Docling, see the video tutorial [Docling + Langflow: Document Processing for AI Workflows](https://www.youtube.com/watch?v=5DuS6uRI5OM).
+To learn more about content extraction with Docling, see the video tutorial [Docling + Hanzo Flow: Document Processing for AI Workflows](https://www.youtube.com/watch?v=5DuS6uRI5OM).
 :::
 
 This example demonstrates how to use Docling components to split a PDF in a flow:
@@ -104,7 +104,7 @@ For more information, see the [Docling serve project repository](https://github.
 
 The **Chunk DoclingDocument** component splits `DoclingDocument` objects into chunks.
 
-This component requires Docling's optional chunking dependencies. Install them with `uv pip install "langflow[docling-chunking]"` or `uv pip install "langflow-base[docling-chunking]"`.
+This component requires Docling's optional chunking dependencies. Install them with `uv pip install "flow[docling-chunking]"` or `uv pip install "flow-base[docling-chunking]"`.
 
 It outputs the chunked documents as a [`Table`](/data-types#table).
 

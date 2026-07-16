@@ -244,7 +244,7 @@ FLOW_LOG_LEVEL=ERROR
         """.strip()
         )
 
-        # Create a test script that starts langflow and checks if the database was created
+        # Create a test script that starts flow and checks if the database was created
         # at the location specified in the env file
         test_script = tmp_path / "verify_startup.py"
         test_script.write_text(
@@ -255,14 +255,14 @@ import subprocess
 import signal
 from pathlib import Path
 
-# Start langflow run with --env-file in background
+# Start flow run with --env-file in background
 db_path = Path(r"{db_path}")
 env_file = Path(r"{env_file}")
 
 # Start the server
 proc = subprocess.Popen(
     [
-        sys.executable, "-m", "langflow", "run", "--env-file", str(env_file),
+        sys.executable, "-m", "flow", "run", "--env-file", str(env_file),
         "--host", "127.0.0.1", "--port", "17860", "--backend-only"
     ],
     stdout=subprocess.PIPE,

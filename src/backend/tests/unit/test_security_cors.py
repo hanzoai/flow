@@ -29,7 +29,7 @@ class TestCORSConfiguration:
             warnings.warn(
                 "CRITICAL SECURITY WARNING: Current CORS configuration uses wildcard origins (*) "
                 "WITH CREDENTIALS ENABLED! This allows any website to make authenticated requests "
-                "to your Langflow instance and potentially steal user credentials. "
+                "to your Hanzo Flow instance and potentially steal user credentials. "
                 "This will be changed to more secure defaults in v1.7. "
                 "Please configure FLOW_CORS_ORIGINS with specific domains for production use.",
                 UserWarning,

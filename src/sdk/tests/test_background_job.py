@@ -1,6 +1,6 @@
 """Unit tests for BackgroundJob and AsyncLangflowClient.run_background.
 
-All tests run entirely in-process; no real Langflow instance required.
+All tests run entirely in-process; no real Hanzo Flow instance required.
 The async client's ``run`` method is patched directly so only the asyncio
 task lifecycle and BackgroundJob status logic is under test.
 """

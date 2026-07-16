@@ -4,7 +4,7 @@ This module tests the agent workflow by:
 1. Creating and validating the agent script
 2. Testing component instantiation and configuration
 3. Testing direct graph execution without CLI
-4. Verifying the workflow works with langflow's dependencies
+4. Verifying the workflow works with flow's dependencies
 """
 
 import os
@@ -22,9 +22,9 @@ class TestAgentInLfxRun:
     @pytest.fixture
     def simple_agent_script_content(self):
         """The simple_agent.py script content for testing lfx run."""
-        return '''"""A simple agent flow example for Langflow.
+        return '''"""A simple agent flow example for Hanzo Flow.
 
-This script demonstrates how to set up a conversational agent using Langflow's
+This script demonstrates how to set up a conversational agent using Hanzo Flow's
 Agent component with proper async handling.
 
 Features:
@@ -123,7 +123,7 @@ async def get_graph() -> Graph:
 
     def test_agent_script_file_validation(self, simple_agent_script_file):
         """Test that the agent script file exists and has valid content."""
-        # Since we don't have direct CLI access in langflow tests,
+        # Since we don't have direct CLI access in flow tests,
         # verify the script file exists and has correct content
         assert simple_agent_script_file.exists(), "Script file should exist in tests/data"
 

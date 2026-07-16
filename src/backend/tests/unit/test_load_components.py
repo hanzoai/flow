@@ -120,7 +120,7 @@ class TestComponentLoading:
         """Test that _process_single_module catches all exceptions during module import and component building.
 
         This ensures that if a component fails to import or build (e.g., due to network errors,
-        missing dependencies, or initialization failures), it doesn't crash Langflow startup.
+        missing dependencies, or initialization failures), it doesn't crash Hanzo Flow startup.
         """
         from unittest.mock import patch
 

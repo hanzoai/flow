@@ -78,7 +78,7 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          version=$(uv tree 2>/dev/null | grep '^langflow-base' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep '^flow-base' | cut -d' ' -f2 | sed 's/^v//')
           echo "Base version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
@@ -124,7 +124,7 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          version=$(uv tree 2>/dev/null | grep -E '^langflow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep -E '^flow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
           echo "Main version from pyproject.toml: $version"
 
           if [ ${{inputs.pre_release}} == "true" ]; then
@@ -155,10 +155,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -226,10 +226,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -297,10 +297,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -372,10 +372,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -443,10 +443,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -514,10 +514,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -602,9 +602,9 @@ jobs:
         id: version
         run: |
           if [[ "${{ inputs.release_type }}" == "base" ]]; then
-            version=$(uv tree 2>/dev/null | grep 'langflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
+            version=$(uv tree 2>/dev/null | grep 'flow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
           else
-            version=$(uv tree 2>/dev/null | grep -E '^langflow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
+            version=$(uv tree 2>/dev/null | grep -E '^flow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
           fi
           echo "Using version: $version"
           echo version=$version >> $GITHUB_OUTPUT

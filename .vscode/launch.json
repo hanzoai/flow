@@ -44,7 +44,7 @@
       "args": [
         "run",
         "--frontend-path",
-        "${workspaceFolder}/src/backend/base/langflow/frontend",
+        "${workspaceFolder}/src/backend/base/flow/frontend",
         "--env-file",
         "${workspaceFolder}/.env"
       ],

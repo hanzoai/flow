@@ -212,7 +212,7 @@ class TestRunResponseHelpers:
 
 
 def test_load_environments(tmp_path: Path):
-    config = tmp_path / "langflow-environments.toml"
+    config = tmp_path / "flow-environments.toml"
     config.write_text(
         textwrap.dedent("""\
             [environments.staging]
@@ -247,7 +247,7 @@ def test_load_environments(tmp_path: Path):
 
 
 def test_environment_not_found(tmp_path: Path):
-    config = tmp_path / "langflow-environments.toml"
+    config = tmp_path / "flow-environments.toml"
     config.write_text("[environments.staging]\nurl = 'https://x.com'\n")
 
     from flow_sdk.environments import get_environment
@@ -258,7 +258,7 @@ def test_environment_not_found(tmp_path: Path):
 
 
 def test_missing_url_raises(tmp_path: Path):
-    config = tmp_path / "langflow-environments.toml"
+    config = tmp_path / "flow-environments.toml"
     # Intentionally omit 'url' to trigger the validation error
     config.write_text("[environments.bad]\ndescription = 'oops'\n")
 

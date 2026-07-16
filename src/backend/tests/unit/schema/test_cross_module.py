@@ -197,7 +197,7 @@ class TestDuckTypingInputMixin:
         lfx_msg = LfxMessage(text="hello")
         input1 = MessageInput(name="test1", value=lfx_msg)
 
-        # Create with langflow Message
+        # Create with flow Message
         langflow_msg = LangflowMessage(text="world")
         input2 = MessageInput(name="test2", value=langflow_msg)
 

@@ -89,7 +89,7 @@ test(
     // Check that User A starts with an empty flows list
     expect(
       (
-        await page.waitForSelector("text=Welcome to LangFlow", {
+        await page.waitForSelector("text=Welcome to Hanzo Flow", {
           timeout: 30000,
         })
       ).isVisible(),

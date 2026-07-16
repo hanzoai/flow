@@ -1,7 +1,7 @@
 """Tests for MCP reverse proxy support (root_path / X-Forwarded-Prefix).
 
-Covers the fix for https://github.com/langflow-ai/langflow/issues/9797 where MCP
-SSE transport breaks when Langflow sits behind a reverse proxy that adds a URL
+Covers the fix for https://github.com/hanzoai/flow/issues/9797 where MCP
+SSE transport breaks when Hanzo Flow sits behind a reverse proxy that adds a URL
 prefix (basePath).
 """
 
@@ -108,10 +108,10 @@ class TestForwardedPrefixMiddleware:
         """Verify the middleware sets root_path visible to downstream code."""
         root_path = await self._captured_downstream_root_path(
             configured_root_path="/enabled",
-            headers={"X-Forwarded-Prefix": "/langflow"},
+            headers={"X-Forwarded-Prefix": "/flow"},
         )
 
-        assert root_path == "/langflow"
+        assert root_path == "/flow"
 
     async def test_middleware_ignores_header_when_root_path_not_configured(self):
         """When root_path is not set, X-Forwarded-Prefix is ignored."""

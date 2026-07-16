@@ -13,7 +13,7 @@ from pydantic import SecretStr
 
 @pytest.fixture
 def langflow_auth_service(tmp_path):
-    """Use Langflow AuthService for encrypt/decrypt so tests get real Fernet behavior."""
+    """Use Hanzo Flow AuthService for encrypt/decrypt so tests get real Fernet behavior."""
     settings = AuthSettings(CONFIG_DIR=str(tmp_path))
     settings.SECRET_KEY = SecretStr("unit-test-secret-for-encryption")
     settings_service = SimpleNamespace(
@@ -25,7 +25,7 @@ def langflow_auth_service(tmp_path):
 
 @pytest.fixture(autouse=True)
 def use_langflow_auth_for_encryption(langflow_auth_service):
-    """Ensure utils use Langflow AuthService (real encrypt/decrypt), not LFX stub."""
+    """Ensure utils use Hanzo Flow AuthService (real encrypt/decrypt), not LFX stub."""
     with patch("flow.services.auth.utils.get_auth_service", return_value=langflow_auth_service):
         yield
 

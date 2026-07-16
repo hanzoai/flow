@@ -1,6 +1,6 @@
 """Unit tests for lfx validate — structural, extended checks, directory scanning, strict mode.
 
-All tests run entirely in-process (no running Langflow instance or component
+All tests run entirely in-process (no running Hanzo Flow instance or component
 registry required).  Level-2 component checks are skipped via skip_components=True
 so the registry never needs to be loaded.
 """
@@ -691,7 +691,7 @@ class TestVersionMismatch:
         assert len(result.warnings) == 2
 
     def test_langflow_not_installed_skips_check(self):
-        """If Langflow is not installed, version check is skipped silently."""
+        """If Hanzo Flow is not installed, version check is skipped silently."""
         flow = {**_MINIMAL_VALID, "data": {"nodes": [_NODE_WITH_VERSION], "edges": []}}
         result = self._make_result()
         with patch("lfx.cli.validation.core._get_lf_version", return_value=None):

@@ -1,9 +1,9 @@
 """Regression tests for lfx.memory runtime dispatch.
 
-Original bug: when langflow was installed alongside lfx but `lfx run` had
+Original bug: when flow was installed alongside lfx but `lfx run` had
 only a NoopDatabaseService registered, `lfx.memory` bound at import time to
-`flow.memory` (because the `langflow` package was importable). The
-langflow-backed `aupdate_messages` then called `session.get(...)` on a
+`flow.memory` (because the `flow` package was importable). The
+flow-backed `aupdate_messages` then called `session.get(...)` on a
 NoopSession, which always returns `None`, raising spurious
 "Message with id X not found" errors mid-stream.
 """
@@ -92,7 +92,7 @@ class TestAupdateMessagesRegression:
     async def test_aupdate_messages_does_not_raise_against_noop_session(self, monkeypatch):
         """Regression: route to stubs (no-op) instead of raising via flow.memory.
 
-        With langflow importable but only a NoopDatabaseService registered,
+        With flow importable but only a NoopDatabaseService registered,
         aupdate_messages must route to stubs and succeed silently rather than
         trigger flow.memory's strict existence check against NoopSession.
         """

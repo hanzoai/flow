@@ -202,5 +202,5 @@ class TestChunkDoclingDocumentComponentHybridChunker:
 
         monkeypatch.setattr(builtins, "__import__", fake_import)
 
-        with pytest.raises(ImportError, match=r"langflow-base\[docling-chunking\]"):
+        with pytest.raises(ImportError, match=r"flow-base\[docling-chunking\]"):
             _load_docling_chunker_dependencies()

@@ -2,16 +2,16 @@
 
 lfx is a command-line tool for running Hanzo Flow workflows. It provides two main commands: `serve` and `run`.
 
-Running a flow with LFX is similar to running flows with the `--backend-only` environment variable enabled, but even more lightweight because the Langflow package and all of its dependencies don't need to be installed.
+Running a flow with LFX is similar to running flows with the `--backend-only` environment variable enabled, but even more lightweight because the Hanzo Flow package and all of its dependencies don't need to be installed.
 
-LFX uses a no-op database interface called [`NoopSession`](https://github.com/langflow-ai/langflow/blob/main/src/lfx/src/lfx/services/session.py) for all operations that require persistent state.
-There is no `langflow.db` database file when using LFX.
-You can run flows with the API, but any stateful operations that depend on the Langflow database, like saving flows, storing messages, or managing users **will not** persist data.
-Operations that depend on `langflow.db` will not work as they do in the full Langflow application.
+LFX uses a no-op database interface called [`NoopSession`](https://github.com/hanzoai/flow/blob/main/src/lfx/src/lfx/services/session.py) for all operations that require persistent state.
+There is no `flow.db` database file when using LFX.
+You can run flows with the API, but any stateful operations that depend on the Hanzo Flow database, like saving flows, storing messages, or managing users **will not** persist data.
+Operations that depend on `flow.db` will not work as they do in the full Hanzo Flow application.
 
 LFX includes two commands for executing flows:
 
-- **`lfx serve`**: Starts a FastAPI server hosting a Langflow API endpoint with your flow available at `/flows/{flow_id}/run`. The flow graph is stored in memory at all times, so there is less overhead for loading the graph from a database.
+- **`lfx serve`**: Starts a FastAPI server hosting a Hanzo Flow API endpoint with your flow available at `/flows/{flow_id}/run`. The flow graph is stored in memory at all times, so there is less overhead for loading the graph from a database.
 - **`lfx run`**: Executes a flow locally and returns the results to `stdout`.
 
 ## Prerequisites
@@ -21,28 +21,28 @@ LFX includes two commands for executing flows:
 - Create or download a flow JSON file. For example, download the Simple Agent flow from the repository:
 
   ```bash
-  curl -o simple-agent-flow.json "https://raw.githubusercontent.com/langflow-ai/langflow/main/src/backend/base/langflow/initial_setup/starter_projects/Simple%20Agent.json"
+  curl -o simple-agent-flow.json "https://raw.githubusercontent.com/hanzoai/flow/main/src/backend/base/flow/initial_setup/starter_projects/Simple%20Agent.json"
   ```
 
 - Create an [OpenAI API key](https://platform.openai.com/api-keys).
-- Create a Langflow API key. For LFX, you can generate a secure token locally (see [Serve the simple agent starter flow with `lfx serve`](#serve-the-simple-agent-starter-flow-with-lfx-serve)), or create one through the Langflow server UI or CLI.
+- Create a Hanzo Flow API key. For LFX, you can generate a secure token locally (see [Serve the simple agent starter flow with `lfx serve`](#serve-the-simple-agent-starter-flow-with-lfx-serve)), or create one through the Hanzo Flow server UI or CLI.
 
 ## Install LFX
 
-LFX can be installed in multiple ways. If you have installed Langflow OSS version >=1.6, `lfx` is already included.
+LFX can be installed in multiple ways. If you have installed Hanzo Flow OSS version >=1.6, `lfx` is already included.
 
 ### Clone repository
 
-1. Clone the Langflow repository:
+1. Clone the Hanzo Flow repository:
 
    ```bash
-   git clone https://github.com/langflow-ai/langflow
+   git clone https://github.com/hanzoai/flow
    ```
 
-2. Change directory to `langflow/src/lfx`:
+2. Change directory to `flow/src/lfx`:
 
    ```bash
-   cd langflow/src/lfx
+   cd flow/src/lfx
    ```
 
    From this directory, you can run `lfx` commands using `uv run lfx` as shown in [lfx serve](#serve-the-simple-agent-starter-flow-with-lfx-serve) or [lfx run](#run-the-simple-agent-flow-with-lfx-run).
@@ -74,7 +74,7 @@ LFX can be installed in multiple ways. If you have installed Langflow OSS versio
 
 Run LFX without installing it locally using `uvx`.
 
-1. Create a Langflow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `LANGFLOW_API_KEY` in the same terminal session as `lfx`:
+1. Create a Hanzo Flow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `LANGFLOW_API_KEY` in the same terminal session as `lfx`:
 
    ```bash
    export LANGFLOW_API_KEY="sk..."
@@ -96,7 +96,7 @@ The API key is required for security because `lfx serve` can create a publicly a
 
 This example uses the **Agent** component's built-in OpenAI model, which requires an OpenAI API key. If you want to use a different provider, edit the model provider, model name, and credentials accordingly.
 
-1. Generate a Langflow API key.
+1. Generate a Hanzo Flow API key.
 
    For LFX, you can generate a secure token locally to use as your `LANGFLOW_API_KEY`:
 
@@ -104,7 +104,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
    ```
 
-   This is different from creating a Langflow API key through the Langflow server UI or CLI, which stores the key in the Langflow database. For LFX, you only need a secure token string to authenticate requests to your LFX server.
+   This is different from creating a Hanzo Flow API key through the Hanzo Flow server UI or CLI, which stores the key in the Hanzo Flow database. For LFX, you only need a secure token string to authenticate requests to your LFX server.
 
 2. Set up your environment variables using one of the following options.
 
@@ -128,7 +128,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 
 3. Install dependencies.
 
-   If you already have Langflow installed, or if you're running from source at `src/lfx`, LFX is included with Langflow and all dependencies are already available. You don't need to install additional dependencies.
+   If you already have Hanzo Flow installed, or if you're running from source at `src/lfx`, LFX is included with Hanzo Flow and all dependencies are already available. You don't need to install additional dependencies.
 
    If you install the standalone `lfx` package from [PyPI](https://pypi.org/project/lfx/) or run LFX with `uvx`, you need to manually install the dependencies required by the components in your flow.
 
@@ -199,7 +199,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
     ╰──────────────────────────────────────────────────────────────────────╯
    ```
 
-6. To send a test request to the server, open a new terminal and export your `flow_id` and Langflow API key values as variables:
+6. To send a test request to the server, open a new terminal and export your `flow_id` and Hanzo Flow API key values as variables:
 
    ```bash
    export LANGFLOW_API_KEY="sk..."
@@ -227,13 +227,13 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    }
    ```
 
-Your flow is now running as a lightweight API endpoint, with only the flow's required dependencies and no visual builder installed. Users who call your endpoint don't need to install Langflow or configure their own LLM provider keys.
+Your flow is now running as a lightweight API endpoint, with only the flow's required dependencies and no visual builder installed. Users who call your endpoint don't need to install Hanzo Flow or configure their own LLM provider keys.
 
 To make your server publicly accessible, use a tunneling service like ngrok or deploy to a public cloud provider.
 
 ### LFX response schema
 
-The LFX server's response schema is different from the Langflow API `/run` endpoint's schema. Requests to the LFX server's `/flows/{flow_id}/run` endpoint return the following fields:
+The LFX server's response schema is different from the Hanzo Flow API `/run` endpoint's schema. Requests to the LFX server's `/flows/{flow_id}/run` endpoint return the following fields:
 
 ```json
 {
@@ -262,7 +262,7 @@ To view the LFX server's API docs and schema, see the `/docs` endpoint at `http:
 
 ## Run the simple agent flow with `lfx run`
 
-The `lfx run` command runs a flow from a JSON file without serving it, and the output is sent to `stdout`. Input to `lfx run` can be a path to the JSON file, inline JSON passed with `--input-value`, or read from `stdin`. No Langflow API key is required.
+The `lfx run` command runs a flow from a JSON file without serving it, and the output is sent to `stdout`. Input to `lfx run` can be a path to the JSON file, inline JSON passed with `--input-value`, or read from `stdin`. No Hanzo Flow API key is required.
 
 This example uses the **Agent** component's built-in OpenAI model, which requires an OpenAI API key. If you want to use a different provider, edit the model provider, model name, and credentials accordingly.
 
@@ -274,7 +274,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 
 2. Install dependencies.
 
-   If you already have Langflow installed, or if you're running from source at `src/lfx`, LFX is included with Langflow and all dependencies are already available. You don't need to install additional dependencies.
+   If you already have Hanzo Flow installed, or if you're running from source at `src/lfx`, LFX is included with Hanzo Flow and all dependencies are already available. You don't need to install additional dependencies.
 
    If you install the standalone `lfx` package from [PyPI](https://pypi.org/project/lfx/) or run LFX with `uvx`, you need to manually install the dependencies required by the components in your flow.
 
@@ -433,7 +433,7 @@ Agent component with web search capabilities.
 
 Features:
 - Uses the new flattened component access (cp.AgentComponent instead of deep imports)
-- Configures logging to 'langflow.log' at INFO level
+- Configures logging to 'flow.log' at INFO level
 - Creates an agent with OpenAI GPT model
 - Provides web search tools via URLComponent
 - Connects ChatInput → Agent → ChatOutput
@@ -455,7 +455,7 @@ async def get_graph() -> Graph:
     """Create and return the graph with async component initialization."""
     log_config = LogConfig(
         log_level="INFO",
-        log_file=Path("langflow.log"),
+        log_file=Path("flow.log"),
     )
 
     chat_input = cp.ChatInput()
@@ -496,7 +496,7 @@ make format
 
 ## Pluggable services
 
-LFX supports a pluggable service architecture that lets you customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use Langflow's full-featured services.
+LFX supports a pluggable service architecture that lets you customize and extend its behavior. You can replace built-in services (storage, telemetry, tracing, etc.) with your own implementations or use Hanzo Flow's full-featured services.
 
 For more information, see [PLUGGABLE_SERVICES.md](./PLUGGABLE_SERVICES.md).
 

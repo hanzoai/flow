@@ -5,7 +5,7 @@ create/update payload-heavy scenarios for the Watsonx Orchestrate provider.
 
 Warning:
 --------
-This script performs live integration calls and creates real resources in langflow
+This script performs live integration calls and creates real resources in flow
 and Watsonx Orchestrate (agents, snapshots/tools, and configs/connections).
 By default, cleanup runs at the end of execution, but cleanup is best-effort:
 if the process is interrupted or provider deletes fail, resources may remain.
@@ -1949,7 +1949,7 @@ class DeploymentsApiParallelE2E:
         return version_ids
 
     def _resolve_starter_project_paths(self, *, count: int) -> list[Path]:
-        starter_root = Path(__file__).resolve().parents[3] / "src/backend/base/langflow/initial_setup/starter_projects"
+        starter_root = Path(__file__).resolve().parents[3] / "src/backend/base/flow/initial_setup/starter_projects"
         if not starter_root.is_dir():
             msg = f"starter projects directory not found: {starter_root}"
             raise RuntimeError(msg)
@@ -2075,7 +2075,7 @@ def _parse_args() -> argparse.Namespace:
         default=os.getenv("WXO_E2E_STARTER_PROJECT_FILES", ""),
         help=(
             "Optional comma-separated starter project filenames from "
-            "src/backend/base/langflow/initial_setup/starter_projects."
+            "src/backend/base/flow/initial_setup/starter_projects."
         ),
     )
     parser.add_argument(

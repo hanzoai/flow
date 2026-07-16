@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Idea from https://github.com/streamlit/streamlit/blob/4841cf91f1c820a392441092390c4c04907f9944/scripts/pypi_nightly_create_tag.py.
 
-`langflow-nightly` pins an EXACT dependency on `langflow-base-nightly[complete]==X.Y.Z.devN`.
-For the latest published `langflow-nightly` to be installable, the base version it pins must
+`flow-nightly` pins an EXACT dependency on `flow-base-nightly[complete]==X.Y.Z.devN`.
+For the latest published `flow-nightly` to be installable, the base version it pins must
 exist on PyPI. The two packages are therefore versioned in lockstep: they share a single dev
 number so that, in a single nightly run (publish order base -> main, gated), main's `devN` pin
 always references the base `devN` built and published in the same run.
@@ -56,7 +56,7 @@ def get_latest_published_version(build_type: str, *, is_nightly: bool) -> Versio
 def create_tag(build_type: str):
     from pathlib import Path
 
-    Both langflow-nightly and langflow-base-nightly are versioned from the ROOT pyproject on
+    Both flow-nightly and flow-base-nightly are versioned from the ROOT pyproject on
     purpose. Do not switch base to read src/backend/base/pyproject.toml, or the two dev counters
     will fork again and the exact `==` pin can reference a version that was never published.
     """
@@ -100,7 +100,7 @@ def _all_dev_numbers(url: str, base_version: str) -> list[int]:
 
 
 def _shared_nightly_version() -> str:
-    """Compute the single dev number shared by langflow-nightly and langflow-base-nightly."""
+    """Compute the single dev number shared by flow-nightly and flow-base-nightly."""
     base_version = _root_base_version()
 
     dev_numbers = [dev for url in PYPI_NIGHTLY_URLS for dev in _all_dev_numbers(url, base_version)]

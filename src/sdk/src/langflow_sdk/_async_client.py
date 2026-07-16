@@ -1,4 +1,4 @@
-"""Async HTTP client for the Langflow REST API.
+"""Async HTTP client for the Hanzo Flow REST API.
 
 Preferred usage via the short alias::
 
@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 
 
 class AsyncLangflowClient(_ClientCommon):
-    """Async client for the Langflow REST API.
+    """Async client for the Hanzo Flow REST API.
 
     Prefer the short alias :data:`AsyncClient` for new code::
 
@@ -234,14 +234,14 @@ class AsyncLangflowClient(_ClientCommon):
         Args:
             flow_id_or_endpoint: Flow UUID or named endpoint.
             input_value: Text input passed to the flow.
-            input_type: Langflow input type (default ``"chat"``).
-            output_type: Langflow output type (default ``"chat"``).
+            input_type: Hanzo Flow input type (default ``"chat"``).
+            output_type: Hanzo Flow output type (default ``"chat"``).
             tweaks: Optional component tweaks dict.
 
         Returns:
             A :class:`BackgroundJob` wrapping the in-flight asyncio task.
 
-        Adapted from ``BackgroundJob`` in langflow-ai/sdk PR #1
+        Adapted from ``BackgroundJob`` in flow-ai/sdk PR #1
         (Janardan Singh Kavia, IBM Corp., Apache 2.0).
         """
         task: asyncio.Task[RunResponse] = asyncio.create_task(

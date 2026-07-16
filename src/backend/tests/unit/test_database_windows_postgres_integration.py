@@ -111,14 +111,14 @@ class TestDatabaseServiceWindowsPostgres:
         """Test that Docker environments work correctly."""
         mock_platform.return_value = "Linux"
         os.environ["DOCKER_CONTAINER"] = "true"
-        mock_settings_service.settings.database_url = "postgresql://postgres:5432/langflow"
+        mock_settings_service.settings.database_url = "postgresql://postgres:5432/flow"
 
         with patch("flow.services.database.service.create_async_engine") as mock_create_engine:
             mock_create_engine.return_value = MagicMock()
 
             # Should not raise any errors
             service = DatabaseService(mock_settings_service)
-            assert service.database_url == "postgresql+psycopg://postgres:5432/langflow"
+            assert service.database_url == "postgresql+psycopg://postgres:5432/flow"
 
     @pytest.mark.asyncio
     async def test_async_operations_work_after_configuration(self, mock_settings_service):

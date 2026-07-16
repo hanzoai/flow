@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate the Langflow OpenAPI specification.
+"""Generate the Hanzo Flow OpenAPI specification.
 
-This script imports the Langflow FastAPI application and writes its OpenAPI
+This script imports the Hanzo Flow FastAPI application and writes its OpenAPI
 schema to a JSON file in this directory.
 
 Usage (from repository root):
@@ -94,7 +94,7 @@ def generate_openapi(output_path: Path) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Generate Langflow OpenAPI specification.")
+    parser = argparse.ArgumentParser(description="Generate Hanzo Flow OpenAPI specification.")
     parser.add_argument(
         "--output",
         "-o",
