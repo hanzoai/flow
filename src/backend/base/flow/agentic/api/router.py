@@ -1,6 +1,6 @@
-"""Hanzo Flow Assistant API router.
+"""Flow Assistant API router.
 
-This module provides the HTTP endpoints for the Hanzo Flow Assistant.
+This module provides the HTTP endpoints for the Flow Assistant.
 All business logic is delegated to service modules.
 """
 
@@ -171,7 +171,7 @@ async def check_assistant_config(
     current_user: CurrentActiveUser,
     session: DbSession,
 ) -> dict:
-    """Check if the Hanzo Flow Assistant is properly configured.
+    """Check if the Flow Assistant is properly configured.
 
     Returns available providers with their configured status and available models.
     """
@@ -256,7 +256,7 @@ async def assist(
     current_user: CurrentActiveUser,
     session: DbSession,
 ) -> dict:
-    """Chat with the Hanzo Flow Assistant."""
+    """Chat with the Flow Assistant."""
     ctx = await _resolve_assistant_context(request, current_user.id, session)
 
     logger.info(f"Executing {FLOW_ASSISTANT_FLOW} with {ctx.provider}/{ctx.model_name}")
@@ -281,7 +281,7 @@ async def assist_stream(
     current_user: CurrentActiveUser,
     session: DbSession,
 ) -> StreamingResponse:
-    """Chat with the Hanzo Flow Assistant with streaming progress updates."""
+    """Chat with the Flow Assistant with streaming progress updates."""
     ctx = await _resolve_assistant_context(request, current_user.id, session)
 
     return StreamingResponse(

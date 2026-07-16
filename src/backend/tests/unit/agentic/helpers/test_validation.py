@@ -185,7 +185,7 @@ class TestValidateComponentCode:
         generated code, an attacker who can influence LLM output can achieve
         arbitrary server-side code execution.
         """
-        env_key = "_LANGFLOW_SECURITY_VALIDATION_TEST"
+        env_key = "_FLOW_SECURITY_VALIDATION_TEST"
         os.environ.pop(env_key, None)
 
         malicious_code = f"""

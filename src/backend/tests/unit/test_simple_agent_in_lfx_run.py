@@ -22,9 +22,9 @@ class TestAgentInLfxRun:
     @pytest.fixture
     def simple_agent_script_content(self):
         """The simple_agent.py script content for testing lfx run."""
-        return '''"""A simple agent flow example for Hanzo Flow.
+        return '''"""A simple agent flow example for Flow.
 
-This script demonstrates how to set up a conversational agent using Hanzo Flow's
+This script demonstrates how to set up a conversational agent using Flow's
 Agent component with proper async handling.
 
 Features:

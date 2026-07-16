@@ -87,7 +87,7 @@ def is_ssrf_protection_enabled() -> bool:
     # This ensures tests can override the protection state without settings service caching issues
     import os
 
-    env_value = os.getenv("LANGFLOW_SSRF_PROTECTION_ENABLED")
+    env_value = os.getenv("FLOW_SSRF_PROTECTION_ENABLED")
     if env_value is not None:
         # Environment variable is set - use it (supports test mocking)
         return env_value.lower() in ("true", "1", "yes", "on")
@@ -106,7 +106,7 @@ def get_allowed_hosts() -> list[str]:
     # This ensures tests can override the allowlist without settings service caching issues
     import os
 
-    env_value = os.getenv("LANGFLOW_SSRF_ALLOWED_HOSTS", "")
+    env_value = os.getenv("FLOW_SSRF_ALLOWED_HOSTS", "")
     if env_value:
         # Parse comma-separated list from environment variable
         return [host.strip() for host in env_value.split(",") if host.strip()]
@@ -508,7 +508,7 @@ def validate_and_resolve_url(url: str) -> tuple[str, list[str]]:
             if is_ip_blocked(ip_obj):
                 msg = (
                     f"Access to IP address {hostname} is blocked by SSRF protection. "
-                    "To allow this IP, add it to LANGFLOW_SSRF_ALLOWED_HOSTS environment variable."
+                    "To allow this IP, add it to FLOW_SSRF_ALLOWED_HOSTS environment variable."
                 )
                 raise SSRFProtectionError(msg)
             # Direct IP is public and allowed - return it for DNS pinning
@@ -558,7 +558,7 @@ def validate_and_resolve_url(url: str) -> tuple[str, list[str]]:
         if blocked_ips:
             msg = (
                 f"Hostname {hostname} resolves to blocked IP address(es): {', '.join(blocked_ips)}. "
-                "To allow this hostname, add it to LANGFLOW_SSRF_ALLOWED_HOSTS environment variable."
+                "To allow this hostname, add it to FLOW_SSRF_ALLOWED_HOSTS environment variable."
             )
             raise SSRFProtectionError(msg)
 

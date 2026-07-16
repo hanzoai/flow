@@ -2,7 +2,7 @@
 
 Relationship to adapter registries:
 - Adapters execute provider operations (create/update/delete/list/status).
-- Mappers reshape Hanzo Flow API payloads/results into adapter-facing contracts.
+- Mappers reshape Flow API payloads/results into adapter-facing contracts.
 
 Why ``AdapterType`` is used here:
 - Mapper lookup must follow the same provider categorization as adapters.

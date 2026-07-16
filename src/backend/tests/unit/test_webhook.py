@@ -170,7 +170,7 @@ def test_webhook_auth_enable_defaults_to_true():
 
     Defaulting to False previously allowed anyone who knew a flow UUID to execute
     that flow unauthenticated as the flow owner. We read the class-level default
-    directly so a stray LANGFLOW_WEBHOOK_AUTH_ENABLE env var can't mask a regression.
+    directly so a stray FLOW_WEBHOOK_AUTH_ENABLE env var can't mask a regression.
     """
     from lfx.services.settings.auth import AuthSettings
 

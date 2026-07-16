@@ -20,8 +20,8 @@ function buildMcpJson(serverUrl: string): string {
           command: "uvx",
           args: ["--from", "lfx", "lfx-mcp"],
           env: {
-            LANGFLOW_SERVER_URL: serverUrl,
-            LANGFLOW_API_KEY: "YOUR_API_KEY", // pragma: allowlist secret
+            FLOW_SERVER_URL: serverUrl,
+            FLOW_API_KEY: "YOUR_API_KEY", // pragma: allowlist secret
           },
         },
       },
@@ -58,8 +58,8 @@ function getAgentInstructions(agent: AgentTab): {
 
 function getClaudeCodeCommand(serverUrl: string): string {
   return `claude mcp add flow -- uvx --from lfx lfx-mcp \\
-  -e LANGFLOW_SERVER_URL=${serverUrl} \\
-  -e LANGFLOW_API_KEY=YOUR_API_KEY`;
+  -e FLOW_SERVER_URL=${serverUrl} \\
+  -e FLOW_API_KEY=YOUR_API_KEY`;
 }
 
 export default function McpClientPage() {
@@ -89,14 +89,14 @@ export default function McpClientPage() {
       <div className="flex w-full items-start justify-between gap-6">
         <div className="flex flex-col">
           <h2 className="flex items-center text-lg font-semibold tracking-tight">
-            Hanzo Flow MCP Client
+            Flow MCP Client
             <ForwardedIconComponent
               name="Mcp"
               className="ml-2 h-5 w-5 text-primary"
             />
           </h2>
           <p className="text-sm text-muted-foreground">
-            Connect coding agents to build and run flows on this Hanzo Flow
+            Connect coding agents to build and run flows on this Flow
             instance.
           </p>
         </div>

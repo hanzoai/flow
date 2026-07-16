@@ -94,14 +94,14 @@ Alternatively, you can use a JSON mapping to configure multiple flows at once:
 <TabItem value="linux-macos" label="Linux or macOS" default>
 
 ```bash
-export OPENLAYER_LANGFLOW_MAPPING='{"Flow Name 1":"pipeline-id-1","Flow Name 2":"pipeline-id-2"}'
+export OPENLAYER_FLOW_MAPPING='{"Flow Name 1":"pipeline-id-1","Flow Name 2":"pipeline-id-2"}'
 ```
 
 </TabItem>
 <TabItem value="windows" label="Windows">
 
 ```cmd
-set OPENLAYER_LANGFLOW_MAPPING={"Flow Name 1":"pipeline-id-1","Flow Name 2":"pipeline-id-2"}
+set OPENLAYER_FLOW_MAPPING={"Flow Name 1":"pipeline-id-1","Flow Name 2":"pipeline-id-2"}
 ```
 
 </TabItem>
@@ -112,7 +112,7 @@ set OPENLAYER_LANGFLOW_MAPPING={"Flow Name 1":"pipeline-id-1","Flow Name 2":"pip
 Openlayer configuration is resolved in the following order (highest priority first):
 
 1. Flow-specific environment variable: `OPENLAYER_PIPELINE_<FLOW_NAME>`
-2. JSON mapping: `OPENLAYER_LANGFLOW_MAPPING`
+2. JSON mapping: `OPENLAYER_FLOW_MAPPING`
 3. Default environment variable: `OPENLAYER_INFERENCE_PIPELINE_ID`
 
 This allows you to set a default pipeline for all flows and override it for specific flows as needed.

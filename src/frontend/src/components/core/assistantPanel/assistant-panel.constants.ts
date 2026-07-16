@@ -1,6 +1,6 @@
 import type { AssistantSuggestion } from "./assistant-panel.types";
 
-export const ASSISTANT_TITLE = "Hanzo Flow Assistant";
+export const ASSISTANT_TITLE = "Flow Assistant";
 
 export const ASSISTANT_SESSION_STORAGE_KEY_PREFIX =
   "flow-assistant-session-";
@@ -10,7 +10,7 @@ export const ASSISTANT_PLACEHOLDERS = [
   "Build a RAG pipeline...",
   "Create a web scraper component...",
   "Build a document parser...",
-  "Ask me anything about Hanzo Flow...",
+  "Ask me anything about Flow...",
 ];
 
 export function getAssistantPlaceholder(): string {
@@ -34,6 +34,6 @@ export const ASSISTANT_SUGGESTIONS: AssistantSuggestion[] = [
   {
     id: "answer-questions",
     icon: "Sparkles",
-    text: "Answer questions about Hanzo Flow",
+    text: "Answer questions about Flow",
   },
 ];

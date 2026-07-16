@@ -5,17 +5,17 @@ from pydantic import BaseModel, field_validator
 
 
 class PathSettings(BaseModel):
-    """Filesystem paths Hanzo Flow reads from and writes to."""
+    """Filesystem paths Flow reads from and writes to."""
 
     config_dir: str | None = None
-    """Base directory for Hanzo Flow data (db, logs, caches)."""
+    """Base directory for Flow data (db, logs, caches)."""
 
     knowledge_bases_dir: str | None = "~/.flow/knowledge_bases"
     """The directory to store knowledge bases."""
 
     @field_validator("config_dir", mode="before")
     @classmethod
-    def set_langflow_dir(cls, value: Any) -> str:
+    def set_flow_dir(cls, value: Any) -> str:
         if not value:
             from platformdirs import user_cache_dir
 

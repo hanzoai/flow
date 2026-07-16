@@ -25,7 +25,7 @@ This option provides more control over the configuration, including a persistent
 With Docker installed and running on your system, run the following command:
 
 ```shell
-docker run -p 7860:7860 langflowai/flow:latest
+docker run -p 7860:7860 flowai/flow:latest
 ```
 
 Then, access Hanzo Flow at `http://localhost:7860/`.
@@ -80,8 +80,8 @@ For example, to configure the container's database credentials using a `.env` fi
     POSTGRES_DB=flow
 
     # Hanzo Flow configuration
-    LANGFLOW_DATABASE_URL=postgresql://myuser:mypassword@postgres:5432/flow
-    LANGFLOW_CONFIG_DIR=/app/flow
+    FLOW_DATABASE_URL=postgresql://myuser:mypassword@postgres:5432/flow
+    FLOW_CONFIG_DIR=/app/flow
     ```
 
 2. Modify the `docker-compose.yml` file to reference the `.env` file for both the `flow` and `postgres` services:
@@ -90,8 +90,8 @@ For example, to configure the container's database credentials using a `.env` fi
     services:
       flow:
         environment:
-          - LANGFLOW_DATABASE_URL=${LANGFLOW_DATABASE_URL}
-          - LANGFLOW_CONFIG_DIR=${LANGFLOW_CONFIG_DIR}
+          - FLOW_DATABASE_URL=${FLOW_DATABASE_URL}
+          - FLOW_CONFIG_DIR=${FLOW_CONFIG_DIR}
       postgres:
         environment:
           - POSTGRES_USER=${POSTGRES_USER}
@@ -128,10 +128,10 @@ Unlike the previous sections that use pre-built images, this method builds a cus
 3. Create a Dockerfile to build your custom image:
 
     ```dockerfile
-    FROM langflowai/flow:latest
+    FROM flowai/flow:latest
     RUN mkdir /app/flows
     COPY ./*.json /app/flows/
-    ENV LANGFLOW_LOAD_FLOWS_PATH=/app/flows
+    ENV FLOW_LOAD_FLOWS_PATH=/app/flows
     ```
 
 This Dockerfile uses the official Hanzo Flow image as the base, creates a directory for your flows, copies your JSON flow files into the directory, and sets the environment variable to tell Hanzo Flow where to find the flows.
@@ -158,7 +158,7 @@ While the previous section showed how to package a flow with a Docker image, thi
 This example demonstrates how to customize the **Message History** component, but the same approach can be used for any code modifications.
 
 ```dockerfile
-FROM langflowai/flow:latest
+FROM flowai/flow:latest
 
 # Set working directory
 WORKDIR /app
@@ -226,9 +226,9 @@ For example, this Docker Compose file uses a bind mount for Hanzo Flow data (`./
     ```yaml
     services:
       flow:
-        image: langflowai/flow:1.8.0
+        image: flowai/flow:1.8.0
         environment:
-          - LANGFLOW_CONFIG_DIR=/app/flow
+          - FLOW_CONFIG_DIR=/app/flow
         volumes:
           - ./flow-data:/app/flow
       postgres:
@@ -247,7 +247,7 @@ For example, this Docker Compose file uses a bind mount for Hanzo Flow data (`./
 
 2. Pull the new image and update the image tag in your `docker-compose.yml` or `docker run` command.
 
-    With Docker Compose, set the image in your compose file, such as `image: langflowai/flow:1.8.0`, and then pull:
+    With Docker Compose, set the image in your compose file, such as `image: flowai/flow:1.8.0`, and then pull:
 
     ```bash
     docker compose pull
@@ -256,7 +256,7 @@ For example, this Docker Compose file uses a bind mount for Hanzo Flow data (`./
     With `docker run`, pull the image:
 
     ```bash
-    docker pull langflowai/flow:1.8.0
+    docker pull flowai/flow:1.8.0
     ```
 
 3. Restart the container. The same volumes will be reattached, so your database and flows are preserved.
@@ -270,7 +270,7 @@ For example, this Docker Compose file uses a bind mount for Hanzo Flow data (`./
     With `docker run`, use the same volume mount and the new image tag:
 
     ```bash
-    docker run -p 7860:7860 -v flow-data:/app/flow langflowai/flow:1.8.0
+    docker run -p 7860:7860 -v flow-data:/app/flow flowai/flow:1.8.0
     ```
 
 This approach keeps the persistent volumes separate from the Hanzo Flow container, so you can upgrade the Hanzo Flow application without losing data.

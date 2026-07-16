@@ -4,10 +4,10 @@ This module automatically chooses between the full flow implementation
 (when available) and the lfx implementation (when standalone).
 """
 
-from lfx.utils.langflow_utils import has_langflow_memory
+from lfx.utils.flow_utils import has_flow_memory
 
 # Import the appropriate implementation
-if has_langflow_memory():
+if has_flow_memory():
     try:
         # Import full flow implementation
         # Base Model

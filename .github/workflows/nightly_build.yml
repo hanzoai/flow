@@ -125,7 +125,7 @@ jobs:
           # If the main tag does not exist in GH, we create the base tag from the existing codebase.
 
           git config --global user.email "bot-nightly-builds@flow.org"
-          git config --global user.name "Hanzo Flow Bot"
+          git config --global user.name "Flow Bot"
 
           MAIN_TAG="${{ steps.generate_main_tag.outputs.main_tag }}"
           BASE_TAG="${{ steps.generate_base_tag.outputs.base_tag }}"
@@ -151,7 +151,7 @@ jobs:
           git commit -m "Update version and project name"
 
           echo "Tagging main with $MAIN_TAG"
-          if ! git tag -a $MAIN_TAG -m "Hanzo Flow nightly $MAIN_TAG"; then
+          if ! git tag -a $MAIN_TAG -m "Flow nightly $MAIN_TAG"; then
             echo "Tag creation failed. Exiting the workflow."
             exit 1
           fi
@@ -241,7 +241,7 @@ jobs:
         run: |
           echo "=== Configuring git ==="
           git config --global user.email "bot-nightly-builds@flow.org"
-          git config --global user.name "Hanzo Flow Bot"
+          git config --global user.name "Flow Bot"
 
           echo "=== Checking for hash history changes ==="
           # Check if there are changes to commit (handles if it's a new file for first run)
@@ -317,7 +317,7 @@ jobs:
 
   release-nightly-build:
     if: github.repository == 'hanzoai/flow' && always() && needs.frontend-tests.result != 'failure' && needs.backend-unit-tests.result != 'failure' && needs.build-hash-history.result != 'failure'
-    name: Run Nightly Hanzo Flow Build
+    name: Run Nightly Flow Build
     needs: [create-nightly-tag, frontend-tests, backend-unit-tests, build-hash-history]
     uses: ./.github/workflows/release_nightly.yml
     with:
@@ -341,8 +341,8 @@ jobs:
     with:
       # Pass Docker image reference for docker-compose and version without 'v' prefix for pip
       # release_tag format: v1.10.0.dev20260522
-      # We need: langflowai/flow-nightly:1.10.0.dev20260522 for Docker
-      nightly_tag: langflowai/flow-nightly:${{ needs.create-nightly-tag.outputs.release_tag }}
+      # We need: flowai/flow-nightly:1.10.0.dev20260522 for Docker
+      nightly_tag: flowai/flow-nightly:${{ needs.create-nightly-tag.outputs.release_tag }}
     secrets: inherit
 
   slack-notification:
@@ -399,7 +399,7 @@ jobs:
                 ]
               }
             ]
-          }" ${{ secrets.LANGFLOW_ENG_SLACK_WEBHOOK_URL }}
+          }" ${{ secrets.FLOW_ENG_SLACK_WEBHOOK_URL }}
 
   merge-hash-history-to-main:
     name: Create PR to Merge Hash History to Main
@@ -423,7 +423,7 @@ jobs:
       - name: Configure Git
         run: |
           git config --global user.email "bot-nightly-builds@flow.org"
-          git config --global user.name "Hanzo Flow Bot"
+          git config --global user.name "Flow Bot"
 
       - name: "Setup Environment"
         uses: astral-sh/setup-uv@v6
@@ -588,4 +588,4 @@ jobs:
                 ]
               }
             ]
-          }' ${{ secrets.LANGFLOW_ENG_SLACK_WEBHOOK_URL }}
+          }' ${{ secrets.FLOW_ENG_SLACK_WEBHOOK_URL }}

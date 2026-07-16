@@ -5,7 +5,7 @@ import MessageMetadata from "@/components/common/messageMetadataComponent";
 import { useUpdateMessage } from "@/controllers/API/queries/messages";
 import { CustomMarkdownField } from "@/customization/components/custom-markdown-field";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_FLOW } from "@/customization/feature-flags";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import Robot from "../../../../../assets/robot.png";
@@ -255,7 +255,7 @@ export default function ChatMessage({
                   ) : (
                     <ForwardedIconComponent name={chat.properties.icon} />
                   )
-                ) : !ENABLE_DATASTAX_LANGFLOW && !playgroundPage ? (
+                ) : !ENABLE_DATASTAX_FLOW && !playgroundPage ? (
                   <CustomProfileIcon />
                 ) : playgroundPage ? (
                   <ForwardedIconComponent name="User" />

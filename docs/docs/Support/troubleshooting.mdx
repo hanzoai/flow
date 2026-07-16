@@ -188,12 +188,12 @@ To resolve this issue, upgrade your PostgreSQL instance to version 15 or higher,
 
 The following error can occur when attempting to sign up on the Hanzo Flow sign in page: `An API key must be passed as query or header`.
 
-This means that `LANGFLOW_AUTO_LOGIN` is set to `false`, and only superusers can create and activate non-superuser accounts.
+This means that `FLOW_AUTO_LOGIN` is set to `false`, and only superusers can create and activate non-superuser accounts.
 Therefore, you are locked out of this Hanzo Flow instance.
 
 If you aren't an administrator, then a superuser must create and activate a non-superuser account before you can sign in.
 
-If you are the administrator, sign in with a superuser account, or restart Hanzo Flow with `LANGFLOW_AUTO_LOGIN=true`.
+If you are the administrator, sign in with a superuser account, or restart Hanzo Flow with `FLOW_AUTO_LOGIN=true`.
 
 For more information, see [Start Hanzo Flow Server with authentication enabled](/api-keys-and-authentication#start-a-flow-server-with-authentication-enabled).
 
@@ -282,7 +282,7 @@ Your `args` array must include `"--headers"`, `"x-api-key"`, and your key value.
         "--headers",
         "x-api-key",
         "YOUR_API_KEY",
-        "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+        "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
       ]
     }
   }
@@ -311,7 +311,7 @@ If Claude for Desktop doesn't use your server's tools correctly, try explicitly 
           "command": "PATH_TO_UVX",
           "args": [
             "mcp-proxy",
-            "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
           ]
         }
       }
@@ -330,7 +330,7 @@ If Claude for Desktop doesn't use your server's tools correctly, try explicitly 
             "-y",
             "supergateway",
             "--sse",
-            "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
           ]
         }
       }
@@ -411,7 +411,7 @@ If your custom components are not appearing in the Hanzo Flow visual editor, try
 
 1. Ensure your components follow the [required directory structure](https://docs.flow.org/components-custom-components#directory-structure-requirements).
     ```
-    /your/custom/components/path/       # Base directory set by LANGFLOW_COMPONENTS_PATH
+    /your/custom/components/path/       # Base directory set by FLOW_COMPONENTS_PATH
         └── category_name/              # Required category subfolder that determines menu name
             ├── __init__.py             # Required
             └── custom_component.py     # Component file
@@ -420,8 +420,8 @@ If your custom components are not appearing in the Hanzo Flow visual editor, try
 2. Verify each category directory includes an `__init__.py` file.
 This is required for Python to recognize the directory as a module.
 
-3. Use the command line argument instead of the environment variable for `LANGFLOW_COMPONENTS_PATH`.
-If you're using the `LANGFLOW_COMPONENTS_PATH` environment variable and components aren't loading, try the `--components-path` command line argument instead:
+3. Use the command line argument instead of the environment variable for `FLOW_COMPONENTS_PATH`.
+If you're using the `FLOW_COMPONENTS_PATH` environment variable and components aren't loading, try the `--components-path` command line argument instead:
 
     ```bash
     uv run flow run --components-path /path/to/your/custom/components

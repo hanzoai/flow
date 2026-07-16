@@ -14,37 +14,37 @@ import uuid
 
 import pytest
 from lfx.services.database.service import NoopDatabaseService
-from lfx.utils.langflow_utils import has_langflow_db_backend
+from lfx.utils.flow_utils import has_flow_db_backend
 
 
 class _FakeRealDbService:
     """Stand-in for any non-noop DatabaseService implementation."""
 
 
-class TestHasLangflowDbBackend:
-    def test_returns_false_when_langflow_not_importable(self, monkeypatch):
-        monkeypatch.setattr("lfx.utils.langflow_utils.has_langflow_memory", lambda: False)
-        assert has_langflow_db_backend() is False
+class TestHasFlowDbBackend:
+    def test_returns_false_when_flow_not_importable(self, monkeypatch):
+        monkeypatch.setattr("lfx.utils.flow_utils.has_flow_memory", lambda: False)
+        assert has_flow_db_backend() is False
 
     def test_returns_false_with_noop_db_service(self, monkeypatch):
-        monkeypatch.setattr("lfx.utils.langflow_utils.has_langflow_memory", lambda: True)
+        monkeypatch.setattr("lfx.utils.flow_utils.has_flow_memory", lambda: True)
         monkeypatch.setattr("lfx.services.deps.get_db_service", lambda: NoopDatabaseService())
-        assert has_langflow_db_backend() is False
+        assert has_flow_db_backend() is False
 
     def test_returns_true_with_real_db_service(self, monkeypatch):
-        monkeypatch.setattr("lfx.utils.langflow_utils.has_langflow_memory", lambda: True)
+        monkeypatch.setattr("lfx.utils.flow_utils.has_flow_memory", lambda: True)
         monkeypatch.setattr("lfx.services.deps.get_db_service", lambda: _FakeRealDbService())
-        assert has_langflow_db_backend() is True
+        assert has_flow_db_backend() is True
 
     def test_returns_false_when_get_db_service_raises(self, monkeypatch):
-        monkeypatch.setattr("lfx.utils.langflow_utils.has_langflow_memory", lambda: True)
+        monkeypatch.setattr("lfx.utils.flow_utils.has_flow_memory", lambda: True)
 
         def boom():
             msg = "service manager exploded"
             raise RuntimeError(msg)
 
         monkeypatch.setattr("lfx.services.deps.get_db_service", boom)
-        assert has_langflow_db_backend() is False
+        assert has_flow_db_backend() is False
 
 
 class TestMemoryDispatch:
@@ -52,16 +52,16 @@ class TestMemoryDispatch:
         import lfx.memory as memory_mod
         from lfx.memory import stubs
 
-        monkeypatch.setattr("lfx.memory.has_langflow_db_backend", lambda: False)
+        monkeypatch.setattr("lfx.memory.has_flow_db_backend", lambda: False)
         assert memory_mod._impl() is stubs
 
-    def test_dispatches_to_langflow_when_real_db(self, monkeypatch):
+    def test_dispatches_to_flow_when_real_db(self, monkeypatch):
         pytest.importorskip("flow.memory")
-        import flow.memory as langflow_memory
+        import flow.memory as flow_memory
         import lfx.memory as memory_mod
 
-        monkeypatch.setattr("lfx.memory.has_langflow_db_backend", lambda: True)
-        assert memory_mod._impl() is langflow_memory
+        monkeypatch.setattr("lfx.memory.has_flow_db_backend", lambda: True)
+        assert memory_mod._impl() is flow_memory
 
     def test_dispatch_is_evaluated_per_call(self, monkeypatch):
         """Dispatch must read the backend state each call, not cache at import.
@@ -75,14 +75,14 @@ class TestMemoryDispatch:
         from lfx.memory import stubs
 
         state = {"real": False}
-        monkeypatch.setattr("lfx.memory.has_langflow_db_backend", lambda: state["real"])
+        monkeypatch.setattr("lfx.memory.has_flow_db_backend", lambda: state["real"])
 
         assert memory_mod._impl() is stubs
         state["real"] = True
         pytest.importorskip("flow.memory")
-        import flow.memory as langflow_memory
+        import flow.memory as flow_memory
 
-        assert memory_mod._impl() is langflow_memory
+        assert memory_mod._impl() is flow_memory
 
 
 class TestAupdateMessagesRegression:

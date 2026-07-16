@@ -18,7 +18,7 @@ class SecuritySettings(BaseModel):
 
     # SSRF Protection
     ssrf_protection_enabled: bool = True
-    """If set to True, Hanzo Flow will enable SSRF (Server-Side Request Forgery) protection.
+    """If set to True, Flow will enable SSRF (Server-Side Request Forgery) protection.
     When enabled, blocks requests to private IP ranges, localhost, and cloud metadata endpoints.
     When False, no URL validation is performed, allowing requests to any destination
     including internal services, private networks, and cloud metadata endpoints.
@@ -46,7 +46,7 @@ class SecuritySettings(BaseModel):
     when the cache is not yet loaded (e.g., during startup), all flow execution is blocked
     as a safety measure.
 
-    Note: LANGFLOW_COMPONENTS_PATH can be used to define an allow-list of custom components
+    Note: FLOW_COMPONENTS_PATH can be used to define an allow-list of custom components
     that will be allowed to execute, even when allow_custom_components is False.
 
     Note: this is a beta feature. For security in a multi-tenant environment,

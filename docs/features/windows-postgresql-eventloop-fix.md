@@ -46,7 +46,7 @@ Platform Infrastructure - Database Connectivity Layer
 | SelectorEventLoop | Alternative Windows event loop using select() system call, compatible with psycopg | `asyncio.WindowsSelectorEventLoopPolicy` |
 | psycopg | PostgreSQL adapter for Python with async support | `postgresql+psycopg://` |
 | Event Loop Policy | Strategy pattern implementation controlling which event loop type is created | `asyncio.set_event_loop_policy()` |
-| Database URL | Connection string specifying database type, credentials, and location | `LANGFLOW_DATABASE_URL` |
+| Database URL | Connection string specifying database type, credentials, and location | `FLOW_DATABASE_URL` |
 | Platform Detection | Runtime identification of the operating system | `platform.system()` |
 
 ---
@@ -59,7 +59,7 @@ Platform Infrastructure - Database Connectivity Layer
 - **Root Entity**: `WindowsPostgresHelper`
 - **Entities**: None (stateless helper)
 - **Value Objects**: 
-  - `LANGFLOW_DATABASE_URL` (constant)
+  - `FLOW_DATABASE_URL` (constant)
   - `POSTGRESQL_PREFIXES` (tuple constant)
 - **Invariants**: 
   - Event loop policy must be set before any async database operations
@@ -89,7 +89,7 @@ Platform Infrastructure - Database Connectivity Layer
 
 ### Scenario: Windows with PostgreSQL - Apply Fix
 - **Given** the operating system is "Windows"
-- **And** LANGFLOW_DATABASE_URL starts with "postgresql" or "postgres"
+- **And** FLOW_DATABASE_URL starts with "postgresql" or "postgres"
 - **And** the current event loop policy is WindowsProactorEventLoopPolicy
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** WindowsSelectorEventLoopPolicy is set as the event loop policy
@@ -98,7 +98,7 @@ Platform Infrastructure - Database Connectivity Layer
 
 ### Scenario: Windows with PostgreSQL - Already Configured
 - **Given** the operating system is "Windows"
-- **And** LANGFLOW_DATABASE_URL starts with "postgresql"
+- **And** FLOW_DATABASE_URL starts with "postgresql"
 - **And** the current event loop policy is already WindowsSelectorEventLoopPolicy
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** no changes are made to the event loop policy
@@ -106,14 +106,14 @@ Platform Infrastructure - Database Connectivity Layer
 
 ### Scenario: Windows with SQLite - No Fix Needed
 - **Given** the operating system is "Windows"
-- **And** LANGFLOW_DATABASE_URL is "sqlite:///test.db"
+- **And** FLOW_DATABASE_URL is "sqlite:///test.db"
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** no changes are made to the event loop policy
 - **And** the function returns False
 
 ### Scenario: Linux with PostgreSQL - No Fix Needed
 - **Given** the operating system is "Linux"
-- **And** LANGFLOW_DATABASE_URL starts with "postgresql"
+- **And** FLOW_DATABASE_URL starts with "postgresql"
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** no changes are made to the event loop policy
 - **And** the function returns False
@@ -121,14 +121,14 @@ Platform Infrastructure - Database Connectivity Layer
 ### Scenario: Docker Container - No Fix Applied
 - **Given** the operating system is "Linux" (typical in Docker)
 - **And** DOCKER_CONTAINER environment variable is set
-- **And** LANGFLOW_DATABASE_URL starts with "postgresql"
+- **And** FLOW_DATABASE_URL starts with "postgresql"
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** no changes are made to the event loop policy
 - **And** the function returns False
 
 ### Scenario: Missing Database URL
 - **Given** the operating system is "Windows"
-- **And** LANGFLOW_DATABASE_URL is not set
+- **And** FLOW_DATABASE_URL is not set
 - **When** configure_windows_postgres_event_loop() is called
 - **Then** no changes are made to the event loop policy
 - **And** the function returns False
@@ -176,7 +176,7 @@ The event loop must be configured before any async operations or database import
 #### Decision
 Apply configuration at all critical entry points to ensure coverage regardless of how Hanzo Flow is started:
 - `__init__.py` - Package initialization
-- `langflow_launcher.py` - CLI launcher
+- `flow_launcher.py` - CLI launcher
 - `__main__.py` - Direct module execution
 - `DatabaseService.__init__` - Service initialization
 - `initialize_services()` - Service orchestration
@@ -407,15 +407,15 @@ graph TB
 ### For Windows + PostgreSQL Users
 No action required. The fix is automatically applied when:
 1. Operating system is Windows
-2. `LANGFLOW_DATABASE_URL` starts with `postgresql://` or `postgres://`
+2. `FLOW_DATABASE_URL` starts with `postgresql://` or `postgres://`
 
 ### For Other Configurations
 No changes or impact. The fix only activates for Windows + PostgreSQL combinations.
 
 ### Environment Variables
-Ensure `LANGFLOW_DATABASE_URL` is properly set in your `.env` file:
+Ensure `FLOW_DATABASE_URL` is properly set in your `.env` file:
 ```env
-LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
+FLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
 ```
 
 ---
@@ -428,7 +428,7 @@ LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
 
 **Solutions**:
 1. Ensure you're using the latest version with this fix
-2. Check that `LANGFLOW_DATABASE_URL` is properly set before application start
+2. Check that `FLOW_DATABASE_URL` is properly set before application start
 3. Verify no other code is resetting the event loop policy
 
 ### Issue: Performance Degradation on Windows

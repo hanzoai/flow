@@ -24,7 +24,7 @@ def _get_version_info():
         ValueError: If the package is not found from the list of package names.
     """
     package_options = [
-        ("hanzo-flow", "Hanzo Flow"),
+        ("hanzo-flow", "Flow"),
         ("flow", "Flow"),
         ("flow-base", "Flow Base"),
         ("flow-nightly", "Flow Nightly"),

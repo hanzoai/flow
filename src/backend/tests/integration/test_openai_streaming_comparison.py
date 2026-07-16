@@ -33,7 +33,7 @@ load_env_vars()
 
 
 async def create_global_variable(client: AsyncClient, headers, name, value, variable_type="credential"):
-    """Create a global variable in Hanzo Flow."""
+    """Create a global variable in Flow."""
     payload = {"name": name, "value": value, "type": variable_type, "default_fields": []}
 
     response = await client.post("/v1/variables/", json=payload, headers=headers)

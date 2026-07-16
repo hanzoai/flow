@@ -1,4 +1,4 @@
-"""lfx push -- push normalized flow JSON to a remote Hanzo Flow instance.
+"""lfx push -- push normalized flow JSON to a remote Flow instance.
 
 Uses stable flow IDs for upsert (PUT /api/v1/flows/{id}), so repeated pushes
 are idempotent: the first push creates the flow, subsequent ones update it in
@@ -130,7 +130,7 @@ def _upsert_single(
         try:
             # Use direct module imports (not sdk.*) so mock call-counts in tests
             # stay accurate and so the except clause uses a real exception class.
-            from flow_sdk.exceptions import LangflowNotFoundError
+            from flow_sdk.exceptions import FlowNotFoundError
             from flow_sdk.serialization import flow_to_json, normalize_flow
 
             remote = client.get_flow(flow_id)
@@ -148,7 +148,7 @@ def _upsert_single(
                     status="unchanged",
                     flow_url=flow_url,
                 )
-        except LangflowNotFoundError:
+        except FlowNotFoundError:
             pass  # Flow doesn't exist yet — fall through to create it
         except Exception:  # noqa: BLE001
             import logging
@@ -159,7 +159,7 @@ def _upsert_single(
         _, created = client.upsert_flow(flow_id, flow_create)
         status = "created" if created else "updated"
         return PushResult(path=path, flow_id=flow_id, flow_name=flow_name, status=status, flow_url=flow_url)
-    except sdk.LangflowHTTPError as exc:
+    except sdk.FlowHTTPError as exc:
         return PushResult(
             path=path,
             flow_id=flow_id,

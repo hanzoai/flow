@@ -13,7 +13,7 @@ from uuid import UUID, uuid5
 from lfx.log.logger import logger
 
 # Deterministic namespace for generating span UUIDs from non-UUID string IDs.
-LANGFLOW_SPAN_NAMESPACE = UUID("a3e1c2d4-5b6f-7890-abcd-ef1234567890")
+FLOW_SPAN_NAMESPACE = UUID("a3e1c2d4-5b6f-7890-abcd-ef1234567890")
 
 
 def resolve_span_uuids(
@@ -35,7 +35,7 @@ def resolve_span_uuids(
         try:
             span_uuid = UUID(span_data["id"])
         except (ValueError, TypeError):
-            span_uuid = uuid5(LANGFLOW_SPAN_NAMESPACE, f"{trace_id}-{span_data['id']}")
+            span_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{trace_id}-{span_data['id']}")
 
         parent_uuid: UUID | None = None
         if span_data.get("parent_span_id"):
@@ -46,7 +46,7 @@ def resolve_span_uuids(
                 try:
                     parent_uuid = UUID(str(parent_id))
                 except (ValueError, TypeError):
-                    parent_uuid = uuid5(LANGFLOW_SPAN_NAMESPACE, f"{trace_id}-{parent_id}")
+                    parent_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{trace_id}-{parent_id}")
 
         resolved.append((span_data, span_uuid, parent_uuid))
     return resolved

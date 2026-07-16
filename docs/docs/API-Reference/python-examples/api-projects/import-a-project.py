@@ -3,8 +3,8 @@ from pathlib import Path
 
 import requests
 
-base = os.environ.get("LANGFLOW_URL", "")
-api_key = os.environ.get("LANGFLOW_API_KEY", "")
+base = os.environ.get("FLOW_URL", "")
+api_key = os.environ.get("FLOW_API_KEY", "")
 
 fixtures = Path(__file__).resolve().parents[2] / "fixtures"
 default_json = fixtures / "project-import.json"

@@ -444,7 +444,7 @@ async def delete_project(
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    # Prevent deletion of the Hanzo Flow Assistant folder
+    # Prevent deletion of the Flow Assistant folder
     if project.name == ASSISTANT_FOLDER_NAME:
         msg = f"Cannot delete the '{ASSISTANT_FOLDER_NAME}' folder, that contains pre-built flows."
         await logger.adebug("Cannot delete the '%s' folder, that contains pre-built flows.", ASSISTANT_FOLDER_NAME)

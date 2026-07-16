@@ -10,7 +10,7 @@ from uuid import UUID
 import httpx
 import pytest
 from flow_sdk import AsyncClient, Client
-from flow_sdk.exceptions import LangflowHTTPError
+from flow_sdk.exceptions import FlowHTTPError
 from flow_sdk.models import Flow
 
 # ---------------------------------------------------------------------------
@@ -250,7 +250,7 @@ def test_pull_returns_dict_without_output() -> None:
 @pytest.mark.unit
 def test_pull_raises_on_http_error() -> None:
     client = _sync_client(_MockTransport(status=404, body={"detail": "Not found"}))
-    with pytest.raises(LangflowHTTPError):
+    with pytest.raises(FlowHTTPError):
         client.pull(_FLOW_ID)
     client.close()
 

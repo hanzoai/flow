@@ -263,7 +263,7 @@ describe("file-utils", () => {
         expect(getFilePreviewUrl(windowsPath)).toBe(expected);
       });
 
-      it("should_not_treat_langflow_substrings_as_special_path_segments", () => {
+      it("should_not_treat_flow_substrings_as_special_path_segments", () => {
         const windowsPath = "C:\\temp\\flow-report\\flow123\\image.png";
         const expected =
           "http://localhost:3000/api/v1/files/images/C%3A/temp/flow-report/flow123/image.png";

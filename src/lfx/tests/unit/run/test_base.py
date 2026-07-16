@@ -516,7 +516,7 @@ class TestRunFlowSessionIdPropagation:
     async def test_session_id_does_not_overwrite_hardcoded_vertex_value(self, tmp_path):
         """If the flow JSON pinned session_id on the Memory component, the CLI must not clobber it.
 
-        Matches Hanzo Flow's playground behavior: ``build_graph_from_data`` only writes
+        Matches Flow's playground behavior: ``build_graph_from_data`` only writes
         when ``raw_params.get("session_id")`` is falsy.
         """
         script_path = tmp_path / "test.py"
@@ -703,7 +703,7 @@ class TestRunFlowFallbackToEnvVars:
 
     @pytest.mark.asyncio
     async def test_respects_settings_when_disabled(self, tmp_path):
-        """When LANGFLOW_FALLBACK_TO_ENV_VAR=false, the flag plumbs through as False."""
+        """When FLOW_FALLBACK_TO_ENV_VAR=false, the flag plumbs through as False."""
         script_path = tmp_path / "test.py"
         script_path.write_text("graph = None")
         captured: dict = {}

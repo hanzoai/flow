@@ -63,7 +63,7 @@ test(
 
     await page.getByRole("button", { name: "Playground", exact: true }).click();
     await page
-      .getByText("Create a Hanzo Flow post", { exact: true })
+      .getByText("Create a Flow post", { exact: true })
       .last()
       .isVisible();
 

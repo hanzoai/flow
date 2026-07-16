@@ -83,7 +83,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/ghcr.io/hanzoai/flow/tags?page_size=100" | jq -r '.results[].name' | grep -E '\.rc[0-9]+' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest base pre-release version: $last_released_version"
             echo "Base pre-release version to be released: $version"
           else
@@ -129,7 +129,7 @@ jobs:
 
           if [ ${{inputs.pre_release}} == "true" ]; then
             last_released_version=$(curl -s "https://registry.hub.docker.com/v2/repositories/ghcr.io/hanzoai/flow/tags?page_size=100" | jq -r '.results[].name' | grep -E '\.rc[0-9]+' | sort -V | tail -n 1)
-            version="$(uv run ./scripts/ci/langflow_pre_release_tag.py "$version" "$last_released_version")"
+            version="$(uv run ./scripts/ci/flow_pre_release_tag.py "$version" "$last_released_version")"
             echo "Latest main pre-release version: $last_released_version"
             echo "Main pre-release version to be released: $version"
           else
@@ -155,7 +155,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -226,7 +226,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -297,7 +297,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -335,7 +335,7 @@ jobs:
           context: .
           push: ${{ inputs.push_to_registry }}
           build-args: |
-            LANGFLOW_IMAGE=ghcr.io/hanzoai/flow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
+            FLOW_IMAGE=ghcr.io/hanzoai/flow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
           file: ./docker/build_and_push_backend.Dockerfile
           tags: ${{ steps.tags.outputs.docker_tags }}
           platforms: linux/${{ matrix.arch }}
@@ -356,7 +356,7 @@ jobs:
           context: .
           push: ${{ inputs.push_to_registry }}
           build-args: |
-            LANGFLOW_IMAGE=ghcr.io/hanzoai/flow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
+            FLOW_IMAGE=ghcr.io/hanzoai/flow:${{ steps.version.outputs.version }}-${{ matrix.arch }}
           file: ./docker/build_and_push_backend.Dockerfile
           tags: ${{ steps.tags.outputs.ghcr_tags }}
           platforms: linux/${{ matrix.arch }}
@@ -372,7 +372,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -443,7 +443,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -514,7 +514,7 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Hanzo Flow-runner]
+            runner: [Flow-runner]
           - arch: arm64
             runner:
               [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
@@ -696,7 +696,7 @@ jobs:
             echo "Creating manifest for $tag"
 
             # Determine architecture-specific tags
-            if [[ "$tag" == *"langflowai"* ]]; then
+            if [[ "$tag" == *"flowai"* ]]; then
               amd64_tag="${{ steps.tags.outputs.arch_base }}-amd64"
               arm64_tag="${{ steps.tags.outputs.arch_base }}-arm64"
             else

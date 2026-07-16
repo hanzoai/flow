@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import langflowAssistantIcon from "@/assets/langflow_assistant.svg";
+import flowAssistantIcon from "@/assets/flow_assistant.svg";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import { Button } from "@/components/ui/button";
 
@@ -14,8 +14,8 @@ export function AssistantNoModelsState() {
     <div className="flex flex-1 flex-col items-center justify-center px-8 pb-6">
       <div className="mb-6 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
         <img
-          src={langflowAssistantIcon}
-          alt="Hanzo Flow Assistant"
+          src={flowAssistantIcon}
+          alt="Flow Assistant"
           className="h-full w-full object-cover"
         />
       </div>

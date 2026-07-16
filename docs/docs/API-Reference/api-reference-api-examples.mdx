@@ -3,7 +3,7 @@ title: Get started with the Hanzo Flow API
 slug: /api-reference-api-examples
 ---
 import CodeSnippet from '@site/src/components/CodeSnippet';
-import exampleApiReferenceApiExamplesFormLangflowApiRequests from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/form-flow-api-requests.sh';
+import exampleApiReferenceApiExamplesFormHanzo FlowApiRequests from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/form-flow-api-requests.sh';
 import exampleApiReferenceApiExamplesSetEnvironmentVariables from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/set-environment-variables.sh';
 import exampleApiReferenceApiExamplesHealthCheck from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/health-check.sh';
 import resultApiReferenceApiExamplesResultHealthCheck from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/result-health-check.json';
@@ -12,8 +12,8 @@ import resultApiReferenceApiExamplesResultGetVersion from '!!raw-loader!@site/do
 import exampleApiReferenceApiExamplesGetConfiguration from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/get-configuration.sh';
 import resultApiReferenceApiExamplesResultGetConfiguration from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/result-get-configuration.json';
 import exampleApiReferenceApiExamplesGetAllComponents from '!!raw-loader!@site/docs/API-Reference/curl-examples/api-reference-api-examples/get-all-components.sh';
-import examplePythonApiReferenceApiExamplesFormLangflowApiRequests from '!!raw-loader!@site/docs/API-Reference/python-examples/api-reference-api-examples/form-flow-api-requests.py';
-import exampleJavascriptApiReferenceApiExamplesFormLangflowApiRequests from '!!raw-loader!@site/docs/API-Reference/javascript-examples/api-reference-api-examples/form-flow-api-requests.js';
+import examplePythonApiReferenceApiExamplesFormHanzo FlowApiRequests from '!!raw-loader!@site/docs/API-Reference/python-examples/api-reference-api-examples/form-flow-api-requests.py';
+import exampleJavascriptApiReferenceApiExamplesFormHanzo FlowApiRequests from '!!raw-loader!@site/docs/API-Reference/javascript-examples/api-reference-api-examples/form-flow-api-requests.js';
 import examplePythonApiReferenceApiExamplesHealthCheck from '!!raw-loader!@site/docs/API-Reference/python-examples/api-reference-api-examples/health-check.py';
 import exampleJavascriptApiReferenceApiExamplesHealthCheck from '!!raw-loader!@site/docs/API-Reference/javascript-examples/api-reference-api-examples/health-check.js';
 import examplePythonApiReferenceApiExamplesGetVersion from '!!raw-loader!@site/docs/API-Reference/python-examples/api-reference-api-examples/get-version.py';
@@ -53,17 +53,17 @@ As an example of a Hanzo Flow API request, the following curl command calls the 
 <Tabs>
 <TabItem value="Python" label="Python" default>
 
-<CodeSnippet source={examplePythonApiReferenceApiExamplesFormLangflowApiRequests} language="python" />
+<CodeSnippet source={examplePythonApiReferenceApiExamplesFormHanzo FlowApiRequests} language="python" />
 
 </TabItem>
 <TabItem value="JavaScript" label="JavaScript">
 
-<CodeSnippet source={exampleJavascriptApiReferenceApiExamplesFormLangflowApiRequests} language="javascript" />
+<CodeSnippet source={exampleJavascriptApiReferenceApiExamplesFormHanzo FlowApiRequests} language="javascript" />
 
 </TabItem>
 <TabItem value="curl" label="curl">
 
-<CodeSnippet source={exampleApiReferenceApiExamplesFormLangflowApiRequests} language="bash" />
+<CodeSnippet source={exampleApiReferenceApiExamplesFormHanzo FlowApiRequests} language="bash" />
 
 </TabItem>
 </Tabs>
@@ -72,13 +72,13 @@ As an example of a Hanzo Flow API request, the following curl command calls the 
 
 By default, local deployments serve the Hanzo Flow API at `http://localhost:7860/api`.
 
-Remotely hosted Hanzo Flow deployments are available at the domain set by the hosting service, such as `http://IP_OR_DNS/api` or `http://IP_OR_DNS:LANGFLOW_PORT/api`.
+Remotely hosted Hanzo Flow deployments are available at the domain set by the hosting service, such as `http://IP_OR_DNS/api` or `http://IP_OR_DNS:FLOW_PORT/api`.
 
-You can configure the Hanzo Flow port number in the `LANGFLOW_PORT` [environment variable](/environment-variables).
+You can configure the Hanzo Flow port number in the `FLOW_PORT` [environment variable](/environment-variables).
 
 * `https://UUID.ngrok.app/api`
 * `http://IP_OR_DNS/api`
-* `http://IP_OR_DNS:LANGFLOW_PORT/api`
+* `http://IP_OR_DNS:FLOW_PORT/api`
 
 ### Authentication
 

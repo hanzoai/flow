@@ -736,12 +736,12 @@ class TestResolveSpanUuids:
     def test_non_uuid_string_id_uses_uuid5(self):
         from uuid import uuid5 as _uuid5
 
-        from flow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
+        from flow.services.tracing.span_sorting import FLOW_SPAN_NAMESPACE
 
         trace_id = uuid4()
         spans = [{"id": "not-a-uuid", "name": "span"}]
         result = resolve_span_uuids(spans, trace_id)
-        expected = _uuid5(LANGFLOW_SPAN_NAMESPACE, f"{trace_id}-not-a-uuid")
+        expected = _uuid5(FLOW_SPAN_NAMESPACE, f"{trace_id}-not-a-uuid")
         assert result[0][1] == expected
 
     def test_parent_as_uuid_instance(self):
@@ -763,13 +763,13 @@ class TestResolveSpanUuids:
     def test_parent_as_non_uuid_string(self):
         from uuid import uuid5 as _uuid5
 
-        from flow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
+        from flow.services.tracing.span_sorting import FLOW_SPAN_NAMESPACE
 
         trace_id = uuid4()
         span_id = uuid4()
         spans = [{"id": str(span_id), "name": "span", "parent_span_id": "invalid-parent"}]
         result = resolve_span_uuids(spans, trace_id)
-        expected_parent = _uuid5(LANGFLOW_SPAN_NAMESPACE, f"{trace_id}-invalid-parent")
+        expected_parent = _uuid5(FLOW_SPAN_NAMESPACE, f"{trace_id}-invalid-parent")
         assert result[0][2] == expected_parent
 
     def test_no_parent_span_id_key(self):

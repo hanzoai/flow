@@ -144,7 +144,7 @@ async def ws_api_key_security(api_key: str | None) -> UserRead:
 def _auth_error_to_http(e: AuthenticationError) -> HTTPException:
     """Map auth exceptions to 401 Unauthorized or 403 Forbidden.
 
-    Hanzo Flow returns 403 for missing/invalid credentials; 401 for invalid/expired tokens.
+    Flow returns 403 for missing/invalid credentials; 401 for invalid/expired tokens.
     """
     if isinstance(
         e,

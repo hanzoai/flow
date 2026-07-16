@@ -311,7 +311,7 @@ async def test_get_config_returns_mcp_base_url(client: AsyncClient, logged_in_he
 
 
 async def test_get_config_mcp_base_url_defaults_to_empty(client: AsyncClient, logged_in_headers: dict):
-    """Test that mcp_base_url defaults to empty string when LANGFLOW_MCP_BASE_URL is not set."""
+    """Test that mcp_base_url defaults to empty string when FLOW_MCP_BASE_URL is not set."""
     response = await client.get("api/v1/config", headers=logged_in_headers)
     result = response.json()
     assert response.status_code == status.HTTP_200_OK

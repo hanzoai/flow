@@ -11,13 +11,13 @@ class TelemetrySettings(BaseModel):
 
     # Telemetry
     do_not_track: bool = False
-    """If set to True, Hanzo Flow will not track telemetry."""
+    """If set to True, Flow will not track telemetry."""
     telemetry_base_url: str = "https://flow.gateway.scarf.sh"
 
     transactions_storage_enabled: bool = True
-    """If set to True, Hanzo Flow will track transactions between flows."""
+    """If set to True, Flow will track transactions between flows."""
     vertex_builds_storage_enabled: bool = True
-    """If set to True, Hanzo Flow will keep track of each vertex builds (outputs) in the UI for any flow."""
+    """If set to True, Flow will keep track of each vertex builds (outputs) in the UI for any flow."""
 
     deactivate_tracing: bool = False
     """If set to True, tracing will be deactivated."""

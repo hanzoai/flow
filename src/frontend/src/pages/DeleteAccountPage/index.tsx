@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LangflowLogo from "@/assets/LangflowLogo.svg?react";
+import FlowLogo from "@/assets/FlowLogo.svg?react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import BaseModal from "../../modals/baseModal";

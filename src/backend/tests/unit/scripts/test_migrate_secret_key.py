@@ -456,7 +456,7 @@ class TestKeyFileManagement:
 
 @pytest.mark.usefixtures("client")
 class TestMigrationWithRealDatabase:
-    """Integration tests using real Hanzo Flow database fixtures."""
+    """Integration tests using real Flow database fixtures."""
 
     async def test_credential_variable_stored_encrypted(
         self,
@@ -527,10 +527,10 @@ class TestMigrationWithRealDatabase:
 
 @pytest.mark.usefixtures("client")
 class TestMigrationCompatibility:
-    """Test that migration script is compatible with Hanzo Flow's encryption."""
+    """Test that migration script is compatible with Flow's encryption."""
 
-    def test_script_encryption_matches_langflow(self, migrate_module):
-        """Verify migration script produces same results as Hanzo Flow's auth utils."""
+    def test_script_encryption_matches_flow(self, migrate_module):
+        """Verify migration script produces same results as Flow's auth utils."""
         from flow.services.auth import utils as auth_utils
 
         settings_service = get_settings_service()
@@ -538,7 +538,7 @@ class TestMigrationCompatibility:
 
         plaintext = "test-api-key-compatibility"
 
-        # Encrypt with Hanzo Flow
+        # Encrypt with Flow
         flow_encrypted = auth_utils.encrypt_api_key(plaintext, settings_service)
 
         # Decrypt with migration script
@@ -548,7 +548,7 @@ class TestMigrationCompatibility:
         # Encrypt with migration script
         script_encrypted = migrate_module.encrypt_with_key(plaintext, secret_key)
 
-        # Decrypt with Hanzo Flow
+        # Decrypt with Flow
         flow_decrypted = auth_utils.decrypt_api_key(script_encrypted, settings_service)
         assert flow_decrypted == plaintext
 

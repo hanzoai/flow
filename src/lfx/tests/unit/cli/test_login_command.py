@@ -1,6 +1,6 @@
 """Unit tests for lfx login -- login_command and helpers.
 
-All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
+All tests run entirely in-process; no real Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the login logic
 (key masking, connection probing, success/failure output) is under test.
 """
@@ -28,16 +28,16 @@ _EXACT_KEY = "exactly8"  # pragma: allowlist secret  (exactly 8 chars)
 # ---------------------------------------------------------------------------
 
 
-class _FakeLangflowAuthError(Exception):
-    """Stand-in for langflow_sdk.LangflowAuthError in unit tests."""
+class _FakeFlowAuthError(Exception):
+    """Stand-in for flow_sdk.FlowAuthError in unit tests."""
 
 
-class _FakeLangflowConnectionError(Exception):
-    """Stand-in for langflow_sdk.LangflowConnectionError in unit tests."""
+class _FakeFlowConnectionError(Exception):
+    """Stand-in for flow_sdk.FlowConnectionError in unit tests."""
 
 
-class _FakeLangflowHTTPError(Exception):
-    """Stand-in for langflow_sdk.LangflowHTTPError in unit tests."""
+class _FakeFlowHTTPError(Exception):
+    """Stand-in for flow_sdk.FlowHTTPError in unit tests."""
 
     def __init__(self, status_code: int, detail: str) -> None:
         self.status_code = status_code
@@ -65,14 +65,14 @@ def _make_client_mock(flows: list | None = None) -> MagicMock:
 
 
 def _make_sdk_mock(client_mock: MagicMock | None = None) -> MagicMock:
-    """Return a mock langflow_sdk module wired up for login tests."""
+    """Return a mock flow_sdk module wired up for login tests."""
     if client_mock is None:
         client_mock = _make_client_mock()
     sdk = MagicMock()
     sdk.Client.return_value = client_mock
-    sdk.LangflowAuthError = _FakeLangflowAuthError
-    sdk.LangflowConnectionError = _FakeLangflowConnectionError
-    sdk.LangflowHTTPError = _FakeLangflowHTTPError
+    sdk.FlowAuthError = _FakeFlowAuthError
+    sdk.FlowConnectionError = _FakeFlowConnectionError
+    sdk.FlowHTTPError = _FakeFlowHTTPError
     return sdk
 
 
@@ -191,7 +191,7 @@ class TestProbeConnection:
         from lfx.cli.login import _probe_connection
 
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowAuthError("unauthorized")
+        client.list_flows.side_effect = _FakeFlowAuthError("unauthorized")
         sdk = _make_sdk_mock(client_mock=client)
         ok, msg, count = _probe_connection(client, sdk)
         assert ok is False
@@ -202,7 +202,7 @@ class TestProbeConnection:
         from lfx.cli.login import _probe_connection
 
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowConnectionError("refused")
+        client.list_flows.side_effect = _FakeFlowConnectionError("refused")
         sdk = _make_sdk_mock(client_mock=client)
         ok, msg, count = _probe_connection(client, sdk)
         assert ok is False
@@ -213,7 +213,7 @@ class TestProbeConnection:
         from lfx.cli.login import _probe_connection
 
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowHTTPError(503, "service unavailable")
+        client.list_flows.side_effect = _FakeFlowHTTPError(503, "service unavailable")
         sdk = _make_sdk_mock(client_mock=client)
         ok, msg, count = _probe_connection(client, sdk)
         assert ok is False
@@ -247,7 +247,7 @@ class TestProbeConnection:
 
         original_msg = "Connection refused at port 7860"
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowConnectionError(original_msg)
+        client.list_flows.side_effect = _FakeFlowConnectionError(original_msg)
         sdk = _make_sdk_mock(client_mock=client)
         _, msg, _ = _probe_connection(client, sdk)
         assert original_msg in msg
@@ -305,7 +305,7 @@ class TestLoginCommandSuccess:
 class TestLoginCommandAuthFailure:
     def test_auth_error_raises_exit_1(self):
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowAuthError("unauthorized")
+        client.list_flows.side_effect = _FakeFlowAuthError("unauthorized")
         sdk = _make_sdk_mock(client_mock=client)
         env_cfg = _make_env_cfg()
         with pytest.raises(typer.Exit) as exc_info:
@@ -315,7 +315,7 @@ class TestLoginCommandAuthFailure:
     def test_auth_failure_with_api_key_includes_masked_key(self):
         """When auth fails and a key is configured, masked key is shown on stderr."""
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowAuthError("forbidden")
+        client.list_flows.side_effect = _FakeFlowAuthError("forbidden")
         sdk = _make_sdk_mock(client_mock=client)
         env_cfg = _make_env_cfg(api_key=_API_KEY)
         with pytest.raises(typer.Exit):
@@ -330,7 +330,7 @@ class TestLoginCommandAuthFailure:
 class TestLoginCommandConnectionFailure:
     def test_connection_error_raises_exit_1(self):
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowConnectionError("timeout")
+        client.list_flows.side_effect = _FakeFlowConnectionError("timeout")
         sdk = _make_sdk_mock(client_mock=client)
         env_cfg = _make_env_cfg()
         with pytest.raises(typer.Exit) as exc_info:
@@ -346,7 +346,7 @@ class TestLoginCommandConnectionFailure:
 class TestLoginCommandHTTPError:
     def test_http_error_raises_exit_1(self):
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowHTTPError(500, "internal server error")
+        client.list_flows.side_effect = _FakeFlowHTTPError(500, "internal server error")
         sdk = _make_sdk_mock(client_mock=client)
         env_cfg = _make_env_cfg()
         with pytest.raises(typer.Exit) as exc_info:
@@ -355,7 +355,7 @@ class TestLoginCommandHTTPError:
 
     def test_http_404_raises_exit_1(self):
         client = _make_client_mock()
-        client.list_flows.side_effect = _FakeLangflowHTTPError(404, "not found")
+        client.list_flows.side_effect = _FakeFlowHTTPError(404, "not found")
         sdk = _make_sdk_mock(client_mock=client)
         env_cfg = _make_env_cfg()
         with pytest.raises(typer.Exit) as exc_info:

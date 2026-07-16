@@ -27,18 +27,18 @@ Get started with Hanzo Flow by loading a template flow, running it, and then ser
     2. Click **Hanzo Flow API Keys**, and then click <Icon name="Plus" aria-hidden="true"/> **Add New**.
     3. Name your key, and then click **Create API Key**.
     4. Copy the API key and store it securely.
-    5. To use your Hanzo Flow API key in a request, set a `LANGFLOW_API_KEY` environment variable in your terminal, and then include an `x-api-key` header or query parameter with your request.
+    5. To use your Hanzo Flow API key in a request, set a `FLOW_API_KEY` environment variable in your terminal, and then include an `x-api-key` header or query parameter with your request.
     For example:
 
         ```bash
         # Set variable
-        export LANGFLOW_API_KEY="sk..."
+        export FLOW_API_KEY="sk..."
 
         # Send request
         curl --request POST \
-        --url "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
+        --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
         --header "Content-Type: application/json" \
-        --header "x-api-key: $LANGFLOW_API_KEY" \
+        --header "x-api-key: $FLOW_API_KEY" \
         --data '{
           "output_type": "chat",
           "input_type": "chat",
@@ -111,7 +111,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
 1. When editing a flow, click **Share**, and then click **API access**.
 
     The default code in the API access pane constructs a request with the Hanzo Flow server `url`, `headers`, and a `payload` of request data.
-    The code snippets automatically include the `LANGFLOW_SERVER_ADDRESS` and `FLOW_ID` values for the flow, and a script to include your `LANGFLOW_API_KEY` if you've set it as an environment variable in your terminal session.
+    The code snippets automatically include the `FLOW_SERVER_ADDRESS` and `FLOW_ID` values for the flow, and a script to include your `FLOW_API_KEY` if you've set it as an environment variable in your terminal session.
     Replace these values if you're using the code for a different server or flow.
     The default Hanzo Flow server address is `http://localhost:7860`.
 
@@ -121,7 +121,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
     ```python
     import requests
 
-    url = "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
+    url = "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
 
     # Request payload configuration
     payload = {
@@ -133,7 +133,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
     # Request headers
     headers = {
         "Content-Type": "application/json",
-        "x-api-key": "$LANGFLOW_API_KEY"
+        "x-api-key": "$FLOW_API_KEY"
     }
 
     try:
@@ -165,12 +165,12 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'LANGFLOW_API_KEY'
+            'x-api-key': 'FLOW_API_KEY'
         },
         body: JSON.stringify(payload)
     };
 
-    fetch('http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID', options)
+    fetch('http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID', options)
         .then(response => response.json())
         .then(response => console.log(response))
         .catch(err => console.error(err));
@@ -181,9 +181,9 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
 
     ```bash
     curl --request POST \
-         --url 'http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false' \
+         --url 'http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false' \
          --header 'Content-Type: application/json' \
-         --header "x-api-key: LANGFLOW_API_KEY" \
+         --header "x-api-key: FLOW_API_KEY" \
          --data '{
           "output_type": "chat",
           "input_type": "chat",
@@ -388,7 +388,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
     import requests
     import json
 
-    url = "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"
+    url = "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"
 
     def ask_agent(question):
         payload = {
@@ -399,7 +399,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
 
         headers = {
         "Content-Type": "application/json",
-        "x-api-key": "LANGFLOW_API_KEY"
+        "x-api-key": "FLOW_API_KEY"
         }
 
         try:
@@ -457,7 +457,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
         output: process.stdout
     });
 
-    const url = 'http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID';
+    const url = 'http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID';
 
     // Store the previous answer from askAgent response
     let previousAnswer = null;
@@ -474,7 +474,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'LANGFLOW_API_KEY'
+                'x-api-key': 'FLOW_API_KEY'
             },
             body: JSON.stringify(payload)
         };

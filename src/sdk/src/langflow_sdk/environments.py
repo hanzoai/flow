@@ -1,12 +1,12 @@
 """Environment configuration for flow-sdk.
 
 Loads named environment definitions from a TOML file so teams can switch
-between Hanzo Flow instances (dev / staging / production) without code changes.
+between Flow instances (dev / staging / production) without code changes.
 
 Config file lookup order
 ------------------------
 1. Path given explicitly to ``load_environments()`` or ``get_client()``.
-2. The ``LANGFLOW_ENVIRONMENTS_FILE`` environment variable.
+2. The ``FLOW_ENVIRONMENTS_FILE`` environment variable.
 3. ``flow-environments.toml`` in the current working directory.
 4. ``~/.config/flow/environments.toml``
 
@@ -16,11 +16,11 @@ File format
 
     [environments.staging]
     url = "https://staging.flow.example.com"
-    api_key_env = "LANGFLOW_STAGING_API_KEY"   # env-var that holds the key  # pragma: allowlist secret
+    api_key_env = "FLOW_STAGING_API_KEY"   # env-var that holds the key  # pragma: allowlist secret
 
     [environments.production]
     url = "https://flow.example.com"
-    api_key_env = "LANGFLOW_PROD_API_KEY"  # pragma: allowlist secret
+    api_key_env = "FLOW_PROD_API_KEY"  # pragma: allowlist secret
 
     # Optional: set a default so callers don't have to name an environment
     [defaults]
@@ -40,23 +40,23 @@ try:
 except ImportError:  # pragma: no cover
     import tomli as tomllib  # type: ignore[no-reattr,assignment]
 
-_ENV_VAR = "LANGFLOW_ENVIRONMENTS_FILE"
+_ENV_VAR = "FLOW_ENVIRONMENTS_FILE"
 _LOCAL_NAME = "flow-environments.toml"
 _USER_PATH = Path.home() / ".config" / "flow" / "environments.toml"
 
 _EXAMPLE_CONFIG = """\
 # flow-environments.toml
 #
-# Define named Hanzo Flow environments.  The api_key_env field is the *name*
+# Define named Flow environments.  The api_key_env field is the *name*
 # of an environment variable that holds the API key for that instance.
 #
 # [environments.staging]
 # url = "https://staging.flow.example.com"
-# api_key_env = "LANGFLOW_STAGING_API_KEY"  # pragma: allowlist secret
+# api_key_env = "FLOW_STAGING_API_KEY"  # pragma: allowlist secret
 #
 # [environments.production]
 # url = "https://flow.example.com"
-# api_key_env = "LANGFLOW_PROD_API_KEY"  # pragma: allowlist secret
+# api_key_env = "FLOW_PROD_API_KEY"  # pragma: allowlist secret
 #
 # [defaults]
 # environment = "staging"

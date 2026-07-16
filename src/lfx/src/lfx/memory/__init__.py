@@ -17,11 +17,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from lfx.utils.langflow_utils import has_langflow_db_backend
+from lfx.utils.flow_utils import has_flow_db_backend
 
 
 def _impl():
-    if has_langflow_db_backend():
+    if has_flow_db_backend():
         from flow import memory as impl
     else:
         from lfx.memory import stubs as impl
@@ -72,7 +72,7 @@ def store_message(*args: Any, **kwargs: Any):
     return _impl().store_message(*args, **kwargs)
 
 # Import the appropriate implementation
-if has_langflow_memory():
+if has_flow_memory():
     try:
         # Import full flow implementation
         from flow.memory import (

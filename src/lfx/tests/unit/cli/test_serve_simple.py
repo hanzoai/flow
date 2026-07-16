@@ -133,7 +133,7 @@ def test_cli_utility_functions():
 
 @_skip_in_ci
 def test_serve_command_missing_api_key():
-    """Serve command must exit 1 and mention LANGFLOW_API_KEY when no key is set."""
+    """Serve command must exit 1 and mention FLOW_API_KEY when no key is set."""
     from lfx.__main__ import app
 
     flow_data = {"data": {"nodes": [], "edges": []}}
@@ -148,7 +148,7 @@ def test_serve_command_missing_api_key():
             result = runner.invoke(app, ["serve", temp_path])
 
             assert result.exit_code == 1
-            assert "LANGFLOW_API_KEY" in str(result.output or result.exception or "")
+            assert "FLOW_API_KEY" in str(result.output or result.exception or "")
     finally:
         Path(temp_path).unlink()
 
@@ -160,7 +160,7 @@ def test_serve_command_with_flow_json():
 
     flow_json = '{"data": {"nodes": [], "edges": []}}'
 
-    env = {"LANGFLOW_API_KEY": "test-key"}  # pragma: allowlist secret
+    env = {"FLOW_API_KEY": "test-key"}  # pragma: allowlist secret
     with patch.dict(os.environ, env), patch("uvicorn.run") as mock_uvicorn:
         runner = CliRunner()
         result = runner.invoke(app, ["serve", "--flow-json", flow_json])

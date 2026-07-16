@@ -41,7 +41,7 @@ For more information and examples, see [Files endpoints](/api-files) and [Create
 ## Set the maximum file size
 
 By default, the maximum file size is 1024 MB.
-To modify this value, change the `LANGFLOW_MAX_FILE_SIZE_UPLOAD` [environment variable](/environment-variables).
+To modify this value, change the `FLOW_MAX_FILE_SIZE_UPLOAD` [environment variable](/environment-variables).
 
 ## Use files in a flow
 
@@ -107,9 +107,9 @@ You can upload images to the **Playground** chat interface and as runtime input 
 * When you trigger a flow with the `/api/v1/run/$FLOW_ID` endpoint, you can use the `files` parameter to attach image data as a base64-encoded string:
 
    ```bash
-   curl -X POST "http://$LANGFLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID" \
+   curl -X POST "http://$FLOW_SERVER_ADDRESS/api/v1/run/$FLOW_ID" \
    -H "Content-Type: application/json" \
-   -H "x-api-key: $LANGFLOW_API_KEY" \
+   -H "x-api-key: $FLOW_API_KEY" \
    -d '{
       "session_id": "custom_session_123",
       "input_value": "What is in this image?",
@@ -129,7 +129,7 @@ For videos, see the **Twelve Labs** and **YouTube** <Icon name="Blocks" aria-hid
 
 Hanzo Flow supports two storage backends for file management.
 
-* **Local storage**: Hanzo Flow's default storage backend. Files are stored locally in your [Hanzo Flow configuration directory](/memory). Set `LANGFLOW_STORAGE_TYPE=local` or leave it unset to use local storage.
+* **Local storage**: Hanzo Flow's default storage backend. Files are stored locally in your [Hanzo Flow configuration directory](/memory). Set `FLOW_STORAGE_TYPE=local` or leave it unset to use local storage.
 
 * **S3 storage**: Files are stored in an AWS S3 bucket.
 Hanzo Flow uses the [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) library to interact with S3.
@@ -138,9 +138,9 @@ To use S3 as your file storage backend, add the following configuration to your 
 
 ```text
 # S3 Storage Configuration
-LANGFLOW_STORAGE_TYPE=s3
-LANGFLOW_OBJECT_STORAGE_BUCKET_NAME=S3_BUCKET_NAME
-LANGFLOW_OBJECT_STORAGE_PREFIX=S3_BUCKET_DIRECTORY
+FLOW_STORAGE_TYPE=s3
+FLOW_OBJECT_STORAGE_BUCKET_NAME=S3_BUCKET_NAME
+FLOW_OBJECT_STORAGE_PREFIX=S3_BUCKET_DIRECTORY
 
 # AWS Credentials (required for S3)
 AWS_ACCESS_KEY_ID=S3_ACCESS_KEY
@@ -164,7 +164,7 @@ This example policy allows basic CRUD operations on S3 objects.
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "LangflowS3StorageAccess",
+            "Sid": "Hanzo FlowS3StorageAccess",
             "Effect": "Allow",
             "Action": [
                 "s3:PutObject",
@@ -197,10 +197,10 @@ The following environment variables configure file storage backends for Hanzo Fl
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_STORAGE_TYPE` | String | `local` | Set the file storage backend. Supported values: `local` (files stored in the Hanzo Flow configuration directory) or `s3` (files stored in AWS S3). For S3 storage, you must also configure AWS credentials and bucket settings. |
-| `LANGFLOW_OBJECT_STORAGE_BUCKET_NAME` | String | Not set | The name of the S3 bucket to use for file storage. Required when `LANGFLOW_STORAGE_TYPE=s3`. |
-| `LANGFLOW_OBJECT_STORAGE_PREFIX` | String | Not set | Optional prefix/folder path within the S3 bucket where files will be stored. If not set, files are stored at the bucket root. |
-| `LANGFLOW_OBJECT_STORAGE_TAGS` | JSON object | Not set | Optional S3 object tags applied to stored files when `LANGFLOW_STORAGE_TYPE=s3`. Ignored for local storage. Provided as a JSON map of string keys to string values, such as `{"env": "prod", "owner": "data-team"}`. |
+| `FLOW_STORAGE_TYPE` | String | `local` | Set the file storage backend. Supported values: `local` (files stored in the Hanzo Flow configuration directory) or `s3` (files stored in AWS S3). For S3 storage, you must also configure AWS credentials and bucket settings. |
+| `FLOW_OBJECT_STORAGE_BUCKET_NAME` | String | Not set | The name of the S3 bucket to use for file storage. Required when `FLOW_STORAGE_TYPE=s3`. |
+| `FLOW_OBJECT_STORAGE_PREFIX` | String | Not set | Optional prefix/folder path within the S3 bucket where files will be stored. If not set, files are stored at the bucket root. |
+| `FLOW_OBJECT_STORAGE_TAGS` | JSON object | Not set | Optional S3 object tags applied to stored files when `FLOW_STORAGE_TYPE=s3`. Ignored for local storage. Provided as a JSON map of string keys to string values, such as `{"env": "prod", "owner": "data-team"}`. |
 
 ## See also
 

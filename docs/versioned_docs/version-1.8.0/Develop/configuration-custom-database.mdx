@@ -36,10 +36,10 @@ Hanzo Flow can more efficiently handle multiple users and larger workloads by us
 
     You can use the [`.env.example`](https://github.com/hanzoai/flow/blob/main/.env.example) file in the Hanzo Flow repository as a template for your own `.env` file.
 
-4. In your `.env` file, set `LANGFLOW_DATABASE_URL` to your PostgreSQL connection string:
+4. In your `.env` file, set `FLOW_DATABASE_URL` to your PostgreSQL connection string:
 
     ```text
-    LANGFLOW_DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+    FLOW_DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
     ```
 
     Hanzo Flow uses [SQLAlchemy](https://www.sqlalchemy.org/) with the [psycopg](https://www.psycopg.org/) driver to pass SSL parameters directly to the PostgreSQL connection.
@@ -52,20 +52,20 @@ Hanzo Flow can more efficiently handle multiple users and larger workloads by us
 
     - **`sslmode=require`**: Requires SSL connection but doesn't verify server certificate. This option is the least secure, but acceptable for most use cases.
         ```bash
-        LANGFLOW_DATABASE_URL="postgresql://user:password@localhost:5432/dbname?sslmode=require"
+        FLOW_DATABASE_URL="postgresql://user:password@localhost:5432/dbname?sslmode=require"
         ```
 
     - **`sslmode=verify-ca`**: Requires SSL and verifies the server certificate against the Certificate Authority (CA). Add the certificate paths to your connection string:
         ```bash
-        LANGFLOW_DATABASE_URL="postgresql://user@localhost:5432/dbname?sslmode=verify-ca&sslcert=/path/to/client.crt&sslkey=/path/to/client.key&sslrootcert=/path/to/ca.crt"
+        FLOW_DATABASE_URL="postgresql://user@localhost:5432/dbname?sslmode=verify-ca&sslcert=/path/to/client.crt&sslkey=/path/to/client.key&sslrootcert=/path/to/ca.crt"
         ```
 
     - **`sslmode=verify-full`**: Requires SSL, verifies the server certificate, and checks the request hostname against the certificate hostname. The `db.example.com` hostname in this example must match the server certificate's CN. This option is the most secure.
         ```bash
-        LANGFLOW_DATABASE_URL="postgresql://user@db.example.com:5432/dbname?sslmode=verify-full&sslcert=/path/to/client.crt&sslkey=/path/to/client.key&sslrootcert=/path/to/ca.crt"
+        FLOW_DATABASE_URL="postgresql://user@db.example.com:5432/dbname?sslmode=verify-full&sslcert=/path/to/client.crt&sslkey=/path/to/client.key&sslrootcert=/path/to/ca.crt"
         ```
 
-        Do not use the Hanzo Flow environment variables [`LANGFLOW_SSL_CERT_FILE`](/environment-variables#server) and [`LANGFLOW_SSL_KEY_FILE`](/environment-variables#server) for your PostgreSQL certificates: these variables are for enabling HTTPS on the Hanzo Flow server, not for PostgreSQL database connections.
+        Do not use the Hanzo Flow environment variables [`FLOW_SSL_CERT_FILE`](/environment-variables#server) and [`FLOW_SSL_KEY_FILE`](/environment-variables#server) for your PostgreSQL certificates: these variables are for enabling HTTPS on the Hanzo Flow server, not for PostgreSQL database connections.
 
         For more on managing SSL certificates in PostgreSQL, see the [PostgreSQL documentation](https://www.postgresql.org/docs/9.1/ssl-tcp.html).
 
@@ -110,10 +110,10 @@ This approach means you only have to manage deployment variables in one file, in
     POSTGRES_DB=flow
     POSTGRES_HOST=postgres
     POSTGRES_PORT=5432
-    LANGFLOW_CONFIG_DIR=app/flow
-    LANGFLOW_PORT_1=7860
-    LANGFLOW_PORT_2=7861
-    LANGFLOW_HOST=0.0.0.0
+    FLOW_CONFIG_DIR=app/flow
+    FLOW_PORT_1=7860
+    FLOW_PORT_2=7861
+    FLOW_HOST=0.0.0.0
     ```
 
     For optional connection pooling and timeout settings, see [Configure external memory](/memory#configure-external-memory).
@@ -135,31 +135,31 @@ For example:
           - flow-postgres:/var/lib/postgresql/data
 
       flow-1:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         pull_policy: always
         ports:
-          - "${LANGFLOW_PORT_1}:7860"
+          - "${FLOW_PORT_1}:7860"
         depends_on:
           - postgres
         environment:
-          - LANGFLOW_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-          - LANGFLOW_CONFIG_DIR=${LANGFLOW_CONFIG_DIR}
-          - LANGFLOW_HOST=${LANGFLOW_HOST}
+          - FLOW_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+          - FLOW_CONFIG_DIR=${FLOW_CONFIG_DIR}
+          - FLOW_HOST=${FLOW_HOST}
           - PORT=7860
         volumes:
           - flow-data-1:/app/flow
 
       flow-2:
-        image: langflowai/flow:latest
+        image: flowai/flow:latest
         pull_policy: always
         ports:
-          - "${LANGFLOW_PORT_2}:7860"
+          - "${FLOW_PORT_2}:7860"
         depends_on:
           - postgres
         environment:
-          - LANGFLOW_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-          - LANGFLOW_CONFIG_DIR=${LANGFLOW_CONFIG_DIR}
-          - LANGFLOW_HOST=${LANGFLOW_HOST}
+          - FLOW_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+          - FLOW_CONFIG_DIR=${FLOW_CONFIG_DIR}
+          - FLOW_HOST=${FLOW_HOST}
           - PORT=7860
         volumes:
           - flow-data-2:/app/flow

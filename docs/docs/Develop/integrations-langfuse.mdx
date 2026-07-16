@@ -80,7 +80,7 @@ As an alternative to the previous setup, particularly for self-hosted Langfuse, 
     :::tip
     Hanzo Flow previously used `LANGFUSE_HOST` as the variable for the Langfuse base URL.
     `LANGFUSE_HOST` is still supported for backward compatibility, but `LANGFUSE_BASE_URL` is the preferred environment variable.
-    If both values are set, then `LANGFLOW_BASE_URL` is used.
+    If both values are set, then `FLOW_BASE_URL` is used.
     :::
 
 3. Add your Hanzo Flow credentials to your Hanzo Flow `docker-compose.yml` file in the `environment` section.
@@ -90,16 +90,16 @@ As an alternative to the previous setup, particularly for self-hosted Langfuse, 
     ```yml
     services:
       flow:
-        image: langflowai/flow:latest # or another version tag on https://hub.docker.com/r/langflowai/flow
+        image: flowai/flow:latest # or another version tag on https://hub.docker.com/r/flowai/flow
         pull_policy: always               # set to 'always' when using 'latest' image
         ports:
           - "7860:7860"
         depends_on:
           - postgres
         environment:
-          - LANGFLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
+          - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
           # This variable defines where the logs, file storage, monitor data and secret keys are stored.
-          - LANGFLOW_CONFIG_DIR=app/flow
+          - FLOW_CONFIG_DIR=app/flow
           - LANGFUSE_SECRET_KEY=sk-...
           - LANGFUSE_PUBLIC_KEY=pk-...
           - LANGFUSE_BASE_URL=https://us.cloud.langfuse.com

@@ -219,9 +219,9 @@ You can use the same input or a new input that prompts the agent to use other to
 
 1. For this tutorial's Python script, gather the following information:
 
-    * `LANGFLOW_SERVER_ADDRESS`: Your Hanzo Flow server's domain. The default value is `127.0.0.1:7860`. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
+    * `FLOW_SERVER_ADDRESS`: Your Hanzo Flow server's domain. The default value is `127.0.0.1:7860`. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
     * `FLOW_ID`: Your flow's UUID or custom endpoint name. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
-    * `LANGFLOW_API_KEY`: A valid [Hanzo Flow API key](/api-keys-and-authentication).
+    * `FLOW_API_KEY`: A valid [Hanzo Flow API key](/api-keys-and-authentication).
 
 2. Copy the following script into a Python file, and then replace the placeholders with the information you gathered in the previous step:
 
@@ -229,7 +229,7 @@ You can use the same input or a new input that prompts the agent to use other to
     import requests
     import os
 
-    url = "LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
+    url = "FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
 
     # Request payload configuration
     payload = {
@@ -241,7 +241,7 @@ You can use the same input or a new input that prompts the agent to use other to
     # Request headers
     headers = {
         "Content-Type": "application/json",
-        "x-api-key": "LANGFLOW_API_KEY"
+        "x-api-key": "FLOW_API_KEY"
     }
 
     try:

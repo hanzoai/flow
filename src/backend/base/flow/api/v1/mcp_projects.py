@@ -786,18 +786,18 @@ async def install_mcp_config(
             legacy_sse_url = await get_project_sse_url(project_id)
             command = "uvx"
             args = ["mcp-proxy"]
-            # Check if we need to add Hanzo Flow API key headers
+            # Check if we need to add Flow API key headers
             # Necessary only when Project API Key Authentication is enabled
 
-            # Generate a Hanzo Flow API key for auto-install if needed
+            # Generate a Flow API key for auto-install if needed
             # Only add API key headers for projects with "apikey" auth type (not "none" or OAuth)
 
             if should_generate_api_key:
                 async with session_scope() as api_key_session:
                     api_key_create = ApiKeyCreate(name=f"MCP Server {project.name}")
                     api_key_response = await create_api_key(api_key_session, api_key_create, current_user.id)
-                    langflow_api_key = api_key_response.api_key
-                    args.extend(["--headers", "x-api-key", langflow_api_key])
+                    flow_api_key = api_key_response.api_key
+                    args.extend(["--headers", "x-api-key", flow_api_key])
 
             # Add the target URL for mcp-proxy based on requested transport
             proxy_target_url = streamable_http_url if transport_mode == "streamablehttp" else legacy_sse_url
@@ -856,7 +856,7 @@ async def install_mcp_config(
         if "mcpServers" not in existing_config:
             existing_config["mcpServers"] = {}
 
-        # Remove stale entries that point to the same Hanzo Flow URLs (e.g. after the project is renamed)
+        # Remove stale entries that point to the same Flow URLs (e.g. after the project is renamed)
         existing_config, removed_servers = remove_server_by_urls(existing_config, connection_urls)
 
         if removed_servers:
@@ -1414,7 +1414,7 @@ async def register_project_with_composer(project: Folder):
 
         settings = get_settings_service().settings
         if not settings.host or not settings.port:
-            error_msg = "Hanzo Flow host and port must be set in settings to register project with MCP Composer"
+            error_msg = "Flow host and port must be set in settings to register project with MCP Composer"
             raise ValueError(error_msg)
 
         if not project.id:
@@ -1549,7 +1549,7 @@ async def get_or_start_mcp_composer(auth_config: dict, project_name: str, projec
     # Prepare current auth config for comparison
     settings = get_settings_service().settings
     if not settings.host or not settings.port:
-        error_msg = "Hanzo Flow host and port must be set in settings to register project with MCP Composer"
+        error_msg = "Flow host and port must be set in settings to register project with MCP Composer"
         raise ValueError(error_msg)
 
     streamable_http_url = await get_project_streamable_http_url(project_id)

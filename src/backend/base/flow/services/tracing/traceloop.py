@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 
 class TraceloopTracer(BaseTracer):
-    """Traceloop tracer for Hanzo Flow."""
+    """Traceloop tracer for Flow."""
 
     def __init__(
         self,

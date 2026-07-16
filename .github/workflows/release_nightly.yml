@@ -1,21 +1,21 @@
-name: Hanzo Flow Nightly Build
-run-name: Hanzo Flow Nightly Release by @${{ github.actor }}
+name: Flow Nightly Build
+run-name: Flow Nightly Release by @${{ github.actor }}
 
 on:
   workflow_call:
     inputs:
       build_docker_base:
-        description: "Build Docker Image for Hanzo Flow Nightly Base"
+        description: "Build Docker Image for Flow Nightly Base"
         required: true
         type: boolean
         default: false
       build_docker_main:
-        description: "Build Docker Image for Hanzo Flow Nightly"
+        description: "Build Docker Image for Flow Nightly"
         required: true
         type: boolean
         default: false
       build_docker_ep:
-        description: "Build Docker Image for Hanzo Flow Nightly with Entrypoint"
+        description: "Build Docker Image for Flow Nightly with Entrypoint"
         required: false
         type: boolean
         default: false
@@ -143,7 +143,7 @@ jobs:
           path: src/lfx/dist
 
   build-nightly-base:
-    name: Build Hanzo Flow Nightly Base
+    name: Build Flow Nightly Base
     needs: [build-nightly-lfx]
     if: ${{ always() && (needs.build-nightly-lfx.result == 'success' || inputs.build_lfx == false) }}
     runs-on: ubuntu-latest
@@ -207,13 +207,13 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "skipped=false" >> $GITHUB_OUTPUT
 
-      - name: Build Hanzo Flow Base for distribution
+      - name: Build Flow Base for distribution
         run: |
           rm -rf src/backend/base/dist
           rm -rf dist
           make build base=true args="--no-sources --wheel"
 
-      - name: Test Hanzo Flow Base CLI
+      - name: Test Flow Base CLI
         run: |
           # TODO: Unsure why the whl is not built in src/backend/base/dist
           mkdir src/backend/base/dist
@@ -245,7 +245,7 @@ jobs:
           path: src/backend/base/dist
 
   build-nightly-main:
-    name: Build Hanzo Flow Nightly Main
+    name: Build Flow Nightly Main
     needs: [build-nightly-base]
     runs-on: ubuntu-latest
     outputs:
@@ -314,9 +314,9 @@ jobs:
         if: needs.build-nightly-base.outputs.skipped == 'false'
         run: sleep 300 # wait for 5 minutes to ensure PyPI propagation of base
 
-      - name: Build Hanzo Flow Main for distribution
+      - name: Build Flow Main for distribution
         run: make build main=true args="--no-sources --wheel"
-      - name: Test Hanzo Flow Main CLI
+      - name: Test Flow Main CLI
         run: |
           uv pip install dist/*.whl
           uv run python -m flow run --host localhost --port 7860 --backend-only &
@@ -334,10 +334,10 @@ jobs:
             echo "Server terminated successfully"
           fi
 
-      - name: Prepare Hanzo Flow Main artifact
+      - name: Prepare Flow Main artifact
         run: |
           shopt -s nullglob
-          MAIN_WHEELS=(dist/langflow_nightly-*.whl)
+          MAIN_WHEELS=(dist/flow_nightly-*.whl)
           if [ ${#MAIN_WHEELS[@]} -ne 1 ]; then
             echo "Expected exactly one flow-nightly wheel in dist/, found ${#MAIN_WHEELS[@]}"
             ls -la dist/
@@ -447,7 +447,7 @@ jobs:
           make sdk_publish
 
   publish-nightly-base:
-    name: Publish Hanzo Flow Base Nightly to PyPI
+    name: Publish Flow Base Nightly to PyPI
     needs: [build-nightly-base, test-cross-platform, publish-nightly-lfx]
     if: ${{ always() && needs.build-nightly-base.result == 'success' && needs.test-cross-platform.result == 'success' && (needs.publish-nightly-lfx.result == 'success' || inputs.build_lfx == false) }}
     runs-on: ubuntu-latest
@@ -476,7 +476,7 @@ jobs:
           make publish base=true
 
   publish-nightly-bundles:
-    name: Publish Hanzo Flow Bundles Nightly to PyPI
+    name: Publish Flow Bundles Nightly to PyPI
     # flow-nightly pins each `lfx-<name>-nightly==<dev>` exactly, so the
     # bundles must be on PyPI before main is published (publish-nightly-main
     # gates on this job). They depend on `lfx-nightly`, so gate on the lfx
@@ -526,7 +526,7 @@ jobs:
           fi
 
   publish-nightly-main:
-    name: Publish Hanzo Flow Main Nightly to PyPI
+    name: Publish Flow Main Nightly to PyPI
     needs: [build-nightly-main, test-cross-platform, publish-nightly-base, publish-nightly-bundles]
     if: ${{ always() && needs.build-nightly-main.result == 'success' && needs.test-cross-platform.result == 'success' && needs.publish-nightly-base.result == 'success' && needs.publish-nightly-bundles.result == 'success' }}
     runs-on: ubuntu-latest
@@ -554,7 +554,7 @@ jobs:
           make publish main=true
 
   call_docker_build_base:
-    name: Call Docker Build Workflow for Hanzo Flow Base
+    name: Call Docker Build Workflow for Flow Base
     if: ${{ always() && inputs.build_docker_base }}
     needs: [build-nightly-base, build-nightly-main]
     uses: ./.github/workflows/docker-nightly-build.yml
@@ -565,7 +565,7 @@ jobs:
     secrets: inherit
 
   call_docker_build_main:
-    name: Call Docker Build Workflow for Hanzo Flow
+    name: Call Docker Build Workflow for Flow
     if: ${{ always() && inputs.build_docker_main }}
     needs: [build-nightly-main, call_docker_build_base]
     uses: ./.github/workflows/docker-nightly-build.yml
@@ -588,7 +588,7 @@ jobs:
   #   secrets: inherit
 
   call_docker_build_main_ep:
-    name: Call Docker Build Workflow for Hanzo Flow with Entrypoint
+    name: Call Docker Build Workflow for Flow with Entrypoint
     if: ${{ always() && inputs.build_docker_ep }}
     needs: [build-nightly-main, call_docker_build_main]
     uses: ./.github/workflows/docker-build-v2.yml

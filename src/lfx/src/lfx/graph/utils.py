@@ -324,10 +324,10 @@ async def log_vertex_build(
     try:
         # Try to use flow's services if available (when running within flow)
         try:
-            from flow.services.deps import get_db_service as langflow_get_db_service
-            from flow.services.deps import get_settings_service as langflow_get_settings_service
+            from flow.services.deps import get_db_service as flow_get_db_service
+            from flow.services.deps import get_settings_service as flow_get_settings_service
 
-            settings_service = langflow_get_settings_service()
+            settings_service = flow_get_settings_service()
             if not settings_service:
                 return
             if not getattr(settings_service.settings, "vertex_builds_storage_enabled", False):
@@ -366,7 +366,7 @@ async def log_vertex_build(
                 job_id=job_id,
             )
 
-            db_service = langflow_get_db_service()
+            db_service = flow_get_db_service()
             if db_service is None:
                 return
 

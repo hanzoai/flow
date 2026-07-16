@@ -35,9 +35,9 @@ from flow.services.adapters.deployment.watsonx_orchestrate.core.shared import (
 from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
     ToolUploadBatchError,
     create_and_upload_wxo_flow_tools_with_bindings,
-    ensure_langflow_connections_binding,
+    ensure_flow_connections_binding,
     to_writable_tool_payload,
-    verify_langflow_owned,
+    verify_flow_owned,
 )
 from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
     WatsonxAttachToolOperation,
@@ -382,12 +382,12 @@ async def _bind_existing_tools_for_create(
     tool_updates: list[tuple[str, dict[str, Any]]] = []
     for tool_id in tool_ids:
         tool = tool_by_id[tool_id]
-        verify_langflow_owned(tool, tool_id=tool_id)
+        verify_flow_owned(tool, tool_id=tool_id)
 
         original_tool = to_writable_tool_payload(tool)
         original_tools[tool_id] = original_tool
         writable_tool = copy.deepcopy(original_tool)
-        connections = ensure_langflow_connections_binding(writable_tool)
+        connections = ensure_flow_connections_binding(writable_tool)
 
         for operation_app_id in existing_tool_bindings[tool_id]:
             provider_app_id = operation_to_provider_app_id.get(operation_app_id)

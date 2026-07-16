@@ -1,6 +1,6 @@
-"""A simple chat flow example for Hanzo Flow.
+"""A simple chat flow example for Flow.
 
-This script demonstrates how to set up a basic conversational flow using Hanzo Flow's ChatInput and ChatOutput components.
+This script demonstrates how to set up a basic conversational flow using Flow's ChatInput and ChatOutput components.
 
 Features:
 - Configures logging to 'flow.log' at INFO level
@@ -10,7 +10,7 @@ Features:
 Usage:
     python simple_chat.py
 
-You can use this script as a template for building more complex conversational flows in Hanzo Flow.
+You can use this script as a template for building more complex conversational flows in Flow.
 """
 
 from pathlib import Path

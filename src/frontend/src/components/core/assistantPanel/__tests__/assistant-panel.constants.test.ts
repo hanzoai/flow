@@ -7,8 +7,8 @@ import {
 
 describe("assistant-panel.constants", () => {
   describe("ASSISTANT_TITLE", () => {
-    it("should be Hanzo Flow Assistant", () => {
-      expect(ASSISTANT_TITLE).toBe("Hanzo Flow Assistant");
+    it("should be Flow Assistant", () => {
+      expect(ASSISTANT_TITLE).toBe("Flow Assistant");
     });
   });
 

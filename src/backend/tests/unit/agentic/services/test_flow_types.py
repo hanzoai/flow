@@ -138,7 +138,7 @@ class TestConstants:
         assert VALIDATION_UI_DELAY_SECONDS > 0
         assert VALIDATION_UI_DELAY_SECONDS < 2
 
-    def test_langflow_assistant_flow_should_be_string(self):
+    def test_flow_assistant_flow_should_be_string(self):
         """FLOW_ASSISTANT_FLOW should be a non-empty string."""
         assert isinstance(FLOW_ASSISTANT_FLOW, str)
         assert len(FLOW_ASSISTANT_FLOW) > 0

@@ -780,7 +780,7 @@ async def get_or_create_starter_folder(session):
 
 
 async def get_or_create_assistant_folder(session, user_id: UUID):
-    """Create or get the Hanzo Flow Assistant folder for a specific user.
+    """Create or get the Flow Assistant folder for a specific user.
 
     This folder contains agentic flows and cannot be deleted.
 
@@ -789,7 +789,7 @@ async def get_or_create_assistant_folder(session, user_id: UUID):
         user_id: The ID of the user who owns the folder
 
     Returns:
-        The Hanzo Flow Assistant folder
+        The Flow Assistant folder
     """
     stmt = select(Folder).where(Folder.user_id == user_id, Folder.name == ASSISTANT_FOLDER_NAME)
     result = await session.exec(stmt)
@@ -836,10 +836,10 @@ async def load_agentic_flows() -> list[tuple[anyio.Path, dict]]:
 
 
 async def create_or_update_agentic_flows(session: AsyncSession, user_id: UUID) -> None:
-    """Create or update agentic flows in the Hanzo Flow Assistant folder for a user.
+    """Create or update agentic flows in the Flow Assistant folder for a user.
 
     This function is called on user login to ensure that all agentic flows
-    are present and up-to-date in the user's Hanzo Flow Assistant folder.
+    are present and up-to-date in the user's Flow Assistant folder.
 
     The function will:
     - Extract flow_id and endpoint_name from the JSON
@@ -859,7 +859,7 @@ async def create_or_update_agentic_flows(session: AsyncSession, user_id: UUID) -
         return
 
     try:
-        # Get or create the Hanzo Flow Assistant folder
+        # Get or create the Flow Assistant folder
         assistant_folder = await get_or_create_assistant_folder(session, user_id)
 
         # Load all agentic flows from the directory

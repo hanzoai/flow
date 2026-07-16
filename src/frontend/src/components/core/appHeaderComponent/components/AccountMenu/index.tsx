@@ -119,7 +119,7 @@ export const AccountMenu = () => {
             )}
             <HeaderMenuItemLink
               newPage
-              href={ENABLE_DATASTAX_LANGFLOW ? DATASTAX_DOCS_URL : DOCS_URL}
+              href={ENABLE_DATASTAX_FLOW ? DATASTAX_DOCS_URL : DOCS_URL}
             >
               <span data-testid="menu_docs_button" id="menu_docs_button">
                 {t("account.docs")}

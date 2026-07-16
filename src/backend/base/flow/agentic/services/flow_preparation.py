@@ -7,10 +7,10 @@ from lfx.base.models.model_metadata import MODEL_PROVIDER_METADATA, get_provider
 
 import lfx
 
-# Relative path embedded in the bundled LangflowAssistant.json flow for the
+# Relative path embedded in the bundled FlowAssistant.json flow for the
 # Directory component that scans built-in lfx components. It only resolves
 # correctly when the process CWD is the monorepo root, which is never the
-# case for a packaged install (Hanzo Flow Desktop, `pip install flow`,
+# case for a packaged install (Flow Desktop, `pip install flow`,
 # Docker, etc.). inject_lfx_components_path rewrites it to an absolute path
 # derived from the installed lfx package at runtime.
 LFX_COMPONENTS_PATH_SENTINEL = "./src/lfx/src/lfx/components/"
@@ -110,10 +110,10 @@ def inject_model_into_flow(
 def inject_lfx_components_path(flow_data: dict) -> dict:
     """Rewrite Directory nodes targeting bundled lfx components to an absolute path.
 
-    The bundled LangflowAssistant flow hardcodes a relative path that only
+    The bundled FlowAssistant flow hardcodes a relative path that only
     resolves from the monorepo root. In any packaged install the process CWD
     is different and the Directory component raises "Path ... must exist and
-    be a directory.", causing the Hanzo Flow Assistant to fail with
+    be a directory.", causing the Flow Assistant to fail with
     "An internal error occurred while executing the flow." on first use.
 
     This function walks the flow nodes and, for each Directory node whose

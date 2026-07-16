@@ -30,9 +30,9 @@ As an example of a Hanzo Flow API request, the following curl command calls the 
 
 ```bash
 curl --request POST \
-  --url "$LANGFLOW_SERVER_URL/api/v1/run/$FLOW_ID?stream=false" \
+  --url "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID?stream=false" \
   --header "Content-Type: application/json" \
-  --header "x-api-key: $LANGFLOW_API_KEY" \
+  --header "x-api-key: $FLOW_API_KEY" \
   --data '{
   "input_value": "hello world!",
   "output_type": "chat",
@@ -49,13 +49,13 @@ curl --request POST \
 
 By default, local deployments serve the Hanzo Flow API at `http://localhost:7860/api`.
 
-Remotely hosted Hanzo Flow deployments are available at the domain set by the hosting service, such as `http://IP_OR_DNS/api` or `http://IP_OR_DNS:LANGFLOW_PORT/api`.
+Remotely hosted Hanzo Flow deployments are available at the domain set by the hosting service, such as `http://IP_OR_DNS/api` or `http://IP_OR_DNS:FLOW_PORT/api`.
 
-You can configure the Hanzo Flow port number in the `LANGFLOW_PORT` [environment variable](/environment-variables).
+You can configure the Hanzo Flow port number in the `FLOW_PORT` [environment variable](/environment-variables).
 
 * `https://UUID.ngrok.app/api`
 * `http://IP_OR_DNS/api`
-* `http://IP_OR_DNS:LANGFLOW_PORT/api`
+* `http://IP_OR_DNS:FLOW_PORT/api`
 
 ### Authentication
 
@@ -91,17 +91,17 @@ For example:
 
 ```bash
 # Set environment variables
-export LANGFLOW_API_KEY="sk..."
-export LANGFLOW_SERVER_URL="https://localhost:7860"
+export FLOW_API_KEY="sk..."
+export FLOW_SERVER_URL="https://localhost:7860"
 export FLOW_ID="359cd752-07ea-46f2-9d3b-a4407ef618da"
 export PROJECT_ID="1415de42-8f01-4f36-bf34-539f23e47466"
-export LANGFLOW_API_KEY="sk-..."
+export FLOW_API_KEY="sk-..."
 
 # Use environment variables in API requests
 curl --request POST \
-  --url "$LANGFLOW_SERVER_URL/api/v1/run/$FLOW_ID$?stream=false" \
+  --url "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID$?stream=false" \
   --header "Content-Type: application/json" \
-  --header "x-api-key: $LANGFLOW_API_KEY" \
+  --header "x-api-key: $FLOW_API_KEY" \
   --data '{
   "input_value": "hello world!",
   "output_type": "chat",
@@ -128,7 +128,7 @@ Returns the health status of the Hanzo Flow database and chat services:
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_SERVER_URL/health_check" \
+  "$FLOW_SERVER_URL/health_check" \
   -H "accept: application/json"
 ```
 
@@ -154,7 +154,7 @@ Returns the current Hanzo Flow API version:
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_SERVER_URL/api/v1/version" \
+  "$FLOW_SERVER_URL/api/v1/version" \
   -H "accept: application/json"
 ```
 
@@ -178,9 +178,9 @@ Requires a [Hanzo Flow API key](/api-keys-and-authentication).
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_SERVER_URL/api/v1/config" \
+  "$FLOW_SERVER_URL/api/v1/config" \
   -H "accept: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY"
+  -H "x-api-key: $FLOW_API_KEY"
 ```
 
 <details>
@@ -218,9 +218,9 @@ Requires a [Hanzo Flow API key](/api-keys-and-authentication).
 
 ```bash
 curl -X GET \
-  "$LANGFLOW_SERVER_URL/api/v1/all" \
+  "$FLOW_SERVER_URL/api/v1/all" \
   -H "accept: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY"
+  -H "x-api-key: $FLOW_API_KEY"
 ```
 
 ## Available endpoints

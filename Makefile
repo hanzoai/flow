@@ -44,7 +44,7 @@ check_tools:
 help: ## show basic help message with common commands
 	@echo ''
 	@echo "$(GREEN)═══════════════════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)                    LANGFLOW MAKEFILE COMMANDS                     $(NC)"
+	@echo "$(GREEN)                    FLOW MAKEFILE COMMANDS                     $(NC)"
 	@echo "$(GREEN)═══════════════════════════════════════════════════════════════════$(NC)"
 	@echo ''
 	@echo "$(GREEN)Basic Commands:$(NC)"
@@ -563,26 +563,26 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	fi; \
 	echo "$(GREEN)Updating version to $(v)$(NC)"; \
 	\
-	LANGFLOW_VERSION="$(v)"; \
-	LANGFLOW_BASE_VERSION=$$(echo "$$LANGFLOW_VERSION" | sed -E 's/^[0-9]+\.(.*)$$/0.\1/'); \
+	FLOW_VERSION="$(v)"; \
+	FLOW_BASE_VERSION=$$(echo "$$FLOW_VERSION" | sed -E 's/^[0-9]+\.(.*)$$/0.\1/'); \
 	\
-	echo "$(GREEN)Hanzo Flow version: $$LANGFLOW_VERSION$(NC)"; \
-	echo "$(GREEN)Hanzo Flow-base version: $$LANGFLOW_BASE_VERSION$(NC)"; \
+	echo "$(GREEN)Hanzo Flow version: $$FLOW_VERSION$(NC)"; \
+	echo "$(GREEN)Hanzo Flow-base version: $$FLOW_BASE_VERSION$(NC)"; \
 	\
 	echo "$(GREEN)Updating main pyproject.toml...$(NC)"; \
-	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"flow-base==.*\"', '\"flow-base==$$LANGFLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$FLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"flow-base==.*\"', '\"flow-base==$$FLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Updating flow-base pyproject.toml...$(NC)"; \
-	python -c "import re; fname='src/backend/base/pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_BASE_VERSION\"', txt, flags=re.MULTILINE); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='src/backend/base/pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$FLOW_BASE_VERSION\"', txt, flags=re.MULTILINE); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Updating frontend package.json...$(NC)"; \
-	python -c "import re; fname='src/frontend/package.json'; txt=open(fname).read(); txt=re.sub(r'\"version\": \".*\"', '\"version\": \"$$LANGFLOW_VERSION\"', txt); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='src/frontend/package.json'; txt=open(fname).read(); txt=re.sub(r'\"version\": \".*\"', '\"version\": \"$$FLOW_VERSION\"', txt); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Validating version changes...$(NC)"; \
-	if ! grep -q "^version = \"$$LANGFLOW_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml version validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "\"flow-base==$$LANGFLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml flow-base dependency validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "^version = \"$$LANGFLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ Hanzo Flow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "\"version\": \"$$LANGFLOW_VERSION\"" src/frontend/package.json; then echo "$(RED)✗ Frontend package.json version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "^version = \"$$FLOW_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "\"flow-base==$$FLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml flow-base dependency validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "^version = \"$$FLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ Hanzo Flow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "\"version\": \"$$FLOW_VERSION\"" src/frontend/package.json; then echo "$(RED)✗ Frontend package.json version validation failed$(NC)"; exit 1; fi; \
 	echo "$(GREEN)✓ All versions updated successfully$(NC)"; \
 	\
 	echo "$(GREEN)Syncing dependencies in parallel...$(NC)"; \
@@ -609,9 +609,9 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	\
 	echo "$(GREEN)Version update complete!$(NC)"; \
 	echo "$(GREEN)Updated files:$(NC)"; \
-	echo "  - pyproject.toml: $$LANGFLOW_VERSION"; \
-	echo "  - src/backend/base/pyproject.toml: $$LANGFLOW_BASE_VERSION"; \
-	echo "  - src/frontend/package.json: $$LANGFLOW_VERSION"; \
+	echo "  - pyproject.toml: $$FLOW_VERSION"; \
+	echo "  - src/backend/base/pyproject.toml: $$FLOW_BASE_VERSION"; \
+	echo "  - src/frontend/package.json: $$FLOW_VERSION"; \
 	echo "  - uv.lock: dependency lock updated"; \
 	echo "  - src/frontend/package-lock.json: dependency lock updated"; \
 	echo "$(GREEN)Dependencies synced successfully!$(NC)"
@@ -716,15 +716,15 @@ load_test_lfx_quick: ## Quick LFX load test (30 users, 60s). Options: html=true,
 # Enhanced load testing system with API-based flow loading
 load_test_setup: ## Set up load test environment with starter project flows
 	@echo "$(YELLOW)Setting up Hanzo Flow load test environment$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --interactive
+	@cd src/backend/tests/locust && uv run python flow_setup_test.py --interactive
 
 load_test_setup_basic: ## Set up load test environment with Basic Prompting flow
 	@echo "$(YELLOW)Setting up load test environment with Basic Prompting flow$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "Basic Prompting" --save-credentials load_test_creds.json
+	@cd src/backend/tests/locust && uv run python flow_setup_test.py --flow "Basic Prompting" --save-credentials load_test_creds.json
 
 load_test_list_flows: ## List available starter project flows
 	@echo "$(YELLOW)Listing available starter project flows$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows
+	@cd src/backend/tests/locust && uv run python flow_setup_test.py --list-flows
 
 load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running load test with enhanced error logging$(NC)"
@@ -732,18 +732,18 @@ load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --list-flows; \
 			echo "$(RED)Please specify a flow: make load_test_run FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 20 --duration 120 --no-start-flow --html load_test_report.html --csv load_test_results
+	uv run python flow_run_load_test.py --headless --users 20 --duration 120 --no-start-flow --html load_test_report.html --csv load_test_results
 
 load_test_flow_quick: ## Quick Hanzo Flow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running quick Hanzo Flow load test with HTML report$(NC)"
@@ -751,18 +751,18 @@ load_test_flow_quick: ## Quick Hanzo Flow load test (10 users, 30s) with HTML re
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --list-flows; \
 			echo "$(RED)Please specify a flow: make load_test_flow_quick FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 10 --duration 30 --no-start-flow --html quick_test_report.html
+	uv run python flow_run_load_test.py --headless --users 10 --duration 30 --no-start-flow --html quick_test_report.html
 
 load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive reporting (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running stress test with comprehensive reporting$(NC)"
@@ -770,51 +770,51 @@ load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive repor
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
 			echo "$(CYAN)Available flows:$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --list-flows; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --list-flows; \
 			echo "$(RED)Please specify a flow: make load_test_stress FLOW_NAME=\"Basic Prompting\"$(NC)"; \
 			exit 1; \
 		else \
 			echo "$(BLUE)Setting up with flow: $(FLOW_NAME)$(NC)"; \
-			cd src/backend/tests/locust && uv run python langflow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
+			cd src/backend/tests/locust && uv run python flow_setup_test.py --flow "$(FLOW_NAME)" --save-credentials load_test_creds.json; \
 		fi \
 	fi
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-flow --html stress_test_report.html --csv stress_test_results --shape ramp100
+	uv run python flow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-flow --html stress_test_report.html --csv stress_test_results --shape ramp100
 
 load_test_example: ## Run complete example workflow (setup + test + reports)
 	@echo "$(YELLOW)Running complete load test example workflow$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_example_workflow.py --auto
+	@cd src/backend/tests/locust && uv run python flow_example_workflow.py --auto
 
 load_test_clean: ## Clean up load test files and credentials
 	@echo "$(YELLOW)Cleaning up load test files$(NC)"
 	@cd src/backend/tests/locust && rm -f *.json *.html *.csv *.log
 	@echo "$(GREEN)Load test files cleaned$(NC)"
 
-load_test_remote_setup: ## Set up load test for remote instance (requires LANGFLOW_HOST)
-	@if [ -z "$(LANGFLOW_HOST)" ]; then \
-		echo "$(RED)Error: LANGFLOW_HOST environment variable required$(NC)"; \
-		echo "$(YELLOW)Example: export LANGFLOW_HOST=https://your-remote-instance.com$(NC)"; \
+load_test_remote_setup: ## Set up load test for remote instance (requires FLOW_HOST)
+	@if [ -z "$(FLOW_HOST)" ]; then \
+		echo "$(RED)Error: FLOW_HOST environment variable required$(NC)"; \
+		echo "$(YELLOW)Example: export FLOW_HOST=https://your-remote-instance.com$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Setting up load test for remote instance: $(LANGFLOW_HOST)$(NC)"
-	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --host $(LANGFLOW_HOST) --flow "Basic Prompting" --save-credentials remote_test_creds.json
+	@echo "$(YELLOW)Setting up load test for remote instance: $(FLOW_HOST)$(NC)"
+	@cd src/backend/tests/locust && uv run python flow_setup_test.py --host $(FLOW_HOST) --flow "Basic Prompting" --save-credentials remote_test_creds.json
 
 load_test_remote_run: ## Run load test against remote instance (requires prior setup)
-	@if [ -z "$(LANGFLOW_HOST)" ]; then \
-		echo "$(RED)Error: LANGFLOW_HOST environment variable required$(NC)"; \
+	@if [ -z "$(FLOW_HOST)" ]; then \
+		echo "$(RED)Error: FLOW_HOST environment variable required$(NC)"; \
 		exit 1; \
 	fi
 	@if [ ! -f "src/backend/tests/locust/remote_test_creds.json" ]; then \
 		echo "$(RED)Error: No remote credentials found. Run 'make load_test_remote_setup' first$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Running load test against remote instance: $(LANGFLOW_HOST)$(NC)"
+	@echo "$(YELLOW)Running load test against remote instance: $(FLOW_HOST)$(NC)"
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --host $(LANGFLOW_HOST) --no-start-flow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
+	uv run python flow_run_load_test.py --host $(FLOW_HOST) --no-start-flow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
 
 load_test_help: ## Show detailed load testing help
 	@echo "$(GREEN)Hanzo Flow Enhanced Load Testing System$(NC)"
@@ -825,7 +825,7 @@ load_test_help: ## Show detailed load testing help
 	@echo "  3. Open quick_test_report.html  # View results"
 	@echo ""
 	@echo "$(YELLOW)Remote Testing:$(NC)"
-	@echo "  1. export LANGFLOW_HOST=https://your-instance.com"
+	@echo "  1. export FLOW_HOST=https://your-instance.com"
 	@echo "  2. make load_test_remote_setup   # Set up for remote testing"
 	@echo "  3. make load_test_remote_run     # Run test against remote instance"
 	@echo ""
@@ -892,7 +892,7 @@ help_backend: ## show backend-specific commands
 	@echo "  $(GREEN)make build_and_run$(NC)       - Build and run the project"
 	@echo "  $(GREEN)make build_and_install$(NC)   - Build and install the project"
 	@echo "  $(GREEN)make build_flow_base$(NC) - Build flow-base package"
-	@echo "  $(GREEN)make build_langflow$(NC)      - Build flow package"
+	@echo "  $(GREEN)make build_flow$(NC)      - Build flow package"
 	@echo "  $(GREEN)make lock$(NC)                - Lock dependencies"
 	@echo "  $(GREEN)make update$(NC)              - Update dependencies"
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI"
@@ -1028,7 +1028,7 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo "$(GREEN)Lock Files:$(NC)"
 	@echo "  $(GREEN)make lock$(NC)                - Lock all dependencies"
 	@echo "  $(GREEN)make lock_base$(NC)           - Lock flow-base dependencies"
-	@echo "  $(GREEN)make lock_langflow$(NC)       - Lock flow dependencies"
+	@echo "  $(GREEN)make lock_flow$(NC)       - Lock flow dependencies"
 	@echo ''
 	@echo "$(GREEN)Utilities:$(NC)"
 	@echo "  $(GREEN)make check_tools$(NC)         - Verify required tools are installed"

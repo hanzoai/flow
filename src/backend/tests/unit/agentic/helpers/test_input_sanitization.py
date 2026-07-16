@@ -13,11 +13,11 @@ from flow.agentic.helpers.input_sanitization import (
 
 
 class TestSanitizeInputCleanInputs:
-    """Tests that legitimate Hanzo Flow questions pass sanitization."""
+    """Tests that legitimate Flow questions pass sanitization."""
 
-    def test_should_pass_normal_langflow_question(self):
-        """Normal Hanzo Flow question should pass."""
-        result = sanitize_input("How do I create a component in Hanzo Flow?")
+    def test_should_pass_normal_flow_question(self):
+        """Normal Flow question should pass."""
+        result = sanitize_input("How do I create a component in Flow?")
         assert result.is_safe is True
         assert result.violation is None
 
@@ -44,12 +44,12 @@ class TestSanitizeInputCleanInputs:
 
     def test_should_pass_system_in_legitimate_context(self):
         """'system' in legitimate context should not trigger false positive."""
-        result = sanitize_input("How do I configure system settings in Hanzo Flow?")
+        result = sanitize_input("How do I configure system settings in Flow?")
         assert result.is_safe is True
 
     def test_should_pass_portuguese_question(self):
-        """Portuguese Hanzo Flow question should pass."""
-        result = sanitize_input("Como criar um fluxo no Hanzo Flow?")
+        """Portuguese Flow question should pass."""
+        result = sanitize_input("Como criar um fluxo no Flow?")
         assert result.is_safe is True
 
 
@@ -171,9 +171,9 @@ class TestSanitizeInputNormalization:
 class TestRefusalMessage:
     """Tests for the refusal message constant."""
 
-    def test_refusal_message_mentions_langflow(self):
-        """Refusal message should mention Hanzo Flow to redirect the user."""
-        assert "Hanzo Flow" in REFUSAL_MESSAGE
+    def test_refusal_message_mentions_flow(self):
+        """Refusal message should mention Flow to redirect the user."""
+        assert "Flow" in REFUSAL_MESSAGE
 
     def test_refusal_message_is_not_empty(self):
         """Refusal message should not be empty."""

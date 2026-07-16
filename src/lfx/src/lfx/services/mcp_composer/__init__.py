@@ -1,4 +1,4 @@
-"""MCP Composer service for Hanzo Flow."""
+"""MCP Composer service for Flow."""
 
 from lfx.services.mcp_composer.factory import MCPComposerServiceFactory
 from lfx.services.mcp_composer.service import MCPComposerService

@@ -357,10 +357,10 @@ external = ["RUF027"]
 "src/backend/base/flow/api/utils/*" = [
     "TCH",  # Imports are used at runtime (FastAPI deps, SQLAlchemy queries, model constructors)
 ]
-"src/sdk/src/langflow_sdk/_http.py" = [
+"src/sdk/src/flow_sdk/_http.py" = [
     "TCH",  # httpx is used at runtime (response object methods)
 ]
-"src/sdk/src/langflow_sdk/environments.py" = [
+"src/sdk/src/flow_sdk/environments.py" = [
     "TRY003", # Contextual error messages are necessary here
     "EM102",  # f-string messages assigned before raise where possible
 ]
@@ -404,7 +404,7 @@ external = ["RUF027"]
     "T201",    # Print statements (needed for CLI output)
     "S603",    # Subprocess calls (needed for running commands)
     "S607",    # Starting process with partial executable path
-    "S104",    # Binding to all interfaces (needed for Hanzo Flow server)
+    "S104",    # Binding to all interfaces (needed for Flow server)
     "S105",    # Hardcoded passwords (test credentials)
     "FBT001",  # Boolean-typed positional arguments (common in CLI)
     "FBT002",  # Boolean default arguments (common in CLI tools)

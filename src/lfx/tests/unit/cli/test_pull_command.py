@@ -1,6 +1,6 @@
 """Unit tests for lfx pull -- pull_command and helpers.
 
-All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
+All tests run entirely in-process; no real Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the pull logic
 (flow fetching, file writing, project resolution, result rendering)
 is under test.
@@ -70,7 +70,7 @@ def _fake_flow_obj(
     name: str = "My Flow",
     flow_dict: dict | None = None,
 ) -> MagicMock:
-    """Return a MagicMock that looks like a langflow_sdk Flow object."""
+    """Return a MagicMock that looks like a flow_sdk Flow object."""
     flow = MagicMock()
     flow.id = flow_id
     flow.name = name
@@ -83,7 +83,7 @@ def _fake_project(
     project_id: UUID = _PROJECT_ID,
     flows: list | None = None,
 ) -> MagicMock:
-    """Return a MagicMock that looks like a langflow_sdk Project object."""
+    """Return a MagicMock that looks like a flow_sdk Project object."""
     proj = MagicMock()
     proj.name = name
     proj.id = project_id
@@ -111,7 +111,7 @@ def _make_sdk_mock(
     client_mock: MagicMock | None = None,
     flow_json: str | None = None,
 ) -> MagicMock:
-    """Return a mock langflow_sdk module wired to client_mock."""
+    """Return a mock flow_sdk module wired to client_mock."""
     if client_mock is None:
         client_mock = _make_client_mock()
 

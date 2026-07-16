@@ -41,7 +41,7 @@ export async function customPollBuildEvents(
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
         errorData.detail ||
-          "Hanzo Flow was not able to connect to the server. Please make sure your connection is working properly.",
+          "Flow was not able to connect to the server. Please make sure your connection is working properly.",
       );
     }
 
