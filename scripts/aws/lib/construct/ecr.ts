@@ -28,8 +28,8 @@ export class EcrRepository extends Construct {
     }
 
     // Backend ECR リポジトリ作成
-    this.ecrBackEndRepository = new ecr.Repository(scope, 'HanzoflowBackEndRepository', {
-      repositoryName: 'hanzoflow-backend-repository',
+    this.ecrBackEndRepository = new ecr.Repository(scope, 'HanzoFlowBackEndRepository', {
+      repositoryName: 'flow-backend-repository',
       removalPolicy: RemovalPolicy.RETAIN,
       imageScanOnPush: true,
     })

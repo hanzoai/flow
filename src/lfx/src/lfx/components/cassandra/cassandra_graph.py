@@ -204,7 +204,7 @@ class CassandraGraphVectorStoreComponent(LCVectorStoreComponent):
             except KeyError as e:
                 if "content" in str(e):
                     msg = (
-                        "You should ingest data through Hanzoflow (or LangChain) to query it in Hanzoflow. "
+                        "You should ingest data through HanzoFlow (or LangChain) to query it in HanzoFlow. "
                         "Your collection does not contain a field name 'content'."
                     )
                     raise ValueError(msg) from e

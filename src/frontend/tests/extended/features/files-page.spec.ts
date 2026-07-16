@@ -16,8 +16,8 @@ test(
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunHanzoflow > 0) {
-      await addFlowToTestOnEmptyHanzoflow(page);
+    if (firstRunHanzoFlow > 0) {
+      await addFlowToTestOnEmptyHanzoFlow(page);
     }
 
     await page.waitForSelector('[data-testid="mainpage_title"]', {
@@ -61,8 +61,8 @@ test(
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunHanzoflow > 0) {
-      await addFlowToTestOnEmptyHanzoflow(page);
+    if (firstRunHanzoFlow > 0) {
+      await addFlowToTestOnEmptyHanzoFlow(page);
     }
 
     await page.waitForSelector('[data-testid="mainpage_title"]', {
@@ -104,8 +104,8 @@ test(
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunHanzoflow > 0) {
-      await addFlowToTestOnEmptyHanzoflow(page);
+    if (firstRunHanzoFlow > 0) {
+      await addFlowToTestOnEmptyHanzoFlow(page);
     }
 
     await page.waitForSelector('[data-testid="mainpage_title"]', {
@@ -172,8 +172,8 @@ test(
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunHanzoflow > 0) {
-      await addFlowToTestOnEmptyHanzoflow(page);
+    if (firstRunHanzoFlow > 0) {
+      await addFlowToTestOnEmptyHanzoFlow(page);
     }
 
     await page.waitForSelector('[data-testid="mainpage_title"]', {
@@ -244,8 +244,8 @@ test(
       .getByTestId("empty-project-description")
       .count();
 
-    if (firstRunHanzoflow > 0) {
-      await addFlowToTestOnEmptyHanzoflow(page);
+    if (firstRunHanzoFlow > 0) {
+      await addFlowToTestOnEmptyHanzoFlow(page);
     }
 
     await page.waitForSelector('[data-testid="mainpage_title"]', {

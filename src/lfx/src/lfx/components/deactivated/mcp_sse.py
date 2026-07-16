@@ -19,7 +19,7 @@ class MCPSse(Component):
     tools = types.ListToolsResult
     tool_names = [str]
     display_name = "MCP Tools (SSE) [DEPRECATED]"
-    description = "Connects to an MCP server over SSE and exposes it's tools as hanzoflow tools to be used by an Agent."
+    description = "Connects to an MCP server over SSE and exposes it's tools as flow tools to be used by an Agent."
     documentation: str = "https://docs.hanzo.ai/flow/components-custom-components"
     icon = "code"
     name = "MCPSse"

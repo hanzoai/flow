@@ -11,7 +11,7 @@ from alembic import op
 import sqlalchemy as sa
 import sqlmodel
 from sqlalchemy.engine.reflection import Inspector
-from hanzoflow.utils import migration
+from flow.utils import migration
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.

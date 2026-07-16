@@ -17,9 +17,9 @@ def get_version() -> str:
     """
     pkg_names = [
         "flow",
-        "hanzoflow-base",
-        "hanzoflow-nightly",
-        "hanzoflow-base-nightly",
+        "flow-base",
+        "flow-nightly",
+        "flow-base-nightly",
     ]
     version = None
     for pkg_name in pkg_names:

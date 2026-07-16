@@ -4,14 +4,14 @@ import { checkHasApiKey, checkHasStore } from "../controllers/API";
 import type { StoreStoreType } from "../types/zustand/store";
 
 export const useStoreStore = create<StoreStoreType>((set) => ({
-  hasStore: ENABLE_HANZOFLOW_STORE,
+  hasStore: ENABLE_FLOW_STORE,
   validApiKey: false,
   hasApiKey: false,
   loadingApiKey: true,
   checkHasStore: () => {
     checkHasStore().then((res) => {
       set({
-        hasStore: ENABLE_HANZOFLOW_STORE && (res?.enabled ?? false),
+        hasStore: ENABLE_FLOW_STORE && (res?.enabled ?? false),
       });
     });
   },

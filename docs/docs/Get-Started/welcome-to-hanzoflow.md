@@ -1,23 +1,23 @@
 ---
-title: Welcome to Hanzoflow
+title: Welcome to Hanzo Flow
 slug: /
 ---
 
-Hanzoflow is a new, visual framework for building multi-agent and RAG applications. It is open-source, Python-powered, fully customizable, and LLM and vector store agnostic.
+Hanzo Flow is a new, visual framework for building multi-agent and RAG applications. It is open-source, Python-powered, fully customizable, and LLM and vector store agnostic.
 
 Its intuitive interface allows for easy manipulation of AI building blocks, enabling developers to quickly prototype and turn their ideas into powerful, real-world solutions.
 
-Hanzoflow empowers developers to rapidly prototype and build AI applications with its user-friendly interface and powerful features. Whether you're a seasoned AI developer or just starting out, Hanzoflow provides the tools you need to bring your AI ideas to life.
+Hanzo Flow empowers developers to rapidly prototype and build AI applications with its user-friendly interface and powerful features. Whether you're a seasoned AI developer or just starting out, Hanzo Flow provides the tools you need to bring your AI ideas to life.
 
 ## Visual flow builder
 
-Hanzoflow is an intuitive visual flow builder. This drag-and-drop interface allows developers to create complex AI workflows without writing extensive code. You can easily connect different components, such as prompts, language models, and data sources, to build sophisticated AI applications.
+Hanzo Flow is an intuitive visual flow builder. This drag-and-drop interface allows developers to create complex AI workflows without writing extensive code. You can easily connect different components, such as prompts, language models, and data sources, to build sophisticated AI applications.
 
-![Hanzoflow in action](/img/playground-response.png)
+![Hanzo Flow in action](/img/playground-response.png)
 
 ## Use cases
 
-Hanzoflow can be used for a wide range of AI applications, including:
+Hanzo Flow can be used for a wide range of AI applications, including:
 
 * [Craft intelligent chatbots](/tutorials-memory-chatbot)
 * [Build document analysis systems](/tutorials-document-qa)
@@ -26,14 +26,14 @@ Hanzoflow can be used for a wide range of AI applications, including:
 
 ## Community and support
 
-Join Hanzoflow's vibrant community of developers and AI enthusiasts. See the following resources to join discussions, share your projects, and get support:
+Join Hanzo Flow's vibrant community of developers and AI enthusiasts. See the following resources to join discussions, share your projects, and get support:
 
-* [Contribute to Hanzoflow](contributing-how-to-contribute)
-* [Hanzoflow Discord Server](https://discord.gg/EqksyE2EX9)
-* [@hanzoflow_ai](https://twitter.com/hanzoflow_ai) 
+* [Contribute to Hanzo Flow](contributing-how-to-contribute)
+* [Hanzo Flow Discord Server](https://discord.gg/EqksyE2EX9)
+* [@flow_ai](https://twitter.com/flow_ai) 
 
-## Get started with Hanzoflow
+## Get started with Hanzo Flow
 
-- [Install Hanzoflow](/get-started-installation)
+- [Install Hanzo Flow](/get-started-installation)
 - [Quickstart](/get-started-quickstart)
 

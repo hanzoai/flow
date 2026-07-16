@@ -88,8 +88,8 @@ export default function ImageViewer({ image }: { image: string }) {
         {t("output.imgTitle")}
       </div>
       <div className="align-center flex justify-center">
-        <div className="hanzoflow-chat-desc align-center flex justify-center">
-          <div className="hanzoflow-chat-desc-span">{IMGViewErrorMSG}</div>
+        <div className="flow-chat-desc align-center flex justify-center">
+          <div className="flow-chat-desc-span">{IMGViewErrorMSG}</div>
         </div>
       </div>
     </div>

@@ -14,17 +14,17 @@ export default function getWidgetCode({
 }: GetCodeType): string {
   const source = copy
     ? `<script
-  src="https://cdn.jsdelivr.net/gh/logspace-ai/hanzoflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
+  src="https://cdn.jsdelivr.net/gh/logspace-ai/flow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
 </script>`
     : `<script
-  src="https://cdn.jsdelivr.net/gh/logspace-ai/hanzoflow-embedded-chat@v1.0.7/dist/
+  src="https://cdn.jsdelivr.net/gh/logspace-ai/flow-embedded-chat@v1.0.7/dist/
 build/static/js/bundle.min.js">
 </script>`;
 
   const { protocol, host } = customGetHostProtocol();
 
   return `${source}
-  <hanzoflow-chat
+  <flow-chat
     window_title="${flowName}"
     flow_id="${flowId}"
     host_url="${protocol}//${host}"${
@@ -33,5 +33,5 @@ build/static/js/bundle.min.js">
     api_key="..."`
         : ""
     }>
-</hanzoflow-chat>`;
+</flow-chat>`;
 }

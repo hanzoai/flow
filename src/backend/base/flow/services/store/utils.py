@@ -40,11 +40,11 @@ async def update_components_with_user_data(
     return components
 
 
-# Get the latest released version of hanzoflow (https://pypi.org/project/hanzoflow/)
+# Get the latest released version of flow (https://pypi.org/project/flow/)
 async def get_lf_version_from_pypi():
     try:
         async with httpx.AsyncClient() as client:
-            response = await client.get("https://pypi.org/pypi/hanzoflow/json")
+            response = await client.get("https://pypi.org/pypi/flow/json")
         if response.status_code != httpx.codes.OK:
             return None
         return response.json()["info"]["version"]

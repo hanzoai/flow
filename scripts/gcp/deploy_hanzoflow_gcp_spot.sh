@@ -1,5 +1,5 @@
 # Set the VM, image, and networking configuration
-VM_NAME="hanzoflow-dev"
+VM_NAME="flow-dev"
 IMAGE_FAMILY="debian-11"
 IMAGE_PROJECT="debian-cloud"
 BOOT_DISK_SIZE="100GB"
@@ -46,10 +46,10 @@ STARTUP_SCRIPT=$(cat <<'EOF'
 apt -y update
 apt -y upgrade
 
-# Install Python 3 pip, Hanzoflow, and Nginx
+# Install Python 3 pip, HanzoFlow, and Nginx
 apt -y install python3-pip
-pip install hanzoflow
-hanzoflow --host 0.0.0.0 --port 7860
+pip install hanzo-flow
+flow --host 0.0.0.0 --port 7860
 EOF
 )
 

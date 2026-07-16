@@ -31,20 +31,20 @@ Hanzo Flow will now be accessible at [http://localhost:7860/](http://localhost:7
 
 ## Docker Compose Configuration
 
-The Docker Compose configuration spins up two services: `hanzoflow` and `postgres`.
+The Docker Compose configuration spins up two services: `flow` and `postgres`.
 
 ### Hanzo Flow Service
 
-The `hanzoflow` service uses the `hanzoflowai/hanzoflow:latest` Docker image and exposes port 7860. It depends on the `postgres` service.
+The `flow` service uses the `flowai/flow:latest` Docker image and exposes port 7860. It depends on the `postgres` service.
 
 Environment variables:
 
-- `HANZOFLOW_DATABASE_URL`: The connection string for the PostgreSQL database.
-- `HANZOFLOW_CONFIG_DIR`: The directory where Hanzo Flow stores logs, file storage, monitor data, and secret keys.
+- `FLOW_DATABASE_URL`: The connection string for the PostgreSQL database.
+- `FLOW_CONFIG_DIR`: The directory where Hanzo Flow stores logs, file storage, monitor data, and secret keys.
 
 Volumes:
 
-- `hanzoflow-data`: This volume is mapped to `/app/hanzoflow` in the container.
+- `flow-data`: This volume is mapped to `/app/flow` in the container.
 
 ### PostgreSQL Service
 
@@ -58,8 +58,8 @@ Environment variables:
 
 Volumes:
 
-- `hanzoflow-postgres`: This volume is mapped to `/var/lib/postgresql/data` in the container.
+- `flow-postgres`: This volume is mapped to `/var/lib/postgresql/data` in the container.
 
 ## Switching to a Specific Version
 
-If you want to use a specific version of Hanzo Flow, you can modify the `image` field under the `hanzoflow` service in the Docker Compose file. For example, to use version 1.0-alpha, change `hanzoflowai/hanzoflow:latest` to `hanzoflowai/hanzoflow:1.0-alpha`.
+If you want to use a specific version of Hanzo Flow, you can modify the `image` field under the `flow` service in the Docker Compose file. For example, to use version 1.0-alpha, change `flowai/flow:latest` to `flowai/flow:1.0-alpha`.

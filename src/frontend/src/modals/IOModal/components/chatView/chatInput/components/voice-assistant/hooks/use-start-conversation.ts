@@ -37,7 +37,7 @@ export const useStartConversation = (
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(
           JSON.stringify({
-            type: "hanzoflow.elevenlabs.config",
+            type: "flow.elevenlabs.config",
             enabled: audioSettings.provider === "elevenlabs",
             voice_id:
               audioSettings.provider === "elevenlabs"

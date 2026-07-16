@@ -9,7 +9,7 @@ This document details how to set up a local development environment that will al
 
 ## Set up Git Repository Fork
 
-You will push changes to a fork of the Hanzoflow repository, and from there create a Pull Request into the project repository.
+You will push changes to a fork of the Hanzo Flow repository, and from there create a Pull Request into the project repository.
 
 Fork the [Hanzo Flow GitHub repository](https://github.com/hanzoai/flow/fork), and follow the instructions to create a new fork.
 
@@ -144,11 +144,11 @@ make backend
 You will get output similar to:
 
 ```
-INFO:     Will watch for changes in these directories: ['/home/phil/git/hanzoflow']
+INFO:     Will watch for changes in these directories: ['/home/phil/git/flow']
 INFO:     Loading environment from '.env'
 INFO:     Uvicorn running on http://0.0.0.0:7860 (Press CTRL+C to quit)
 INFO:     Started reloader process [22330] using WatchFiles
-Starting Hanzoflow ...
+Starting Hanzo Flow ...
 ```
 
 At which point you can check http://localhost:7860/health in a browser; when the backend service is ready it will return a document like:
@@ -159,7 +159,7 @@ At which point you can check http://localhost:7860/health in a browser; when the
 
 ### Start the Frontend Service
 
-The frontend (User Interface) is, in shipped code (i.e. via `hanzoflow run`), statically-compiled files that the backend FastAPI service provides to clients via port `7860`. In development mode, these are served by a Node.js service on port `3000`. In the _Frontend Terminal_, start the frontend service:
+The frontend (User Interface) is, in shipped code (i.e. via `flow run`), statically-compiled files that the backend FastAPI service provides to clients via port `7860`. In development mode, these are served by a Node.js service on port `3000`. In the _Frontend Terminal_, start the frontend service:
 
 ```bash
 make frontend
@@ -175,7 +175,7 @@ You will get output similar to:
   ➜  press h + enter to show help
 ```
 
-At this point, you can navigate to http://localhost:3000/ in a browser and access the Hanzoflow User Interface.
+At this point, you can navigate to http://localhost:3000/ in a browser and access the Hanzo Flow User Interface.
 
 ### Build and display documentation
 
@@ -249,7 +249,7 @@ When you are ready to commit, and before you commit, you should consider the fol
 
 Once these changes are ready, it is helpful to rebase your changes on top of `upstream`'s `main` branch, to ensure you have the latest code version! Of course if you have had to merge changes into your component you may want to re-lint/format/unit_test.
 
-As a final validation, stop the backend and frontend services and run `make init`; this will do a clean build and the UI should be available in port `7860` (as it has invoked `hanzoflow run`). Open a **new** browser tab to this service and do a final check of your changes by adding your new/modified component onto the canvas from the Components list.
+As a final validation, stop the backend and frontend services and run `make init`; this will do a clean build and the UI should be available in port `7860` (as it has invoked `flow run`). Open a **new** browser tab to this service and do a final check of your changes by adding your new/modified component onto the canvas from the Components list.
 
 ## Committing, Pushing, and Pull Requests
 
@@ -272,7 +272,7 @@ You may observe some quirky things:
 
 There are some files that change without you having made changes:
 
-- Files in `src/backend/base/flow/initial_setup/starter_projects` modify after `hanzoflow run`; these are formatting changes. Feel free to commit (or ignore) them.
+- Files in `src/backend/base/flow/initial_setup/starter_projects` modify after `flow run`; these are formatting changes. Feel free to commit (or ignore) them.
 - `uv.lock` and `src/frontend/package-lock.json` files can be modified by `make` targets; changes should not be committed by individual contributors.
   - You can exclude these from consideration in git: `git update-index --assume-unchanged uv.lock src/frontend/package-lock.json`
   - You can re-include these from consideration in git: `git update-index --no-assume-unchanged uv.lock src/frontend/package-lock.json`

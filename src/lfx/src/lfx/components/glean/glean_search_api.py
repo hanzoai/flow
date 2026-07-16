@@ -26,7 +26,7 @@ class GleanAPIWrapper(BaseModel):
 
     glean_api_url: str
     glean_access_token: str
-    act_as: str = "hanzoflow-component@datastax.com"  # TODO: Detect this
+    act_as: str = "flow-component@datastax.com"  # TODO: Detect this
 
     def _prepare_request(
         self,

@@ -1,11 +1,11 @@
-# Deploy Hanzoflow on Google Cloud Platform
+# Deploy Hanzo Flow on Google Cloud Platform
 
 **Duration**: 45 minutes
 **Author**: [Robert Wilkins III](https://www.linkedin.com/in/robertwilkinsiii)
 
 ## Introduction
 
-In this tutorial, you will learn how to deploy Hanzoflow on [Google Cloud Platform](https://cloud.google.com/) (GCP) using Google Cloud Shell.
+In this tutorial, you will learn how to deploy Hanzo Flow on [Google Cloud Platform](https://cloud.google.com/) (GCP) using Google Cloud Shell.
 
 This tutorial assumes you have a GCP account and basic knowledge of Google Cloud Shell. If you're not familiar with Cloud Shell, you can review the [Cloud Shell documentation](https://cloud.google.com/shell/docs).
 
@@ -14,7 +14,7 @@ This tutorial assumes you have a GCP account and basic knowledge of Google Cloud
 Before you start, make sure you have the following prerequisites:
 
 - A GCP account with the necessary permissions to create resources
-- A project on GCP where you want to deploy Hanzoflow
+- A project on GCP where you want to deploy Hanzo Flow
 
 [**Select your GCP project**]<walkthrough-project-setup
   billing="true"
@@ -22,42 +22,42 @@ Before you start, make sure you have the following prerequisites:
 </walkthrough-project-setup>
 
 
-In the next step, you'll configure the GCP environment and deploy Hanzoflow.
+In the next step, you'll configure the GCP environment and deploy Hanzo Flow.
 
-## Configure the GCP environment and deploy Hanzoflow
-Run the deploy_hanzoflow_gcp_spot.sh script to configure the GCP environment and deploy Hanzoflow:
+## Configure the GCP environment and deploy Hanzo Flow
+Run the deploy_flow_gcp_spot.sh script to configure the GCP environment and deploy Hanzo Flow:
 
 ```sh
 gcloud config set project <walkthrough-project-id/>
-bash ./deploy_hanzoflow_gcp_spot.sh
+bash ./deploy_flow_gcp_spot.sh
 ```
 
 The script will:
 
 1. Check if the required resources (VPC, subnet, firewall rules, and Cloud Router) exist and create them if needed
-2. Create a startup script to install Python, Hanzoflow, and Nginx
+2. Create a startup script to install Python, Hanzo Flow, and Nginx
 3. Create a Compute Engine VM instance with the specified configuration and startup script
-4. Run Hanzoflow to serve content on TCP port 7860
+4. Run Hanzo Flow to serve content on TCP port 7860
 
 > <walkthrough-pin-section-icon></walkthrough-pin-section-icon> The process may take approximately 30 minutes to complete. Rest assured that progress is being made, and you'll be able to proceed once the process is finished.
 
-In the next step, you'll learn how to connect to the Hanzoflow VM.
+In the next step, you'll learn how to connect to the Hanzo Flow VM.
 
-## Connect to the Hanzoflow VM
-To connect to your new Hanzoflow VM, follow these steps:
+## Connect to the Hanzo Flow VM
+To connect to your new Hanzo Flow VM, follow these steps:
 
 1. Navigate to the [VM instances](https://console.cloud.google.com/compute/instances) page and click on the external IP for your VM.  Make sure to use HTTP and set the port to 7860
 <br>**or**
-3. Run the following command to display the URL for your Hanzoflow environment:
+3. Run the following command to display the URL for your Hanzo Flow environment:
 ```bash
-export HANZOFLOW_IP=$(gcloud compute instances list --filter="NAME=hanzoflow-dev" --format="value(EXTERNAL_IP)")
+export FLOW_IP=$(gcloud compute instances list --filter="NAME=flow-dev" --format="value(EXTERNAL_IP)")
 
-echo http://$HANZOFLOW_IP:7860
+echo http://$FLOW_IP:7860
 ```
 
-4. Click on the Hanzoflow URL in cloudshell to be greeted by the Hanzoflow Dev environment
+4. Click on the Hanzo Flow URL in cloudshell to be greeted by the Hanzo Flow Dev environment
 
-Congratulations! You have successfully deployed Hanzoflow on Google Cloud Platform.
+Congratulations! You have successfully deployed Hanzo Flow on Google Cloud Platform.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
@@ -65,7 +65,7 @@ Congratulations! You have successfully deployed Hanzoflow on Google Cloud Platfo
 If you want to remove the resources created during this tutorial, you can use the following commands:
 
 ```sql
-gcloud compute instances delete hanzoflow-dev --zone us-central1-a --quiet
+gcloud compute instances delete flow-dev --zone us-central1-a --quiet
 ```
 The following network settings and services are used during this walkthrough. If you plan to continue using the project after the walkthrough, you may keep these configurations in place.
 

@@ -1,10 +1,10 @@
-export const custom = `from hanzoflow.custom import CustomComponent
+export const custom = `from flow.custom import CustomComponent
 
-from hanzoflow.field_typing import BaseLanguageModel
+from flow.field_typing import BaseLanguageModel
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain_core.documents import Document
-from hanzoflow.field_typing import NestedDict
+from flow.field_typing import NestedDict
 
 import requests
 

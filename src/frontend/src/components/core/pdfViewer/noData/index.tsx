@@ -6,11 +6,11 @@ export default function NoDataPdf(): JSX.Element {
     <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
       <div className="chat-alert-box">
         <span>
-          📄 <span className="hanzoflow-chat-span">{PDFErrorTitle}</span>
+          📄 <span className="flow-chat-span">{PDFErrorTitle}</span>
         </span>
         <br />
-        <div className="hanzoflow-chat-desc">
-          <span className="hanzoflow-chat-desc-span">{PDFLoadError} </span>
+        <div className="flow-chat-desc">
+          <span className="flow-chat-desc-span">{PDFLoadError} </span>
         </div>
       </div>
     </div>

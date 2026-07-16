@@ -68,7 +68,7 @@ test(
     await page
       .getByTestId("inputlist_str_texts_0")
       .first()
-      .fill("big news! hanzoflow 1.0 is out");
+      .fill("big news! flow 1.0 is out");
     await page
       .getByTestId("inputlist_str_texts_1")
       .first()

@@ -113,7 +113,7 @@ export default function SettingsPage(): JSX.Element {
     <PageLayout
       backTo={-1 as To}
       title="Settings"
-      description="Manage the general settings for Hanzoflow."
+      description="Manage the general settings for HanzoFlow."
     >
       <SidebarProvider width="15rem" defaultOpen={false}>
         <SideBarButtonsComponent items={sidebarNavItems} />

@@ -88,12 +88,12 @@ export default function SignUp(): JSX.Element {
     >
       <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
         <div className="flex w-72 flex-col items-center justify-center gap-2">
-          <HanzoflowLogo
-            title="Hanzoflow logo"
+          <HanzoFlowLogo
+            title="HanzoFlow logo"
             className="mb-4 h-10 w-10 scale-[1.5]"
           />
           <span className="mb-6 text-2xl font-semibold text-primary">
-            Sign up for Hanzoflow
+            Sign up for HanzoFlow
           </span>
           <div className="mb-3 w-full">
             <Form.Field name="username">

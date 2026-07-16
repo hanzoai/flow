@@ -13,8 +13,8 @@ jest.mock("react-cookie", () => ({
 
 // Mock constants
 jest.mock("@/constants/constants", () => ({
-  HANZOFLOW_ACCESS_TOKEN: "flow_access_token",
-  HANZOFLOW_API_TOKEN: "flow_api_token",
+  FLOW_ACCESS_TOKEN: "flow_access_token",
+  FLOW_API_TOKEN: "flow_api_token",
 }));
 
 // Mock the darkStore to avoid import.meta issues

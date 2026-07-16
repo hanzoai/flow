@@ -145,12 +145,12 @@ test(
     await page.locator("textarea").press("Control+a");
     const emptyOptionsCode = `from langchain_aws import ChatBedrock
 
-from hanzoflow.base.constants import STREAM_INFO_TEXT
-from hanzoflow.base.models.model import LCModelComponent
-from hanzoflow.field_typing import BaseLanguageModel, Text
-from hanzoflow.io import BoolInput, DictInput, DropdownInput, StrInput
-from hanzoflow.io import MessageInput
-from hanzoflow.io import Output
+from flow.base.constants import STREAM_INFO_TEXT
+from flow.base.models.model import LCModelComponent
+from flow.field_typing import BaseLanguageModel, Text
+from flow.io import BoolInput, DictInput, DropdownInput, StrInput
+from flow.io import MessageInput
+from flow.io import Output
 
 
 class AmazonBedrockComponent(LCModelComponent):
