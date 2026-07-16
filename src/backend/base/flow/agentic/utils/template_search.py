@@ -1,4 +1,4 @@
-"""Template search and loading utilities for Langflow."""
+"""Template search and loading utilities for Hanzo Flow."""
 
 import json
 from pathlib import Path

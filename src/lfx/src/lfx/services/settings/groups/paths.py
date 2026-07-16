@@ -5,12 +5,12 @@ from pydantic import BaseModel, field_validator
 
 
 class PathSettings(BaseModel):
-    """Filesystem paths Langflow reads from and writes to."""
+    """Filesystem paths Hanzo Flow reads from and writes to."""
 
     config_dir: str | None = None
-    """Base directory for Langflow data (db, logs, caches)."""
+    """Base directory for Hanzo Flow data (db, logs, caches)."""
 
-    knowledge_bases_dir: str | None = "~/.langflow/knowledge_bases"
+    knowledge_bases_dir: str | None = "~/.flow/knowledge_bases"
     """The directory to store knowledge bases."""
 
     @field_validator("config_dir", mode="before")
@@ -19,8 +19,8 @@ class PathSettings(BaseModel):
         if not value:
             from platformdirs import user_cache_dir
 
-            app_name = "langflow"
-            app_author = "langflow"
+            app_name = "flow"
+            app_author = "flow"
 
             cache_dir = user_cache_dir(app_name, app_author)
 

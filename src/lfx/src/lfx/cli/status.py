@@ -1,4 +1,4 @@
-"""lfx status -- compare local flow files against a remote Langflow instance.
+"""lfx status -- compare local flow files against a remote Hanzo Flow instance.
 
 Shows, for each local flow JSON, whether it is in sync with the remote,
 ahead (locally modified), brand new (not yet pushed), or missing entirely.

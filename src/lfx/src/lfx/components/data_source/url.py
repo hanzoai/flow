@@ -29,7 +29,7 @@ URL_REGEX = re.compile(
 )
 
 USER_AGENT = None
-# Check if langflow is installed using importlib.util.find_spec(name))
+# Check if flow is installed using importlib.util.find_spec(name))
 if importlib.util.find_spec("flow"):
     langflow_installed = True
     USER_AGENT = get_user_agent()

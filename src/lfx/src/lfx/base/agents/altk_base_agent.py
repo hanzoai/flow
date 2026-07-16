@@ -152,7 +152,7 @@ class ALTKBaseTool(BaseTool):
             llm_client = get_llm(llm_client_type)
             llm_client_obj = llm_client(model=model_name, api_key=api_key)
         else:
-            logger.info("ALTK currently only supports OpenAI and Anthropic models through Langflow.")
+            logger.info("ALTK currently only supports OpenAI and Anthropic models through Hanzo Flow.")
             llm_client_obj = None
 
         return llm_client_obj

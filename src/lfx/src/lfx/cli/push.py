@@ -1,4 +1,4 @@
-"""lfx push -- push normalized flow JSON to a remote Langflow instance.
+"""lfx push -- push normalized flow JSON to a remote Hanzo Flow instance.
 
 Uses stable flow IDs for upsert (PUT /api/v1/flows/{id}), so repeated pushes
 are idempotent: the first push creates the flow, subsequent ones update it in

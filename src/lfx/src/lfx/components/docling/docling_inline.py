@@ -148,7 +148,7 @@ class DoclingInlineComponent(BaseFileComponent):
                                 "error": (
                                     "langchain-docling is not installed. Please install it with "
                                     "`pip install langchain-docling` or "
-                                    "`pip install 'langflow[docling-image-description]'`."
+                                    "`pip install 'flow[docling-image-description]'`."
                                 )
                             }))
                             return
@@ -245,7 +245,7 @@ class DoclingInlineComponent(BaseFileComponent):
 
         if importlib.util.find_spec("docling") is None:
             msg = (
-                "Docling is an optional dependency. Install with `uv pip install 'langflow[docling]'` or refer to the "
+                "Docling is an optional dependency. Install with `uv pip install 'flow[docling]'` or refer to the "
                 "documentation on how to install optional dependencies."
             )
             raise ImportError(msg)

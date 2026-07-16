@@ -1,4 +1,4 @@
-"""JSON and Data classes for langflow - imports from lfx.
+"""JSON and Data classes for flow - imports from lfx.
 
 This maintains backward compatibility while using the lfx implementation.
 JSON is the new base type; Data is an alias for backwards compatibility.

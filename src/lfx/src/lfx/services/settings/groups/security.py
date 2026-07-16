@@ -18,7 +18,7 @@ class SecuritySettings(BaseModel):
 
     # SSRF Protection
     ssrf_protection_enabled: bool = True
-    """If set to True, Langflow will enable SSRF (Server-Side Request Forgery) protection.
+    """If set to True, Hanzo Flow will enable SSRF (Server-Side Request Forgery) protection.
     When enabled, blocks requests to private IP ranges, localhost, and cloud metadata endpoints.
     When False, no URL validation is performed, allowing requests to any destination
     including internal services, private networks, and cloud metadata endpoints.

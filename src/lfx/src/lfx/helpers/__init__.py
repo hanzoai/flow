@@ -1,6 +1,6 @@
 """Helpers module for the lfx package.
 
-This module automatically chooses between the full langflow implementation
+This module automatically chooses between the full flow implementation
 (when available) and the lfx implementation (when standalone).
 """
 
@@ -9,7 +9,7 @@ from lfx.utils.langflow_utils import has_langflow_memory
 # Import the appropriate implementation
 if has_langflow_memory():
     try:
-        # Import full langflow implementation
+        # Import full flow implementation
         # Base Model
         from flow.helpers.base_model import (
             BaseModel,
@@ -45,7 +45,7 @@ if has_langflow_memory():
             run_flow,
         )
     except ImportError:
-        # Fallback to lfx implementation if langflow import fails
+        # Fallback to lfx implementation if flow import fails
         # Base Model
         from lfx.helpers.base_model import (
             BaseModel,

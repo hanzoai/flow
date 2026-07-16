@@ -134,7 +134,7 @@ class APIRequestComponent(Component):
                     "description": "Header value",
                 },
             ],
-            value=[{"key": "User-Agent", "value": "Langflow/1.0"}],
+            value=[{"key": "User-Agent", "value": "Hanzo Flow/1.0"}],
             advanced=True,
             input_types=["Data", "JSON"],
             real_time_refresh=True,

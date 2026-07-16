@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
     from lfx.graph import Graph
 
-# Security - use the same pattern as Langflow main API
+# Security - use the same pattern as Hanzo Flow main API
 API_KEY_NAME = "x-api-key"
 api_key_query = APIKeyQuery(name=API_KEY_NAME, scheme_name="API key query", auto_error=False)
 api_key_header = APIKeyHeader(name=API_KEY_NAME, scheme_name="API key header", auto_error=False)

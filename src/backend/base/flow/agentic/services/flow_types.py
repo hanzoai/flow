@@ -41,7 +41,7 @@ ERROR:
 ORIGINAL REQUEST:
 {original_input}
 
-Respond with a complete, valid Langflow component as a Python class extending Component, \
+Respond with a complete, valid Hanzo Flow component as a Python class extending Component, \
 inside a single ```python code block. Do not emit raw tool calls or partial JSON."""
 
 

@@ -1,4 +1,4 @@
-"""Langflow knowledge bases module - forwards to lfx.components.files_and_knowledge.
+"""Hanzo Flow knowledge bases module - forwards to lfx.components.files_and_knowledge.
 
 This module provides backwards compatibility by forwarding all imports
 to files_and_knowledge where the actual knowledge base components are located.

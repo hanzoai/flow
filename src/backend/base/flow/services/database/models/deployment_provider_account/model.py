@@ -48,14 +48,14 @@ class DeploymentProviderAccount(SQLModel, table=True):  # type: ignore[call-arg]
     # may not require a tenant/organization identifier.
     provider_tenant_id: str | None = Field(default=None, index=True)
     # The DB-level ``deployment_provider_key_enum`` constraint is defined
-    # by a Langflow alembic migration.  The enum is Langflow-owned (see
+    # by a Hanzo Flow alembic migration.  The enum is Hanzo Flow-owned (see
     # ``DeploymentProviderKey`` above); LFX uses plain strings for adapter
     # registry keys and does not reference this enum.
     #
     # To add a new value to ``deployment_provider_key_enum``:
     #   1. Add the member to ``DeploymentProviderKey`` in this module.
-    #   2. Register the corresponding adapter in LFX and mapper in Langflow.
-    #   3. Create a Langflow alembic migration that runs:
+    #   2. Register the corresponding adapter in LFX and mapper in Hanzo Flow.
+    #   3. Create a Hanzo Flow alembic migration that runs:
     #        op.execute(
     #            "ALTER TYPE deployment_provider_key_enum ADD VALUE '<new>'"
     #        )

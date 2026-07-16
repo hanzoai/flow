@@ -20,7 +20,7 @@ class BaseTracingService(Service, ABC):
     """Abstract base class for tracing services.
 
     Defines the minimal interface that all tracing service implementations
-    must provide, whether minimal (LFX) or full-featured (Langflow).
+    must provide, whether minimal (LFX) or full-featured (Hanzo Flow).
     """
 
     @abstractmethod
