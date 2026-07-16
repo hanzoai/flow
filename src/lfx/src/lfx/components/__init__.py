@@ -178,6 +178,7 @@ _dynamic_imports = {
     "nvidia": "__module__",
     "olivya": "__module__",
     "ollama": "__module__",
+    "hanzo": "__module__",
     "openai": "__module__",
     "openrouter": "__module__",
     "output_parsers": "__module__",
