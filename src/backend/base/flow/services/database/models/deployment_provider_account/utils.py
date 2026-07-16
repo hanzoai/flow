@@ -30,7 +30,7 @@ from urllib.parse import urlparse, urlunparse
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-from langflow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
 
 _ALLOWED_URL_SCHEMES = frozenset({"https"})
 _MAX_URL_LENGTH = 2048

@@ -30,31 +30,31 @@ from lfx.services.adapters.deployment.schema import (
 from lfx.services.deps import get_deployment_adapter
 from lfx.services.interfaces import DeploymentServiceProtocol
 
-from langflow.services.adapters.deployment.context import deployment_provider_scope
-from langflow.services.database.models.deployment.crud import (
+from flow.services.adapters.deployment.context import deployment_provider_scope
+from flow.services.database.models.deployment.crud import (
     delete_deployments_by_ids,
     list_deployments_for_flows_with_provider_info,
     list_project_deployments_with_provider_info,
 )
-from langflow.services.database.models.deployment.exceptions import parse_deployment_guard_error
-from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+from flow.services.database.models.deployment.exceptions import parse_deployment_guard_error
+from flow.services.database.models.flow_version_deployment_attachment.crud import (
     delete_deployment_attachments_by_keys,
     delete_orphan_attachments_for_flow_ids,
     delete_orphan_attachments_for_project,
     delete_unbound_attachments,
 )
-from langflow.services.database.models.flow_version_deployment_attachment.model import (
+from flow.services.database.models.flow_version_deployment_attachment.model import (
     FlowVersionDeploymentAttachment,
 )
-from langflow.services.database.models.flow_version_deployment_attachment.schema import (
+from flow.services.database.models.flow_version_deployment_attachment.schema import (
     DeploymentAttachmentKey,
     DeploymentAttachmentKeyBatch,
 )
-from langflow.services.database.utils import require_non_empty
+from flow.services.database.utils import require_non_empty
 
 if TYPE_CHECKING:
-    from langflow.api.utils import DbSession
-    from langflow.services.database.models.deployment.model import Deployment
+    from flow.api.utils import DbSession
+    from flow.services.database.models.deployment.model import Deployment
 
 TGuardOperationResult = TypeVar("TGuardOperationResult")
 
@@ -209,7 +209,7 @@ async def _sync_deployments_and_attachments_by_provider(
     failure_log_message: str,
     failure_scope_value: UUID | list[UUID],
 ) -> None:
-    from langflow.api.v1.mappers.deployments.registry import get_deployment_mapper
+    from flow.api.v1.mappers.deployments.registry import get_deployment_mapper
 
     grouped_source = sorted(
         deployments_with_provider,

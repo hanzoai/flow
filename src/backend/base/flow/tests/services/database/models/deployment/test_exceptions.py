@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pytest
-from langflow.services.database.models.deployment.exceptions import (
+from flow.services.database.models.deployment.exceptions import (
     DeploymentGuardError,
     araise_if_deployment_guard_error_or_skip,
     get_friendly_guard_detail,
@@ -135,7 +135,7 @@ async def test_araise_if_deployment_guard_error_or_skip_raises_and_logs_message(
     async def _fake_adebug(message: str, *args: object) -> None:
         debug_calls.append((message, args))
 
-    monkeypatch.setattr("langflow.services.database.models.deployment.exceptions.logger.adebug", _fake_adebug)
+    monkeypatch.setattr("flow.services.database.models.deployment.exceptions.logger.adebug", _fake_adebug)
 
     with pytest.raises(DeploymentGuardError) as raised:
         await araise_if_deployment_guard_error_or_skip(
@@ -168,7 +168,7 @@ async def test_araise_if_deployment_guard_error_or_skip_raises_without_logging_w
     async def _fake_adebug(message: str, *args: object) -> None:
         debug_calls.append((message, args))
 
-    monkeypatch.setattr("langflow.services.database.models.deployment.exceptions.logger.adebug", _fake_adebug)
+    monkeypatch.setattr("flow.services.database.models.deployment.exceptions.logger.adebug", _fake_adebug)
 
     with pytest.raises(DeploymentGuardError):
         await araise_if_deployment_guard_error_or_skip(guard_error)

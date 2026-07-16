@@ -6,7 +6,7 @@ Tests cover:
 - Input normalization (whitespace, null bytes)
 """
 
-from langflow.agentic.helpers.input_sanitization import (
+from flow.agentic.helpers.input_sanitization import (
     REFUSAL_MESSAGE,
     sanitize_input,
 )

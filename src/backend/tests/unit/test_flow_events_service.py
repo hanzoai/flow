@@ -1,7 +1,7 @@
 import multiprocessing
 import time
 
-from langflow.services.flow_events.service import FlowEventsService
+from flow.services.flow_events.service import FlowEventsService
 
 
 def _worker_append(cache_dir, flow_id, event_type, summary):

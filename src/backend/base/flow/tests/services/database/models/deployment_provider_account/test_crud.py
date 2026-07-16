@@ -11,10 +11,10 @@ from flow.services.database.models.deployment_provider_account.crud import (
     delete_provider_account,
     update_provider_account,
 )
-from langflow.services.database.models.deployment_provider_account.model import (
+from flow.services.database.models.deployment_provider_account.model import (
     DeploymentProviderKey,
 )
-from langflow.services.database.models.user.model import User
+from flow.services.database.models.user.model import User
 from sqlalchemy import event
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -22,8 +22,8 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-_ENCRYPT_TARGET = "langflow.services.database.models.deployment_provider_account.crud.auth_utils"
-_CRUD_LOGGER = "langflow.services.database.models.deployment_provider_account.crud.logger"
+_ENCRYPT_TARGET = "flow.services.database.models.deployment_provider_account.crud.auth_utils"
+_CRUD_LOGGER = "flow.services.database.models.deployment_provider_account.crud.logger"
 _TEST_PASSWORD = "hashed"  # noqa: S105  # pragma: allowlist secret
 
 
@@ -101,7 +101,7 @@ async def user(db: AsyncSession) -> User:
 
 @pytest.mark.asyncio
 async def test_get_provider_account_by_id_invalid_uuid_raises():
-    from langflow.services.database.models.deployment_provider_account.crud import get_provider_account_by_id
+    from flow.services.database.models.deployment_provider_account.crud import get_provider_account_by_id
 
     db = _make_db()
     with pytest.raises(ValueError, match="provider_id is not a valid UUID"):

@@ -289,7 +289,7 @@ def register_builtin_adapters() -> None:
         return
 
     try:
-        import_module("langflow.services.adapters.deployment.watsonx_orchestrate")
+        import_module("flow.services.adapters.deployment.watsonx_orchestrate")
     except ModuleNotFoundError as exc:
         logger.info("Skipping Watsonx Orchestrate adapter registration: %s", exc)
 
@@ -301,7 +301,7 @@ def register_builtin_deployment_mappers() -> None:
         return
 
     try:
-        import_module("langflow.api.v1.mappers.deployments.watsonx_orchestrate")
+        import_module("flow.api.v1.mappers.deployments.watsonx_orchestrate")
     except ModuleNotFoundError as exc:
         logger.info("Skipping Watsonx Orchestrate deployment mapper registration: %s", exc)
 

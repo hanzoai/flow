@@ -124,7 +124,7 @@ def _resolve_remote_client(request: pytest.FixtureRequest) -> Any | None:
         return None
 
     try:
-        import langflow_sdk  # type: ignore[import-untyped]
+        import flow_sdk  # type: ignore[import-untyped]
     except ImportError:
         pytest.skip("langflow-sdk is required for remote testing. Install: pip install langflow-sdk")
 
@@ -141,7 +141,7 @@ def _resolve_remote_client(request: pytest.FixtureRequest) -> Any | None:
     try:
         from pathlib import Path as _Path
 
-        from langflow_sdk.environments import get_client  # type: ignore[import-untyped]
+        from flow_sdk.environments import get_client  # type: ignore[import-untyped]
 
         return get_client(env_name, config_file=_Path(env_file) if env_file else None)
     except Exception as exc:  # noqa: BLE001
@@ -157,7 +157,7 @@ def _resolve_async_remote_client(request: pytest.FixtureRequest) -> Any | None:
         return None
 
     try:
-        import langflow_sdk  # type: ignore[import-untyped]
+        import flow_sdk  # type: ignore[import-untyped]
     except ImportError:
         pytest.skip("langflow-sdk is required for remote testing. Install: pip install langflow-sdk")
 
@@ -173,7 +173,7 @@ def _resolve_async_remote_client(request: pytest.FixtureRequest) -> Any | None:
     try:
         from pathlib import Path as _Path
 
-        from langflow_sdk.environments import get_async_client  # type: ignore[import-untyped]
+        from flow_sdk.environments import get_async_client  # type: ignore[import-untyped]
 
         return get_async_client(env_name, config_file=_Path(env_file) if env_file else None)
     except Exception as exc:  # noqa: BLE001

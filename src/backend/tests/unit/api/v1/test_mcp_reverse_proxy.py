@@ -6,7 +6,7 @@ prefix (basePath).
 """
 
 import pytest
-from langflow.api.v1.mcp_projects import get_project_sse, project_sse_transports
+from flow.api.v1.mcp_projects import get_project_sse, project_sse_transports
 from mcp.server.sse import SseServerTransport
 
 pytestmark = pytest.mark.asyncio
@@ -52,7 +52,7 @@ class TestForwardedPrefixMiddleware:
 
     async def _captured_downstream_root_path(self, *, configured_root_path, headers=None):
         # Import the middleware logic inline to test it in isolation
-        from langflow.main import get_settings_service
+        from flow.main import get_settings_service
         from starlette.requests import Request
         from starlette.responses import PlainTextResponse
 
@@ -115,7 +115,7 @@ class TestForwardedPrefixMiddleware:
 
     async def test_middleware_ignores_header_when_root_path_not_configured(self):
         """When root_path is not set, X-Forwarded-Prefix is ignored."""
-        from langflow.main import get_settings_service
+        from flow.main import get_settings_service
         from starlette.requests import Request
 
         settings = get_settings_service().settings

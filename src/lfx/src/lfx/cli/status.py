@@ -69,10 +69,10 @@ class FlowStatus:
 
 
 def _load_sdk() -> tuple[object, object, object, type]:
-    """Return (normalize_flow, flow_to_json, Client, LangflowNotFoundError) from langflow_sdk."""
+    """Return (normalize_flow, flow_to_json, Client, LangflowNotFoundError) from flow_sdk."""
     sdk = load_sdk("status")
-    from langflow_sdk.exceptions import LangflowNotFoundError
-    from langflow_sdk.serialization import flow_to_json, normalize_flow
+    from flow_sdk.exceptions import LangflowNotFoundError
+    from flow_sdk.serialization import flow_to_json, normalize_flow
 
     return normalize_flow, flow_to_json, sdk.Client, LangflowNotFoundError
 

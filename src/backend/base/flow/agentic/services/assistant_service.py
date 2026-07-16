@@ -36,7 +36,7 @@ from flow.agentic.services.helpers.intent_classification import classify_intent
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator, Callable, Coroutine
 
-    from langflow.agentic.api.schemas import StepType
+    from flow.agentic.api.schemas import StepType
 
 
 async def execute_flow_with_validation(

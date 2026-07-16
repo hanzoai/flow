@@ -721,7 +721,7 @@ def test_update_projects_resolves_parser_via_component_type_alias():
 
 async def test_update_project_file_success():
     """Test that update_project_file successfully writes to a writable path."""
-    from langflow.initial_setup.setup import update_project_file
+    from flow.initial_setup.setup import update_project_file
 
     with tempfile.TemporaryDirectory() as temp_dir:
         project_path = Path(temp_dir) / "test_project.json"
@@ -742,7 +742,7 @@ async def test_update_project_file_success():
 
 async def test_update_project_file_readonly_filesystem():
     """Test that update_project_file handles read-only filesystem gracefully."""
-    from langflow.initial_setup.setup import update_project_file
+    from flow.initial_setup.setup import update_project_file
 
     project_path = Path("/nonexistent/readonly/path/test_project.json")
     project = {"name": "Test Project", "data": {"old": "data"}}
@@ -757,7 +757,7 @@ async def test_update_project_file_readonly_filesystem():
 
 async def test_update_project_file_permission_denied():
     """Test that update_project_file handles permission denied gracefully."""
-    from langflow.initial_setup.setup import update_project_file
+    from flow.initial_setup.setup import update_project_file
 
     with tempfile.TemporaryDirectory() as temp_dir:
         project_path = Path(temp_dir) / "test_project.json"
@@ -765,7 +765,7 @@ async def test_update_project_file_permission_denied():
         updated_data = {"new": "data"}
 
         # Mock aiofiles.open to raise OSError (permission denied)
-        with patch("langflow.initial_setup.setup.aiofiles.open") as mock_open:
+        with patch("flow.initial_setup.setup.aiofiles.open") as mock_open:
             mock_open.side_effect = OSError(13, "Permission denied")
 
             # Should not raise
@@ -777,13 +777,13 @@ async def test_update_project_file_permission_denied():
 
 async def test_update_project_file_logs_debug_on_oserror():
     """Test that update_project_file logs a debug message on OSError."""
-    from langflow.initial_setup.setup import update_project_file
+    from flow.initial_setup.setup import update_project_file
 
     project_path = Path("/nonexistent/readonly/path/test_project.json")
     project = {"name": "Test Project", "data": {"old": "data"}}
     updated_data = {"new": "data"}
 
-    with patch("langflow.initial_setup.setup.logger") as mock_logger:
+    with patch("flow.initial_setup.setup.logger") as mock_logger:
         mock_logger.adebug = AsyncMock()
         await update_project_file(project_path, project, updated_data)
         # Verify debug log was called (either success or error path)

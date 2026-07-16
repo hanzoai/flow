@@ -124,7 +124,7 @@ class TestReleaseChromaResources:
 
         KBStorageHelper.release_chroma_resources(tmp_path / "nonexistent")
 
-    @patch("langflow.api.utils.kb_helpers.gc.collect")
+    @patch("flow.api.utils.kb_helpers.gc.collect")
     def test_should_call_gc_collect(self, mock_gc, tmp_path):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -141,9 +141,9 @@ class TestReleaseChromaResources:
 class TestDeleteStorage:
     """Tests for KBStorageHelper.delete_storage — unified deletion with retry."""
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_return_true_when_path_does_not_exist(self, tmp_path):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -152,9 +152,9 @@ class TestDeleteStorage:
 
         assert result is True
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_delete_directory_on_first_attempt(self, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -163,9 +163,9 @@ class TestDeleteStorage:
         assert result is True
         assert not kb_dir.exists()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_retry_and_succeed_on_second_attempt(self, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -180,20 +180,20 @@ class TestDeleteStorage:
                 raise OSError(msg)
             original_rmtree(path, ignore_errors=ignore_errors)
 
-        with patch("langflow.api.utils.kb_helpers.shutil.rmtree", side_effect=rmtree_fails_once):
+        with patch("flow.api.utils.kb_helpers.shutil.rmtree", side_effect=rmtree_fails_once):
             result = KBStorageHelper.delete_storage(kb_dir, "test_kb")
 
         assert result is True
         assert call_count == 2
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_rename_as_fallback_when_all_retries_fail(self, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
         with patch(
-            "langflow.api.utils.kb_helpers.shutil.rmtree",
+            "flow.api.utils.kb_helpers.shutil.rmtree",
             side_effect=OSError("[WinError 32] File in use"),
         ):
             result = KBStorageHelper.delete_storage(kb_dir, "test_kb")
@@ -203,15 +203,15 @@ class TestDeleteStorage:
         renamed_dirs = [p for p in kb_dir.parent.iterdir() if p.name.startswith(".deleted_test_kb_")]
         assert len(renamed_dirs) == 1
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_return_false_when_all_strategies_fail(self, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
         with (
             patch(
-                "langflow.api.utils.kb_helpers.shutil.rmtree",
+                "flow.api.utils.kb_helpers.shutil.rmtree",
                 side_effect=OSError("[WinError 32] File in use"),
             ),
             patch.object(Path, "rename", side_effect=OSError("Cannot rename")),
@@ -221,9 +221,9 @@ class TestDeleteStorage:
         assert result is False
         assert kb_dir.exists()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep")
     def test_should_use_exponential_backoff_on_retries(self, mock_sleep, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -238,16 +238,16 @@ class TestDeleteStorage:
                 raise OSError(msg)
             real_rmtree(path, ignore_errors=ignore_errors)
 
-        with patch("langflow.api.utils.kb_helpers.shutil.rmtree", side_effect=rmtree_fails_three_times):
+        with patch("flow.api.utils.kb_helpers.shutil.rmtree", side_effect=rmtree_fails_three_times):
             result = KBStorageHelper.delete_storage(kb_dir, "test_kb")
 
         assert result is True
         sleep_values = [call.args[0] for call in mock_sleep.call_args_list]
         assert sleep_values == [1.0, 2.0, 4.0]
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.utils.kb_helpers.Chroma")
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
+    @patch("flow.api.utils.kb_helpers.Chroma")
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_teardown_collection_before_deletion(self, mock_chroma_cls, mock_client_cls, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -260,8 +260,8 @@ class TestDeleteStorage:
         mock_chroma.delete_collection.assert_called_once()
         assert not kb_dir.exists()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client")
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_not_fail_when_teardown_raises(self, mock_client_cls, kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -272,9 +272,9 @@ class TestDeleteStorage:
         assert result is True
         assert not kb_dir.exists()
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
     def test_should_skip_teardown_when_no_chroma_data(self, empty_kb_dir):
         from flow.api.utils.kb_helpers import KBStorageHelper
 
@@ -292,10 +292,10 @@ class TestDeleteStorage:
 class TestDeleteEndpoint:
     """Tests that delete endpoint uses KBStorageHelper.delete_storage."""
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_should_delete_kb_successfully(self, mock_root, client, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         (tmp_path / "activeuser" / "My_KB").mkdir(parents=True)
@@ -304,8 +304,8 @@ class TestDeleteEndpoint:
 
         assert response.status_code == 200
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=False)
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.delete_storage", return_value=False)
+    @patch("flow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_should_return_500_when_deletion_fails(
         self, mock_root, mock_delete, client, logged_in_headers, tmp_path
     ):
@@ -327,10 +327,10 @@ class TestDeleteEndpoint:
 class TestBulkDeleteEndpoint:
     """Tests that bulk delete endpoint uses KBStorageHelper.delete_storage."""
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.Chroma", new=MagicMock())
-    @patch("langflow.api.utils.kb_helpers.time.sleep", new=MagicMock())
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.get_fresh_chroma_client", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.Chroma", new=MagicMock())
+    @patch("flow.api.utils.kb_helpers.time.sleep", new=MagicMock())
+    @patch("flow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_should_delete_multiple_kbs(self, mock_root, client, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         kb_user_path = tmp_path / "activeuser"
@@ -349,8 +349,8 @@ class TestBulkDeleteEndpoint:
         data = response.json()
         assert data["deleted_count"] == 2
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.delete_storage")
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.delete_storage")
+    @patch("flow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_should_handle_partial_failure(self, mock_root, mock_delete, client, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         kb_user_path = tmp_path / "activeuser"
@@ -371,8 +371,8 @@ class TestBulkDeleteEndpoint:
         data = response.json()
         assert data["deleted_count"] == 1
 
-    @patch("langflow.api.utils.kb_helpers.KBStorageHelper.delete_storage", new=MagicMock(return_value=True))
-    @patch("langflow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
+    @patch("flow.api.utils.kb_helpers.KBStorageHelper.delete_storage", new=MagicMock(return_value=True))
+    @patch("flow.api.v1.knowledge_bases.KBStorageHelper.get_root_path")
     async def test_should_report_not_found_kbs(self, mock_root, client, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         kb_user_path = tmp_path / "activeuser"

@@ -1,4 +1,4 @@
-"""Unit tests for langflow.services.tracing.validation.
+"""Unit tests for flow.services.tracing.validation.
 
 Covers sanitize_query_string: happy path, edge cases, adversarial inputs.
 """

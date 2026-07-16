@@ -13,8 +13,8 @@ from types import SimpleNamespace
 from uuid import uuid4
 
 import pytest
-from langflow.api.v1.mappers.deployments.base import BaseDeploymentMapper
-from langflow.services.database.models.deployment.model import Deployment, DeploymentRead
+from flow.api.v1.mappers.deployments.base import BaseDeploymentMapper
+from flow.services.database.models.deployment.model import Deployment, DeploymentRead
 from lfx.services.adapters.deployment.schema import (
     DEPLOYMENT_DESCRIPTION_MAX_LENGTH,
     BaseDeploymentData,

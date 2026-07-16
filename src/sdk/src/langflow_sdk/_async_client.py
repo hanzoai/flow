@@ -2,9 +2,9 @@
 
 Preferred usage via the short alias::
 
-    from langflow_sdk import AsyncClient
+    from flow_sdk import AsyncClient
 
-    async with AsyncClient("https://langflow.example.com", api_key="...") as client:
+    async with AsyncClient("https://flow.example.com", api_key="...") as client:
         flows = await client.list_flows()
 """
 
@@ -15,8 +15,8 @@ from typing import TYPE_CHECKING, Any
 
 import httpx
 
-from langflow_sdk._client_common import _ClientCommon
-from langflow_sdk._http import (
+from flow_sdk._client_common import _ClientCommon
+from flow_sdk._http import (
     _DEFAULT_TIMEOUT,
     _build_headers,
     _connection_error,
@@ -24,8 +24,8 @@ from langflow_sdk._http import (
     _raise_for_status,
     _raise_for_status_code,
 )
-from langflow_sdk.background_job import BackgroundJob
-from langflow_sdk.models import (
+from flow_sdk.background_job import BackgroundJob
+from flow_sdk.models import (
     Flow,
     FlowCreate,
     FlowUpdate,
@@ -51,9 +51,9 @@ class AsyncLangflowClient(_ClientCommon):
 
     Prefer the short alias :data:`AsyncClient` for new code::
 
-        from langflow_sdk import AsyncClient
+        from flow_sdk import AsyncClient
 
-        async with AsyncClient("https://langflow.example.com", api_key="...") as client:
+        async with AsyncClient("https://flow.example.com", api_key="...") as client:
             flows = await client.list_flows()
     """
 
@@ -417,7 +417,7 @@ class AsyncLangflowClient(_ClientCommon):
 #:
 #: Example::
 #:
-#:     from langflow_sdk import AsyncClient
-#:     async with AsyncClient("https://langflow.example.com", api_key="...") as c:
+#:     from flow_sdk import AsyncClient
+#:     async with AsyncClient("https://flow.example.com", api_key="...") as c:
 #:         flows = await c.list_flows()
 AsyncClient = AsyncLangflowClient

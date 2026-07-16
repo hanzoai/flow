@@ -7,16 +7,16 @@ from httpx import AsyncClient
 
 
 async def _attach_deployment_to_flow(*, user_id: UUID, flow_id: UUID, project_id: UUID) -> None:
-    from langflow.services.database.models.deployment.model import Deployment
-    from langflow.services.database.models.deployment_provider_account.model import (
+    from flow.services.database.models.deployment.model import Deployment
+    from flow.services.database.models.deployment_provider_account.model import (
         DeploymentProviderAccount,
         DeploymentProviderKey,
     )
-    from langflow.services.database.models.flow_version.model import FlowVersion
-    from langflow.services.database.models.flow_version_deployment_attachment.model import (
+    from flow.services.database.models.flow_version.model import FlowVersion
+    from flow.services.database.models.flow_version_deployment_attachment.model import (
         FlowVersionDeploymentAttachment,
     )
-    from langflow.services.deps import session_scope
+    from flow.services.deps import session_scope
     from lfx.services.adapters.deployment.schema import DeploymentType
 
     async with session_scope() as session:

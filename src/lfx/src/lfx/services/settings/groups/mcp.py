@@ -10,7 +10,7 @@ class McpSettings(BaseModel):
 
     mcp_base_url: str = ""
     """External base URL used to build MCP server URLs in the UI configuration JSON
-    (e.g. 'https://langflow.example.com'). When empty, the frontend falls back to
+    (e.g. 'https://flow.example.com'). When empty, the frontend falls back to
     the browser's window.location.origin."""
 
     mcp_server_timeout: int = 20

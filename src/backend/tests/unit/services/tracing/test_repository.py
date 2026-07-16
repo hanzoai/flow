@@ -1,4 +1,4 @@
-"""Unit tests for langflow.services.tracing.repository.
+"""Unit tests for flow.services.tracing.repository.
 
 Covers:
 - fetch_trace_summary_data: token aggregation, I/O extraction, empty input

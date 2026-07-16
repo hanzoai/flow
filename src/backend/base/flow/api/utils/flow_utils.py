@@ -13,20 +13,20 @@ from sqlalchemy import delete
 from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from langflow.services.database.models.deployment.exceptions import (
+from flow.services.database.models.deployment.exceptions import (
     araise_if_deployment_guard_error_or_skip,
 )
-from langflow.services.database.models.deployment.guards import check_flow_has_deployed_versions
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.database.models.flow_version.model import FlowVersion
-from langflow.services.database.models.message.model import MessageTable
-from langflow.services.database.models.traces.model import SpanTable, TraceTable
-from langflow.services.database.models.transactions.model import TransactionTable
-from langflow.services.database.models.user.model import User
-from langflow.services.database.models.vertex_builds.model import VertexBuildTable
+from flow.services.database.models.deployment.guards import check_flow_has_deployed_versions
+from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.message.model import MessageTable
+from flow.services.database.models.traces.model import SpanTable, TraceTable
+from flow.services.database.models.transactions.model import TransactionTable
+from flow.services.database.models.user.model import User
+from flow.services.database.models.vertex_builds.model import VertexBuildTable
 
 if TYPE_CHECKING:
-    from langflow.services.chat.service import ChatService
+    from flow.services.chat.service import ChatService
 
 
 async def _get_flow_name(flow_id: uuid.UUID) -> str:
@@ -194,7 +194,7 @@ async def verify_public_flow_and_get_user(
     async with session_scope() as session:
         from sqlmodel import select
 
-        from langflow.services.database.models.flow.model import AccessTypeEnum, Flow
+        from flow.services.database.models.flow.model import AccessTypeEnum, Flow
 
         flow = (await session.exec(select(Flow).where(Flow.id == flow_id))).first()
         if not flow or flow.access_type is not AccessTypeEnum.PUBLIC:
@@ -206,7 +206,7 @@ async def verify_public_flow_and_get_user(
 
     # Get the user associated with the flow
     try:
-        from langflow.helpers.user import get_user_by_flow_id_or_endpoint_name
+        from flow.helpers.user import get_user_by_flow_id_or_endpoint_name
 
         user = await get_user_by_flow_id_or_endpoint_name(str(flow_id))
 

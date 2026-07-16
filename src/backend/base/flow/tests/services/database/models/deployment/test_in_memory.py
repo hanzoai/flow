@@ -39,7 +39,7 @@ from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 _TEST_PASSWORD = "hashed"  # noqa: S105  # pragma: allowlist secret
-_ENCRYPT_TARGET = "langflow.services.database.models.deployment_provider_account.crud.auth_utils"
+_ENCRYPT_TARGET = "flow.services.database.models.deployment_provider_account.crud.auth_utils"
 
 
 # ---------------------------------------------------------------------------

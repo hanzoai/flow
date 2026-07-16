@@ -30,7 +30,7 @@ from lfx.services.telemetry.schema import (
 if TYPE_CHECKING:
     from pydantic import BaseModel
 
-_DEFAULT_BASE_URL = "https://langflow.gateway.scarf.sh"
+_DEFAULT_BASE_URL = "https://flow.gateway.scarf.sh"
 
 
 class TelemetryService(BaseTelemetryService):

@@ -82,7 +82,7 @@ def setup_error_logging():
     error_logger.addHandler(error_handler)
 
     # Try to capture Langflow logs
-    langflow_log_paths = ["flow.log", "logs/langflow.log", "../../../langflow.log", "../../../../langflow.log"]
+    langflow_log_paths = ["flow.log", "logs/flow.log", "../../../flow.log", "../../../../flow.log"]
 
     for log_path in langflow_log_paths:
         if Path(log_path).exists():

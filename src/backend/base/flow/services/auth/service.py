@@ -651,7 +651,7 @@ class AuthService(BaseAuthService):
         return user if self.verify_password(password, user.password) else None
 
     def _get_fernet(self) -> Fernet:
-        from langflow.services.auth.utils import ensure_fernet_key
+        from flow.services.auth.utils import ensure_fernet_key
 
         secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
         return Fernet(ensure_fernet_key(secret_key))

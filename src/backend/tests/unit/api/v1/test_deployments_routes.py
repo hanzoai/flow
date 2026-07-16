@@ -6,7 +6,7 @@ captured by the dynamic `/{deployment_id}` route.
 
 from uuid import uuid4
 
-import langflow.api.router as api_router_module
+import flow.api.router as api_router_module
 import pytest
 from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute

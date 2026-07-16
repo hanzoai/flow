@@ -1,6 +1,6 @@
 """Plugin route discovery and registration with conflict protection.
 
-Plugins register via the ``langflow.plugins`` entry-point group. They receive
+Plugins register via the ``flow.plugins`` entry-point group. They receive
 a wrapper so they cannot overwrite or shadow existing Langflow routes.
 """
 
@@ -100,7 +100,7 @@ class _PluginAppWrapper:
 def load_plugin_routes(app: FastAPI) -> None:
     """Discover and register additional routers from enterprise plugins.
 
-    Plugins register themselves via the ``langflow.plugins`` entry-point group.
+    Plugins register themselves via the ``flow.plugins`` entry-point group.
     Each entry point must expose a callable with the signature::
 
         def register(app: FastAPI) -> None: ...
@@ -109,7 +109,7 @@ def load_plugin_routes(app: FastAPI) -> None:
     reserved = _get_route_keys(app)
     wrapper = _PluginAppWrapper(app, reserved)
 
-    eps = entry_points(group="langflow.plugins")
+    eps = entry_points(group="flow.plugins")
     for ep in sorted(eps, key=lambda e: e.name):
         try:
             plugin_register = ep.load()

@@ -300,7 +300,7 @@ class KnowledgeIngestionComponent(Component):
         the batched metrics counting logic.
         """
         import chromadb.errors
-        from langflow.api.utils.kb_helpers import KBAnalysisHelper, KBStorageHelper
+        from flow.api.utils.kb_helpers import KBAnalysisHelper, KBStorageHelper
 
         metadata_path = kb_path / "embedding_metadata.json"
         if not metadata_path.exists():

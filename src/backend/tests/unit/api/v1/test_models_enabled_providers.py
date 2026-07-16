@@ -516,7 +516,7 @@ async def test_list_models_returns_live_ollama_models_when_configured(client: As
 
     with (
         mock.patch(
-            "langflow.api.v1.models.get_enabled_providers",
+            "flow.api.v1.models.get_enabled_providers",
             side_effect=mock_get_enabled_providers,
         ),
         mock.patch(
@@ -548,7 +548,7 @@ async def test_list_models_ollama_empty_when_live_fetch_returns_empty(client: As
 
     with (
         mock.patch(
-            "langflow.api.v1.models.get_enabled_providers",
+            "flow.api.v1.models.get_enabled_providers",
             side_effect=mock_get_enabled_providers,
         ),
         mock.patch(

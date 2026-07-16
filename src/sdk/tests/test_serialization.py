@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 import pytest
-from langflow_sdk.serialization import flow_to_json, normalize_flow, normalize_flow_file
+from flow_sdk.serialization import flow_to_json, normalize_flow, normalize_flow_file
 
 # ---------------------------------------------------------------------------
 # Helpers

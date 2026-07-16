@@ -38,7 +38,7 @@ from flow.api.utils.core import (
     remove_api_keys,
     validate_is_component,
 )
-from langflow.api.utils.flow_utils import (
+from flow.api.utils.flow_utils import (
     build_and_cache_graph_from_data,
     build_graph_from_data,
     build_graph_from_db,

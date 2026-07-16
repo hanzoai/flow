@@ -2,7 +2,7 @@
 
 Original bug: when langflow was installed alongside lfx but `lfx run` had
 only a NoopDatabaseService registered, `lfx.memory` bound at import time to
-`langflow.memory` (because the `langflow` package was importable). The
+`flow.memory` (because the `langflow` package was importable). The
 langflow-backed `aupdate_messages` then called `session.get(...)` on a
 NoopSession, which always returns `None`, raising spurious
 "Message with id X not found" errors mid-stream.
@@ -56,8 +56,8 @@ class TestMemoryDispatch:
         assert memory_mod._impl() is stubs
 
     def test_dispatches_to_langflow_when_real_db(self, monkeypatch):
-        pytest.importorskip("langflow.memory")
-        import langflow.memory as langflow_memory
+        pytest.importorskip("flow.memory")
+        import flow.memory as langflow_memory
         import lfx.memory as memory_mod
 
         monkeypatch.setattr("lfx.memory.has_langflow_db_backend", lambda: True)
@@ -79,8 +79,8 @@ class TestMemoryDispatch:
 
         assert memory_mod._impl() is stubs
         state["real"] = True
-        pytest.importorskip("langflow.memory")
-        import langflow.memory as langflow_memory
+        pytest.importorskip("flow.memory")
+        import flow.memory as langflow_memory
 
         assert memory_mod._impl() is langflow_memory
 
@@ -90,14 +90,14 @@ class TestAupdateMessagesRegression:
 
     @pytest.mark.asyncio
     async def test_aupdate_messages_does_not_raise_against_noop_session(self, monkeypatch):
-        """Regression: route to stubs (no-op) instead of raising via langflow.memory.
+        """Regression: route to stubs (no-op) instead of raising via flow.memory.
 
         With langflow importable but only a NoopDatabaseService registered,
         aupdate_messages must route to stubs and succeed silently rather than
-        trigger langflow.memory's strict existence check against NoopSession.
+        trigger flow.memory's strict existence check against NoopSession.
         """
         try:
-            from langflow.schema.message import Message
+            from flow.schema.message import Message
         except ImportError:
             from lfx.schema.message import Message
 

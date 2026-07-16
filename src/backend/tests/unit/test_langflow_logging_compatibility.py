@@ -1,6 +1,6 @@
-"""Test langflow.logging backwards compatibility and integration.
+"""Test flow.logging backwards compatibility and integration.
 
-This test ensures that langflow.logging works correctly and that there are no
+This test ensures that flow.logging works correctly and that there are no
 conflicts with the new lfx.logging backwards compatibility module.
 """
 
@@ -8,7 +8,7 @@ import pytest
 
 
 def test_langflow_logging_imports():
-    """Test that langflow.logging can be imported and works correctly."""
+    """Test that flow.logging can be imported and works correctly."""
     try:
         from flow.logging import configure, logger
 
@@ -20,7 +20,7 @@ def test_langflow_logging_imports():
 
 
 def test_langflow_logging_functionality():
-    """Test that langflow.logging functions work correctly."""
+    """Test that flow.logging functions work correctly."""
     from flow.logging import configure, logger
 
     # Should be able to configure
@@ -37,22 +37,22 @@ def test_langflow_logging_functionality():
 
 
 def test_langflow_logging_has_expected_exports():
-    """Test that langflow.logging has the expected exports."""
+    """Test that flow.logging has the expected exports."""
     import flow.logging
 
-    assert hasattr(langflow.logging, "configure")
-    assert hasattr(langflow.logging, "logger")
-    assert hasattr(langflow.logging, "disable_logging")
-    assert hasattr(langflow.logging, "enable_logging")
+    assert hasattr(flow.logging, "configure")
+    assert hasattr(flow.logging, "logger")
+    assert hasattr(flow.logging, "disable_logging")
+    assert hasattr(flow.logging, "enable_logging")
 
     # Check __all__
-    assert hasattr(langflow.logging, "__all__")
+    assert hasattr(flow.logging, "__all__")
     expected_exports = {"configure", "logger", "disable_logging", "enable_logging"}
-    assert set(langflow.logging.__all__) == expected_exports
+    assert set(flow.logging.__all__) == expected_exports
 
 
 def test_langflow_logging_specific_functions():
-    """Test langflow.logging specific functions (disable_logging, enable_logging)."""
+    """Test flow.logging specific functions (disable_logging, enable_logging)."""
     from flow.logging import disable_logging, enable_logging
 
     assert callable(disable_logging)
@@ -65,14 +65,14 @@ def test_langflow_logging_specific_functions():
 
 
 def test_no_conflict_with_lfx_logging():
-    """Test that langflow.logging and lfx.logging don't conflict."""
+    """Test that flow.logging and lfx.logging don't conflict."""
     # Import both
     from flow.logging import configure as lf_configure
     from flow.logging import logger as lf_logger
     from lfx.logging import configure as lfx_configure
     from lfx.logging import logger as lfx_logger
 
-    # They should be the same underlying objects since langflow.logging imports from lfx.log.logger
+    # They should be the same underlying objects since flow.logging imports from lfx.log.logger
     # and lfx.logging re-exports from lfx.log.logger
     # Note: Due to import order and module initialization, object identity may vary,
     # but functionality should be equivalent
@@ -89,12 +89,12 @@ def test_no_conflict_with_lfx_logging():
 
 
 def test_langflow_logging_imports_from_lfx():
-    """Test that langflow.logging correctly imports from lfx."""
+    """Test that flow.logging correctly imports from lfx."""
     from flow.logging import configure, logger
     from lfx.log.logger import configure as lfx_configure
     from lfx.log.logger import logger as lfx_logger
 
-    # langflow.logging should import equivalent objects from lfx.log.logger
+    # flow.logging should import equivalent objects from lfx.log.logger
     # Due to module initialization order, object identity may vary
     assert callable(configure)
     assert callable(lfx_configure)
@@ -111,7 +111,7 @@ def test_langflow_logging_imports_from_lfx():
 def test_backwards_compatibility_scenario():
     """Test the complete backwards compatibility scenario."""
     # This tests the scenario where:
-    # 1. langflow.logging exists and imports from lfx.log.logger
+    # 1. flow.logging exists and imports from lfx.log.logger
     # 2. lfx.logging now exists (new) and re-exports from lfx.log.logger
     # 3. Both should work without conflicts
 
@@ -143,16 +143,16 @@ def test_backwards_compatibility_scenario():
 
 
 def test_importing_langflow_logging_in_langflow():
-    """Test that langflow.logging can be imported and used in langflow context without errors.
+    """Test that flow.logging can be imported and used in langflow context without errors.
 
     This is similar to test_importing_langflow_logging_in_lfx but tests the langflow side
-    using create_class to validate component creation with langflow.logging imports.
+    using create_class to validate component creation with flow.logging imports.
     """
     from textwrap import dedent
 
     from lfx.custom.validate import create_class
 
-    # Test that langflow.logging can be used in component code created via create_class
+    # Test that flow.logging can be used in component code created via create_class
     code = dedent("""
 from flow.logging import logger, configure
 from flow.logging.logger import logger

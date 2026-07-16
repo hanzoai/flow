@@ -10,7 +10,7 @@ from textwrap import dedent
 from unittest.mock import patch
 
 import pytest
-from langflow.agentic.helpers.validation import (
+from flow.agentic.helpers.validation import (
     _extract_class_name_regex,
     _extract_io_names,
     _extract_output_methods,
@@ -19,7 +19,7 @@ from langflow.agentic.helpers.validation import (
     validate_component_runtime,
 )
 
-MODULE = "langflow.agentic.helpers.validation"
+MODULE = "flow.agentic.helpers.validation"
 
 
 def _parse(code: str) -> ast.Module:

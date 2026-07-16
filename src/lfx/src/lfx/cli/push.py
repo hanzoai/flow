@@ -130,8 +130,8 @@ def _upsert_single(
         try:
             # Use direct module imports (not sdk.*) so mock call-counts in tests
             # stay accurate and so the except clause uses a real exception class.
-            from langflow_sdk.exceptions import LangflowNotFoundError
-            from langflow_sdk.serialization import flow_to_json, normalize_flow
+            from flow_sdk.exceptions import LangflowNotFoundError
+            from flow_sdk.serialization import flow_to_json, normalize_flow
 
             remote = client.get_flow(flow_id)
             remote_normalized = normalize_flow(

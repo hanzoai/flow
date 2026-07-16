@@ -23,7 +23,7 @@ class ServerSettings(BaseModel):
     """The number of workers to run."""
     log_level: str = "critical"
     """The log level for Langflow."""
-    log_file: str | None = "logs/langflow.log"
+    log_file: str | None = "logs/flow.log"
     """The path to log file for Langflow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""

@@ -16,9 +16,9 @@ from pydantic import (
     model_validator,
 )
 
-from langflow.api.v1.mappers.deployments.contracts import CreateFlowArtifactProviderData
-from langflow.api.v1.schemas.deployments import ValidatedUrl
-from langflow.services.database.models.deployment_provider_account.utils import validate_provider_url
+from flow.api.v1.mappers.deployments.contracts import CreateFlowArtifactProviderData
+from flow.api.v1.schemas.deployments import ValidatedUrl
+from flow.services.database.models.deployment_provider_account.utils import validate_provider_url
 
 WatsonxApiLlmName = Annotated[
     str,

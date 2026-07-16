@@ -179,7 +179,7 @@ def test_webhook_auth_enable_defaults_to_true():
 
 async def test_webhook_rejects_unauthenticated_request_by_default(client, added_webhook_test):
     """Under the default config, an unauthenticated POST to /webhook must return 403."""
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     # Confirm the runtime default matches the secure-by-default value before exercising it.

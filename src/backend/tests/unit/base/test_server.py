@@ -1,4 +1,4 @@
-from langflow.server import LangflowApplication
+from flow.server import LangflowApplication
 
 
 def _make_app(options=None, env_args=None, monkeypatch=None):
@@ -50,4 +50,4 @@ class TestGunicornEnvArgs:
             monkeypatch=monkeypatch,
         )
 
-        assert app.cfg.settings["worker_class"].get() == "langflow.server.LangflowUvicornWorker"
+        assert app.cfg.settings["worker_class"].get() == "flow.server.LangflowUvicornWorker"

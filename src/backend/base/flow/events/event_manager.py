@@ -1,4 +1,4 @@
-# Backwards compatibility module for langflow.events.event_manager
+# Backwards compatibility module for flow.events.event_manager
 # This module redirects imports to the new lfx.events.event_manager module
 
 from lfx.events.event_manager import (

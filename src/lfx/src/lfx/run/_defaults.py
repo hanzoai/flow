@@ -9,7 +9,7 @@ both need to:
 2. Auto-generate a UUID when neither is supplied (so component prechecks and
    ``astore_message`` validation don't fail).
 3. Propagate ``session_id`` to ``Memory``/``MessageHistory`` vertices the way
-   ``langflow.api.utils.flow_utils.build_graph_from_data`` does — preserving
+   ``flow.api.utils.flow_utils.build_graph_from_data`` does — preserving
    any value already pinned in the flow JSON.
 4. Resolve ``fallback_to_env_vars`` from settings (mirrors the langflow API
    path in ``processing.process.run_graph_internal``).

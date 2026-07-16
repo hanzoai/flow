@@ -39,11 +39,11 @@ from lfx.services.adapters.payload import (
 from lfx.services.adapters.schema import AdapterType
 from pydantic import ValidationError
 
-from langflow.api.v1.mappers.deployments.base import (
+from flow.api.v1.mappers.deployments.base import (
     BaseDeploymentMapper,
     DeploymentApiPayloads,
 )
-from langflow.api.v1.mappers.deployments.contracts import (
+from flow.api.v1.mappers.deployments.contracts import (
     CreatedSnapshotIds,
     CreateFlowArtifactProviderData,
     CreateSnapshotBinding,
@@ -53,13 +53,13 @@ from langflow.api.v1.mappers.deployments.contracts import (
     UpdateSnapshotBinding,
     UpdateSnapshotBindings,
 )
-from langflow.api.v1.mappers.deployments.helpers import (
+from flow.api.v1.mappers.deployments.helpers import (
     build_flow_artifacts_from_flow_versions,
     build_project_scoped_flow_artifacts_from_flow_versions,
     page_offset,
 )
-from langflow.api.v1.mappers.deployments.registry import register_mapper
-from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+from flow.api.v1.mappers.deployments.registry import register_mapper
+from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
     WatsonxApiAddFlowItem,
     WatsonxApiAgentExecutionCreateResultData,
     WatsonxApiAgentExecutionStatusResultData,
@@ -84,7 +84,7 @@ from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
     WatsonxApiUpsertFlowItem,
     WatsonxApiUpsertToolItem,
 )
-from langflow.api.v1.schemas.deployments import (
+from flow.api.v1.schemas.deployments import (
     DeploymentConfigListResponse,
     DeploymentCreateRequest,
     DeploymentCreateResponse,
@@ -100,29 +100,29 @@ from langflow.api.v1.schemas.deployments import (
     RunCreateResponse,
     RunStatusResponse,
 )
-from langflow.services.adapters.deployment.watsonx_orchestrate.constants import (
+from flow.services.adapters.deployment.watsonx_orchestrate.constants import (
     WATSONX_ORCHESTRATE_DEPLOYMENT_ADAPTER_KEY,
 )
-from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
     PAYLOAD_SCHEMAS as WXO_ADAPTER_PAYLOAD_SCHEMAS,
 )
-from langflow.services.adapters.deployment.watsonx_orchestrate.utils import normalize_wxo_name
-from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-from langflow.services.database.models.deployment_provider_account.utils import (
+from flow.services.adapters.deployment.watsonx_orchestrate.utils import normalize_wxo_name
+from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+from flow.services.database.models.deployment_provider_account.utils import (
     check_provider_url_allowed,
     extract_tenant_from_url,
 )
-from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+from flow.services.database.models.flow_version_deployment_attachment.crud import (
     list_deployment_attachments_for_flow_version_ids,
 )
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
-    from langflow.services.database.models.deployment.model import Deployment
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-    from langflow.services.database.models.flow_version.model import FlowVersion
-    from langflow.services.database.models.flow_version_deployment_attachment.model import (
+    from flow.services.database.models.deployment.model import Deployment
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.flow_version.model import FlowVersion
+    from flow.services.database.models.flow_version_deployment_attachment.model import (
         FlowVersionDeploymentAttachment,
     )
 
@@ -844,8 +844,8 @@ class WatsonxOrchestrateDeploymentMapper(BaseDeploymentMapper):
         If the provider snapshots were concurrently deleted, the adapter call
         may fail; read-path snapshot sync handles that residual divergence.
         """
-        from langflow.services.database.models.deployment.crud import get_deployment
-        from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+        from flow.services.database.models.deployment.crud import get_deployment
+        from flow.services.database.models.flow_version_deployment_attachment.crud import (
             list_deployment_attachments,
         )
 

@@ -274,8 +274,8 @@ async def list_deployments_for_flows_with_provider_info(
     if not flow_ids:
         return []
 
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-    from langflow.services.database.models.flow_version.model import FlowVersion
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.flow_version.model import FlowVersion
 
     deployment_ids_subquery = (
         select(FlowVersionDeploymentAttachment.deployment_id)
@@ -318,7 +318,7 @@ async def list_project_deployments_with_provider_info(
     provider_account_id: UUID | None = None,
 ) -> list[tuple[Deployment, str]]:
     """Return project deployments with provider key for provider-scoped sync."""
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     stmt = (
         select(Deployment, DeploymentProviderAccount.provider_key)

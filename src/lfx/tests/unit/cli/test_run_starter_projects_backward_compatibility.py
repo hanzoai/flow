@@ -62,7 +62,7 @@ class TestRunStarterProjectsBackwardCompatibility:
         """
         # Known failing starter projects due to component-level import bugs in 1.6.0
         known_failing_projects = {
-            "News Aggregator.json": "Contains SaveToFile component with langflow.api import bug "
+            "News Aggregator.json": "Contains SaveToFile component with flow.api import bug "
             "(fixed in later versions)"
         }
 
