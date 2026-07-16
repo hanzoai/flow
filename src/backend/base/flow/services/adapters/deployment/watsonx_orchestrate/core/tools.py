@@ -106,20 +106,20 @@ def ensure_langflow_connections_binding(tool_payload: dict[str, Any]) -> dict[st
     to prevent a stubbornly failing update.
     """
     binding = _ensure_dict(tool_payload, "binding")
-    langflow = _ensure_dict(binding, "langflow")
-    return _ensure_dict(langflow, "connections")
+    flow = _ensure_dict(binding, "flow")
+    return _ensure_dict(flow, "connections")
 
 
 def verify_langflow_owned(tool: dict[str, Any], *, tool_id: str) -> None:
-    """Raise ``InvalidContentError`` if the tool lacks ``binding.langflow``.
+    """Raise ``InvalidContentError`` if the tool lacks ``binding.flow``.
 
     Call before any mutating operation on an existing tool to ensure
-    Langflow created it.  Tools created manually in the wxO console or
+    Hanzo Flow created it.  Tools created manually in the wxO console or
     by other integrations will not have this marker.
     """
     binding = tool.get("binding")
-    if not isinstance(binding, dict) or "langflow" not in binding:
-        msg = f"Cannot modify tool '{tool_id}': it does not have a Langflow binding and may not be managed by Langflow."
+    if not isinstance(binding, dict) or "flow" not in binding:
+        msg = f"Cannot modify tool '{tool_id}': it does not have a Hanzo Flow binding and may not be managed by Hanzo Flow."
         raise InvalidContentError(message=msg)
 
 
@@ -132,8 +132,8 @@ def extract_langflow_connections_binding(tool_payload: dict[str, Any]) -> dict[s
     binding = tool_payload.get("binding")
     if not isinstance(binding, dict):
         return {}
-    langflow = binding.get("langflow")
-    if not isinstance(langflow, dict):
+    flow = binding.get("flow")
+    if not isinstance(flow, dict):
         return {}
     connections = flow.get("connections")
     return connections if isinstance(connections, dict) else {}
@@ -183,7 +183,7 @@ async def update_existing_tool_connection_bindings(
 
 
 def extract_langflow_artifact_from_zip(artifact_zip_bytes: bytes, *, snapshot_id: str) -> dict[str, Any]:
-    """Read and parse the Langflow flow JSON from a wxO snapshot artifact zip."""
+    """Read and parse the Hanzo Flow flow JSON from a wxO snapshot artifact zip."""
     try:
         with zipfile.ZipFile(io.BytesIO(artifact_zip_bytes), "r") as zip_artifact:
             json_members = [name for name in zip_artifact.namelist() if name.lower().endswith(".json")]
@@ -299,7 +299,7 @@ def create_wxo_flow_tool(
     if not flow_definition.get("last_tested_version"):
         detected_version = (get_version_info() or {}).get("version")
         if not detected_version:
-            msg = "Unable to determine running Langflow version for snapshot creation."
+            msg = "Unable to determine running Hanzo Flow version for snapshot creation."
             raise InvalidContentError(message=msg)
         flow_definition["last_tested_version"] = detected_version
 
@@ -320,12 +320,12 @@ def create_wxo_flow_tool(
     if current_name:
         tool_payload["name"] = normalize_wxo_name(current_name)
 
-    (tool_payload.setdefault("binding", {}).setdefault("langflow", {})["project_id"]) = project_id
+    (tool_payload.setdefault("binding", {}).setdefault("flow", {})["project_id"]) = project_id
     logger.debug(
         "create_wxo_flow_tool: tool name='%s', project_id='%s', binding=%s",
         tool_payload.get("name"),
         project_id,
-        tool_payload.get("binding", {}).get("langflow"),
+        tool_payload.get("binding", {}).get("flow"),
     )
 
     artifacts: bytes = build_langflow_artifact_bytes(
@@ -462,7 +462,7 @@ async def process_raw_flows_with_app_id(
     app_id: str,
     flows: list[BaseFlowArtifact[WatsonxFlowArtifactProviderData]],
 ) -> list[WatsonxToolRefBinding]:
-    """Create langflow tools in wxO and connect them to the given app_id."""
+    """Create flow tools in wxO and connect them to the given app_id."""
     from flow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
 
     connection = await validate_connection(clients.connections, app_id=app_id)
@@ -558,7 +558,7 @@ async def verify_tools_by_ids(
 
         if len(normalized_connections) < len(connections):
             logger.warning(
-                "Tool %s returned malformed langflow connection bindings; defaulting to empty mapping",
+                "Tool %s returned malformed flow connection bindings; defaulting to empty mapping",
                 tool["id"],
             )
             provider_data: dict[str, dict[str, str]] = {"connections": {}}

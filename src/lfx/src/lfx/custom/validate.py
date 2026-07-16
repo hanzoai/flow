@@ -57,12 +57,12 @@ def validate_code(code):
                 except ModuleNotFoundError as e:
                     errors["imports"]["errors"].append(str(e))
 
-    # Evaluate the function definition with langflow context
+    # Evaluate the function definition with flow context
     for node in tree.body:
         if isinstance(node, ast.FunctionDef):
             code_obj = compile(ast.Module(body=[node], type_ignores=[]), "<string>", "exec")
             try:
-                # Create execution context with common langflow imports
+                # Create execution context with common flow imports
                 exec_globals = _create_langflow_execution_context()
                 exec(code_obj, exec_globals)
             except Exception as e:  # noqa: BLE001
@@ -74,10 +74,10 @@ def validate_code(code):
 
 
 def _create_langflow_execution_context():
-    """Create execution context with common langflow imports."""
+    """Create execution context with common flow imports."""
     context = {}
 
-    # Import common langflow types that are used in templates
+    # Import common flow types that are used in templates
     try:
         from lfx.schema.dataframe import DataFrame
 
@@ -364,7 +364,7 @@ class _MissingModulePlaceholder:
 def _get_module_fallbacks(module_name: str) -> list[str]:
     """Return a list of module names to try, including compatibility fallbacks.
 
-    Handles langflow -> lfx and langchain -> langchain_classic remapping at the
+    Handles flow -> lfx and langchain -> langchain_classic remapping at the
     module level (for entirely removed modules). Attribute-level fallback for
     removed attributes in still-existing modules is handled by _resolve_attribute.
 
@@ -445,7 +445,7 @@ def prepare_global_scope(module):
     for node in import_froms:
         module_names_to_try = [node.module]
 
-        # If original module starts with langflow, also try lfx equivalent
+        # If original module starts with flow, also try lfx equivalent
         if node.module and node.module.startswith("flow."):
             lfx_module_name = node.module.replace("flow.", "lfx.", 1)
             module_names_to_try.append(lfx_module_name)

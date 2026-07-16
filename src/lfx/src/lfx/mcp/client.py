@@ -1,4 +1,4 @@
-"""Async HTTP client for Langflow REST API.
+"""Async HTTP client for Hanzo Flow REST API.
 
 Adapted from the CLI's sync Backend class, using httpx.AsyncClient
 for non-blocking operations inside the MCP server.
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 
 class LangflowClient:
-    """Async HTTP client for Langflow's REST API.
+    """Async HTTP client for Hanzo Flow's REST API.
 
     Auth sends both headers on every request:
     - Authorization: Bearer <access_token or api_key>

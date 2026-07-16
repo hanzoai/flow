@@ -18,7 +18,7 @@ DANGEROUS_CALLS: dict[str, str] = {
 
 # Dangerous attribute calls: (module, method, violation_message)
 DANGEROUS_ATTR_CALLS: list[tuple[str, str, str]] = [
-    ("os", "system", "os.system() is forbidden — use Langflow's built-in integrations"),
+    ("os", "system", "os.system() is forbidden — use Hanzo Flow's built-in integrations"),
     ("os", "popen", "os.popen() is forbidden"),
     ("os", "execl", "os.execl() is forbidden"),
     ("os", "execle", "os.execle() is forbidden"),

@@ -143,15 +143,15 @@ router = APIRouter(prefix="/deployments", tags=["Deployments"], include_in_schem
 
 DeploymentProviderAccountIdQuery = Annotated[
     UUID,
-    Query(description="Langflow DB provider-account UUID (`deployment_provider_account.id`)."),
+    Query(description="Hanzo Flow DB provider-account UUID (`deployment_provider_account.id`)."),
 ]
 DeploymentProviderAccountIdPath = Annotated[
     UUID,
-    Path(description="Langflow DB provider-account UUID (`deployment_provider_account.id`)."),
+    Path(description="Hanzo Flow DB provider-account UUID (`deployment_provider_account.id`)."),
 ]
 DeploymentIdPath = Annotated[
     UUID,
-    Path(description="Langflow DB deployment UUID (`deployment.id`)."),
+    Path(description="Hanzo Flow DB deployment UUID (`deployment.id`)."),
 ]
 ProjectIdQuery = Annotated[
     UUID | None,
@@ -159,7 +159,7 @@ ProjectIdQuery = Annotated[
 ]
 DeploymentIdQuery = Annotated[
     UUID,
-    Query(description="Langflow DB deployment UUID (`deployment.id`)."),
+    Query(description="Hanzo Flow DB deployment UUID (`deployment.id`)."),
 ]
 SnapshotNameQueryItem = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
@@ -178,7 +178,7 @@ IncludeProviderDeleteQuery = Annotated[
             "When true (default), deletes the deployment resource (e.g., agent) on the provider, "
             "then removes the local DB row. Other provider-managed resources "
             "(for example, tools and connections) are NOT deleted. "
-            "When false, only the local Langflow DB row is removed; "
+            "When false, only the local Hanzo Flow DB row is removed; "
             "nothing is changed on the provider."
         ),
     ),
@@ -256,7 +256,7 @@ async def _delete_local_deployment_row_with_commit_retry(
     Delete is provider-first, so by the time this helper runs the provider
     resource is already gone (or was already missing). If the first DB commit
     fails, retry the local delete once after a rollback so we do not strand a
-    stale Langflow row that still blocks later reads or provider-account
+    stale Hanzo Flow row that still blocks later reads or provider-account
     deletion.
     """
     try:
@@ -497,7 +497,7 @@ async def create_deployment(
         if existing_deployment is not None:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"The agent '{existing_resource_key}' is already managed by Langflow. "
+                detail=f"The agent '{existing_resource_key}' is already managed by Hanzo Flow. "
                 "Update it to make changes, or delete the existing deployment first.",
             )
     should_mutate_existing_resource = (
@@ -636,14 +636,14 @@ async def list_deployments(
     load_from_provider: Annotated[
         bool,
         Query(
-            description=("When true, list deployments directly from the provider (bypassing Langflow deployment rows).")
+            description=("When true, list deployments directly from the provider (bypassing Hanzo Flow deployment rows).")
         ),
     ] = False,
     flow_version_ids: Annotated[
         FlowVersionIdsQuery,
         Query(
             description=(
-                "Optional Langflow flow version ids (pass as repeated query params, "
+                "Optional Hanzo Flow flow version ids (pass as repeated query params, "
                 "e.g. ?flow_version_ids=id1&flow_version_ids=id2). When provided, "
                 "deployments are filtered to those with at least one matching "
                 "attachment (OR semantics across ids). "
@@ -1012,7 +1012,7 @@ async def update_snapshot(
     """Replace an existing provider snapshot's content with a new flow version.
 
     Resolves the deployment context from the attachment record linked to
-    ``provider_snapshot_id``.  Only Langflow-tracked snapshots (those with
+    ``provider_snapshot_id``.  Only Hanzo Flow-tracked snapshots (those with
     a ``flow_version_deployment_attachment`` row) can be updated.
     """
     from flow.services.database.models.deployment.crud import get_deployment as get_deployment_row

@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 
 class TraceloopTracer(BaseTracer):
-    """Traceloop tracer for Langflow."""
+    """Traceloop tracer for Hanzo Flow."""
 
     def __init__(
         self,
@@ -64,7 +64,7 @@ class TraceloopTracer(BaseTracer):
                 api_endpoint=os.getenv("TRACELOOP_BASE_URL", "https://api.traceloop.com"),
             )
             self._ready = True
-            self._tracer = trace.get_tracer("langflow")
+            self._tracer = trace.get_tracer("flow")
             self.propagator = TraceContextTextMapPropagator()
             self.carrier: CarrierT = {}
 

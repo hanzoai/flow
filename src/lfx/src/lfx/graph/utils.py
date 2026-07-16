@@ -200,7 +200,7 @@ async def emit_vertex_build_event(
             },
         )
     except ImportError:
-        pass  # langflow not available (standalone lfx usage)
+        pass  # flow not available (standalone lfx usage)
     except Exception as exc:  # noqa: BLE001
         logger.debug(f"SSE emission failed for vertex {vertex_id}: {exc}")
 
@@ -221,7 +221,7 @@ async def emit_build_start_event(flow_id: str | UUID, vertex_id: str) -> None:
         webhook_event_manager.record_build_start(flow_id_str, vertex_id)
         await webhook_event_manager.emit(flow_id_str, "build_start", {"id": vertex_id})
     except ImportError:
-        pass  # langflow not available (standalone lfx usage)
+        pass  # flow not available (standalone lfx usage)
     except Exception as exc:  # noqa: BLE001
         logger.debug(f"SSE build_start emission failed for vertex {vertex_id}: {exc}")
 
@@ -249,7 +249,7 @@ async def log_transaction(
 ) -> None:
     """Asynchronously logs a transaction record for a vertex in a flow if transaction storage is enabled.
 
-    Uses the pluggable TransactionService to log transactions. When running within langflow,
+    Uses the pluggable TransactionService to log transactions. When running within flow,
     the concrete TransactionService implementation persists to the database.
     When running standalone (lfx only), transactions are not persisted.
 
@@ -318,11 +318,11 @@ async def log_vertex_build(
     """Asynchronously logs a vertex build record if vertex build storage is enabled.
 
     This is a lightweight implementation that only logs if database service is available.
-    When running within langflow, it will use langflow's database service to persist the build.
+    When running within flow, it will use flow's database service to persist the build.
     When running standalone (lfx only), it will only log debug messages.
     """
     try:
-        # Try to use langflow's services if available (when running within langflow)
+        # Try to use flow's services if available (when running within flow)
         try:
             from flow.services.deps import get_db_service as langflow_get_db_service
             from flow.services.deps import get_settings_service as langflow_get_settings_service
@@ -378,7 +378,7 @@ async def log_vertex_build(
             # The event is emitted separately in graph._execute_tasks() with complete data.
 
         except ImportError:
-            # Fallback for standalone lfx usage (without langflow)
+            # Fallback for standalone lfx usage (without flow)
             settings_service = get_settings_service()
             if not settings_service or not getattr(settings_service.settings, "vertex_builds_storage_enabled", False):
                 return
@@ -386,7 +386,7 @@ async def log_vertex_build(
             if isinstance(flow_id, str):
                 flow_id = UUID(flow_id)
 
-            # Log basic vertex build info - concrete implementation is in langflow
+            # Log basic vertex build info - concrete implementation is in flow
             logger.debug(f"Vertex build logged: vertex={vertex_id}, flow={flow_id}, valid={valid}")
 
     except Exception as exc:  # noqa: BLE001

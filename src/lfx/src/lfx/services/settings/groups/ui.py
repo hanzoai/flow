@@ -4,12 +4,12 @@ from lfx.serialization.constants import MAX_ITEMS_LENGTH, MAX_TEXT_LENGTH
 
 
 class UiSettings(BaseModel):
-    """Frontend, auto-save, display limits, and (legacy) Langflow Store integration."""
+    """Frontend, auto-save, display limits, and (legacy) Hanzo Flow Store integration."""
 
     auto_saving: bool = True
-    """If set to True, Langflow will auto save flows."""
+    """If set to True, Hanzo Flow will auto save flows."""
     auto_saving_interval: int = 1000
-    """The interval in ms at which Langflow will auto save flows."""
+    """The interval in ms at which Hanzo Flow will auto save flows."""
 
     max_text_length: int = MAX_TEXT_LENGTH
     """Maximum number of characters to store and display in the UI. Responses longer than this
@@ -21,7 +21,7 @@ class UiSettings(BaseModel):
     frontend_timeout: int = 0
     """Timeout for the frontend API calls in seconds."""
 
-    # Langflow Store (legacy)
+    # Hanzo Flow Store (legacy)
     store: bool | None = True
     store_url: str | None = "https://api.flow.store"
     download_webhook_url: str | None = "https://api.flow.store/flows/trigger/ec611a61-8460-4438-b187-a4f65e5559d4"

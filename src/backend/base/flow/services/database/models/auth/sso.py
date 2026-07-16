@@ -1,7 +1,7 @@
 """SSO plugin tables.
 
 These tables are used by the SSO plugin for identity and provider configuration.
-Migrations are managed by Langflow (OSS); the plugin must not create or
+Migrations are managed by Hanzo Flow (OSS); the plugin must not create or
 migrate these tables.
 
 Plugins must use these tables via the models exported from

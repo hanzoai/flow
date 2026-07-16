@@ -621,7 +621,7 @@ async def get_flow_snake_case(flow_name: str, user_id: str, session, *, is_actio
         from flow.services.database.models.flow.model import Flow
         from sqlmodel import select
     except ImportError as e:
-        msg = "Langflow Flow model is not available. This feature requires the full Langflow installation."
+        msg = "Hanzo Flow Flow model is not available. This feature requires the full Hanzo Flow installation."
         raise ImportError(msg) from e
 
     uuid_user_id = UUID(user_id) if isinstance(user_id, str) else user_id

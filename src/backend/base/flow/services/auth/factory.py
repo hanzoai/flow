@@ -1,6 +1,6 @@
 """Authentication service factory.
 
-Builds the Langflow auth implementation (JWT, DB users, etc.)
+Builds the Hanzo Flow auth implementation (JWT, DB users, etc.)
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class AuthServiceFactory(ServiceFactory):
-    """Factory that creates the Langflow auth service (implements LFX BaseAuthService)."""
+    """Factory that creates the Hanzo Flow auth service (implements LFX BaseAuthService)."""
 
     name = ServiceType.AUTH_SERVICE.value
 

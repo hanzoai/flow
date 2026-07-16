@@ -43,7 +43,7 @@ if TYPE_CHECKING:
 
 
 class AuthService(BaseAuthService):
-    """Default Langflow authentication service (implements LFX BaseAuthService)."""
+    """Default Hanzo Flow authentication service (implements LFX BaseAuthService)."""
 
     name = ServiceType.AUTH_SERVICE.value
 

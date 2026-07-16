@@ -105,8 +105,8 @@ class DeploymentApiPayloads(DeploymentPayloadFields):
     """API-side payload schema registry for deployment providers.
 
     Ownership boundary:
-    Langflow owns API slot population here because API payloads may include
-    Langflow-specific references and reshaping requirements. Adapter-side
+    Hanzo Flow owns API slot population here because API payloads may include
+    Hanzo Flow-specific references and reshaping requirements. Adapter-side
     slot population is defined separately via ``DeploymentPayloadSchemas``.
     """
 
@@ -119,7 +119,7 @@ class BaseDeploymentMapper:
     """Per-provider mapper for deployment API payloads.
 
     Mapper vs adapter responsibilities:
-    - Mapper: API-boundary translation/validation (Langflow schemas <-> adapter payloads).
+    - Mapper: API-boundary translation/validation (Hanzo Flow schemas <-> adapter payloads).
     - Adapter: provider execution (network calls, provider semantics, side effects).
 
     Selection contract:
@@ -136,7 +136,7 @@ class BaseDeploymentMapper:
       responses), while payload-only shapers return provider dicts unchanged.
 
     Provider-specific mappers override only the methods that need
-    Langflow-aware resolution or payload reshaping.
+    Hanzo Flow-aware resolution or payload reshaping.
     """
 
     api_payloads: ClassVar[DeploymentApiPayloads] = DeploymentApiPayloads()

@@ -277,7 +277,7 @@ class DatabaseService(Service):
     async def ensure_postgresql_version(self) -> None:
         """If the database is PostgreSQL, ensure it is version 15 or higher.
 
-        Langflow's schema uses UNIQUE NULLS DISTINCT, which is only supported in PostgreSQL 15+.
+        Hanzo Flow's schema uses UNIQUE NULLS DISTINCT, which is only supported in PostgreSQL 15+.
         Logs the message and raises UnsupportedPostgreSQLVersionError if the version is too old.
         """
         if not self.database_url.startswith(("postgresql", "postgres")):

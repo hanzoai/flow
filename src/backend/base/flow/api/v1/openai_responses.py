@@ -102,7 +102,7 @@ async def run_flow_for_openai_responses(
         event_manager = create_stream_tokens_event_manager(queue=asyncio_queue)
 
         async def openai_stream_generator() -> AsyncGenerator[str, None]:
-            """Convert Langflow events to OpenAI Responses API streaming format."""
+            """Convert Hanzo Flow events to OpenAI Responses API streaming format."""
             main_task = asyncio.create_task(
                 run_flow_generator(
                     flow=flow,
@@ -598,7 +598,7 @@ async def create_response(
     """Create a response using OpenAI Responses API format.
 
     This endpoint accepts a flow_id in the model parameter and processes
-    the input through the specified Langflow flow.
+    the input through the specified Hanzo Flow flow.
 
     Args:
         request: OpenAI Responses API request with model (flow_id) and input

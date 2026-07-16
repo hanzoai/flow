@@ -1,6 +1,6 @@
-"""Langflow Agentic Flows.
+"""Hanzo Flow Agentic Flows.
 
-This package contains flow definitions for the Langflow Assistant feature.
+This package contains flow definitions for the Hanzo Flow Assistant feature.
 
 Available flows:
 - translation_flow: Intent classification and translation flow (Python)

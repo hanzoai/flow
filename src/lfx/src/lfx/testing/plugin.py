@@ -51,32 +51,32 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         help="Base directory for resolving relative flow paths (default: cwd).",
     )
 
-    # Guard against duplicate registration when langflow-sdk[testing] is also installed.
-    # Both plugins expose the same --langflow-* options; only register them once.
-    remote = parser.getgroup("langflow", "Langflow remote integration testing options")
+    # Guard against duplicate registration when flow-sdk[testing] is also installed.
+    # Both plugins expose the same --flow-* options; only register them once.
+    remote = parser.getgroup("flow", "Hanzo Flow remote integration testing options")
     _remote_opts = {
-        "--langflow-env": {
+        "--flow-env": {
             "dest": "langflow_env",
             "default": None,
             "metavar": "NAME",
             "help": (
-                "Named environment from .lfx/environments.yaml or langflow-environments.toml. "
+                "Named environment from .lfx/environments.yaml or flow-environments.toml. "
                 "When set, flow_runner targets the remote instance instead of running locally."
             ),
         },
-        "--langflow-url": {
+        "--flow-url": {
             "dest": "langflow_url",
             "default": None,
             "metavar": "URL",
-            "help": "Base URL of the remote Langflow instance (overrides --langflow-env).",
+            "help": "Base URL of the remote Hanzo Flow instance (overrides --flow-env).",
         },
-        "--langflow-api-key": {
+        "--flow-api-key": {
             "dest": "langflow_api_key",
             "default": None,
             "metavar": "KEY",
-            "help": "API key for the remote Langflow instance.",
+            "help": "API key for the remote Hanzo Flow instance.",
         },
-        "--langflow-environments-file": {
+        "--flow-environments-file": {
             "dest": "langflow_environments_file",
             "default": None,
             "metavar": "PATH",
@@ -100,13 +100,13 @@ def pytest_configure(config: pytest.Config) -> None:
     )
     config.addinivalue_line(
         "markers",
-        "integration: integration test that requires a live Langflow instance",
+        "integration: integration test that requires a live Hanzo Flow instance",
     )
 
 
 _SKIP_NO_REMOTE = (
-    "No remote Langflow connection configured. "
-    "Pass --langflow-url <URL> or --langflow-env <NAME> to run against a live instance."
+    "No remote Hanzo Flow connection configured. "
+    "Pass --flow-url <URL> or --flow-env <NAME> to run against a live instance."
 )
 
 
@@ -114,8 +114,8 @@ def _resolve_remote_client(request: pytest.FixtureRequest) -> Any | None:
     """Return a sync SDK client if remote options are configured, else ``None``.
 
     Priority:
-    1. ``--langflow-url`` / ``LANGFLOW_URL`` -- direct URL (with optional ``--langflow-api-key``)
-    2. ``--langflow-env`` / ``LANGFLOW_ENV`` -- named environment from TOML/YAML file
+    1. ``--flow-url`` / ``LANGFLOW_URL`` -- direct URL (with optional ``--flow-api-key``)
+    2. ``--flow-env`` / ``LANGFLOW_ENV`` -- named environment from TOML/YAML file
     """
     url: str | None = request.config.getoption("langflow_url", default=None) or os.environ.get("LANGFLOW_URL")
     env_name: str | None = request.config.getoption("langflow_env", default=None) or os.environ.get("LANGFLOW_ENV")
@@ -126,7 +126,7 @@ def _resolve_remote_client(request: pytest.FixtureRequest) -> Any | None:
     try:
         import flow_sdk  # type: ignore[import-untyped]
     except ImportError:
-        pytest.skip("langflow-sdk is required for remote testing. Install: pip install langflow-sdk")
+        pytest.skip("flow-sdk is required for remote testing. Install: pip install flow-sdk")
 
     if url:
         api_key: str | None = request.config.getoption("langflow_api_key", default=None) or os.environ.get(
@@ -145,7 +145,7 @@ def _resolve_remote_client(request: pytest.FixtureRequest) -> Any | None:
 
         return get_client(env_name, config_file=_Path(env_file) if env_file else None)
     except Exception as exc:  # noqa: BLE001
-        pytest.skip(f"Could not configure Langflow environment {env_name!r}: {exc}")
+        pytest.skip(f"Could not configure Hanzo Flow environment {env_name!r}: {exc}")
 
 
 def _resolve_async_remote_client(request: pytest.FixtureRequest) -> Any | None:
@@ -159,7 +159,7 @@ def _resolve_async_remote_client(request: pytest.FixtureRequest) -> Any | None:
     try:
         import flow_sdk  # type: ignore[import-untyped]
     except ImportError:
-        pytest.skip("langflow-sdk is required for remote testing. Install: pip install langflow-sdk")
+        pytest.skip("flow-sdk is required for remote testing. Install: pip install flow-sdk")
 
     if url:
         api_key: str | None = request.config.getoption("langflow_api_key", default=None) or os.environ.get(
@@ -177,7 +177,7 @@ def _resolve_async_remote_client(request: pytest.FixtureRequest) -> Any | None:
 
         return get_async_client(env_name, config_file=_Path(env_file) if env_file else None)
     except Exception as exc:  # noqa: BLE001
-        pytest.skip(f"Could not configure Langflow environment {env_name!r}: {exc}")
+        pytest.skip(f"Could not configure Hanzo Flow environment {env_name!r}: {exc}")
 
 
 def _get_marker_arg(request: pytest.FixtureRequest, name: str) -> Any:
@@ -225,13 +225,13 @@ def flow_runner(
         * ``--lfx-env-file`` / ``--lfx-timeout`` / ``--lfx-flow-dir``
         * ``LFX_ENV_FILE`` / ``LFX_TIMEOUT`` / ``LFX_FLOW_DIR``
 
-    **Remote mode** (when ``--langflow-env`` or ``--langflow-url`` is supplied)
-        Calls the live Langflow API.  Requires ``langflow-sdk``.
+    **Remote mode** (when ``--flow-env`` or ``--flow-url`` is supplied)
+        Calls the live Hanzo Flow API.  Requires ``flow-sdk``.
 
-        * ``--langflow-env <NAME>`` -- named environment from ``.lfx/environments.yaml``
-        * ``--langflow-url <URL>`` -- direct URL
-        * ``--langflow-api-key <KEY>`` / ``LANGFLOW_API_KEY``
-        * ``--langflow-environments-file <PATH>`` / ``LANGFLOW_ENVIRONMENTS_FILE``
+        * ``--flow-env <NAME>`` -- named environment from ``.lfx/environments.yaml``
+        * ``--flow-url <URL>`` -- direct URL
+        * ``--flow-api-key <KEY>`` / ``LANGFLOW_API_KEY``
+        * ``--flow-environments-file <PATH>`` / ``LANGFLOW_ENVIRONMENTS_FILE``
         * ``LANGFLOW_ENV`` / ``LANGFLOW_URL``
 
     Example (local)::
@@ -240,7 +240,7 @@ def flow_runner(
             result = flow_runner("flows/greeting.json", input_value="Hello")
             assert result.ok
 
-    Example (remote -- run with ``pytest --langflow-env staging``)::
+    Example (remote -- run with ``pytest --flow-env staging``)::
 
         @pytest.mark.integration
         def test_greeting(flow_runner):

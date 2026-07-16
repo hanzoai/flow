@@ -23,7 +23,7 @@ class TracingService(BaseTracingService):
     This is a lightweight implementation that logs trace events
     but does not integrate with external tracing services. For full
     tracing functionality (LangSmith, LangFuse, etc.), use the
-    Langflow TracingService.
+    Hanzo Flow TracingService.
     """
 
     def __init__(self):
