@@ -100,11 +100,11 @@ withEventDeliveryModes(
 
     await page.waitForTimeout(2000);
 
-    let hanzoflowCount = await page
-      .locator('[data-testid="hanzoflow-0-option"]')
+    let flowCount = await page
+      .locator('[data-testid="flow-0-option"]')
       .count();
 
-    while (hanzoflowCount === 0) {
+    while (flowCount === 0) {
       await page.waitForTimeout(1000);
       await page.getByTestId("icon-RefreshCcw").click();
 
@@ -112,17 +112,17 @@ withEventDeliveryModes(
 
       await page.waitForTimeout(1000);
 
-      hanzoflowCount = await page
-        .locator('[data-testid="hanzoflow-0-option"]')
+      flowCount = await page
+        .locator('[data-testid="flow-0-option"]')
         .count();
     }
 
-    await page.locator('[data-testid="hanzoflow-0-option"]').nth(0).waitFor({
+    await page.locator('[data-testid="flow-0-option"]').nth(0).waitFor({
       timeout: 15000,
       state: "visible",
     });
 
-    await page.getByTestId("hanzoflow-0-option").nth(0).click();
+    await page.getByTestId("flow-0-option").nth(0).click();
 
     await page
       .locator('[data-testid="dropdown_str_collection_name"]')
@@ -187,11 +187,11 @@ withEventDeliveryModes(
 
     await page.waitForTimeout(2000);
 
-    hanzoflowCount = await page
-      .locator('[data-testid="hanzoflow-0-option"]')
+    flowCount = await page
+      .locator('[data-testid="flow-0-option"]')
       .count();
 
-    while (hanzoflowCount === 0) {
+    while (flowCount === 0) {
       await page.waitForTimeout(1000);
       await page.getByTestId("icon-RefreshCcw").click();
 
@@ -206,12 +206,12 @@ withEventDeliveryModes(
 
       await page.waitForTimeout(1000);
 
-      hanzoflowCount = await page
-        .locator('[data-testid="hanzoflow-0-option"]')
+      flowCount = await page
+        .locator('[data-testid="flow-0-option"]')
         .count();
     }
 
-    await page.getByTestId("hanzoflow-0-option").nth(0).click();
+    await page.getByTestId("flow-0-option").nth(0).click();
 
     await page.waitForTimeout(2000);
 

@@ -25,23 +25,23 @@ export class Network extends Construct {
 
     // VPC等リソースの作成
     this.vpc = new ec2.Vpc(scope, 'VPC', {
-      vpcName: 'hanzoflow-vpc',
+      vpcName: 'flow-vpc',
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       maxAzs: 3,
       subnetConfiguration: [
         {
           cidrMask: 24,
-          name: 'hanzoflow-Isolated',
+          name: 'flow-Isolated',
           subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
         },
         {
           cidrMask: 24,
-          name: 'hanzoflow-Public',
+          name: 'flow-Public',
           subnetType: ec2.SubnetType.PUBLIC,
         },
         {
           cidrMask: 24,
-          name: 'hanzoflow-Private',
+          name: 'flow-Private',
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
         },
       ],
@@ -55,9 +55,9 @@ export class Network extends Construct {
       vpc: this.vpc,
     })
 
-    this.alb = new elb.ApplicationLoadBalancer(this,'hanzoflow-alb',{
+    this.alb = new elb.ApplicationLoadBalancer(this,'flow-alb',{
       internetFacing: true, //インターネットからのアクセスを許可するかどうか指定
-      loadBalancerName: 'hanzoflow-alb',
+      loadBalancerName: 'flow-alb',
       securityGroup: this.albSG, //作成したセキュリティグループを割り当てる
       vpc:this.vpc,
     })
@@ -80,15 +80,15 @@ export class Network extends Construct {
 
     // Cluster
     this.cluster = new ecs.Cluster(this, 'EcsCluster', {
-      clusterName: 'hanzoflow-cluster',
+      clusterName: 'flow-cluster',
       vpc: this.vpc,
       enableFargateCapacityProviders: true,
     });
 
     // ECS BackEndに設定するセキュリティグループ
     this.ecsBackSG = new ec2.SecurityGroup(scope, 'ECSBackEndSecurityGroup', {
-      securityGroupName: 'hanzoflow-ecs-back-sg',
-      description: 'for hanzoflow-back-ecs',
+      securityGroupName: 'flow-ecs-back-sg',
+      description: 'for flow-back-ecs',
       vpc: this.vpc,
     })
     this.ecsBackSG.addIngressRule(this.albSG,ec2.Port.tcp(back_service_port))
@@ -96,16 +96,16 @@ export class Network extends Construct {
     // RDSに設定するセキュリティグループ
     this.dbSG = new ec2.SecurityGroup(scope, 'DBSecurityGroup', {
       allowAllOutbound: true,
-      securityGroupName: 'hanzoflow-db',
-      description: 'for hanzoflow-db',
+      securityGroupName: 'flow-db',
+      description: 'for flow-db',
       vpc: this.vpc,
     })
-    // hanzoflow-ecs-back-sg からのポート3306:mysql(5432:postgres)のインバウンドを許可
+    // flow-ecs-back-sg からのポート3306:mysql(5432:postgres)のインバウンドを許可
     this.dbSG.addIngressRule(this.ecsBackSG, ec2.Port.tcp(3306))
 
     // Create CloudWatch Log Group
     this.backendLogGroup = new logs.LogGroup(this, 'backendLogGroup', {
-      logGroupName: 'hanzoflow-backend-logs',
+      logGroupName: 'flow-backend-logs',
       removalPolicy: RemovalPolicy.DESTROY,
     });
 

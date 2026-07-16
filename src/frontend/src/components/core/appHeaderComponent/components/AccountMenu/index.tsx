@@ -10,7 +10,7 @@ import {
 } from "@/constants/constants";
 import { useLogout } from "@/controllers/API/queries/auth";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_HANZOFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_FLOW } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useAuthStore from "@/stores/authStore";
 import { useDarkStore } from "@/stores/darkStore";

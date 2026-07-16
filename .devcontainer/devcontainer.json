@@ -1,5 +1,5 @@
 {
-  "name": "Hanzoflow Dev Container",
+  "name": "Hanzo Flow Dev Container",
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile"
@@ -8,7 +8,7 @@
     "ghcr.io/devcontainers/features/node": {},
     "ghcr.io/dhoeric/features/hadolint:1": {}
   },
-  "postCreateCommand": "sudo chown -R hanzoflow:hanzoflow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/hanzoflow/frontend && make install_frontend && make install_backend",
+  "postCreateCommand": "sudo chown -R flow:flow .venv .mypy_cache src/frontend/node_modules src/frontend/build src/backend/base/flow/frontend && make install_frontend && make install_backend",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -37,48 +37,48 @@
       }
     }
   },
-  "remoteUser": "hanzoflow",
+  "remoteUser": "flow",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   "forwardPorts": [7860, 3000],
   "containerEnv": {
     "FRONTEND_START_FLAGS": "--host",
     "PYTHONPATH": "/workspace/src/backend/base",
-    "HOME": "/home/hanzoflow"
+    "HOME": "/home/flow"
   },
   "mounts": [
     {
-      "source": "hanzoflow-frontend-node_modules",
+      "source": "flow-frontend-node_modules",
       "target": "/workspace/src/frontend/node_modules",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-frontend-build",
+      "source": "flow-frontend-build",
       "target": "/workspace/src/frontend/build",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-backend-frontend",
-      "target": "/workspace/src/backend/base/hanzoflow/frontend",
+      "source": "flow-backend-frontend",
+      "target": "/workspace/src/backend/base/flow/frontend",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-venv",
+      "source": "flow-venv",
       "target": "/workspace/.venv",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-mypy-cache",
+      "source": "flow-mypy-cache",
       "target": "/workspace/.mypy_cache",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-dist",
+      "source": "flow-dist",
       "target": "/workspace/dist",
       "type": "volume"
     },
     {
-      "source": "hanzoflow-backend-dist",
+      "source": "flow-backend-dist",
       "target": "/workspace/src/backend/base/dist",
       "type": "volume"
     }

@@ -128,7 +128,7 @@ test(
     await page
       .getByTestId("popover-anchor-input-message")
       .first()
-      .fill("hanzoflow");
+      .fill("flow");
 
     const firstApiKeyInput = page
       .getByTestId("popover-anchor-input-openai_api_key")

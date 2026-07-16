@@ -20,12 +20,12 @@ class FaissVectorStoreComponent(LCVectorStoreComponent):
         StrInput(
             name="index_name",
             display_name="Index Name",
-            value="hanzoflow_index",
+            value="flow_index",
         ),
         StrInput(
             name="persist_directory",
             display_name="Persist Directory",
-            info="Path to save the FAISS index. It will be relative to where Hanzoflow is running.",
+            info="Path to save the FAISS index. It will be relative to where HanzoFlow is running.",
         ),
         *LCVectorStoreComponent.inputs,
         BoolInput(
@@ -48,7 +48,7 @@ class FaissVectorStoreComponent(LCVectorStoreComponent):
 
     @staticmethod
     def resolve_path(path: str) -> str:
-        """Resolve the path relative to the Hanzoflow root.
+        """Resolve the path relative to the HanzoFlow root.
 
         Args:
             path: The path to resolve

@@ -13,7 +13,7 @@ from platformdirs import user_cache_dir
 
 @pytest.fixture
 def flow_cache_dir(tmp_path):
-    """Create a temporary hanzoflow cache directory."""
+    """Create a temporary flow cache directory."""
     cache_dir = tmp_path / "flow"
     cache_dir.mkdir(parents=True)
     return cache_dir
@@ -49,8 +49,8 @@ def sample_image(flow_cache_dir):
 
 def test_message_prompt_serialization():
     template = "Hello, {name}!"
-    message = Message.from_template(template, name="Hanzoflow")
-    assert message.text == "Hello, Hanzoflow!"
+    message = Message.from_template(template, name="HanzoFlow")
+    assert message.text == "Hello, HanzoFlow!"
 
     # The base Message class in lfx doesn't support prompt serialization
     # This functionality is only available in the enhanced message class

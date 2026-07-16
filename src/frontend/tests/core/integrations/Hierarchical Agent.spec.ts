@@ -48,6 +48,6 @@ test.skip(
 
     expect(await page.locator(".markdown").count()).toBeGreaterThan(0);
 
-    expect(await page.getByText("Hanzoflow").count()).toBeGreaterThan(2);
+    expect(await page.getByText("HanzoFlow").count()).toBeGreaterThan(2);
   },
 );

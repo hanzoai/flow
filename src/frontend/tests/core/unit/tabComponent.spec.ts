@@ -132,7 +132,7 @@ function updateComponentCode(
     const newImports = updates.imports.join(", ");
     updatedCode = updatedCode.replace(
       importPattern,
-      `from hanzoflow.io import ${newImports}`,
+      `from flow.io import ${newImports}`,
     );
   }
 

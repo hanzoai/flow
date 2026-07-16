@@ -42,7 +42,7 @@ export class Web extends Construct {
     this,
     'OriginAccessIdentity',
     {
-      comment: 'hanzoflow-distribution-originAccessIdentity',
+      comment: 'flow-distribution-originAccessIdentity',
     }
   );
 
@@ -75,7 +75,7 @@ export class Web extends Construct {
   }
 
   const cloudFrontWebDistribution = new cloudfront.Distribution(this, 'distribution', {
-    comment: 'hanzoflow-distribution',
+    comment: 'flow-distribution',
     defaultRootObject: 'index.html',
     errorResponses: [
       {

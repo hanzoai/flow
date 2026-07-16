@@ -1,4 +1,4 @@
-"""Script to update Hanzoflow starter projects with the latest component versions."""
+"""Script to update HanzoFlow starter projects with the latest component versions."""
 
 import asyncio
 import os
@@ -19,7 +19,7 @@ from lfx.services.deps import get_settings_service
 async def main():
     """Updates the starter projects with the latest component versions.
 
-    Copies the code from hanzoflow/initial_setup/setup.py. Doesn't use the
+    Copies the code from flow/initial_setup/setup.py. Doesn't use the
     create_or_update_starter_projects function directly to avoid sql interactions.
     """
     await initialize_services(fix_migration=False)
@@ -28,7 +28,7 @@ async def main():
     starter_projects = await load_starter_projects()
     for project_path, project in starter_projects:
         _, _, _, _, project_data, _, _, _, _ = get_project_data(project)
-        do_update_starter_projects = os.environ.get("HANZOFLOW_UPDATE_STARTER_PROJECTS", "true").lower() == "true"
+        do_update_starter_projects = os.environ.get("FLOW_UPDATE_STARTER_PROJECTS", "true").lower() == "true"
         if do_update_starter_projects:
             updated_project_data = update_projects_components_with_latest_component_versions(
                 project_data.copy(), all_types_dict

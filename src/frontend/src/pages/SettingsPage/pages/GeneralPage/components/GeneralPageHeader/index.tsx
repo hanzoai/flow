@@ -18,7 +18,7 @@ const GeneralPageHeaderComponent = () => {
             />
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage settings related to Hanzoflow and your account.
+            Manage settings related to HanzoFlow and your account.
           </p>
         </div>
       </div>

@@ -66,7 +66,7 @@ class CombinatorialReasonerComponent(Component):
 
         creds = HTTPBasicAuth(self.username, password=self.password)
         response = requests.post(
-            "https://cr-api.icosacomputing.com/cr/hanzoflow",
+            "https://cr-api.icosacomputing.com/cr/flow",
             json=params,
             auth=creds,
             timeout=100,

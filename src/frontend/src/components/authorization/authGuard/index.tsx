@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import {
   IS_AUTO_LOGIN,
-  HANZOFLOW_ACCESS_TOKEN_EXPIRE_SECONDS,
-  HANZOFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV,
+  FLOW_ACCESS_TOKEN_EXPIRE_SECONDS,
+  FLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV,
 } from "@/constants/constants";
 import { useRefreshAccessToken } from "@/controllers/API/queries/auth";
 import { CustomNavigate } from "@/customization/components/custom-navigate";
@@ -21,8 +21,8 @@ export const ProtectedRoute = ({ children }) => {
     (!autoLogin || !isAutoLoginEnv);
 
   useEffect(() => {
-    const envRefreshTime = HANZOFLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV;
-    const automaticRefreshTime = HANZOFLOW_ACCESS_TOKEN_EXPIRE_SECONDS;
+    const envRefreshTime = FLOW_ACCESS_TOKEN_EXPIRE_SECONDS_ENV;
+    const automaticRefreshTime = FLOW_ACCESS_TOKEN_EXPIRE_SECONDS;
 
     const accessTokenTimer = isNaN(envRefreshTime)
       ? automaticRefreshTime

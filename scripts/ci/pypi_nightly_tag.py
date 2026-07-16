@@ -20,11 +20,11 @@ import packaging.version
 import requests
 from packaging.version import Version
 
-PYPI_HANZOFLOW_URL = "https://pypi.org/pypi/hanzoflow/json"
-PYPI_HANZOFLOW_NIGHTLY_URL = "https://pypi.org/pypi/flow-nightly/json"
+PYPI_FLOW_URL = "https://pypi.org/pypi/flow/json"
+PYPI_FLOW_NIGHTLY_URL = "https://pypi.org/pypi/flow-nightly/json"
 
-PYPI_HANZOFLOW_BASE_URL = "https://pypi.org/pypi/flow-base/json"
-PYPI_HANZOFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/flow-base-nightly/json"
+PYPI_FLOW_BASE_URL = "https://pypi.org/pypi/flow-base/json"
+PYPI_FLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/flow-base-nightly/json"
 
 # main and base MUST share one dev number, so the shared number is derived from both packages.
 PYPI_NIGHTLY_URLS = (PYPI_FLOW_NIGHTLY_URL, PYPI_FLOW_BASE_NIGHTLY_URL)
@@ -36,9 +36,9 @@ VALID_BUILD_TYPES = ("main", "base", "both")
 def get_latest_published_version(build_type: str, *, is_nightly: bool) -> Version:
     url = ""
     if build_type == "base":
-        url = PYPI_HANZOFLOW_BASE_NIGHTLY_URL if is_nightly else PYPI_HANZOFLOW_BASE_URL
+        url = PYPI_FLOW_BASE_NIGHTLY_URL if is_nightly else PYPI_FLOW_BASE_URL
     elif build_type == "main":
-        url = PYPI_HANZOFLOW_NIGHTLY_URL if is_nightly else PYPI_HANZOFLOW_URL
+        url = PYPI_FLOW_NIGHTLY_URL if is_nightly else PYPI_FLOW_URL
     else:
         msg = f"Invalid build type: {build_type}"
         raise ValueError(msg)

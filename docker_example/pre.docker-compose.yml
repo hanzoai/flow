@@ -1,18 +1,18 @@
 version: "3.8"
 
 services:
-  hanzoflow:
-    image: hanzoflowai/hanzoflow:1.0-alpha
+  flow:
+    image: flowai/flow:1.0-alpha
     ports:
       - "7860:7860"
     depends_on:
       - postgres
     environment:
-      - HANZOFLOW_DATABASE_URL=postgresql://hanzoflow:hanzoflow@postgres:5432/hanzoflow
+      - FLOW_DATABASE_URL=postgresql://flow:flow@postgres:5432/flow
       # This variable defines where the logs, file storage, monitor data and secret keys are stored.
-      - HANZOFLOW_CONFIG_DIR=app/hanzoflow
+      - FLOW_CONFIG_DIR=app/flow
     volumes:
-      - hanzoflow-data:/app/hanzoflow
+      - flow-data:/app/flow
 
   postgres:
     # Pinned to a specific Debian base (trixie) so the postgres:16 tag does not
@@ -21,14 +21,14 @@ services:
     # base. See https://github.com/hanzoai/flow/issues/9608
     image: postgres:16-trixie
     environment:
-      POSTGRES_USER: hanzoflow
-      POSTGRES_PASSWORD: hanzoflow
-      POSTGRES_DB: hanzoflow
+      POSTGRES_USER: flow
+      POSTGRES_PASSWORD: flow
+      POSTGRES_DB: flow
     ports:
       - "5432:5432"
     volumes:
-      - hanzoflow-postgres:/var/lib/postgresql/data
+      - flow-postgres:/var/lib/postgresql/data
 
 volumes:
-  hanzoflow-postgres:
-  hanzoflow-data:
+  flow-postgres:
+  flow-data:

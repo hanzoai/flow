@@ -10,16 +10,16 @@ test(
   { tag: ["@release", "@workspace", "@components"] },
   async ({ page }) => {
     const customComponentCodeWithRaiseErrorMessage = `
-# from hanzoflow.field_typing import Data
-from hanzoflow.custom import Component
-from hanzoflow.io import MessageTextInput, Output
-from hanzoflow.schema import Data
+# from flow.field_typing import Data
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema import Data
 
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.hanzoflow.org/components-custom-components"
+    documentation: str = "https://docs.flow.org/components-custom-components"
     icon = "code"
     name = "CustomComponent"
 

@@ -1,5 +1,5 @@
 import type { Edge } from "@xyflow/react";
-import { HANZOFLOW_SUPPORTED_TYPES } from "@/constants/constants";
+import { FLOW_SUPPORTED_TYPES } from "@/constants/constants";
 import { scapedJSONStringfy } from "@/utils/reactflowUtils";
 
 export type DisplayHandleTemplate = {
@@ -39,7 +39,7 @@ export const computeDisplayHandle = (
   }
 
   return !!(
-    (!HANZOFLOW_SUPPORTED_TYPES.has(type ?? "") ||
+    (!FLOW_SUPPORTED_TYPES.has(type ?? "") ||
       (optionalHandle && optionalHandle.length > 0)) &&
     !(isToolMode && template.tool_mode) &&
     !hasRefreshButton

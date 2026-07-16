@@ -187,7 +187,7 @@ class ApifyActorsComponent(Component):
         if self._apify_client is None or self._apify_client.token != self.apify_token:
             self._apify_client = ApifyClient(self.apify_token)
             if httpx_client := self._apify_client.http_client.httpx_client:
-                httpx_client.headers["user-agent"] += "; Origin/hanzoflow"
+                httpx_client.headers["user-agent"] += "; Origin/flow"
         return self._apify_client
 
     def _get_actor_latest_build(self, actor_id: str) -> dict:

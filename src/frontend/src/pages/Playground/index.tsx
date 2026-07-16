@@ -60,7 +60,7 @@ export default function PlaygroundPage() {
   }, []);
 
   useEffect(() => {
-    document.title = currentSavedFlow?.name || "Hanzoflow";
+    document.title = currentSavedFlow?.name || "HanzoFlow";
     if (currentSavedFlow?.data) {
       const { inputs, outputs } = getInputsAndOutputs(
         currentSavedFlow?.data?.nodes || [],

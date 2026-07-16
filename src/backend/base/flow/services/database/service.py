@@ -102,8 +102,8 @@ class DatabaseService(Service):
 
         self._sanitize_database_url()
 
-        # This file is in hanzoflow.services.database.manager.py
-        # the ini is in hanzoflow
+        # This file is in flow.services.database.manager.py
+        # the ini is in flow
         flow_dir = Path(__file__).parent.parent.parent
         self.script_location = flow_dir / "alembic"
         self.alembic_cfg_path = flow_dir / "alembic.ini"
