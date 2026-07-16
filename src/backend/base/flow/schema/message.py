@@ -1,4 +1,4 @@
-"""Message class for langflow - imports from lfx.
+"""Message class for flow - imports from lfx.
 
 This maintains backward compatibility while using the lfx implementation.
 """

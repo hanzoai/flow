@@ -746,7 +746,7 @@ class ComposioBaseComponent(Component):
             logger.debug(f"Could not populate Composio actions for {self.app_name}: {e}")
 
     def _validate_schema_inputs(self, action_key: str) -> list[InputTypes]:
-        """Convert the JSON schema for *action_key* into Langflow input objects."""
+        """Convert the JSON schema for *action_key* into Hanzo Flow input objects."""
         # Skip validation for default/placeholder values
         if action_key in ("disabled", "placeholder", ""):
             logger.debug(f"Skipping schema validation for placeholder value: {action_key}")

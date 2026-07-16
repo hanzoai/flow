@@ -7,8 +7,8 @@ from lfx.io import BoolInput, DropdownInput, HandleInput, IntInput, MessageTextI
 from lfx.schema import Data, DataFrame
 
 _CHUNKING_INSTALL_HINT = (
-    "Install them with `uv pip install 'langflow[docling-chunking]'`, "
-    "`uv pip install 'langflow-base[docling-chunking]'`, or "
+    "Install them with `uv pip install 'flow[docling-chunking]'`, "
+    "`uv pip install 'flow-base[docling-chunking]'`, or "
     "`uv pip install 'docling-core[chunking]' tiktoken`."
 )
 

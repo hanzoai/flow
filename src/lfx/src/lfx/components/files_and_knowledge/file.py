@@ -3,7 +3,7 @@
 Notes:
 -----
 - ALL Docling parsing/export runs in a separate OS process to prevent memory
-  growth and native library state from impacting the main Langflow process.
+  growth and native library state from impacting the main Hanzo Flow process.
 - Standard text/structured parsing continues to use existing BaseFileComponent
   utilities (and optional threading via `parallel_load_data`).
 """

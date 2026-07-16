@@ -37,7 +37,7 @@ MAX_ATTACHMENT_SIZE_BYTES: int = 50 * 1024 * 1024
 
 
 class Message(Data):
-    """Message schema for Langflow.
+    """Message schema for Hanzo Flow.
 
     Message ID Semantics:
     - Messages only have an ID after being stored in the database

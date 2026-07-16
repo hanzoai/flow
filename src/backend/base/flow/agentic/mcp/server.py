@@ -1,4 +1,4 @@
-"""FastMCP server for Langflow Agentic tools.
+"""FastMCP server for Hanzo Flow Agentic tools.
 
 This module exposes template search and creation functions as MCP tools using FastMCP decorators.
 """
@@ -40,7 +40,7 @@ from flow.agentic.utils.template_search import (
 from flow.services.deps import get_settings_service, session_scope
 
 # Initialize FastMCP server
-mcp = FastMCP("langflow-agentic")
+mcp = FastMCP("flow-agentic")
 
 DEFAULT_TEMPLATE_FIELDS = ["id", "name", "description", "tags", "endpoint_name", "icon"]
 DEFAULT_COMPONENT_FIELDS = ["name", "type", "display_name", "description"]

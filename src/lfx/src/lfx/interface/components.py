@@ -479,7 +479,7 @@ async def import_langflow_components(
     settings_service: Optional["SettingsService"] = None,
     telemetry_service: Any | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Asynchronously discovers and loads all built-in Langflow components.
+    """Asynchronously discovers and loads all built-in Hanzo Flow components.
 
     Loading Strategy:
     - Production mode: Load from prebuilt index -> cache -> build dynamically (with caching)
@@ -633,7 +633,7 @@ async def get_and_cache_all_types_dict(
 ):
     """Retrieves and caches the complete dictionary of component types and templates.
 
-    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in Langflow
+    Supports both full and partial (lazy) loading. If the cache is empty, loads built-in Hanzo Flow
     components and either fully loads all components or loads only their metadata, depending on the
     lazy loading setting. Merges built-in and custom components into the cache and returns the
     resulting dictionary.

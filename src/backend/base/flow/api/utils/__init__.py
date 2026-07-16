@@ -1,4 +1,4 @@
-"""API utilities for Langflow.
+"""API utilities for Hanzo Flow.
 
 This module provides backward compatibility by re-exporting all utilities
 from the core module. This ensures existing imports continue to work while

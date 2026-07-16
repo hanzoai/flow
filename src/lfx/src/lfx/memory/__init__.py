@@ -1,14 +1,14 @@
 """Memory management for lfx with dynamic dispatch.
 
-Routes memory operations to either the full langflow implementation (when
-langflow is installed AND a real database service is registered) or the lfx
+Routes memory operations to either the full flow implementation (when
+flow is installed AND a real database service is registered) or the lfx
 stub implementation (standalone / noop DB).
 
 Dispatch is evaluated at call time, not import time, because the database
 service is typically registered *after* this module is first imported (e.g.,
 from Component class definitions loaded before graph setup). An import-time
-decision can't distinguish "langflow is importable" from "a real DB is wired",
-and picking the langflow backend with a NoopDatabaseService yields silent
+decision can't distinguish "flow is importable" from "a real DB is wired",
+and picking the flow backend with a NoopDatabaseService yields silent
 no-op inserts followed by spurious "Message with id X not found" errors on
 update.
 """
@@ -74,7 +74,7 @@ def store_message(*args: Any, **kwargs: Any):
 # Import the appropriate implementation
 if has_langflow_memory():
     try:
-        # Import full langflow implementation
+        # Import full flow implementation
         from flow.memory import (
             aadd_messages,
             aadd_messagetables,
@@ -89,7 +89,7 @@ if has_langflow_memory():
             store_message,
         )
     except ImportError:
-        # Fallback to lfx implementation if langflow import fails
+        # Fallback to lfx implementation if flow import fails
         from lfx.memory.stubs import (
             aadd_messages,
             aadd_messagetables,

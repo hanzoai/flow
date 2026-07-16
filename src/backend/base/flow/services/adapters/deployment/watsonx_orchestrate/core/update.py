@@ -335,7 +335,7 @@ async def _apply_tool_renames(
 
     Guards against destructive operations on tools we don't own:
     1. Tool must be attached to this agent (tool_id in agent_tool_ids).
-    2. Tool must be a Langflow-managed tool (has ``binding.langflow``).
+    2. Tool must be a Hanzo Flow-managed tool (has ``binding.flow``).
     3. Tool must exist on the provider.
 
     Captures original tool payloads in ``original_tools`` for rollback.

@@ -150,7 +150,7 @@ class WebhookEventManager:
 
 
 # Module-level instance (can be replaced in tests via dependency injection)
-# TODO: Consider migrating to langflow's service manager pattern for better DI
+# TODO: Consider migrating to flow's service manager pattern for better DI
 _webhook_event_manager: WebhookEventManager | None = None
 
 

@@ -49,7 +49,7 @@ async def get_lf_version_from_pypi():
             return None
         return response.json()["info"]["version"]
     except Exception:  # noqa: BLE001
-        logger.debug("Error getting the latest version of langflow from PyPI", exc_info=True)
+        logger.debug("Error getting the latest version of flow from PyPI", exc_info=True)
         return None
 
 

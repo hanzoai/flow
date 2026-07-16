@@ -91,7 +91,7 @@ class AuthSettings(BaseSettings):
         default=True,
         description="Allow creation of superusers via CLI. Set to False in production for security.",
     )
-    """If True, allows creation of superusers via the CLI 'langflow superuser' command."""
+    """If True, allows creation of superusers via the CLI 'flow superuser' command."""
 
     NEW_USER_IS_ACTIVE: bool = False
     SUPERUSER: str = DEFAULT_SUPERUSER

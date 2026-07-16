@@ -34,9 +34,9 @@ class McpSettings(BaseModel):
 
     # MCP Server
     mcp_server_enabled: bool = True
-    """If set to False, Langflow will not enable the MCP server."""
+    """If set to False, Hanzo Flow will not enable the MCP server."""
     mcp_server_enable_progress_notifications: bool = False
-    """If set to False, Langflow will not send progress notifications in the MCP server."""
+    """If set to False, Hanzo Flow will not send progress notifications in the MCP server."""
 
     # Add projects to MCP servers automatically on creation
     add_projects_to_mcp_servers: bool = True
@@ -44,7 +44,7 @@ class McpSettings(BaseModel):
 
     # MCP Composer
     mcp_composer_enabled: bool = True
-    """If set to False, Langflow will not start the MCP Composer service."""
+    """If set to False, Hanzo Flow will not start the MCP Composer service."""
     mcp_composer_version: str = "==0.1.0.8.10"
     """Version constraint for mcp-composer when using uvx. Uses PEP 440 syntax."""
 

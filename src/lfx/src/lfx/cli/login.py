@@ -1,4 +1,4 @@
-"""lfx login -- validate credentials against a remote Langflow instance.
+"""lfx login -- validate credentials against a remote Hanzo Flow instance.
 
 Tests whether the configured URL and API key are reachable and accepted,
 then prints a summary with guidance on how to fix any problems.
@@ -82,7 +82,7 @@ def _probe_connection(client: Any, sdk: Any) -> tuple[bool, str, int]:
     except Exception as exc:  # noqa: BLE001
         # A Pydantic ValidationError means the HTTP request completed and was
         # authenticated (auth is fine) but the SDK's schema doesn't match the
-        # local Langflow version exactly.  Treat this as a successful probe.
+        # local Hanzo Flow version exactly.  Treat this as a successful probe.
         if "ValidationError" in type(exc).__qualname__:
             return True, "OK", 0
         return False, f"error:{exc}", 0
@@ -150,13 +150,13 @@ def login_command(
             err_console.print()
             err_console.print("[bold]How to fix:[/bold]")
             if key_env_name:
-                err_console.print("  1. Open Langflow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
                 err_console.print(f"  2. [bold]export {key_env_name}=<your-new-key>[/bold]")
             elif env_cfg.name not in ("__inline__", "__env__"):
-                err_console.print("  1. Open Langflow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
                 err_console.print("  2. Pass [bold]--api-key <key>[/bold] or configure api_key_env in your YAML")
             else:
-                err_console.print("  1. Open Langflow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
                 err_console.print("  2. Pass [bold]--api-key <key>[/bold]")
             raise typer.Exit(1)
 
@@ -166,9 +166,9 @@ def login_command(
             err_console.print(f"  URL: {env_cfg.url}")
             err_console.print()
             err_console.print("[bold]How to fix:[/bold]")
-            err_console.print("  • Make sure your Langflow instance is running")
+            err_console.print("  • Make sure your Hanzo Flow instance is running")
             err_console.print("  • Check the URL in your .lfx/environments.yaml")
-            err_console.print("  • If running locally: [bold]langflow run[/bold] or [bold]lfx serve <flow.json>[/bold]")
+            err_console.print("  • If running locally: [bold]flow run[/bold] or [bold]lfx serve <flow.json>[/bold]")
             raise typer.Exit(1)
 
         # Generic HTTP or other error

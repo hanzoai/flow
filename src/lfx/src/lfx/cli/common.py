@@ -638,7 +638,7 @@ def load_sdk(command_name: str) -> Any:
     try:
         import flow_sdk  # type: ignore[import-untyped]
     except ImportError as exc:
-        msg = f"langflow-sdk is required for lfx {command_name}. Install it with: pip install langflow-sdk"
+        msg = f"flow-sdk is required for lfx {command_name}. Install it with: pip install flow-sdk"
         raise typer.BadParameter(msg) from exc
     else:
         return langflow_sdk

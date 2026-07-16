@@ -1,4 +1,4 @@
-"""Core run functionality for executing Langflow graphs."""
+"""Core run functionality for executing Hanzo Flow graphs."""
 
 import json
 import re
@@ -73,9 +73,9 @@ async def run_flow(
     session_id: str | None = None,
     event_manager: "EventManager | None" = None,
 ) -> dict:
-    """Execute a Langflow graph script or JSON flow and return the result.
+    """Execute a Hanzo Flow graph script or JSON flow and return the result.
 
-    This function analyzes and executes either a Python script containing a Langflow graph,
+    This function analyzes and executes either a Python script containing a Hanzo Flow graph,
     a JSON flow file, inline JSON, or JSON from stdin, returning the result as a dict.
 
     Args:
@@ -359,7 +359,7 @@ async def run_flow(
         logger.info("Starting graph execution...", level="DEBUG")
 
         # See lfx.run._defaults.resolve_fallback_to_env_vars for why this flag is
-        # plumbed through (mirrors langflow's API path so load_from_db variables
+        # plumbed through (mirrors flow's API path so load_from_db variables
         # fall through to os.environ on miss instead of erroring the build).
         fallback_to_env_vars = resolve_fallback_to_env_vars()
 

@@ -1,1 +1,1 @@
-"""Adapter namespaces for Langflow service-scoped plugin registries."""
+"""Adapter namespaces for Hanzo Flow service-scoped plugin registries."""

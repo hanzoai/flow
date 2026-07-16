@@ -51,7 +51,7 @@ _convert_type_to_field_type = {
 
 
 def _resolve_input_type(annotation: Any, *, required: bool) -> tuple[type[InputTypes], bool, list[Any] | None]:
-    """Resolve a Pydantic annotation into a Langflow input type."""
+    """Resolve a Pydantic annotation into a Hanzo Flow input type."""
     ann = annotation
 
     if isinstance(ann, UnionType):
@@ -105,7 +105,7 @@ def _resolve_input_type(annotation: Any, *, required: bool) -> tuple[type[InputT
 
 
 def _get_langflow_input_default(model_field: Any, input_cls: type[InputTypes]) -> Any:
-    """Return a Langflow-safe default value for a Pydantic model field."""
+    """Return a Hanzo Flow-safe default value for a Pydantic model field."""
     default = model_field.default
     if default is PydanticUndefined:
         return PydanticUndefined
