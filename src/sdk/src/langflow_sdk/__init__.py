@@ -1,4 +1,4 @@
-"""langflow-sdk -- Python SDK for the Langflow REST API."""
+"""flow-sdk -- Python SDK for the Hanzo Flow REST API."""
 
 from flow_sdk._async_client import AsyncClient, AsyncLangflowClient
 from flow_sdk.background_job import BackgroundJob

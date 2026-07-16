@@ -72,7 +72,7 @@ make load_test_remote_run FLOW_HOST="https://your-remote-instance.com"
 
 # Or using Python scripts directly
 python langflow_setup_test.py --host https://your-remote-instance.com --interactive
-python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-langflow --headless --users 10 --duration 120
+python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-flow --headless --users 10 --duration 120
 
 # Test remote instance before setup (optional)
 python diagnose_remote.py --host https://your-remote-instance.com --load-test 5
@@ -80,7 +80,7 @@ python diagnose_remote.py --host https://your-remote-instance.com --load-test 5
 
 ### Important Notes for Remote Testing
 
-- **Always use `--no-start-langflow`** when testing remote instances
+- **Always use `--no-start-flow`** when testing remote instances
 - **Use HTTPS** for production remote instances
 - **Consider network latency** in your performance expectations
 - **Monitor both client and server resources** during testing
@@ -108,7 +108,7 @@ python langflow_setup_test.py --list-flows
 
 This will:
 
-- Use default credentials (langflow/langflow)
+- Use default credentials (flow/flow)
 - Generate API keys
 - Upload a real starter project flow
 - Provide credentials for load testing
@@ -136,7 +136,7 @@ python langflow_setup_test.py --host https://your-remote-instance.com --interact
 python langflow_setup_test.py --interactive --save-credentials my_test_creds.json
 
 # Test against existing remote Hanzo Flow instance
-python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-langflow
+python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-flow
 
 # Save results to CSV and HTML
 python langflow_run_load_test.py --headless --csv results --html report.html --users 50 --duration 300
@@ -185,7 +185,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 1. **Health Check**: Verify Hanzo Flow is running
 2. **Flow Selection**: Choose from 40+ real starter project flows
-3. **Authentication**: Login with default credentials (langflow/langflow)
+3. **Authentication**: Login with default credentials (flow/flow)
 4. **API Key Generation**: Create API key for load testing
 5. **Flow Upload**: Upload the selected starter project flow
 6. **Credential Export**: Provide environment variables for testing
@@ -240,7 +240,7 @@ The test tracks:
 ### Common Issues
 
 1. **Setup Failed**: Ensure Hanzo Flow is accessible and not in read-only mode
-2. **Authentication Errors**: Verify default credentials (langflow/langflow) are enabled
+2. **Authentication Errors**: Verify default credentials (flow/flow) are enabled
 3. **Flow Creation Failed**: Verify the user has permission to create flows
 4. **Connection Errors**: Check network connectivity and firewall settings
 5. **Status Code 0 Errors**: Usually indicates connection overload - reduce user count or spawn rate
@@ -259,7 +259,7 @@ For debugging, you can:
 
 If automatic setup fails, you can set up manually:
 
-1. Start Hanzo Flow: `python -m langflow run --auto-login`
+1. Start Hanzo Flow: `python -m flow run --auto-login`
 2. Create a user account through the UI
 3. Create an API key in the settings
 4. Create a simple flow and note its ID

@@ -159,7 +159,7 @@ class TestWindowsPostgresHelper:
     def test_docker_environment_not_affected(self, mock_platform):
         """Test that Docker environments (typically Linux) are not affected."""
         mock_platform.return_value = "Linux"
-        os.environ[FLOW_DATABASE_URL] = "postgresql://user:pass@postgres:5432/langflow"
+        os.environ[FLOW_DATABASE_URL] = "postgresql://user:pass@postgres:5432/flow"
         os.environ["DOCKER_CONTAINER"] = "true"
 
         original_policy = asyncio.get_event_loop_policy()

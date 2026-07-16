@@ -299,7 +299,7 @@ def test_update_source_handle():
     assert updated_edge["data"]["sourceHandle"]["id"] == "last_node"
 
 
-# TODO: Move to Langflow tests
+# TODO: Move to Hanzo Flow tests
 @pytest.mark.skip(reason="Temporarily disabled")
 async def test_serialize_graph():
     pass

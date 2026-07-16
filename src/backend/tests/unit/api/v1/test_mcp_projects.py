@@ -654,7 +654,7 @@ async def test_project_sse_creation(user_test_project):
     assert mcp_server is project_mcp_servers[project_id_str]
     assert isinstance(mcp_server, ProjectMCPServer)
     assert mcp_server.project_id == project_id
-    assert mcp_server.server.name == f"langflow-mcp-project-{project_id}"
+    assert mcp_server.server.name == f"flow-mcp-project-{project_id}"
 
     # Test that getting the same SSE transport and MCP server again returns the cached instances
     sse_transport2 = get_project_sse(project_id)

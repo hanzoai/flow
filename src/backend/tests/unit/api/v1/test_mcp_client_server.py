@@ -1,7 +1,7 @@
 """Integration tests for lfx.mcp.server MCP tools.
 
-Uses the client_fixture (real Langflow app via ASGITransport) — no mocking.
-Tests the full roundtrip: MCP tool -> LangflowClient -> Langflow API -> DB.
+Uses the client_fixture (real Hanzo Flow app via ASGITransport) — no mocking.
+Tests the full roundtrip: MCP tool -> LangflowClient -> Hanzo Flow API -> DB.
 """
 
 import pytest
@@ -625,7 +625,7 @@ class TestRunFlow:
         assert "outputs" in result
 
     async def test_stream_post_yields_events(self, mcp_client, created_api_key):
-        """Verify stream_post yields SSE events from Langflow's streaming endpoint."""
+        """Verify stream_post yields SSE events from Hanzo Flow's streaming endpoint."""
         mcp_client.api_key = created_api_key.api_key
         created = await mcp_server_module.create_flow("StreamTest")
         c1 = await mcp_server_module.add_component(created["id"], "ChatInput")

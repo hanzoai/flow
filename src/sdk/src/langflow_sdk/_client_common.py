@@ -1,4 +1,4 @@
-"""Shared helpers used by both sync and async Langflow SDK clients."""
+"""Shared helpers used by both sync and async Hanzo Flow SDK clients."""
 
 from __future__ import annotations
 

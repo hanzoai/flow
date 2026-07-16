@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Keep this syntax directive! It's used to enable Docker BuildKit
 #
-# Backend-only Langflow image
+# Backend-only Hanzo Flow image
 # - No frontend code or assets
 # - No Playwright
 
@@ -31,13 +31,13 @@ COPY ./src/backend ./src/backend
 COPY ./src/lfx ./src/lfx
 COPY ./src/sdk ./src/sdk
 
-# Create venv and install langflow-base with dependencies
+# Create venv and install flow-base with dependencies
 # Using uv pip instead of uv sync to avoid workspace complexities
 RUN uv venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 ENV VIRTUAL_ENV="/app/.venv"
 
-# Install langflow-base with all extras except dev (which includes Playwright)
+# Install flow-base with all extras except dev (which includes Playwright)
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install ./src/sdk ./src/lfx "./src/backend/base[complete,postgresql]"
 
@@ -80,23 +80,23 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Create home directory and ensure proper ownership
 # The user needs write access to /app/data (home) and /app (workdir).
-# Also pre-create /app/langflow (LANGFLOW_CONFIG_DIR used by the docker_example
+# Also pre-create /app/flow (LANGFLOW_CONFIG_DIR used by the docker_example
 # compose file) with the non-root user as owner, so a fresh named volume mounted
-# at /app/langflow inherits the correct ownership/permissions and the in-container
+# at /app/flow inherits the correct ownership/permissions and the in-container
 # uid=1000 user can write secret_key, profile_pictures, etc. Without this, the
-# volume would be initialized as root:root and Langflow would crash with
-# PermissionError on /app/langflow/secret_key (issue #10437).
+# volume would be initialized as root:root and Hanzo Flow would crash with
+# PermissionError on /app/flow/secret_key (issue #10437).
 # Note: .venv is already owned by 1000:0 via COPY --chown above, so no recursive chown needed
-RUN mkdir -p /app/data /app/langflow \
-    && chown -R 1000:0 /app/data /app/langflow \
-    && chmod -R g+rwX /app/langflow \
+RUN mkdir -p /app/data /app/flow \
+    && chown -R 1000:0 /app/data /app/flow \
+    && chmod -R g+rwX /app/flow \
     && chown 1000:0 /app
 
-LABEL org.opencontainers.image.title=langflow-backend
-LABEL org.opencontainers.image.authors=['Langflow']
+LABEL org.opencontainers.image.title=flow-backend
+LABEL org.opencontainers.image.authors=['Hanzo Flow']
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.url=https://github.com/langflow-ai/langflow
-LABEL org.opencontainers.image.source=https://github.com/langflow-ai/langflow
+LABEL org.opencontainers.image.url=https://github.com/hanzoai/flow
+LABEL org.opencontainers.image.source=https://github.com/hanzoai/flow
 
 USER user
 WORKDIR /app
@@ -104,4 +104,4 @@ WORKDIR /app
 ENV LANGFLOW_HOST=0.0.0.0
 ENV LANGFLOW_PORT=7860
 
-CMD ["python", "-m", "langflow", "run", "--backend-only"]
+CMD ["python", "-m", "flow", "run", "--backend-only"]

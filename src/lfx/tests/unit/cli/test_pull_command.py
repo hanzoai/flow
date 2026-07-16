@@ -1,6 +1,6 @@
 """Unit tests for lfx pull -- pull_command and helpers.
 
-All tests run entirely in-process; no real Langflow instance or SDK required.
+All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the pull logic
 (flow fetching, file writing, project resolution, result rendering)
 is under test.
@@ -700,7 +700,7 @@ class TestPullCommandErrorHandling:
         from lfx.cli.pull import pull_command
 
         with (
-            patch("lfx.cli.pull.load_sdk", side_effect=typer.BadParameter("langflow-sdk is required")),
+            patch("lfx.cli.pull.load_sdk", side_effect=typer.BadParameter("flow-sdk is required")),
             pytest.raises(typer.BadParameter),
         ):
             pull_command(

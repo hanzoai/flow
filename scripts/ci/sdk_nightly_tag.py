@@ -4,8 +4,8 @@ import packaging.version
 import requests
 from packaging.version import Version
 
-PYPI_SDK_URL = "https://pypi.org/pypi/langflow-sdk/json"
-PYPI_SDK_NIGHTLY_URL = "https://pypi.org/pypi/langflow-sdk-nightly/json"
+PYPI_SDK_URL = "https://pypi.org/pypi/flow-sdk/json"
+PYPI_SDK_NIGHTLY_URL = "https://pypi.org/pypi/flow-sdk-nightly/json"
 
 
 def get_latest_published_version(*, is_nightly: bool) -> Version:

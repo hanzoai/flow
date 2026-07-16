@@ -143,9 +143,9 @@ def test_backwards_compatibility_scenario():
 
 
 def test_importing_langflow_logging_in_langflow():
-    """Test that flow.logging can be imported and used in langflow context without errors.
+    """Test that flow.logging can be imported and used in flow context without errors.
 
-    This is similar to test_importing_langflow_logging_in_lfx but tests the langflow side
+    This is similar to test_importing_langflow_logging_in_lfx but tests the flow side
     using create_class to validate component creation with flow.logging imports.
     """
     from textwrap import dedent
@@ -160,7 +160,7 @@ from flow.custom import Component
 
 class TestLangflowLoggingComponent(Component):
     def some_method(self):
-        # Test that both logger and configure work in langflow context
+        # Test that both logger and configure work in flow context
         configure(log_level="INFO")
         logger.info("Test message from flow component")
 

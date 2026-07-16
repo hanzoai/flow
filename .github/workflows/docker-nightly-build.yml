@@ -49,10 +49,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -72,7 +72,7 @@ jobs:
         id: version
         run: |
           echo "Extracting base version from pyproject.toml"
-          version=$(uv tree 2>/dev/null | grep 'langflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
+          version=$(uv tree 2>/dev/null | grep 'flow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
 
 
           # Verify nightly tag format
@@ -145,10 +145,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -168,7 +168,7 @@ jobs:
         id: version
         run: |
           echo "Extracting main version from pyproject.toml"
-          version=$(uv tree 2>/dev/null | grep -E '^langflow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep -E '^flow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
 
           # Verify nightly tag format
           if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.dev[0-9]+$ ]]; then
@@ -240,10 +240,10 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: [Langflow-runner]
+            runner: [Hanzo Flow-runner]
           - arch: arm64
             runner:
-              [self-hosted, linux, ARM64, langflow-ai-arm64-40gb-ephemeral]
+              [self-hosted, linux, ARM64, flow-ai-arm64-40gb-ephemeral]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out the code
@@ -263,7 +263,7 @@ jobs:
         id: version
         run: |
           echo "Extracting main version from pyproject.toml"
-          version=$(uv tree 2>/dev/null | grep -E '^langflow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
+          version=$(uv tree 2>/dev/null | grep -E '^flow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
 
           # Verify nightly tag format
           if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.dev[0-9]+$ ]]; then
@@ -351,9 +351,9 @@ jobs:
         id: version
         run: |
           if [[ "${{ inputs.release_type }}" == "nightly-base" ]]; then
-            version=$(uv tree 2>/dev/null | grep 'langflow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
+            version=$(uv tree 2>/dev/null | grep 'flow-base' | awk '{print $3}' | sed 's/^v//' | head -n 1)
           else
-            version=$(uv tree 2>/dev/null | grep -E '^langflow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
+            version=$(uv tree 2>/dev/null | grep -E '^flow(-nightly)?[[:space:]]' | cut -d' ' -f2 | sed 's/^v//')
           fi
           echo "Using version: $version"
           echo version=$version >> $GITHUB_OUTPUT

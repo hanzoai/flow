@@ -4543,7 +4543,7 @@
     }
   },
   "info": {
-    "title": "Langflow",
+    "title": "Hanzo Flow",
     "version": "1.9.0"
   },
   "openapi": "3.1.0",
@@ -8381,7 +8381,7 @@
     },
     "/api/v1/responses": {
       "post": {
-        "description": "Create a response using OpenAI Responses API format.<br><br>This endpoint accepts a flow_id in the model parameter and processes<br>the input through the specified Langflow flow.<br><br>Args:<br>    request: OpenAI Responses API request with model (flow_id) and input<br>    background_tasks: FastAPI background task manager<br>    api_key_user: Authenticated user from API key<br>    http_request: The incoming HTTP request<br>    telemetry_service: Telemetry service for logging<br><br>Returns:<br>    OpenAI-compatible response or streaming response<br><br>Raises:<br>    HTTPException: For validation errors or flow execution issues",
+        "description": "Create a response using OpenAI Responses API format.<br><br>This endpoint accepts a flow_id in the model parameter and processes<br>the input through the specified Hanzo Flow flow.<br><br>Args:<br>    request: OpenAI Responses API request with model (flow_id) and input<br>    background_tasks: FastAPI background task manager<br>    api_key_user: Authenticated user from API key<br>    http_request: The incoming HTTP request<br>    telemetry_service: Telemetry service for logging<br><br>Returns:<br>    OpenAI-compatible response or streaming response<br><br>Raises:<br>    HTTPException: For validation errors or flow execution issues",
         "operationId": "create_response_api_v1_responses_post",
         "requestBody": {
           "content": {

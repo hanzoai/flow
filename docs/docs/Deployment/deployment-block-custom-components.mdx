@@ -3,23 +3,23 @@ title: Block custom components
 slug: /deployment-block-custom-components
 ---
 
-Custom components and the component code editor allow Langflow users to create and execute Python code in the Langflow runtime.
-While this freedom is a feature of Langflow, in some deployments you might want to block the creation of custom Langflow components to prevent arbitrary code execution.
+Custom components and the component code editor allow Hanzo Flow users to create and execute Python code in the Hanzo Flow runtime.
+While this freedom is a feature of Hanzo Flow, in some deployments you might want to block the creation of custom Hanzo Flow components to prevent arbitrary code execution.
 
-To block custom component creation on a Langflow server, set the following [environment variable](/environment-variables):
+To block custom component creation on a Hanzo Flow server, set the following [environment variable](/environment-variables):
 
 ```bash
 LANGFLOW_ALLOW_CUSTOM_COMPONENTS=false
 ```
 
-When set to `false`, Langflow blocks creating custom components and changing code in the visual editor.
+When set to `false`, Hanzo Flow blocks creating custom components and changing code in the visual editor.
 
-When unset or `true`, Langflow allows custom code.
-Existing Langflow installations will keep the default `true` behavior until you opt in to this restriction.
+When unset or `true`, Hanzo Flow allows custom code.
+Existing Hanzo Flow installations will keep the default `true` behavior until you opt in to this restriction.
 
 This environment variable is a beta feature, and should not be your only safeguard in production environments.
 
-In the event that Langflow could execute untrusted or LLM-generated code, run Langflow in an isolated and containerized execution environment.
+In the event that Hanzo Flow could execute untrusted or LLM-generated code, run Hanzo Flow in an isolated and containerized execution environment.
 
 ### Configure a custom component allow-list
 
@@ -35,7 +35,7 @@ This environment variable replaces the default index bundled with the `lfx` pack
 It does **not** import Python modules from a directory on disk.
 To allow-list custom components, use the `LANGFLOW_COMPONENTS_PATH` environment variable.
 
-If both environment variables are set, Langflow builds one combined set of components from the custom index _and_ from `LANGFLOW_COMPONENTS_PATH`. If the same component category name exists in both, `LANGFLOW_COMPONENTS_PATH` replaces that whole category from the custom index.
+If both environment variables are set, Hanzo Flow builds one combined set of components from the custom index _and_ from `LANGFLOW_COMPONENTS_PATH`. If the same component category name exists in both, `LANGFLOW_COMPONENTS_PATH` replaces that whole category from the custom index.
 
 For more information, see:
 

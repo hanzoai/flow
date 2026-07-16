@@ -294,13 +294,13 @@ def test_vertex_before_callback_event():
     # Assert the event has the correct step_name
     assert event.step_name == vertex.display_name
 
-    # Assert the raw_event contains the langflow metrics
+    # Assert the raw_event contains the flow metrics
     assert event.raw_event is not None
     assert isinstance(event.raw_event, dict)
-    assert "langflow" in event.raw_event
+    assert "flow" in event.raw_event
 
-    # Assert the langflow metrics contain expected fields
-    langflow_metrics = event.raw_event["langflow"]
+    # Assert the flow metrics contain expected fields
+    langflow_metrics = event.raw_event["flow"]
     assert isinstance(langflow_metrics, dict)
     assert "timestamp" in langflow_metrics
     assert isinstance(langflow_metrics["timestamp"], float)
@@ -332,13 +332,13 @@ def test_vertex_after_callback_event():
     # Assert the event has the correct step_name
     assert event.step_name == vertex.display_name
 
-    # Assert the raw_event contains the langflow metrics
+    # Assert the raw_event contains the flow metrics
     assert event.raw_event is not None
     assert isinstance(event.raw_event, dict)
-    assert "langflow" in event.raw_event
+    assert "flow" in event.raw_event
 
-    # Assert the langflow metrics contain expected fields
-    langflow_metrics = event.raw_event["langflow"]
+    # Assert the flow metrics contain expected fields
+    langflow_metrics = event.raw_event["flow"]
     assert isinstance(langflow_metrics, dict)
     assert "timestamp" in langflow_metrics
     assert isinstance(langflow_metrics["timestamp"], float)

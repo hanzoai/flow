@@ -4,8 +4,8 @@ These tests show:
 1. What FAILS with the OLD (buggy) code
 2. What PASSES with the NEW (fixed) code
 
-Issue: https://github.com/langflow-ai/langflow/issues/10231
-PR: https://github.com/langflow-ai/langflow/pull/10232
+Issue: https://github.com/hanzoai/flow/issues/10231
+PR: https://github.com/hanzoai/flow/pull/10232
 
 Run these tests to verify:
 - The bug exists (tests that show errors)

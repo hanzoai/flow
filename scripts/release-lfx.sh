@@ -67,7 +67,7 @@ done
 
 # Check if we're in the right directory
 if [ ! -f "src/lfx/pyproject.toml" ]; then
-    print_error "This script must be run from the root of the langflow repository"
+    print_error "This script must be run from the root of the flow repository"
     exit 1
 fi
 
@@ -204,7 +204,7 @@ else
     echo "   git push origin $TAG_NAME"
     echo ""
     echo "2. Go to GitHub Actions and run the 'LFX Release' workflow:"
-    echo "   https://github.com/langflow-ai/langflow/actions/workflows/release-lfx.yml"
+    echo "   https://github.com/hanzoai/flow/actions/workflows/release-lfx.yml"
     echo ""
     echo "3. Enter version: $NEW_VERSION"
     echo ""

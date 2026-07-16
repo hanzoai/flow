@@ -1,6 +1,6 @@
-"""A simple agent flow example for Langflow.
+"""A simple agent flow example for Hanzo Flow.
 
-This script demonstrates how to set up a conversational agent using Langflow's
+This script demonstrates how to set up a conversational agent using Hanzo Flow's
 Agent component with web search capabilities.
 
 Features:

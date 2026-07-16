@@ -1,6 +1,6 @@
 """Unit tests for lfx status -- status_command and helpers.
 
-All tests run entirely in-process; no real Langflow instance or SDK required.
+All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
 The SDK is replaced via patch so only the status logic (file collection, hash
 comparison, table rendering, exit-code rules) is exercised.
 """

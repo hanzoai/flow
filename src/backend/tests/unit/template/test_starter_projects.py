@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-# Import langflow validation utilities
+# Import flow validation utilities
 from flow.utils.template_validation import (
     validate_flow_can_build,
     validate_flow_execution,

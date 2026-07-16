@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Pull OpenAPI spec files from the langflow-ai/sdk repository.
+"""Pull OpenAPI spec files from the hanzoai/sdk repository.
 
 This script is only for syncing external SDK specs when needed.
-It is not used by the main Langflow OpenAPI generation workflow,
+It is not used by the main Hanzo Flow OpenAPI generation workflow,
 which now relies on `docs/openapi/generate_openapi.py`.
 
 Usage:
@@ -18,10 +18,10 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-REPO = "langflow-ai/sdk"
+REPO = "hanzoai/sdk"
 BRANCH = "main"
 SPECS_DIR = "specs"
-FILES = ["langflow-workflows-openapi.json", "langflow-openapi.json"]
+FILES = ["flow-workflows-openapi.json", "flow-openapi.json"]
 
 
 def fetch_file(repo: str, filepath: str, branch: str) -> str:

@@ -416,9 +416,9 @@ from bs4 import BeautifulSoup
         assert "tabulate" in packages
 
     def test_langflow_imports_filtered(self):
-        """Components with langflow imports should NOT list langflow as a dep.
+        """Components with flow imports should NOT list flow as a dep.
 
-        lfx provides the langflow interfaces at runtime, so langflow/langflow_base
+        lfx provides the flow interfaces at runtime, so flow/langflow_base
         should be filtered out just like lfx itself.
         """
         code = """
@@ -427,8 +427,8 @@ from flow.io import MessageTextInput
 """
         node = _make_node("LegacyComponent", code)
         packages, _ = _extract_component_requirements(node)
-        assert "langflow" not in packages
-        assert "langflow-base" not in packages
+        assert "flow" not in packages
+        assert "flow-base" not in packages
 
 
 # ===================================================================

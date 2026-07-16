@@ -16,14 +16,14 @@ def update_sdk_for_nightly(sdk_tag: str):
     """Update SDK package for nightly build."""
     sdk_pyproject_path = "src/sdk/pyproject.toml"
 
-    update_pyproject_name(sdk_pyproject_path, "langflow-sdk-nightly")
+    update_pyproject_name(sdk_pyproject_path, "flow-sdk-nightly")
 
     version = sdk_tag.lstrip("v")
     update_pyproject_version(sdk_pyproject_path, version)
 
-    update_workspace_dep("pyproject.toml", "langflow-sdk-nightly")
+    update_workspace_dep("pyproject.toml", "flow-sdk-nightly")
 
-    print(f"Updated SDK package to langflow-sdk-nightly version {version}")
+    print(f"Updated SDK package to flow-sdk-nightly version {version}")
 
 
 def main():

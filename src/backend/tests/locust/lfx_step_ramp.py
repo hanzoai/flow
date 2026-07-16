@@ -1,6 +1,6 @@
 """LFX Step Ramp Load Test for Finding Performance Cliffs.
 
-This file tests the LFX API (complex serve), not the Langflow API.
+This file tests the LFX API (complex serve), not the Hanzo Flow API.
 
 Steps every 30 seconds: 5 -> 10 -> 15 -> 20 -> 25 -> 30 -> 35 users.
 Each step holds for exactly 30 seconds to measure steady-state performance.

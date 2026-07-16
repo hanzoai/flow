@@ -1,6 +1,6 @@
 """Unit tests for lfx export -- export_command and helpers.
 
-All tests run entirely in-process; no real Langflow instance or SDK required.
+All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the export logic
 (file normalization, output routing, remote pull, project export) is under test.
 """

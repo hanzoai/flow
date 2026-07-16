@@ -118,16 +118,16 @@ test(
     await page.getByTestId("int_int_chunk_overlap").fill("1");
 
     const timerCode = `
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import MessageTextInput, Output
-from langflow.schema import Data
+# from flow.field_typing import Data
+from flow.custom import Component
+from flow.io import MessageTextInput, Output
+from flow.schema import Data
 import time
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.flow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 

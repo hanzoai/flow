@@ -15,7 +15,7 @@
 //
 //	studio      = Run(GPUResident, Graph-of-Tensor-steps)   // comfy nodes
 //	automations = Run(Durable,     Graph-of-ConnectorIO)    // triggers -> actions
-//	llmFlow     = Run(InProcess,   Graph-of-Message-steps)  // langflow (lfx) nodes
+//	llmFlow     = Run(InProcess,   Graph-of-Message-steps)  // flow (lfx) nodes
 //
 // A domain supplies Steps (typed input ports -> typed output ports + a Run fn) and,
 // if it has special execution needs, a Backend for a Mode. The engine only wires

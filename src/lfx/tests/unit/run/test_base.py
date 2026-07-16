@@ -453,7 +453,7 @@ class TestRunFlowSessionIdPropagation:
     must replicate that loop after assigning ``graph.session_id`` so components
     that read ``self.session_id`` from their input field (Memory.retrieve_messages
     etc.) actually see the configured value. Mirrors what
-    ``langflow/api/utils/flow_utils.build_graph_from_data`` does for the playground.
+    ``flow/api/utils/flow_utils.build_graph_from_data`` does for the playground.
     """
 
     @staticmethod
@@ -516,7 +516,7 @@ class TestRunFlowSessionIdPropagation:
     async def test_session_id_does_not_overwrite_hardcoded_vertex_value(self, tmp_path):
         """If the flow JSON pinned session_id on the Memory component, the CLI must not clobber it.
 
-        Matches Langflow's playground behavior: ``build_graph_from_data`` only writes
+        Matches Hanzo Flow's playground behavior: ``build_graph_from_data`` only writes
         when ``raw_params.get("session_id")`` is falsy.
         """
         script_path = tmp_path / "test.py"
@@ -654,12 +654,12 @@ class TestRunFlowUserId:
 class TestRunFlowFallbackToEnvVars:
     """run_flow must plumb fallback_to_env_vars into ``graph.async_start``.
 
-    Without this, a langflow ``DatabaseVariableService`` registered alongside
+    Without this, a flow ``DatabaseVariableService`` registered alongside
     ``database_service`` would raise ``variable not found`` for any
     ``load_from_db=True`` field whose user_id has no Variable row (e.g., the
     ceremonial UUID lfx auto-generates). The flag tells
     ``loading.update_params_with_load_from_db_fields`` to fall back to
-    ``os.environ`` when the DB lookup misses — same behavior as the langflow
+    ``os.environ`` when the DB lookup misses — same behavior as the flow
     API path in ``processing.process.run_graph_internal``.
     """
 

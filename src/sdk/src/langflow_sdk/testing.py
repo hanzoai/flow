@@ -1,18 +1,18 @@
-"""pytest plugin providing fixtures for integration-testing Langflow flows.
+"""pytest plugin providing fixtures for integration-testing Hanzo Flow flows.
 
 Install with the ``testing`` extra::
 
-    pip install "langflow-sdk[testing]"
+    pip install "flow-sdk[testing]"
 
 The plugin is auto-discovered by pytest via the ``pytest11`` entry point, so
 no ``conftest.py`` changes are needed.  Simply pass connection details on the
 command line or via environment variables::
 
     # Direct URL
-    pytest --langflow-url http://localhost:7860 tests/
+    pytest --flow-url http://localhost:7860 tests/
 
     # Named environment from flow-environments.toml
-    pytest --langflow-env staging tests/
+    pytest --flow-env staging tests/
 
     # Via environment variables (useful in CI)
     LANGFLOW_URL=http://localhost:7860 pytest tests/
@@ -20,8 +20,8 @@ command line or via environment variables::
 Usage inside a test file::
 
     def test_my_rag_flow(flow_runner):
-        response = flow_runner("rag-endpoint", "What is Langflow?")
-        assert "Langflow" in response.first_text_output()
+        response = flow_runner("rag-endpoint", "What is Hanzo Flow?")
+        assert "Hanzo Flow" in response.first_text_output()
 
     async def test_my_async_flow(async_flow_runner):
         response = await async_flow_runner("rag-endpoint", "Hello")
@@ -37,7 +37,7 @@ from typing import TYPE_CHECKING, Any
 try:
     import pytest
 except ImportError as exc:
-    msg = "pytest is required for langflow_sdk.testing. Install it with: pip install 'langflow-sdk[testing]'"
+    msg = "pytest is required for langflow_sdk.testing. Install it with: pip install 'flow-sdk[testing]'"
     raise ImportError(msg) from exc
 
 if TYPE_CHECKING:
@@ -53,36 +53,36 @@ if TYPE_CHECKING:
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
-    """Register Langflow-specific CLI options."""
-    group = parser.getgroup("langflow", "Langflow integration testing options")
+    """Register Hanzo Flow-specific CLI options."""
+    group = parser.getgroup("flow", "Hanzo Flow integration testing options")
     options = {
-        "--langflow-env": {
+        "--flow-env": {
             "dest": "langflow_env",
             "default": None,
             "metavar": "NAME",
             "help": "Environment name from flow-environments.toml to use for integration tests.",
         },
-        "--langflow-url": {
+        "--flow-url": {
             "dest": "langflow_url",
             "default": None,
             "metavar": "URL",
-            "help": "Base URL of the Langflow instance (overrides --langflow-env).",
+            "help": "Base URL of the Hanzo Flow instance (overrides --flow-env).",
         },
-        "--langflow-api-key": {
+        "--flow-api-key": {
             "dest": "langflow_api_key",
             "default": None,
             "metavar": "KEY",
-            "help": "API key for the Langflow instance (overrides environment config).",
+            "help": "API key for the Hanzo Flow instance (overrides environment config).",
         },
-        "--langflow-environments-file": {
+        "--flow-environments-file": {
             "dest": "langflow_environments_file",
             "default": None,
             "metavar": "PATH",
-            "help": "Path to langflow-environments.toml (overrides default discovery).",
+            "help": "Path to flow-environments.toml (overrides default discovery).",
         },
     }
 
-    # langflow-sdk and lfx can both be installed in the same environment and
+    # flow-sdk and lfx can both be installed in the same environment and
     # expose the same remote-testing flags. Keep registration idempotent so
     # pytest plugin auto-discovery can load both entry points safely.
     for flag, kwargs in options.items():
@@ -106,7 +106,7 @@ def _resolve_url_credentials(request: pytest.FixtureRequest) -> tuple[str, str |
 
 
 def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
-    """Return a sync client from --langflow-url / LANGFLOW_URL, or None."""
+    """Return a sync client from --flow-url / LANGFLOW_URL, or None."""
     from flow_sdk.client import Client
 
     creds = _resolve_url_credentials(request)
@@ -114,7 +114,7 @@ def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
 
 
 def _resolve_async_url_client(request: pytest.FixtureRequest) -> AsyncClient | None:
-    """Return an async client from --langflow-url / LANGFLOW_URL, or None."""
+    """Return an async client from --flow-url / LANGFLOW_URL, or None."""
     from flow_sdk.client import AsyncClient
 
     creds = _resolve_url_credentials(request)
@@ -130,7 +130,7 @@ def _env_file(request: pytest.FixtureRequest) -> str | None:
 
 
 _SKIP_MSG = (
-    "No Langflow connection configured. Pass --langflow-url <URL> or --langflow-env <NAME> to enable integration tests."
+    "No Hanzo Flow connection configured. Pass --flow-url <URL> or --flow-env <NAME> to enable integration tests."
 )
 
 
@@ -147,10 +147,10 @@ def langflow_client(request: pytest.FixtureRequest) -> Client:
     information is available.  Configure via CLI options or environment
     variables (in priority order):
 
-    1. ``--langflow-url`` / ``LANGFLOW_URL`` — direct base URL
-    2. ``--langflow-api-key`` / ``LANGFLOW_API_KEY`` — API key  # pragma: allowlist secret
-    3. ``--langflow-env`` / ``LANGFLOW_ENV`` — named environment from TOML file
-    4. ``--langflow-environments-file`` / ``LANGFLOW_ENVIRONMENTS_FILE`` — TOML path
+    1. ``--flow-url`` / ``LANGFLOW_URL`` — direct base URL
+    2. ``--flow-api-key`` / ``LANGFLOW_API_KEY`` — API key  # pragma: allowlist secret
+    3. ``--flow-env`` / ``LANGFLOW_ENV`` — named environment from TOML file
+    4. ``--flow-environments-file`` / ``LANGFLOW_ENVIRONMENTS_FILE`` — TOML path
     """
     client = _resolve_url_client(request)
     if not client:
@@ -294,8 +294,8 @@ def flow_runner(langflow_client: Client) -> FlowRunner:
     Example::
 
         def test_rag_flow(flow_runner):
-            response = flow_runner("rag-endpoint", "What is Langflow?")
-            assert "Langflow" in response.first_text_output()
+            response = flow_runner("rag-endpoint", "What is Hanzo Flow?")
+            assert "Hanzo Flow" in response.first_text_output()
     """
     return FlowRunner(langflow_client)
 
@@ -307,7 +307,7 @@ def async_flow_runner(async_langflow_client: AsyncClient) -> AsyncFlowRunner:
     Example::
 
         async def test_rag_flow(async_flow_runner):
-            response = await async_flow_runner("rag-endpoint", "What is Langflow?")
-            assert "Langflow" in response.first_text_output()
+            response = await async_flow_runner("rag-endpoint", "What is Hanzo Flow?")
+            assert "Hanzo Flow" in response.first_text_output()
     """
     return AsyncFlowRunner(async_langflow_client)

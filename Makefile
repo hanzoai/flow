@@ -49,7 +49,7 @@ help: ## show basic help message with common commands
 	@echo ''
 	@echo "$(GREEN)Basic Commands:$(NC)"
 	@echo "  $(GREEN)make init$(NC)                - Initialize project (install all dependencies)"
-	@echo "  $(GREEN)make run_cli$(NC)             - Run Langflow CLI"
+	@echo "  $(GREEN)make run_cli$(NC)             - Run Hanzo Flow CLI"
 	@echo "  $(GREEN)make run_clic$(NC)            - Run CLI with fresh frontend build"
 	@echo "  $(GREEN)make format$(NC)              - Format all code (backend + frontend)"
 	@echo "  $(GREEN)make tests$(NC)               - Run all tests"
@@ -566,13 +566,13 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	LANGFLOW_VERSION="$(v)"; \
 	LANGFLOW_BASE_VERSION=$$(echo "$$LANGFLOW_VERSION" | sed -E 's/^[0-9]+\.(.*)$$/0.\1/'); \
 	\
-	echo "$(GREEN)Langflow version: $$LANGFLOW_VERSION$(NC)"; \
-	echo "$(GREEN)Langflow-base version: $$LANGFLOW_BASE_VERSION$(NC)"; \
+	echo "$(GREEN)Hanzo Flow version: $$LANGFLOW_VERSION$(NC)"; \
+	echo "$(GREEN)Hanzo Flow-base version: $$LANGFLOW_BASE_VERSION$(NC)"; \
 	\
 	echo "$(GREEN)Updating main pyproject.toml...$(NC)"; \
-	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"langflow-base==.*\"', '\"langflow-base==$$LANGFLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
+	python -c "import re; fname='pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_VERSION\"', txt, flags=re.MULTILINE); txt=re.sub(r'\"flow-base==.*\"', '\"flow-base==$$LANGFLOW_BASE_VERSION\"', txt); open(fname, 'w').write(txt)"; \
 	\
-	echo "$(GREEN)Updating langflow-base pyproject.toml...$(NC)"; \
+	echo "$(GREEN)Updating flow-base pyproject.toml...$(NC)"; \
 	python -c "import re; fname='src/backend/base/pyproject.toml'; txt=open(fname).read(); txt=re.sub(r'^version = \".*\"', 'version = \"$$LANGFLOW_BASE_VERSION\"', txt, flags=re.MULTILINE); open(fname, 'w').write(txt)"; \
 	\
 	echo "$(GREEN)Updating frontend package.json...$(NC)"; \
@@ -580,8 +580,8 @@ patch: ## Update version across all projects. Usage: make patch v=1.5.0
 	\
 	echo "$(GREEN)Validating version changes...$(NC)"; \
 	if ! grep -q "^version = \"$$LANGFLOW_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml version validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "\"langflow-base==$$LANGFLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml langflow-base dependency validation failed$(NC)"; exit 1; fi; \
-	if ! grep -q "^version = \"$$LANGFLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ Langflow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "\"flow-base==$$LANGFLOW_BASE_VERSION\"" pyproject.toml; then echo "$(RED)✗ Main pyproject.toml flow-base dependency validation failed$(NC)"; exit 1; fi; \
+	if ! grep -q "^version = \"$$LANGFLOW_BASE_VERSION\"" src/backend/base/pyproject.toml; then echo "$(RED)✗ Hanzo Flow-base pyproject.toml version validation failed$(NC)"; exit 1; fi; \
 	if ! grep -q "\"version\": \"$$LANGFLOW_VERSION\"" src/frontend/package.json; then echo "$(RED)✗ Frontend package.json version validation failed$(NC)"; exit 1; fi; \
 	echo "$(GREEN)✓ All versions updated successfully$(NC)"; \
 	\
@@ -715,7 +715,7 @@ load_test_lfx_quick: ## Quick LFX load test (30 users, 60s). Options: html=true,
 
 # Enhanced load testing system with API-based flow loading
 load_test_setup: ## Set up load test environment with starter project flows
-	@echo "$(YELLOW)Setting up Langflow load test environment$(NC)"
+	@echo "$(YELLOW)Setting up Hanzo Flow load test environment$(NC)"
 	@cd src/backend/tests/locust && uv run python langflow_setup_test.py --interactive
 
 load_test_setup_basic: ## Set up load test environment with Basic Prompting flow
@@ -743,10 +743,10 @@ load_test_run: ## Run load test (automatically sets up if needed). Use FLOW_NAME
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 20 --duration 120 --no-start-langflow --html load_test_report.html --csv load_test_results
+	uv run python langflow_run_load_test.py --headless --users 20 --duration 120 --no-start-flow --html load_test_report.html --csv load_test_results
 
-load_test_flow_quick: ## Quick Langflow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
-	@echo "$(YELLOW)Running quick Langflow load test with HTML report$(NC)"
+load_test_flow_quick: ## Quick Hanzo Flow load test (10 users, 30s) with HTML report (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
+	@echo "$(YELLOW)Running quick Hanzo Flow load test with HTML report$(NC)"
 	@if [ ! -f "src/backend/tests/locust/load_test_creds.json" ]; then \
 		echo "$(BLUE)No credentials found. Running automatic setup...$(NC)"; \
 		if [ -z "$(FLOW_NAME)" ]; then \
@@ -762,7 +762,7 @@ load_test_flow_quick: ## Quick Langflow load test (10 users, 30s) with HTML repo
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 10 --duration 30 --no-start-langflow --html quick_test_report.html
+	uv run python langflow_run_load_test.py --headless --users 10 --duration 30 --no-start-flow --html quick_test_report.html
 
 load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive reporting (automatically sets up if needed). Use FLOW_NAME="Flow Name" to specify flow
 	@echo "$(YELLOW)Running stress test with comprehensive reporting$(NC)"
@@ -781,7 +781,7 @@ load_test_stress: ## Stress test (100 users, 5 minutes) with comprehensive repor
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('load_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-langflow --html stress_test_report.html --csv stress_test_results --shape ramp100
+	uv run python langflow_run_load_test.py --headless --users 100 --spawn-rate 5 --duration 300 --no-start-flow --html stress_test_report.html --csv stress_test_results --shape ramp100
 
 load_test_example: ## Run complete example workflow (setup + test + reports)
 	@echo "$(YELLOW)Running complete load test example workflow$(NC)"
@@ -814,14 +814,14 @@ load_test_remote_run: ## Run load test against remote instance (requires prior s
 	@cd src/backend/tests/locust && \
 	export API_KEY=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['api_key'])") && \
 	export FLOW_ID=$$(python -c "import json; print(json.load(open('remote_test_creds.json'))['flow_id'])") && \
-	uv run python langflow_run_load_test.py --host $(LANGFLOW_HOST) --no-start-langflow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
+	uv run python langflow_run_load_test.py --host $(LANGFLOW_HOST) --no-start-flow --headless --users 10 --spawn-rate 1 --duration 120 --html remote_test_report.html
 
 load_test_help: ## Show detailed load testing help
-	@echo "$(GREEN)Langflow Enhanced Load Testing System$(NC)"
+	@echo "$(GREEN)Hanzo Flow Enhanced Load Testing System$(NC)"
 	@echo ""
 	@echo "$(YELLOW)Quick Start (Local):$(NC)"
 	@echo "  1. make load_test_setup_basic    # Set up with Basic Prompting flow"
-	@echo "  2. make load_test_flow_quick # Run quick Langflow test"
+	@echo "  2. make load_test_flow_quick # Run quick Hanzo Flow test"
 	@echo "  3. Open quick_test_report.html  # View results"
 	@echo ""
 	@echo "$(YELLOW)Remote Testing:$(NC)"
@@ -834,7 +834,7 @@ load_test_help: ## Show detailed load testing help
 	@echo "  load_test_setup_basic  - Quick setup with Basic Prompting"
 	@echo "  load_test_list_flows   - List available starter flows"
 	@echo "  load_test_run          - Standard load test (25 users, 2 min)"
-	@echo "  load_test_flow_quick - Quick Langflow test (10 users, 30s)"
+	@echo "  load_test_flow_quick - Quick Hanzo Flow test (10 users, 30s)"
 	@echo "  load_test_quick        - Quick complex serve test (30 users, 60s)"
 	@echo "  load_test_stress       - Stress test (100 users, 5 min)"
 	@echo "  load_test_example      - Complete example workflow"
@@ -864,7 +864,7 @@ help_backend: ## show backend-specific commands
 	@echo ''
 	@echo "$(GREEN)Development:$(NC)"
 	@echo "  $(GREEN)make backend$(NC)             - Run backend in development mode"
-	@echo "  $(GREEN)make run_cli$(NC)             - Run Langflow CLI"
+	@echo "  $(GREEN)make run_cli$(NC)             - Run Hanzo Flow CLI"
 	@echo "  $(GREEN)make run_clic$(NC)            - Run CLI with fresh frontend build"
 	@echo "  $(GREEN)make run_cli_debug$(NC)       - Run CLI in debug mode"
 	@echo "  $(GREEN)make setup_devcontainer$(NC)  - Set up development container"
@@ -891,8 +891,8 @@ help_backend: ## show backend-specific commands
 	@echo "  $(GREEN)make build$(NC)               - Build the project"
 	@echo "  $(GREEN)make build_and_run$(NC)       - Build and run the project"
 	@echo "  $(GREEN)make build_and_install$(NC)   - Build and install the project"
-	@echo "  $(GREEN)make build_flow_base$(NC) - Build langflow-base package"
-	@echo "  $(GREEN)make build_langflow$(NC)      - Build langflow package"
+	@echo "  $(GREEN)make build_flow_base$(NC) - Build flow-base package"
+	@echo "  $(GREEN)make build_langflow$(NC)      - Build flow package"
 	@echo "  $(GREEN)make lock$(NC)                - Lock dependencies"
 	@echo "  $(GREEN)make update$(NC)              - Update dependencies"
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI"
@@ -1013,13 +1013,13 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo "$(GREEN)Version Management:$(NC)"
 	@echo "  $(GREEN)make patch v=X.Y.Z$(NC)       - Update version across all projects"
 	@echo "    Example: make patch v=1.5.0"
-	@echo "    This updates: pyproject.toml, langflow-base, frontend package.json"
+	@echo "    This updates: pyproject.toml, flow-base, frontend package.json"
 	@echo ''
 	@echo "$(GREEN)Publishing:$(NC)"
 	@echo "  $(GREEN)make publish$(NC)             - Publish to PyPI (use: make publish base=1 or main=1)"
 	@echo "  $(GREEN)make publish_testpypi$(NC)    - Publish to test PyPI"
-	@echo "  $(GREEN)make publish_base$(NC)        - Publish langflow-base to PyPI"
-	@echo "  $(GREEN)make publish_flow$(NC)    - Publish langflow to PyPI"
+	@echo "  $(GREEN)make publish_base$(NC)        - Publish flow-base to PyPI"
+	@echo "  $(GREEN)make publish_flow$(NC)    - Publish flow to PyPI"
 	@echo "  $(GREEN)make lfx_publish$(NC)         - Publish LFX package to PyPI"
 	@echo "  $(GREEN)make lfx_publish_testpypi$(NC) - Publish LFX to test PyPI"
 	@echo "  $(GREEN)make sdk_publish$(NC)         - Publish SDK package to PyPI"
@@ -1027,8 +1027,8 @@ help_advanced: ## show advanced and miscellaneous commands
 	@echo ''
 	@echo "$(GREEN)Lock Files:$(NC)"
 	@echo "  $(GREEN)make lock$(NC)                - Lock all dependencies"
-	@echo "  $(GREEN)make lock_base$(NC)           - Lock langflow-base dependencies"
-	@echo "  $(GREEN)make lock_langflow$(NC)       - Lock langflow dependencies"
+	@echo "  $(GREEN)make lock_base$(NC)           - Lock flow-base dependencies"
+	@echo "  $(GREEN)make lock_langflow$(NC)       - Lock flow dependencies"
 	@echo ''
 	@echo "$(GREEN)Utilities:$(NC)"
 	@echo "  $(GREEN)make check_tools$(NC)         - Verify required tools are installed"
@@ -1075,7 +1075,7 @@ docs_serve: docs_build ## build and serve documentation locally
 # Note: $(or $(suites),a,b,c) is wrong here — GNU make's `or` returns only the first non-empty token.
 suites ?= curl,python,javascript
 
-api_examples_local: ## run docs API sample files against a local Langflow server
+api_examples_local: ## run docs API sample files against a local Hanzo Flow server
 	@echo "$(GREEN)Running docs API examples locally...$(NC)"
 	@SUITES="$(suites)" EXECUTE_MODE=true ./scripts/test-api-examples-local.sh
 

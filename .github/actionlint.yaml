@@ -1,4 +1,4 @@
 self-hosted-runner:
   labels:
-    - langflow-ai-arm64-40gb-ephemeral
-    - Langflow-runner
+    - flow-ai-arm64-40gb-ephemeral
+    - Hanzo Flow-runner

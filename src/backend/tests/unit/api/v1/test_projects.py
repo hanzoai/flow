@@ -1586,7 +1586,7 @@ async def test_download_file_starter_project(client: AsyncClient, logged_in_head
     # Create a project for the user (since download_file requires user ownership)
     project_payload = {
         "name": STARTER_FOLDER_NAME,
-        "description": "Starter projects to help you get started in Langflow.",
+        "description": "Starter projects to help you get started in Hanzo Flow.",
         "flows_list": [],
         "components_list": [],
     }

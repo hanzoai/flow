@@ -58,7 +58,7 @@ on:
         options:
           - ubuntu-latest
           - self-hosted
-          - '["self-hosted", "linux", "ARM64", "langflow-ai-arm64-40gb-ephemeral"]'
+          - '["self-hosted", "linux", "ARM64", "flow-ai-arm64-40gb-ephemeral"]'
         default: ubuntu-latest
   pull_request:
     types: [opened, synchronize, labeled]
@@ -117,8 +117,8 @@ jobs:
           TODAY=$(date -u +"%Y-%m-%d")
           echo "Today's date: $TODAY"
 
-          # Query PyPI API for the langflow package
-          HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" https://pypi.org/pypi/langflow-nightly/json)
+          # Query PyPI API for the flow package
+          HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" https://pypi.org/pypi/flow-nightly/json)
 
           # Check HTTP status code first
           if [ "$HTTP_STATUS" -ne 200 ]; then

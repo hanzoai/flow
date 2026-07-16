@@ -51,7 +51,7 @@ export default function SettingsPage(): JSX.Element {
       ),
     },
     {
-      title: "Langflow MCP Client",
+      title: "Hanzo Flow MCP Client",
       href: "/settings/mcp-client",
       icon: (
         <ForwardedIconComponent

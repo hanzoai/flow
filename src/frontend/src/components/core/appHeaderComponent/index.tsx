@@ -8,7 +8,7 @@ import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import CustomAccountMenu from "@/customization/components/custom-AccountMenu";
-import CustomLangflowCounts from "@/customization/components/custom-langflow-counts";
+import CustomLangflowCounts from "@/customization/components/custom-flow-counts";
 import { CustomOrgSelector } from "@/customization/components/custom-org-selector";
 import { FLOW_AGENTIC_EXPERIENCE } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";

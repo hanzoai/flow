@@ -5,7 +5,7 @@ const client = new OpenAI({
   defaultHeaders: {
     "x-api-key": "LANGFLOW_API_KEY"
   },
-  apiKey: "dummy-api-key" // Required by OpenAI SDK but not used by Langflow
+  apiKey: "dummy-api-key" // Required by OpenAI SDK but not used by Hanzo Flow
 });
 
 const response = await client.responses.create({

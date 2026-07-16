@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-# Tests that invoke `serve` with valid-looking input may hang while langflow
+# Tests that invoke `serve` with valid-looking input may hang while flow
 # initialises async server infrastructure.  Skip those in CI only; all
 # import/help/utility/fast-error tests run everywhere.
 _ci_env = os.environ.get("CI", "")

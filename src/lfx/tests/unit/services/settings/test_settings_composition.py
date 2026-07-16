@@ -229,7 +229,7 @@ def test_database_url_sees_config_dir(monkeypatch, tmp_path):
     """database_url validator must see config_dir in info.data.
 
     With config_dir set and no LANGFLOW_DATABASE_URL env var, the validator
-    falls back to a sqlite path under the langflow package directory. If
+    falls back to a sqlite path under the flow package directory. If
     PathSettings's config_dir wasn't validated first, the validator would
     raise 'config_dir not set'.
     """

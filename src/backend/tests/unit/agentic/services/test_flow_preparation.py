@@ -206,7 +206,7 @@ def _make_directory_flow(path_value: str) -> dict:
 class TestInjectLfxComponentsPath:
     """Tests for inject_lfx_components_path.
 
-    Regression guard for the Langflow Desktop bug where the LangflowAssistant
+    Regression guard for the Hanzo Flow Desktop bug where the LangflowAssistant
     flow embedded a relative path './src/lfx/src/lfx/components/' which only
     resolved correctly when the sidecar CWD was the monorepo root. On Desktop
     the CWD is the data dir, so the Directory component raised

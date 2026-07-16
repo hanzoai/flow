@@ -202,7 +202,7 @@ Navigate to http://localhost:3001/ in a browser and view the documentation. Docu
 
 ## Adding or Modifying a Component
 
-Components reside in folders under `src/backend/base/langflow`, and their unit tests under `src/backend/base/tests/unit/components`.
+Components reside in folders under `src/backend/base/flow`, and their unit tests under `src/backend/base/tests/unit/components`.
 
 > [!IMPORTANT]
 > **Component Development Mode**: When actively developing components, make sure to run the backend with `LFX_DEV=1` to enable live reloading:
@@ -272,7 +272,7 @@ You may observe some quirky things:
 
 There are some files that change without you having made changes:
 
-- Files in `src/backend/base/langflow/initial_setup/starter_projects` modify after `hanzoflow run`; these are formatting changes. Feel free to commit (or ignore) them.
+- Files in `src/backend/base/flow/initial_setup/starter_projects` modify after `hanzoflow run`; these are formatting changes. Feel free to commit (or ignore) them.
 - `uv.lock` and `src/frontend/package-lock.json` files can be modified by `make` targets; changes should not be committed by individual contributors.
   - You can exclude these from consideration in git: `git update-index --assume-unchanged uv.lock src/frontend/package-lock.json`
   - You can re-include these from consideration in git: `git update-index --no-assume-unchanged uv.lock src/frontend/package-lock.json`

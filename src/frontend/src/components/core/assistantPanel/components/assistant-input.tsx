@@ -43,7 +43,7 @@ function useAnimatedPlaceholder(
   return currentMessage;
 }
 
-const ASSISTANT_MODEL_STORAGE_KEY = "langflow-assistant-selected-model";
+const ASSISTANT_MODEL_STORAGE_KEY = "flow-assistant-selected-model";
 const MAX_MESSAGE_LENGTH = 500;
 
 interface AssistantInputProps {

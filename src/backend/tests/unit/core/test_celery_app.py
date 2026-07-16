@@ -191,4 +191,4 @@ class TestMakeCelery:
         assert hasattr(celery_app, "send_task")
 
         # Should have the expected app name
-        assert celery_app.main == "langflow"
+        assert celery_app.main == "flow"

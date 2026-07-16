@@ -18,10 +18,10 @@ class TestUploadStrings:
         source.write_text(json.dumps({"hello": "Hello", "bye": "Bye"}), encoding="utf-8")
 
         with (
-            patch.object(upload_mod, "list_bundles", return_value={"bundleIds": ["langflow-ui"]}),
+            patch.object(upload_mod, "list_bundles", return_value={"bundleIds": ["flow-ui"]}),
             patch.object(upload_mod, "create_bundle") as mock_create,
             patch.object(upload_mod, "upload_strings") as mock_upload,
-            patch.object(upload_mod, "GP_BUNDLE", "langflow-ui"),
+            patch.object(upload_mod, "GP_BUNDLE", "flow-ui"),
         ):
             _run_main(str(source))
 
@@ -36,7 +36,7 @@ class TestUploadStrings:
             patch.object(upload_mod, "list_bundles", return_value={"bundleIds": []}),
             patch.object(upload_mod, "create_bundle") as mock_create,
             patch.object(upload_mod, "upload_strings") as mock_upload,
-            patch.object(upload_mod, "GP_BUNDLE", "langflow-ui"),
+            patch.object(upload_mod, "GP_BUNDLE", "flow-ui"),
         ):
             _run_main(str(source))
 
@@ -48,10 +48,10 @@ class TestUploadStrings:
         source.write_text("{}", encoding="utf-8")
 
         with (
-            patch.object(upload_mod, "list_bundles", return_value={"bundleIds": ["langflow-ui"]}),
+            patch.object(upload_mod, "list_bundles", return_value={"bundleIds": ["flow-ui"]}),
             patch.object(upload_mod, "create_bundle"),
             patch.object(upload_mod, "upload_strings") as mock_upload,
-            patch.object(upload_mod, "GP_BUNDLE", "langflow-ui"),
+            patch.object(upload_mod, "GP_BUNDLE", "flow-ui"),
         ):
             _run_main(str(source))
 
