@@ -106,7 +106,7 @@ class TestQAResponse:
         ):
             gen = execute_flow_with_validation_streaming(
                 flow_filename="TestFlow",
-                input_value="what is langflow?",
+                input_value="what is flow?",
                 global_variables={},
             )
             events = await _collect_events(gen)

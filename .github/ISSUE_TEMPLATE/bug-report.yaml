@@ -85,7 +85,7 @@ body:
       required: true
 
   - type: input
-    id: langflow-version
+    id: flow-version
     attributes:
       label: Hanzo Flow Version
       placeholder: ex. 1.0.9

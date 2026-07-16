@@ -33,7 +33,7 @@ def mock_superuser():
     """Create a mock active superuser."""
     user = MagicMock(spec=User)
     user.id = uuid4()
-    user.username = "langflow"
+    user.username = "flow"
     user.is_active = True
     user.is_superuser = True
     return user
@@ -61,7 +61,7 @@ def mock_settings_service_db():
     """Create a mock settings service with API_KEY_SOURCE='db'."""
     settings_service = MagicMock()
     settings_service.auth_settings.API_KEY_SOURCE = "db"
-    settings_service.auth_settings.SUPERUSER = "langflow"
+    settings_service.auth_settings.SUPERUSER = "flow"
     settings_service.auth_settings.SECRET_KEY.get_secret_value.return_value = "test-secret-key-for-unit-tests"
     settings_service.settings.disable_track_apikey_usage = False
     return settings_service
@@ -72,7 +72,7 @@ def mock_settings_service_env():
     """Create a mock settings service with API_KEY_SOURCE='env'."""
     settings_service = MagicMock()
     settings_service.auth_settings.API_KEY_SOURCE = "env"
-    settings_service.auth_settings.SUPERUSER = "langflow"
+    settings_service.auth_settings.SUPERUSER = "flow"
     settings_service.auth_settings.SECRET_KEY.get_secret_value.return_value = "test-secret-key-for-unit-tests"
     settings_service.settings.disable_track_apikey_usage = False
     return settings_service
@@ -223,7 +223,7 @@ class TestCheckKeyFromEnv:
             result = await _check_key_from_env(mock_session, "sk-test-env-key", mock_settings_service_env)
 
             assert result == mock_superuser
-            mock_get_user.assert_called_once_with(mock_session, "langflow")
+            mock_get_user.assert_called_once_with(mock_session, "flow")
 
     @pytest.mark.asyncio
     async def test_invalid_key_returns_none(self, mock_session, mock_settings_service_env, monkeypatch):
@@ -437,7 +437,7 @@ class TestCheckKeyIntegration:
 
         mock_settings = MagicMock()
         mock_settings.auth_settings.API_KEY_SOURCE = "env"
-        mock_settings.auth_settings.SUPERUSER = "langflow"
+        mock_settings.auth_settings.SUPERUSER = "flow"
 
         with (
             patch(
@@ -476,7 +476,7 @@ class TestCheckKeyIntegration:
 
         mock_settings = MagicMock()
         mock_settings.auth_settings.API_KEY_SOURCE = "env"
-        mock_settings.auth_settings.SUPERUSER = "langflow"
+        mock_settings.auth_settings.SUPERUSER = "flow"
         mock_settings.auth_settings.SECRET_KEY.get_secret_value.return_value = "test-secret-key-for-unit-tests"
         mock_settings.settings.disable_track_apikey_usage = False
 
@@ -502,7 +502,7 @@ class TestCheckKeyIntegration:
 
         mock_settings = MagicMock()
         mock_settings.auth_settings.API_KEY_SOURCE = "env"
-        mock_settings.auth_settings.SUPERUSER = "langflow"
+        mock_settings.auth_settings.SUPERUSER = "flow"
         mock_settings.auth_settings.SECRET_KEY.get_secret_value.return_value = "test-secret-key-for-unit-tests"
         mock_settings.settings.disable_track_apikey_usage = False
 

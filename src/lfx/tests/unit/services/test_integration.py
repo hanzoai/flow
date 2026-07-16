@@ -72,15 +72,15 @@ class TestStandaloneLFX:
 
 
 class TestLFXWithLangflowConfig:
-    """Test LFX with langflow configuration."""
+    """Test LFX with flow configuration."""
 
     @pytest.fixture
     def langflow_config_dir(self, tmp_path):
-        """Create a temporary langflow-style config directory."""
+        """Create a temporary flow-style config directory."""
         config_dir = tmp_path / "config"
         config_dir.mkdir()
 
-        # Create lfx.toml with langflow services
+        # Create lfx.toml with flow services
         config_file = config_dir / "lfx.toml"
         config_file.write_text(
             """

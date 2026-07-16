@@ -42,8 +42,8 @@ def update_sdk_dependency_in_lfx(pyproject_path: str, sdk_version: str) -> None:
     filepath = BASE_DIR / pyproject_path
     content = filepath.read_text(encoding="utf-8")
 
-    pattern = re.compile(r'"langflow-sdk(?:-nightly)?(?:==|~=|>=)[\d.]+(?:\.(?:post|dev|a|b|rc)\d+)*"')
-    replacement = f'"langflow-sdk-nightly=={sdk_version}"'
+    pattern = re.compile(r'"flow-sdk(?:-nightly)?(?:==|~=|>=)[\d.]+(?:\.(?:post|dev|a|b|rc)\d+)*"')
+    replacement = f'"flow-sdk-nightly=={sdk_version}"'
 
     if not pattern.search(content):
         msg = f"SDK dependency not found in {filepath}"
@@ -110,7 +110,7 @@ def rename_bundles_for_nightly(lfx_version: str) -> None:
 
     The stable bundles publish as `lfx-<name>` and pin `lfx>=X.Y`. During a
     nightly build the workspace `lfx` becomes `lfx-nightly` (no stable `lfx`
-    matching the pin may exist on PyPI yet), so a `langflow-nightly` that still
+    matching the pin may exist on PyPI yet), so a `flow-nightly` that still
     depended on the stable `lfx-<name>` would drag in `lfx>=X.Y` and fail to
     resolve. Give the bundles their own nightly track instead, mirroring how
     lfx/base/main are renamed. For every bundle this:
@@ -118,7 +118,7 @@ def rename_bundles_for_nightly(lfx_version: str) -> None:
       * rewrites its `[project] name`     `lfx-<name>` -> `lfx-<name>-nightly`
       * rewrites its `[project] version`  `0.1.0`      -> `0.1.0.dev<N>`
       * repoints the root `[tool.uv.sources]` workspace entry to the new name
-      * repoints the root `langflow` dependency to `lfx-<name>-nightly==<dev>`
+      * repoints the root `flow` dependency to `lfx-<name>-nightly==<dev>`
 
     The bundle's own `lfx` dep is repinned separately by
     `update_lfx_dep_in_bundles`. No-op when no bundles are present, and
@@ -190,7 +190,7 @@ def update_lfx_for_nightly(lfx_tag: str, sdk_tag: str):
     update_lfx_dep_in_bundles(version)
 
     # Give each bundle its own `-nightly` distribution and repoint the root
-    # `langflow` deps + workspace sources at it, so `langflow-nightly` pulls
+    # `flow` deps + workspace sources at it, so `flow-nightly` pulls
     # `lfx-<name>-nightly` (which pins `lfx-nightly`) instead of the stable
     # `lfx-<name>` (which pins an as-yet-unpublished stable `lfx`).
     rename_bundles_for_nightly(version)

@@ -1,10 +1,10 @@
-"""Test to ensure all langflow modules that re-export lfx modules work correctly.
+"""Test to ensure all flow modules that re-export lfx modules work correctly.
 
-This test validates that every langflow module that re-exports from lfx
+This test validates that every flow module that re-exports from lfx
 can successfully import and access all expected symbols, maintaining
 backward compatibility and proper API exposure.
 
-Based on analysis, there are 24 langflow modules that re-export from lfx:
+Based on analysis, there are 24 flow modules that re-export from lfx:
 
 Base Modules (11):
 - flow.base (wildcard from lfx.base)
@@ -93,11 +93,11 @@ def get_all_reexport_modules():
 
 
 class TestLfxReexportModules:
-    """Test that all langflow modules that re-export from lfx work correctly."""
+    """Test that all flow modules that re-export from lfx work correctly."""
 
     @classmethod
     def _discover_langflow_modules(cls) -> list[str]:
-        """Dynamically discover all langflow modules."""
+        """Dynamically discover all flow modules."""
         langflow_modules: list[str] = []
         try:
             import flow
@@ -208,9 +208,9 @@ class TestLfxReexportModules:
 
         for langflow_module, lfx_module in self.DIRECT_REEXPORT_MODULES.items():
             try:
-                # Import the langflow module
+                # Import the flow module
                 lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Langflow module {langflow_module} is None"
+                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
 
                 # Import the corresponding lfx module to compare
 
@@ -228,9 +228,9 @@ class TestLfxReexportModules:
 
         for langflow_module, lfx_module in self.WILDCARD_REEXPORT_MODULES.items():
             try:
-                # Import the langflow module
+                # Import the flow module
                 lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Langflow module {langflow_module} is None"
+                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
 
                 # Wildcard imports should expose most/all attributes from lfx module
                 lfx_mod = importlib.import_module(lfx_module)
@@ -253,9 +253,9 @@ class TestLfxReexportModules:
 
         for langflow_module in self.COMPLEX_REEXPORT_MODULES:
             try:
-                # Import the langflow module
+                # Import the flow module
                 lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Langflow module {langflow_module} is None"
+                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
 
                 # Verify it has __all__ attribute for complex modules
                 assert hasattr(lf_module, "__all__"), f"Complex module {langflow_module} missing __all__"
@@ -281,9 +281,9 @@ class TestLfxReexportModules:
 
         for langflow_module in self.DYNAMIC_REEXPORT_MODULES:
             try:
-                # Import the langflow module
+                # Import the flow module
                 lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Langflow module {langflow_module} is None"
+                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
 
                 # Dynamic modules should have __getattr__ method
                 assert hasattr(lf_module, "__getattr__"), f"Dynamic module {langflow_module} missing __getattr__"
@@ -435,9 +435,9 @@ class TestLfxReexportModules:
 
     # Dynamic test methods using the discovery functions
     def test_dynamic_module_discovery(self):
-        """Test that we can dynamically discover langflow modules."""
+        """Test that we can dynamically discover flow modules."""
         modules = self._discover_langflow_modules()
-        assert len(modules) > 0, "Should discover at least some langflow modules"
+        assert len(modules) > 0, "Should discover at least some flow modules"
 
         # Check that known modules are found
         expected_modules = ["flow.schema", "flow.inputs", "flow.custom"]
@@ -471,10 +471,10 @@ class TestLfxReexportModules:
             lfx_symbols = self._get_expected_symbols(expected_lfx_source)
             assert len(lfx_symbols) > 0, f"Should find some symbols in {expected_lfx_source}"
 
-            # Test that symbols explicitly re-exported by langflow module are accessible
+            # Test that symbols explicitly re-exported by flow module are accessible
             lf_module_obj = importlib.import_module(lf_module)
 
-            # Get the symbols that langflow explicitly re-exports (from its __all__)
+            # Get the symbols that flow explicitly re-exports (from its __all__)
             if hasattr(lf_module_obj, "__all__"):
                 lf_reexported = lf_module_obj.__all__
                 # Check that these re-exported symbols are actually available

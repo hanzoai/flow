@@ -1,7 +1,7 @@
 """Test run command with starter project templates from 1.6.0 for backwards compatibility.
 
 Tests that all starter project JSON files from tag 1.6.0 can be loaded by lfx run command
-without import errors for langflow modules. We expect execution errors
+without import errors for flow modules. We expect execution errors
 (missing API keys, etc.) but no import/module errors.
 
 This ensures backwards compatibility with existing starter projects.
@@ -52,10 +52,10 @@ class TestRunStarterProjectsBackwardCompatibility:
 
     @pytest.mark.parametrize("template_file", get_starter_project_files(), ids=lambda x: x.name)
     def test_run_1_6_0_starter_project_no_import_errors(self, template_file):
-        """Test that 1.6.0 starter project can be loaded without langflow or lfx import errors.
+        """Test that 1.6.0 starter project can be loaded without flow or lfx import errors.
 
         We expect execution errors (missing API keys, missing inputs, etc.)
-        but there should be NO errors about importing langflow or lfx modules.
+        but there should be NO errors about importing flow or lfx modules.
 
         Note: Some 1.6.0 starter projects contain components with import bugs that were
         fixed in later versions. These are marked as expected failures.
@@ -81,14 +81,14 @@ class TestRunStarterProjectsBackwardCompatibility:
         # Use the combined output provided by Click/Typer
         all_output = result.output
 
-        # Check for import errors related to langflow or lfx
+        # Check for import errors related to flow or lfx
         if "ModuleNotFoundError" in all_output or "ImportError" in all_output or "Module" in all_output:
-            # Check for langflow import errors
-            if "No module named 'langflow'" in all_output or "Module langflow" in all_output:
+            # Check for flow import errors
+            if "No module named 'flow'" in all_output or "Module flow" in all_output:
                 # Extract the specific error for better debugging
                 error_line = ""
                 for line in all_output.split("\n"):
-                    if "langflow" in line and ("No module named" in line or "Module" in line):
+                    if "flow" in line and ("No module named" in line or "Module" in line):
                         error_line = line.strip()
                         break
                 pytest.fail(f"Langflow import error found in 1.6.0 template {template_file.name}.\nError: {error_line}")
@@ -130,7 +130,7 @@ class TestRunStarterProjectsBackwardCompatibility:
                 )
 
             # Check for other critical import errors
-            if "cannot import name" in all_output and ("langflow" in all_output or "lfx" in all_output):
+            if "cannot import name" in all_output and ("flow" in all_output or "lfx" in all_output):
                 # Extract the specific import error
                 error_line = ""
                 for line in all_output.split("\n"):
@@ -219,7 +219,7 @@ class TestRunStarterProjectsBackwardCompatibility:
             )
 
     @pytest.mark.xfail(
-        reason="1.6.0 basic templates have langflow import issues - components expect langflow package to be available"
+        reason="1.6.0 basic templates have flow import issues - components expect flow package to be available"
     )
     def test_run_basic_1_6_0_starter_projects_detailed(self):
         """Test basic 1.6.0 starter projects that should have minimal dependencies."""
@@ -245,14 +245,14 @@ class TestRunStarterProjectsBackwardCompatibility:
             all_output = result.output
 
             # More specific checks for these basic templates
-            if "No module named 'langflow'" in all_output:
+            if "No module named 'flow'" in all_output:
                 pytest.fail(f"Langflow import error in 1.6.0 template {template_name}")
 
-            # Check for module not found errors specifically related to langflow
+            # Check for module not found errors specifically related to flow
             # (Settings service errors are runtime errors, not import errors)
-            if "ModuleNotFoundError" in all_output and "langflow" in all_output and "lfx.services" not in all_output:
-                # This is an actual langflow import error, not an internal lfx error
-                pytest.fail(f"Module not found error for langflow in 1.6.0 template {template_name}")
+            if "ModuleNotFoundError" in all_output and "flow" in all_output and "lfx.services" not in all_output:
+                # This is an actual flow import error, not an internal lfx error
+                pytest.fail(f"Module not found error for flow in 1.6.0 template {template_name}")
 
     @pytest.mark.parametrize("template_file", get_starter_project_files(), ids=lambda x: x.name)
     def test_run_1_6_0_starter_project_with_stdin(self, template_file):
@@ -272,7 +272,7 @@ class TestRunStarterProjectsBackwardCompatibility:
 
         # Verify no import errors
         all_output = result.output
-        if "No module named 'langflow'" in all_output:
+        if "No module named 'flow'" in all_output:
             pytest.fail("Langflow import error in 1.6.0 stdin test")
 
     @pytest.mark.parametrize("template_file", get_starter_project_files(), ids=lambda x: x.name)
@@ -292,5 +292,5 @@ class TestRunStarterProjectsBackwardCompatibility:
 
         # Verify no import errors
         all_output = result.output
-        if "No module named 'langflow'" in all_output:
+        if "No module named 'flow'" in all_output:
             pytest.fail("Langflow import error in 1.6.0 inline JSON test")

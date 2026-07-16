@@ -30,17 +30,17 @@ test(
     await page.getByTestId("code-button-modal").last().click();
 
     const codeInputCode = `
-# from langflow.field_typing import Data
-from langflow.custom import Component
-from langflow.io import CodeInput, Output
-from langflow.schema import Data
+# from flow.field_typing import Data
+from flow.custom import Component
+from flow.io import CodeInput, Output
+from flow.schema import Data
 from time import sleep
-from langflow.schema.message import Message
+from flow.schema.message import Message
 
 class CustomComponent(Component):
     display_name = "Custom Component"
     description = "Use as a template to create your own component."
-    documentation: str = "https://docs.langflow.org/components-custom-components"
+    documentation: str = "https://docs.flow.org/components-custom-components"
     icon = "custom_components"
     name = "CustomComponent"
 

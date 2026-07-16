@@ -44,7 +44,7 @@ def mock_settings_service():
     """Create a mock settings service with S3 configuration.
 
     Configuration via environment variables:
-    - FLOW_OBJECT_STORAGE_BUCKET_NAME: S3 bucket name (default: langflow-ci)
+    - FLOW_OBJECT_STORAGE_BUCKET_NAME: S3 bucket name (default: flow-ci)
     - FLOW_OBJECT_STORAGE_PREFIX: S3 prefix (default: test-files-1)
     - FLOW_OBJECT_STORAGE_TAGS: S3 tags as JSON string (default: {"env": "test-1"})
 
@@ -56,7 +56,7 @@ def mock_settings_service():
 
     # Bucket name from env or default
     settings_service.settings.object_storage_bucket_name = os.environ.get(
-        "FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci"
+        "FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci"
     )
 
     # Prefix from env - using standard LANGFLOW env var name
@@ -107,7 +107,7 @@ class TestS3StorageServiceInitialization:
         assert s3_storage_service.ready is True
 
         # Verify bucket name matches env or default
-        expected_bucket = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+        expected_bucket = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci")
         assert s3_storage_service.bucket_name == expected_bucket
 
         # Verify prefix matches env or default (with trailing slash)

@@ -502,7 +502,7 @@ class TestQADoesNotIncludeCode:
         ):
             gen = execute_flow_with_validation_streaming(
                 flow_filename="TestFlow",
-                input_value="what is langflow?",
+                input_value="what is flow?",
                 global_variables={},
             )
             raw_events = await _collect_raw_events(gen)

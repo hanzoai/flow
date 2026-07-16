@@ -250,14 +250,14 @@ jobs:
         with:
           images: |
             langflowai/lfx
-            ghcr.io/langflow-ai/lfx
+            ghcr.io/flow-ai/lfx
           tags: |
             type=raw,value=${{ github.event.inputs.version }}${{ matrix.variant == 'alpine' && '-alpine' || '' }}
             type=raw,value=latest${{ matrix.variant == 'alpine' && '-alpine' || '' }},enable=${{ github.event.inputs.pre_release == 'false' }}
           labels: |
             org.opencontainers.image.title=LFX
-            org.opencontainers.image.description=Langflow Executor - CLI tool for running Langflow AI workflows
-            org.opencontainers.image.vendor=Langflow
+            org.opencontainers.image.description=Hanzo Flow Executor - CLI tool for running Hanzo Flow AI workflows
+            org.opencontainers.image.vendor=Hanzo Flow
             org.opencontainers.image.version=${{ github.event.inputs.version }}
 
       - name: Build and push Docker image

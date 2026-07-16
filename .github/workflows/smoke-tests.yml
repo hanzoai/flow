@@ -166,7 +166,7 @@ jobs:
             Critical functionality validated:
 
             - ${backendEmoji} **Backend**: 11 essential test files (database, auth, API endpoints, flows, components)
-            - ${lfxEmoji} **LFX**: Graph tests (langflow execution) - runs in isolation
+            - ${lfxEmoji} **LFX**: Graph tests (flow execution) - runs in isolation
             - ${frontendEmoji} **Frontend**: Unit tests only (components, utilities)
             
             **Coverage**: Core functionality without external dependencies

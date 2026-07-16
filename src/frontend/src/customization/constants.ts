@@ -1,4 +1,4 @@
-//Langflow Desktop Base URL
+//Hanzo Flow Desktop Base URL
 export const baseURL = "";
 
 export const customDefaultShortcuts = [

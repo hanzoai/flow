@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { addFlowToTestOnEmptyLangflow } from "./add-flow-to-test-on-empty-langflow";
+import { addFlowToTestOnEmptyLangflow } from "./add-flow-to-test-on-empty-flow";
 
 export const awaitBootstrapTest = async (
   page: Page,

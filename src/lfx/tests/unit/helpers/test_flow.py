@@ -21,10 +21,10 @@ class TestDynamicImport:
     """Test dynamic imports of the lfx implementation."""
 
     def test_langflow_available(self):
-        """Test whether the langflow implementation is available."""
-        # Langflow implementation should not be available
+        """Test whether the flow implementation is available."""
+        # Hanzo Flow implementation should not be available
         if has_langflow_memory():
-            pytest.fail("Langflow implementation is available")
+            pytest.fail("Hanzo Flow implementation is available")
 
     def test_helpers_import_build_schema_from_inputs(self):
         """Test the lfx.helpers.build_schema_from_inputs import."""

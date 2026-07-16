@@ -318,12 +318,12 @@ class TestLocalStorageParseFilePathWindowsCompatibility:
         """Test parsing Windows path with UUID flow_id (real-world scenario)."""
         mock_session = Mock()
         mock_settings = Mock()
-        mock_settings.settings.config_dir = "C:\\Users\\user\\AppData\\Local\\langflow"
+        mock_settings.settings.config_dir = "C:\\Users\\user\\AppData\\Local\\flow"
 
         service = LocalStorageService(mock_session, mock_settings)
 
         flow_id, file_name = service.parse_file_path(
-            "C:\\Users\\user\\AppData\\Local\\langflow\\afffa27a-a9f0-4511-b1a9-7e6cb2b3df05\\uploaded_file.png"
+            "C:\\Users\\user\\AppData\\Local\\flow\\afffa27a-a9f0-4511-b1a9-7e6cb2b3df05\\uploaded_file.png"
         )
         assert flow_id == "afffa27a-a9f0-4511-b1a9-7e6cb2b3df05"
         assert file_name == "uploaded_file.png"

@@ -1,11 +1,11 @@
-# langflow-validate.yml
+# flow-validate.yml
 #
 # PURPOSE
 #   Block a PR if any changed flow JSON fails lfx validate.
 #   No secrets required -- this is a pure static analysis step.
 #
 # USAGE
-#   Copy to .github/workflows/langflow-validate.yml in your repo.
+#   Copy to .github/workflows/flow-validate.yml in your repo.
 #   Adjust `paths` to match where you store your flow files.
 #
 # CUSTOMISATION
@@ -14,7 +14,7 @@
 #   --skip-*    Use --skip-components, --skip-edge-types, or --skip-required-inputs
 #               to suppress individual check categories.
 
-name: Validate Langflow Flows
+name: Validate Hanzo Flow Flows
 
 on:
   pull_request:

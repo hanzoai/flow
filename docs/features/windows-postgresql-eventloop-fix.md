@@ -329,13 +329,13 @@ C4Context
   title System Context diagram for Windows PostgreSQL Event Loop Fix
   
   Person(dev, "Developer", "Windows user running Hanzo Flow")
-  System(langflow, "Hanzo Flow", "AI workflow platform")
+  System(flow, "Hanzo Flow", "AI workflow platform")
   System_Ext(postgres, "PostgreSQL", "Database server")
   System_Ext(sqlite, "SQLite", "File-based database")
   
-  Rel(dev, langflow, "Develops AI apps")
-  Rel(langflow, postgres, "Stores data (with event loop fix)")
-  Rel(langflow, sqlite, "Alternative storage (no fix needed)")
+  Rel(dev, flow, "Develops AI apps")
+  Rel(flow, postgres, "Stores data (with event loop fix)")
+  Rel(flow, sqlite, "Alternative storage (no fix needed)")
 ```
 
 ### 9.2 Container Diagram (Level 2)
@@ -415,7 +415,7 @@ No changes or impact. The fix only activates for Windows + PostgreSQL combinatio
 ### Environment Variables
 Ensure `LANGFLOW_DATABASE_URL` is properly set in your `.env` file:
 ```env
-LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/langflow
+LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
 ```
 
 ---

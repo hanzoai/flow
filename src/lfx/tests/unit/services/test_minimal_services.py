@@ -253,12 +253,12 @@ class TestVariableService:
             del os.environ["TEST_VAR"]
 
     async def test_get_variable_is_coroutine(self, variables):
-        """get_variable must be async to match the langflow call site.
+        """get_variable must be async to match the flow call site.
 
         Callers use ``await variable_service.get_variable(...)`` (see
         ``Component.get_variable`` in custom_component.py); awaiting a non-coroutine
         TypeErrors. lfx's implementation does no I/O — the async wrapper exists
-        purely to match the interface langflow's DatabaseVariableService uses.
+        purely to match the interface flow's DatabaseVariableService uses.
         """
         import inspect
 
@@ -268,9 +268,9 @@ class TestVariableService:
         await coro  # avoid 'coroutine never awaited' warning
 
     async def test_get_variable_absorbs_extra_kwargs(self, variables):
-        """Extra kwargs from the langflow call site must not crash the lfx implementation.
+        """Extra kwargs from the flow call site must not crash the lfx implementation.
 
-        Langflow calls ``await variable_service.get_variable(user_id=..., name=...,
+        Hanzo Flow calls ``await variable_service.get_variable(user_id=..., name=...,
         field=..., session=...)``. lfx's implementation must accept and ignore the
         extras so flows behave identically as long as the variable can be resolved
         by name.

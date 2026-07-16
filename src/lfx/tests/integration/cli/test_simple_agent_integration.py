@@ -121,7 +121,7 @@ class TestSimpleAgentFlowLoading:
         # These are the critical errors that indicate structural problems
         critical_errors = [
             "No module named 'lfx.components",
-            "No module named 'langflow",
+            "No module named 'flow",
             "'NoneType' object has no attribute 'resolve_component_path'",
             "Error creating class. ModuleNotFoundError",
         ]

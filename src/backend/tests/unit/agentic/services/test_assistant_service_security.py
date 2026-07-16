@@ -164,7 +164,7 @@ class TestOffTopicIntegration:
         ):
             gen = execute_flow_with_validation_streaming(
                 flow_filename="TestFlow",
-                input_value="What is Langflow?",
+                input_value="What is Hanzo Flow?",
                 global_variables={},
             )
             events = await _collect_events(gen)

@@ -2,8 +2,8 @@ import { expect } from "../fixtures";
 
 export async function getAuthToken(request: any) {
   const formData = new URLSearchParams();
-  formData.append("username", "langflow");
-  formData.append("password", "langflow");
+  formData.append("username", "flow");
+  formData.append("password", "flow");
 
   const loginResponse = await request.post("/v1/login", {
     headers: {

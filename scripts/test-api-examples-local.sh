@@ -15,8 +15,8 @@ export LANGFLOW_AUTO_LOGIN="${LANGFLOW_AUTO_LOGIN:-true}"
 export LANGFLOW_DEVELOPER_API_ENABLED=true
 
 cleanup() {
-  if [[ -f /tmp/langflow-server.pid ]]; then
-    SERVER_PID="$(< /tmp/langflow-server.pid)"
+  if [[ -f /tmp/flow-server.pid ]]; then
+    SERVER_PID="$(< /tmp/flow-server.pid)"
     if kill -0 "$SERVER_PID" 2>/dev/null; then
       kill "$SERVER_PID" || true
       for _ in {1..15}; do
@@ -27,12 +27,12 @@ cleanup() {
       done
       kill -9 "$SERVER_PID" 2>/dev/null || true
     fi
-    rm -f /tmp/langflow-server.pid
+    rm -f /tmp/flow-server.pid
   fi
 }
 trap cleanup EXIT
 
-# If PORT is already taken, Langflow may bind to PORT+1 while this script still uses PORT for
+# If PORT is already taken, Hanzo Flow may bind to PORT+1 while this script still uses PORT for
 # curl and examples — you then hit the wrong server (e.g. 403 on /api/v2/workflows without dev API).
 port_is_in_use() {
   local host="$1" port="$2"
@@ -74,13 +74,13 @@ if port_is_in_use "$HOST" "$PORT"; then
   echo "Port $REQUESTED_PORT was in use; using $PORT for this run (set LANGFLOW_PORT to pin a port)."
 fi
 
-echo "Starting Langflow on http://$HOST:$PORT (developer API enabled for /api/v2/workflows)"
+echo "Starting Hanzo Flow on http://$HOST:$PORT (developer API enabled for /api/v2/workflows)"
 # Set on the command line so the server process always sees it (macOS launcher/exec paths).
-LANGFLOW_DEVELOPER_API_ENABLED=true uv run langflow run --backend-only --host "$HOST" --port "$PORT" >/tmp/langflow-server.log 2>&1 &
-echo $! >/tmp/langflow-server.pid
+LANGFLOW_DEVELOPER_API_ENABLED=true uv run flow run --backend-only --host "$HOST" --port "$PORT" >/tmp/flow-server.log 2>&1 &
+echo $! >/tmp/flow-server.pid
 
-echo "Waiting for Langflow readiness (DB + services via /health_check)..."
-# /health can respond before the Langflow app is fully up (uvicorn default).
+echo "Waiting for Hanzo Flow readiness (DB + services via /health_check)..."
+# /health can respond before the Hanzo Flow app is fully up (uvicorn default).
 for _ in {1..60}; do
   if curl -sf "http://$HOST:$PORT/health_check" >/dev/null; then
     break
@@ -89,8 +89,8 @@ for _ in {1..60}; do
 done
 
 if ! curl -sf "http://$HOST:$PORT/health_check" >/dev/null; then
-  echo "Langflow did not become ready in time."
-  echo "See /tmp/langflow-server.log for details."
+  echo "Hanzo Flow did not become ready in time."
+  echo "See /tmp/flow-server.log for details."
   exit 1
 fi
 
@@ -108,8 +108,8 @@ from requests import RequestException
 
 base = os.environ["BASE_URL"]
 session = requests.Session()
-user = os.environ.get("LANGFLOW_SUPERUSER", "langflow")
-password = os.environ.get("LANGFLOW_SUPERUSER_PASSWORD", "langflow")
+user = os.environ.get("LANGFLOW_SUPERUSER", "flow")
+password = os.environ.get("LANGFLOW_SUPERUSER_PASSWORD", "flow")
 
 token = None
 last_status = None
@@ -220,7 +220,7 @@ try:
     if not job_id:
         raise RuntimeError(f"Build start returned no job_id: {build_data}")
 
-    project_zip_path = Path("/tmp/langflow-project-import.zip")
+    project_zip_path = Path("/tmp/flow-project-import.zip")
     try:
         export_resp = requests.get(
             f"{base_url}/api/v1/projects/download/{project_id}",
@@ -282,4 +282,4 @@ for suite in "${SUITE_LIST[@]}"; do
   esac
 done
 
-echo "Done. Server log: /tmp/langflow-server.log"
+echo "Done. Server log: /tmp/flow-server.log"

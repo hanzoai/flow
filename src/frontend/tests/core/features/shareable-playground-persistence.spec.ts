@@ -38,10 +38,10 @@ async function setupAutoLoginOff(page: any) {
   });
 
   await page.goto("/");
-  await page.waitForSelector("text=sign in to langflow", { timeout: 30000 });
+  await page.waitForSelector("text=sign in to flow", { timeout: 30000 });
 
-  await page.getByPlaceholder("Username").fill("langflow");
-  await page.getByPlaceholder("Password").fill("langflow");
+  await page.getByPlaceholder("Username").fill("flow");
+  await page.getByPlaceholder("Password").fill("flow");
 
   await page.evaluate(() => {
     sessionStorage.removeItem("testMockAutoLogin");

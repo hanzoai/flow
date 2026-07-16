@@ -1,20 +1,20 @@
-# langflow-test.yml
+# flow-test.yml
 #
 # PURPOSE
 #   Run your pytest flow-integration tests against a live staging instance
 #   on every PR that touches flow files or tests.
 #
 # PREREQUISITES
-#   pip install "langflow-sdk[testing]" pytest
+#   pip install "flow-sdk[testing]" pytest
 #
 # GITHUB SETUP  (Settings → Environments → New environment → "staging")
 #   Variables  (plain text, visible in logs):
-#     LANGFLOW_STAGING_URL   e.g. https://staging.langflow.example.com
+#     LANGFLOW_STAGING_URL   e.g. https://staging.flow.example.com
 #   Secrets    (masked, never logged):
 #     LANGFLOW_STAGING_API_KEY   your staging API key
 #
 # USAGE
-#   Copy to .github/workflows/langflow-test.yml in your repo.
+#   Copy to .github/workflows/flow-test.yml in your repo.
 #   Write tests in tests/ using the flow_runner fixture:
 #
 #       def test_my_flow(flow_runner):
@@ -25,7 +25,7 @@
 #   Tests are automatically skipped when no connection is configured,
 #   so PRs from external contributors (who lack secrets) still pass.
 
-name: Test Langflow Flows
+name: Test Hanzo Flow Flows
 
 on:
   pull_request:
@@ -59,30 +59,30 @@ jobs:
       # Adjust versions / add other project dependencies as needed.        #
       # ------------------------------------------------------------------ #
       - name: Install dependencies
-        run: pip install "langflow-sdk[testing]" pytest
+        run: pip install "flow-sdk[testing]" pytest
 
       # ------------------------------------------------------------------ #
-      # Write a minimal environments config so --langflow-env works.       #
+      # Write a minimal environments config so --flow-env works.       #
       # The URL comes from a plain variable; the key is injected as an     #
-      # env var and resolved by langflow-sdk at runtime (never written to  #
+      # env var and resolved by flow-sdk at runtime (never written to  #
       # disk).                                                              #
       # ------------------------------------------------------------------ #
       - name: Write environments config
         run: >-
           printf '[environments.staging]\nurl = "%s"\napi_key_env = "LANGFLOW_STAGING_API_KEY"\n'
-          "$LANGFLOW_STAGING_URL" > langflow-environments.toml
+          "$LANGFLOW_STAGING_URL" > flow-environments.toml
         env:
           LANGFLOW_STAGING_URL: ${{ vars.LANGFLOW_STAGING_URL }}
 
       - name: Run flow tests
         env:
-          # URL for the flow_runner --langflow-env option
-          LANGFLOW_ENVIRONMENTS_FILE: langflow-environments.toml
+          # URL for the flow_runner --flow-env option
+          LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
           # API key resolved by api_key_env in the environments file
           LANGFLOW_STAGING_API_KEY: ${{ secrets.LANGFLOW_STAGING_API_KEY }}
         run: |
           pytest tests/ \
-            --langflow-env staging \
+            --flow-env staging \
             -m integration \
             -v \
             --tb=short

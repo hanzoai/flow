@@ -2,37 +2,37 @@
 # ci-push.sh
 #
 # PURPOSE
-#   Push (upsert) Langflow flow JSON files to a remote Langflow instance
+#   Push (upsert) Hanzo Flow flow JSON files to a remote Hanzo Flow instance
 #   using `lfx push`.  Stable flow IDs mean re-running always converges.
 #
 # USAGE
 #   chmod +x ci-push.sh
-#   export LANGFLOW_URL=https://staging.langflow.example.com
+#   export LANGFLOW_URL=https://staging.flow.example.com
 #   export LANGFLOW_API_KEY=<your-api-key>
 #   ./ci-push.sh
 #
 # ENVIRONMENT VARIABLES — connection (pick one approach)
 #
 #   Approach A: direct URL + key (simplest)
-#     LANGFLOW_URL        URL of the target Langflow instance.
+#     LANGFLOW_URL        URL of the target Hanzo Flow instance.
 #     LANGFLOW_API_KEY    API key for that instance.
 #
 #   Approach B: named environment from a TOML config
 #     LANGFLOW_ENV                 Name of the environment block.
 #                                  e.g. staging  or  production
 #     LANGFLOW_ENVIRONMENTS_FILE   Path to environments TOML.
-#                                  Default: langflow-environments.toml
+#                                  Default: flow-environments.toml
 #     <api_key_env var>            The env var named in api_key_env inside the
 #                                  TOML block.  Must be exported separately.
 #
 #   The TOML format:
 #
 #     [environments.staging]
-#     url         = "https://staging.langflow.example.com"
+#     url         = "https://staging.flow.example.com"
 #     api_key_env  = "LANGFLOW_STAGING_API_KEY"
 #
 #     [environments.production]
-#     url         = "https://langflow.example.com"
+#     url         = "https://flow.example.com"
 #     api_key_env  = "LANGFLOW_PROD_API_KEY"
 #
 # ENVIRONMENT VARIABLES — behaviour
@@ -63,7 +63,7 @@ set -euo pipefail
 
 FLOWS_DIR="${FLOWS_DIR:-flows/}"
 LANGFLOW_ENV="${LANGFLOW_ENV:-}"
-LANGFLOW_ENVIRONMENTS_FILE="${LANGFLOW_ENVIRONMENTS_FILE:-langflow-environments.toml}"
+LANGFLOW_ENVIRONMENTS_FILE="${LANGFLOW_ENVIRONMENTS_FILE:-flow-environments.toml}"
 LANGFLOW_URL="${LANGFLOW_URL:-}"
 LANGFLOW_API_KEY="${LANGFLOW_API_KEY:-}"
 LANGFLOW_PROJECT="${LANGFLOW_PROJECT:-}"
@@ -80,7 +80,7 @@ fi
 # ── Install lfx ───────────────────────────────────────────────────────────── #
 
 echo "==> Installing lfx${LFX_VERSION:+ ${LFX_VERSION}} ..."
-pip install --quiet "lfx${LFX_VERSION}" langflow-sdk
+pip install --quiet "lfx${LFX_VERSION}" flow-sdk
 
 # ── Build environments file if using Approach B ───────────────────────────── #
 

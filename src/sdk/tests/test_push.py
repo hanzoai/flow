@@ -138,7 +138,7 @@ def test_push_command_creates_flow(tmp_path: Path):
     respx.get(f"{_BASE}/api/v1/projects/").mock(return_value=httpx.Response(200, json=[]))
 
     # Write an environments config
-    env_file = tmp_path / "langflow-environments.toml"
+    env_file = tmp_path / "flow-environments.toml"
     env_file.write_text(
         f'[environments.test]\nurl = "{_BASE}"\n',
         encoding="utf-8",
@@ -169,7 +169,7 @@ def test_push_command_dry_run_makes_no_requests(tmp_path: Path):
         encoding="utf-8",
     )
 
-    env_file = tmp_path / "langflow-environments.toml"
+    env_file = tmp_path / "flow-environments.toml"
     env_file.write_text(
         f'[environments.test]\nurl = "{_BASE}"\n',
         encoding="utf-8",
@@ -218,7 +218,7 @@ def test_push_command_project_dir(tmp_path: Path):
         payload = {**_FLOW_PAYLOAD, "id": str(fid)}
         respx.put(f"{_BASE}/api/v1/flows/{fid}").mock(return_value=httpx.Response(201, json=payload))
 
-    env_file = tmp_path / "langflow-environments.toml"
+    env_file = tmp_path / "flow-environments.toml"
     env_file.write_text(
         f'[environments.test]\nurl = "{_BASE}"\n',
         encoding="utf-8",

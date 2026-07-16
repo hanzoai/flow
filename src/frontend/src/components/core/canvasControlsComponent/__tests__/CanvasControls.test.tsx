@@ -107,7 +107,7 @@ describe("CanvasControls", () => {
     render(<CanvasControls selectedNode={null} />);
 
     expect(screen.getByText("New")).toBeInTheDocument();
-    expect(screen.getByAltText("Langflow Assistant")).toBeInTheDocument();
+    expect(screen.getByAltText("Hanzo Flow Assistant")).toBeInTheDocument();
   });
 
   it("should_render_sticky_note_button", () => {

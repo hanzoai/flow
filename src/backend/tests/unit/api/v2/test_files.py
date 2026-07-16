@@ -716,7 +716,7 @@ async def s3_files_client_fixture(
             monkeypatch.setenv("FLOW_STORAGE_TYPE", "s3")
             monkeypatch.setenv(
                 "FLOW_OBJECT_STORAGE_BUCKET_NAME",
-                os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci"),
+                os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci"),
             )
             # Use unique prefix per test run to avoid conflicts
             test_prefix = f"test-files-api-{uuid.uuid4().hex[:8]}"
@@ -744,7 +744,7 @@ async def s3_files_client_fixture(
             import boto3
 
             s3 = boto3.client("s3")
-            bucket_name = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+            bucket_name = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci")
 
             # List and delete all objects with our test prefix
             with contextlib.suppress(Exception):
@@ -949,7 +949,7 @@ class TestS3FileOperations:
         import boto3
 
         s3 = boto3.client("s3")
-        bucket_name = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "langflow-ci")
+        bucket_name = os.environ.get("FLOW_OBJECT_STORAGE_BUCKET_NAME", "flow-ci")
 
         # Extract file name from path
         file_name = file_path.split("/")[-1]
