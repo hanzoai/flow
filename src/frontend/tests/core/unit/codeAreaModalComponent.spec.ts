@@ -76,9 +76,9 @@ class CustomComponent(Component):
       'def python_function(text: str) -> st:    """This is a default python function that returns the input text"""    return text';
 
     const customComponentCode = `from typing import Callable
-from hanzoflow.field_typing import Code
-from hanzoflow.interface.custom.custom_component import CustomComponent
-from hanzoflow.interface.custom.utils import get_function
+from flow.field_typing import Code
+from flow.interface.custom.custom_component import CustomComponent
+from flow.interface.custom.utils import get_function
 
 class PythonFunctionComponent(CustomComponent):
     def python_function(text: str) -> str:

@@ -985,7 +985,7 @@ const useFlowStore = create<FlowStoreType>((set, get) => ({
           ...next_vertices_ids,
         ];
         if (
-          ENABLE_DATASTAX_HANZOFLOW &&
+          ENABLE_DATASTAX_FLOW &&
           vertexBuildData?.id?.includes("AstraDB")
         ) {
           const search_results: LogsLogType[] = Object.values(

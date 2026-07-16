@@ -4,6 +4,6 @@ node_modules
 **/node_modules/
 dist/
 **/build/
-src/backend/hanzoflow/frontend
-**/hanzoflow-pre.db
-**/hanzoflow.db
+src/backend/flow/frontend
+**/flow-pre.db
+**/flow.db

@@ -15,7 +15,7 @@ Get Started: about, installation, quickstart, tutorials (RAG, files, agents, MCP
 Get Started: about, install, quickstart, tutorials. Flows: visual editor, triggers, playground, import/export. Agents: agents, MCP. Develop: config, storage, observability, CLI. Deploy: overview, Docker, Kubernetes, cloud, security. Components: concepts, core, bundles, custom. API Reference: getting started, endpoints, spec. Contribute: community, contributing. Support: troubleshooting, help, release notes.
 
 **Installation**
-OSS: uv pip install hanzoflow -U; uv run hanzoflow run. Docker: docker run -p 7860:7860 hanzoflowai/hanzoflow:latest. From source: make run_cli. First use: UI at 127.0.0.1:7860, configure API keys, build or import flows, trigger via API or webhooks.
+OSS: uv pip install hanzo-flow -U; uv run flow run. Docker: docker run -p 7860:7860 flowai/flow:latest. From source: make run_cli. First use: UI at 127.0.0.1:7860, configure API keys, build or import flows, trigger via API or webhooks.
 
 **Use cases**
 RAG applications, multi-agent workflows, MCP servers and clients, API-backed AI services, document processing, custom components and bundles, deployment (Docker, Kubernetes, cloud). Target users: developers, data scientists, devops, contributors.

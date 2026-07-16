@@ -71,11 +71,11 @@ const StoreApiKeyFormComponent = ({
                 {t("store.createApiKey")}{" "}
                 <a
                   className="text-high-indigo underline"
-                  href="https://hanzoflow.store/"
+                  href="https://flow.store/"
                   target="_blank"
                   rel="noopener"
                 >
-                  hanzoflow.store
+                  flow.store
                 </a>
               </span>
             </div>

@@ -10,16 +10,16 @@ const isProduction = process.env.NODE_ENV === "production";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Hanzoflow Documentation",
+  title: "HanzoFlow Documentation",
   tagline:
-    "Hanzoflow is a low-code app builder for RAG and multi-agent AI applications.",
+    "HanzoFlow is a low-code app builder for RAG and multi-agent AI applications.",
   favicon: "img/favicon.ico",
-  url: "https://docs.hanzoflow.org",
+  url: "https://docs.flow.org",
   baseUrl: process.env.BASE_URL ? process.env.BASE_URL : "/",
   onBrokenLinks: "throw",
   onBrokenAnchors: "warn",
-  organizationName: "hanzoflow-ai",
-  projectName: "hanzoflow",
+  organizationName: "flow-ai",
+  projectName: "flow",
   trailingSlash: false,
   staticDirectories: ["static"],
   markdown: {
@@ -450,7 +450,7 @@ const config = {
           // right
           {
             position: "right",
-            href: "https://github.com/hanzoflow-ai/hanzoflow",
+            href: "https://github.com/flow-ai/flow",
             className: "header-github-link",
             target: "_blank",
             rel: null,
@@ -464,7 +464,7 @@ const config = {
           },
           {
             position: "right",
-            href: "https://twitter.com/hanzoflow_ai",
+            href: "https://twitter.com/flow_ai",
             className: "header-twitter-link",
             target: "_blank",
             rel: null,

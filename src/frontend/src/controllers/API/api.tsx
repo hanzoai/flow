@@ -100,9 +100,9 @@ function ApiInterceptor() {
 
     const isAuthorizedURL = (url) => {
       const authorizedDomains = [
-        "https://raw.githubusercontent.com/hanzoflow-ai/hanzoflow_examples/main/examples",
-        "https://api.github.com/repos/hanzoflow-ai/hanzoflow_examples/contents/examples",
-        "https://api.github.com/repos/hanzoflow-ai/hanzoflow",
+        "https://raw.githubusercontent.com/flow-ai/flow_examples/main/examples",
+        "https://api.github.com/repos/flow-ai/flow_examples/contents/examples",
+        "https://api.github.com/repos/flow-ai/flow",
         "auto_login",
       ];
 

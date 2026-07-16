@@ -24,7 +24,7 @@ Three Python packages in a uv workspace:
 | Package | PyPI name | Dir | Purpose |
 |---------|-----------|-----|---------|
 | `flow` | `flow-base` | `src/backend/base/flow/` | Main backend package (454 files) |
-| `flow` (root) | `hanzoflow` | `src/backend/flow/` | Root package (version only) |
+| `flow` (root) | `flow` | `src/backend/flow/` | Root package (version only) |
 | `lfx` | `lfx` | `src/lfx/src/lfx/` | Lightweight executor, standalone CLI |
 
 ### Internal package name: `flow`
@@ -33,10 +33,10 @@ Three Python packages in a uv workspace:
 - Entry point: `flow-base = "flow.launcher:main"` (base pyproject.toml)
 - Hatch build target: `packages = ["flow"]` (base), `packages = ["src/backend/flow"]` (root)
 - The `flow` compat shim package has been removed (was at `src/backend/base/flow/`)
-- The `hanzoflow` package dir has been renamed to `flow`
+- The `flow` package dir has been renamed to `flow`
 
 ### PyPI package names (unchanged)
-- `hanzoflow` -- root package name in pyproject.toml
+- `flow` -- root package name in pyproject.toml
 - `flow-base` -- base package name in pyproject.toml
 - `lfx` -- executor package name
 
@@ -49,7 +49,7 @@ Three Python packages in a uv workspace:
 - `FlowUvicornWorker` -- Uvicorn worker class (`flow.server`)
 
 ## Key Files
-- `pyproject.toml` -- Root project config (PyPI name: hanzoflow)
+- `pyproject.toml` -- Root project config (PyPI name: flow)
 - `src/backend/base/pyproject.toml` -- Base package config (PyPI name: flow-base)
 - `src/backend/base/flow/launcher.py` -- Main entry point (was flow_launcher.py)
 - `src/backend/base/flow/__main__.py` -- CLI commands (typer app)

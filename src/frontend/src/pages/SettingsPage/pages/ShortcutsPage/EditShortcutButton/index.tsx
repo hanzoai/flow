@@ -72,7 +72,7 @@ export default function EditShortcutButton({
     const shortcutName = toCamelCase(shortcut[0]);
     setUniqueShortcut(shortcutName, newCombination);
     setShortcuts(nextShortcuts);
-    localStorage.setItem("hanzoflow-shortcuts", JSON.stringify(nextShortcuts));
+    localStorage.setItem("flow-shortcuts", JSON.stringify(nextShortcuts));
     setKey(null);
     setOpen(false);
     setSuccessData({

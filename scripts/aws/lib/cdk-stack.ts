@@ -13,7 +13,7 @@ const errorMessageForBooleanContext = (key: string) => {
 };
 
 
-export class HanzoflowAppStack extends cdk.Stack {
+export class HanzoFlowAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     // Kendra Enable

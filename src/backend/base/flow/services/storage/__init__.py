@@ -1,4 +1,4 @@
-"""Storage services for hanzoflow."""
+"""Storage services for flow."""
 
 from .file_storage import FileStorageService
 from .local import LocalStorageService

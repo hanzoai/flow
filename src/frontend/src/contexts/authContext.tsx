@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import {
-  HANZOFLOW_ACCESS_TOKEN,
-  HANZOFLOW_API_TOKEN,
-  HANZOFLOW_AUTO_LOGIN_OPTION,
-  HANZOFLOW_REFRESH_TOKEN,
+  FLOW_ACCESS_TOKEN,
+  FLOW_API_TOKEN,
+  FLOW_AUTO_LOGIN_OPTION,
+  FLOW_REFRESH_TOKEN,
 } from "@/constants/constants";
 import { useGetUserData } from "@/controllers/API/queries/auth";
 import { useGetGlobalVariablesMutation } from "@/controllers/API/queries/variables/use-get-mutation-global-variables";
@@ -69,12 +69,12 @@ export function AuthProvider({ children }): React.ReactElement {
     autoLogin: string,
     refreshToken?: string,
   ) {
-    cookieManager.set(HANZOFLOW_ACCESS_TOKEN, newAccessToken);
-    cookieManager.set(HANZOFLOW_AUTO_LOGIN_OPTION, autoLogin);
-    setLocalStorage(HANZOFLOW_ACCESS_TOKEN, newAccessToken);
+    cookieManager.set(FLOW_ACCESS_TOKEN, newAccessToken);
+    cookieManager.set(FLOW_AUTO_LOGIN_OPTION, autoLogin);
+    setLocalStorage(FLOW_ACCESS_TOKEN, newAccessToken);
 
     if (refreshToken) {
-      cookieManager.set(HANZOFLOW_REFRESH_TOKEN, refreshToken);
+      cookieManager.set(FLOW_REFRESH_TOKEN, refreshToken);
     }
     setAccessToken(newAccessToken);
 
@@ -130,9 +130,9 @@ export function AuthProvider({ children }): React.ReactElement {
 
   function clearAuthSession() {
     cookieManager.clearAuthCookies();
-    localStorage.removeItem(HANZOFLOW_ACCESS_TOKEN);
-    localStorage.removeItem(HANZOFLOW_API_TOKEN);
-    localStorage.removeItem(HANZOFLOW_REFRESH_TOKEN);
+    localStorage.removeItem(FLOW_ACCESS_TOKEN);
+    localStorage.removeItem(FLOW_API_TOKEN);
+    localStorage.removeItem(FLOW_REFRESH_TOKEN);
     setAccessToken(null);
     setApiKey(null);
     setUserData(null);

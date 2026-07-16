@@ -331,7 +331,7 @@ def get_lifespan(*, fix_migration=False, version=None):
                 os.kill(os.getppid(), signal.SIGTERM)
             os._exit(3)
         except Exception as exc:
-            if "hanzoflow migration --fix" not in str(exc):
+            if "flow migration --fix" not in str(exc):
                 logger.exception(exc)
 
                 await log_exception_to_telemetry(exc, "lifespan")

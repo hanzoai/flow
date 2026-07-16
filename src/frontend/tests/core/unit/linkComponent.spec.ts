@@ -106,11 +106,11 @@ function updateComponentCode(
 
   // Update imports
   if (updates.imports) {
-    const importPattern = /from\s+hanzoflow\.io\s+import\s+([^;\n]+)/;
+    const importPattern = /from\s+flow\.io\s+import\s+([^;\n]+)/;
     const newImports = updates.imports.join(", ");
     updatedCode = updatedCode.replace(
       importPattern,
-      `from hanzoflow.io import ${newImports}`,
+      `from flow.io import ${newImports}`,
     );
   }
 
