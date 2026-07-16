@@ -49,10 +49,10 @@ src/lfx/src/lfx/components/
         └── dataframe_processor.py # Your custom component file
 ```
 
-If you're creating custom components in a different location using the `LANGFLOW_COMPONENTS_PATH` [environment variable](/environment-variables), components must be similarly organized in a specific directory structure to be displayed in the visual editor.
+If you're creating custom components in a different location using the `FLOW_COMPONENTS_PATH` [environment variable](/environment-variables), components must be similarly organized in a specific directory structure to be displayed in the visual editor.
 
 ```
-/your/custom/components/path/    # Base directory set by LANGFLOW_COMPONENTS_PATH
+/your/custom/components/path/    # Base directory set by FLOW_COMPONENTS_PATH
     └── category_name/
         ├── __init__.py
         └── custom_component.py
@@ -138,21 +138,21 @@ Your new `DataFrameProcessor` component is available in the <Icon name="Componen
 
 ### Docker deployment
 
-When running Hanzo Flow in Docker, mount your custom components directory and set the `LANGFLOW_COMPONENTS_PATH` environment variable in the `docker run` command to point to the custom components directory.
+When running Hanzo Flow in Docker, mount your custom components directory and set the `FLOW_COMPONENTS_PATH` environment variable in the `docker run` command to point to the custom components directory.
 
 ```bash
 docker run -d \
   --name flow \
   -p 7860:7860 \
   -v ./custom_components:/app/custom_components \
-  -e LANGFLOW_COMPONENTS_PATH=/app/custom_components \
-  langflowai/flow:latest
+  -e FLOW_COMPONENTS_PATH=/app/custom_components \
+  flowai/flow:latest
 ```
 
 Create the same custom components directory structure as the example in [Save the custom component](#custom-component-path).
 
 ```
-/app/custom_components/          # LANGFLOW_COMPONENTS_PATH
+/app/custom_components/          # FLOW_COMPONENTS_PATH
     └── data/
         ├── __init__.py
         └── dataframe_processor.py

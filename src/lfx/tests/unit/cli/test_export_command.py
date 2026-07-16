@@ -1,6 +1,6 @@
 """Unit tests for lfx export -- export_command and helpers.
 
-All tests run entirely in-process; no real Hanzo Flow instance or SDK required.
+All tests run entirely in-process; no real Flow instance or SDK required.
 The SDK module is replaced wholesale with MagicMock so only the export logic
 (file normalization, output routing, remote pull, project export) is under test.
 """
@@ -71,7 +71,7 @@ def _make_client_mock(
 
 
 def _make_sdk_mock(client_mock: MagicMock | None = None) -> MagicMock:
-    """Return a mock langflow_sdk module wired up for export tests."""
+    """Return a mock flow_sdk module wired up for export tests."""
     if client_mock is None:
         client_mock = _make_client_mock()
     sdk = MagicMock()

@@ -73,7 +73,7 @@ jobs:
       - name: Build backend image
         run: |
           ${{ env.CONTAINER_RUNTIME }} build -t ghcr.io/hanzoai/flow-backend:latest-dev \
-            --build-arg LANGFLOW_IMAGE=ghcr.io/hanzoai/flow:latest-dev \
+            --build-arg FLOW_IMAGE=ghcr.io/hanzoai/flow:latest-dev \
             -f docker/build_and_push_backend.Dockerfile \
             .
       - name: Test backend image

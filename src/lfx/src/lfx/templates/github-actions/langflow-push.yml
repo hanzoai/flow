@@ -1,7 +1,7 @@
 # flow-push.yml
 #
 # PURPOSE
-#   Deploy (upsert) all flows to a remote Hanzo Flow instance whenever
+#   Deploy (upsert) all flows to a remote Flow instance whenever
 #   flow files are merged to main.  Uses stable flow IDs so re-running
 #   this workflow always converges to the same state.
 #
@@ -10,10 +10,10 @@
 #
 # GITHUB SETUP  (Settings → Environments → New environment → "production")
 #   Variables  (plain text):
-#     LANGFLOW_PROD_URL        e.g. https://flow.example.com
-#     LANGFLOW_PROJECT_NAME    e.g. "Production Flows"   (optional)
+#     FLOW_PROD_URL        e.g. https://flow.example.com
+#     FLOW_PROJECT_NAME    e.g. "Production Flows"   (optional)
 #   Secrets    (masked):
-#     LANGFLOW_PROD_API_KEY    your production API key
+#     FLOW_PROD_API_KEY    your production API key
 #
 #   Using a GitHub Environment lets you require manual approval before
 #   each production deploy (Settings → Environments → Required reviewers).
@@ -23,7 +23,7 @@
 #   The workflow triggers automatically on merges to main that touch
 #   flows/ and can also be triggered manually from the Actions tab.
 
-name: Deploy Hanzo Flow Flows
+name: Deploy Flow Flows
 
 on:
   push:
@@ -70,10 +70,10 @@ jobs:
       # ------------------------------------------------------------------ #
       - name: Write environments config
         run: >-
-          printf '[environments.production]\nurl = "%s"\napi_key_env = "LANGFLOW_PROD_API_KEY"\n'
-          "$LANGFLOW_PROD_URL" > flow-environments.toml
+          printf '[environments.production]\nurl = "%s"\napi_key_env = "FLOW_PROD_API_KEY"\n'
+          "$FLOW_PROD_URL" > flow-environments.toml
         env:
-          LANGFLOW_PROD_URL: ${{ vars.LANGFLOW_PROD_URL }}
+          FLOW_PROD_URL: ${{ vars.FLOW_PROD_URL }}
 
       # ------------------------------------------------------------------ #
       # Push flows.  Add --project to group flows into a folder.           #
@@ -82,14 +82,14 @@ jobs:
       - name: Push flows
         env:
           # Resolved from the GitHub variable; falls back to "Main" if unset
-          LANGFLOW_PROJECT_NAME: ${{ vars.LANGFLOW_PROJECT_NAME || 'Main' }}
-          LANGFLOW_ENVIRONMENTS_FILE: flow-environments.toml
-          LANGFLOW_PROD_API_KEY: ${{ secrets.LANGFLOW_PROD_API_KEY }}
+          FLOW_PROJECT_NAME: ${{ vars.FLOW_PROJECT_NAME || 'Main' }}
+          FLOW_ENVIRONMENTS_FILE: flow-environments.toml
+          FLOW_PROD_API_KEY: ${{ secrets.FLOW_PROD_API_KEY }}
         run: |
           lfx push \
             --dir flows/ \
             --env production \
-            --project "$LANGFLOW_PROJECT_NAME" \
+            --project "$FLOW_PROJECT_NAME" \
             ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
 
       - name: Summary

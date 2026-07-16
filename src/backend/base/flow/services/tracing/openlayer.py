@@ -180,7 +180,7 @@ class OpenlayerTracer(BaseTracer):
         # Clean component name
         name = trace_name.removesuffix(f" ({trace_id})")
 
-        # Map LangFlow trace_type to Openlayer StepType
+        # Map Flow trace_type to Openlayer StepType
         step_type = self._step_type_map.get(trace_type, self._openlayer_enums.StepType.USER_CALL)
 
         # Convert inputs and metadata
@@ -644,7 +644,7 @@ class OpenlayerTracer(BaseTracer):
         return {str(key): self._convert_to_openlayer_type(value) for key, value in io_dict.items()}
 
     def _convert_to_openlayer_type(self, value: Any) -> Any:
-        """Convert LangFlow/LangChain types to Openlayer-compatible primitives.
+        """Convert Flow/LangChain types to Openlayer-compatible primitives.
 
         Args:
             value: Input value to convert

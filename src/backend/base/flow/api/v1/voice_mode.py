@@ -95,8 +95,8 @@ async def authenticate_and_get_openai_key(session: DbSession, user: User, websoc
         await websocket.send_json(
             {
                 "type": "error",
-                "code": "langflow_auth",
-                "message": "You must pass a valid Hanzo Flow token or cookie.",
+                "code": "flow_auth",
+                "message": "You must pass a valid Flow token or cookie.",
             }
         )
         return None, None

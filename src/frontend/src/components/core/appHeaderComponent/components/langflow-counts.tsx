@@ -6,7 +6,7 @@ import { Case } from "@/shared/components/caseComponent";
 import { useDarkStore } from "@/stores/darkStore";
 import { formatNumber } from "@/utils/utils";
 
-export const LangflowCounts = () => {
+export const FlowCounts = () => {
   const stars: number | undefined = useDarkStore((state) => state.stars);
   const discordCount: number = useDarkStore((state) => state.discordCount);
 
@@ -64,4 +64,4 @@ export const LangflowCounts = () => {
   );
 };
 
-export default LangflowCounts;
+export default FlowCounts;

@@ -1,6 +1,6 @@
 """Lightweight JSON class for lfx package - contains only methods with no flow dependencies.
 
-This module provides the JSON class (formerly Data) as the base type for Hanzo Flow data structures.
+This module provides the JSON class (formerly Data) as the base type for Flow data structures.
 Data is maintained as an alias for backwards compatibility.
 """
 
@@ -51,7 +51,7 @@ def serialize_data(data):
 class JSON(CrossModuleModel):
     """Represents a record with text and optional data.
 
-    This is the base type for Hanzo Flow data structures, replacing the legacy Data class.
+    This is the base type for Flow data structures, replacing the legacy Data class.
     Data is maintained as an alias for backwards compatibility.
 
     Attributes:

@@ -54,10 +54,10 @@ For more information and examples of other Hanzo Flow API endpoints, see [Get st
 
 In Hanzo Flow versions 1.5 and later, most API endpoints require authentication with a Hanzo Flow API key.
 
-Code snippets generated in the **API access** pane include a script that checks for a `LANGFLOW_API_KEY` environment variable set in the local terminal session.
+Code snippets generated in the **API access** pane include a script that checks for a `FLOW_API_KEY` environment variable set in the local terminal session.
 This script doesn't check for Hanzo Flow API keys set anywhere besides the local terminal session.
 
-For this script to work, you must set a `LANGFLOW_API_KEY` variable in the terminal session where you intend to run the code snippet, such as `export LANGFLOW_API_KEY="sk..."`.
+For this script to work, you must set a `FLOW_API_KEY` variable in the terminal session where you intend to run the code snippet, such as `export FLOW_API_KEY="sk..."`.
 
 Alternatively, you can edit the code snippet to include an `x-api-key` header and ensure that the request can authenticate to the Hanzo Flow API.
 
@@ -85,9 +85,9 @@ For example, the following curl command includes a tweak that disables the **Sto
 
 ```bash
 curl --request POST \
-  --url "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
+  --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
   --header "Content-Type: application/json" \
-  --header "x-api-key: LANGFLOW_API_KEY" \
+  --header "x-api-key: FLOW_API_KEY" \
   --data '{
   "input_value": "Text to input to the flow",
   "output_type": "chat",
@@ -148,7 +148,7 @@ For example, the following HTML embeds a chat widget for a **Basic Prompting** t
     <flow-chat
       host_url="https://c822-73-64-93-151.ngrok-free.app"
       flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-      api_key="$LANGFLOW_API_KEY"
+      api_key="$FLOW_API_KEY"
     ></flow-chat>
   </body>
 </html>
@@ -192,7 +192,7 @@ To use the chat widget in your React application, create a component that loads 
         <flow-chat
             host_url="https://c822-73-64-93-151.ngrok-free.app"
             flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-            api_key="$LANGFLOW_API_KEY"
+            api_key="$FLOW_API_KEY"
         ></flow-chat>
         </div>
     );
@@ -237,7 +237,7 @@ To use the chat widget in your React application, create a component that loads 
         <flow-chat
             host_url="https://c822-73-64-93-151.ngrok-free.app"
             flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-            api_key="$LANGFLOW_API_KEY"
+            api_key="$FLOW_API_KEY"
         ></flow-chat>
         </div>
     );
@@ -314,7 +314,7 @@ You must add `CUSTOM_ELEMENTS_SCHEMA` to your module's configuration to enable t
         <flow-chat
             host_url="https://c822-73-64-93-151.ngrok-free.app"
             flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-            api_key="$LANGFLOW_API_KEY"
+            api_key="$FLOW_API_KEY"
         ></flow-chat>
         </div>
     `,
@@ -342,7 +342,7 @@ You must add `CUSTOM_ELEMENTS_SCHEMA` to your module's configuration to enable t
 <flow-chat
     host_url="https://c822-73-64-93-151.ngrok-free.app"
     flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-    api_key="$LANGFLOW_API_KEY"
+    api_key="$FLOW_API_KEY"
   ></flow-chat>
 </body>
 </html>
@@ -377,7 +377,7 @@ For example, securely store your API key, and then retrieve with an environment 
 <flow-chat
     host_url="https://c822-73-64-93-151.ngrok-free.app"
     flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-    api_key="$LANGFLOW_API_KEY"
+    api_key="$FLOW_API_KEY"
 ></flow-chat>
 ```
 
@@ -395,7 +395,7 @@ In React and plain HTML, JSON props are expressed as JSON objects or stringified
 <flow-chat
     host_url="https://c822-73-64-93-151.ngrok-free.app"
     flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-    api_key="$LANGFLOW_API_KEY"
+    api_key="$FLOW_API_KEY"
     chat_window_style='{
         "backgroundColor": "#1a0d0d",
         "border": "4px solid #b30000",
@@ -425,7 +425,7 @@ import { Component } from '@angular/core';
       <flow-chat
         host_url="https://c822-73-64-93-151.ngrok-free.app"
         flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-        api_key="$LANGFLOW_API_KEY"
+        api_key="$FLOW_API_KEY"
         [chat_window_style]='{"backgroundColor": "#ffffff"}'
         [bot_message_style]='{"color": "#000000"}'
         [user_message_style]='{"color": "#000000"}'
@@ -458,7 +458,7 @@ The following example adds a custom [session ID](/session-id) to help identify f
 <flow-chat
     host_url="https://c822-73-64-93-151.ngrok-free.app"
     flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-    api_key="$LANGFLOW_API_KEY"
+    api_key="$FLOW_API_KEY"
     session_id="$SESSION_ID"
 ></flow-chat>
 ```
@@ -478,7 +478,7 @@ For example:
 <flow-chat
     host_url="https://c822-73-64-93-151.ngrok-free.app"
     flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-    api_key="$LANGFLOW_API_KEY"
+    api_key="$FLOW_API_KEY"
     tweaks='{
         "model_name": "llama-3.1-8b-instant"
     }'
@@ -499,7 +499,7 @@ import { Component } from '@angular/core';
       <flow-chat
         host_url="https://c822-73-64-93-151.ngrok-free.app"
         flow_id="dcbed533-859f-4b99-b1f5-16fce884f28f"
-        api_key="$LANGFLOW_API_KEY"
+        api_key="$FLOW_API_KEY"
         [tweaks]='{"model_name": "llama-3.1-8b-instant"}'
       ></flow-chat>
     </div>

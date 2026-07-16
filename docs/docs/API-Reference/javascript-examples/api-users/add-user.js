@@ -1,10 +1,10 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v1/users/`;
+const url = `${process.env.FLOW_URL ?? ""}/api/v1/users/`;
 
 const options = {
   method: 'POST',
   headers: {
     "Content-Type": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.FLOW_API_KEY ?? ""}`,
   },
   body: JSON.stringify({
   "username": "newuser2",

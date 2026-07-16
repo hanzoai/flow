@@ -17,7 +17,7 @@ let isDataAttributeTrackingInitialized = false;
  *   'data-channel': 'docs',
  *   'data-element-id': 'social-github',
  *   'data-namespace': 'header',
- *   'data-platform-title': 'Hanzo Flow'
+ *   'data-platform-title': 'Flow'
  * }
  *
  * Example - CTA Clicked:

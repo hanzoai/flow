@@ -145,15 +145,15 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
     import requests
     import os
 
-    LANGFLOW_SERVER_ADDRESS = "http://localhost:7860"
+    FLOW_SERVER_ADDRESS = "http://localhost:7860"
     FLOW_ID = "your-flow-id"
-    LANGFLOW_API_KEY = os.getenv("LANGFLOW_API_KEY")
+    FLOW_API_KEY = os.getenv("FLOW_API_KEY")
     MCP_TOOLS_COMPONENT_ID = "MCPTools-Bzahc"
 
-    url = f"{LANGFLOW_SERVER_ADDRESS}/api/v1/run/{FLOW_ID}?stream=false"
+    url = f"{FLOW_SERVER_ADDRESS}/api/v1/run/{FLOW_ID}?stream=false"
     headers = {
         "Content-Type": "application/json",
-        "x-api-key": LANGFLOW_API_KEY
+        "x-api-key": FLOW_API_KEY
     }
     payload = {
         "output_type": "chat",
@@ -180,18 +180,18 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
     <TabItem value="typescript" label="TypeScript">
 
     ```typescript
-    const LANGFLOW_SERVER_ADDRESS = "http://localhost:7860";
+    const FLOW_SERVER_ADDRESS = "http://localhost:7860";
     const FLOW_ID = "your-flow-id";
-    const LANGFLOW_API_KEY = process.env.LANGFLOW_API_KEY || "";
+    const FLOW_API_KEY = process.env.FLOW_API_KEY || "";
     const MCP_TOOLS_COMPONENT_ID = "MCPTools-Bzahc";
 
-    const url = `${LANGFLOW_SERVER_ADDRESS}/api/v1/run/${FLOW_ID}?stream=false`;
+    const url = `${FLOW_SERVER_ADDRESS}/api/v1/run/${FLOW_ID}?stream=false`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": LANGFLOW_API_KEY,
+        "x-api-key": FLOW_API_KEY,
       },
       body: JSON.stringify({
         output_type: "chat",
@@ -220,9 +220,9 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
 
     ```bash
     curl --request POST \
-      --url "http://LANGFLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false" \
+      --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false" \
       --header "Content-Type: application/json" \
-      --header "x-api-key: LANGFLOW_API_KEY" \
+      --header "x-api-key: FLOW_API_KEY" \
       --data '{
         "output_type": "chat",
         "input_type": "chat",
@@ -244,7 +244,7 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
     </TabItem>
     </Tabs>
 
-    Replace `MCP_TOOLS_COMPONENT_ID`, `LANGFLOW_API_KEY`, `LANGFLOW_SERVER_ADDRESS`, and `FLOW_ID` with the actual values from your Hanzo Flow deployment.
+    Replace `MCP_TOOLS_COMPONENT_ID`, `FLOW_API_KEY`, `FLOW_SERVER_ADDRESS`, and `FLOW_ID` with the actual values from your Hanzo Flow deployment.
 
     Hanzo Flow doesn't automatically discover or expose which environment variables your MCP server accepts from the **MCP Tools** component.
     To determine which environment variables your MCP server accepts, see the MCP server's documentation. For example, the [Astra DB MCP server](https://github.com/datastax/astra-db-mcp) requires `ASTRA_DB_APPLICATION_TOKEN` and `ASTRA_DB_API_ENDPOINT`, with an optional variable for `ASTRA_DB_KEYSPACE`, as documented in its repository.

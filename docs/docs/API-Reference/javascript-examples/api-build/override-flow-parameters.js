@@ -1,11 +1,11 @@
-const url = `${process.env.LANGFLOW_URL ?? ""}/api/v1/build/${process.env.FLOW_ID ?? ""}/flow`;
+const url = `${process.env.FLOW_URL ?? ""}/api/v1/build/${process.env.FLOW_ID ?? ""}/flow`;
 
 const options = {
   method: 'POST',
   headers: {
     "accept": `application/json`,
     "Content-Type": `application/json`,
-    "x-api-key": `${process.env.LANGFLOW_API_KEY ?? ""}`,
+    "x-api-key": `${process.env.FLOW_API_KEY ?? ""}`,
   },
   body: JSON.stringify({
   "data": {

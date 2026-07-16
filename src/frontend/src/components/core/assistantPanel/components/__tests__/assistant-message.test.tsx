@@ -30,7 +30,7 @@ jest.mock("@/customization/config-constants", () => ({
 }));
 
 // Mocking the customization layer for the user avatar is how we prove the
-// Desktop Hanzo Flow Assistant avatar bug is fixed: the component must render
+// Desktop Flow Assistant avatar bug is fixed: the component must render
 // CustomProfileIcon (which the Desktop customization overrides to prepend an
 // absolute baseURL), not a bare <img> with a relative URL.
 jest.mock("@/customization/components/custom-profile-icon", () => ({
@@ -43,7 +43,7 @@ jest.mock("@/customization/components/custom-profile-icon", () => ({
   ),
 }));
 
-jest.mock("@/assets/langflow_assistant.svg", () => "flow-icon.svg");
+jest.mock("@/assets/flow_assistant.svg", () => "flow-icon.svg");
 
 jest.mock("../assistant-component-result", () => ({
   AssistantComponentResult: ({
@@ -133,7 +133,7 @@ describe("AssistantMessageItem", () => {
       expect(screen.getByAltText("User")).toBeInTheDocument();
     });
 
-    // Regression guard: Hanzo Flow Desktop shipped with a broken user avatar in
+    // Regression guard: Flow Desktop shipped with a broken user avatar in
     // the Assistant panel because the bare <img> used a relative URL that
     // resolved against the Tauri origin instead of the Python sidecar. The
     // fix routes the avatar through CustomProfileIcon so Desktop's
@@ -173,7 +173,7 @@ describe("AssistantMessageItem", () => {
   });
 
   describe("assistant messages", () => {
-    it("should render assistant label with Hanzo Flow icon", () => {
+    it("should render assistant label with Flow icon", () => {
       const message = createMessage({
         role: "assistant",
         content: "Here is your component",
@@ -182,8 +182,8 @@ describe("AssistantMessageItem", () => {
 
       render(<AssistantMessageItem message={message} />);
 
-      expect(screen.getByText("Hanzo Flow Assistant")).toBeInTheDocument();
-      expect(screen.getByAltText("Hanzo Flow Assistant")).toBeInTheDocument();
+      expect(screen.getByText("Flow Assistant")).toBeInTheDocument();
+      expect(screen.getByAltText("Flow Assistant")).toBeInTheDocument();
     });
   });
 
@@ -334,14 +334,14 @@ describe("AssistantMessageItem", () => {
     it("should render markdown for regular text content", () => {
       const message = createMessage({
         role: "assistant",
-        content: "Hanzo Flow is a visual flow builder.",
+        content: "Flow is a visual flow builder.",
         status: "complete",
       });
 
       render(<AssistantMessageItem message={message} />);
 
       expect(screen.getByTestId("markdown-content")).toHaveTextContent(
-        "Hanzo Flow is a visual flow builder.",
+        "Flow is a visual flow builder.",
       );
     });
 
@@ -365,7 +365,7 @@ describe("AssistantMessageItem", () => {
         "    def run(self) -> Data:\n",
         "        return Data(data={'result': 42})\n",
         "```\n\n",
-        "Save the file and restart Hanzo Flow.",
+        "Save the file and restart Flow.",
       ].join("");
 
       const message = createMessage({

@@ -8,7 +8,7 @@ export const CustomStoreSidebar = (
 
   if (hasApiKey) {
     items.push({
-      title: "Hanzo Flow API Keys",
+      title: "Flow API Keys",
       href: "/settings/api-keys",
       icon: (
         <ForwardedIconComponent
@@ -21,7 +21,7 @@ export const CustomStoreSidebar = (
 
   if (hasStore) {
     items.push({
-      title: "Hanzo Flow Store",
+      title: "Flow Store",
       href: "/settings/store",
       icon: (
         <ForwardedIconComponent

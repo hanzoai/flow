@@ -15,7 +15,7 @@ CACHE: dict[str, Any] = {}
 
 CACHE_DIR = user_cache_dir("flow", "flow")
 
-PREFIX = "langflow_cache"
+PREFIX = "flow_cache"
 
 
 class CacheMiss:

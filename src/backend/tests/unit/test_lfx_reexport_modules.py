@@ -96,17 +96,17 @@ class TestLfxReexportModules:
     """Test that all flow modules that re-export from lfx work correctly."""
 
     @classmethod
-    def _discover_langflow_modules(cls) -> list[str]:
+    def _discover_flow_modules(cls) -> list[str]:
         """Dynamically discover all flow modules."""
-        langflow_modules: list[str] = []
+        flow_modules: list[str] = []
         try:
             import flow
 
             for _importer, modname, _ispkg in pkgutil.walk_packages(flow.__path__, flow.__name__ + "."):
-                langflow_modules.append(modname)
+                flow_modules.append(modname)
         except ImportError:
             pass
-        return langflow_modules
+        return flow_modules
 
     @classmethod
     def _detect_reexport_pattern(cls, module_name: str) -> dict[str, str | None]:
@@ -206,11 +206,11 @@ class TestLfxReexportModules:
         """Test that all direct re-export modules can be imported."""
         successful_imports = 0
 
-        for langflow_module, lfx_module in self.DIRECT_REEXPORT_MODULES.items():
+        for flow_module, lfx_module in self.DIRECT_REEXPORT_MODULES.items():
             try:
                 # Import the flow module
-                lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
+                lf_module = importlib.import_module(flow_module)
+                assert lf_module is not None, f"Flow module {flow_module} is None"
 
                 # Import the corresponding lfx module to compare
 
@@ -220,17 +220,17 @@ class TestLfxReexportModules:
                 successful_imports += 1
 
             except Exception as e:
-                pytest.fail(f"Failed to import direct re-export module {langflow_module}: {e!s}")
+                pytest.fail(f"Failed to import direct re-export module {flow_module}: {e!s}")
 
     def test_wildcard_reexport_modules_importable(self):
         """Test that modules using wildcard imports work correctly."""
         successful_imports = 0
 
-        for langflow_module, lfx_module in self.WILDCARD_REEXPORT_MODULES.items():
+        for flow_module, lfx_module in self.WILDCARD_REEXPORT_MODULES.items():
             try:
                 # Import the flow module
-                lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
+                lf_module = importlib.import_module(flow_module)
+                assert lf_module is not None, f"Flow module {flow_module} is None"
 
                 # Wildcard imports should expose most/all attributes from lfx module
                 lfx_mod = importlib.import_module(lfx_module)
@@ -240,56 +240,56 @@ class TestLfxReexportModules:
                     all_attrs = list(lfx_mod.__all__)  # Test all attributes
                     for attr in all_attrs:
                         if hasattr(lfx_mod, attr):
-                            assert hasattr(lf_module, attr), f"Attribute {attr} missing from {langflow_module}"
+                            assert hasattr(lf_module, attr), f"Attribute {attr} missing from {flow_module}"
 
                 successful_imports += 1
 
             except Exception as e:
-                pytest.fail(f"Failed to import wildcard re-export module {langflow_module}: {e!s}")
+                pytest.fail(f"Failed to import wildcard re-export module {flow_module}: {e!s}")
 
     def test_complex_reexport_modules_importable(self):
         """Test that modules with complex/mixed import patterns work correctly."""
         successful_imports = 0
 
-        for langflow_module in self.COMPLEX_REEXPORT_MODULES:
+        for flow_module in self.COMPLEX_REEXPORT_MODULES:
             try:
                 # Import the flow module
-                lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
+                lf_module = importlib.import_module(flow_module)
+                assert lf_module is not None, f"Flow module {flow_module} is None"
 
                 # Verify it has __all__ attribute for complex modules
-                assert hasattr(lf_module, "__all__"), f"Complex module {langflow_module} missing __all__"
-                assert len(lf_module.__all__) > 0, f"Complex module {langflow_module} has empty __all__"
+                assert hasattr(lf_module, "__all__"), f"Complex module {flow_module} missing __all__"
+                assert len(lf_module.__all__) > 0, f"Complex module {flow_module} has empty __all__"
 
                 # Try to access all items from __all__
                 all_items = lf_module.__all__  # Test all items
                 for item in all_items:
                     try:
                         attr = getattr(lf_module, item)
-                        assert attr is not None, f"Attribute {item} is None in {langflow_module}"
+                        assert attr is not None, f"Attribute {item} is None in {flow_module}"
                     except AttributeError:
-                        pytest.fail(f"Complex module {langflow_module} missing expected attribute {item} from __all__")
+                        pytest.fail(f"Complex module {flow_module} missing expected attribute {item} from __all__")
 
                 successful_imports += 1
 
             except Exception as e:
-                pytest.fail(f"Failed to import complex re-export module {langflow_module}: {e!s}")
+                pytest.fail(f"Failed to import complex re-export module {flow_module}: {e!s}")
 
     def test_dynamic_reexport_modules_importable(self):
         """Test that modules with __getattr__ dynamic loading work correctly."""
         successful_imports = 0
 
-        for langflow_module in self.DYNAMIC_REEXPORT_MODULES:
+        for flow_module in self.DYNAMIC_REEXPORT_MODULES:
             try:
                 # Import the flow module
-                lf_module = importlib.import_module(langflow_module)
-                assert lf_module is not None, f"Hanzo Flow module {langflow_module} is None"
+                lf_module = importlib.import_module(flow_module)
+                assert lf_module is not None, f"Flow module {flow_module} is None"
 
                 # Dynamic modules should have __getattr__ method
-                assert hasattr(lf_module, "__getattr__"), f"Dynamic module {langflow_module} missing __getattr__"
+                assert hasattr(lf_module, "__getattr__"), f"Dynamic module {flow_module} missing __getattr__"
 
                 # Test accessing some known attributes dynamically
-                if langflow_module == "flow.field_typing":
+                if flow_module == "flow.field_typing":
                     # Test some known field typing constants
                     test_attrs = ["Data", "Text", "LanguageModel"]
                     for attr in test_attrs:
@@ -297,12 +297,12 @@ class TestLfxReexportModules:
                             value = getattr(lf_module, attr)
                             assert value is not None, f"Dynamic attribute {attr} is None"
                         except AttributeError:
-                            pytest.fail(f"Dynamic module {langflow_module} missing expected attribute {attr}")
+                            pytest.fail(f"Dynamic module {flow_module} missing expected attribute {attr}")
 
                 successful_imports += 1
 
             except Exception as e:
-                pytest.fail(f"Failed to import dynamic re-export module {langflow_module}: {e!s}")
+                pytest.fail(f"Failed to import dynamic re-export module {flow_module}: {e!s}")
 
     def test_all_reexport_modules_have_required_structure(self):
         """Test that re-export modules have the expected structure."""
@@ -315,9 +315,9 @@ class TestLfxReexportModules:
         for lf_mod in self.COMPLEX_REEXPORT_MODULES:
             all_modules[lf_mod] = self.COMPLEX_REEXPORT_MODULES[lf_mod]
 
-        for langflow_module in all_modules:
+        for flow_module in all_modules:
             try:
-                lf_module = importlib.import_module(langflow_module)
+                lf_module = importlib.import_module(flow_module)
 
                 # All modules should be importable
                 assert lf_module is not None
@@ -329,7 +329,7 @@ class TestLfxReexportModules:
                 assert hasattr(lf_module, "__file__") or hasattr(lf_module, "__path__")
 
             except Exception as e:
-                pytest.fail(f"Module structure issue with {langflow_module}: {e!s}")
+                pytest.fail(f"Module structure issue with {flow_module}: {e!s}")
 
     def test_reexport_modules_backward_compatibility(self):
         """Test that common import patterns still work for backward compatibility."""
@@ -436,7 +436,7 @@ class TestLfxReexportModules:
     # Dynamic test methods using the discovery functions
     def test_dynamic_module_discovery(self):
         """Test that we can dynamically discover flow modules."""
-        modules = self._discover_langflow_modules()
+        modules = self._discover_flow_modules()
         assert len(modules) > 0, "Should discover at least some flow modules"
 
         # Check that known modules are found

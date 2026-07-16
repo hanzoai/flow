@@ -1,4 +1,4 @@
-"""Generate requirements.txt from a Hanzo Flow flow JSON.
+"""Generate requirements.txt from a Flow flow JSON.
 
 Analyzes a flow's component code and configuration to determine the minimal
 set of PyPI packages needed to run that flow on a standalone LFX runner.
@@ -77,7 +77,7 @@ MODULE_EXTRA_DEPS: dict[str, list[str]] = {
 
 # Import names that are internal to the lfx/flow runtime and should
 # never appear as separate requirements.
-_INTERNAL_IMPORT_NAMES: frozenset[str] = frozenset({"lfx", "flow", "langflow_base"})
+_INTERNAL_IMPORT_NAMES: frozenset[str] = frozenset({"lfx", "flow", "flow_base"})
 
 # Fields in a component template that may contain provider selection info
 # NOTE: Look back into how the dynamic components (LanguageModel, EmbeddingModel) are handled.
@@ -490,10 +490,10 @@ def generate_requirements_from_flow(
     include_lfx: bool = True,
     pin_versions: bool = True,
 ) -> list[str]:
-    """Generate a requirements list from a Hanzo Flow flow JSON.
+    """Generate a requirements list from a Flow flow JSON.
 
     Args:
-        flow: Parsed Hanzo Flow flow JSON (dict).
+        flow: Parsed Flow flow JSON (dict).
         lfx_package: Name of the LFX package to include (e.g. ``"lfx"`` or
             ``"lfx-nightly"``).
         include_lfx: Whether to include the LFX package itself.
@@ -542,10 +542,10 @@ def generate_requirements_txt(
     include_lfx: bool = True,
     pin_versions: bool = True,
 ) -> str:
-    """Generate requirements.txt content from a Hanzo Flow flow JSON.
+    """Generate requirements.txt content from a Flow flow JSON.
 
     Args:
-        flow: Parsed Hanzo Flow flow JSON (dict).
+        flow: Parsed Flow flow JSON (dict).
         lfx_package: Name of the LFX package to include.
         include_lfx: Whether to include the LFX package itself.
         pin_versions: If True, pin each package to the currently installed
@@ -561,7 +561,7 @@ def generate_requirements_txt(
         pin_versions=pin_versions,
     )
     lines = [
-        "# Auto-generated requirements for Hanzo Flow flow",
+        "# Auto-generated requirements for Flow flow",
         "# This file contains only the dependencies needed for this specific flow",
         "",
     ]
@@ -580,7 +580,7 @@ def generate_requirements_from_file(
     """Generate requirements list from a flow JSON file path.
 
     Args:
-        flow_path: Path to a Hanzo Flow flow JSON file.
+        flow_path: Path to a Flow flow JSON file.
         lfx_package: Name of the LFX package to include.
         include_lfx: Whether to include the LFX package itself.
         pin_versions: If True, pin each package to the currently installed

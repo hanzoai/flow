@@ -205,7 +205,7 @@ test(
 
     expect(
       (
-        await page.waitForSelector("text=Welcome to Hanzo Flow", {
+        await page.waitForSelector("text=Welcome to Flow", {
           timeout: 30000,
         })
       ).isVisible(),

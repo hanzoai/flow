@@ -2,14 +2,14 @@ import os
 
 from openai import OpenAI
 
-base = (os.environ.get("LANGFLOW_URL") or os.environ.get("LANGFLOW_SERVER_URL", "")).rstrip("/")
-api_key = os.environ.get("LANGFLOW_API_KEY", "")
+base = (os.environ.get("FLOW_URL") or os.environ.get("FLOW_SERVER_URL", "")).rstrip("/")
+api_key = os.environ.get("FLOW_API_KEY", "")
 flow_id = os.environ.get("FLOW_ID", "")
 
 client = OpenAI(
     base_url=f"{base}/api/v1/",
     default_headers={"x-api-key": api_key},
-    api_key="dummy-api-key",  # Required by OpenAI SDK but not used by Hanzo Flow
+    api_key="dummy-api-key",  # Required by OpenAI SDK but not used by Flow
 )
 
 try:

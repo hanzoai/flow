@@ -270,7 +270,7 @@ class TestVariableService:
     async def test_get_variable_absorbs_extra_kwargs(self, variables):
         """Extra kwargs from the flow call site must not crash the lfx implementation.
 
-        Hanzo Flow calls ``await variable_service.get_variable(user_id=..., name=...,
+        Flow calls ``await variable_service.get_variable(user_id=..., name=...,
         field=..., session=...)``. lfx's implementation must accept and ignore the
         extras so flows behave identically as long as the variable can be resolved
         by name.

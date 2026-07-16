@@ -65,7 +65,7 @@ class FlowEventsService(Service):
 
     def __init__(self, cache_dir: str | Path | None = None) -> None:
         if cache_dir is None:
-            cache_dir = Path(tempfile.gettempdir()) / "langflow_flow_events"
+            cache_dir = Path(tempfile.gettempdir()) / "flow_flow_events"
         cache_dir = Path(cache_dir)
         cache_dir.mkdir(parents=True, exist_ok=True)
         self._db_path = cache_dir / "flow_events.sqlite"

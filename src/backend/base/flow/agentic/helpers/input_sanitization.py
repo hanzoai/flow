@@ -11,15 +11,15 @@ MAX_INPUT_LENGTH = 2000
 
 REFUSAL_MESSAGE = (
     "I'm sorry, but I can't process that request. "
-    "I'm the Hanzo Flow Assistant and I can help you with "
-    "Hanzo Flow components, flows, and technical questions. "
-    "Please rephrase your question about Hanzo Flow."
+    "I'm the Flow Assistant and I can help you with "
+    "Flow components, flows, and technical questions. "
+    "Please rephrase your question about Flow."
 )
 
 # Prompt injection patterns: (compiled_regex, violation_description)
 # Each pattern targets a specific injection technique.
 # Patterns are intentionally specific to avoid false positives on
-# legitimate Hanzo Flow questions (e.g., "how do I ignore errors").
+# legitimate Flow questions (e.g., "how do I ignore errors").
 INJECTION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     # Instruction override attempts
     (

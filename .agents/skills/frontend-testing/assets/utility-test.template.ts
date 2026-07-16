@@ -1,5 +1,5 @@
 /**
- * Test template for utility/helper functions in Hanzo Flow.
+ * Test template for utility/helper functions in Flow.
  *
  * Usage:
  * 1. Copy this file to `__tests__/util-name.test.ts`

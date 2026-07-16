@@ -27,7 +27,7 @@ from flow.agentic.services.flow_types import (
     IntentResult,
 )
 
-# Sample valid Hanzo Flow component code
+# Sample valid Flow component code
 VALID_COMPONENT_CODE = """from flow.custom import Component
 from flow.io import MessageTextInput, Output
 from flow.schema.message import Message
@@ -317,7 +317,7 @@ class TestStreamingValidationFlow:
     @pytest.mark.asyncio
     async def test_no_code_in_response_returns_as_is(self):
         """When response has no code (question intent), should return without validation."""
-        text_only_response = {"result": "Hanzo Flow is a visual flow builder for LLM applications."}
+        text_only_response = {"result": "Flow is a visual flow builder for LLM applications."}
 
         with (
             patch(

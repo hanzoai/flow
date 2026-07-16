@@ -88,7 +88,7 @@ async def test_should_not_return_403_on_sse_endpoint_when_webhook_auth_enable_is
     added_webhook_test,
     created_api_key,
 ):
-    """SSE auth is independent of LANGFLOW_WEBHOOK_AUTH_ENABLE.
+    """SSE auth is independent of FLOW_WEBHOOK_AUTH_ENABLE.
 
     `WEBHOOK_AUTH_ENABLE` controls the POST /webhook endpoint (allow/deny public
     execution). It must not interfere with SSE subscription: the SSE endpoint always

@@ -1,4 +1,4 @@
-"""lfx login -- validate credentials against a remote Hanzo Flow instance.
+"""lfx login -- validate credentials against a remote Flow instance.
 
 Tests whether the configured URL and API key are reachable and accepted,
 then prints a summary with guidance on how to fix any problems.
@@ -73,16 +73,16 @@ def _probe_connection(client: Any, sdk: Any) -> tuple[bool, str, int]:
     try:
         flows = client.list_flows(page=1, size=1)
         return True, "OK", len(flows)
-    except sdk.LangflowAuthError:
+    except sdk.FlowAuthError:
         return False, "auth", 0
-    except sdk.LangflowConnectionError as exc:
+    except sdk.FlowConnectionError as exc:
         return False, f"connection:{exc}", 0
-    except sdk.LangflowHTTPError as exc:
+    except sdk.FlowHTTPError as exc:
         return False, f"http:{exc}", 0
     except Exception as exc:  # noqa: BLE001
         # A Pydantic ValidationError means the HTTP request completed and was
         # authenticated (auth is fine) but the SDK's schema doesn't match the
-        # local Hanzo Flow version exactly.  Treat this as a successful probe.
+        # local Flow version exactly.  Treat this as a successful probe.
         if "ValidationError" in type(exc).__qualname__:
             return True, "OK", 0
         return False, f"error:{exc}", 0
@@ -127,7 +127,7 @@ def login_command(
         if key_env_name:
             warning_parts.append(f"  Set [bold]export {key_env_name}=<your-key>[/bold] then retry.")
         else:
-            warning_parts.append("  Add [bold]api_key_env: LANGFLOW_<ENV>_API_KEY[/bold] to your config,")
+            warning_parts.append("  Add [bold]api_key_env: FLOW_<ENV>_API_KEY[/bold] to your config,")
             warning_parts.append("  then set that environment variable to your API key.")
         for line in warning_parts:
             err_console.print(line)
@@ -150,13 +150,13 @@ def login_command(
             err_console.print()
             err_console.print("[bold]How to fix:[/bold]")
             if key_env_name:
-                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Flow → Settings → API Keys → Create a new key")
                 err_console.print(f"  2. [bold]export {key_env_name}=<your-new-key>[/bold]")
             elif env_cfg.name not in ("__inline__", "__env__"):
-                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Flow → Settings → API Keys → Create a new key")
                 err_console.print("  2. Pass [bold]--api-key <key>[/bold] or configure api_key_env in your YAML")
             else:
-                err_console.print("  1. Open Hanzo Flow → Settings → API Keys → Create a new key")
+                err_console.print("  1. Open Flow → Settings → API Keys → Create a new key")
                 err_console.print("  2. Pass [bold]--api-key <key>[/bold]")
             raise typer.Exit(1)
 
@@ -166,7 +166,7 @@ def login_command(
             err_console.print(f"  URL: {env_cfg.url}")
             err_console.print()
             err_console.print("[bold]How to fix:[/bold]")
-            err_console.print("  • Make sure your Hanzo Flow instance is running")
+            err_console.print("  • Make sure your Flow instance is running")
             err_console.print("  • Check the URL in your .lfx/environments.yaml")
             err_console.print("  • If running locally: [bold]flow run[/bold] or [bold]lfx serve <flow.json>[/bold]")
             raise typer.Exit(1)
@@ -183,8 +183,8 @@ def login_command(
     key_source = ""
     if key_env_name and env_cfg.api_key:
         key_source = f"  [dim]from env var {key_env_name}[/dim]"
-    elif os.environ.get("LANGFLOW_API_KEY") == env_cfg.api_key and env_cfg.api_key:
-        key_source = "  [dim]from LANGFLOW_API_KEY[/dim]"
+    elif os.environ.get("FLOW_API_KEY") == env_cfg.api_key and env_cfg.api_key:
+        key_source = "  [dim]from FLOW_API_KEY[/dim]"
 
     env_label = env_cfg.name if env_cfg.name not in ("__inline__", "__env__") else "(inline)"
 
@@ -212,4 +212,4 @@ def login_command(
         console.print("[dim]  environments:[/dim]")
         console.print(f"[dim]    {env_display}:[/dim]")
         console.print(f"[dim]      url: {env_cfg.url}[/dim]")
-        console.print(f"[dim]      api_key_env: LANGFLOW_{env_display.upper()}_API_KEY[/dim]")
+        console.print(f"[dim]      api_key_env: FLOW_{env_display.upper()}_API_KEY[/dim]")

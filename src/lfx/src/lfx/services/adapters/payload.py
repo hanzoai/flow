@@ -11,8 +11,8 @@ Ownership boundaries start here:
   define canonical slot names in lfx so both layers share one structure.
 - Adapter integrations populate adapter-side registries in lfx
   (``*PayloadSchemas`` subclasses).
-- Hanzo Flow integrations populate API-side registries in Hanzo Flow
-  (for example ``DeploymentApiPayloads``), including Hanzo Flow-specific
+- Flow integrations populate API-side registries in Flow
+  (for example ``DeploymentApiPayloads``), including Flow-specific
   validation/reshaping decisions.
 """
 

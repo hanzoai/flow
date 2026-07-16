@@ -36,7 +36,7 @@ For more information, see [MCP server authentication](#authentication).
 
 ### Prevent automatic MCP server configuration for Hanzo Flow projects
 
-To disable automatic MCP server configuration for new projects, set the `LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS` environment variable to `false`.
+To disable automatic MCP server configuration for new projects, set the `FLOW_ADD_PROJECTS_TO_MCP_SERVERS` environment variable to `false`.
 For more information, see [MCP server environment variables](#mcp-server-environment-variables).
 
 ### Selectively enable and disable MCP servers for Hanzo Flow projects
@@ -149,14 +149,14 @@ For example:
             "mcp-proxy",
             "--transport",
             "streamablehttp",
-            "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
           ]
         }
       }
     }
     ```
 
-    The **MCP Server** tab automatically populates the `LANGFLOW_SERVER_ADDRESS` and `PROJECT_ID` values.
+    The **MCP Server** tab automatically populates the `FLOW_SERVER_ADDRESS` and `PROJECT_ID` values.
 
     The default Hanzo Flow server address is `http://localhost:7860`.
     If you are using a [public Hanzo Flow server](/deployment-public-server), the server address is automatically included.
@@ -175,7 +175,7 @@ For example:
             "mcp-proxy",
             "--transport",
             "streamablehttp",
-            "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
           ],
           "env": {
             "KEY": "VALUE"
@@ -254,7 +254,7 @@ To add your API key to the configuration, use three separate entries in `args`: 
         "--headers",
         "x-api-key",
         "YOUR_API_KEY",
-        "http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+        "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
       ]
     }
   }
@@ -327,11 +327,11 @@ The following environment variables set behaviors related to your Hanzo Flow pro
 
 | Variable | Format | Default | Description |
 |----------|--------|---------|-------------|
-| `LANGFLOW_MCP_SERVER_ENABLED` | Boolean | `True` | Whether to initialize an MCP server for each of your Hanzo Flow projects. If `false`, Hanzo Flow doesn't initialize MCP servers. |
-| `LANGFLOW_MCP_SERVER_ENABLE_PROGRESS_NOTIFICATIONS` | Boolean | `False` | If `true`, Hanzo Flow MCP servers send progress notifications. |
-| `LANGFLOW_MCP_SERVER_TIMEOUT` | Integer | `20` | The number of seconds to wait before an MCP server operation expires due to poor connectivity or long-running requests. |
-| `LANGFLOW_MCP_MAX_SESSIONS_PER_SERVER` | Integer | `10` | Maximum number of MCP sessions to keep per unique server. |
-| `LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS` | Boolean | `True` | Whether to automatically add newly created projects to the user's MCP servers configuration. If `false`, projects must be manually added to MCP servers. |
+| `FLOW_MCP_SERVER_ENABLED` | Boolean | `True` | Whether to initialize an MCP server for each of your Hanzo Flow projects. If `false`, Hanzo Flow doesn't initialize MCP servers. |
+| `FLOW_MCP_SERVER_ENABLE_PROGRESS_NOTIFICATIONS` | Boolean | `False` | If `true`, Hanzo Flow MCP servers send progress notifications. |
+| `FLOW_MCP_SERVER_TIMEOUT` | Integer | `20` | The number of seconds to wait before an MCP server operation expires due to poor connectivity or long-running requests. |
+| `FLOW_MCP_MAX_SESSIONS_PER_SERVER` | Integer | `10` | Maximum number of MCP sessions to keep per unique server. |
+| `FLOW_ADD_PROJECTS_TO_MCP_SERVERS` | Boolean | `True` | Whether to automatically add newly created projects to the user's MCP servers configuration. If `false`, projects must be manually added to MCP servers. |
 
 {/* The anchor on this section (deploy-your-server-externally) is currently a link target in the Hanzo Flow UI. Do not change. */}
 ### Deploy your Hanzo Flow MCP server externally {#deploy-your-server-externally}
@@ -364,9 +364,9 @@ The default address is `http://localhost:6274`.
 
         - **Transport Type**: Select **STDIO**.
         - **Command**: `uvx`
-        - **Arguments**: Enter the following list of arguments, separated by spaces. Replace the values for `YOUR_API_KEY`, `LANGFLOW_SERVER_ADDRESS`, and `PROJECT_ID` with the values from your Hanzo Flow MCP server. For example:
+        - **Arguments**: Enter the following list of arguments, separated by spaces. Replace the values for `YOUR_API_KEY`, `FLOW_SERVER_ADDRESS`, and `PROJECT_ID` with the values from your Hanzo Flow MCP server. For example:
             ```bash
-            mcp-proxy --headers x-api-key YOUR_API_KEY http://LANGFLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable
+            mcp-proxy --headers x-api-key YOUR_API_KEY http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable
             ```
 
       </TabItem>

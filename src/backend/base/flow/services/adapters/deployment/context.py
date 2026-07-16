@@ -20,7 +20,7 @@ class DeploymentAdapterContext:
 
 class DeploymentProviderIDContext:
     _current: ClassVar[ContextVar[DeploymentAdapterContext | None]] = ContextVar(
-        "langflow_current_deployment_context",
+        "flow_current_deployment_context",
         default=None,
     )
 

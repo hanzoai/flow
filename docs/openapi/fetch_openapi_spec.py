@@ -2,7 +2,7 @@
 """Pull OpenAPI spec files from the hanzoai/sdk repository.
 
 This script is only for syncing external SDK specs when needed.
-It is not used by the main Hanzo Flow OpenAPI generation workflow,
+It is not used by the main Flow OpenAPI generation workflow,
 which now relies on `docs/openapi/generate_openapi.py`.
 
 Usage:

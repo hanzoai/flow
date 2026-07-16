@@ -26,9 +26,9 @@ To avoid the impact of potential breaking changes and test new versions, the Han
 
     ```bash
     curl -X GET \
-    "$LANGFLOW_SERVER_URL/api/v1/projects/download/$PROJECT_ID" \
+    "$FLOW_SERVER_URL/api/v1/projects/download/$PROJECT_ID" \
       -H "accept: application/json" \
-      -H "x-api-key: $LANGFLOW_API_KEY"
+      -H "x-api-key: $FLOW_API_KEY"
     ```
 
    To export flows from the visual editor, see [Import and export flows](/concepts-flows-import).
@@ -103,7 +103,7 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
 
 - Disable custom components
 
-    Set `LANGFLOW_ALLOW_CUSTOM_COMPONENTS=false` to disable custom components and in-editor editing of component code.
+    Set `FLOW_ALLOW_CUSTOM_COMPONENTS=false` to disable custom components and in-editor editing of component code.
     For more information, see [Block custom components](../Deployment/deployment-block-custom-components.mdx).
 
 - Deploy flows to watsonx Orchestrate (beta)
@@ -112,7 +112,7 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
     This workflow packages a selected flow version for use in IBM watsonx Orchestrate.
     For more information, see [Deploy Hanzo Flow on watsonx Orchestrate](../Deployment/deployment-wxo.mdx).
 
-    As of Hanzo Flow 1.9.2, this feature is behind a feature flag. To enable it, set `LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true` before starting Hanzo Flow.
+    As of Hanzo Flow 1.9.2, this feature is behind a feature flag. To enable it, set `FLOW_FEATURE_WXO_DEPLOYMENTS=true` before starting Hanzo Flow.
 
 - **Policies** component (beta)
 
@@ -162,14 +162,14 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
     In Hanzo Flow 1.8.0, the Hanzo Flow Docker image does not include `uv` or `uvx` in the runtime image.
     This means that MCP server configurations, including the default Hanzo Flow MCP server, that rely on commands like `uvx mcp-proxy` will fail inside the container with a `command not found` error.
 
-    If you use MCP from within a Hanzo Flow 1.8.0 Docker image, you must install `uv` in an image derived from the official `langflowai/flow` image.
+    If you use MCP from within a Hanzo Flow 1.8.0 Docker image, you must install `uv` in an image derived from the official `flowai/flow` image.
 
-    To install `uv` and `uvx` in a derived image based on the official `langflowai/flow` image, do the following:
+    To install `uv` and `uvx` in a derived image based on the official `flowai/flow` image, do the following:
 
     1. Create a `Dockerfile` in your project.
     2. Use the official Hanzo Flow image as the base and install `uv` into the existing virtual environment:
         ```dockerfile
-        FROM langflowai/flow:1.8.0
+        FROM flowai/flow:1.8.0
 
         USER root
         RUN /app/.venv/bin/pip install uv
@@ -200,7 +200,7 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
 
     In Hanzo Flow 1.8.0, Docling behavior depends on how Hanzo Flow is installed.
 
-    For Hanzo Flow Desktop installations, you need to set `LANGFLOW_DOCLING=True` in your `.env` file to enable Docling dependency installation. For more information, see [Set environment variables for Hanzo Flow Desktop](/environment-variables#set-environment-variables-for-flow-desktop).
+    For Hanzo Flow Desktop installations, you need to set `FLOW_DOCLING=True` in your `.env` file to enable Docling dependency installation. For more information, see [Set environment variables for Hanzo Flow Desktop](/environment-variables#set-environment-variables-for-flow-desktop).
 
     For Hanzo Flow OSS installations with `uv pip install flow`, Docling is included with the Hanzo Flow package.
 
@@ -327,15 +327,15 @@ If you installed version 1.7.0 before the fix was released, follow these steps t
 
 - Webhook authentication
 
-    Added the `LANGFLOW_WEBHOOK_AUTH_ENABLE` environment variable for authenticating requests to the [`/webhook` endpoint](/api-flows-run#webhook-run-flow). When `LANGFLOW_WEBHOOK_AUTH_ENABLE=TRUE`, webhook endpoints require API key authentication and validate that the authenticated user owns the flow being executed. When `FALSE`, no Hanzo Flow API key is required and all requests to the webhook endpoint are treated as being sent by the flow owner. For more information, see [Trigger flows with webhooks](/webhook).
+    Added the `FLOW_WEBHOOK_AUTH_ENABLE` environment variable for authenticating requests to the [`/webhook` endpoint](/api-flows-run#webhook-run-flow). When `FLOW_WEBHOOK_AUTH_ENABLE=TRUE`, webhook endpoints require API key authentication and validate that the authenticated user owns the flow being executed. When `FALSE`, no Hanzo Flow API key is required and all requests to the webhook endpoint are treated as being sent by the flow owner. For more information, see [Trigger flows with webhooks](/webhook).
 
 - Configurable API key validation
 
-    Added the `LANGFLOW_API_KEY_SOURCE` environment variable to control how Hanzo Flow validates API keys. When set to `db`, Hanzo Flow validates API keys against keys stored in the database. When set to `env`, Hanzo Flow validates API keys against the `LANGFLOW_API_KEY` environment variable. For more information, see [API keys and authentication](/api-keys-and-authentication#flow-api-key-source).
+    Added the `FLOW_API_KEY_SOURCE` environment variable to control how Hanzo Flow validates API keys. When set to `db`, Hanzo Flow validates API keys against keys stored in the database. When set to `env`, Hanzo Flow validates API keys against the `FLOW_API_KEY` environment variable. For more information, see [API keys and authentication](/api-keys-and-authentication#flow-api-key-source).
 
 - SSRF protection
 
-    Added SSRF (Server-Side Request Forgery) protection to the [**API Request** component](/api-request). HTTP redirects are disabled by default to prevent SSRF bypass attacks. To enable SSRF protection, set `LANGFLOW_SSRF_PROTECTION_ENABLED=TRUE`. Configure allowed hosts with `LANGFLOW_SSRF_ALLOWED_HOSTS`. Flows that relied on automatic redirects will need to enable it manually.
+    Added SSRF (Server-Side Request Forgery) protection to the [**API Request** component](/api-request). HTTP redirects are disabled by default to prevent SSRF bypass attacks. To enable SSRF protection, set `FLOW_SSRF_PROTECTION_ENABLED=TRUE`. Configure allowed hosts with `FLOW_SSRF_ALLOWED_HOSTS`. Flows that relied on automatic redirects will need to enable it manually.
 
 - Email registration in Hanzo Flow Desktop
 
@@ -434,16 +434,16 @@ This is expected behavior.
 
 - Authentication enforced for Hanzo Flow API requests by default
 
-    In Hanzo Flow version 1.6, `LANGFLOW_AUTO_LOGIN=True` and `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=False` by default.
+    In Hanzo Flow version 1.6, `FLOW_AUTO_LOGIN=True` and `FLOW_SKIP_AUTH_AUTO_LOGIN=False` by default.
     This enforces authentication for Hanzo Flow API requests while still automatically authenticating all users as superusers in the visual editor.
 
     **This is a breaking change from 1.5 where both of these environment variables were `true` by default, bypassing all authentication.**
 
     For temporary backwards compatibility, you can revert to the earlier unauthenticated behavior by setting both variables to `true`.
-    However, a future release will set `LANGFLOW_AUTO_LOGIN=False` and remove `LANGFLOW_SKIP_AUTH_AUTO_LOGIN`.
-    At that point, Hanzo Flow will strictly enforce API key authentication for API requests, and you can manually disable authentication for some features, like the visual editor, by setting `LANGFLOW_AUTO_LOGIN=True`.
+    However, a future release will set `FLOW_AUTO_LOGIN=False` and remove `FLOW_SKIP_AUTH_AUTO_LOGIN`.
+    At that point, Hanzo Flow will strictly enforce API key authentication for API requests, and you can manually disable authentication for some features, like the visual editor, by setting `FLOW_AUTO_LOGIN=True`.
 
-    For more information, see the documentation for [`LANGFLOW_AUTO_LOGIN`](/api-keys-and-authentication#flow-auto-login).
+    For more information, see the documentation for [`FLOW_AUTO_LOGIN`](/api-keys-and-authentication#flow-auto-login).
 
 ### New features and enhancements
 
@@ -493,12 +493,12 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
 
 - Hanzo Flow API requests can require authentication
 
-    To enhance security and ensure proper authentication for automatic login features, Hanzo Flow API endpoints now require authentication with a Hanzo Flow API key, even when `LANGFLOW_AUTO_LOGIN=True`.
+    To enhance security and ensure proper authentication for automatic login features, Hanzo Flow API endpoints now require authentication with a Hanzo Flow API key, even when `FLOW_AUTO_LOGIN=True`.
     This change will be enforced in a future release.
-    For temporary backwards compatibility, this release adds the `LANGFLOW_SKIP_AUTH_AUTO_LOGIN` environment variable.
+    For temporary backwards compatibility, this release adds the `FLOW_SKIP_AUTH_AUTO_LOGIN` environment variable.
     The default value is `true`, which disables API authentication enforcement.
-    To enforce API authentication, set `LANGFLOW_SKIP_AUTH_AUTO_LOGIN=False`.
-    For more information, see the documentation for [`LANGFLOW_AUTO_LOGIN`](/api-keys-and-authentication#flow-auto-login).
+    To enforce API authentication, set `FLOW_SKIP_AUTH_AUTO_LOGIN=False`.
+    For more information, see the documentation for [`FLOW_AUTO_LOGIN`](/api-keys-and-authentication#flow-auto-login).
 
 - Centralized **Language Model** and **Embedding Model** components
 

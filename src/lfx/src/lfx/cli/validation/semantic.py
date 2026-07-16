@@ -1,4 +1,4 @@
-"""Semantic validation checks for Hanzo Flow flow JSON.
+"""Semantic validation checks for Flow flow JSON.
 
 Includes component existence (Level 2), edge type compatibility (Level 3),
 required inputs (Level 4), and credential checks.

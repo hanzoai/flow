@@ -45,8 +45,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     await setupBaseRoutes(page);
@@ -64,8 +64,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let capturedRequestBody: Record<string, unknown> | null = null;
@@ -120,8 +120,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let runCallCount = 0;
@@ -172,8 +172,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let runCallCount = 0;
@@ -228,8 +228,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let runCallCount = 0;
@@ -304,8 +304,8 @@ test(
   { tag: ["@release", "@workspace", "@api"] },
   async ({ page }) => {
     test.skip(
-      process.env.LANGFLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
-      "Requires LANGFLOW_FEATURE_WXO_DEPLOYMENTS=true",
+      process.env.FLOW_FEATURE_WXO_DEPLOYMENTS !== "true",
+      "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
     let runCallCount = 0;

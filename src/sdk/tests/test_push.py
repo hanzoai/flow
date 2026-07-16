@@ -1,4 +1,4 @@
-"""Unit tests for lfx push / LangflowClient.upsert_flow.
+"""Unit tests for lfx push / FlowClient.upsert_flow.
 
 Uses respx to mock HTTP without a live server.
 """
@@ -13,8 +13,8 @@ from uuid import UUID
 import httpx
 import pytest
 import respx
-from flow_sdk.client import LangflowClient
-from flow_sdk.exceptions import LangflowHTTPError, LangflowNotFoundError
+from flow_sdk.client import FlowClient
+from flow_sdk.exceptions import FlowHTTPError, FlowNotFoundError
 
 _BASE = "http://flow.test"
 _FLOW_ID = UUID("aaaaaaaa-0000-0000-0000-000000000001")
@@ -39,8 +39,8 @@ _FLOW_PAYLOAD = {
 }
 
 
-def _client() -> LangflowClient:
-    return LangflowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
+def _client() -> FlowClient:
+    return FlowClient(base_url=_BASE, api_key="test-key")  # pragma: allowlist secret
 
 
 # ---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ def test_upsert_flow_update():
 
 
 # ---------------------------------------------------------------------------
-# upsert_flow -- 404 raises LangflowNotFoundError
+# upsert_flow -- 404 raises FlowNotFoundError
 # ---------------------------------------------------------------------------
 
 
@@ -89,12 +89,12 @@ def test_upsert_flow_not_found_raises():
     from flow_sdk.models import FlowCreate
 
     client = _client()
-    with pytest.raises(LangflowNotFoundError):
+    with pytest.raises(FlowNotFoundError):
         client.upsert_flow(_FLOW_ID, FlowCreate(name="Test Flow"))
 
 
 # ---------------------------------------------------------------------------
-# upsert_flow -- 409 conflict raises LangflowHTTPError
+# upsert_flow -- 409 conflict raises FlowHTTPError
 # ---------------------------------------------------------------------------
 
 
@@ -106,7 +106,7 @@ def test_upsert_flow_conflict_raises():
     from flow_sdk.models import FlowCreate
 
     client = _client()
-    with pytest.raises(LangflowHTTPError) as exc_info:
+    with pytest.raises(FlowHTTPError) as exc_info:
         client.upsert_flow(_FLOW_ID, FlowCreate(name="Test Flow"))
     from http import HTTPStatus
 

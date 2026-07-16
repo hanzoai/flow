@@ -8,8 +8,8 @@ Copy the files you need into your project's CI configuration.
 | File | Trigger | Secrets needed |
 |------|---------|----------------|
 | [`github-actions/flow-validate.yml`](github-actions/flow-validate.yml) | PR touching `flows/**/*.json` | None |
-| [`github-actions/flow-test.yml`](github-actions/flow-test.yml) | PR touching flows or tests | `LANGFLOW_STAGING_API_KEY` |
-| [`github-actions/flow-push.yml`](github-actions/flow-push.yml) | Push to `main` touching flows | `LANGFLOW_PROD_API_KEY` |
+| [`github-actions/flow-test.yml`](github-actions/flow-test.yml) | PR touching flows or tests | `FLOW_STAGING_API_KEY` |
+| [`github-actions/flow-push.yml`](github-actions/flow-push.yml) | Push to `main` touching flows | `FLOW_PROD_API_KEY` |
 
 ### Quick start
 
@@ -26,15 +26,15 @@ Configure these in **Settings → Environments**:
 **`staging`** environment (used by `flow-test.yml`):
 | Name | Type | Value |
 |------|------|-------|
-| `LANGFLOW_STAGING_URL` | Variable | `https://staging.flow.example.com` |
-| `LANGFLOW_STAGING_API_KEY` | Secret | your staging API key |
+| `FLOW_STAGING_URL` | Variable | `https://staging.flow.example.com` |
+| `FLOW_STAGING_API_KEY` | Secret | your staging API key |
 
 **`production`** environment (used by `flow-push.yml`):
 | Name | Type | Value |
 |------|------|-------|
-| `LANGFLOW_PROD_URL` | Variable | `https://flow.example.com` |
-| `LANGFLOW_PROD_API_KEY` | Secret | your production API key |
-| `LANGFLOW_PROJECT_NAME` | Variable | `Production Flows` *(optional)* |
+| `FLOW_PROD_URL` | Variable | `https://flow.example.com` |
+| `FLOW_PROD_API_KEY` | Secret | your production API key |
+| `FLOW_PROJECT_NAME` | Variable | `Production Flows` *(optional)* |
 
 Add **Required reviewers** to the `production` environment to gate every deploy
 behind a manual approval step.
@@ -65,11 +65,11 @@ Configure these in **Settings → CI/CD → Variables**:
 
 | Variable | Protected | Masked | Description |
 |----------|-----------|--------|-------------|
-| `LANGFLOW_STAGING_URL` | ✓ | ✗ | Staging instance URL |
-| `LANGFLOW_STAGING_API_KEY` | ✓ | ✓ | Staging API key |
-| `LANGFLOW_PROD_URL` | ✓ | ✗ | Production instance URL |
-| `LANGFLOW_PROD_API_KEY` | ✓ | ✓ | Production API key |
-| `LANGFLOW_PROJECT_NAME` | ✗ | ✗ | Project folder name *(optional)* |
+| `FLOW_STAGING_URL` | ✓ | ✗ | Staging instance URL |
+| `FLOW_STAGING_API_KEY` | ✓ | ✓ | Staging API key |
+| `FLOW_PROD_URL` | ✓ | ✗ | Production instance URL |
+| `FLOW_PROD_API_KEY` | ✓ | ✓ | Production API key |
+| `FLOW_PROJECT_NAME` | ✗ | ✗ | Project folder name *(optional)* |
 
 ---
 
@@ -94,10 +94,10 @@ They are copied to `ci/` by `lfx init`.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LANGFLOW_URL` | — | URL of target Hanzo Flow instance (Approach A) |
-| `LANGFLOW_API_KEY` | — | API key for target instance (Approach A) |
-| `LANGFLOW_ENV` | — | Environment name from config (Approach B) |
-| `LANGFLOW_ENVIRONMENTS_FILE` | `flow-environments.toml` | Path to environments config (Approach B) |
+| `FLOW_URL` | — | URL of target Hanzo Flow instance (Approach A) |
+| `FLOW_API_KEY` | — | API key for target instance (Approach A) |
+| `FLOW_ENV` | — | Environment name from config (Approach B) |
+| `FLOW_ENVIRONMENTS_FILE` | `flow-environments.toml` | Path to environments config (Approach B) |
 | `TESTS_DIR` | `tests/` | Directory containing test files |
 | `PYTEST_MARKERS` | `integration` | Markers passed to `pytest -m` |
 | `PYTEST_ARGS` | — | Extra arguments forwarded verbatim to pytest |
@@ -107,13 +107,13 @@ They are copied to `ci/` by `lfx init`.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LANGFLOW_URL` | — | URL of target Hanzo Flow instance (Approach A) |
-| `LANGFLOW_API_KEY` | — | API key for target instance (Approach A) |
-| `LANGFLOW_ENV` | — | Environment name from config (Approach B) |
-| `LANGFLOW_ENVIRONMENTS_FILE` | `flow-environments.toml` | Path to environments config (Approach B) |
+| `FLOW_URL` | — | URL of target Hanzo Flow instance (Approach A) |
+| `FLOW_API_KEY` | — | API key for target instance (Approach A) |
+| `FLOW_ENV` | — | Environment name from config (Approach B) |
+| `FLOW_ENVIRONMENTS_FILE` | `flow-environments.toml` | Path to environments config (Approach B) |
 | `FLOWS_DIR` | `flows/` | Directory containing flow JSON files |
-| `LANGFLOW_PROJECT` | — | Project (folder) name on the remote instance |
-| `LANGFLOW_PROJECT_ID` | — | Project UUID (takes precedence over `LANGFLOW_PROJECT`) |
+| `FLOW_PROJECT` | — | Project (folder) name on the remote instance |
+| `FLOW_PROJECT_ID` | — | Project UUID (takes precedence over `FLOW_PROJECT`) |
 | `DRY_RUN` | `false` | Set to `true` to preview without making changes |
 | `LFX_VERSION` | *(latest)* | PEP 508 version specifier for `lfx` |
 
@@ -160,7 +160,7 @@ async def test_async_flow(async_flow_runner):
 Run locally against staging:
 
 ```bash
-LANGFLOW_URL=https://staging.flow.example.com \
-LANGFLOW_API_KEY=<key> \
+FLOW_URL=https://staging.flow.example.com \
+FLOW_API_KEY=<key> \
 pytest tests/ -m integration
 ```

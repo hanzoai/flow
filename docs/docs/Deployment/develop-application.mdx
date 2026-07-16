@@ -21,7 +21,7 @@ This documentation doesn't explain how to write a complete application; it only 
 The following example describes the directory structure for a minimal Hanzo Flow application:
 
 ```text
-LANGFLOW-APPLICATION/
+FLOW-APPLICATION/
 ├── docker.env
 ├── Dockerfile
 ├── flows/
@@ -44,7 +44,7 @@ Your application might have additional files and folders, such as a `/components
 
 ### Package management
 
-The base Hanzo Flow Docker image includes the Hanzo Flow core dependencies because it uses `langflowai/flow:latest` as the parent image.
+The base Hanzo Flow Docker image includes the Hanzo Flow core dependencies because it uses `flowai/flow:latest` as the parent image.
 
 If your application requires additional dependencies, create a [`pyproject.toml`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml) file for the additional dependencies.
 For more information, see [Install custom dependencies](/install-custom-dependencies).
@@ -63,9 +63,9 @@ It contains [Hanzo Flow environment variables](/environment-variables) that are 
 For example:
 
 ```text
-LANGFLOW_AUTO_LOGIN=True
-LANGFLOW_SAVE_DB_IN_CONFIG_DIR=True
-LANGFLOW_BASE_URL=http://0.0.0.0:7860
+FLOW_AUTO_LOGIN=True
+FLOW_SAVE_DB_IN_CONFIG_DIR=True
+FLOW_BASE_URL=http://0.0.0.0:7860
 OPENAI_API_KEY=sk-...
 ```
 
@@ -110,11 +110,11 @@ Custom components must be placed inside category folders, not directly in the ba
 1. Create a `/components` folder in your application directory.
 2. Inside `/components`, create category subfolders (for example, `/components/data`, `/components/tools`).
 3. Add your custom component files to the appropriate category folders.
-4. Copy the `/components` folder to your Docker image and set the `LANGFLOW_COMPONENTS_PATH` environment variable:
+4. Copy the `/components` folder to your Docker image and set the `FLOW_COMPONENTS_PATH` environment variable:
 
     ```dockerfile
     COPY components /app/components
-    ENV LANGFLOW_COMPONENTS_PATH=/app/components
+    ENV FLOW_COMPONENTS_PATH=/app/components
     ```
 
 ## Hanzo Flow Dockerfile {#dockerfile}
@@ -125,7 +125,7 @@ At minimum, you need to specify the base Hanzo Flow image, create the necessary 
 
 ```dockerfile
 # Use the latest version of the base Hanzo Flow image
-FROM langflowai/flow:latest
+FROM flowai/flow:latest
 
 # Create folders and set the working directory in the container
 RUN mkdir /app/flows
@@ -145,10 +145,10 @@ COPY pyproject.toml uv.lock /app/
 
 # Set environment variables if not set in docker.env
 ENV PYTHONPATH=/app
-ENV LANGFLOW_LOAD_FLOWS_PATH=/app/flows
-ENV LANGFLOW_CONFIG_DIR=/app/flow-config-dir
-ENV LANGFLOW_COMPONENTS_PATH=/app/components
-ENV LANGFLOW_LOG_ENV=container
+ENV FLOW_LOAD_FLOWS_PATH=/app/flows
+ENV FLOW_CONFIG_DIR=/app/flow-config-dir
+ENV FLOW_COMPONENTS_PATH=/app/components
+ENV FLOW_LOG_ENV=container
 
 # Command to run the Hanzo Flow server on port 7860
 EXPOSE 7860
@@ -158,7 +158,7 @@ CMD ["flow", "run", "--backend-only", "--env-file","/app/.env","--host", "0.0.0.
 The environment variables set directly in this Dockerfile specify resource paths for Hanzo Flow.
 If these variables are also set in `docker.env`, the values in `docker.env` override the values set in the Dockerfile.
 
-In this example, `ENV LANGFLOW_LOG_ENV=container` sets the logging behavior for serialized JSON to `stdout` to track the application's behavior in a containerized environment. For more information, see [Logging](/logging).
+In this example, `ENV FLOW_LOG_ENV=container` sets the logging behavior for serialized JSON to `stdout` to track the application's behavior in a containerized environment. For more information, see [Logging](/logging).
 
 ### Backend-only mode
 

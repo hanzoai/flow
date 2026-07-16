@@ -9,7 +9,7 @@ import { initialGPTsetup } from "../../utils/initialGPTsetup";
 // When the server runs with AUTO_LOGIN=TRUE (default for local dev),
 // the backend uses client_id instead of user_id for session isolation,
 // and persistence features are not active.
-// Set LANGFLOW_AUTO_LOGIN=false in your .env to run these tests.
+// Set FLOW_AUTO_LOGIN=false in your .env to run these tests.
 
 /**
  * Helper: mock auto-login as disabled and log in manually.
@@ -27,7 +27,7 @@ async function setupAutoLoginOff(page: any) {
     window.process = window.process || ({} as any);
     const newEnv = {
       ...(window.process as any).env,
-      LANGFLOW_AUTO_LOGIN: "false",
+      FLOW_AUTO_LOGIN: "false",
     };
     Object.defineProperty(window.process, "env", {
       value: newEnv,
@@ -120,7 +120,7 @@ test(
     );
 
     test.skip(
-      process?.env?.LANGFLOW_AUTO_LOGIN !== "false",
+      process?.env?.FLOW_AUTO_LOGIN !== "false",
       "Server must run with AUTO_LOGIN=FALSE for persistence tests",
     );
 
@@ -171,7 +171,7 @@ test(
     );
 
     test.skip(
-      process?.env?.LANGFLOW_AUTO_LOGIN !== "false",
+      process?.env?.FLOW_AUTO_LOGIN !== "false",
       "Server must run with AUTO_LOGIN=FALSE for persistence tests",
     );
 
@@ -210,7 +210,7 @@ test(
     );
 
     test.skip(
-      process?.env?.LANGFLOW_AUTO_LOGIN !== "false",
+      process?.env?.FLOW_AUTO_LOGIN !== "false",
       "Server must run with AUTO_LOGIN=FALSE for persistence tests",
     );
 
@@ -273,7 +273,7 @@ test(
     );
 
     test.skip(
-      process?.env?.LANGFLOW_AUTO_LOGIN !== "false",
+      process?.env?.FLOW_AUTO_LOGIN !== "false",
       "Server must run with AUTO_LOGIN=FALSE for persistence tests",
     );
 

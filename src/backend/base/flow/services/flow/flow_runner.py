@@ -19,8 +19,8 @@ from flow.services.database.utils import initialize_database
 from flow.services.deps import get_auth_service, get_cache_service, get_storage_service, session_scope
 
 
-class LangflowRunnerExperimental:
-    """LangflowRunnerExperimental orchestrates flow execution without a dedicated server.
+class FlowRunnerExperimental:
+    """FlowRunnerExperimental orchestrates flow execution without a dedicated server.
 
     .. warning::
         This class is currently **experimental** and in a **beta phase**.
@@ -31,7 +31,7 @@ class LangflowRunnerExperimental:
     Instantiate the class and call the `run` method with the desired flow and input.
 
     Example:
-        runner = LangflowRunnerExperimental()
+        runner = FlowRunnerExperimental()
         result = await runner.run(flow="path/to/flow.json", input_value="Hello", session_id=str(uuid.uuid4()))
 
     """

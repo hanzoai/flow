@@ -25,9 +25,9 @@ The `/logs` endpoint requires log retrieval to be enabled in your Hanzo Flow ins
 To enable log retrieval, set the following [environment variables](/environment-variables) in your Hanzo Flow `.env` file, and then start Hanzo Flow with `uv run flow run --env-file .env`:
 
 ```text
-LANGFLOW_ENABLE_LOG_RETRIEVAL=True
-LANGFLOW_LOG_RETRIEVER_BUFFER_SIZE=10000 // Must be greater than 0
-LANGFLOW_LOG_LEVEL=DEBUG // Can be DEBUG, ERROR, INFO, WARNING, or CRITICAL
+FLOW_ENABLE_LOG_RETRIEVAL=True
+FLOW_LOG_RETRIEVER_BUFFER_SIZE=10000 // Must be greater than 0
+FLOW_LOG_LEVEL=DEBUG // Can be DEBUG, ERROR, INFO, WARNING, or CRITICAL
 ```
 
 ## Stream logs

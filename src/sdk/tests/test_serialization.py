@@ -1,4 +1,4 @@
-"""Unit tests for langflow_sdk.serialization."""
+"""Unit tests for flow_sdk.serialization."""
 # pragma: allowlist secret -- all credentials in this file are fake test data
 
 from __future__ import annotations

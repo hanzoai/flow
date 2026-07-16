@@ -11,12 +11,12 @@ Two identifier domains coexist in these schemas:
 * **Provider-owned (str)** -- ``reference_id``, ``config_id``,
   ``run_id``.
   Opaque values assigned or consumed by the external deployment provider.
-  ``provider_key`` is Hanzo Flow-owned adapter vocabulary.
+  ``provider_key`` is Flow-owned adapter vocabulary.
   Provider-specific metadata (for example URL and tenant/account identifiers)
   belongs inside ``provider_data``.
 
-* **Provider-originated but Hanzo Flow-owned once persisted** -- ``resource_key``.
-  Hanzo Flow stores and indexes this as part of its own deployment record.
+* **Provider-originated but Flow-owned once persisted** -- ``resource_key``.
+  Flow stores and indexes this as part of its own deployment record.
 
 ``provider_data`` dicts are opaque pass-through containers whose contents
 are defined by the provider adapter. Flow forwards them without
@@ -265,7 +265,7 @@ class DeploymentGetResponse(_DeploymentResponseWithProviderData):
     list item stays lean.
     """
 
-    resource_key: str = Field(description="Hanzo Flow-persisted stable provider resource identifier.")
+    resource_key: str = Field(description="Flow-persisted stable provider resource identifier.")
     attached_count: int = Field(default=0, ge=0, description="Number of flow versions attached to this deployment.")
 
 
@@ -275,7 +275,7 @@ class DeploymentListItem(_DeploymentResponseCommon):
     See ``DeploymentGetResponse`` docstring for rationale on the separate class.
     """
 
-    resource_key: str = Field(description="Hanzo Flow-persisted stable provider resource identifier.")
+    resource_key: str = Field(description="Flow-persisted stable provider resource identifier.")
     attached_count: int = Field(default=0, ge=0, description="Number of flow versions attached to this deployment.")
     flow_version_ids: list[UUID] | None = Field(
         default=None,
@@ -333,25 +333,25 @@ class DeploymentSnapshotListResponse(_PaginatedResponse):
 class DeploymentFlowVersionListItem(BaseModel):
     """Flow version metadata attached to a deployment.
 
-    **Identity model:** Hanzo Flow tracks provider tools by their immutable
+    **Identity model:** Flow tracks provider tools by their immutable
     ``provider_snapshot_id`` (the wxO tool_id), never by name.  This
     distinguishes the following cases:
 
     * **Tool renamed in provider** — Same ``provider_snapshot_id``, different
-      ``provider_data.tool_name``.  Hanzo Flow picks up the new name on the next fetch.
+      ``provider_data.tool_name``.  Flow picks up the new name on the next fetch.
     * **Tool deleted in provider** — ``provider_snapshot_id`` no longer
       resolves.  ``provider_data.tool_name`` may be missing/``None``.
     * **Tool deleted + new tool created with same name** — The new tool has
-      a different ID.  Hanzo Flow's attachment still points to the old
-      (missing) ID.  The new tool is invisible to Hanzo Flow until explicitly
+      a different ID.  Flow's attachment still points to the old
+      (missing) ID.  The new tool is invisible to Flow until explicitly
       attached via an update operation.
 
     Frontends should use ``provider_data.tool_name`` for display and
     ``provider_snapshot_id`` for identity / operations.
     """
 
-    id: UUID = Field(description="Hanzo Flow flow version UUID (`flow_version.id`).")
-    flow_id: UUID = Field(description="Hanzo Flow flow UUID (`flow.id`) for this version.")
+    id: UUID = Field(description="Flow flow version UUID (`flow_version.id`).")
+    flow_id: UUID = Field(description="Flow flow UUID (`flow.id`) for this version.")
     flow_name: str | None = Field(
         default=None,
         description="Name of the flow owning this version (`flow.name`).",
@@ -378,13 +378,13 @@ class DeploymentFlowVersionListResponse(_PaginatedResponse):
 class DeploymentCreateResponse(_DeploymentResponseWithProviderData):
     """API response for deployment creation."""
 
-    resource_key: str = Field(description="Hanzo Flow-persisted stable provider resource identifier.")
+    resource_key: str = Field(description="Flow-persisted stable provider resource identifier.")
 
 
 class DeploymentUpdateResponse(_DeploymentResponseWithProviderData):
     """API response for deployment update."""
 
-    resource_key: str = Field(description="Hanzo Flow-persisted stable provider resource identifier.")
+    resource_key: str = Field(description="Flow-persisted stable provider resource identifier.")
 
 
 class DeploymentStatusResponse(_DeploymentResponseWithProviderData):
@@ -661,7 +661,7 @@ class SnapshotUpdateRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
     flow_version_id: UUID = Field(
-        description="Hanzo Flow flow version whose artifact will replace the snapshot content.",
+        description="Flow flow version whose artifact will replace the snapshot content.",
     )
 
 

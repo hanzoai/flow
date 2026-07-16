@@ -1,4 +1,4 @@
-"""API utilities for Hanzo Flow.
+"""API utilities for Flow.
 
 This module provides backward compatibility by re-exporting all utilities
 from the core module. This ensures existing imports continue to work while

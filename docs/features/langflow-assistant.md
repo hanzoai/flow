@@ -69,7 +69,7 @@ This context owns:
 | **EnabledProvider** | A model provider that has been configured with valid API credentials | `get_enabled_providers_for_user()` |
 | **FlowExecutor** | Service that runs Hanzo Flow flows programmatically for assistant operations | `FlowExecutor`, `execute_flow_file()` |
 | **TranslationFlow** | Pre-built flow that translates user input and classifies intent | `TranslationFlow.json`, `TRANSLATION_FLOW` |
-| **LangflowAssistantFlow** | Pre-built flow containing the main assistant prompt and component generation logic | `LangflowAssistant.json`, `LANGFLOW_ASSISTANT_FLOW` |
+| **Hanzo FlowAssistantFlow** | Pre-built flow containing the main assistant prompt and component generation logic | `Hanzo FlowAssistant.json`, `FLOW_ASSISTANT_FLOW` |
 | **ReasoningUI** | Animated typing display showing "thinking" messages during component generation | `AssistantLoadingState` |
 | **ApproveAction** | User action to add a validated component to the canvas | `handleApprove()`, `addComponent()` |
 | **OffTopic** | Intent classification for questions unrelated to Hanzo Flow (other tools, general knowledge) | `"off_topic"`, `OFF_TOPIC_REFUSAL_MESSAGE` |
@@ -485,7 +485,7 @@ The frontend generates a `session_id` once (via `useRef`) when the `useAssistant
 **Status**: Accepted
 
 #### Context
-The TranslationFlow (intent classification) and LangflowAssistant flow shared the same `session_id`. This caused cross-flow contamination: the TranslationFlow's JSON intent responses were stored alongside the assistant's messages. On subsequent requests, the TranslationFlow's LLM saw messages from both flows in its history, causing intent classification to fail and default to `"question"`.
+The TranslationFlow (intent classification) and Hanzo FlowAssistant flow shared the same `session_id`. This caused cross-flow contamination: the TranslationFlow's JSON intent responses were stored alongside the assistant's messages. On subsequent requests, the TranslationFlow's LLM saw messages from both flows in its history, causing intent classification to fail and default to `"question"`.
 
 #### Decision
 1. Pass `session_id=None` when calling `classify_intent` — the TranslationFlow is stateless and does not need conversation memory.
@@ -984,11 +984,11 @@ C4Context
   System(assistant, "Hanzo Flow Assistant", "AI-powered component generation through natural language")
 
   System_Ext(llm_providers, "LLM Providers", "OpenAI, Anthropic, Azure, Google - text generation")
-  System_Ext(langflow_core, "Hanzo Flow Core", "Flow execution, component validation, canvas")
+  System_Ext(flow_core, "Hanzo Flow Core", "Flow execution, component validation, canvas")
 
   Rel(user, assistant, "Sends prompts, receives components")
   Rel(assistant, llm_providers, "Generates text via API")
-  Rel(assistant, langflow_core, "Validates code, adds to canvas")
+  Rel(assistant, flow_core, "Validates code, adds to canvas")
 ```
 
 ### 9.2 Container Diagram (Level 2)
@@ -1012,7 +1012,7 @@ C4Container
     Container(validation_service, "ValidationService", "Python", "Validates component code")
   }
 
-  Container_Ext(flows, "Assistant Flows", "JSON/Python", "LangflowAssistant.json, translation_flow.py")
+  Container_Ext(flows, "Assistant Flows", "JSON/Python", "Hanzo FlowAssistant.json, translation_flow.py")
   System_Ext(llm, "LLM Provider", "External API")
 
   Rel(user, assistant_panel, "Enters prompts")
@@ -1032,8 +1032,8 @@ C4Container
 flowchart TD
     A[User Input] --> B{Intent Classification<br/>TranslationFlow - stateless}
     B -->|off_topic| Z[Return Refusal Message<br/>no LLM call]
-    B -->|generate_component| C[Execute LangflowAssistant Flow]
-    B -->|question| D[Execute LangflowAssistant Flow<br/>with token streaming]
+    B -->|generate_component| C[Execute Hanzo FlowAssistant Flow]
+    B -->|question| D[Execute Hanzo FlowAssistant Flow<br/>with token streaming]
 
     D --> F[Complete Response<br/>plain text / Q&A]
 

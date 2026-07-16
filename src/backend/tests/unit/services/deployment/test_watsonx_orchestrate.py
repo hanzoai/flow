@@ -3031,15 +3031,15 @@ def test_create_wxo_flow_tool_keeps_load_from_db_global_values_unprefixed(monkey
         )
     )
 
-    def mock_create_langflow_tool(*, tool_definition, connections, show_details):  # noqa: ARG001
+    def mock_create_flow_tool(*, tool_definition, connections, show_details):  # noqa: ARG001
         assert show_details is False
         captured_tool_definition.update(tool_definition)
         return fake_tool
 
-    monkeypatch.setattr(tools_module, "create_langflow_tool", mock_create_langflow_tool)
+    monkeypatch.setattr(tools_module, "create_flow_tool", mock_create_flow_tool)
     monkeypatch.setattr(
         tools_module,
-        "build_langflow_artifact_bytes",
+        "build_flow_artifact_bytes",
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
@@ -3099,15 +3099,15 @@ def test_create_wxo_flow_tool_excludes_provider_data_from_artifact(monkeypatch):
         )
     )
 
-    def mock_create_langflow_tool(*, tool_definition, connections, show_details):  # noqa: ARG001
+    def mock_create_flow_tool(*, tool_definition, connections, show_details):  # noqa: ARG001
         assert show_details is False
         captured_flow_definition.update(tool_definition)
         return fake_tool
 
-    monkeypatch.setattr(tools_module, "create_langflow_tool", mock_create_langflow_tool)
+    monkeypatch.setattr(tools_module, "create_flow_tool", mock_create_flow_tool)
     monkeypatch.setattr(
         tools_module,
-        "build_langflow_artifact_bytes",
+        "build_flow_artifact_bytes",
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
@@ -3165,12 +3165,12 @@ def test_create_wxo_flow_tool_normalizes_name_for_raw_payload(monkeypatch):
     )
     monkeypatch.setattr(
         tools_module,
-        "create_langflow_tool",
+        "create_flow_tool",
         lambda **kwargs: fake_tool,  # noqa: ARG005
     )
     monkeypatch.setattr(
         tools_module,
-        "build_langflow_artifact_bytes",
+        "build_flow_artifact_bytes",
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
@@ -6338,9 +6338,9 @@ def test_get_agent_environments_raises_when_env_entry_missing_name():
 # ---------------------------------------------------------------------------
 
 
-def test_build_langflow_artifact_bytes_structure():
+def test_build_flow_artifact_bytes_structure():
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        build_langflow_artifact_bytes,
+        build_flow_artifact_bytes,
     )
 
     flow_definition = {"nodes": [{"id": "n1"}], "edges": []}
@@ -6349,7 +6349,7 @@ def test_build_langflow_artifact_bytes_structure():
         requirements=["lfx>=0.3.0"],
     )
 
-    artifact_bytes = build_langflow_artifact_bytes(
+    artifact_bytes = build_flow_artifact_bytes(
         tool=tool,
         flow_definition=flow_definition,
     )
@@ -6750,73 +6750,73 @@ async def test_update_rejects_empty_provider_data_with_no_spec_changes(monkeypat
 
 
 # ---------------------------------------------------------------------------
-# Test Coverage Gap #4: extract_langflow_artifact_from_zip — all error paths
+# Test Coverage Gap #4: extract_flow_artifact_from_zip — all error paths
 # ---------------------------------------------------------------------------
 
 
-def test_extract_langflow_artifact_from_zip_success():
-    """extract_langflow_artifact_from_zip returns parsed JSON from a valid zip."""
+def test_extract_flow_artifact_from_zip_success():
+    """extract_flow_artifact_from_zip returns parsed JSON from a valid zip."""
     import json
 
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        extract_langflow_artifact_from_zip,
+        extract_flow_artifact_from_zip,
     )
 
     flow_data = {"name": "test_flow", "nodes": []}
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("flow.json", json.dumps(flow_data))
-    result = extract_langflow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
+    result = extract_flow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
     assert result == flow_data
 
 
-def test_extract_langflow_artifact_from_zip_no_json():
-    """extract_langflow_artifact_from_zip raises InvalidContentError when no JSON in zip."""
+def test_extract_flow_artifact_from_zip_no_json():
+    """extract_flow_artifact_from_zip raises InvalidContentError when no JSON in zip."""
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        extract_langflow_artifact_from_zip,
+        extract_flow_artifact_from_zip,
     )
 
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("readme.txt", "hello")
     with pytest.raises(InvalidContentError, match="does not include a flow JSON"):
-        extract_langflow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
+        extract_flow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
 
 
-def test_extract_langflow_artifact_from_zip_bad_zip():
-    """extract_langflow_artifact_from_zip raises InvalidContentError for invalid zip data."""
+def test_extract_flow_artifact_from_zip_bad_zip():
+    """extract_flow_artifact_from_zip raises InvalidContentError for invalid zip data."""
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        extract_langflow_artifact_from_zip,
+        extract_flow_artifact_from_zip,
     )
 
     with pytest.raises(InvalidContentError, match="not a valid zip"):
-        extract_langflow_artifact_from_zip(b"not a zip file", snapshot_id="snap-1")
+        extract_flow_artifact_from_zip(b"not a zip file", snapshot_id="snap-1")
 
 
-def test_extract_langflow_artifact_from_zip_invalid_utf8():
-    """extract_langflow_artifact_from_zip raises InvalidContentError for non-UTF-8 content."""
+def test_extract_flow_artifact_from_zip_invalid_utf8():
+    """extract_flow_artifact_from_zip raises InvalidContentError for non-UTF-8 content."""
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        extract_langflow_artifact_from_zip,
+        extract_flow_artifact_from_zip,
     )
 
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("flow.json", b"\xff\xfe invalid utf-8")
     with pytest.raises(InvalidContentError, match="not valid UTF-8"):
-        extract_langflow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
+        extract_flow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
 
 
-def test_extract_langflow_artifact_from_zip_invalid_json():
-    """extract_langflow_artifact_from_zip raises InvalidContentError for malformed JSON."""
+def test_extract_flow_artifact_from_zip_invalid_json():
+    """extract_flow_artifact_from_zip raises InvalidContentError for malformed JSON."""
     from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
-        extract_langflow_artifact_from_zip,
+        extract_flow_artifact_from_zip,
     )
 
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as zf:
         zf.writestr("flow.json", "not valid json {{{")
     with pytest.raises(InvalidContentError, match="invalid JSON"):
-        extract_langflow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
+        extract_flow_artifact_from_zip(buf.getvalue(), snapshot_id="snap-1")
 
 
 # ---------------------------------------------------------------------------
@@ -7275,8 +7275,8 @@ def test_api_execution_schemas_have_no_run_id_field():
     assert "run_id" not in WatsonxApiAgentExecutionStatusResultData.model_fields
 
 
-def test_api_execution_schemas_omit_langflow_owned_fields():
-    """deployment_id (Hanzo Flow DB UUID) belongs on the top-level response, not in provider_data."""
+def test_api_execution_schemas_omit_flow_owned_fields():
+    """deployment_id (Flow DB UUID) belongs on the top-level response, not in provider_data."""
     from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
         WatsonxApiAgentExecutionStatusResultData,
@@ -7634,8 +7634,8 @@ async def test_verify_credentials_provider_unreachable(monkeypatch):
 # ---------------------------------------------------------------------------
 
 
-def _make_langflow_tool(tool_id: str, *, connections: dict[str, str] | None = None) -> dict[str, Any]:
-    """Build a tool dict that looks Hanzo Flow-managed (has binding.flow)."""
+def _make_flow_tool(tool_id: str, *, connections: dict[str, str] | None = None) -> dict[str, Any]:
+    """Build a tool dict that looks Flow-managed (has binding.flow)."""
     return {
         "id": tool_id,
         "name": f"tool_{tool_id}",
@@ -7649,7 +7649,7 @@ def _make_langflow_tool(tool_id: str, *, connections: dict[str, str] | None = No
 
 
 def _make_external_tool(tool_id: str) -> dict[str, Any]:
-    """Build a tool dict that is NOT Hanzo Flow-managed (no binding.flow)."""
+    """Build a tool dict that is NOT Flow-managed (no binding.flow)."""
     return {
         "id": tool_id,
         "name": f"external_{tool_id}",
@@ -7663,7 +7663,7 @@ def _make_unbound_tool(tool_id: str) -> dict[str, Any]:
 
 
 @pytest.mark.anyio
-async def test_update_connection_deltas_rejects_non_langflow_tool():
+async def test_update_connection_deltas_rejects_non_flow_tool():
     """_update_existing_tool_connection_deltas must refuse to modify tools without binding.flow."""
     _update_deltas = update_core_module._update_existing_tool_connection_deltas
 
@@ -7671,7 +7671,7 @@ async def test_update_connection_deltas_rejects_non_langflow_tool():
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
     ops = ToolConnectionOps(bind=OrderedUniqueStrs.from_values(["app-1"]))
-    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Flow binding"):
         await _update_deltas(
             clients=clients,
             existing_tool_deltas={"ext-1": ops},
@@ -7682,11 +7682,11 @@ async def test_update_connection_deltas_rejects_non_langflow_tool():
 
 
 @pytest.mark.anyio
-async def test_update_connection_deltas_accepts_langflow_tool():
+async def test_update_connection_deltas_accepts_flow_tool():
     """_update_existing_tool_connection_deltas succeeds for tools with binding.flow."""
     _update_deltas = update_core_module._update_existing_tool_connection_deltas
 
-    lf_tool = _make_langflow_tool("lf-1")
+    lf_tool = _make_flow_tool("lf-1")
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
 
     ops = ToolConnectionOps(bind=OrderedUniqueStrs.from_values(["app-1"]))
@@ -7703,14 +7703,14 @@ async def test_update_connection_deltas_accepts_langflow_tool():
 
 
 @pytest.mark.anyio
-async def test_bind_existing_tools_for_create_rejects_non_langflow_tool():
+async def test_bind_existing_tools_for_create_rejects_non_flow_tool():
     """_bind_existing_tools_for_create must refuse to modify tools without binding.flow."""
     _bind_existing = create_core_module._bind_existing_tools_for_create
 
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Flow binding"):
         await _bind_existing(
             clients=clients,
             existing_tool_bindings={"ext-1": ["app-1"]},
@@ -7721,11 +7721,11 @@ async def test_bind_existing_tools_for_create_rejects_non_langflow_tool():
 
 
 @pytest.mark.anyio
-async def test_bind_existing_tools_for_create_accepts_langflow_tool():
+async def test_bind_existing_tools_for_create_accepts_flow_tool():
     """_bind_existing_tools_for_create succeeds for tools with binding.flow."""
     _bind_existing = create_core_module._bind_existing_tools_for_create
 
-    lf_tool = _make_langflow_tool("lf-1")
+    lf_tool = _make_flow_tool("lf-1")
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
 
     original_tools: dict[str, dict] = {}
@@ -7741,14 +7741,14 @@ async def test_bind_existing_tools_for_create_accepts_langflow_tool():
 
 
 @pytest.mark.anyio
-async def test_update_existing_tool_connection_bindings_rejects_non_langflow_tool():
+async def test_update_existing_tool_connection_bindings_rejects_non_flow_tool():
     """update_existing_tool_connection_bindings must refuse to modify tools without binding.flow."""
     _update_bindings = tools_module.update_existing_tool_connection_bindings
 
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Flow binding"):
         await _update_bindings(
             clients=clients,
             existing_target_tool_ids=["ext-1"],
@@ -7765,7 +7765,7 @@ async def test_update_existing_tool_connection_bindings_rejects_unbound_tool():
     bare_tool = _make_unbound_tool("bare-1")
     clients = FakeWXOClients(tool=FakeToolClient([bare_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Flow binding"):
         await _update_bindings(
             clients=clients,
             existing_target_tool_ids=["bare-1"],
@@ -7780,11 +7780,11 @@ async def test_update_existing_tool_connection_bindings_rejects_unbound_tool():
 
 
 @pytest.mark.anyio
-async def test_apply_tool_renames_succeeds_for_langflow_tool():
-    """_apply_tool_renames renames a Hanzo Flow-owned tool on the agent."""
+async def test_apply_tool_renames_succeeds_for_flow_tool():
+    """_apply_tool_renames renames a Flow-owned tool on the agent."""
     _apply_renames = update_core_module._apply_tool_renames
 
-    lf_tool = _make_langflow_tool("lf-1")
+    lf_tool = _make_flow_tool("lf-1")
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
 
     original_tools: dict[str, dict] = {}
@@ -7803,14 +7803,14 @@ async def test_apply_tool_renames_succeeds_for_langflow_tool():
 
 
 @pytest.mark.anyio
-async def test_apply_tool_renames_rejects_non_langflow_tool():
+async def test_apply_tool_renames_rejects_non_flow_tool():
     """_apply_tool_renames must refuse to rename tools without binding.flow."""
     _apply_renames = update_core_module._apply_tool_renames
 
     external_tool = _make_external_tool("ext-1")
     clients = FakeWXOClients(tool=FakeToolClient([external_tool]))
 
-    with pytest.raises(InvalidContentError, match="does not have a Hanzo Flow binding"):
+    with pytest.raises(InvalidContentError, match="does not have a Flow binding"):
         await _apply_renames(
             clients=clients,
             agent_tool_ids=["ext-1"],
@@ -7825,7 +7825,7 @@ async def test_apply_tool_renames_rejects_tool_not_on_agent():
     """_apply_tool_renames must refuse to rename tools not attached to the agent."""
     _apply_renames = update_core_module._apply_tool_renames
 
-    lf_tool = _make_langflow_tool("lf-1")
+    lf_tool = _make_flow_tool("lf-1")
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
 
     with pytest.raises(InvalidContentError, match="not attached to this agent"):
@@ -7859,7 +7859,7 @@ async def test_apply_tool_renames_captures_original_for_rollback():
     """_apply_tool_renames must capture original payload before renaming for rollback."""
     _apply_renames = update_core_module._apply_tool_renames
 
-    lf_tool = _make_langflow_tool("lf-1")
+    lf_tool = _make_flow_tool("lf-1")
     lf_tool["name"] = "original_name"
     lf_tool["display_name"] = "original_name"
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
@@ -7879,7 +7879,7 @@ async def test_apply_tool_renames_preserves_latest_connections_when_original_alr
     """Rename should keep connection updates already applied earlier in the transaction."""
     _apply_renames = update_core_module._apply_tool_renames
 
-    lf_tool = _make_langflow_tool("lf-1", connections={"app-1": "conn-1", "app-2": "conn-2"})
+    lf_tool = _make_flow_tool("lf-1", connections={"app-1": "conn-1", "app-2": "conn-2"})
     lf_tool["name"] = "current_name"
     lf_tool["display_name"] = "current_name"
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))
@@ -7915,7 +7915,7 @@ async def test_apply_tool_renames_preserves_latest_connections_for_add_and_remov
     _apply_renames = update_core_module._apply_tool_renames
 
     # Simulate post-delta provider state (one app removed, one app added).
-    lf_tool = _make_langflow_tool("lf-1", connections={"cfg-keep": "conn-keep", "cfg-add": "conn-add"})
+    lf_tool = _make_flow_tool("lf-1", connections={"cfg-keep": "conn-keep", "cfg-add": "conn-add"})
     lf_tool["name"] = "current_name"
     lf_tool["display_name"] = "current_name"
     clients = FakeWXOClients(tool=FakeToolClient([lf_tool]))

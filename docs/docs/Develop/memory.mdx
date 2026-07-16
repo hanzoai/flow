@@ -15,14 +15,14 @@ The default storage path depends on your operating system and installation metho
 
 - **Hanzo Flow Desktop**:
   - **macOS**: `/Users/<username>/.flow/data/database.db`
-  - **Windows**: `C:\Users\<name>\AppData\Roaming\com.LangflowDesktop\data\database.db`
+  - **Windows**: `C:\Users\<name>\AppData\Roaming\com.Hanzo FlowDesktop\data\database.db`
 - **Hanzo Flow OSS**
   - **macOS/Windows/Linux/WSL with `uv pip install`**: `<path_to_venv>/lib/python3.12/site-packages/flow/flow.db` (Python version can vary. Database isn't shared between virtual environments because it is tied to the venv path.)
   - **macOS/Windows/Linux/WSL with `git clone`**: `<path_to_clone>/src/backend/base/flow/flow.db`
 
 Hanzo Flow offers a few alternatives to the default database path:
 
-- **Config directory**: Set `LANGFLOW_SAVE_DB_IN_CONFIG_DIR=True` to store the database in your Hanzo Flow config directory as set in [`LANGFLOW_CONFIG_DIR`](/logging).
+- **Config directory**: Set `FLOW_SAVE_DB_IN_CONFIG_DIR=True` to store the database in your Hanzo Flow config directory as set in [`FLOW_CONFIG_DIR`](/logging).
 
 - **External PostgreSQL database**: You can use an external PostgreSQL database for all of your Hanzo Flow storage.
   External storage can be useful if you want to preserve the data after uninstalling Hanzo Flow or to share the same database between multiple virtual environments.
@@ -31,7 +31,7 @@ Hanzo Flow offers a few alternatives to the default database path:
 - **Separate chat memory**: You can selectively use external storage for chat memory only, separate from other Hanzo Flow storage.
   For more information, see [Store chat memory](#store-chat-memory).
 
-- **No database**: To disable all database operations and run a no-op session, set `LANGFLOW_USE_NOOP_DATABASE=True` in your [Hanzo Flow environment variables](/environment-variables).
+- **No database**: To disable all database operations and run a no-op session, set `FLOW_USE_NOOP_DATABASE=True` in your [Hanzo Flow environment variables](/environment-variables).
   This is useful for testing when you don't want to persist any data.
 
 ## Hanzo Flow database tables
@@ -45,7 +45,7 @@ The following tables are stored in `flow.db`:
 • **Flow**: Contains flow definitions, including nodes, edges, and components, stored as JSON or database records. For more information, see [Build flows](/concepts-flows).
 
     :::tip
-    To automatically remove API keys and tokens from flow data before saving a flow to the database, set `LANGFLOW_REMOVE_API_KEYS=True` in your [Hanzo Flow environment variables](/environment-variables).
+    To automatically remove API keys and tokens from flow data before saving a flow to the database, set `FLOW_REMOVE_API_KEYS=True` in your [Hanzo Flow environment variables](/environment-variables).
     When `true`, any field marked as a password field that _also_ has `api`, `key`, or `token` in its name is set to `null` before the flow is saved.
     This helps prevent credentials from being stored in the database.
     :::
@@ -68,22 +68,22 @@ For more information, see the database models in the [source code](https://githu
 
 ## Configure external memory {#configure-external-memory}
 
-To replace the default Hanzo Flow SQLite database with another database, set the `LANGFLOW_DATABASE_URL` environment variable to your database URL, and then start Hanzo Flow with your `.env` file.
+To replace the default Hanzo Flow SQLite database with another database, set the `FLOW_DATABASE_URL` environment variable to your database URL, and then start Hanzo Flow with your `.env` file.
 For more information and examples, see [Configure an external PostgreSQL database](/configuration-custom-database).
 
 ```text
-LANGFLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
+FLOW_DATABASE_URL=postgresql://user:password@localhost:5432/flow
 ```
 
 To fine-tune your database connection pool and timeout settings, you can set the following additional environment variables:
 
-- `LANGFLOW_DATABASE_CONNECTION_RETRY`: Whether to retry lost connections to your Hanzo Flow database. If `true`, Hanzo Flow tries to connect to the database again if the connection fails. Default: `false`.
+- `FLOW_DATABASE_CONNECTION_RETRY`: Whether to retry lost connections to your Hanzo Flow database. If `true`, Hanzo Flow tries to connect to the database again if the connection fails. Default: `false`.
 
-- `LANGFLOW_DB_CONNECT_TIMEOUT`: The number of seconds to wait before giving up on a lock to be released or establishing a connection to the database. This may be separate from the `pool_timeout` in `LANGFLOW_DB_CONNECTION_SETTINGS`. Default: 30.
+- `FLOW_DB_CONNECT_TIMEOUT`: The number of seconds to wait before giving up on a lock to be released or establishing a connection to the database. This may be separate from the `pool_timeout` in `FLOW_DB_CONNECTION_SETTINGS`. Default: 30.
 
-- `LANGFLOW_MIGRATION_LOCK_NAMESPACE`: Optional namespace for PostgreSQL advisory locks used during database migrations. This is useful when running multiple Hanzo Flow instances that share the same PostgreSQL database. Each instance should use a unique namespace to avoid conflicts. If not set, Hanzo Flow uses a default namespace. This setting only applies when using PostgreSQL as your database backend.
+- `FLOW_MIGRATION_LOCK_NAMESPACE`: Optional namespace for PostgreSQL advisory locks used during database migrations. This is useful when running multiple Hanzo Flow instances that share the same PostgreSQL database. Each instance should use a unique namespace to avoid conflicts. If not set, Hanzo Flow uses a default namespace. This setting only applies when using PostgreSQL as your database backend.
 
-- `LANGFLOW_DB_CONNECTION_SETTINGS`: A JSON dictionary containing the following database connection pool settings:
+- `FLOW_DB_CONNECTION_SETTINGS`: A JSON dictionary containing the following database connection pool settings:
   - `pool_size`: The base number of connections to keep open in the connection pool. Default: 20.
   - `max_overflow`: Maximum number of connections that can be created in excess of `pool_size` if needed. Default: 30.
   - `pool_timeout`: Number of seconds to wait for a connection from the pool before timing out. Default: 30.
@@ -94,19 +94,19 @@ To fine-tune your database connection pool and timeout settings, you can set the
   For example:
 
   ```text
-  LANGFLOW_DB_CONNECTION_SETTINGS='{"pool_size": 20, "max_overflow": 30, "pool_timeout": 30, "pool_pre_ping": true, "pool_recycle": 1800, "echo": false}'
+  FLOW_DB_CONNECTION_SETTINGS='{"pool_size": 20, "max_overflow": 30, "pool_timeout": 30, "pool_pre_ping": true, "pool_recycle": 1800, "echo": false}'
   ```
 
-  Don't use the deprecated environment variables `LANGFLOW_DB_POOL_SIZE` or `LANGFLOW_DB_MAX_OVERFLOW`.
-  Instead, use `pool_size` and `max_overflow` in `LANGFLOW_DB_CONNECTION_SETTINGS`.
+  Don't use the deprecated environment variables `FLOW_DB_POOL_SIZE` or `FLOW_DB_MAX_OVERFLOW`.
+  Instead, use `pool_size` and `max_overflow` in `FLOW_DB_CONNECTION_SETTINGS`.
 
 ## Configure cache memory
 
 The default Hanzo Flow caching behavior is an asynchronous, in-memory cache:
 
 ```text
-LANGFLOW_LANGCHAIN_CACHE=InMemoryCache
-LANGFLOW_CACHE_TYPE=async
+FLOW_LANGCHAIN_CACHE=InMemoryCache
+FLOW_CACHE_TYPE=async
 ```
 
 Hanzo Flow officially supports only the default asynchronous, in-memory cache, which is suitable for most use cases.
@@ -115,13 +115,13 @@ If you want to use a non-default cache setting, you can use the following enviro
 
 | Variable                      | Type    | Default         | Description                                                                                                                                                                                                                                                                                                         |
 | ----------------------------- | ------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `LANGFLOW_CACHE_TYPE`         | String  | `async`         | Set the cache type for Hanzo Flow's internal caching system. Possible values: `async`, `redis`, `memory`. If you set the type to `redis`, then you must also set the `LANGFLOW_REDIS_*` environment variables. The `disk` backend was removed in 1.9.4 — switch to `async` for in-memory or `redis` for cross-worker. |
-| `LANGFLOW_LANGCHAIN_CACHE`    | String  | `InMemoryCache` | Set the cache storage type for the LangChain caching system (a Hanzo Flow dependency), either `InMemoryCache` or `SQLiteCache`.                                                                                                                                                                                       |
-| `LANGFLOW_REDIS_HOST`         | String  | `localhost`     | Redis server hostname if `LANGFLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                               |
-| `LANGFLOW_REDIS_PORT`         | Integer | `6379`          | Redis server port if `LANGFLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                                   |
-| `LANGFLOW_REDIS_DB`           | Integer | `0`             | Redis database number if `LANGFLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                               |
-| `LANGFLOW_REDIS_CACHE_EXPIRE` | Integer | `3600`          | Cache expiration time in seconds if `LANGFLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                    |
-| `LANGFLOW_REDIS_PASSWORD`     | String  | Not set         | Optional password for Redis authentication if `LANGFLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                          |
+| `FLOW_CACHE_TYPE`         | String  | `async`         | Set the cache type for Hanzo Flow's internal caching system. Possible values: `async`, `redis`, `memory`. If you set the type to `redis`, then you must also set the `FLOW_REDIS_*` environment variables. The `disk` backend was removed in 1.9.4 — switch to `async` for in-memory or `redis` for cross-worker. |
+| `FLOW_LANGCHAIN_CACHE`    | String  | `InMemoryCache` | Set the cache storage type for the LangChain caching system (a Hanzo Flow dependency), either `InMemoryCache` or `SQLiteCache`.                                                                                                                                                                                       |
+| `FLOW_REDIS_HOST`         | String  | `localhost`     | Redis server hostname if `FLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                               |
+| `FLOW_REDIS_PORT`         | Integer | `6379`          | Redis server port if `FLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                                   |
+| `FLOW_REDIS_DB`           | Integer | `0`             | Redis database number if `FLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                               |
+| `FLOW_REDIS_CACHE_EXPIRE` | Integer | `3600`          | Cache expiration time in seconds if `FLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                                    |
+| `FLOW_REDIS_PASSWORD`     | String  | Not set         | Optional password for Redis authentication if `FLOW_CACHE_TYPE=redis`.                                                                                                                                                                                                                                          |
 
 ## Store chat memory
 

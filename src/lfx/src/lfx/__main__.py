@@ -18,7 +18,7 @@ def _version_callback(value: bool) -> None:
 
 app = typer.Typer(
     name="lfx",
-    help="lfx - Hanzo Flow Executor",
+    help="lfx - Flow Executor",
     add_completion=False,
 )
 
@@ -34,7 +34,7 @@ def _app_callback(
         callback=_version_callback,
     ),
 ) -> None:
-    """Lfx - Hanzo Flow Executor."""
+    """Lfx - Flow Executor."""
 
 
 # Register command groups (order determines help-panel ordering)

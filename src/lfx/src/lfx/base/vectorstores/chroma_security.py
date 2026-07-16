@@ -1,8 +1,8 @@
-"""Safe defaults for Hanzo Flow-created Chroma collections.
+"""Safe defaults for Flow-created Chroma collections.
 
 Chroma collection configuration can persist server-side embedding functions.
 Some embedding functions accept model-loading kwargs such as trust_remote_code.
-Hanzo Flow embeds client-side, so built-in collection creation should not register
+Flow embeds client-side, so built-in collection creation should not register
 server-side embedding code.
 """
 

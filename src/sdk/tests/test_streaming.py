@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import pytest
 from flow_sdk import AsyncClient, Client, StreamChunk
-from flow_sdk.exceptions import LangflowAuthError, LangflowConnectionError, LangflowHTTPError
+from flow_sdk.exceptions import FlowAuthError, FlowConnectionError, FlowHTTPError
 from flow_sdk.models import RunResponse
 
 # ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ def test_stream_chunk_empty_data_defaults() -> None:
 
 
 # ---------------------------------------------------------------------------
-# LangflowClient.stream() tests
+# FlowClient.stream() tests
 # ---------------------------------------------------------------------------
 
 
@@ -252,7 +252,7 @@ def test_sync_stream_sets_stream_true_in_payload() -> None:
 def test_sync_stream_raises_auth_error_on_401() -> None:
     body = json.dumps({"detail": "Unauthorized"}).encode()
     client = _sync_client(_MockTransport(status=401, content=body, headers={"content-type": "application/json"}))
-    with pytest.raises(LangflowAuthError):
+    with pytest.raises(FlowAuthError):
         list(client.stream(_FLOW_ID, input_value="hi"))
     client.close()
 
@@ -261,7 +261,7 @@ def test_sync_stream_raises_auth_error_on_401() -> None:
 def test_sync_stream_raises_http_error_on_500() -> None:
     body = json.dumps({"detail": "Internal server error"}).encode()
     client = _sync_client(_MockTransport(status=500, content=body, headers={"content-type": "application/json"}))
-    with pytest.raises(LangflowHTTPError):
+    with pytest.raises(FlowHTTPError):
         list(client.stream(_FLOW_ID, input_value="hi"))
     client.close()
 
@@ -275,7 +275,7 @@ def test_sync_stream_raises_connection_error() -> None:
 
     http = httpx.Client(base_url=_BASE_URL, transport=_ErrorTransport())
     client = Client(_BASE_URL, httpx_client=http)
-    with pytest.raises(LangflowConnectionError):
+    with pytest.raises(FlowConnectionError):
         list(client.stream(_FLOW_ID, input_value="hi"))
     client.close()
 
@@ -299,7 +299,7 @@ def test_sync_stream_passes_tweaks() -> None:
 
 
 # ---------------------------------------------------------------------------
-# LangflowClient.run() convenience tests
+# FlowClient.run() convenience tests
 # ---------------------------------------------------------------------------
 
 
@@ -341,7 +341,7 @@ def test_sync_run_sends_correct_payload() -> None:
 
 
 # ---------------------------------------------------------------------------
-# AsyncLangflowClient.stream() tests
+# AsyncFlowClient.stream() tests
 # ---------------------------------------------------------------------------
 
 
@@ -374,7 +374,7 @@ async def test_async_stream_skips_blank_lines() -> None:
 async def test_async_stream_raises_auth_error_on_401() -> None:
     body = json.dumps({"detail": "Unauthorized"}).encode()
     client = _async_client(_AsyncMockTransport(status=401, content=body, headers={"content-type": "application/json"}))
-    with pytest.raises(LangflowAuthError):
+    with pytest.raises(FlowAuthError):
         async for _ in client.stream(_FLOW_ID, input_value="hi"):
             pass
     await client.aclose()
@@ -389,7 +389,7 @@ async def test_async_stream_raises_connection_error() -> None:
 
     http = httpx.AsyncClient(base_url=_BASE_URL, transport=_AsyncErrorTransport())
     client = AsyncClient(_BASE_URL, httpx_client=http)
-    with pytest.raises(LangflowConnectionError):
+    with pytest.raises(FlowConnectionError):
         async for _ in client.stream(_FLOW_ID, input_value="hi"):
             pass
     await client.aclose()
@@ -416,7 +416,7 @@ async def test_async_stream_sets_stream_true_in_payload() -> None:
 
 
 # ---------------------------------------------------------------------------
-# AsyncLangflowClient.run() convenience tests
+# AsyncFlowClient.run() convenience tests
 # ---------------------------------------------------------------------------
 
 
@@ -462,4 +462,4 @@ async def test_async_run_does_not_set_stream_true() -> None:
 def test_stream_chunk_importable_from_package() -> None:
     import flow_sdk
 
-    assert langflow_sdk.StreamChunk is StreamChunk
+    assert flow_sdk.StreamChunk is StreamChunk

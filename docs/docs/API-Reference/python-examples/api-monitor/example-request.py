@@ -2,8 +2,8 @@ import os
 
 import requests
 
-base_url = os.environ.get("LANGFLOW_URL") or os.environ.get("LANGFLOW_SERVER_URL", "http://127.0.0.1:7860")
-api_key = os.environ.get("LANGFLOW_API_KEY", "")
+base_url = os.environ.get("FLOW_URL") or os.environ.get("FLOW_SERVER_URL", "http://127.0.0.1:7860")
+api_key = os.environ.get("FLOW_API_KEY", "")
 flow_id = os.environ.get("FLOW_ID", "")
 
 response = requests.get(

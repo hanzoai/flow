@@ -15,7 +15,7 @@ class BaseTelemetryService(Service, ABC):
     """Abstract base class for telemetry services.
 
     Defines the minimal interface that all telemetry service implementations
-    must provide, whether minimal (LFX) or full-featured (Hanzo Flow).
+    must provide, whether minimal (LFX) or full-featured (Flow).
     """
 
     @abstractmethod

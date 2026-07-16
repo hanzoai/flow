@@ -405,7 +405,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://127.0.0.1:8080"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "false"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "false"}),
             respx.mock,
         ):
             respx.get("http://127.0.0.1:8080").mock(return_value=Response(200, json={"status": "ok"}))
@@ -429,7 +429,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://0.0.0.0:8080/admin"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             pytest.raises(ValueError, match="SSRF Protection"),
         ):
             await component.make_api_request()
@@ -447,7 +447,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://10.0.0.1/admin"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             pytest.raises(ValueError, match="SSRF Protection"),
         ):
             await component.make_api_request()
@@ -457,7 +457,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://172.16.0.1/internal"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             pytest.raises(ValueError, match="SSRF Protection"),
         ):
             await component.make_api_request()
@@ -477,7 +477,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://169.254.1.1/api"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "true"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "true"}),
             pytest.raises(ValueError, match="SSRF Protection"),
         ):
             await component.make_api_request()
@@ -525,8 +525,8 @@ class TestAPIRequestSSRFProtection:
             patch.dict(
                 os.environ,
                 {
-                    "LANGFLOW_SSRF_PROTECTION_ENABLED": "true",
-                    "LANGFLOW_SSRF_ALLOWED_HOSTS": "192.168.1.100",
+                    "FLOW_SSRF_PROTECTION_ENABLED": "true",
+                    "FLOW_SSRF_ALLOWED_HOSTS": "192.168.1.100",
                 },
             ),
             respx.mock,
@@ -575,7 +575,7 @@ class TestAPIRequestSSRFProtection:
         component.log = MagicMock()
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "false"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "false"}),
             respx.mock,
         ):
             respx.get("https://example.com/api").mock(return_value=Response(200, json={"status": "ok"}))
@@ -593,7 +593,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "example.com"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "false"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "false"}),
             respx.mock,
         ):
             respx.get("https://example.com").mock(return_value=Response(200, json={"status": "ok"}))
@@ -606,7 +606,7 @@ class TestAPIRequestSSRFProtection:
         component.url_input = "http://example.com"
 
         with (
-            patch.dict(os.environ, {"LANGFLOW_SSRF_PROTECTION_ENABLED": "false"}),
+            patch.dict(os.environ, {"FLOW_SSRF_PROTECTION_ENABLED": "false"}),
             respx.mock,
         ):
             respx.get("http://example.com").mock(return_value=Response(200, json={"status": "ok"}))

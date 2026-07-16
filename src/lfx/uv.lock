@@ -1590,7 +1590,7 @@ dependencies = [
     { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8e/67/ebbe027e50366fa16f00b01521f84d75bf79f9b9e036dd69de9d36dc9f4e/langflow_sdk-0.1.3-py3-none-any.whl", hash = "sha256:76ae666ebd1604a3abf2204609c871b169bb6a528e179cbc5012f782a3f270ed", size = 26438, upload-time = "2026-05-15T18:24:05.675Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/67/ebbe027e50366fa16f00b01521f84d75bf79f9b9e036dd69de9d36dc9f4e/flow_sdk-0.1.3-py3-none-any.whl", hash = "sha256:76ae666ebd1604a3abf2204609c871b169bb6a528e179cbc5012f782a3f270ed", size = 26438, upload-time = "2026-05-15T18:24:05.675Z" },
 ]
 
 [[package]]

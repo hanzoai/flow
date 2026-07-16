@@ -66,31 +66,31 @@ With your flow operational, connect it to a JavaScript application to use the ag
 
 1. To construct a JavaScript application to connect to your flow, gather the following information:
 
-    * `LANGFLOW_SERVER_ADDRESS`: Your Hanzo Flow server's domain. The default value is `127.0.0.1:7860`. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
+    * `FLOW_SERVER_ADDRESS`: Your Hanzo Flow server's domain. The default value is `127.0.0.1:7860`. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
     * `FLOW_ID`: Your flow's UUID or custom endpoint name. You can get this value from the code snippets on your flow's [**API access** pane](/concepts-publish#api-access).
-    * `LANGFLOW_API_KEY`: A valid [Hanzo Flow API key](/api-keys-and-authentication).
+    * `FLOW_API_KEY`: A valid [Hanzo Flow API key](/api-keys-and-authentication).
 
 2. Copy the following script into a JavaScript file, and then replace the placeholders with the information you gathered in the previous step.
 If you're using the `customer_orders.csv` example file, you can run this example as-is with the example email address in the code sample.
 If not, modify the `const email = "isabella.rodriguez@example.com"` to search for a value in your dataset.
 
     ```js
-    import { LangflowClient } from "@datastax/flow-client";
+    import { Hanzo FlowClient } from "@datastax/flow-client";
 
-    const LANGFLOW_SERVER_ADDRESS = 'LANGFLOW_SERVER_ADDRESS';
+    const FLOW_SERVER_ADDRESS = 'FLOW_SERVER_ADDRESS';
     const FLOW_ID = 'FLOW_ID';
-    const LANGFLOW_API_KEY = 'LANGFLOW_API_KEY';
+    const FLOW_API_KEY = 'FLOW_API_KEY';
     const email = "isabella.rodriguez@example.com";
 
     async function runAgentFlow(): Promise<void> {
         try {
             // Initialize the Hanzo Flow client
-            const client = new LangflowClient({
-                baseUrl: LANGFLOW_SERVER_ADDRESS,
-                apiKey: LANGFLOW_API_KEY
+            const client = new Hanzo FlowClient({
+                baseUrl: FLOW_SERVER_ADDRESS,
+                apiKey: FLOW_API_KEY
             });
 
-            console.log(`Connecting to Hanzo Flow server at: ${LANGFLOW_SERVER_ADDRESS} `);
+            console.log(`Connecting to Hanzo Flow server at: ${FLOW_SERVER_ADDRESS} `);
             console.log(`Flow ID: ${FLOW_ID}`);
             console.log(`Email: ${email}`);
 
@@ -120,7 +120,7 @@ If not, modify the `const email = "isabella.rodriguez@example.com"` to search fo
             // Provide error messages
             if (error instanceof Error) {
                 if (error.message.includes('fetch')) {
-                    console.error('\nMake sure your Hanzo Flow server is running and accessible at:', LANGFLOW_SERVER_ADDRESS);
+                    console.error('\nMake sure your Hanzo Flow server is running and accessible at:', FLOW_SERVER_ADDRESS);
                 }
                 if (error.message.includes('401') || error.message.includes('403')) {
                     console.error('\nCheck your API key configuration');

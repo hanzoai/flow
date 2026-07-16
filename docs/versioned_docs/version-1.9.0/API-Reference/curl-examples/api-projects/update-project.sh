@@ -1,7 +1,7 @@
 curl -X PATCH \
-  "$LANGFLOW_URL/api/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331" \
+  "$FLOW_URL/api/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331" \
   -H "accept: application/json" \
-  -H "x-api-key: $LANGFLOW_API_KEY" \
+  -H "x-api-key: $FLOW_API_KEY" \
   -d '{
   "name": "string",
   "description": "string",

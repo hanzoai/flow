@@ -273,13 +273,13 @@ async def check_flow_version(component: StoreComponentCreate) -> None:
     if not component.last_tested_version:
         component.last_tested_version = __version__
 
-    langflow_version = await get_lf_version_from_pypi()
-    if langflow_version is None:
-        raise HTTPException(status_code=500, detail="Unable to verify the latest version of Hanzo Flow")
-    if langflow_version != component.last_tested_version:
+    flow_version = await get_lf_version_from_pypi()
+    if flow_version is None:
+        raise HTTPException(status_code=500, detail="Unable to verify the latest version of Flow")
+    if flow_version != component.last_tested_version:
         await logger.awarning(
-            f"Your version of Hanzo Flow ({component.last_tested_version}) is outdated. "
-            f"Please update to the latest version ({langflow_version}) and try again."
+            f"Your version of Flow ({component.last_tested_version}) is outdated. "
+            f"Please update to the latest version ({flow_version}) and try again."
         )
 
 

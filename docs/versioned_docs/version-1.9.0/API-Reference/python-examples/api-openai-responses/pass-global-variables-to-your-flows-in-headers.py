@@ -2,14 +2,14 @@ import os
 
 import requests
 
-url = f"{os.getenv('LANGFLOW_SERVER_URL', '')}/api/v1/responses"
+url = f"{os.getenv('FLOW_SERVER_URL', '')}/api/v1/responses"
 
 headers = {
-    "x-api-key": f"{os.getenv('LANGFLOW_API_KEY', '')}",
+    "x-api-key": f"{os.getenv('FLOW_API_KEY', '')}",
     "Content-Type": "application/json",
-    "X-LANGFLOW-GLOBAL-VAR-OPENAI_API_KEY": "sk-...",
-    "X-LANGFLOW-GLOBAL-VAR-USER_ID": "user123",
-    "X-LANGFLOW-GLOBAL-VAR-ENVIRONMENT": "production",
+    "X-FLOW-GLOBAL-VAR-OPENAI_API_KEY": "sk-...",
+    "X-FLOW-GLOBAL-VAR-USER_ID": "user123",
+    "X-FLOW-GLOBAL-VAR-ENVIRONMENT": "production",
 }
 
 payload = {"model": "your-flow-id", "input": "Hello"}

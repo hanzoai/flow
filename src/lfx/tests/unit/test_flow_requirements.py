@@ -415,10 +415,10 @@ from bs4 import BeautifulSoup
         assert "lxml" in packages
         assert "tabulate" in packages
 
-    def test_langflow_imports_filtered(self):
+    def test_flow_imports_filtered(self):
         """Components with flow imports should NOT list flow as a dep.
 
-        lfx provides the flow interfaces at runtime, so flow/langflow_base
+        lfx provides the flow interfaces at runtime, so flow/flow_base
         should be filtered out just like lfx itself.
         """
         code = """

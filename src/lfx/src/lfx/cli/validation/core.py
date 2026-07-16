@@ -86,7 +86,7 @@ def _node_display_name(node: dict[str, Any]) -> str | None:
 
 
 def _get_lf_version() -> str | None:
-    """Return the installed Hanzo Flow version string, or *None* if not installed.
+    """Return the installed Flow version string, or *None* if not installed.
 
     Tries the four known package names in order of preference so the check
     works with released builds, nightly builds, and editable installs.

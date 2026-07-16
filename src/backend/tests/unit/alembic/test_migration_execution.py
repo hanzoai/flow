@@ -47,7 +47,7 @@ def _normalize_pg_url(url: str) -> str:
 
 def _pg_url() -> str | None:
     """Return a PostgreSQL URL from the environment, or None."""
-    url = os.environ.get("LANGFLOW_TEST_DATABASE_URI")
+    url = os.environ.get("FLOW_TEST_DATABASE_URI")
     if url is not None:
         return _normalize_pg_url(url)
     return None
@@ -101,7 +101,7 @@ def db_url(request):
     else:
         base_url = _pg_url()
         if base_url is None:
-            pytest.skip("LANGFLOW_TEST_DATABASE_URI not set")
+            pytest.skip("FLOW_TEST_DATABASE_URI not set")
         # Use a unique DB name per test to allow parallel execution
         import hashlib
 

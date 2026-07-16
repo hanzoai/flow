@@ -1,7 +1,7 @@
 """Tests for MCP reverse proxy support (root_path / X-Forwarded-Prefix).
 
 Covers the fix for https://github.com/hanzoai/flow/issues/9797 where MCP
-SSE transport breaks when Hanzo Flow sits behind a reverse proxy that adds a URL
+SSE transport breaks when Flow sits behind a reverse proxy that adds a URL
 prefix (basePath).
 """
 
@@ -171,6 +171,6 @@ class TestRootPathSetting:
     def test_root_path_can_be_set(self, monkeypatch):
         from lfx.services.settings.base import Settings
 
-        monkeypatch.setenv("LANGFLOW_ROOT_PATH", "/basePath")
+        monkeypatch.setenv("FLOW_ROOT_PATH", "/basePath")
         s = Settings()
         assert s.root_path == "/basePath"

@@ -74,10 +74,10 @@ LFX can be installed in multiple ways. If you have installed Hanzo Flow OSS vers
 
 Run LFX without installing it locally using `uvx`.
 
-1. Create a Hanzo Flow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `LANGFLOW_API_KEY` in the same terminal session as `lfx`:
+1. Create a Hanzo Flow API key (see [Serve](#serve-the-simple-agent-starter-flow-with-lfx-serve)), and set `FLOW_API_KEY` in the same terminal session as `lfx`:
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export FLOW_API_KEY="sk..."
    ```
 
 2. Run `lfx serve` using `uvx`:
@@ -90,7 +90,7 @@ Run LFX without installing it locally using `uvx`.
 
 ## Serve the simple agent starter flow with `lfx serve`
 
-To serve a flow as a REST API endpoint, set a `LANGFLOW_API_KEY` and run the flow JSON.
+To serve a flow as a REST API endpoint, set a `FLOW_API_KEY` and run the flow JSON.
 
 The API key is required for security because `lfx serve` can create a publicly accessible FastAPI server.
 
@@ -98,7 +98,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 
 1. Generate a Hanzo Flow API key.
 
-   For LFX, you can generate a secure token locally to use as your `LANGFLOW_API_KEY`:
+   For LFX, you can generate a secure token locally to use as your `FLOW_API_KEY`:
 
    ```bash
    uv run python -c "import secrets; print(secrets.token_urlsafe(32))"
@@ -110,10 +110,10 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 
    **Option: .env file**
 
-   Create a `.env` file and populate it with your flow's variables. The `LANGFLOW_API_KEY` is required. This example assumes the flow requires an OpenAI API key.
+   Create a `.env` file and populate it with your flow's variables. The `FLOW_API_KEY` is required. This example assumes the flow requires an OpenAI API key.
 
    ```bash
-   LANGFLOW_API_KEY="sk..."
+   FLOW_API_KEY="sk..."
    OPENAI_API_KEY="sk-..."
    ```
 
@@ -122,7 +122,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    Export your variables in the same terminal session where you'll start the server. You must declare your variables before the server starts for the server to pick them up.
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export FLOW_API_KEY="sk..."
    export OPENAI_API_KEY="sk-..."
    ```
 
@@ -202,7 +202,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
 6. To send a test request to the server, open a new terminal and export your `flow_id` and Hanzo Flow API key values as variables:
 
    ```bash
-   export LANGFLOW_API_KEY="sk..."
+   export FLOW_API_KEY="sk..."
    export FLOW_ID="c1dab29d-3364-58ef-8fef-99311d32ee42"
    ```
 
@@ -211,7 +211,7 @@ This example uses the **Agent** component's built-in OpenAI model, which require
    ```bash
    curl -X POST http://localhost:8000/flows/$FLOW_ID/run \
      -H "Content-Type: application/json" \
-     -H "x-api-key: $LANGFLOW_API_KEY" \
+     -H "x-api-key: $FLOW_API_KEY" \
      -d '{"input_value": "Hello, world!"}'
    ```
 
@@ -534,8 +534,8 @@ Both settings are optional. When unset or empty, all categories from the compone
 
 | Variable | Description |
 |----------|-------------|
-| `LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST` | Comma-separated list of component category names to **include**. If empty (default), all categories are included. If set, only the listed categories are available. |
-| `LANGFLOW_COMPONENT_CATEGORY_BLOCKLIST` | Comma-separated list of component category names to **exclude**. If empty (default), no categories are excluded. Applied after the allowlist. |
+| `FLOW_COMPONENT_CATEGORY_ALLOWLIST` | Comma-separated list of component category names to **include**. If empty (default), all categories are included. If set, only the listed categories are available. |
+| `FLOW_COMPONENT_CATEGORY_BLOCKLIST` | Comma-separated list of component category names to **exclude**. If empty (default), no categories are excluded. Applied after the allowlist. |
 
 Category names are case-insensitive.
 
@@ -554,21 +554,21 @@ Provider-specific and other categories (e.g. `openai`, `anthropic`, `google`, `l
 Allowlist only — restrict to specific categories:
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST="openai,anthropic,google,processing,input_output"
+   export FLOW_COMPONENT_CATEGORY_ALLOWLIST="openai,anthropic,google,processing,input_output"
    uv run lfx serve my_flow.json
    ```
 
 Blocklist only — load all categories except the ones you exclude:
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_BLOCKLIST="prototypes,langchain_utilities"
+   export FLOW_COMPONENT_CATEGORY_BLOCKLIST="prototypes,langchain_utilities"
    uv run lfx run my_flow.json "Hello"
    ```
 
 Virtual `core` keyword — use `core` in the allowlist or blocklist to refer to all core categories at once (e.g. allow only core categories, or exclude all core from a broader set):
 
    ```bash
-   export LANGFLOW_COMPONENT_CATEGORY_ALLOWLIST="core"
+   export FLOW_COMPONENT_CATEGORY_ALLOWLIST="core"
    uv run lfx serve my_flow.json
    ```
 

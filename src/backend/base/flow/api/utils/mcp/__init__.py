@@ -1,4 +1,4 @@
-"""MCP utilities for Hanzo Flow."""
+"""MCP utilities for Flow."""
 
 from flow.api.utils.mcp.config_utils import (
     auto_configure_starter_projects_mcp,

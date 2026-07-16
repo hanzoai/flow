@@ -80,7 +80,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Create home directory and ensure proper ownership
 # The user needs write access to /app/data (home) and /app (workdir).
-# Also pre-create /app/flow (LANGFLOW_CONFIG_DIR used by the docker_example
+# Also pre-create /app/flow (FLOW_CONFIG_DIR used by the docker_example
 # compose file) with the non-root user as owner, so a fresh named volume mounted
 # at /app/flow inherits the correct ownership/permissions and the in-container
 # uid=1000 user can write secret_key, profile_pictures, etc. Without this, the
@@ -101,7 +101,7 @@ LABEL org.opencontainers.image.source=https://github.com/hanzoai/flow
 USER user
 WORKDIR /app
 
-ENV LANGFLOW_HOST=0.0.0.0
-ENV LANGFLOW_PORT=7860
+ENV FLOW_HOST=0.0.0.0
+ENV FLOW_PORT=7860
 
 CMD ["python", "-m", "flow", "run", "--backend-only"]

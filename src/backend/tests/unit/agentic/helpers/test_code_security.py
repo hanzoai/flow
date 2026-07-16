@@ -14,7 +14,7 @@ class TestScanCodeSecuritySafeCode:
     """Tests that safe component code passes the security scan."""
 
     def test_should_pass_basic_component(self):
-        """Basic Hanzo Flow component should pass."""
+        """Basic Flow component should pass."""
         code = """
 from lfx.custom import Component
 from lfx.io import MessageTextInput, Output

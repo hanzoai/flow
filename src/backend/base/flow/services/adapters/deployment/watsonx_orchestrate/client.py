@@ -50,7 +50,7 @@ class WxOProviderClientsContext:
 
 class WxOProviderClientsRequestContext:
     _current: ClassVar[ContextVar[WxOProviderClientsContext | None]] = ContextVar(
-        "langflow_wxo_provider_clients_request_context",
+        "flow_wxo_provider_clients_request_context",
         default=None,
     )
 

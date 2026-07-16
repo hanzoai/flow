@@ -427,7 +427,7 @@ class TestMultiServeStreaming:
         monkeypatch,
     ):
         """Test that /stream returns an error stream when validation blocks the flow."""
-        monkeypatch.setenv("LANGFLOW_API_KEY", "test-api-key")
+        monkeypatch.setenv("FLOW_API_KEY", "test-api-key")
         mock_graphs["flow1"].raw_graph_data = _blocked_raw_graph()
 
         app = create_multi_serve_app(

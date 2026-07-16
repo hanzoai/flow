@@ -2,10 +2,10 @@ import os
 
 import requests
 
-url = f"{os.getenv('LANGFLOW_URL', '')}/api/v1/files/upload/{os.getenv('FLOW_ID', '')}"
+url = f"{os.getenv('FLOW_URL', '')}/api/v1/files/upload/{os.getenv('FLOW_ID', '')}"
 
 headers = {
-    "x-api-key": f"{os.getenv('LANGFLOW_API_KEY', '')}",
+    "x-api-key": f"{os.getenv('FLOW_API_KEY', '')}",
 }
 
 files = {

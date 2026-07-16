@@ -27,7 +27,7 @@ PYPI_HANZOFLOW_BASE_URL = "https://pypi.org/pypi/flow-base/json"
 PYPI_HANZOFLOW_BASE_NIGHTLY_URL = "https://pypi.org/pypi/flow-base-nightly/json"
 
 # main and base MUST share one dev number, so the shared number is derived from both packages.
-PYPI_NIGHTLY_URLS = (PYPI_LANGFLOW_NIGHTLY_URL, PYPI_LANGFLOW_BASE_NIGHTLY_URL)
+PYPI_NIGHTLY_URLS = (PYPI_FLOW_NIGHTLY_URL, PYPI_FLOW_BASE_NIGHTLY_URL)
 
 ARGUMENT_NUMBER = 2
 VALID_BUILD_TYPES = ("main", "base", "both")

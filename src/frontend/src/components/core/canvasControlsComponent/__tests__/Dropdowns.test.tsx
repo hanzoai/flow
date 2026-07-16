@@ -46,7 +46,7 @@ jest.mock("@/constants/constants", () => ({
 }));
 
 jest.mock("@/customization/feature-flags", () => ({
-  ENABLE_DATASTAX_LANGFLOW: false,
+  ENABLE_DATASTAX_FLOW: false,
 }));
 
 jest.mock("@/utils/utils", () => ({
@@ -108,7 +108,7 @@ describe("HelpDropdown", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/settings/shortcuts");
 
     fireEvent.click(
-      screen.getByTestId("canvas_controls_dropdown_get_langflow_desktop"),
+      screen.getByTestId("canvas_controls_dropdown_get_flow_desktop"),
     );
     expect(window.open).toHaveBeenCalledWith(
       "https://desktop.flow.org",

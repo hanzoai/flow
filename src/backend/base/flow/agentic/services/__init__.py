@@ -1,1 +1,1 @@
-"""Services for the Hanzo Flow Assistant."""
+"""Services for the Flow Assistant."""

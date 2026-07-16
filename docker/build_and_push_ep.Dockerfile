@@ -95,7 +95,7 @@ RUN useradd user -u 1000 -g 0 --no-create-home --home-dir /app/data
 COPY --from=builder --chown=1000 /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
-# Pre-create LANGFLOW_CONFIG_DIR (the default location used by the docker_example
+# Pre-create FLOW_CONFIG_DIR (the default location used by the docker_example
 # compose file) with the non-root user as owner. When the official compose mounts
 # a fresh named volume at /app/flow, Docker copies this directory's ownership
 # and permissions into the new volume, so the in-container uid=1000 user can
@@ -112,9 +112,9 @@ LABEL org.opencontainers.image.source=https://github.com/hanzoai/flow
 
 WORKDIR /app
 
-ENV LANGFLOW_HOST=0.0.0.0
-ENV LANGFLOW_PORT=7860
-ENV LANGFLOW_EVENT_DELIVERY=polling
+ENV FLOW_HOST=0.0.0.0
+ENV FLOW_PORT=7860
+ENV FLOW_EVENT_DELIVERY=polling
 
 USER 1000
 CMD ["python", "-m", "flow", "run", "--host", "0.0.0.0", "--backend-only"]

@@ -6,7 +6,7 @@ This directory contains comprehensive load testing tools for both Hanzo Flow and
 
 ### **Hanzo Flow API Testing** (Enhanced System)
 
-- Files: `langflow_*.py`
+- Files: `flow_*.py`
 - Tests the main Hanzo Flow application API
 - Includes automatic setup, real starter projects, and comprehensive error logging
 
@@ -47,7 +47,7 @@ The easiest way to use the load testing system:
 make load_test_setup
 
 # 2. Run a quick test
-make load_test_langflow_quick
+make load_test_flow_quick
 
 # 3. Run a full load test
 make load_test_run
@@ -71,8 +71,8 @@ make load_test_remote_setup FLOW_HOST="https://your-remote-instance.com"
 make load_test_remote_run FLOW_HOST="https://your-remote-instance.com"
 
 # Or using Python scripts directly
-python langflow_setup_test.py --host https://your-remote-instance.com --interactive
-python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-flow --headless --users 10 --duration 120
+python flow_setup_test.py --host https://your-remote-instance.com --interactive
+python flow_run_load_test.py --host https://your-remote-instance.com --no-start-flow --headless --users 10 --duration 120
 
 # Test remote instance before setup (optional)
 python diagnose_remote.py --host https://your-remote-instance.com --load-test 5
@@ -97,13 +97,13 @@ Choose and set up a real Hanzo Flow starter project for testing:
 
 ```bash
 # Interactive flow selection
-python langflow_setup_test.py --interactive
+python flow_setup_test.py --interactive
 
 # Use specific flow
-python langflow_setup_test.py --flow "Memory Chatbot"
+python flow_setup_test.py --flow "Memory Chatbot"
 
 # List available flows
-python langflow_setup_test.py --list-flows
+python flow_setup_test.py --list-flows
 ```
 
 This will:
@@ -117,40 +117,40 @@ This will:
 
 ```bash
 # Interactive mode with web UI
-python langflow_run_load_test.py
+python flow_run_load_test.py
 
 # Headless mode with 20 users for 2 minutes
-python langflow_run_load_test.py --headless --users 20 --duration 120
+python flow_run_load_test.py --headless --users 20 --duration 120
 
 # Use predefined load shape
-python langflow_run_load_test.py --shape ramp100 --headless --users 100 --duration 180
+python flow_run_load_test.py --shape ramp100 --headless --users 100 --duration 180
 ```
 
 ### Advanced Usage
 
 ```bash
 # Setup with custom host (e.g., remote instance)
-python langflow_setup_test.py --host https://your-remote-instance.com --interactive
+python flow_setup_test.py --host https://your-remote-instance.com --interactive
 
 # Save credentials to file
-python langflow_setup_test.py --interactive --save-credentials my_test_creds.json
+python flow_setup_test.py --interactive --save-credentials my_test_creds.json
 
 # Test against existing remote Hanzo Flow instance
-python langflow_run_load_test.py --host https://your-remote-instance.com --no-start-flow
+python flow_run_load_test.py --host https://your-remote-instance.com --no-start-flow
 
 # Save results to CSV and HTML
-python langflow_run_load_test.py --headless --csv results --html report.html --users 50 --duration 300
+python flow_run_load_test.py --headless --csv results --html report.html --users 50 --duration 300
 
 # Direct Locust usage (after setup)
 export API_KEY="your-api-key-from-setup"
 export FLOW_ID="your-flow-id-from-setup"
-locust -f langflow_locustfile.py --host http://localhost:7860
+locust -f flow_locustfile.py --host http://localhost:7860
 
 # Distributed testing (master)
-locust -f langflow_locustfile.py --host http://localhost:7860 --master
+locust -f flow_locustfile.py --host http://localhost:7860 --master
 
 # Distributed testing (worker)
-locust -f langflow_locustfile.py --host http://localhost:7860 --worker --master-host=localhost
+locust -f flow_locustfile.py --host http://localhost:7860 --worker --master-host=localhost
 ```
 
 ## User Types
@@ -181,7 +181,7 @@ Use with: `--shape ramp100` or `--shape stepramp`
 
 ## Architecture
 
-### Setup Process (`langflow_setup_test.py`)
+### Setup Process (`flow_setup_test.py`)
 
 1. **Health Check**: Verify Hanzo Flow is running
 2. **Flow Selection**: Choose from 40+ real starter project flows
@@ -268,14 +268,14 @@ If automatic setup fails, you can set up manually:
 ```bash
 export API_KEY="your-api-key"
 export FLOW_ID="your-flow-id"
-locust -f langflow_locustfile.py --host http://localhost:7860
+locust -f flow_locustfile.py --host http://localhost:7860
 ```
 
 ## Contributing
 
 When adding new user types or test scenarios:
 
-1. Inherit from `BaseLangflowUser`
+1. Inherit from `BaseHanzo FlowUser`
 2. Implement task methods with `@task` decorator
 3. Use `self.make_request()` for consistent error handling
 4. Add appropriate weight and wait_time settings
@@ -286,25 +286,25 @@ When adding new user types or test scenarios:
 ### Basic Load Test
 
 ```bash
-python langflow_run_load_test.py --headless --users 10 --duration 60
+python flow_run_load_test.py --headless --users 10 --duration 60
 ```
 
 ### Stress Test
 
 ```bash
-python langflow_run_load_test.py --shape ramp100 --headless --users 100 --duration 300
+python flow_run_load_test.py --shape ramp100 --headless --users 100 --duration 300
 ```
 
 ### Performance Profiling
 
 ```bash
-python langflow_run_load_test.py --shape stepramp --headless --csv profile_results
+python flow_run_load_test.py --shape stepramp --headless --csv profile_results
 ```
 
 ### Production Readiness Test
 
 ```bash
-python langflow_run_load_test.py --users 50 --duration 600 --csv production_test --html production_report.html
+python flow_run_load_test.py --users 50 --duration 600 --csv production_test --html production_report.html
 ```
 
 ## 📊 HTML Reports
@@ -321,12 +321,12 @@ The system generates beautiful HTML reports with:
 
 ```bash
 # Generate comprehensive HTML report
-python langflow_run_load_test.py --headless --users 25 --duration 120 --html detailed_report.html
+python flow_run_load_test.py --headless --users 25 --duration 120 --html detailed_report.html
 
 # Combined CSV + HTML reporting
-python langflow_run_load_test.py --headless --users 100 --duration 300 --csv data --html analysis.html --shape ramp100
+python flow_run_load_test.py --headless --users 100 --duration 300 --csv data --html analysis.html --shape ramp100
 
 # Quick test with report
-python langflow_setup_test.py --flow "Memory Chatbot"
-python langflow_run_load_test.py --headless --users 10 --duration 60 --html quick_test.html
+python flow_setup_test.py --flow "Memory Chatbot"
+python flow_run_load_test.py --headless --users 10 --duration 60 --html quick_test.html
 ```
