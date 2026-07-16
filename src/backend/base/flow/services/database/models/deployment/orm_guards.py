@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import col, select
 
-from langflow.services.database.models.deployment.exceptions import (
+from flow.services.database.models.deployment.exceptions import (
     DeploymentGuardError,
     get_friendly_guard_detail,
 )
-from langflow.services.database.models.deployment.model import Deployment
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.database.models.flow_version.model import FlowVersion
-from langflow.services.database.models.flow_version_deployment_attachment.model import (
+from flow.services.database.models.deployment.model import Deployment
+from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.flow_version_deployment_attachment.model import (
     FlowVersionDeploymentAttachment,
 )
 
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from lfx.services.adapters.deployment.schema import DeploymentType
     from sqlmodel.ext.asyncio.session import AsyncSession
 
-    from langflow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+    from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
 
 
 def _raise_flow_deployed_in_project() -> None:

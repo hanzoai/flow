@@ -53,7 +53,7 @@ class DeploymentType(str, Enum):
     """Core deployment types recognized by LFX contracts.
 
     **Cross-package coupling** — langflow's ``Deployment`` database model
-    (``langflow.services.database.models.deployment.model``) persists this
+    (``flow.services.database.models.deployment.model``) persists this
     enum's ``.value`` as a ``NOT NULL`` string column and deserialises it
     back via ``DeploymentType(value)``.  Because of this:
 

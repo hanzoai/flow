@@ -21,7 +21,7 @@ from flow.api.v1.schemas.deployments import (
     DeploymentUpdateRequest,
     FlowIdsQuery,
 )
-from langflow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
 from pydantic import ValidationError
 
 TEST_API_KEY = "key"  # pragma: allowlist secret
@@ -285,7 +285,7 @@ class TestDeploymentConfigListResponse:
 
 class TestDeploymentSnapshotListResponse:
     def test_provider_data_contains_tools(self):
-        from langflow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
+        from flow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
 
         response = DeploymentSnapshotListResponse(
             provider_data={
@@ -303,13 +303,13 @@ class TestDeploymentSnapshotListResponse:
         assert response.page == 1
 
     def test_allows_null_provider_data(self):
-        from langflow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
+        from flow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
 
         response = DeploymentSnapshotListResponse()
         assert response.provider_data is None
 
     def test_has_provider_data_and_pagination_fields_only(self):
-        from langflow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
+        from flow.api.v1.schemas.deployments import DeploymentSnapshotListResponse
 
         assert set(DeploymentSnapshotListResponse.model_fields.keys()) == {
             "provider_data",
@@ -492,7 +492,7 @@ class TestDeploymentConfigListResponsePagination:
 
 class TestRunCreateRequest:
     def test_rejects_extra_fields(self):
-        from langflow.api.v1.schemas.deployments import RunCreateRequest
+        from flow.api.v1.schemas.deployments import RunCreateRequest
 
         with pytest.raises(ValidationError, match="Extra inputs are not permitted"):
             RunCreateRequest(provider_data={"input": "x"}, unknown_field="y")
@@ -505,7 +505,7 @@ class TestRunCreateRequest:
 
 class TestRunCreateResponse:
     def test_required_deployment_id(self):
-        from langflow.api.v1.schemas.deployments import RunCreateResponse
+        from flow.api.v1.schemas.deployments import RunCreateResponse
 
         with pytest.raises(ValidationError, match="deployment_id"):
             RunCreateResponse()
@@ -518,13 +518,13 @@ class TestRunCreateResponse:
 
 class TestSnapshotUpdateRequest:
     def test_requires_flow_version_id(self):
-        from langflow.api.v1.schemas.deployments import SnapshotUpdateRequest
+        from flow.api.v1.schemas.deployments import SnapshotUpdateRequest
 
         with pytest.raises(ValidationError, match="flow_version_id"):
             SnapshotUpdateRequest()
 
     def test_rejects_extra_fields(self):
-        from langflow.api.v1.schemas.deployments import SnapshotUpdateRequest
+        from flow.api.v1.schemas.deployments import SnapshotUpdateRequest
 
         with pytest.raises(ValidationError, match="Extra inputs are not permitted"):
             SnapshotUpdateRequest(flow_version_id=uuid4(), extra_field="bad")
@@ -537,13 +537,13 @@ class TestSnapshotUpdateRequest:
 
 class TestSnapshotUpdateResponse:
     def test_requires_flow_version_id(self):
-        from langflow.api.v1.schemas.deployments import SnapshotUpdateResponse
+        from flow.api.v1.schemas.deployments import SnapshotUpdateResponse
 
         with pytest.raises(ValidationError, match="flow_version_id"):
             SnapshotUpdateResponse(provider_snapshot_id="snap-1")
 
     def test_requires_provider_snapshot_id(self):
-        from langflow.api.v1.schemas.deployments import SnapshotUpdateResponse
+        from flow.api.v1.schemas.deployments import SnapshotUpdateResponse
 
         with pytest.raises(ValidationError, match="provider_snapshot_id"):
             SnapshotUpdateResponse(flow_version_id=uuid4())

@@ -1,4 +1,4 @@
-"""Unit tests for langflow.core.celery_app module."""
+"""Unit tests for flow.core.celery_app module."""
 
 from unittest.mock import MagicMock, patch
 

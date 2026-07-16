@@ -45,7 +45,7 @@ router_v2 = APIRouter(
 def include_deployment_router(target_router: APIRouter) -> None:
     """Mount deployment routes only when the deployments feature is enabled."""
     if FEATURE_FLAGS.wxo_deployments:
-        from langflow.api.v1.deployments import router as deployment_router
+        from flow.api.v1.deployments import router as deployment_router
 
         target_router.include_router(deployment_router)
 

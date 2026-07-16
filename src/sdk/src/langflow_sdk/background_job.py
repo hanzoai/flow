@@ -2,12 +2,12 @@
 
 Wraps an :class:`asyncio.Task` so callers can start a flow run and poll or
 await it without blocking the event loop.  Mirrors the ``BackgroundJob`` API
-from langflow-ai/sdk PR #1 (Janardan Singh Kavia, IBM Corp., Apache 2.0)
+from flow-ai/sdk PR #1 (Janardan Singh Kavia, IBM Corp., Apache 2.0)
 adapted for the Langflow V1 ``/api/v1/run/{id}`` endpoint.
 
 Typical usage::
 
-    async with AsyncClient("https://langflow.example.com", api_key="...") as client:
+    async with AsyncClient("https://flow.example.com", api_key="...") as client:
         job = await client.run_background("my-flow", input_value="Hello!")
 
         # Option 1 — poll status without blocking
@@ -25,10 +25,10 @@ import asyncio
 import contextlib
 from typing import TYPE_CHECKING
 
-from langflow_sdk.exceptions import LangflowTimeoutError
+from flow_sdk.exceptions import LangflowTimeoutError
 
 if TYPE_CHECKING:
-    from langflow_sdk.models import RunResponse
+    from flow_sdk.models import RunResponse
 
 
 class BackgroundJob:

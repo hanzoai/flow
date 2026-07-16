@@ -7,15 +7,15 @@ from typing import Any
 
 import httpx
 import pytest
-from langflow_sdk import AsyncClient, Client, StreamChunk
-from langflow_sdk.exceptions import LangflowAuthError, LangflowConnectionError, LangflowHTTPError
-from langflow_sdk.models import RunResponse
+from flow_sdk import AsyncClient, Client, StreamChunk
+from flow_sdk.exceptions import LangflowAuthError, LangflowConnectionError, LangflowHTTPError
+from flow_sdk.models import RunResponse
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _FLOW_ID = "00000000-0000-0000-0000-000000000001"
 _RUN_ENDPOINT = f"/api/v1/run/{_FLOW_ID}"
 
@@ -460,6 +460,6 @@ async def test_async_run_does_not_set_stream_true() -> None:
 
 @pytest.mark.unit
 def test_stream_chunk_importable_from_package() -> None:
-    import langflow_sdk
+    import flow_sdk
 
     assert langflow_sdk.StreamChunk is StreamChunk

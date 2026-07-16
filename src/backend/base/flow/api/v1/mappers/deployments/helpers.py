@@ -29,35 +29,35 @@ from lfx.services.interfaces import DeploymentServiceProtocol
 from sqlalchemy import and_, literal, union_all
 from sqlmodel import col, func, select
 
-from langflow.api.v1.mappers.deployments.contracts import ProviderSnapshotBinding
-from langflow.api.v1.mappers.deployments.sync import (
+from flow.api.v1.mappers.deployments.contracts import ProviderSnapshotBinding
+from flow.api.v1.mappers.deployments.sync import (
     extract_verified_provider_snapshot_ids,
     extract_verified_snapshot_ids,
     fetch_provider_resource_keys,
     sync_attachment_snapshot_ids,
 )
-from langflow.api.v1.schemas.deployments import (
+from flow.api.v1.schemas.deployments import (
     DeploymentCreateRequest,
     DeploymentUpdateRequest,
 )
-from langflow.initial_setup.setup import get_or_create_default_folder
-from langflow.services.adapters.deployment.context import deployment_provider_scope
-from langflow.services.database.models.deployment.crud import (
+from flow.initial_setup.setup import get_or_create_default_folder
+from flow.services.adapters.deployment.context import deployment_provider_scope
+from flow.services.database.models.deployment.crud import (
     count_deployments_by_provider,
     delete_deployment_by_id,
     list_deployments_page,
 )
-from langflow.services.database.models.deployment.crud import (
+from flow.services.database.models.deployment.crud import (
     get_deployment as get_deployment_db,
 )
-from langflow.services.database.models.deployment.model import Deployment
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment.model import Deployment
+from flow.services.database.models.deployment_provider_account.crud import (
     get_provider_account_by_id as get_provider_account_row_by_id,
 )
-from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.database.models.flow_version.model import FlowVersion
-from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.flow_version_deployment_attachment.crud import (
     count_attachments_by_deployment_ids,
     count_deployment_attachments,
     create_deployment_attachment,
@@ -68,14 +68,14 @@ from langflow.services.database.models.flow_version_deployment_attachment.crud i
     list_deployment_attachments_with_versions,
     update_deployment_attachment_provider_snapshot_id,
 )
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.database.utils import require_non_empty
+from flow.services.database.models.folder.model import Folder
+from flow.services.database.utils import require_non_empty
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from langflow.api.utils import DbSession
-    from langflow.services.database.models.flow_version_deployment_attachment.model import (
+    from flow.api.utils import DbSession
+    from flow.services.database.models.flow_version_deployment_attachment.model import (
         FlowVersionDeploymentAttachment,
     )
 
@@ -292,7 +292,7 @@ async def validate_project_scoped_flow_version_ids(
 
 
 # ---------------------------------------------------------------------------
-# Route helpers (moved from langflow.api.v1.deployments)
+# Route helpers (moved from flow.api.v1.deployments)
 # ---------------------------------------------------------------------------
 
 
@@ -386,7 +386,7 @@ async def resolve_adapter_mapper_from_provider_id(
     user_id: UUID,
     db: DbSession,
 ) -> tuple[DeploymentServiceProtocol, BaseDeploymentMapper]:
-    from langflow.api.v1.mappers.deployments.registry import get_deployment_mapper
+    from flow.api.v1.mappers.deployments.registry import get_deployment_mapper
 
     provider_account = await get_owned_provider_account_or_404(provider_id=provider_id, user_id=user_id, db=db)
     deployment_adapter = resolve_deployment_adapter(provider_account.provider_key)
@@ -456,7 +456,7 @@ async def resolve_adapter_mapper_from_deployment(
     db: DbSession,
 ) -> tuple[Deployment, DeploymentServiceProtocol, BaseDeploymentMapper, str, str | None]:
     """Returns ``(deployment_row, adapter, mapper, provider_key, provider_tenant_id)``."""
-    from langflow.api.v1.mappers.deployments.registry import get_deployment_mapper
+    from flow.api.v1.mappers.deployments.registry import get_deployment_mapper
 
     deployment_row = await get_deployment_row_or_404(deployment_id=deployment_id, user_id=user_id, db=db)
     provider_account = await get_owned_provider_account_or_404(

@@ -9,15 +9,15 @@ from uuid import UUID
 
 import httpx
 import pytest
-from langflow_sdk import AsyncClient, Client
-from langflow_sdk.exceptions import LangflowHTTPError
-from langflow_sdk.models import Flow
+from flow_sdk import AsyncClient, Client
+from flow_sdk.exceptions import LangflowHTTPError
+from flow_sdk.models import Flow
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _FLOW_ID = "00000000-0000-0000-0000-000000000042"
 
 _SAMPLE_FLOW: dict[str, Any] = {

@@ -1798,8 +1798,8 @@ async def test_download_project_sanitizes_windows_path_characters(
 
 
 async def _create_other_user(client: AsyncClient) -> tuple[str, dict]:
-    from langflow.services.auth.utils import get_password_hash
-    from langflow.services.database.models.user.model import User
+    from flow.services.auth.utils import get_password_hash
+    from flow.services.database.models.user.model import User
 
     user_id = str(uuid4())
     username = f"other_user_{user_id[:8]}"

@@ -11,17 +11,17 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from langflow.agentic.helpers.input_sanitization import REFUSAL_MESSAGE
-from langflow.agentic.services.assistant_service import (
+from flow.agentic.helpers.input_sanitization import REFUSAL_MESSAGE
+from flow.agentic.services.assistant_service import (
     execute_flow_with_validation,
     execute_flow_with_validation_streaming,
 )
-from langflow.agentic.services.flow_types import (
+from flow.agentic.services.flow_types import (
     OFF_TOPIC_REFUSAL_MESSAGE,
     IntentResult,
 )
 
-MODULE = "langflow.agentic.services.assistant_service"
+MODULE = "flow.agentic.services.assistant_service"
 
 
 def _make_intent(intent="question", translation="test"):

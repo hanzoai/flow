@@ -79,7 +79,7 @@ def _save_working_flow() -> None:
         from lfx.services.deps import session_scope
 
         async def _save():
-            from langflow.services.database.models.flow import Flow
+            from flow.services.database.models.flow import Flow
 
             async with session_scope() as session:
                 flow = await session.get(Flow, UUID(_current_flow_id))

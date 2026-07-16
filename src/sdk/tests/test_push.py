@@ -13,10 +13,10 @@ from uuid import UUID
 import httpx
 import pytest
 import respx
-from langflow_sdk.client import LangflowClient
-from langflow_sdk.exceptions import LangflowHTTPError, LangflowNotFoundError
+from flow_sdk.client import LangflowClient
+from flow_sdk.exceptions import LangflowHTTPError, LangflowNotFoundError
 
-_BASE = "http://langflow.test"
+_BASE = "http://flow.test"
 _FLOW_ID = UUID("aaaaaaaa-0000-0000-0000-000000000001")
 
 _FLOW_PAYLOAD = {
@@ -51,7 +51,7 @@ def _client() -> LangflowClient:
 @respx.mock
 def test_upsert_flow_create():
     respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(201, json=_FLOW_PAYLOAD))
-    from langflow_sdk.models import FlowCreate
+    from flow_sdk.models import FlowCreate
 
     client = _client()
     flow, created = client.upsert_flow(_FLOW_ID, FlowCreate(name="Test Flow"))
@@ -68,7 +68,7 @@ def test_upsert_flow_create():
 @respx.mock
 def test_upsert_flow_update():
     respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(200, json=_FLOW_PAYLOAD))
-    from langflow_sdk.models import FlowCreate
+    from flow_sdk.models import FlowCreate
 
     client = _client()
     flow, created = client.upsert_flow(_FLOW_ID, FlowCreate(name="Test Flow"))
@@ -86,7 +86,7 @@ def test_upsert_flow_not_found_raises():
     respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(
         return_value=httpx.Response(404, json={"detail": "Flow not found"})
     )
-    from langflow_sdk.models import FlowCreate
+    from flow_sdk.models import FlowCreate
 
     client = _client()
     with pytest.raises(LangflowNotFoundError):
@@ -103,7 +103,7 @@ def test_upsert_flow_conflict_raises():
     respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(
         return_value=httpx.Response(409, json={"detail": "Name must be unique"})
     )
-    from langflow_sdk.models import FlowCreate
+    from flow_sdk.models import FlowCreate
 
     client = _client()
     with pytest.raises(LangflowHTTPError) as exc_info:

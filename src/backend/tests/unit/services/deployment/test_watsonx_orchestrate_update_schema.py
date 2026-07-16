@@ -7,7 +7,7 @@ from uuid import UUID
 import pytest
 
 try:
-    import langflow.services.adapters.deployment.watsonx_orchestrate  # noqa: F401
+    import flow.services.adapters.deployment.watsonx_orchestrate  # noqa: F401
 except ModuleNotFoundError:
     pytest.skip(
         "Skipping Watsonx deployment tests: optional IBM SDK dependencies not available.",
@@ -15,7 +15,7 @@ except ModuleNotFoundError:
     )
 
 
-from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
     WatsonxAgentExecutionResultData,
     WatsonxDeploymentCreatePayload,
     WatsonxDeploymentCreateResultData,
@@ -23,7 +23,7 @@ from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
     WatsonxDeploymentUpdateResultData,
     WatsonxFlowArtifactProviderData,
 )
-from langflow.services.adapters.deployment.watsonx_orchestrate.service import WatsonxOrchestrateDeploymentService
+from flow.services.adapters.deployment.watsonx_orchestrate.service import WatsonxOrchestrateDeploymentService
 from lfx.services.adapters.payload import AdapterPayloadValidationError
 
 

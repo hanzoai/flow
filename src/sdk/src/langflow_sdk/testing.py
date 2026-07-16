@@ -11,7 +11,7 @@ command line or via environment variables::
     # Direct URL
     pytest --langflow-url http://localhost:7860 tests/
 
-    # Named environment from langflow-environments.toml
+    # Named environment from flow-environments.toml
     pytest --langflow-env staging tests/
 
     # Via environment variables (useful in CI)
@@ -43,8 +43,8 @@ except ImportError as exc:
 if TYPE_CHECKING:
     from uuid import UUID
 
-    from langflow_sdk.client import AsyncClient, Client
-    from langflow_sdk.models import RunResponse
+    from flow_sdk.client import AsyncClient, Client
+    from flow_sdk.models import RunResponse
 
 
 # ---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
             "dest": "langflow_env",
             "default": None,
             "metavar": "NAME",
-            "help": "Environment name from langflow-environments.toml to use for integration tests.",
+            "help": "Environment name from flow-environments.toml to use for integration tests.",
         },
         "--langflow-url": {
             "dest": "langflow_url",
@@ -107,7 +107,7 @@ def _resolve_url_credentials(request: pytest.FixtureRequest) -> tuple[str, str |
 
 def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
     """Return a sync client from --langflow-url / LANGFLOW_URL, or None."""
-    from langflow_sdk.client import Client
+    from flow_sdk.client import Client
 
     creds = _resolve_url_credentials(request)
     return Client(base_url=creds[0], api_key=creds[1]) if creds else None
@@ -115,7 +115,7 @@ def _resolve_url_client(request: pytest.FixtureRequest) -> Client | None:
 
 def _resolve_async_url_client(request: pytest.FixtureRequest) -> AsyncClient | None:
     """Return an async client from --langflow-url / LANGFLOW_URL, or None."""
-    from langflow_sdk.client import AsyncClient
+    from flow_sdk.client import AsyncClient
 
     creds = _resolve_url_credentials(request)
     return AsyncClient(base_url=creds[0], api_key=creds[1]) if creds else None
@@ -158,7 +158,7 @@ def langflow_client(request: pytest.FixtureRequest) -> Client:
         if env:
             from pathlib import Path
 
-            from langflow_sdk.environments import get_client
+            from flow_sdk.environments import get_client
 
             env_file = _env_file(request)
             config_file = Path(env_file) if env_file else None
@@ -182,7 +182,7 @@ async def async_langflow_client(request: pytest.FixtureRequest) -> AsyncClient:
         if env:
             from pathlib import Path
 
-            from langflow_sdk.environments import get_async_client
+            from flow_sdk.environments import get_async_client
 
             env_file = _env_file(request)
             config_file = Path(env_file) if env_file else None
@@ -227,7 +227,7 @@ class FlowRunner:
         stream: bool = False,
     ) -> RunResponse:
         """Run *flow_id_or_endpoint* and return the full :class:`~langflow_sdk.RunResponse`."""
-        from langflow_sdk.models import RunRequest
+        from flow_sdk.models import RunRequest
 
         return self._client.run_flow(
             flow_id_or_endpoint,
@@ -265,7 +265,7 @@ class AsyncFlowRunner:
         stream: bool = False,
     ) -> RunResponse:
         """Run *flow_id_or_endpoint* asynchronously and return the full response."""
-        from langflow_sdk.models import RunRequest
+        from flow_sdk.models import RunRequest
 
         return await self._client.run_flow(
             flow_id_or_endpoint,

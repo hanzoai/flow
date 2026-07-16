@@ -185,7 +185,7 @@ def _run_sync(**kwargs: Any) -> dict[str, Any]:
 def _import_remote_run_request():
     """Import and return the SDK ``RunRequest`` model with a helpful error."""
     try:
-        from langflow_sdk.models import RunRequest  # type: ignore[import-untyped]
+        from flow_sdk.models import RunRequest  # type: ignore[import-untyped]
     except ImportError as exc:
         msg = "langflow-sdk is required for remote flow testing. Install: pip install langflow-sdk"
         raise ImportError(msg) from exc

@@ -411,11 +411,11 @@ class TestExecuteFlowFile:
 
         with (
             patch(
-                "langflow.agentic.services.flow_executor.resolve_flow_path",
+                "flow.agentic.services.flow_executor.resolve_flow_path",
                 return_value=(Path("/fake/path/test.py"), "python"),
             ),
             patch(
-                "langflow.agentic.services.flow_executor.load_graph_for_execution",
+                "flow.agentic.services.flow_executor.load_graph_for_execution",
                 new_callable=AsyncMock,
                 side_effect=CustomComponentValidationError(validation_error),
             ),
@@ -614,7 +614,7 @@ class TestExecuteFlowFileStreamingEvents:
         ``original_error_message`` for internal callers (the assistant retry loop)
         to feed into extract_friendly_error.
         """
-        from langflow.agentic.services.flow_types import FlowExecutionError
+        from flow.agentic.services.flow_types import FlowExecutionError
 
         async def mock_consume(*_args, **_kwargs):
             yield ("end", None)

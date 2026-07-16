@@ -58,7 +58,7 @@ from lfx.services.adapters.deployment.schema import (
 )
 from lfx.services.adapters.payload import AdapterPayload, PayloadSlot
 
-from langflow.api.v1.schemas.deployments import (
+from flow.api.v1.schemas.deployments import (
     DeploymentConfigListResponse,
     DeploymentCreateRequest,
     DeploymentCreateResponse,
@@ -91,11 +91,11 @@ from .helpers import page_offset
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
-    from langflow.services.database.models.deployment.model import Deployment
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-    from langflow.services.database.models.flow.model import Flow
-    from langflow.services.database.models.flow_version.model import FlowVersion
-    from langflow.services.database.models.flow_version_deployment_attachment.model import (
+    from flow.services.database.models.deployment.model import Deployment
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.flow.model import Flow
+    from flow.services.database.models.flow_version.model import FlowVersion
+    from flow.services.database.models.flow_version_deployment_attachment.model import (
         FlowVersionDeploymentAttachment,
     )
 

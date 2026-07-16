@@ -202,7 +202,7 @@ class RunResponse(BaseModel):
 
     # ------------------------------------------------------------------
     # WorkflowResponse-style helpers
-    # (adapted from langflow-ai/sdk, Janardan Singh Kavia, IBM Corp.,
+    # (adapted from flow-ai/sdk, Janardan Singh Kavia, IBM Corp.,
     #  Apache 2.0 — https://github.com/langflow-ai/sdk/pull/1)
     # ------------------------------------------------------------------
 

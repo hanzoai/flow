@@ -296,7 +296,7 @@ class TestDynamicImportIntegration:
 
     def test_deprecated_astra_assistants_removed(self):
         """Test that deprecated Astra Assistants components are no longer importable."""
-        from langflow.components import datastax
+        from flow.components import datastax
 
         removed_components = [
             "AssistantsCreateAssistant",
@@ -312,7 +312,7 @@ class TestDynamicImportIntegration:
 
     def test_datastax_remaining_components_accessible(self):
         """Test that all non-deprecated datastax components are still accessible."""
-        from langflow.components import datastax
+        from flow.components import datastax
 
         expected_components = [
             "AstraDBVectorStoreComponent",
@@ -333,7 +333,7 @@ class TestDynamicImportIntegration:
 
     def test_datastax_dir_excludes_deprecated(self):
         """Test that dir(datastax) does not list deprecated components."""
-        from langflow.components import datastax
+        from flow.components import datastax
 
         exported = dir(datastax)
         deprecated = {

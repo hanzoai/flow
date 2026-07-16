@@ -11,7 +11,7 @@ Validate a named environment::
 
 Validate inline credentials::
 
-    lfx login --target https://langflow.example.com --api-key sk-abc123
+    lfx login --target https://flow.example.com --api-key sk-abc123
 
 Validate whichever environment is the default in your config::
 

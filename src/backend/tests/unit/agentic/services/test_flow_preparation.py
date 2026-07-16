@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from langflow.agentic.services.flow_preparation import (
+from flow.agentic.services.flow_preparation import (
     LFX_COMPONENTS_PATH_SENTINEL,
     inject_lfx_components_path,
     inject_model_into_flow,
@@ -17,7 +17,7 @@ from langflow.agentic.services.flow_preparation import (
 
 import lfx
 
-MODULE = "langflow.agentic.services.flow_preparation"
+MODULE = "flow.agentic.services.flow_preparation"
 
 OPENAI_CONFIG = {
     "model_class": "ChatOpenAI",

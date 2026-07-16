@@ -10,13 +10,13 @@ from fastapi import HTTPException
 from lfx.log.logger import logger
 from lfx.services.mcp_composer.service import MCPComposerService
 
-from langflow.api.utils.mcp.config_utils import validate_mcp_server_for_project
-from langflow.api.v1.mcp_projects import get_project_streamable_http_url
-from langflow.api.v2.mcp import update_server
-from langflow.services.database.models.api_key.crud import create_api_key
-from langflow.services.database.models.api_key.model import ApiKeyCreate
-from langflow.services.deps import get_service, get_settings_service, get_storage_service
-from langflow.services.schema import ServiceType
+from flow.api.utils.mcp.config_utils import validate_mcp_server_for_project
+from flow.api.v1.mcp_projects import get_project_streamable_http_url
+from flow.api.v2.mcp import update_server
+from flow.services.database.models.api_key.crud import create_api_key
+from flow.services.database.models.api_key.model import ApiKeyCreate
+from flow.services.deps import get_service, get_settings_service, get_storage_service
+from flow.services.schema import ServiceType
 
 
 async def register_mcp_servers_for_project(

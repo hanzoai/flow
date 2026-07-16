@@ -1,4 +1,4 @@
-"""Backwards compatibility module for langflow.base.io.
+"""Backwards compatibility module for flow.base.io.
 
 This module imports from lfx.base.io to maintain compatibility.
 """

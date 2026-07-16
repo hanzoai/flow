@@ -835,9 +835,9 @@ async def test_user_cannot_run_other_users_flow_session_endpoint(
     (a different user than ``active_user`` who owns ``simple_api_test``) to
     exercise the session-auth variant of the wrapper dependency.
     """
-    from langflow.services.auth.utils import get_password_hash
-    from langflow.services.database.models.user.model import User
-    from langflow.services.deps import get_settings_service
+    from flow.services.auth.utils import get_password_hash
+    from flow.services.database.models.user.model import User
+    from flow.services.deps import get_settings_service
     from lfx.services.deps import session_scope
     from sqlmodel import select
 
@@ -1084,9 +1084,9 @@ async def test_openai_responses_rejects_cross_user_flow_access(
     returned 200 with real output; after the fix the helper resolves to
     flow_not_found because UUID lookups now enforce user scope.
     """
-    from langflow.services.auth.utils import get_password_hash
-    from langflow.services.database.models.api_key.model import ApiKey
-    from langflow.services.database.models.user.model import User
+    from flow.services.auth.utils import get_password_hash
+    from flow.services.database.models.api_key.model import ApiKey
+    from flow.services.database.models.user.model import User
     from lfx.services.deps import session_scope
     from sqlmodel import select
 

@@ -5,7 +5,7 @@ Migrations are managed by Langflow (OSS); the plugin must not create or
 migrate these tables.
 
 Plugins must use these tables via the models exported from
-``langflow.services.database.models`` (e.g. ``SSOUserProfile``, ``SSOConfig``).
+``flow.services.database.models`` (e.g. ``SSOUserProfile``, ``SSOConfig``).
 """
 
 from datetime import datetime, timezone

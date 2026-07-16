@@ -7,10 +7,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlmodel import or_, select
 
-from langflow.api.utils import CurrentActiveUser, DbSession
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.deps import get_flow_events_service
-from langflow.services.flow_events import FLOW_EVENT_TYPES, FlowEventsService
+from flow.api.utils import CurrentActiveUser, DbSession
+from flow.services.database.models.flow.model import Flow
+from flow.services.deps import get_flow_events_service
+from flow.services.flow_events import FLOW_EVENT_TYPES, FlowEventsService
 
 router = APIRouter(prefix="/flows", tags=["Flow Events"])
 

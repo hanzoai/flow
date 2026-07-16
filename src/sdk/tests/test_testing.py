@@ -9,11 +9,11 @@ from __future__ import annotations
 import httpx
 import respx
 from _pytest.config.argparsing import Parser
-from langflow_sdk.client import AsyncLangflowClient, LangflowClient
-from langflow_sdk.models import RunOutput, RunResponse
-from langflow_sdk.testing import AsyncFlowRunner, FlowRunner, pytest_addoption
+from flow_sdk.client import AsyncLangflowClient, LangflowClient
+from flow_sdk.models import RunOutput, RunResponse
+from flow_sdk.testing import AsyncFlowRunner, FlowRunner, pytest_addoption
 
-_BASE = "http://langflow.test"
+_BASE = "http://flow.test"
 
 # ---------------------------------------------------------------------------
 # Shared fixtures
@@ -289,9 +289,9 @@ def test_flow_runner_accepts_uuid():
 
 
 def test_flow_runner_and_async_runner_are_importable():
-    """FlowRunner and AsyncFlowRunner can be imported from langflow_sdk.testing."""
-    from langflow_sdk.testing import AsyncFlowRunner as ImportedAsync
-    from langflow_sdk.testing import FlowRunner as ImportedSync
+    """FlowRunner and AsyncFlowRunner can be imported from flow_sdk.testing."""
+    from flow_sdk.testing import AsyncFlowRunner as ImportedAsync
+    from flow_sdk.testing import FlowRunner as ImportedSync
 
     assert ImportedSync is FlowRunner
     assert ImportedAsync is AsyncFlowRunner

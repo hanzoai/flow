@@ -73,7 +73,7 @@ async def test_build_flow_validates_request_data_instead_of_stale_db_flow(
             raise ValueError(saved_flow_validation_message)
 
     monkeypatch.setattr(
-        "langflow.api.v1.chat.validate_flow_for_current_settings",
+        "flow.api.v1.chat.validate_flow_for_current_settings",
         fail_if_saved_flow_is_validated,
     )
 
@@ -320,13 +320,13 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
     # Mock the cancel_flow_build function to raise an unexpected exception
     import flow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_error(*_args, **_kwargs):
         msg = "Unexpected error during cancellation"
         raise RuntimeError(msg)
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
+    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_error)
 
     try:
         # Try to cancel the build - should return 500 Internal Server Error
@@ -339,7 +339,7 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
         assert "Unexpected error during cancellation" in response_data["detail"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -356,12 +356,12 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
     # Mock the cancel_flow_build function to simulate a successful cancellation
     import flow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
 
     async def mock_successful_cancel_flow_build(*_args, **_kwargs):
         return True  # Return True to indicate successful cancellation
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
+    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_successful_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return success)
@@ -376,7 +376,7 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
         assert "cancelled successfully" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -406,12 +406,12 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
     # The import path in monkeypatch should match exactly how it's imported in the application
     import flow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build(*_args, **_kwargs):
         return False  # Return False to indicate cancellation failure
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
+    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
 
     try:
         # Try to cancel the build (should return failure but success=False)
@@ -426,7 +426,7 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
         assert "Failed to cancel" in response_data["message"]
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -445,13 +445,13 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
 
     import flow.api.v1.chat
 
-    original_cancel_flow_build = langflow.api.v1.chat.cancel_flow_build
+    original_cancel_flow_build = flow.api.v1.chat.cancel_flow_build
 
     async def mock_cancel_flow_build_with_cancelled_error(*_args, **_kwargs):
         msg = "Task cancellation failed"
         raise asyncio.CancelledError(msg)
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
+    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build_with_cancelled_error)
 
     try:
         # Try to cancel the build - should return failure when CancelledError is raised
@@ -467,7 +467,7 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
         assert "failed to cancel" in response_data["message"].lower()
     finally:
         # Restore the original function to avoid affecting other tests
-        monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
+        monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", original_cancel_flow_build)
 
 
 @pytest.mark.benchmark
@@ -574,7 +574,7 @@ async def test_build_public_tmp_checks_public_access_before_validation(
         raise ValueError(public_access_validation_message)
 
     monkeypatch.setattr(
-        "langflow.api.v1.chat.validate_flow_for_current_settings",
+        "flow.api.v1.chat.validate_flow_for_current_settings",
         fail_if_validation_runs,
     )
 
@@ -762,13 +762,13 @@ async def test_get_build_events_public_tmp_job_accessible_by_any_auth_user(
     assert login_response.status_code == codes.OK
     other_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
-    import langflow.api.v1.chat
+    import flow.api.v1.chat
     from fastapi import Response
 
     async def mock_get_flow_events_response(**_kwargs):
         return Response(content="", media_type="application/x-ndjson")
 
-    monkeypatch.setattr(langflow.api.v1.chat, "get_flow_events_response", mock_get_flow_events_response)
+    monkeypatch.setattr(flow.api.v1.chat, "get_flow_events_response", mock_get_flow_events_response)
 
     events_response = await get_build_events(client, job_id, other_headers)
     assert events_response.status_code == codes.OK
@@ -805,12 +805,12 @@ async def test_cancel_build_public_tmp_job_accessible_by_any_auth_user(
     assert login_response.status_code == codes.OK
     other_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
-    import langflow.api.v1.chat
+    import flow.api.v1.chat
 
     async def mock_cancel_flow_build(*_args, **_kwargs):
         return True
 
-    monkeypatch.setattr(langflow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
+    monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
 
     cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=other_headers)
     assert cancel_response.status_code == codes.OK
@@ -857,7 +857,7 @@ async def test_job_owner_cleaned_up_after_cleanup_job():
 
 def _stub_start_flow_build(monkeypatch, captured: dict) -> None:
     """Capture the kwargs that would be dispatched to start_flow_build without running the build."""
-    import langflow.api.v1.chat as chat_module
+    import flow.api.v1.chat as chat_module
 
     async def _fake_start_flow_build(**kwargs):
         captured.update(kwargs)
@@ -888,7 +888,7 @@ async def test_build_public_tmp_namespaces_caller_session(
     flow UUID is visible in URLs. Without namespacing, an unauthenticated caller
     can pass that UUID as inputs.session and a Memory component reads its history.
     """
-    from langflow.api.utils.flow_utils import compute_virtual_flow_id
+    from flow.api.utils.flow_utils import compute_virtual_flow_id
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
@@ -925,7 +925,7 @@ async def test_build_public_tmp_session_already_namespaced_unchanged(
     client, json_memory_chatbot_no_llm, logged_in_headers, monkeypatch
 ):
     """Idempotency: a value already in-namespace is forwarded as-is, not double-wrapped."""
-    from langflow.api.utils.flow_utils import compute_virtual_flow_id
+    from flow.api.utils.flow_utils import compute_virtual_flow_id
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
@@ -1033,7 +1033,7 @@ async def test_build_public_tmp_empty_session_is_namespaced(
     fallbacks save it), but a refactor of either branch would silently regress.
     Pin the contract here: empty becomes ``f"{namespace}:"``.
     """
-    from langflow.api.utils.flow_utils import compute_virtual_flow_id
+    from flow.api.utils.flow_utils import compute_virtual_flow_id
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
@@ -1068,7 +1068,7 @@ async def test_build_public_tmp_authenticated_namespace_uses_user_id(
     client, json_memory_chatbot_no_llm, logged_in_headers, active_user, monkeypatch
 ):
     """AUTO_LOGIN=False (prod-like) + valid bearer: the namespace is derived from user.id."""
-    from langflow.api.utils.flow_utils import compute_virtual_flow_id
+    from flow.api.utils.flow_utils import compute_virtual_flow_id
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
@@ -1147,7 +1147,7 @@ async def test_build_public_tmp_namespacing_blocks_memory_query_collision(
 
 
 def test_scope_session_to_namespace_helper():
-    from langflow.api.utils import scope_session_to_namespace
+    from flow.api.utils import scope_session_to_namespace
 
     ns = "namespace-A"
     assert scope_session_to_namespace(None, ns) is None

@@ -557,7 +557,7 @@ def create_app():
     app.include_router(health_check_router)
     app.include_router(log_router)
 
-    # Discover and register additional routers from plugins (langflow.plugins entry-point)
+    # Discover and register additional routers from plugins (flow.plugins entry-point)
     load_plugin_routes(app)
 
     @app.exception_handler(DeploymentGuardError)

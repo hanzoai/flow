@@ -320,15 +320,15 @@ async def test_get_config_mcp_base_url_defaults_to_empty(client: AsyncClient, lo
 
 async def test_get_config_mcp_base_url_from_settings(client: AsyncClient, logged_in_headers: dict, monkeypatch):
     """Test that mcp_base_url reflects the value from settings."""
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
-    monkeypatch.setattr(settings_service.settings, "mcp_base_url", "https://langflow.example.com")
+    monkeypatch.setattr(settings_service.settings, "mcp_base_url", "https://flow.example.com")
 
     response = await client.get("api/v1/config", headers=logged_in_headers)
     result = response.json()
     assert response.status_code == status.HTTP_200_OK
-    assert result["mcp_base_url"] == "https://langflow.example.com"
+    assert result["mcp_base_url"] == "https://flow.example.com"
 
 
 async def test_deprecated_upload_rejects_unauthenticated(client: AsyncClient, flow):
@@ -373,7 +373,7 @@ async def test_deprecated_upload_enforces_max_file_size(
     this route by uploading arbitrarily large files, bypassing the limit the
     non-deprecated twin at /api/v1/files/upload/{flow_id} already enforces.
     """
-    from langflow.services.deps import get_settings_service
+    from flow.services.deps import get_settings_service
 
     settings_service = get_settings_service()
     monkeypatch.setattr(settings_service.settings, "max_file_size_upload", 1)  # 1 MB

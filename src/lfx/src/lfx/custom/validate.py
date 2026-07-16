@@ -372,8 +372,8 @@ def _get_module_fallbacks(module_name: str) -> list[str]:
     are never replaced.
     """
     names = [module_name]
-    if module_name.startswith("langflow."):
-        names.append(module_name.replace("langflow.", "lfx.", 1))
+    if module_name.startswith("flow."):
+        names.append(module_name.replace("flow.", "lfx.", 1))
     if module_name.startswith("langchain."):
         names.append(module_name.replace("langchain.", "langchain_classic.", 1))
     return names

@@ -85,7 +85,7 @@ class TestClassifyIntent:
         mock_result = {"result": '```json\n{"translation": "create a component", "intent": "generate_component"}\n```'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -103,7 +103,7 @@ class TestClassifyIntent:
         mock_result = {"result": "The intent is generate_component. Translation: create a sum component"}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -124,7 +124,7 @@ class TestClassifyIntent:
         }
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -240,7 +240,7 @@ class TestClassifyIntent:
         mock_result = {"result": '{"translation": "test", "intent": "question"}'}
 
         with patch(
-            "langflow.agentic.services.helpers.intent_classification.execute_flow_file",
+            "flow.agentic.services.helpers.intent_classification.execute_flow_file",
             new_callable=AsyncMock,
             return_value=mock_result,
         ) as mock_execute:

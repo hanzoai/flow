@@ -2,9 +2,9 @@
 
 Preferred usage via the short alias::
 
-    from langflow_sdk import Client
+    from flow_sdk import Client
 
-    client = Client("https://langflow.example.com", api_key="...")
+    client = Client("https://flow.example.com", api_key="...")
     flows  = client.list_flows()
     result = client.run_flow("my-endpoint", RunRequest(input_value="Hello"))
 
@@ -17,11 +17,11 @@ from typing import TYPE_CHECKING, Any
 
 import httpx
 
-# Re-export async client so that existing ``from langflow_sdk.client import ...``
+# Re-export async client so that existing ``from flow_sdk.client import ...``
 # statements continue to work without changes.
-from langflow_sdk._async_client import AsyncClient, AsyncLangflowClient
-from langflow_sdk._client_common import _ClientCommon
-from langflow_sdk._http import (
+from flow_sdk._async_client import AsyncClient, AsyncLangflowClient
+from flow_sdk._client_common import _ClientCommon
+from flow_sdk._http import (
     _DEFAULT_TIMEOUT,
     _build_headers,
     _connection_error,
@@ -29,7 +29,7 @@ from langflow_sdk._http import (
     _raise_for_status,
     _raise_for_status_code,
 )
-from langflow_sdk.models import (
+from flow_sdk.models import (
     Flow,
     FlowCreate,
     FlowUpdate,
@@ -60,9 +60,9 @@ class LangflowClient(_ClientCommon):
 
     Prefer the short alias :data:`Client` for new code::
 
-        from langflow_sdk import Client
+        from flow_sdk import Client
 
-        client = Client("https://langflow.example.com", api_key="...")
+        client = Client("https://flow.example.com", api_key="...")
         flows  = client.list_flows()
         result = client.run_flow("my-endpoint", RunRequest(input_value="Hello"))
     """
@@ -402,8 +402,8 @@ class LangflowClient(_ClientCommon):
 #:
 #: Example::
 #:
-#:     from langflow_sdk import Client
-#:     client = Client("https://langflow.example.com", api_key="...")
+#:     from flow_sdk import Client
+#:     client = Client("https://flow.example.com", api_key="...")
 #:     flows  = client.list_flows()
 #:     result = client.run_flow("my-endpoint", RunRequest(input_value="Hello"))
 Client = LangflowClient
