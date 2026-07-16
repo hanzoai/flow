@@ -111,14 +111,14 @@ class DatabaseSettings(BaseModel):
                 database_dir = info.data["config_dir"]
             else:
                 try:
-                    import langflow
+                    import flow
 
-                    database_dir = Path(langflow.__file__).parent.resolve()
+                    database_dir = Path(flow.__file__).parent.resolve()
                 except ImportError:
                     database_dir = Path(__file__).parent.parent.parent.parent.resolve()
 
             pre_db_file_name = "langflow-pre.db"
-            db_file_name = "langflow.db"
+            db_file_name = "flow.db"
             new_pre_path = f"{database_dir}/{pre_db_file_name}"
             new_path = f"{database_dir}/{db_file_name}"
             final_path = None

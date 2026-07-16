@@ -274,7 +274,7 @@ class TestEnd:
         tracer.add_trace("comp-1", "Comp (comp-1)", "chain", {})
         tracer.end_trace("comp-1", "Comp")
 
-        with patch("langflow.services.tracing.native.logger") as mock_logger:
+        with patch("flow.services.tracing.native.logger") as mock_logger:
             with patch("asyncio.get_running_loop", side_effect=RuntimeError("no loop")):
                 tracer.end(inputs={}, outputs={})
             mock_logger.error.assert_called_once()
@@ -335,7 +335,7 @@ class TestFlushToDatabase:
         mock_session.__aexit__ = AsyncMock(return_value=False)
 
         with (
-            patch("langflow.services.tracing.native.logger") as mock_logger,
+            patch("flow.services.tracing.native.logger") as mock_logger,
             patch("lfx.services.deps.session_scope", return_value=mock_session),
         ):
             await tracer._flush_to_database()
@@ -736,7 +736,7 @@ class TestResolveSpanUuids:
     def test_non_uuid_string_id_uses_uuid5(self):
         from uuid import uuid5 as _uuid5
 
-        from langflow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
+        from flow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
 
         trace_id = uuid4()
         spans = [{"id": "not-a-uuid", "name": "span"}]
@@ -763,7 +763,7 @@ class TestResolveSpanUuids:
     def test_parent_as_non_uuid_string(self):
         from uuid import uuid5 as _uuid5
 
-        from langflow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
+        from flow.services.tracing.span_sorting import LANGFLOW_SPAN_NAMESPACE
 
         trace_id = uuid4()
         span_id = uuid4()
@@ -845,7 +845,7 @@ class TestFlushParentChildOrder:
         with patch("lfx.services.deps.session_scope", return_value=mock_session):
             await tracer._flush_to_database()
 
-        from langflow.services.database.models.traces.model import SpanTable
+        from flow.services.database.models.traces.model import SpanTable
 
         span_objects = [o for o in merged_objects if isinstance(o, SpanTable)]
         assert len(span_objects) == 2

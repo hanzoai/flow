@@ -1,3 +1,3 @@
-"""Backwards compatibility module for langflow.base.models."""
+"""Backwards compatibility module for flow.base.models."""
 
 from lfx.base.models import *  # noqa: F403

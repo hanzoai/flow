@@ -35,10 +35,10 @@ pytestmark = pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("args", "urls", "expected"),
     [
-        (None, ["https://langflow.local/sse"], False),
-        ([], ["https://langflow.local/sse"], False),
-        ([123, {"url": "foo"}], ["https://langflow.local/sse"], False),
-        (["https://langflow.local/sse", 42], ["https://langflow.local/sse"], True),
+        (None, ["https://flow.local/sse"], False),
+        ([], ["https://flow.local/sse"], False),
+        ([123, {"url": "foo"}], ["https://flow.local/sse"], False),
+        (["https://flow.local/sse", 42], ["https://flow.local/sse"], True),
         (["alpha", "beta"], [], False),
     ],
 )
@@ -706,10 +706,10 @@ def _prepare_install_test_env(monkeypatch, tmp_path, filename="cursor.json"):
     monkeypatch.setattr("flow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
+        return f"https://flow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
+        return f"https://flow.local/v1/mcp/project/{project_id}/sse"
 
     monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
     monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
@@ -998,17 +998,17 @@ def _prepare_installed_check_env(monkeypatch, tmp_path):
     async def fake_get_config_path(client_name):
         return client_paths[client_name]
 
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_config_path", fake_get_config_path)
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_config_path", fake_get_config_path)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
+        return f"https://flow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
+        return f"https://flow.local/v1/mcp/project/{project_id}/sse"
 
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
 
     return client_paths
 
@@ -1064,7 +1064,7 @@ async def test_should_report_installed_true_when_config_file_contains_matching_u
     # Write config files with matching URLs for all clients
     project_id = user_test_project.id
     for path in client_paths.values():
-        config = {"mcpServers": {"lf-test": {"args": [f"https://langflow.local/v1/mcp/project/{project_id}/sse"]}}}
+        config = {"mcpServers": {"lf-test": {"args": [f"https://flow.local/v1/mcp/project/{project_id}/sse"]}}}
         path.write_text(json.dumps(config))
 
     response = await client.get(
@@ -1135,17 +1135,17 @@ async def test_should_report_available_false_when_app_directory_does_not_exist(
     async def fake_get_config_path(client_name):
         return nonexistent_paths[client_name]
 
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_config_path", fake_get_config_path)
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_config_path", fake_get_config_path)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.should_use_mcp_composer", lambda project: False)  # noqa: ARG005
 
     async def fake_streamable(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/streamable"
+        return f"https://flow.local/v1/mcp/project/{project_id}/streamable"
 
     async def fake_sse(project_id):
-        return f"https://langflow.local/v1/mcp/project/{project_id}/sse"
+        return f"https://flow.local/v1/mcp/project/{project_id}/sse"
 
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
-    monkeypatch.setattr("langflow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_streamable_http_url", fake_streamable)
+    monkeypatch.setattr("flow.api.v1.mcp_projects.get_project_sse_url", fake_sse)
 
     response = await client.get(
         f"/v1/mcp/project/{user_test_project.id}/installed",

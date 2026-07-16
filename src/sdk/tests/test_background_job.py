@@ -12,9 +12,9 @@ import contextlib
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from langflow_sdk.background_job import BackgroundJob
-from langflow_sdk.exceptions import LangflowTimeoutError
-from langflow_sdk.models import RunOutput, RunResponse
+from flow_sdk.background_job import BackgroundJob
+from flow_sdk.exceptions import LangflowTimeoutError
+from flow_sdk.models import RunOutput, RunResponse
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -245,9 +245,9 @@ class TestCancel:
 class TestRunBackground:
     @pytest.mark.asyncio
     async def test_returns_background_job_instance(self):
-        from langflow_sdk.client import AsyncLangflowClient
+        from flow_sdk.client import AsyncLangflowClient
 
-        client = AsyncLangflowClient("http://langflow.test", api_key="test-key")  # pragma: allowlist secret
+        client = AsyncLangflowClient("http://flow.test", api_key="test-key")  # pragma: allowlist secret
         with patch.object(client, "run", new_callable=AsyncMock, return_value=_RUN_RESPONSE):
             job = await client.run_background("my-flow", input_value="Hello")
         assert isinstance(job, BackgroundJob)
@@ -256,9 +256,9 @@ class TestRunBackground:
 
     @pytest.mark.asyncio
     async def test_run_background_calls_run_with_correct_args(self):
-        from langflow_sdk.client import AsyncLangflowClient
+        from flow_sdk.client import AsyncLangflowClient
 
-        client = AsyncLangflowClient("http://langflow.test", api_key="test-key")  # pragma: allowlist secret
+        client = AsyncLangflowClient("http://flow.test", api_key="test-key")  # pragma: allowlist secret
         mock_run = AsyncMock(return_value=_RUN_RESPONSE)
         with patch.object(client, "run", mock_run):
             job = await client.run_background(
@@ -279,13 +279,13 @@ class TestRunBackground:
 
     @pytest.mark.asyncio
     async def test_run_background_job_is_running_immediately(self):
-        from langflow_sdk.client import AsyncLangflowClient
+        from flow_sdk.client import AsyncLangflowClient
 
         async def _slow_run(*_args, **_kwargs) -> RunResponse:
             await asyncio.sleep(5.0)
             return _RUN_RESPONSE
 
-        client = AsyncLangflowClient("http://langflow.test", api_key="test-key")  # pragma: allowlist secret
+        client = AsyncLangflowClient("http://flow.test", api_key="test-key")  # pragma: allowlist secret
         with patch.object(client, "run", side_effect=_slow_run):
             job = await client.run_background("my-flow", input_value="Hi")
         assert job.is_running() is True
@@ -294,9 +294,9 @@ class TestRunBackground:
 
     @pytest.mark.asyncio
     async def test_run_background_completion_result_matches_run(self):
-        from langflow_sdk.client import AsyncLangflowClient
+        from flow_sdk.client import AsyncLangflowClient
 
-        client = AsyncLangflowClient("http://langflow.test", api_key="test-key")  # pragma: allowlist secret
+        client = AsyncLangflowClient("http://flow.test", api_key="test-key")  # pragma: allowlist secret
         with patch.object(client, "run", new_callable=AsyncMock, return_value=_RUN_RESPONSE):
             job = await client.run_background("my-flow")
             response = await job.wait_for_completion()
@@ -305,12 +305,12 @@ class TestRunBackground:
 
     @pytest.mark.asyncio
     async def test_run_background_exported_from_package(self):
-        from langflow_sdk import BackgroundJob as ExportedBackgroundJob
+        from flow_sdk import BackgroundJob as ExportedBackgroundJob
 
         assert ExportedBackgroundJob is BackgroundJob
 
     @pytest.mark.asyncio
     async def test_langflow_timeout_error_exported_from_package(self):
-        from langflow_sdk import LangflowTimeoutError as ExportedError
+        from flow_sdk import LangflowTimeoutError as ExportedError
 
         assert ExportedError is LangflowTimeoutError

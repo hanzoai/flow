@@ -7,7 +7,7 @@ Tests cover:
 - Edge cases (syntax errors, empty code)
 """
 
-from langflow.agentic.helpers.code_security import scan_code_security
+from flow.agentic.helpers.code_security import scan_code_security
 
 
 class TestScanCodeSecuritySafeCode:

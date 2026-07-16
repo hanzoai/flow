@@ -9,8 +9,8 @@ from __future__ import annotations
 import asyncio
 from typing import TYPE_CHECKING
 
-from langflow.agentic.helpers.sse import format_complete_event, format_progress_event
-from langflow.agentic.services.flow_types import VALIDATION_UI_DELAY_SECONDS
+from flow.agentic.helpers.sse import format_complete_event, format_progress_event
+from flow.agentic.services.flow_types import VALIDATION_UI_DELAY_SECONDS
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator

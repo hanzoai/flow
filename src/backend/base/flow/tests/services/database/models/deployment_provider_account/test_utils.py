@@ -5,8 +5,8 @@ from __future__ import annotations
 from unittest.mock import MagicMock
 
 import pytest
-from langflow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
-from langflow.services.database.models.deployment_provider_account.utils import (
+from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+from flow.services.database.models.deployment_provider_account.utils import (
     check_provider_url_allowed,
     extract_tenant_from_url,
     validate_provider_url,

@@ -8,12 +8,12 @@ retry logic, and cancellation handling.
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from langflow.agentic.services.assistant_service import (
+from flow.agentic.services.assistant_service import (
     execute_flow_with_validation_streaming,
 )
-from langflow.agentic.services.flow_types import IntentResult
+from flow.agentic.services.flow_types import IntentResult
 
-MODULE = "langflow.agentic.services.assistant_service"
+MODULE = "flow.agentic.services.assistant_service"
 
 
 def _make_intent(intent="question", translation="test"):
@@ -125,7 +125,7 @@ class TestQAResponse:
         example code in explanatory answers from being treated as component generation.
         """
         component_code = (
-            "from langflow.custom import Component\n\n"
+            "from flow.custom import Component\n\n"
             "class MyComponent(Component):\n"
             "    description = 'test'\n"
             "    inputs = []\n"

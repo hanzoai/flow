@@ -1,4 +1,4 @@
-# Backwards compatibility module for langflow.schema.graph
+# Backwards compatibility module for flow.schema.graph
 # This module redirects imports to the new lfx.schema.graph module
 
 from lfx.schema.graph import InputValue, Tweaks

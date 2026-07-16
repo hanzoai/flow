@@ -12,7 +12,7 @@ in MCPServerConfig schema.
 """
 
 import pytest
-from langflow.api.v2.schemas import ALLOWED_MCP_COMMANDS, DANGEROUS_ENV_VARS, MCPServerConfig
+from flow.api.v2.schemas import ALLOWED_MCP_COMMANDS, DANGEROUS_ENV_VARS, MCPServerConfig
 from pydantic import ValidationError
 
 

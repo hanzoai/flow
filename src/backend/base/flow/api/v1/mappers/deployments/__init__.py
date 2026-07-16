@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from langflow.services.database.utils import require_non_empty
+from flow.services.database.utils import require_non_empty
 
 from .base import BaseDeploymentMapper, DeploymentApiPayloads
 from .contracts import (

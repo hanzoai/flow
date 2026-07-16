@@ -189,7 +189,7 @@ class TestGetEnabledProvidersForUser:
     @pytest.mark.asyncio
     async def test_should_return_empty_when_no_credentials(self):
         """Should return no enabled providers when user has variables but none are credentials."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         mock_var = MagicMock()
         mock_var.name = "SOME_VAR"
@@ -201,7 +201,7 @@ class TestGetEnabledProvidersForUser:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
             patch.dict(os.environ, {}, clear=True),
         ):
             enabled_providers, provider_status = await get_enabled_providers_for_user("user-1", mock_session)
@@ -213,7 +213,7 @@ class TestGetEnabledProvidersForUser:
     @pytest.mark.asyncio
     async def test_should_return_enabled_providers_with_credentials(self):
         """Should return only providers whose API key variable is in credentials."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         mock_cred = MagicMock()
         mock_cred.name = "ANTHROPIC_API_KEY"
@@ -225,12 +225,12 @@ class TestGetEnabledProvidersForUser:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
             patch(
-                "langflow.agentic.services.provider_service.get_model_provider_variable_mapping",
+                "flow.agentic.services.provider_service.get_model_provider_variable_mapping",
                 return_value={"Anthropic": "ANTHROPIC_API_KEY", "OpenAI": "OPENAI_API_KEY"},
             ),
-            patch("langflow.agentic.services.provider_service.os.getenv", return_value=None),
+            patch("flow.agentic.services.provider_service.os.getenv", return_value=None),
         ):
             enabled, status = await get_enabled_providers_for_user("user-1", mock_session)
 
@@ -242,7 +242,7 @@ class TestGetEnabledProvidersForUser:
     @pytest.mark.asyncio
     async def test_should_return_all_providers_when_all_have_credentials(self):
         """Should return all providers when all have matching credentials."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         creds = []
         for name in ["ANTHROPIC_API_KEY", "OPENAI_API_KEY"]:
@@ -257,9 +257,9 @@ class TestGetEnabledProvidersForUser:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
             patch(
-                "langflow.agentic.services.provider_service.get_model_provider_variable_mapping",
+                "flow.agentic.services.provider_service.get_model_provider_variable_mapping",
                 return_value={"Anthropic": "ANTHROPIC_API_KEY", "OpenAI": "OPENAI_API_KEY"},
             ),
         ):
@@ -271,7 +271,7 @@ class TestGetEnabledProvidersForUser:
     @pytest.mark.asyncio
     async def test_should_return_empty_when_get_all_returns_empty(self):
         """Should return empty when get_all returns no variables."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         mock_db_service = MagicMock(spec=DatabaseVariableService)
         mock_db_service.get_all = AsyncMock(return_value=[])
@@ -279,8 +279,8 @@ class TestGetEnabledProvidersForUser:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
-            patch("langflow.agentic.services.provider_service.os.getenv", return_value=None),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.os.getenv", return_value=None),
         ):
             enabled_providers, provider_status = await get_enabled_providers_for_user("user-1", mock_session)
 
@@ -341,7 +341,7 @@ class TestBugsAndEdgeCases:
     @pytest.mark.asyncio
     async def test_get_enabled_providers_when_mapping_raises(self):
         """L37: get_model_provider_variable_mapping() has no error handling — crashes propagate."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         mock_cred = MagicMock()
         mock_cred.name = "ANTHROPIC_API_KEY"
@@ -353,9 +353,9 @@ class TestBugsAndEdgeCases:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
             patch(
-                "langflow.agentic.services.provider_service.get_model_provider_variable_mapping",
+                "flow.agentic.services.provider_service.get_model_provider_variable_mapping",
                 side_effect=RuntimeError("registry unavailable"),
             ),
             pytest.raises(RuntimeError, match="registry unavailable"),
@@ -365,7 +365,7 @@ class TestBugsAndEdgeCases:
     @pytest.mark.asyncio
     async def test_get_enabled_providers_with_no_required_keys(self):
         """Provider with no required keys is enabled (vacuous truth on empty list)."""
-        from langflow.services.variable.service import DatabaseVariableService
+        from flow.services.variable.service import DatabaseVariableService
 
         mock_cred = MagicMock()
         mock_cred.name = "ANTHROPIC_API_KEY"
@@ -377,13 +377,13 @@ class TestBugsAndEdgeCases:
         mock_session = MagicMock()
 
         with (
-            patch("langflow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
+            patch("flow.agentic.services.provider_service.get_variable_service", return_value=mock_db_service),
             patch(
-                "langflow.agentic.services.provider_service.get_model_provider_variable_mapping",
+                "flow.agentic.services.provider_service.get_model_provider_variable_mapping",
                 return_value={"NoKeysProvider": None, "Anthropic": "ANTHROPIC_API_KEY"},
             ),
             patch(
-                "langflow.agentic.services.provider_service.get_provider_required_variable_keys",
+                "flow.agentic.services.provider_service.get_provider_required_variable_keys",
                 side_effect=lambda p: [] if p == "NoKeysProvider" else ["ANTHROPIC_API_KEY"],
             ),
         ):
@@ -396,7 +396,7 @@ class TestBugsAndEdgeCases:
     def test_get_default_model_returns_none_for_model_without_name_key(self):
         """L90: models[0].get('model_name') returns None when key is absent."""
         with patch(
-            "langflow.agentic.services.provider_service.get_unified_models_detailed",
+            "flow.agentic.services.provider_service.get_unified_models_detailed",
             return_value=[{"provider": "TestProvider", "models": [{"id": "test-1"}]}],
         ):
             result = get_default_model("TestProvider")

@@ -43,28 +43,28 @@ from lfx.services.adapters.deployment.schema import (
 from pydantic import ValidationError
 
 try:
-    import langflow.services.adapters.deployment.watsonx_orchestrate  # noqa: F401
+    import flow.services.adapters.deployment.watsonx_orchestrate  # noqa: F401
 except ModuleNotFoundError:
     pytest.skip(
         "Skipping Watsonx deployment tests: optional IBM SDK dependencies not available.",
         allow_module_level=True,
     )
 
-tools_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.tools")
-service_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.service")
-update_core_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.update")
-create_core_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.create")
-shared_core_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.shared")
-payloads_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.payloads")
-client_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.client")
-types_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.types")
-deployment_context_module = importlib.import_module("langflow.services.adapters.deployment.context")
-utils_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.utils")
+tools_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.tools")
+service_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.service")
+update_core_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.update")
+create_core_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.create")
+shared_core_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.shared")
+payloads_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.payloads")
+client_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.client")
+types_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.types")
+deployment_context_module = importlib.import_module("flow.services.adapters.deployment.context")
+utils_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.utils")
 WatsonxOrchestrateDeploymentService = importlib.import_module(
-    "langflow.services.adapters.deployment.watsonx_orchestrate"
+    "flow.services.adapters.deployment.watsonx_orchestrate"
 ).WatsonxOrchestrateDeploymentService
 WxOCredentials = importlib.import_module(
-    "langflow.services.adapters.deployment.watsonx_orchestrate.types"
+    "flow.services.adapters.deployment.watsonx_orchestrate.types"
 ).WxOCredentials
 
 # Aliases for classes used in tests (module-level to satisfy N806).
@@ -84,7 +84,7 @@ def _normalized_provider_app_id(app_id: str) -> str:
 
 
 def _reload_wxo_auth_modules():
-    constants_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.constants")
+    constants_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.constants")
     importlib.reload(constants_module)
     return importlib.reload(client_module)
 
@@ -351,7 +351,7 @@ def _create_provider_spec(
 
 @pytest.mark.anyio
 async def test_process_config_uses_raw_payload_but_overrides_name(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import process_config
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import process_config
 
     captured = {}
 
@@ -361,7 +361,7 @@ async def test_process_config_uses_raw_payload_but_overrides_name(monkeypatch):
         return config.name
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.core.config.create_config",
+        "flow.services.adapters.deployment.watsonx_orchestrate.core.config.create_config",
         mock_create_config,
     )
 
@@ -386,7 +386,7 @@ async def test_process_config_uses_raw_payload_but_overrides_name(monkeypatch):
 
 @pytest.mark.anyio
 async def test_process_config_rejects_reference_id():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import process_config
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import process_config
 
     with pytest.raises(InvalidDeploymentOperationError, match="Config reference binding is not supported"):
         await process_config(
@@ -468,11 +468,11 @@ async def test_resolve_runtime_credentials_supports_variable_and_raw_sources(mon
         return f"resolved::{variable_name}"
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.client.resolve_variable_value",
+        "flow.services.adapters.deployment.watsonx_orchestrate.client.resolve_variable_value",
         mock_resolve_variable_value,
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import resolve_runtime_credentials
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import resolve_runtime_credentials
 
     runtime_credentials = await resolve_runtime_credentials(
         user_id="user-1",
@@ -2584,7 +2584,7 @@ async def test_update_provider_data_rolls_back_mutated_tools_with_writable_paylo
 
 @pytest.mark.anyio
 async def test_update_provider_data_rolls_back_partially_created_raw_tools(monkeypatch):
-    core_tools_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.tools")
+    core_tools_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.tools")
 
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_connections = FakeConnectionsClient()
@@ -2666,7 +2666,7 @@ async def test_update_provider_data_rolls_back_partially_created_raw_tools(monke
 
 @pytest.mark.anyio
 async def test_create_provider_data_rolls_back_partially_created_raw_tools(monkeypatch):
-    core_tools_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.core.tools")
+    core_tools_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.core.tools")
 
     service = WatsonxOrchestrateDeploymentService(DummySettingsService())
     fake_connections = FakeConnectionsClient()
@@ -2769,7 +2769,7 @@ async def test_create_provider_data_rolls_back_partially_created_raw_tools(monke
 
 @pytest.mark.anyio
 async def test_process_raw_flows_with_app_id_awaits_connection_validation(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
 
     fake_clients = SimpleNamespace(
         tool=SimpleNamespace(),
@@ -2792,7 +2792,7 @@ async def test_process_raw_flows_with_app_id_awaits_connection_validation(monkey
         return []
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
+        "flow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
         mock_validate_connection,
     )
     monkeypatch.setattr(
@@ -2813,7 +2813,7 @@ async def test_process_raw_flows_with_app_id_awaits_connection_validation(monkey
 
 @pytest.mark.anyio
 async def test_process_raw_flows_with_app_id_returns_source_ref_bindings(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
 
     fake_clients = SimpleNamespace(
         tool=SimpleNamespace(),
@@ -2832,7 +2832,7 @@ async def test_process_raw_flows_with_app_id_returns_source_ref_bindings(monkeyp
         return ["tool-1", "tool-2"]
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
+        "flow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
         mock_validate_connection,
     )
     monkeypatch.setattr(
@@ -2890,7 +2890,7 @@ async def test_process_raw_flows_with_app_id_returns_source_ref_bindings(monkeyp
 
 @pytest.mark.anyio
 async def test_process_raw_flows_with_app_id_accepts_typed_provider_data(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
 
     fake_clients = SimpleNamespace(
         tool=SimpleNamespace(),
@@ -2909,7 +2909,7 @@ async def test_process_raw_flows_with_app_id_accepts_typed_provider_data(monkeyp
         return ["tool-1"]
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
+        "flow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
         mock_validate_connection,
     )
     monkeypatch.setattr(
@@ -2943,7 +2943,7 @@ async def test_process_raw_flows_with_app_id_accepts_typed_provider_data(monkeyp
 
 @pytest.mark.anyio
 async def test_process_raw_flows_with_app_id_rejects_plain_dict_provider_data(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import tools as tools_core_module
 
     fake_clients = SimpleNamespace(
         tool=SimpleNamespace(),
@@ -2962,7 +2962,7 @@ async def test_process_raw_flows_with_app_id_rejects_plain_dict_provider_data(mo
         return ["tool-1"]
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
+        "flow.services.adapters.deployment.watsonx_orchestrate.core.config.validate_connection",
         mock_validate_connection,
     )
     monkeypatch.setattr(
@@ -3043,7 +3043,7 @@ def test_create_wxo_flow_tool_keeps_load_from_db_global_values_unprefixed(monkey
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
 
     create_wxo_flow_tool(
         flow_payload=flow_payload,
@@ -3111,7 +3111,7 @@ def test_create_wxo_flow_tool_excludes_provider_data_from_artifact(monkeypatch):
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
 
     create_wxo_flow_tool(
         flow_payload=flow_payload,
@@ -3133,7 +3133,7 @@ def test_create_wxo_flow_tool_requires_provider_data_project_id():
         tags=[],
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
 
     with pytest.raises(
         InvalidContentError,
@@ -3174,7 +3174,7 @@ def test_create_wxo_flow_tool_normalizes_name_for_raw_payload(monkeypatch):
         lambda **kwargs: b"artifact",  # noqa: ARG005
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import create_wxo_flow_tool
 
     tool_payload, artifact_bytes = create_wxo_flow_tool(
         flow_payload=flow_payload,
@@ -4758,7 +4758,7 @@ async def test_verify_tools_by_ids_rejects_mixed_connections_payload():
 
 @pytest.mark.anyio
 async def test_retry_with_backoff_succeeds_on_first_try():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
 
     call_count = 0
 
@@ -4774,7 +4774,7 @@ async def test_retry_with_backoff_succeeds_on_first_try():
 
 @pytest.mark.anyio
 async def test_retry_with_backoff_forwards_args_and_kwargs():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
 
     received: list[tuple[str, str]] = []
 
@@ -4791,7 +4791,7 @@ async def test_retry_with_backoff_forwards_args_and_kwargs():
 async def test_retry_create_with_to_thread_forwards_kwargs():
     import asyncio
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_create
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_create
 
     def sync_add(a: int, *, b: int) -> int:
         return a + b
@@ -4802,7 +4802,7 @@ async def test_retry_create_with_to_thread_forwards_kwargs():
 
 @pytest.mark.anyio
 async def test_retry_with_backoff_retries_then_succeeds():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
 
     call_count = 0
 
@@ -4821,7 +4821,7 @@ async def test_retry_with_backoff_retries_then_succeeds():
 
 @pytest.mark.anyio
 async def test_retry_with_backoff_gives_up_after_max_attempts():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
 
     call_count = 0
 
@@ -4838,7 +4838,7 @@ async def test_retry_with_backoff_gives_up_after_max_attempts():
 
 @pytest.mark.anyio
 async def test_retry_with_backoff_respects_should_retry_predicate():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import retry_with_backoff
 
     call_count = 0
 
@@ -4858,7 +4858,7 @@ async def test_retry_with_backoff_respects_should_retry_predicate():
 
 
 def test_is_retryable_create_exception_non_retryable_status_codes():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
 
     non_retryable = {400, 401, 403, 404, 409, 422}
     for code in non_retryable:
@@ -4867,7 +4867,7 @@ def test_is_retryable_create_exception_non_retryable_status_codes():
 
 
 def test_is_retryable_create_exception_retryable_status_codes():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
 
     for code in (500, 502, 503, 429):
         exc = HTTPException(status_code=code)
@@ -4875,7 +4875,7 @@ def test_is_retryable_create_exception_retryable_status_codes():
 
 
 def test_is_retryable_create_exception_domain_exceptions_not_retryable():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
 
     assert is_retryable_create_exception(ResourceConflictError()) is False
     assert is_retryable_create_exception(InvalidContentError()) is False
@@ -4883,14 +4883,14 @@ def test_is_retryable_create_exception_domain_exceptions_not_retryable():
 
 
 def test_is_retryable_create_exception_generic_exception_is_retryable():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
 
     assert is_retryable_create_exception(RuntimeError("boom")) is True
 
 
 @pytest.mark.anyio
 async def test_rollback_created_resources_deletes_all(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
 
     deleted = {"agents": [], "tools": [], "configs": []}
 
@@ -4922,7 +4922,7 @@ async def test_rollback_created_resources_deletes_all(monkeypatch):
 
 @pytest.mark.anyio
 async def test_rollback_continues_after_individual_failures(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
 
     deleted = {"configs": []}
 
@@ -4955,7 +4955,7 @@ async def test_rollback_continues_after_individual_failures(monkeypatch):
 
 @pytest.mark.anyio
 async def test_rollback_update_resources_restores_then_deletes(monkeypatch):
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
+    from flow.services.adapters.deployment.watsonx_orchestrate.core import retry as retry_module
 
     restored: list[tuple[str, dict]] = []
     deleted = {"tools": [], "configs": []}
@@ -5466,7 +5466,7 @@ async def test_update_spec_only_description_sends_update(monkeypatch):
 
 
 def test_get_authenticator_ibm_cloud():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
 
     auth = get_authenticator("https://api.region-foobar.cloud.ibm.com", "test-key")
     from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -5475,7 +5475,7 @@ def test_get_authenticator_ibm_cloud():
 
 
 def test_get_authenticator_mcsp():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
 
     auth = get_authenticator("https://api.wxo.ibm.com", "test-key")
     from ibm_cloud_sdk_core.authenticators import MCSPAuthenticator
@@ -5484,7 +5484,7 @@ def test_get_authenticator_mcsp():
 
 
 def test_get_authenticator_unknown_url():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
     from lfx.services.adapters.deployment.exceptions import AuthSchemeError
 
     with pytest.raises(AuthSchemeError, match="Could not determine"):
@@ -5492,14 +5492,14 @@ def test_get_authenticator_unknown_url():
 
 
 def test_get_authenticator_sets_http_timeout_on_iam():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
 
     auth = get_authenticator("https://api.region-foobar.cloud.ibm.com", "test-key")
     assert auth.token_manager.http_config == {"timeout": (10, 30)}
 
 
 def test_get_authenticator_sets_http_timeout_on_mcsp():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import get_authenticator
 
     auth = get_authenticator("https://api.wxo.ibm.com", "test-key")
     assert auth.token_manager.http_config == {"timeout": (10, 30)}
@@ -5686,7 +5686,7 @@ async def test_deployment_provider_scope_rejects_mixed_users_within_same_scope(m
 
 @pytest.mark.anyio
 async def test_resolve_wxo_client_credentials_reads_provider_url_from_account(monkeypatch):
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     provider_account = DeploymentProviderAccount(
         id=UUID("00000000-0000-0000-0000-000000000099"),
@@ -5764,7 +5764,7 @@ def test_wxo_client_initializes_subclients_eagerly(monkeypatch):
 
 
 def test_normalize_wxo_name():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import normalize_wxo_name
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import normalize_wxo_name
 
     assert normalize_wxo_name("Hello World!") == "Hello_World"
     assert normalize_wxo_name("test-name-123") == "test_name_123"
@@ -5773,21 +5773,21 @@ def test_normalize_wxo_name():
 
 
 def test_validate_wxo_name_valid():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
 
     assert validate_wxo_name("my_deployment") == "my_deployment"
     assert validate_wxo_name("My Deployment!") == "My_Deployment"
 
 
 def test_validate_wxo_name_empty():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
 
     with pytest.raises(InvalidContentError, match="alphanumeric"):
         validate_wxo_name("!!!")
 
 
 def test_validate_wxo_name_starts_with_digit():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import validate_wxo_name
 
     with pytest.raises(InvalidContentError, match="start with a letter"):
         validate_wxo_name("123abc")
@@ -5912,53 +5912,53 @@ async def test_create_agent_deployment_maps_agent_conflict_with_structured_resou
 
 
 def test_extract_error_detail_json_string():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     assert extract_error_detail('{"detail": "something went wrong"}') == "something went wrong"
 
 
 def test_extract_error_detail_json_list():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     assert extract_error_detail('{"detail": [{"msg": "field required"}]}') == "field required"
 
 
 def test_extract_error_detail_json_dict():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     result = extract_error_detail('{"detail": {"msg": "invalid"}}')
     assert result == "invalid"
 
 
 def test_extract_error_detail_non_json():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     assert extract_error_detail("plain text error") == "plain text error"
 
 
 def test_extract_error_detail_with_null_detail_falls_back_to_body():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     assert extract_error_detail('{"detail": null}') == '{"detail": null}'
 
 
 def test_extract_error_detail_uses_message_field_when_detail_missing():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_error_detail
 
     payload = '{"statusCode":409,"message":"The connection ID already exists.","details":"duplicate"}'
     assert extract_error_detail(payload) == "The connection ID already exists."
 
 
 def test_dedupe_list():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import dedupe_list
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import dedupe_list
 
     assert dedupe_list(["a", "b", "a", "c", "b"]) == ["a", "b", "c"]
     assert dedupe_list([]) == []
 
 
 def test_raise_as_deployment_error_wraps_service_error_by_default():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     original = InvalidContentError(message="invalid payload")
 
@@ -5971,8 +5971,8 @@ def test_raise_as_deployment_error_wraps_service_error_by_default():
 
 
 def test_raise_as_deployment_error_reraises_allowed_service_error():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     original = InvalidContentError(message="invalid payload")
 
@@ -5987,8 +5987,8 @@ def test_raise_as_deployment_error_reraises_allowed_service_error():
 
 def test_raise_as_deployment_error_client_api_falls_back_to_raw_body():
     from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     resp = SimpleNamespace(status_code=500, text='{"error":"boom"}')
     exc = ClientAPIException(response=resp)
@@ -6002,8 +6002,8 @@ def test_raise_as_deployment_error_client_api_falls_back_to_raw_body():
 
 
 def test_raise_as_deployment_error_http_exception_uses_detail():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     exc = HTTPException(status_code=400, detail="bad request")
 
@@ -6017,8 +6017,8 @@ def test_raise_as_deployment_error_http_exception_uses_detail():
 
 def test_raise_as_deployment_error_maps_not_found():
     from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     resp = SimpleNamespace(status_code=500, text='{"detail":"Agent \'abc\' not found"}')
     exc = ClientAPIException(response=resp)
@@ -6033,8 +6033,8 @@ def test_raise_as_deployment_error_maps_not_found():
 
 def test_raise_as_deployment_error_maps_conflict():
     from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     resp = SimpleNamespace(status_code=500, text='{"detail":"resource already exists"}')
     exc = ClientAPIException(response=resp)
@@ -6051,8 +6051,8 @@ def test_raise_as_deployment_error_maps_conflict():
 
 def test_raise_as_deployment_error_maps_unprocessable_content():
     from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     resp = SimpleNamespace(status_code=422, text='{"detail":"unprocessable"}')
     exc = ClientAPIException(response=resp)
@@ -6067,8 +6067,8 @@ def test_raise_as_deployment_error_maps_unprocessable_content():
 
 def test_raise_as_deployment_error_maps_forbidden_to_authorization_error():
     from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import ErrorPrefix
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import raise_as_deployment_error
 
     resp = SimpleNamespace(status_code=403, text='{"detail":"forbidden"}')
     exc = ClientAPIException(response=resp)
@@ -6082,7 +6082,7 @@ def test_raise_as_deployment_error_maps_forbidden_to_authorization_error():
 
 
 def test_build_agent_payload_from_values_structure():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import build_agent_payload_from_values
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import build_agent_payload_from_values
 
     payload = build_agent_payload_from_values(
         agent_name="agent_name",
@@ -6100,7 +6100,7 @@ def test_build_agent_payload_from_values_structure():
 
 
 def test_extract_agent_tool_ids():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import extract_agent_tool_ids
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import extract_agent_tool_ids
 
     assert extract_agent_tool_ids({"tools": ["t1", "t2", None, ""]}) == ["t1", "t2"]
     assert extract_agent_tool_ids({}) == []
@@ -6112,7 +6112,7 @@ def test_extract_agent_tool_ids():
 
 
 def test_normalize_optional_text_strips_and_returns_none_for_empty():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
 
     assert normalize_optional_text(None) is None
     assert normalize_optional_text("") is None
@@ -6122,7 +6122,7 @@ def test_normalize_optional_text_strips_and_returns_none_for_empty():
 
 
 def test_normalize_optional_text_rejects_non_str():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
 
     with pytest.raises(TypeError, match=r"expected str \| None"):
         normalize_optional_text(("value",))
@@ -6133,7 +6133,7 @@ def test_normalize_optional_text_rejects_non_str():
 def test_normalize_optional_text_handles_str_enum():
     from enum import Enum
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import normalize_optional_text
 
     class FakeEnum(str, Enum):
         KEY_VALUE = "key_value_creds"
@@ -6142,8 +6142,8 @@ def test_normalize_optional_text_handles_str_enum():
 
 
 def test_build_config_list_item_valid():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
     from lfx.services.adapters.payload import PayloadSlot
 
     slot = PayloadSlot(WatsonxConfigItemProviderData)
@@ -6162,8 +6162,8 @@ def test_build_config_list_item_valid():
 
 
 def test_build_config_list_item_missing_environment_for_key_value_creds():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
     from lfx.services.adapters.payload import PayloadSlot
 
     slot = PayloadSlot(WatsonxConfigItemProviderData)
@@ -6178,8 +6178,8 @@ def test_build_config_list_item_missing_environment_for_key_value_creds():
 
 
 def test_build_config_list_item_invalid_payload():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import build_config_list_item
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxConfigItemProviderData
     from lfx.services.adapters.payload import PayloadSlot
 
     slot = PayloadSlot(WatsonxConfigItemProviderData)
@@ -6196,7 +6196,7 @@ def test_build_config_list_item_invalid_payload():
 def test_warn_if_expected_ids_missing_logs_warning(caplog):
     import logging
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import warn_if_expected_ids_missing
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import warn_if_expected_ids_missing
 
     with caplog.at_level(logging.WARNING):
         warn_if_expected_ids_missing(
@@ -6212,7 +6212,7 @@ def test_warn_if_expected_ids_missing_logs_warning(caplog):
 def test_warn_if_expected_ids_missing_no_warning_when_all_resolved(caplog):
     import logging
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import warn_if_expected_ids_missing
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import warn_if_expected_ids_missing
 
     with caplog.at_level(logging.WARNING):
         warn_if_expected_ids_missing(
@@ -6230,42 +6230,42 @@ def test_warn_if_expected_ids_missing_no_warning_when_all_resolved(caplog):
 
 
 def test_resolve_execution_message_string():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
 
     result = resolve_execution_message("hello")
     assert result == {"role": "user", "content": "hello"}
 
 
 def test_resolve_execution_message_dict_with_role_content():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
 
     msg = {"role": "assistant", "content": "hi"}
     assert resolve_execution_message(msg) == msg
 
 
 def test_resolve_execution_message_dict_with_nested_message():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
 
     msg = {"message": {"role": "user", "content": "nested"}}
     assert resolve_execution_message(msg) == {"role": "user", "content": "nested"}
 
 
 def test_resolve_execution_message_empty_string_raises():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
 
     with pytest.raises(ValueError, match="must not be empty"):
         resolve_execution_message("   ")
 
 
 def test_resolve_execution_message_none_raises():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import resolve_execution_message
 
     with pytest.raises(ValueError, match="requires input content"):
         resolve_execution_message(None)
 
 
 def test_create_agent_run_result_empty_raises():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     with pytest.raises(DeploymentError, match="empty response"):
         create_agent_run_result(None)
@@ -6274,21 +6274,21 @@ def test_create_agent_run_result_empty_raises():
 
 
 def test_create_agent_run_result_with_run_id():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     result = create_agent_run_result({"status": "running", "run_id": "r-1"})
     assert result == {"status": "running", "execution_id": "r-1"}
 
 
 def test_create_agent_run_result_extracts_thread_id():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     result = create_agent_run_result({"status": "running", "run_id": "r-1", "thread_id": "t-1"})
     assert result["thread_id"] == "t-1"
 
 
 def test_create_agent_run_result_omits_thread_id_when_absent():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     result = create_agent_run_result({"status": "running", "run_id": "r-1"})
     assert "thread_id" not in result
@@ -6300,7 +6300,7 @@ def test_create_agent_run_result_omits_thread_id_when_absent():
 
 
 def test_get_agent_environments_dedupes_preserving_order():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
 
     agent = {
         "environments": [
@@ -6314,20 +6314,20 @@ def test_get_agent_environments_dedupes_preserving_order():
 
 
 def test_get_agent_environments_returns_empty_list_when_provider_returns_empty():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
 
     assert get_agent_environments({"environments": []}) == []
 
 
 def test_get_agent_environments_raises_when_environments_key_missing():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
 
     with pytest.raises(KeyError):
         get_agent_environments({})
 
 
 def test_get_agent_environments_raises_when_env_entry_missing_name():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.status import get_agent_environments
 
     with pytest.raises(KeyError):
         get_agent_environments({"environments": [{"not_name": "draft"}]})
@@ -6339,7 +6339,7 @@ def test_get_agent_environments_raises_when_env_entry_missing_name():
 
 
 def test_build_langflow_artifact_bytes_structure():
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         build_langflow_artifact_bytes,
     )
 
@@ -6410,7 +6410,7 @@ async def test_teardown_succeeds():
 @pytest.mark.anyio
 async def test_get_agent_run_empty_response_raises(monkeypatch):
     """get_agent_run raises DeploymentError when provider returns empty payload."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
 
     async def fake_to_thread(fn, *args, **kwargs):  # noqa: ARG001
         return None
@@ -6430,7 +6430,7 @@ def test_retry_rollback_uses_retryable_filter():
     Validates that the filter correctly identifies non-retryable HTTP status codes
     (via HTTPException, which is checked by is_retryable_create_exception).
     """
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.retry import is_retryable_create_exception
 
     # Non-retryable status codes should not be retried
     for code in [400, 401, 403, 404, 409, 422]:
@@ -6457,7 +6457,7 @@ def test_retry_rollback_uses_retryable_filter():
 @pytest.mark.anyio
 async def test_credential_resolution_catches_arbitrary_exceptions(monkeypatch):
     """resolve_wxo_client_credentials wraps unexpected exceptions as CredentialResolutionError."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.client import resolve_wxo_client_credentials
+    from flow.services.adapters.deployment.watsonx_orchestrate.client import resolve_wxo_client_credentials
     from lfx.services.adapters.deployment.exceptions import CredentialResolutionError
 
     class FakeSQLAlchemyError(Exception):
@@ -6468,7 +6468,7 @@ async def test_credential_resolution_catches_arbitrary_exceptions(monkeypatch):
         raise FakeSQLAlchemyError(error_message)
 
     monkeypatch.setattr(
-        "langflow.services.adapters.deployment.watsonx_orchestrate.client.get_provider_account_by_id",
+        "flow.services.adapters.deployment.watsonx_orchestrate.client.get_provider_account_by_id",
         mock_get_provider,
     )
 
@@ -6482,7 +6482,7 @@ async def test_credential_resolution_catches_arbitrary_exceptions(monkeypatch):
 
 def test_wxo_client_eagerly_constructs_sub_clients():
     """WxOClient eagerly builds tool/connections/agent from instance_url and authenticator."""
-    types_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.types")
+    types_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.types")
     wxo_client_cls = types_module.WxOClient
     from ibm_cloud_sdk_core.authenticators import NoAuthAuthenticator
 
@@ -6497,7 +6497,7 @@ def test_wxo_client_eagerly_constructs_sub_clients():
 
 def test_wxo_client_is_frozen():
     """WxOClient is frozen and rejects post-construction mutation."""
-    types_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.types")
+    types_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.types")
     wxo_client_cls = types_module.WxOClient
     from ibm_cloud_sdk_core.authenticators import NoAuthAuthenticator
 
@@ -6508,7 +6508,7 @@ def test_wxo_client_is_frozen():
 
 def test_wxo_client_strips_trailing_slash():
     """WxOClient normalizes instance_url by stripping trailing slashes."""
-    types_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.types")
+    types_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.types")
     wxo_client_cls = types_module.WxOClient
     from ibm_cloud_sdk_core.authenticators import NoAuthAuthenticator
 
@@ -6518,7 +6518,7 @@ def test_wxo_client_strips_trailing_slash():
 
 def test_wxo_client_rejects_empty_url():
     """WxOClient rejects empty instance_url at construction."""
-    types_module = importlib.import_module("langflow.services.adapters.deployment.watsonx_orchestrate.types")
+    types_module = importlib.import_module("flow.services.adapters.deployment.watsonx_orchestrate.types")
     wxo_client_cls = types_module.WxOClient
     from ibm_cloud_sdk_core.authenticators import NoAuthAuthenticator
 
@@ -6758,7 +6758,7 @@ def test_extract_langflow_artifact_from_zip_success():
     """extract_langflow_artifact_from_zip returns parsed JSON from a valid zip."""
     import json
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         extract_langflow_artifact_from_zip,
     )
 
@@ -6772,7 +6772,7 @@ def test_extract_langflow_artifact_from_zip_success():
 
 def test_extract_langflow_artifact_from_zip_no_json():
     """extract_langflow_artifact_from_zip raises InvalidContentError when no JSON in zip."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         extract_langflow_artifact_from_zip,
     )
 
@@ -6785,7 +6785,7 @@ def test_extract_langflow_artifact_from_zip_no_json():
 
 def test_extract_langflow_artifact_from_zip_bad_zip():
     """extract_langflow_artifact_from_zip raises InvalidContentError for invalid zip data."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         extract_langflow_artifact_from_zip,
     )
 
@@ -6795,7 +6795,7 @@ def test_extract_langflow_artifact_from_zip_bad_zip():
 
 def test_extract_langflow_artifact_from_zip_invalid_utf8():
     """extract_langflow_artifact_from_zip raises InvalidContentError for non-UTF-8 content."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         extract_langflow_artifact_from_zip,
     )
 
@@ -6808,7 +6808,7 @@ def test_extract_langflow_artifact_from_zip_invalid_utf8():
 
 def test_extract_langflow_artifact_from_zip_invalid_json():
     """extract_langflow_artifact_from_zip raises InvalidContentError for malformed JSON."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import (
         extract_langflow_artifact_from_zip,
     )
 
@@ -6827,7 +6827,7 @@ def test_extract_langflow_artifact_from_zip_invalid_json():
 @pytest.mark.anyio
 async def test_validate_connection_missing_connection():
     """validate_connection raises InvalidContentError when connection not found."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
 
     connections_client = FakeConnectionsClient()  # no existing connections
 
@@ -6838,7 +6838,7 @@ async def test_validate_connection_missing_connection():
 @pytest.mark.anyio
 async def test_validate_connection_missing_config(monkeypatch):
     """validate_connection raises InvalidContentError when config not found."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
 
     connections_client = FakeConnectionsClient(existing_app_id="my_app")
 
@@ -6854,7 +6854,7 @@ async def test_validate_connection_missing_config(monkeypatch):
 @pytest.mark.anyio
 async def test_validate_connection_wrong_security_scheme(monkeypatch):
     """validate_connection raises InvalidContentError for non-key-value security scheme."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
 
     connections_client = FakeConnectionsClient(existing_app_id="my_app")
 
@@ -6871,7 +6871,7 @@ async def test_validate_connection_wrong_security_scheme(monkeypatch):
 async def test_validate_connection_missing_credentials(monkeypatch):
     """validate_connection raises InvalidContentError when credentials are missing."""
     from ibm_watsonx_orchestrate_core.types.connections import ConnectionSecurityScheme
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.config import validate_connection
 
     connections_client = FakeConnectionsClient(existing_app_id="my_app")
 
@@ -6895,7 +6895,7 @@ async def test_validate_connection_missing_credentials(monkeypatch):
 
 def test_create_agent_run_result_raises_on_missing_run_id():
     """create_agent_run_result raises DeploymentError when response has no execution identifier."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     with pytest.raises(DeploymentError, match="did not return an execution identifier"):
         create_agent_run_result({"status": "accepted"})
@@ -6903,7 +6903,7 @@ def test_create_agent_run_result_raises_on_missing_run_id():
 
 def test_create_agent_run_result_extracts_run_id():
     """create_agent_run_result translates WXO run_id to execution_id."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     result = create_agent_run_result({"status": "accepted", "run_id": "run-123"})
     assert result["execution_id"] == "run-123"
@@ -6912,7 +6912,7 @@ def test_create_agent_run_result_extracts_run_id():
 
 def test_create_agent_run_result_falls_back_to_id_field():
     """create_agent_run_result uses 'id' field when 'run_id' is absent."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import create_agent_run_result
 
     result = create_agent_run_result({"status": "running", "id": "id-456"})
     assert result["execution_id"] == "id-456"
@@ -6925,7 +6925,7 @@ def test_create_agent_run_result_falls_back_to_id_field():
 
 def test_require_single_deployment_id_rejects_multiple_ids():
     """require_single_deployment_id raises InvalidContentError for multiple IDs."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.utils import require_single_deployment_id
+    from flow.services.adapters.deployment.watsonx_orchestrate.utils import require_single_deployment_id
 
     params = ConfigListParams(deployment_ids=["id-1", "id-2"])
     with pytest.raises(InvalidContentError, match="exactly one deployment_id"):
@@ -7009,10 +7009,10 @@ def test_ensure_dict_logs_warning_on_non_dict():
     """_ensure_dict logs a warning when replacing a non-dict value."""
     from unittest.mock import patch
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.tools import _ensure_dict
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.tools import _ensure_dict
 
     parent = {"binding": "not a dict"}
-    with patch("langflow.services.adapters.deployment.watsonx_orchestrate.core.tools.logger") as mock_logger:
+    with patch("flow.services.adapters.deployment.watsonx_orchestrate.core.tools.logger") as mock_logger:
         result = _ensure_dict(parent, "binding")
     assert result == {}
     assert parent["binding"] == {}
@@ -7032,7 +7032,7 @@ async def test_get_agent_run_translates_run_id_to_execution_id(monkeypatch):
     """get_agent_run maps WXO id to execution_id and passes through other fields."""
     import asyncio as _asyncio
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
 
     wxo_payload = {
         "id": "r-42",
@@ -7065,7 +7065,7 @@ async def test_get_agent_run_passes_through_error_fields(monkeypatch):
     """get_agent_run forwards failed_at, cancelled_at, and last_error."""
     import asyncio as _asyncio
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
 
     wxo_payload = {
         "id": "r-fail",
@@ -7098,7 +7098,7 @@ async def test_get_agent_run_falls_back_to_param_run_id(monkeypatch):
     """get_agent_run uses the run_id parameter when WXO payload omits id."""
     import asyncio as _asyncio
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import get_agent_run
 
     wxo_payload = {"status": "in_progress", "agent_id": "agent-1"}
 
@@ -7122,7 +7122,7 @@ async def test_get_agent_run_falls_back_to_param_run_id(monkeypatch):
 
 def test_build_orchestrate_run_payload_uses_message_directly():
     """build_orchestrate_run_payload passes message from provider_data when present."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
 
     message = {"role": "user", "content": "direct message"}
     result = build_orchestrate_run_payload(
@@ -7136,7 +7136,7 @@ def test_build_orchestrate_run_payload_uses_message_directly():
 
 def test_build_orchestrate_run_payload_falls_back_to_deployment_id():
     """build_orchestrate_run_payload uses deployment_id when agent_id is absent."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
 
     result = build_orchestrate_run_payload(
         provider_data={"input": "hello"},
@@ -7149,7 +7149,7 @@ def test_build_orchestrate_run_payload_falls_back_to_deployment_id():
 
 def test_build_orchestrate_run_payload_excludes_extra_fields():
     """build_orchestrate_run_payload does not forward extra fields besides thread_id."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
 
     result = build_orchestrate_run_payload(
         provider_data={
@@ -7170,7 +7170,7 @@ def test_build_orchestrate_run_payload_excludes_extra_fields():
 
 def test_build_orchestrate_run_payload_omits_thread_id_when_absent():
     """build_orchestrate_run_payload does not include thread_id when not provided."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
+    from flow.services.adapters.deployment.watsonx_orchestrate.core.execution import build_orchestrate_run_payload
 
     result = build_orchestrate_run_payload(
         provider_data={"input": "hi"},
@@ -7187,7 +7187,7 @@ def test_build_orchestrate_run_payload_omits_thread_id_when_absent():
 
 def test_adapter_execution_schema_parses_all_explicit_fields():
     """WatsonxAgentExecutionResultData parses all execution response fields."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxAgentExecutionResultData
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxAgentExecutionResultData
 
     data = {
         "execution_id": "e-1",
@@ -7211,7 +7211,7 @@ def test_adapter_execution_schema_parses_all_explicit_fields():
 
 def test_adapter_execution_schema_has_no_run_id_field():
     """WatsonxAgentExecutionResultData does not expose run_id as a named field."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxAgentExecutionResultData
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import WatsonxAgentExecutionResultData
 
     assert "run_id" not in WatsonxAgentExecutionResultData.model_fields
 
@@ -7223,7 +7223,7 @@ def test_adapter_execution_schema_has_no_run_id_field():
 
 def test_api_execution_create_schema_parses_all_explicit_fields():
     """WatsonxApiAgentExecutionCreateResultData parses all execution response fields."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
     )
 
@@ -7243,7 +7243,7 @@ def test_api_execution_create_schema_parses_all_explicit_fields():
 
 def test_api_execution_status_schema_parses_all_explicit_fields():
     """WatsonxApiAgentExecutionStatusResultData parses all execution response fields."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionStatusResultData,
     )
 
@@ -7266,7 +7266,7 @@ def test_api_execution_status_schema_parses_all_explicit_fields():
 
 def test_api_execution_schemas_have_no_run_id_field():
     """Neither create nor status schema exposes run_id as a named field."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
         WatsonxApiAgentExecutionStatusResultData,
     )
@@ -7277,7 +7277,7 @@ def test_api_execution_schemas_have_no_run_id_field():
 
 def test_api_execution_schemas_omit_langflow_owned_fields():
     """deployment_id (Langflow DB UUID) belongs on the top-level response, not in provider_data."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
         WatsonxApiAgentExecutionStatusResultData,
     )
@@ -7290,7 +7290,7 @@ def test_api_execution_schemas_omit_langflow_owned_fields():
 
 def test_api_execution_schema_normalizes_id_fields():
     """Both create and status schemas strip whitespace and blanks from ID fields."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiAgentExecutionCreateResultData,
         WatsonxApiAgentExecutionStatusResultData,
     )
@@ -7322,7 +7322,7 @@ def test_api_execution_schema_normalizes_id_fields():
 
 def test_shape_execution_create_result_maps_all_fields():
     """shape_execution_create_result maps adapter fields to API response."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     deployment_id = UUID("00000000-0000-0000-0000-000000000001")
@@ -7350,7 +7350,7 @@ def test_shape_execution_create_result_maps_all_fields():
 
 def test_shape_execution_status_result_maps_all_fields():
     """shape_execution_status_result maps adapter fields to API response."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     deployment_id = UUID("00000000-0000-0000-0000-000000000002")
@@ -7379,7 +7379,7 @@ def test_shape_execution_status_result_maps_all_fields():
 
 def test_shape_execution_status_result_none_execution_id():
     """When adapter has no execution_id, provider_data includes it as None."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import WatsonxOrchestrateDeploymentMapper
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     deployment_id = UUID("00000000-0000-0000-0000-000000000003")
@@ -7664,7 +7664,7 @@ def _make_unbound_tool(tool_id: str) -> dict[str, Any]:
 
 @pytest.mark.anyio
 async def test_update_connection_deltas_rejects_non_langflow_tool():
-    """_update_existing_tool_connection_deltas must refuse to modify tools without binding.langflow."""
+    """_update_existing_tool_connection_deltas must refuse to modify tools without binding.flow."""
     _update_deltas = update_core_module._update_existing_tool_connection_deltas
 
     external_tool = _make_external_tool("ext-1")
@@ -7683,7 +7683,7 @@ async def test_update_connection_deltas_rejects_non_langflow_tool():
 
 @pytest.mark.anyio
 async def test_update_connection_deltas_accepts_langflow_tool():
-    """_update_existing_tool_connection_deltas succeeds for tools with binding.langflow."""
+    """_update_existing_tool_connection_deltas succeeds for tools with binding.flow."""
     _update_deltas = update_core_module._update_existing_tool_connection_deltas
 
     lf_tool = _make_langflow_tool("lf-1")
@@ -7704,7 +7704,7 @@ async def test_update_connection_deltas_accepts_langflow_tool():
 
 @pytest.mark.anyio
 async def test_bind_existing_tools_for_create_rejects_non_langflow_tool():
-    """_bind_existing_tools_for_create must refuse to modify tools without binding.langflow."""
+    """_bind_existing_tools_for_create must refuse to modify tools without binding.flow."""
     _bind_existing = create_core_module._bind_existing_tools_for_create
 
     external_tool = _make_external_tool("ext-1")
@@ -7722,7 +7722,7 @@ async def test_bind_existing_tools_for_create_rejects_non_langflow_tool():
 
 @pytest.mark.anyio
 async def test_bind_existing_tools_for_create_accepts_langflow_tool():
-    """_bind_existing_tools_for_create succeeds for tools with binding.langflow."""
+    """_bind_existing_tools_for_create succeeds for tools with binding.flow."""
     _bind_existing = create_core_module._bind_existing_tools_for_create
 
     lf_tool = _make_langflow_tool("lf-1")
@@ -7742,7 +7742,7 @@ async def test_bind_existing_tools_for_create_accepts_langflow_tool():
 
 @pytest.mark.anyio
 async def test_update_existing_tool_connection_bindings_rejects_non_langflow_tool():
-    """update_existing_tool_connection_bindings must refuse to modify tools without binding.langflow."""
+    """update_existing_tool_connection_bindings must refuse to modify tools without binding.flow."""
     _update_bindings = tools_module.update_existing_tool_connection_bindings
 
     external_tool = _make_external_tool("ext-1")
@@ -7804,7 +7804,7 @@ async def test_apply_tool_renames_succeeds_for_langflow_tool():
 
 @pytest.mark.anyio
 async def test_apply_tool_renames_rejects_non_langflow_tool():
-    """_apply_tool_renames must refuse to rename tools without binding.langflow."""
+    """_apply_tool_renames must refuse to rename tools without binding.flow."""
     _apply_renames = update_core_module._apply_tool_renames
 
     external_tool = _make_external_tool("ext-1")
@@ -7959,7 +7959,7 @@ async def test_apply_tool_renames_preserves_latest_connections_for_add_and_remov
 
 def test_validate_tool_name_accepts_valid_name():
     """_validate_tool_name accepts a name that normalizes to a valid wxO identifier."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
 
     assert _validate_tool_name("My Flow") == "My_Flow"
     assert _validate_tool_name("hello_world") == "hello_world"
@@ -7968,7 +7968,7 @@ def test_validate_tool_name_accepts_valid_name():
 
 def test_validate_tool_name_rejects_empty():
     """_validate_tool_name rejects names that normalize to empty string."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
 
     with pytest.raises(HTTPException) as exc_info:
         _validate_tool_name("!@#$%")
@@ -7977,7 +7977,7 @@ def test_validate_tool_name_rejects_empty():
 
 def test_validate_tool_name_rejects_leading_digit():
     """_validate_tool_name rejects names that start with a digit after normalization."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
 
     with pytest.raises(HTTPException) as exc_info:
         _validate_tool_name("123flow")
@@ -7986,7 +7986,7 @@ def test_validate_tool_name_rejects_leading_digit():
 
 def test_validate_tool_name_is_idempotent():
     """Running _validate_tool_name twice produces the same result."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.mapper import _validate_tool_name
 
     first = _validate_tool_name("My Flow!")
     second = _validate_tool_name(first)
@@ -8066,7 +8066,7 @@ def test_resolve_lfx_requirement_ignores_blank_override(monkeypatch):
 
 def test_rename_tool_api_payload_parses():
     """WatsonxApiRenameToolOperation parses correctly."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiRenameToolOperation
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiRenameToolOperation
 
     op = WatsonxApiRenameToolOperation(
         op="rename_tool",
@@ -8079,7 +8079,7 @@ def test_rename_tool_api_payload_parses():
 
 def test_rename_tool_api_payload_rejects_empty_name():
     """WatsonxApiRenameToolOperation rejects empty tool_name."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiRenameToolOperation
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiRenameToolOperation
 
     with pytest.raises(ValidationError):
         WatsonxApiRenameToolOperation(
@@ -8107,7 +8107,7 @@ def test_rename_tool_provider_payload_parses():
 
 def test_flow_version_list_item_includes_tool_name_in_provider_data():
     """DeploymentFlowVersionListItem serializes provider tool_name under provider_data."""
-    from langflow.api.v1.schemas.deployments import DeploymentFlowVersionListItem
+    from flow.api.v1.schemas.deployments import DeploymentFlowVersionListItem
 
     item = DeploymentFlowVersionListItem(
         id="00000000-0000-0000-0000-000000000001",
@@ -8122,7 +8122,7 @@ def test_flow_version_list_item_includes_tool_name_in_provider_data():
 
 def test_flow_version_list_item_provider_data_defaults_to_none():
     """DeploymentFlowVersionListItem defaults provider_data to None."""
-    from langflow.api.v1.schemas.deployments import DeploymentFlowVersionListItem
+    from flow.api.v1.schemas.deployments import DeploymentFlowVersionListItem
 
     item = DeploymentFlowVersionListItem(
         id="00000000-0000-0000-0000-000000000001",

@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 # Shared constants
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _API_KEY = "test-key"  # pragma: allowlist secret
 _FLOW_ID = UUID("aaaaaaaa-0000-0000-0000-000000000001")
 _FLOW_ID_2 = UUID("aaaaaaaa-0000-0000-0000-000000000002")

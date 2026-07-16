@@ -209,7 +209,7 @@ async def test_concurrent_update_server_should_not_lose_servers(
         return server_list.get("mcpServers", {}).get(name)
 
     with patch.multiple(
-        "langflow.api.v2.mcp",
+        "flow.api.v2.mcp",
         get_server_list=mock_get_server_list,
         upload_server_config=mock_upload_server_config,
         get_server=mock_get_server,

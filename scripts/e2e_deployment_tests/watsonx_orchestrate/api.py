@@ -114,8 +114,8 @@ from uuid import UUID, uuid4
 import httpx
 from dotenv import load_dotenv
 from ibm_watsonx_orchestrate_clients.tools.tool_client import ClientAPIException
-from langflow.services.adapters.deployment.context import DeploymentAdapterContext, DeploymentProviderIDContext
-from langflow.services.adapters.deployment.watsonx_orchestrate import WxOCredentials
+from flow.services.adapters.deployment.context import DeploymentAdapterContext, DeploymentProviderIDContext
+from flow.services.adapters.deployment.watsonx_orchestrate import WxOCredentials
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -1778,7 +1778,7 @@ class DeploymentsApiParallelE2E:
         if self._client_mod is not None:
             return
 
-        import langflow.services.adapters.deployment.watsonx_orchestrate.client as client_mod
+        import flow.services.adapters.deployment.watsonx_orchestrate.client as client_mod
 
         self._client_mod = client_mod
         self._original_resolve_wxo_client_credentials = client_mod.resolve_wxo_client_credentials

@@ -8,14 +8,14 @@ from uuid import uuid4
 
 import pytest
 from fastapi import HTTPException
-from langflow.api.v1.mappers.deployments import get_mapper
-from langflow.api.v1.mappers.deployments.contracts import (
+from flow.api.v1.mappers.deployments import get_mapper
+from flow.api.v1.mappers.deployments.contracts import (
     CreatedSnapshotIds,
     CreateSnapshotBindings,
     FlowVersionPatch,
     UpdateSnapshotBindings,
 )
-from langflow.api.v1.schemas.deployments import (
+from flow.api.v1.schemas.deployments import (
     DeploymentCreateRequest,
     DeploymentProviderAccountUpdateRequest,
     DeploymentUpdateRequest,
@@ -37,16 +37,16 @@ from lfx.services.adapters.schema import AdapterType
 from pydantic import ValidationError
 
 try:
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate import WatsonxOrchestrateDeploymentMapper
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate import WatsonxOrchestrateDeploymentMapper
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import (
         WatsonxApiDeploymentCreatePayload,
         WatsonxApiDeploymentUpdatePayload,
         WatsonxApiDeploymentUpdateResultData,
     )
-    from langflow.services.adapters.deployment.watsonx_orchestrate.constants import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.constants import (
         WATSONX_ORCHESTRATE_DEPLOYMENT_ADAPTER_KEY,
     )
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
         WatsonxDeploymentUpdateResultData,
     )
 except ModuleNotFoundError:
@@ -907,7 +907,7 @@ def test_watsonx_mapper_create_result_from_existing_resource_includes_empty_payl
 
 
 def test_watsonx_mapper_resolve_verify_credentials_for_update_returns_none_without_provider_data() -> None:
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     existing_account = DeploymentProviderAccount(
@@ -926,7 +926,7 @@ def test_watsonx_mapper_resolve_verify_credentials_for_update_returns_none_witho
 
 
 def test_watsonx_mapper_resolve_verify_credentials_for_update_prefers_new_provider_data() -> None:
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     existing_account = DeploymentProviderAccount(
@@ -952,7 +952,7 @@ def test_watsonx_mapper_resolve_verify_credentials_for_update_prefers_new_provid
 
 def test_watsonx_mapper_resolve_verify_credentials_for_update_rejects_url_update() -> None:
     """WatsonxApiProviderAccountUpdate (extra='forbid') rejects url in provider_data."""
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     existing_account = DeploymentProviderAccount(
@@ -979,7 +979,7 @@ def test_watsonx_mapper_resolve_verify_credentials_for_update_rejects_url_update
 
 def test_watsonx_mapper_resolve_verify_credentials_for_update_rejects_tenant_id_update() -> None:
     """WatsonxApiProviderAccountUpdate (extra='forbid') rejects tenant_id in provider_data."""
-    from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+    from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     existing_account = DeploymentProviderAccount(
@@ -1812,7 +1812,7 @@ def test_watsonx_mapper_trusts_top_level_deployment_id() -> None:
 
 def test_wxo_mapper_verify_credentials_create_filters_non_credential_fields() -> None:
     """WXO mapper forwards only credential fields to adapter verification."""
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
     from lfx.services.adapters.deployment.schema import VerifyCredentials
 
     mapper = WatsonxOrchestrateDeploymentMapper()
@@ -1835,7 +1835,7 @@ def test_wxo_mapper_verify_credentials_create_filters_non_credential_fields() ->
 
 def test_wxo_mapper_verify_credentials_create_accepts_missing_tenant() -> None:
     """Verify-credentials path only parses; tenant validation is deferred to resolve_provider_account_create."""
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
     from lfx.services.adapters.deployment.schema import VerifyCredentials
 
     mapper = WatsonxOrchestrateDeploymentMapper()
@@ -1855,7 +1855,7 @@ def test_wxo_mapper_verify_credentials_create_accepts_missing_tenant() -> None:
 
 def test_wxo_mapper_provider_account_create_requires_tenant() -> None:
     """Create path rejects payloads with no explicit or URL-derived tenant."""
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     payload = DeploymentProviderAccountCreateRequest(
@@ -1894,7 +1894,7 @@ def test_wxo_mapper_resolve_credentials_rejects_tenant_metadata() -> None:
 
 def test_wxo_mapper_verify_credentials_create_rejects_unknown_fields() -> None:
     """Mapper rejects unexpected provider_data keys."""
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     payload = DeploymentProviderAccountCreateRequest(
@@ -1940,7 +1940,7 @@ def test_wxo_mapper_resolve_credentials_rejects_empty() -> None:
 
 
 def test_wxo_mapper_provider_account_create_assembles_model() -> None:
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     payload = DeploymentProviderAccountCreateRequest(
@@ -1960,7 +1960,7 @@ def test_wxo_mapper_provider_account_create_assembles_model() -> None:
 
 
 def test_wxo_mapper_provider_account_create_uses_url_tenant_fallback() -> None:
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountCreateRequest
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     payload = DeploymentProviderAccountCreateRequest(
@@ -1992,7 +1992,7 @@ def _make_wxo_existing_account():
 
 def test_wxo_mapper_update_allows_name_changes_only_for_non_credential_fields() -> None:
     """Provider-account update keeps URL/tenant immutable."""
-    from langflow.api.v1.schemas.deployments import DeploymentProviderAccountUpdateRequest
+    from flow.api.v1.schemas.deployments import DeploymentProviderAccountUpdateRequest
 
     mapper = WatsonxOrchestrateDeploymentMapper()
     payload = DeploymentProviderAccountUpdateRequest(name="renamed")
@@ -2007,7 +2007,7 @@ def test_wxo_mapper_update_allows_name_changes_only_for_non_credential_fields() 
 
 def test_wxo_mapper_resolve_verify_credentials_rejects_extra_fields() -> None:
     """WXO slot uses extra='forbid' so unexpected credential fields are rejected."""
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import PAYLOAD_SCHEMAS
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import PAYLOAD_SCHEMAS
     from lfx.services.adapters.payload import AdapterPayloadValidationError
 
     slot = PAYLOAD_SCHEMAS.verify_credentials
@@ -2715,7 +2715,7 @@ async def test_watsonx_mapper_translates_remove_tool_by_id_into_provider_operati
 
 def test_watsonx_created_tool_includes_tool_id() -> None:
     """WatsonxApiCreatedTool requires tool_id and non-null flow_version_id."""
-    from langflow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiCreatedTool
+    from flow.api.v1.mappers.deployments.watsonx_orchestrate.payloads import WatsonxApiCreatedTool
 
     binding = WatsonxApiCreatedTool(
         flow_version_id=uuid4(),
@@ -2746,7 +2746,7 @@ def test_watsonx_mapper_shapes_update_response_with_tool_id() -> None:
         updated_at=timestamp,
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
         PAYLOAD_SCHEMAS as WXO_SCHEMAS,
     )
 
@@ -2788,7 +2788,7 @@ def test_watsonx_mapper_shapes_update_response_with_non_uuid_source_ref() -> Non
         updated_at=timestamp,
     )
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
         PAYLOAD_SCHEMAS as WXO_SCHEMAS,
     )
 
@@ -2820,7 +2820,7 @@ def test_watsonx_mapper_update_snapshot_bindings_filters_non_uuid_source_refs() 
     mapper = WatsonxOrchestrateDeploymentMapper()
     flow_version_id = uuid4()
 
-    from langflow.services.adapters.deployment.watsonx_orchestrate.payloads import (
+    from flow.services.adapters.deployment.watsonx_orchestrate.payloads import (
         PAYLOAD_SCHEMAS as WXO_SCHEMAS,
     )
 

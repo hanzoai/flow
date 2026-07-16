@@ -191,7 +191,7 @@ class TestWorkflowReconstruction:
         monkeypatch.setattr(component_cache, "type_to_current_hash", {"ChatInput": "known-hash"})
         monkeypatch.setattr(component_cache, "all_types_dict", None)
 
-        with patch("langflow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb:
+        with patch("flow.api.v2.workflow_reconstruction.get_vertex_builds_by_job_id") as mock_get_vb:
             mock_get_vb.return_value = [mock_vertex_build]
             with pytest.raises(CustomComponentValidationError, match="custom components are not allowed"):
                 await reconstruct_workflow_response_from_job_id(

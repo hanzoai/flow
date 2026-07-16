@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class StorageService(Service):
-    """Storage service for langflow."""
+    """Storage service for flow."""
 
     name = "storage_service"
 

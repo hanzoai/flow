@@ -1,4 +1,4 @@
-"""Unit tests for langflow.core.celeryconfig module."""
+"""Unit tests for flow.core.celeryconfig module."""
 
 # Import the module to test
 from flow.core import celeryconfig

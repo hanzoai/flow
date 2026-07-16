@@ -35,7 +35,7 @@ from sqlalchemy import create_engine, text
 
 MINIMUM_KEY_LENGTH = 32
 SENSITIVE_AUTH_FIELDS = ["oauth_client_secret", "api_key"]
-# Must match langflow.services.variable.constants.CREDENTIAL_TYPE
+# Must match flow.services.variable.constants.CREDENTIAL_TYPE
 CREDENTIAL_TYPE = "Credential"
 
 
@@ -209,7 +209,7 @@ def verify_migration(conn, new_key: str) -> tuple[int, int]:
 
 def get_default_database_url(config_dir: Path) -> str | None:
     """Get database URL from default SQLite location."""
-    default_db = config_dir / "langflow.db"
+    default_db = config_dir / "flow.db"
     if default_db.exists():
         return f"sqlite:///{default_db}"
     return None
@@ -472,7 +472,7 @@ Examples:
     database_url = args.database_url or get_default_database_url(args.config_dir)
     if not database_url:
         print("Error: Could not determine database URL.")
-        print(f"  No database found at {args.config_dir}/langflow.db")
+        print(f"  No database found at {args.config_dir}/flow.db")
         print("  Use --database-url to specify the database location")
         sys.exit(1)
 

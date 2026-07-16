@@ -47,7 +47,7 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
-from langflow.utils import migration
+from flow.utils import migration
 
 # revision identifiers, used by Alembic.
 revision: str = "a1b2c3d4e5f6"  # pragma: allowlist secret

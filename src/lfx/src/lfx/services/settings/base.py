@@ -215,9 +215,9 @@ class Settings(BaseSettings):
     sentry_profiles_sample_rate: float | None = 1.0
 
     store: bool | None = True
-    store_url: str | None = "https://api.langflow.store"
-    download_webhook_url: str | None = "https://api.langflow.store/flows/trigger/ec611a61-8460-4438-b187-a4f65e5559d4"
-    like_webhook_url: str | None = "https://api.langflow.store/flows/trigger/64275852-ec00-45c1-984e-3bff814732da"
+    store_url: str | None = "https://api.flow.store"
+    download_webhook_url: str | None = "https://api.flow.store/flows/trigger/ec611a61-8460-4438-b187-a4f65e5559d4"
+    like_webhook_url: str | None = "https://api.flow.store/flows/trigger/64275852-ec00-45c1-984e-3bff814732da"
 
     storage_type: str = "local"
     """Storage type for file storage. Defaults to 'local'. Supports 'local' and 's3'."""
@@ -262,7 +262,7 @@ class Settings(BaseSettings):
     # Telemetry
     do_not_track: bool = False
     """If set to True, Langflow will not track telemetry."""
-    telemetry_base_url: str = "https://langflow.gateway.scarf.sh"
+    telemetry_base_url: str = "https://flow.gateway.scarf.sh"
     transactions_storage_enabled: bool = True
     """If set to True, Langflow will track transactions between flows."""
     vertex_builds_storage_enabled: bool = True
@@ -548,7 +548,7 @@ class Settings(BaseSettings):
             value = flow_database_url
             logger.debug("Using FLOW_DATABASE_URL env variable")
         else:
-            # Originally, we used sqlite:///./langflow.db
+            # Originally, we used sqlite:///./flow.db
             # so we need to migrate to the new format
             # if there is a database in that location
             if not info.data["config_dir"]:

@@ -48,38 +48,38 @@ from flow.api.v1.schemas.deployments import (
     SnapshotUpdateRequest,
     SnapshotUpdateResponse,
 )
-from langflow.services.adapters.deployment.context import deployment_provider_scope
-from langflow.services.database.models.deployment.crud import (
+from flow.services.adapters.deployment.context import deployment_provider_scope
+from flow.services.database.models.deployment.crud import (
     count_deployments_by_provider,
     delete_deployment_by_id,
     deployment_name_exists,
     get_deployment_by_resource_key,
 )
-from langflow.services.database.models.deployment.crud import (
+from flow.services.database.models.deployment.crud import (
     create_deployment as create_deployment_db,
 )
-from langflow.services.database.models.deployment.crud import (
+from flow.services.database.models.deployment.crud import (
     update_deployment as update_deployment_db,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     count_provider_accounts as count_provider_account_rows,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     create_provider_account_from_model as create_provider_account_row,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     delete_provider_account as delete_provider_account_row,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     get_provider_account_by_id as get_provider_account_row_by_id,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     list_provider_accounts as list_provider_account_rows,
 )
-from langflow.services.database.models.deployment_provider_account.crud import (
+from flow.services.database.models.deployment_provider_account.crud import (
     update_provider_account as update_provider_account_row,
 )
-from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+from flow.services.database.models.flow_version_deployment_attachment.crud import (
     AttachmentConflictError,
     delete_unbound_attachments,
     get_attachment_by_provider_snapshot_id,
@@ -87,8 +87,8 @@ from langflow.services.database.models.flow_version_deployment_attachment.crud i
     list_deployment_attachments_for_flow_version_ids,
     update_flow_version_by_provider_snapshot_id,
 )
-from langflow.services.deps import get_telemetry_service
-from langflow.services.telemetry.schema import DeploymentPayload
+from flow.services.deps import get_telemetry_service
+from flow.services.telemetry.schema import DeploymentPayload
 
 
 @dataclass
@@ -1015,8 +1015,8 @@ async def update_snapshot(
     ``provider_snapshot_id``.  Only Langflow-tracked snapshots (those with
     a ``flow_version_deployment_attachment`` row) can be updated.
     """
-    from langflow.services.database.models.deployment.crud import get_deployment as get_deployment_row
-    from langflow.services.database.models.flow_version.crud import get_flow_version_entry
+    from flow.services.database.models.deployment.crud import get_deployment as get_deployment_row
+    from flow.services.database.models.flow_version.crud import get_flow_version_entry
 
     snapshot_id = provider_snapshot_id.strip()
 
@@ -1068,7 +1068,7 @@ async def update_snapshot(
     deployment_adapter = resolve_deployment_adapter(provider_account.provider_key)
     deployment_mapper = get_deployment_mapper(provider_account.provider_key)
 
-    from langflow.services.database.models.flow.model import Flow
+    from flow.services.database.models.flow.model import Flow
 
     flow_row = await session.get(Flow, flow_version.flow_id)
 

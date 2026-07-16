@@ -147,7 +147,7 @@ class TestResolveFlowPath:
 
     def test_should_reject_filename_with_path_traversal_sequences(self, tmp_path):
         """Should reject filenames containing '..' before any path construction."""
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             with pytest.raises(HTTPException) as exc_info:
                 resolve_flow_path("../../etc/passwd")
 
@@ -156,7 +156,7 @@ class TestResolveFlowPath:
 
     def test_should_reject_filename_with_backslash_traversal(self, tmp_path):
         """Should reject filenames containing backslash path separators."""
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             with pytest.raises(HTTPException) as exc_info:
                 resolve_flow_path("..\\..\\etc\\passwd")
 
@@ -293,9 +293,9 @@ class TestLoadGraphFromPython:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
             patch(
-                "langflow.agentic.services.helpers.flow_loader.validate_flow_for_current_settings",
+                "flow.agentic.services.helpers.flow_loader.validate_flow_for_current_settings",
                 side_effect=CustomComponentValidationError(
                     "Flow build blocked: custom components are not allowed: Bad (node)"
                 ),
@@ -473,7 +473,7 @@ class TestBugsAndEdgeCases:
         secret = tmp_path / "secret.json"
         secret.write_text('{"secret": true}')
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", flows_dir):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", flows_dir):
             with pytest.raises(HTTPException) as exc_info:
                 resolve_flow_path("../secret.json")
 
@@ -486,7 +486,7 @@ class TestBugsAndEdgeCases:
         → exists() = True (it's a directory) → returned as 'json'.
         Downstream code will crash trying to read a directory as JSON.
         """
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path("")
 
         assert result_path == tmp_path  # Returns directory as if it were a file
@@ -498,7 +498,7 @@ class TestBugsAndEdgeCases:
         dot_json = tmp_path / ".json"
         dot_json.write_text("{}")
 
-        with patch("langflow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
+        with patch("flow.agentic.services.helpers.flow_loader.FLOWS_BASE_PATH", tmp_path):
             result_path, result_type = resolve_flow_path(".json")
 
         assert result_path == dot_json
@@ -517,7 +517,7 @@ class TestBugsAndEdgeCases:
         with (
             patch("importlib.util.spec_from_file_location") as mock_spec_from_file,
             patch("importlib.util.module_from_spec") as mock_module_from_spec,
-            patch("langflow.agentic.services.helpers.flow_loader._temporary_sys_path"),
+            patch("flow.agentic.services.helpers.flow_loader._temporary_sys_path"),
         ):
             mock_spec = MagicMock()
             mock_spec.loader = MagicMock()

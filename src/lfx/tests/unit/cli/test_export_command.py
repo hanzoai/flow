@@ -20,7 +20,7 @@ import typer
 # Shared constants
 # ---------------------------------------------------------------------------
 
-_BASE_URL = "http://langflow.test"
+_BASE_URL = "http://flow.test"
 _API_KEY = "test-api-key-export"  # pragma: allowlist secret
 _FLOW_ID = "aaaaaaaa-0000-0000-0000-000000000001"
 _PROJECT_ID = "bbbbbbbb-0000-0000-0000-000000000001"

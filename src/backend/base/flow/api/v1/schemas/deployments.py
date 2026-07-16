@@ -57,10 +57,10 @@ from uuid import UUID
 from lfx.services.adapters.deployment.schema import DEPLOYMENT_DESCRIPTION_MAX_LENGTH, DeploymentType
 from pydantic import AfterValidator, BaseModel, Field, ValidationInfo, model_validator
 
-from langflow.services.database.models.deployment_provider_account.schemas import (
+from flow.services.database.models.deployment_provider_account.schemas import (
     DeploymentProviderKey,
 )
-from langflow.services.database.models.deployment_provider_account.utils import (
+from flow.services.database.models.deployment_provider_account.utils import (
     validate_provider_url,
 )
 

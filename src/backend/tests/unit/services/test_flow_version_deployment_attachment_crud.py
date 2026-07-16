@@ -4,28 +4,28 @@ from typing import TYPE_CHECKING
 from uuid import uuid4
 
 import pytest
-from langflow.api.v1.mappers.deployments.contracts import ProviderSnapshotBinding
-from langflow.services.database.models.deployment.crud import create_deployment
-from langflow.services.database.models.deployment.model import Deployment
-from langflow.services.database.models.deployment_provider_account.crud import create_provider_account
-from langflow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
-from langflow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
-from langflow.services.database.models.flow.model import Flow
-from langflow.services.database.models.flow_version.model import FlowVersion
-from langflow.services.database.models.flow_version_deployment_attachment.crud import (
+from flow.api.v1.mappers.deployments.contracts import ProviderSnapshotBinding
+from flow.services.database.models.deployment.crud import create_deployment
+from flow.services.database.models.deployment.model import Deployment
+from flow.services.database.models.deployment_provider_account.crud import create_provider_account
+from flow.services.database.models.deployment_provider_account.model import DeploymentProviderAccount
+from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.flow_version_deployment_attachment.crud import (
     create_deployment_attachment,
     delete_deployment_attachments_by_keys,
     delete_unbound_attachments,
     list_attachments_by_deployment_ids,
     update_deployment_attachment_provider_snapshot_id,
 )
-from langflow.services.database.models.flow_version_deployment_attachment.model import FlowVersionDeploymentAttachment
-from langflow.services.database.models.flow_version_deployment_attachment.schema import (
+from flow.services.database.models.flow_version_deployment_attachment.model import FlowVersionDeploymentAttachment
+from flow.services.database.models.flow_version_deployment_attachment.schema import (
     DeploymentAttachmentKeyBatch,
 )
-from langflow.services.database.models.folder.model import Folder
-from langflow.services.database.models.user.model import User
-from langflow.services.deps import session_scope
+from flow.services.database.models.folder.model import Folder
+from flow.services.database.models.user.model import User
+from flow.services.deps import session_scope
 from lfx.services.adapters.deployment.schema import DeploymentType
 
 if TYPE_CHECKING:

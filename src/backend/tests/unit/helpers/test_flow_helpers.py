@@ -245,7 +245,7 @@ class TestGetFlowByIdOrEndpointName:
     @staticmethod
     def _patch_session(mock_session):
         """Patch session_scope to yield the provided mock session."""
-        patcher = patch("langflow.helpers.flow.session_scope")
+        patcher = patch("flow.helpers.flow.session_scope")
         mock_scope = patcher.start()
         mock_scope.return_value.__aenter__ = AsyncMock(return_value=mock_session)
         mock_scope.return_value.__aexit__ = AsyncMock(return_value=False)
@@ -273,7 +273,7 @@ class TestGetFlowByIdOrEndpointName:
 
         patcher = self._patch_session(mock_session)
         try:
-            with patch("langflow.helpers.flow.FlowRead") as mock_flow_read:
+            with patch("flow.helpers.flow.FlowRead") as mock_flow_read:
                 mock_flow_read.model_validate = MagicMock(return_value="validated_flow")
                 result = await get_flow_by_id_or_endpoint_name(str(flow_id), str(owner_id))
                 assert result == "validated_flow"
@@ -340,7 +340,7 @@ class TestGetFlowByIdOrEndpointName:
 
         patcher = self._patch_session(mock_session)
         try:
-            with patch("langflow.helpers.flow.FlowRead") as mock_flow_read:
+            with patch("flow.helpers.flow.FlowRead") as mock_flow_read:
                 mock_flow_read.model_validate = MagicMock(return_value="validated_flow")
                 # user_id=None: any flow is returned.
                 result = await get_flow_by_id_or_endpoint_name(str(flow_id), user_id=None)
@@ -405,7 +405,7 @@ class TestGetFlowByIdOrEndpointName:
 
         patcher = self._patch_session(mock_session)
         try:
-            with patch("langflow.helpers.flow.FlowRead") as mock_flow_read:
+            with patch("flow.helpers.flow.FlowRead") as mock_flow_read:
                 mock_flow_read.model_validate = MagicMock(return_value="validated_flow")
                 result = await get_flow_by_id_or_endpoint_name("webhook-ep", user_id=None)
                 assert result == "validated_flow"

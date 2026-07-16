@@ -4,10 +4,10 @@ This module provides HTTP handlers for retrieving and deleting execution trace
 data from the native tracer, enabling the Trace View in the frontend.
 
 Business logic (query/aggregation) lives in:
-    langflow.services.tracing.repository
+    flow.services.tracing.repository
 
 Data transformation logic lives in:
-    langflow.services.tracing.formatting
+    flow.services.tracing.formatting
 """
 
 import asyncio

@@ -22,7 +22,7 @@ from lfx.utils.langflow_utils import has_langflow_db_backend
 
 def _impl():
     if has_langflow_db_backend():
-        from langflow import memory as impl
+        from flow import memory as impl
     else:
         from lfx.memory import stubs as impl
     return impl

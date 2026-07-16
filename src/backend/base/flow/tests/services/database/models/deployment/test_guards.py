@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock
 from uuid import uuid4
 
 import pytest
-from langflow.services.database.models.deployment.exceptions import DeploymentGuardError
-from langflow.services.database.models.deployment.guards import (
+from flow.services.database.models.deployment.exceptions import DeploymentGuardError
+from flow.services.database.models.deployment.guards import (
     check_flow_has_deployed_versions,
     check_project_has_deployments,
 )

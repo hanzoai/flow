@@ -1,4 +1,4 @@
-"""Backwards compatibility module for langflow.base.io.chat.
+"""Backwards compatibility module for flow.base.io.chat.
 
 This module imports from lfx.base.io.chat to maintain compatibility.
 """

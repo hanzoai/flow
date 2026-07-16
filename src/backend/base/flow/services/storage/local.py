@@ -1,4 +1,4 @@
-"""Local file-based storage service for langflow."""
+"""Local file-based storage service for flow."""
 
 from __future__ import annotations
 

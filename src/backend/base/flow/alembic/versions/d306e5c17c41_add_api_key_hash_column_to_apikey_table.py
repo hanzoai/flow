@@ -18,7 +18,7 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
-from langflow.utils import migration
+from flow.utils import migration
 
 # revision identifiers, used by Alembic.
 revision: str = "d306e5c17c41"  # pragma: allowlist secret
@@ -106,7 +106,7 @@ def upgrade() -> None:
             batch_op.create_index(INDEX_NAME, [COLUMN_NAME])
 
     try:
-        from langflow.services.auth.utils import decrypt_api_key
+        from flow.services.auth.utils import decrypt_api_key
     except ImportError:
         print(  # noqa: T201
             "WARNING: Could not import auth utilities. "
