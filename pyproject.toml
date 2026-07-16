@@ -11,7 +11,7 @@ maintainers = [
 ]
 # Define your main dependencies here
 dependencies = [
-    "flow-base[complete]>=0.9.6",
+    "hanzo-flow-base[complete]>=0.9.6",
 ]
 
 
@@ -62,9 +62,9 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [tool.uv.sources]
-flow-base = { workspace = true }
+hanzo-flow-base = { workspace = true }
 lfx = { workspace = true }
-flow-sdk = { workspace = true }
+hanzo-flow-sdk = { workspace = true }
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
 
@@ -85,7 +85,7 @@ Documentation = "https://docs.hanzo.ai/flow"
 
 [project.optional-dependencies]
 docling = [
-    "flow-base[docling]>=0.9.5",
+    "hanzo-flow-base[docling]>=0.9.5",
     "tesserocr>=2.8.0",
     "rapidocr-onnxruntime>=1.4.4",
     "ocrmac>=1.0.0; sys_platform == 'darwin'",
@@ -97,11 +97,11 @@ docling = [
 ]
 
 docling-chunking = [
-    "flow-base[docling-chunking]>=0.9.6",
+    "hanzo-flow-base[docling-chunking]>=0.9.6",
 ]
 
 docling-image-description = [
-    "flow-base[docling-image-description]>=0.9.6",
+    "hanzo-flow-base[docling-image-description]>=0.9.6",
     "langchain-docling>=1.1.0",
 ]
 
