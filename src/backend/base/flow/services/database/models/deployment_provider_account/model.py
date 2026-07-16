@@ -43,6 +43,7 @@ class DeploymentProviderAccount(SQLModel, table=True):  # type: ignore[call-arg]
     user_id: UUIDstr = Field(
         sa_column=Column(sa.Uuid(), ForeignKey("user.id", ondelete="CASCADE"), nullable=False, index=True)
     )
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     # provider_tenant_id participates in a unique constraint. When NULL,
     # SQL-standard databases (PostgreSQL, SQLite) treat NULL != NULL in unique
     # constraints, so multiple rows with the same (user_id, provider_url) are

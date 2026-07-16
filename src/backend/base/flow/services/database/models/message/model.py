@@ -131,6 +131,7 @@ class MessageBase(SQLModel):
 
 
 class MessageTable(MessageBase, table=True):  # type: ignore[call-arg]
+    org_id: str | None = Field(default=None, nullable=True, index=True)  # IAM tenant scope
     model_config = ConfigDict(validate_assignment=True, arbitrary_types_allowed=True)
 
     __tablename__ = "message"
