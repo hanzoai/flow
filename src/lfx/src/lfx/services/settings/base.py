@@ -1,4 +1,4 @@
-"""Composed ``Settings`` class for Langflow.
+"""Composed ``Settings`` class for Hanzo Flow.
 
 Fields live in per-group mixins under :mod:`lfx.services.settings.groups`.
 This module wires them together, configures env-var loading, and exposes the
@@ -89,8 +89,8 @@ class CustomSource(EnvSettingsSource):
 class Settings(BaseSettings):
     # Define the default FLOW_DIR
     config_dir: str | None = None
-    # Define if langflow db should be saved in config dir or
-    # in the langflow directory
+    # Define if flow db should be saved in config dir or
+    # in the flow directory
     save_db_in_config_dir: bool = False
     """Define if flow database should be saved in FLOW_CONFIG_DIR or in the flow directory
     (i.e. in the package directory)."""
@@ -99,14 +99,14 @@ class Settings(BaseSettings):
     """The directory to store knowledge bases."""
 
     dev: bool = False
-    """If True, Langflow will run in development mode."""
+    """If True, Hanzo Flow will run in development mode."""
     database_url: str | None = None
-    """Database URL for Langflow. If not provided, Langflow will use a SQLite database.
+    """Database URL for Hanzo Flow. If not provided, Hanzo Flow will use a SQLite database.
     The driver shall be an async one like `sqlite+aiosqlite` (`sqlite` and `postgresql`
     will be automatically converted to the async drivers `sqlite+aiosqlite` and
     `postgresql+psycopg` respectively)."""
     database_connection_retry: bool = False
-    """If True, Langflow will retry to connect to the database if it fails."""
+    """If True, Hanzo Flow will retry to connect to the database if it fails."""
     pool_size: int = 20
     """The number of connections to keep open in the connection pool.
     For high load scenarios, this should be increased based on expected concurrent users."""
@@ -118,7 +118,7 @@ class Settings(BaseSettings):
     database."""
     migration_lock_namespace: str | None = None
     """Optional namespace identifier for PostgreSQL advisory lock during migrations.
-    If not provided, a hash of the database URL will be used. Useful when multiple Langflow
+    If not provided, a hash of the database URL will be used. Useful when multiple Hanzo Flow
     instances share the same database and need coordinated migration locking."""
 
     mcp_server_timeout: int = 20
@@ -184,9 +184,9 @@ class Settings(BaseSettings):
     """The store can be 'db' or 'kubernetes'."""
 
     prometheus_enabled: bool = False
-    """If set to True, Langflow will expose Prometheus metrics."""
+    """If set to True, Hanzo Flow will expose Prometheus metrics."""
     prometheus_port: int = 9090
-    """The port on which Langflow will expose Prometheus metrics. 9090 is the default port."""
+    """The port on which Hanzo Flow will expose Prometheus metrics. 9090 is the default port."""
 
     disable_track_apikey_usage: bool = False
     remove_api_keys: bool = False
@@ -232,7 +232,7 @@ class Settings(BaseSettings):
 
     fallback_to_env_var: bool = True
     """If set to True, Global Variables set in the UI will fallback to a environment variable
-    with the same name in case Langflow fails to retrieve the variable value."""
+    with the same name in case Hanzo Flow fails to retrieve the variable value."""
 
     store_environment_variables: bool = True
     """Whether to store environment variables as Global Variables in the database."""
@@ -245,7 +245,7 @@ class Settings(BaseSettings):
     user_agent: str = "flow"
     """User agent for the API calls."""
     backend_only: bool = False
-    """If set to True, Langflow will not serve the frontend."""
+    """If set to True, Hanzo Flow will not serve the frontend."""
 
     # CORS Settings
     cors_origins: list[str] | str = "*"
@@ -261,18 +261,18 @@ class Settings(BaseSettings):
 
     # Telemetry
     do_not_track: bool = False
-    """If set to True, Langflow will not track telemetry."""
+    """If set to True, Hanzo Flow will not track telemetry."""
     telemetry_base_url: str = "https://flow.gateway.scarf.sh"
     transactions_storage_enabled: bool = True
-    """If set to True, Langflow will track transactions between flows."""
+    """If set to True, Hanzo Flow will track transactions between flows."""
     vertex_builds_storage_enabled: bool = True
-    """If set to True, Langflow will keep track of each vertex builds (outputs) in the UI for any flow."""
+    """If set to True, Hanzo Flow will keep track of each vertex builds (outputs) in the UI for any flow."""
 
     # Config
     host: str = "localhost"
-    """The host on which Langflow will run."""
+    """The host on which Hanzo Flow will run."""
     port: int = 7860
-    """The port on which Langflow will run."""
+    """The port on which Hanzo Flow will run."""
     runtime_port: int | None = Field(default=None, exclude=True)
     """TEMPORARY: The port detected at runtime after checking for conflicts.
     This field is system-managed only and will be removed in future versions
@@ -280,9 +280,9 @@ class Settings(BaseSettings):
     workers: int = 1
     """The number of workers to run."""
     log_level: str = "critical"
-    """The log level for Langflow."""
+    """The log level for Hanzo Flow."""
     log_file: str | None = "logs/flow.log"
-    """The path to log file for Langflow."""
+    """The path to log file for Hanzo Flow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""
     alembic_log_to_stdout: bool = False
@@ -290,11 +290,11 @@ class Settings(BaseSettings):
     frontend_path: str | None = None
     """The path to the frontend directory containing build files. This is for development purposes only.."""
     open_browser: bool = False
-    """If set to True, Langflow will open the browser on startup."""
+    """If set to True, Hanzo Flow will open the browser on startup."""
     auto_saving: bool = True
-    """If set to True, Langflow will auto save flows."""
+    """If set to True, Hanzo Flow will auto save flows."""
     auto_saving_interval: int = 1000
-    """The interval in ms at which Langflow will auto save flows."""
+    """The interval in ms at which Hanzo Flow will auto save flows."""
     health_check_max_retries: int = 5
     """The maximum number of retries for the health check."""
     max_file_size_upload: int = 1024
@@ -330,27 +330,27 @@ class Settings(BaseSettings):
 
     # MCP Server
     mcp_server_enabled: bool = True
-    """If set to False, Langflow will not enable the MCP server."""
+    """If set to False, Hanzo Flow will not enable the MCP server."""
     mcp_server_enable_progress_notifications: bool = False
-    """If set to False, Langflow will not send progress notifications in the MCP server."""
+    """If set to False, Hanzo Flow will not send progress notifications in the MCP server."""
 
     # Add projects to MCP servers automatically on creation
     add_projects_to_mcp_servers: bool = True
     """If set to True, newly created projects will be added to the user's MCP servers config automatically."""
     # MCP Composer
     mcp_composer_enabled: bool = True
-    """If set to False, Langflow will not start the MCP Composer service."""
+    """If set to False, Hanzo Flow will not start the MCP Composer service."""
     mcp_composer_version: str = "==0.1.0.8.10"
     """Version constraint for mcp-composer when using uvx. Uses PEP 440 syntax."""
 
     # Agentic Experience
     agentic_experience: bool = False
-    """If set to True, Langflow will start the agentic MCP server that provides tools for
+    """If set to True, Hanzo Flow will start the agentic MCP server that provides tools for
     flow/component operations, template search, and graph visualization."""
 
     # Developer API
     developer_api_enabled: bool = False
-    """If set to True, Langflow will enable developer API endpoints for advanced debugging and introspection."""
+    """If set to True, Hanzo Flow will enable developer API endpoints for advanced debugging and introspection."""
 
     # Public Flow Settings
     public_flow_cleanup_interval: int = Field(default=3600, gt=600)
@@ -362,20 +362,20 @@ class Settings(BaseSettings):
     event_delivery: Literal["polling", "streaming", "direct"] = "streaming"
     """How to deliver build events to the frontend. Can be 'polling', 'streaming' or 'direct'."""
     lazy_load_components: bool = False
-    """If set to True, Langflow will only partially load components at startup and fully load them on demand.
+    """If set to True, Hanzo Flow will only partially load components at startup and fully load them on demand.
     This significantly reduces startup time but may cause a slight delay when a component is first used."""
 
     # Starter Projects
     create_starter_projects: bool = True
-    """If set to True, Langflow will create starter projects. If False, skips all starter project setup.
+    """If set to True, Hanzo Flow will create starter projects. If False, skips all starter project setup.
     Note that this doesn't check if the starter projects are already loaded in the db;
     this is intended to be used to skip all startup project logic."""
     update_starter_projects: bool = True
-    """If set to True, Langflow will update starter projects."""
+    """If set to True, Hanzo Flow will update starter projects."""
 
     # SSRF Protection
     ssrf_protection_enabled: bool = False
-    """If set to True, Langflow will enable SSRF (Server-Side Request Forgery) protection.
+    """If set to True, Hanzo Flow will enable SSRF (Server-Side Request Forgery) protection.
     When enabled, blocks requests to private IP ranges, localhost, and cloud metadata endpoints.
     When False (default), no URL validation is performed, allowing requests to any destination
     including internal services, private networks, and cloud metadata endpoints.

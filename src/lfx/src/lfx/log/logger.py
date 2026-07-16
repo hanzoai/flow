@@ -1,4 +1,4 @@
-"""Logging configuration for Langflow using structlog."""
+"""Logging configuration for Hanzo Flow using structlog."""
 
 import json
 import logging

@@ -32,7 +32,7 @@ class VariableService(Service):
         by component variable resolution. The lookup itself is sync — no I/O —
         but the coroutine wrapper is required so callers can `await` it
         regardless of which variable service implementation is registered
-        (lfx env-fallback vs langflow DB-backed).
+        (lfx env-fallback vs flow DB-backed).
 
         Args:
             name: Variable name

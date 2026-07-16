@@ -1,4 +1,4 @@
-"""Utilities for auto-configuring the Langflow Agentic MCP server."""
+"""Utilities for auto-configuring the Hanzo Flow Agentic MCP server."""
 
 import sys
 from uuid import UUID
@@ -18,9 +18,9 @@ from flow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE
 
 
 async def auto_configure_agentic_mcp_server(session: AsyncSession) -> None:
-    """Auto-configure the Langflow Agentic MCP server for all users.
+    """Auto-configure the Hanzo Flow Agentic MCP server for all users.
 
-    This function adds the langflow-agentic MCP server to each user's MCP
+    This function adds the flow-agentic MCP server to each user's MCP
     configuration, making the agentic tools available in their MCP clients
     (like Claude Desktop).
 
@@ -34,7 +34,7 @@ async def auto_configure_agentic_mcp_server(session: AsyncSession) -> None:
         await logger.adebug("Agentic experience disabled, skipping agentic MCP server configuration")
         return
 
-    await logger.ainfo("Auto-configuring Langflow Agentic MCP server for all users...")
+    await logger.ainfo("Auto-configuring Hanzo Flow Agentic MCP server for all users...")
 
     try:
         # Get all users in the system
@@ -49,13 +49,13 @@ async def auto_configure_agentic_mcp_server(session: AsyncSession) -> None:
         storage_service = get_service(ServiceType.STORAGE_SERVICE)
 
         # Server configuration
-        server_name = "langflow-agentic"
+        server_name = "flow-agentic"
         python_executable = sys.executable
         server_config = {
             "command": python_executable,
             "args": ["-m", "flow.agentic.mcp"],
             "metadata": {
-                "description": "Langflow Agentic MCP server providing tools for flow/component operations, "
+                "description": "Hanzo Flow Agentic MCP server providing tools for flow/component operations, "
                 "template search, and graph visualization",
                 "auto_configured": True,
                 "langflow_internal": True,
@@ -124,15 +124,15 @@ async def auto_configure_agentic_mcp_server(session: AsyncSession) -> None:
 
 
 async def remove_agentic_mcp_server(session: AsyncSession) -> None:
-    """Remove the Langflow Agentic MCP server from all users.
+    """Remove the Hanzo Flow Agentic MCP server from all users.
 
-    This function removes the langflow-agentic MCP server from each user's MCP
+    This function removes the flow-agentic MCP server from each user's MCP
     configuration. Used when agentic experience is disabled.
 
     Args:
         session: Database session for querying users.
     """
-    await logger.ainfo("Removing Langflow Agentic MCP server from all users...")
+    await logger.ainfo("Removing Hanzo Flow Agentic MCP server from all users...")
 
     try:
         # Get all users
@@ -146,7 +146,7 @@ async def remove_agentic_mcp_server(session: AsyncSession) -> None:
         storage_service = get_service(ServiceType.STORAGE_SERVICE)
         settings_service = get_settings_service()
 
-        server_name = "langflow-agentic"
+        server_name = "flow-agentic"
         servers_removed = 0
 
         for user in users:

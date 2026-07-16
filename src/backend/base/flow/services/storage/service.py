@@ -1,4 +1,4 @@
-"""Storage service for langflow - redirects to lfx implementation."""
+"""Storage service for flow - redirects to lfx implementation."""
 
 from __future__ import annotations
 

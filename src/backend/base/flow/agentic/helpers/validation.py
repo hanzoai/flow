@@ -30,7 +30,7 @@ class _ReturnChecker(ast.NodeVisitor):
                 break
         self.generic_visit(node)
 
-    # Langflow components commonly use async output methods
+    # Hanzo Flow components commonly use async output methods
     visit_AsyncFunctionDef = visit_FunctionDef  # noqa: N815
 
 

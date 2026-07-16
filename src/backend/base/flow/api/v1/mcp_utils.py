@@ -157,7 +157,7 @@ async def handle_list_resources(project_id=None):
                     stored_filename = Path(stored_path).name if stored_path else user_file.name
                     safe_filename = quote(stored_filename)
                     if stored_filename.startswith(f"{MCP_SERVERS_FILE}_{current_user.id}"):
-                        # reserved file name for langflow MCP server config file(s)
+                        # reserved file name for flow MCP server config file(s)
                         continue
                     description = getattr(user_file, "provider", None) or "User file uploaded via File Manager"
                     resource = types.Resource(
@@ -210,7 +210,7 @@ async def handle_read_resource(uri: str, project_id: UUID | str | None = None) -
             raise ValueError(msg)
 
         # SECURITY: authorise the caller before reading. The storage layer alone is
-        # not enough because the filesystem doesn't know about Langflow users, and
+        # not enough because the filesystem doesn't know about Hanzo Flow users, and
         # previously any authenticated user could request any flow_id.
         try:
             current_user = current_user_ctx.get()

@@ -237,8 +237,8 @@ class MCPToolsComponent(ComponentWithCache):
                 from lfx.services.deps import get_settings_service
             except ImportError as e:
                 msg = (
-                    "Langflow MCP server functionality is not available. "
-                    "This feature requires the full Langflow installation."
+                    "Hanzo Flow MCP server functionality is not available. "
+                    "This feature requires the full Hanzo Flow installation."
                 )
                 raise ImportError(msg) from e
 
@@ -720,7 +720,7 @@ class MCPToolsComponent(ComponentWithCache):
         try:
             self.tools, _ = await self.update_tool_list()
             if self.tool != "":
-                # Set session context for persistent MCP sessions using Langflow session ID
+                # Set session context for persistent MCP sessions using Hanzo Flow session ID
                 session_context = self._get_session_context()
                 if session_context:
                     self.stdio_client.set_session_context(session_context)
@@ -761,7 +761,7 @@ class MCPToolsComponent(ComponentWithCache):
         return item_dict
 
     def _get_session_context(self) -> str | None:
-        """Get the Langflow session ID for MCP session caching."""
+        """Get the Hanzo Flow session ID for MCP session caching."""
         # Try to get session ID from the component's execution context
         if hasattr(self, "graph") and hasattr(self.graph, "session_id"):
             session_id = self.graph.session_id

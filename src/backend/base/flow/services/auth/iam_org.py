@@ -1,5 +1,5 @@
 """
-Hanzo IAM Organization extraction for Flow (Langflow fork).
+Hanzo IAM Organization extraction for Flow (Hanzo Flow fork).
 
 Extracts the IAM organization slug from:
   1. X-IAM-Org-Id request header (set by gateway)

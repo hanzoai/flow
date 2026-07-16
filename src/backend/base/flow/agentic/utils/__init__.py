@@ -1,4 +1,4 @@
-"""Utilities for agentic features in Langflow."""
+"""Utilities for agentic features in Hanzo Flow."""
 
 from flow.agentic.utils.template_search import (
     get_all_tags,

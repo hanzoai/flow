@@ -73,7 +73,7 @@ class LangWatchTracer(BaseTracer):
                 api_key = os.environ["LANGWATCH_API_KEY"]
                 endpoint = os.environ.get("LANGWATCH_ENDPOINT", "https://app.langwatch.ai")
 
-                resource = Resource.create(attributes={"service.name": "langflow"})
+                resource = Resource.create(attributes={"service.name": "flow"})
                 exporter = OTLPSpanExporter(
                     endpoint=f"{endpoint}/api/otel/v1/traces", headers={"Authorization": f"Bearer {api_key}"}
                 )

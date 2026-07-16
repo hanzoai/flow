@@ -29,13 +29,13 @@ console = Console()
 _ENVIRONMENTS_YAML = """\
 # .lfx/environments.yaml
 #
-# Configure your Langflow instances here.
+# Configure your Hanzo Flow instances here.
 # Safe to commit — API keys are NEVER stored in this file.
 # The api_key_env value is the NAME of an environment variable that holds
 # the actual API key; set that variable in your shell or CI secrets.
 #
 # Quick start:
-#   1. Open Langflow → Settings → API Keys → Create a new key
+#   1. Open Hanzo Flow → Settings → API Keys → Create a new key
 #   2. export LANGFLOW_LOCAL_API_KEY=<your key>
 #   3. lfx export --env local --flow-id <uuid> --output-dir flows/
 
@@ -57,15 +57,15 @@ defaults:
 """
 
 _TEST_FLOWS_PY = '''\
-"""Integration tests for Langflow flows.
+"""Integration tests for Hanzo Flow flows.
 
 Run against a local instance (started with ``lfx serve``):
 
-    pytest tests/ --langflow-url http://localhost:8000
+    pytest tests/ --flow-url http://localhost:8000
 
 Run against a named environment (staging, production, etc.):
 
-    pytest tests/ --langflow-env staging -m integration
+    pytest tests/ --flow-env staging -m integration
 
 The flow_runner fixture auto-skips when no connection is configured,
 so these tests are safe to include in any CI pipeline.
@@ -85,16 +85,16 @@ def test_flow_responds(flow_runner):
 @pytest.mark.integration
 def test_flow_output_quality(flow_runner):
     """Example: assert on the content of the response."""
-    result = flow_runner("my-flow-endpoint", "What is Langflow?")
+    result = flow_runner("my-flow-endpoint", "What is Hanzo Flow?")
     text = result.first_text_output()
     assert text is not None
     assert len(text) > 20, f"Response seems too short: {text!r}"
 '''
 
 _GITIGNORE = """\
-# Langflow credentials -- never commit API keys
-# (langflow-environments.toml may contain literal keys; .lfx/environments.yaml is safe to commit)
-langflow-environments.toml
+# Hanzo Flow credentials -- never commit API keys
+# (flow-environments.toml may contain literal keys; .lfx/environments.yaml is safe to commit)
+flow-environments.toml
 """
 
 # Templates bundled inside the Python package
@@ -210,11 +210,11 @@ def init_command(
         **kw,
     )
 
-    # .gitignore — keep langflow-environments.toml ignored for backward compat
+    # .gitignore — keep flow-environments.toml ignored for backward compat
     gitignore = target / ".gitignore"
     if gitignore.exists():
         existing_content = gitignore.read_text(encoding="utf-8")
-        if "langflow-environments.toml" not in existing_content:
+        if "flow-environments.toml" not in existing_content:
             gitignore.write_text(existing_content.rstrip() + "\n\n" + _GITIGNORE, encoding="utf-8")
             created.append((".gitignore", "appended credentials ignore rule"))
     else:
@@ -249,9 +249,9 @@ def init_command(
     if example:
         console.print("  3. [bold]lfx validate flows/hello-world.json[/bold]  (check the starter flow)")
         console.print("  4. [bold]lfx serve flows/hello-world.json[/bold]     (run it locally)")
-        console.print("  5. [bold]lfx push --dir flows/ --env local[/bold]    (deploy to Langflow)")
+        console.print("  5. [bold]lfx push --dir flows/ --env local[/bold]    (deploy to Hanzo Flow)")
     else:
         console.print("  3. [bold]lfx create my-flow --template hello-world[/bold]")
         console.print("  4. [bold]lfx push --dir flows/ --env local[/bold]")
-    console.print(f"  {'6' if example else '5'}. [bold]pytest tests/ --langflow-env local[/bold]")
+    console.print(f"  {'6' if example else '5'}. [bold]pytest tests/ --flow-env local[/bold]")
     console.print()

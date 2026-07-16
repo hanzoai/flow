@@ -299,8 +299,8 @@ def docling_worker(
 
     except ModuleNotFoundError:
         msg = (
-            "Docling is an optional dependency of Langflow. "
-            "Install with `uv pip install 'langflow[docling]'` "
+            "Docling is an optional dependency of Hanzo Flow. "
+            "Install with `uv pip install 'flow[docling]'` "
             "or refer to the documentation"
         )
         queue.put({"error": msg})
@@ -345,7 +345,7 @@ def docling_worker(
             except ImportError as e:
                 msg = (
                     "langchain-docling is not installed. Please install it with `pip install langchain-docling` "
-                    "or `pip install 'langflow[docling-image-description]'`."
+                    "or `pip install 'flow[docling-image-description]'`."
                 )
                 raise ImportError(msg) from e
             pic_desc_llm = _deserialize_pydantic_model(pic_desc_config)

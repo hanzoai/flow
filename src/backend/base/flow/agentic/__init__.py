@@ -1,1 +1,1 @@
-"""Agentic experience module for Langflow."""
+"""Agentic experience module for Hanzo Flow."""

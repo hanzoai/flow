@@ -58,7 +58,7 @@ class TableInput(BaseInputMixin, MetadataTraceMixin, TableMixin, ListableInputMi
                 "- A list of dictionaries (each dict is a row)\n"
                 "- A pandas DataFrame\n"
                 "- A single dictionary (will become a one-row table)\n"
-                "- A Data object (Langflow's internal data structure)\n"
+                "- A Data object (Hanzo Flow's internal data structure)\n"
             )
             raise ValueError(msg)  # noqa: TRY004
         # Ensure each item in the list is either a dict or a Data instance.
@@ -67,7 +67,7 @@ class TableInput(BaseInputMixin, MetadataTraceMixin, TableMixin, ListableInputMi
                 msg = (
                     f"Row {i + 1} in your table has an invalid format. Each row must be either:\n"
                     "- A dictionary containing column name/value pairs\n"
-                    "- A Data object (Langflow's internal data structure for passing data between components)\n"
+                    "- A Data object (Hanzo Flow's internal data structure for passing data between components)\n"
                     f"Instead, got a {type(item).__name__}. Please check the format of your input data."
                 )
                 raise ValueError(msg)  # noqa: TRY004
@@ -106,7 +106,7 @@ class ToolsInput(BaseInputMixin, ListableInputMixin, MetadataTraceMixin, ToolMod
 class JSONInput(HandleInput, InputTraceMixin, ListableInputMixin, ToolModeMixin):
     """Represents an Input that has a Handle that receives a JSON object.
 
-    This is the new standard input for Langflow data structures.
+    This is the new standard input for Hanzo Flow data structures.
     DataInput is maintained as an alias for backwards compatibility.
 
     Attributes:
@@ -326,9 +326,9 @@ class MessageInput(StrInput, InputTraceMixin):
 
 
 class MessageTextInput(StrInput, MetadataTraceMixin, InputTraceMixin, ToolModeMixin):
-    """Represents a text input component for the Langflow system.
+    """Represents a text input component for the Hanzo Flow system.
 
-    This component is used to handle text inputs in the Langflow system.
+    This component is used to handle text inputs in the Hanzo Flow system.
     It provides methods for validating and processing text values.
 
     Attributes:

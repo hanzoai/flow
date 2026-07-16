@@ -1,4 +1,4 @@
-"""Langflow ServiceManager - re-exports from lfx for backwards compatibility."""
+"""Hanzo Flow ServiceManager - re-exports from lfx for backwards compatibility."""
 
 from __future__ import annotations
 

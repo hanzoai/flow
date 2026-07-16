@@ -1,4 +1,4 @@
-"""lfx environment configuration — resolve Langflow instance URL and API key.
+"""lfx environment configuration — resolve Hanzo Flow instance URL and API key.
 
 Config file lookup order
 ------------------------
@@ -6,8 +6,8 @@ Config file lookup order
 2.  ``.lfx/environments.yaml`` in the current working directory, then each
     parent directory up to the first ``.git`` boundary (project root discovery).
 3.  ``~/.lfx/environments.yaml`` (user-level config).
-4.  ``langflow-environments.toml`` in the current working directory
-    (backward-compatible with the langflow-sdk TOML format).
+4.  ``flow-environments.toml`` in the current working directory
+    (backward-compatible with the flow-sdk TOML format).
 
 YAML file format
 ----------------
@@ -29,7 +29,7 @@ YAML file format
     defaults:
       environment: local
 
-TOML format is also accepted (``langflow-environments.toml`` or any ``.toml``
+TOML format is also accepted (``flow-environments.toml`` or any ``.toml``
 file passed via ``--environments-file``).
 
 The ``api_key_env`` field names an *environment variable* that holds the API
@@ -60,11 +60,11 @@ class ConfigError(Exception):
 
 @dataclass
 class LangflowEnvironment:
-    """A fully-resolved Langflow target instance.
+    """A fully-resolved Hanzo Flow target instance.
 
     Attributes:
         name:    Human-readable label (environment name or ``"__inline__"``).
-        url:     Base URL of the Langflow instance.
+        url:     Base URL of the Hanzo Flow instance.
         api_key: Resolved API key value, or ``None`` if not configured.
     """
 
@@ -78,7 +78,7 @@ class LangflowEnvironment:
 # ---------------------------------------------------------------------------
 
 _YAML_NAMES: tuple[str, ...] = ("environments.yaml", "environments.yml")
-_TOML_FALLBACK = "langflow-environments.toml"
+_TOML_FALLBACK = "flow-environments.toml"
 _LFX_DIR = ".lfx"
 
 
@@ -119,7 +119,7 @@ def _find_config_file(override: Path | None) -> Path | None:
         if user_yaml.is_file():
             return user_yaml
 
-    # Backward-compat: langflow-environments.toml in cwd
+    # Backward-compat: flow-environments.toml in cwd
     toml_fallback = cwd / _TOML_FALLBACK
     if toml_fallback.is_file():
         return toml_fallback

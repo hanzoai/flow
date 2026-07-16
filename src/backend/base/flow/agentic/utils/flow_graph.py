@@ -1,4 +1,4 @@
-"""Flow graph visualization utilities for Langflow."""
+"""Flow graph visualization utilities for Hanzo Flow."""
 
 from typing import TYPE_CHECKING, Any
 from uuid import UUID

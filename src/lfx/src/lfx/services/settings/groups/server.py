@@ -12,9 +12,9 @@ class ServerSettings(BaseModel):
     """ASGI server, process, and logging settings."""
 
     host: str = "localhost"
-    """The host on which Langflow will run."""
+    """The host on which Hanzo Flow will run."""
     port: int = 7860
-    """The port on which Langflow will run."""
+    """The port on which Hanzo Flow will run."""
     runtime_port: int | None = Field(default=None, exclude=True)
     """TEMPORARY: The port detected at runtime after checking for conflicts.
     This field is system-managed only and will be removed in future versions
@@ -22,9 +22,9 @@ class ServerSettings(BaseModel):
     workers: int = 1
     """The number of workers to run."""
     log_level: str = "critical"
-    """The log level for Langflow."""
+    """The log level for Hanzo Flow."""
     log_file: str | None = "logs/flow.log"
-    """The path to log file for Langflow."""
+    """The path to log file for Hanzo Flow."""
     alembic_log_file: str = "alembic/alembic.log"
     """The path to log file for Alembic for SQLAlchemy."""
     alembic_log_to_stdout: bool = False
@@ -32,19 +32,19 @@ class ServerSettings(BaseModel):
     frontend_path: str | None = None
     """The path to the frontend directory containing build files. This is for development purposes only."""
     open_browser: bool = False
-    """If set to True, Langflow will open the browser on startup."""
+    """If set to True, Hanzo Flow will open the browser on startup."""
     backend_only: bool = False
-    """If set to True, Langflow will not serve the frontend."""
+    """If set to True, Hanzo Flow will not serve the frontend."""
     ssl_cert_file: str | None = None
     """Path to the SSL certificate file on the local system."""
     ssl_key_file: str | None = None
     """Path to the SSL key file on the local system."""
     root_path: str = ""
     """ASGI root_path for deployments behind a reverse proxy that strips a URL
-    prefix (e.g. '/langflow').  When set, the MCP SSE transport includes this
+    prefix (e.g. '/flow').  When set, the MCP SSE transport includes this
     prefix in the POST-back URL so clients can reach the correct endpoint.
     Can also be set via the LANGFLOW_ROOT_PATH environment variable."""
-    user_agent: str = "langflow"
+    user_agent: str = "flow"
     """User agent for the API calls."""
 
     @field_validator("root_path", mode="before")
@@ -105,7 +105,7 @@ class ServerSettings(BaseModel):
     @classmethod
     def set_user_agent(cls, value):
         if not value:
-            value = "Langflow"
+            value = "Hanzo Flow"
         os.environ["USER_AGENT"] = value
         logger.debug(f"Setting user agent to {value}")
         return value

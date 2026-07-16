@@ -14,7 +14,7 @@ class RuntimeSettings(BaseModel):
     """
 
     dev: bool = False
-    """If True, Langflow will run in development mode."""
+    """If True, Hanzo Flow will run in development mode."""
 
     event_delivery: Literal["polling", "streaming", "direct"] = "streaming"
     """How to deliver build events to the frontend. Can be 'polling', 'streaming' or 'direct'."""

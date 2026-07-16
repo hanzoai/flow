@@ -1,6 +1,6 @@
-"""FastMCP server exposing Langflow operations as MCP tools.
+"""FastMCP server exposing Hanzo Flow operations as MCP tools.
 
-Connects to a running Langflow server via REST API. Flow data is never
+Connects to a running Hanzo Flow server via REST API. Flow data is never
 cached — every mutating tool does GET -> modify -> PATCH. The component
 registry is cached on first access.
 
@@ -92,9 +92,9 @@ async def _telemetry_lifespan(_server: FastMCP) -> AsyncIterator[dict]:
 
 
 mcp = FastMCP(
-    "langflow-mcp",
+    "flow-mcp",
     instructions=(
-        "Langflow MCP server -- build and run AI flows on a Langflow instance.\n"
+        "Hanzo Flow MCP server -- build and run AI flows on a Hanzo Flow instance.\n"
         "\n"
         "Typical workflow:\n"
         "  1. login (or set LANGFLOW_API_KEY env var)\n"
@@ -219,13 +219,13 @@ def _extract_vertex_error(build_data: dict[str, Any]) -> str:
 @mcp.tool()
 @_tracked
 async def login(username: str, password: str, server_url: str | None = None) -> dict[str, str]:
-    """Authenticate with a Langflow server. Call this first.
+    """Authenticate with a Hanzo Flow server. Call this first.
 
     Credentials are stored and reused for all subsequent calls.
 
     Args:
-        username: Langflow username.
-        password: Langflow password.
+        username: Hanzo Flow username.
+        password: Hanzo Flow password.
         server_url: Server URL (defaults to LANGFLOW_SERVER_URL env var or http://localhost:7860).
     """
     old_client = _client_var.get() or _shared_client
