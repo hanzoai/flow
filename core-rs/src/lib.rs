@@ -24,6 +24,9 @@ use std::collections::{BTreeSet, HashMap};
 use std::fmt;
 use std::sync::Arc;
 
+/// The `GpuResident` backend + `Device` seam (hanzo-ml / hanzo-fusion on hanzo-engine).
+pub mod gpu;
+
 // ── Errors ───────────────────────────────────────────────────────────────────
 
 /// Every fallible engine operation returns this. Variants name the exact defect so
