@@ -26,6 +26,8 @@ use std::sync::Arc;
 
 /// The `GpuResident` backend + `Device` seam (hanzo-ml / hanzo-fusion on hanzo-engine).
 pub mod gpu;
+/// The `Durable` backend + `Store` seam (checkpoint/resume; cloud S3-Base, desktop disk).
+pub mod durable;
 
 // ── Errors ───────────────────────────────────────────────────────────────────
 
