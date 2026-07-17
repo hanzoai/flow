@@ -1,0 +1,21 @@
+[package]
+name = "flow-ml"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "The hanzo-ml binding for flow-core: MlDevice/MlTensor make the GpuResident seam concrete. Same steps run on CPU or GPU — only the Device ctor differs. CPU by default; enable `cuda`/`metal` for on-GPU residence."
+license = "MIT"
+
+[lib]
+name = "flow_ml"
+
+# flow-core stays std-only; the heavy compute dep lives here, behind this crate, so
+# hanzo-desktop can embed flow-core alone (tiny) or flow-ml (with hanzo-ml) as needed.
+[dependencies]
+flow-core = { path = "../core-rs" }
+hanzo-ml = { path = "../../ml/hanzo-ml" }
+
+[features]
+# CPU by default (default = []). A GPU-resident build just forwards to hanzo-ml.
+cuda = ["hanzo-ml/cuda"]
+metal = ["hanzo-ml/metal"]
