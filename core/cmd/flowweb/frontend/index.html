@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hanzo Flow</title>
+<meta name="description" content="Hanzo Flow — the one visual builder for AI, agent, and data flows. Multi-tenant, org-scoped, native." />
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #000; color: #ededed; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .wrap { max-width: 560px; text-align: center; }
+  .mark { width: 44px; height: 44px; margin: 0 auto 22px; display: block; color: #fff; }
+  h1 { font-size: 30px; font-weight: 650; letter-spacing: -0.02em; }
+  h1 span { color: #8b8b8b; font-weight: 400; }
+  p.lede { margin: 14px 0 28px; color: #a1a1a1; font-size: 16px; }
+  .cta { display: inline-flex; gap: 10px; }
+  a.btn {
+    display: inline-block; padding: 10px 20px; border-radius: 10px; text-decoration: none;
+    font-weight: 550; transition: transform .12s ease, background .12s ease;
+  }
+  a.primary { background: #fff; color: #000; }
+  a.primary:hover { transform: translateY(-1px); }
+  a.ghost { border: 1px solid #262626; color: #ededed; }
+  a.ghost:hover { border-color: #3a3a3a; }
+  .foot { margin-top: 34px; color: #6b6b6b; font-size: 12.5px; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <svg class="mark" viewBox="0 0 67 67" fill="currentColor" aria-hidden="true">
+      <path d="M22.21 67V44.6369H0V67H22.21Z"/>
+      <path d="M66.7038 22.3184H22.2534L0.0878906 44.6367H44.4634L66.7038 22.3184Z"/>
+      <path d="M22.21 0H0V22.3184H22.21V0Z"/>
+      <path d="M66.7198 0H44.5098V22.3184H66.7198V0Z"/>
+      <path d="M66.7198 67V44.6369H44.5098V67H66.7198Z"/>
+    </svg>
+    <h1>Hanzo <span>Flow</span></h1>
+    <p class="lede">The one visual builder for AI, agent, and data flows — multi-tenant, org-scoped, native.</p>
+    <div class="cta">
+      <a class="btn primary" href="/flows">Open the builder</a>
+      <a class="btn ghost" href="/login">Sign in</a>
+    </div>
+    <div class="foot">Starting the app… if the builder doesn't load, it's warming up.</div>
+  </main>
+  <script>
+    // When the real Vite bundle is embedded, this file is overwritten by the app's
+    // own index.html. As a standalone landing, nudge signed-in users to the builder.
+    fetch('/api/v1/auto_login', { credentials: 'include' })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.frontend_timeout !== undefined) location.replace('/flows'); })
+      .catch(() => {});
+  </script>
+</body>
+</html>
