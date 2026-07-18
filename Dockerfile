@@ -1,8 +1,37 @@
 # syntax=docker/dockerfile:1
-# Multi-stage Dockerfile for Hanzo Flow
+# Multi-stage Dockerfile for Hanzo Flow.
+#
+# ONE image, ONE origin: the Go `flowweb` front door (:8080) serves the embedded
+# UI + landing and reverse-proxies /api to the Python flow backend (:7860, on
+# loopback). No separate flow-site landing, no second app host. See
+# core/cmd/flowweb. Mirrors hanzoai/world + hanzoai/cloud's embedded-SPA pattern.
 
 ################################
-# BUILDER
+# FRONTEND — build the Vite UI
+################################
+FROM node:20-slim AS frontend
+
+WORKDIR /fe
+COPY ./src/frontend/package.json ./src/frontend/package-lock.json* ./
+RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+COPY ./src/frontend/ ./
+RUN npm run build          # → /fe/build (Vite outDir)
+
+################################
+# GOWEB — embed the UI into flowweb
+################################
+FROM golang:1.23-bookworm AS goweb
+
+WORKDIR /src
+COPY ./core/ ./core/
+# Overwrite the committed landing placeholder with the real Vite bundle, then
+# go:embed it into a static, CGO-free binary.
+COPY --from=frontend /fe/build/ ./core/cmd/flowweb/frontend/
+WORKDIR /src/core
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /flowweb ./cmd/flowweb
+
+################################
+# BUILDER — Python deps
 ################################
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
@@ -66,11 +95,16 @@ RUN groupadd -r hanzo && useradd -r -g hanzo -d /app/data hanzo
 WORKDIR /app
 
 COPY --from=builder --chown=hanzo:hanzo /app/.venv /app/.venv
+# The Go front door (embedded UI + landing).
+COPY --from=goweb --chown=hanzo:hanzo /flowweb /app/flowweb
 
 ENV PATH="/app/.venv/bin:${PATH}"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+# Python backend on loopback; flowweb fronts it on the public port.
 ENV PORT=7860
+ENV FLOW_WEB_PORT=8080
+ENV FLOW_BACKEND_URL=http://127.0.0.1:7860
 
 # Copy only what's needed at runtime (not .git, tests, docs, docker/, etc.)
 COPY --chown=hanzo:hanzo ./src /app/src
@@ -81,9 +115,12 @@ RUN mkdir -p /app/data /app/logs && chown -R hanzo:hanzo /app/data /app/logs
 
 USER hanzo
 
-EXPOSE 7860
+EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:7860/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
 
-CMD ["python", "-m", "flow", "run", "--host", "0.0.0.0", "--port", "7860", "--backend-only"]
+# Python flow backend (API only) on loopback; exec flowweb as PID 1's foreground
+# so the container restarts if the front door dies. flowweb serves the embedded UI
+# + landing and proxies /api → 127.0.0.1:7860.
+CMD ["sh", "-c", "python -m flow run --host 127.0.0.1 --port 7860 --backend-only & exec /app/flowweb"]
