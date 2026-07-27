@@ -45,17 +45,17 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       "import.meta.env.BACKEND_URL": JSON.stringify(
-        envHanzo Flow.BACKEND_URL ?? "http://localhost:7860",
+        envHanzoFlow.BACKEND_URL ?? "http://localhost:7860",
       ),
       "import.meta.env.ACCESS_TOKEN_EXPIRE_SECONDS": JSON.stringify(
-        envHanzo Flow.ACCESS_TOKEN_EXPIRE_SECONDS ?? 60,
+        envHanzoFlow.ACCESS_TOKEN_EXPIRE_SECONDS ?? 60,
       ),
-      "import.meta.env.CI": JSON.stringify(envHanzo Flow.CI ?? false),
+      "import.meta.env.CI": JSON.stringify(envHanzoFlow.CI ?? false),
       "import.meta.env.FLOW_AUTO_LOGIN": JSON.stringify(
-        envHanzo Flow.FLOW_AUTO_LOGIN ?? true,
+        envHanzoFlow.FLOW_AUTO_LOGIN ?? true,
       ),
       "import.meta.env.FLOW_MCP_COMPOSER_ENABLED": JSON.stringify(
-        envHanzo Flow.FLOW_MCP_COMPOSER_ENABLED ?? "true",
+        envHanzoFlow.FLOW_MCP_COMPOSER_ENABLED ?? "true",
       ),
     },
     plugins: [
