@@ -50,12 +50,14 @@ RUN apt-get update \
 
 # Copy all workspace manifests so uv can resolve workspace members.
 # README.md files are required by hatchling build-backend.
-# src/backend/base/uv.lock is required by the base workspace member.
+# A uv WORKSPACE has exactly ONE lockfile, at the root. Members do not carry
+# their own, and src/backend/base does not have one — it holds README.md, flow/
+# and pyproject.toml only. The removed line claimed otherwise and broke the build:
+#   failed to calculate checksum of ref ...: "/src/backend/base/uv.lock": not found
 COPY ./uv.lock /app/uv.lock
 COPY ./README.md /app/README.md
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./src/backend/base/README.md /app/src/backend/base/README.md
-COPY ./src/backend/base/uv.lock /app/src/backend/base/uv.lock
 COPY ./src/backend/base/pyproject.toml /app/src/backend/base/pyproject.toml
 COPY ./src/lfx/README.md /app/src/lfx/README.md
 COPY ./src/lfx/pyproject.toml /app/src/lfx/pyproject.toml
