@@ -18,10 +18,13 @@
     "jsx": "react-jsx",
     "noImplicitAny": false,
     "paths": {
-      "@/*": ["*"],
-      "@queries/*": ["controllers/API/queries/*"]
-    },
-    "baseUrl": "src"
+      "@/*": [
+        "./src/*"
+      ],
+      "@queries/*": [
+        "./src/controllers/API/queries/*"
+      ]
+    }
   },
   "include": [
     "src",
