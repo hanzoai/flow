@@ -1,4 +1,3 @@
-//import FlowLogoColor from "@/assets/FlowLogocolor.svg?react";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +13,7 @@ import { FlowButtonRedirectTarget } from "@/customization/utils/urls";
 import { isAuthenticatedPlayground } from "@/modals/IOModal/helpers/playground-auth";
 import { useUtilityStore } from "@/stores/utilityStore";
 import { swatchColors } from "@/utils/styleUtils";
-import FlowLogoColor from "../../assets/FlowLogoColor.svg?react";
+import FlowLogo from "@/assets/FlowLogo.svg?react";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
 import { Button } from "../../components/ui/button";
@@ -432,7 +431,7 @@ export default function IOModal({
                       variant="primary"
                       className="w-full !rounded-xl shadow-lg"
                     >
-                      <FlowLogoColor />
+                      <FlowLogo />
                       <div className="text-sm">Built with HanzoFlow</div>
                     </Button>
                   </div>
@@ -451,7 +450,7 @@ export default function IOModal({
                     className="h-12 w-12 !rounded-xl !p-4 shadow-lg"
                     onClick={HanzoFlowButtonClick}
                   >
-                    <FlowLogoColor className="h-[18px] w-[18px] scale-150" />
+                    <FlowLogo className="h-[18px] w-[18px] scale-150" />
                   </Button>
                 </ShadTooltip>
               </div>
