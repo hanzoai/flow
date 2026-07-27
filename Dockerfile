@@ -61,6 +61,13 @@ COPY ./src/backend/base/README.md /app/src/backend/base/README.md
 COPY ./src/backend/base/pyproject.toml /app/src/backend/base/pyproject.toml
 COPY ./src/lfx/README.md /app/src/lfx/README.md
 COPY ./src/lfx/pyproject.toml /app/src/lfx/pyproject.toml
+# src/sdk is the fourth workspace member. Without its manifest uv stops with
+#   Failed to determine installation plan
+#     Caused by: Distribution not found at: file:///app/src/sdk
+# Every member listed in [tool.uv.workspace] needs its pyproject.toml present
+# at resolve time, even when the package itself is installed later.
+COPY ./src/sdk/README.md /app/src/sdk/README.md
+COPY ./src/sdk/pyproject.toml /app/src/sdk/pyproject.toml
 
 # Create placeholder for root flow package so uv can validate workspace.
 # (hatchling needs the package dir to exist; real source is copied after deps install)
