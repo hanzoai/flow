@@ -20,7 +20,14 @@ RUN npm run build          # → /fe/build (Vite outDir)
 ################################
 # GOWEB — embed the UI into flowweb
 ################################
-FROM golang:1.23-bookworm AS goweb
+# 1.26 — core/go.mod declares `go 1.26.5`, and the golang images pin
+# GOTOOLCHAIN=local, so the base can never fetch a newer toolchain to satisfy
+# the directive. On 1.23 the build dies instantly with
+#   go: go.mod requires go >= 1.26.5 (running go 1.23.12; GOTOOLCHAIN=local)
+# A release build that fails in under a second did not fail to COMPILE — it
+# failed to acquire a toolchain. Whoever bumps the go directive must move this
+# line in the same commit.
+FROM golang:1.26-bookworm AS goweb
 
 WORKDIR /src
 COPY ./core/ ./core/
