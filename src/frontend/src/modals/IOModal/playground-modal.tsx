@@ -432,7 +432,7 @@ export default function IOModal({
                       variant="primary"
                       className="w-full !rounded-xl shadow-lg"
                     >
-                      <HanzoFlowLogoColor />
+                      <FlowLogoColor />
                       <div className="text-sm">Built with HanzoFlow</div>
                     </Button>
                   </div>
@@ -451,7 +451,7 @@ export default function IOModal({
                     className="h-12 w-12 !rounded-xl !p-4 shadow-lg"
                     onClick={HanzoFlowButtonClick}
                   >
-                    <HanzoFlowLogoColor className="h-[18px] w-[18px] scale-150" />
+                    <FlowLogoColor className="h-[18px] w-[18px] scale-150" />
                   </Button>
                 </ShadTooltip>
               </div>
