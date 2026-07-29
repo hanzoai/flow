@@ -49,7 +49,7 @@ class IAMConfig:
     issuer: str
     jwks_url: str
     audience: str = ""
-    # Claim names — Hanzo IAM is Casdoor-derived; org falls back to the `owner` claim.
+    # Claim names — org falls back to the `owner` claim.
     org_claim: str = "org"
     org_fallback_claim: str = "owner"
     project_claim: str = "project"
