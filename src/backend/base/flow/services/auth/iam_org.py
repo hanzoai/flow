@@ -3,7 +3,7 @@ Hanzo IAM Organization extraction for Flow (Flow fork).
 
 Extracts the IAM organization slug from:
   1. X-IAM-Org-Id request header (set by gateway)
-  2. JWT `owner` claim (from Casdoor OIDC token)
+  2. JWT `owner` claim (from the IAM OIDC token)
   3. JWT `org` or `organization` claim (generic OIDC)
 
 Updates the user's org_id in the database on each authenticated request.
@@ -40,10 +40,10 @@ def extract_org_from_request(request: Request) -> str | None:
 def extract_org_from_jwt_payload(payload: dict) -> str | None:
     """Extract org slug from a decoded JWT payload.
 
-    Casdoor uses the `owner` field. We also check `org` and `organization`
-    for compatibility with other OIDC providers.
+    Hanzo IAM carries the org in the `owner` field. We also check `org` and
+    `organization` for compatibility with other OIDC providers.
 
-    Skip the Casdoor built-in org as it's not a real tenant.
+    Skip the built-in org as it's not a real tenant.
     """
     org = (
         payload.get("owner")
