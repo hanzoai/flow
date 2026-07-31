@@ -3,6 +3,7 @@ from uuid import UUID
 from sqlmodel import col, delete, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from flow.services.database.models.flow.model import Flow
 from flow.services.database.models.vertex_builds.model import VertexBuildBase, VertexBuildTable
 from flow.services.deps import get_settings_service
 
