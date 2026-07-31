@@ -5,6 +5,7 @@ from sqlalchemy import delete
 from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from flow.services.database.models.flow.model import Flow
 from flow.services.database.models.message.model import MessageTable, MessageUpdate
 from flow.services.deps import session_scope
 

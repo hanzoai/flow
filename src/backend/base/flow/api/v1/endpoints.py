@@ -52,10 +52,12 @@ from flow.helpers.flow import get_flow_by_id_or_endpoint_name
 from flow.interface.initialize.loading import update_params_with_load_from_db_fields
 from flow.processing.process import process_tweaks, run_graph_internal
 from flow.schema.graph import Tweaks
+from flow.api.v1.files import get_flow
 from flow.services.auth.utils import (
     api_key_security,
     get_current_active_user,
     get_current_user_for_sse,
+    get_optional_user,
 )
 from flow.services.cache.utils import save_uploaded_file
 from flow.services.database.models.flow.model import Flow, FlowRead
