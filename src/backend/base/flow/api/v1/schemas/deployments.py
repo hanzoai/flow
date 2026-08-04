@@ -54,8 +54,14 @@ from datetime import datetime
 from typing import Annotated, Any
 from uuid import UUID
 
-from lfx.services.adapters.deployment.schema import DEPLOYMENT_DESCRIPTION_MAX_LENGTH, DeploymentType
-from pydantic import AfterValidator, BaseModel, Field, ValidationInfo, model_validator
+from lfx.services.adapters.deployment.schema import (
+    DEPLOYMENT_DESCRIPTION_MAX_LENGTH,
+    BaseDeploymentData,
+    BaseDeploymentDataUpdate,
+    DeploymentConfig,
+    DeploymentType,
+)
+from pydantic import AfterValidator, BaseModel, Field, ValidationInfo, field_validator, model_validator
 
 from flow.services.database.models.deployment_provider_account.schemas import (
     DeploymentProviderKey,
@@ -391,11 +397,11 @@ class DeploymentStatusResponse(_DeploymentResponseWithProviderData):
     """API response for deployment status/health."""
 
 
-class DeploymentRedeployResponse(_DeploymentResponseBase):
+class DeploymentRedeployResponse(_DeploymentResponseWithProviderData):
     """API response for redeployment."""
 
 
-class DeploymentDuplicateResponse(_DeploymentResponseBase):
+class DeploymentDuplicateResponse(_DeploymentResponseWithProviderData):
     """API response for deployment duplication."""
 
 
@@ -616,16 +622,21 @@ class RunCreateRequest(BaseModel):
     deployment_id: UUID = Field(description="Flow DB deployment UUID.")
     provider_data: dict[str, Any] | None = Field(
         default=None,
+        description="Provider-owned opaque execution request payload.",
+    )
+
+
+class _RunResponseBase(BaseModel):
+    """Shared fields for run response schemas."""
+
+    deployment_id: UUID = Field(description="Flow DB deployment UUID.")
+    provider_data: dict[str, Any] | None = Field(
+        default=None,
         description=(
             "Provider-owned opaque run result payload.  "
             "Contains at least ``id`` (the provider's opaque run identifier) "
             "when the provider has assigned one."
         ),
-    )
-    deployment_id: UUID = Field(description="Flow DB deployment UUID.")
-    provider_data: dict[str, Any] | None = Field(
-        default=None,
-        description="Provider-owned opaque execution result payload.",
     )
 
 

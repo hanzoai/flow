@@ -22,6 +22,26 @@ class _FlowModule:
         cls._available = value
 
 
+def has_flow_db_backend():
+    """Check if flow's database-backed memory is actually usable right now.
+
+    True only when the `flow` package is importable AND the registered
+    DatabaseService is a real one — a NoopDatabaseService (lfx run without a
+    database) must dispatch to the in-memory stubs, or flow-backed message
+    updates call session.get() on a NoopSession and raise spurious
+    "Message with id X not found" errors mid-stream.
+    """
+    if not has_flow_memory():
+        return False
+    try:
+        from lfx.services import deps
+        from lfx.services.database.service import NoopDatabaseService
+
+        return not isinstance(deps.get_db_service(), NoopDatabaseService)
+    except Exception:  # noqa: BLE001 - no service manager yet means no db backend
+        return False
+
+
 def has_flow_memory():
     """Check if flow.memory (with database support) and MessageTable are available."""
     # Use cached check from previous invocation (if applicable)

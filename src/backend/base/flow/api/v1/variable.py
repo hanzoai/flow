@@ -8,6 +8,7 @@ from lfx.base.models.unified_models import get_model_provider_variable_mapping, 
 from sqlalchemy.exc import NoResultFound
 
 from flow.api.utils import CurrentActiveUser, DbSession
+from flow.api.v1.schemas.deployments import DetectVarsRequest, DetectVarsResponse
 from flow.api.v1.models import (
     DISABLED_MODELS_VAR,
     ENABLED_MODELS_VAR,
