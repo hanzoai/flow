@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from lfx.utils.flow_utils import has_flow_db_backend
+from lfx.utils.flow_utils import has_flow_db_backend, has_flow_memory
 
 
 def _impl():

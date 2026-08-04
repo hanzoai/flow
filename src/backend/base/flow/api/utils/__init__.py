@@ -18,7 +18,6 @@ from flow.api.utils.core import (
     ValidatedFileName,
     ValidatedFolderName,
     build_input_keys_response,
-    cascade_delete_flow,
     check_flow_version,
     custom_params,
     extract_global_variables_from_headers,

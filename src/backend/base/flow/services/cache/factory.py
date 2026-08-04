@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from lfx.log.logger import logger
 from typing_extensions import override
 
-from flow.services.cache.disk import AsyncDiskCache
 from flow.services.cache.service import AsyncInMemoryCache, CacheService, RedisCache, ThreadingInMemoryCache
 from flow.services.factory import ServiceFactory
 
