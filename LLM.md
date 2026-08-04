@@ -3,7 +3,19 @@
 ## Overview
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers.
 
-**Upstream**: Hanzo Flow (MIT). Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `FLOW_*` retained only for backwards compatibility — do not introduce new `FLOW_*` references).
+**Upstream**: Langflow (MIT) — https://github.com/langflow-ai/langflow. Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `LANGFLOW_*` retained only for backwards compatibility — do not introduce new `LANGFLOW_*` references).
+
+### Licence
+This is a fork, not original work. Langflow's MIT terms govern the whole tree
+and ours cannot replace them. NOTICE carries upstream's copyright and permission
+notice verbatim, which is what MIT requires us to ship.
+
+LICENSE does not. The upstream line was restored there in 24c1da1168, then
+overwritten again by the blanket `langflow`->`flow` rename in 919f7c30e1, which
+swept LICENSE along with the docs; f091015e32 repaired NOTICE the same day and
+left LICENSE behind. It still reads `Copyright (c) 2024 Hanzo Flow` where
+upstream reads `Copyright (c) 2024 Langflow`. That line wants restoring, and
+LICENSE and NOTICE want excluding from any future rename sweep.
 
 ## Tech Stack
 - **Backend**: Python (FastAPI, SQLModel, Alembic)
