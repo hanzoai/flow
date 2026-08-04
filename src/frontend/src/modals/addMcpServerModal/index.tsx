@@ -4,16 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import InputListComponent from "@/components/core/parameterRenderComponent/components/inputListComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs-button";
-import { Textarea } from "@/components/ui/textarea";
+import { Button, Input, Label, Tabs, TabsContent, TabsList, TabsTrigger, Textarea } from "@hanzo/ui";
 import { MAX_MCP_SERVER_NAME_LENGTH } from "@/constants/constants";
 import { useAddMCPServer } from "@/controllers/API/queries/mcp/use-add-mcp-server";
 import { usePatchMCPServer } from "@/controllers/API/queries/mcp/use-patch-mcp-server";

@@ -1,17 +1,6 @@
 import { useRef } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContentWithoutPortal,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button, Command, CommandGroup, CommandItem, CommandList, Popover, PopoverContent, PopoverTrigger } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import ShadTooltip from "../../../../components/common/shadTooltipComponent";
 import type { outputComponentType } from "../../../../types/components";
@@ -88,7 +77,7 @@ export default function OutputComponent({
               </div>
             </Button>
           </PopoverTrigger>
-          <PopoverContentWithoutPortal
+          <PopoverContent
             side="bottom"
             align="end"
             className="noflow nowheel nopan nodelete nodrag w-full min-w-[200px] max-w-[250px] p-0"
@@ -117,7 +106,7 @@ export default function OutputComponent({
                 </CommandGroup>
               </CommandList>
             </Command>
-          </PopoverContentWithoutPortal>
+          </PopoverContent>
         </Popover>
       ) : (
         singleOutput

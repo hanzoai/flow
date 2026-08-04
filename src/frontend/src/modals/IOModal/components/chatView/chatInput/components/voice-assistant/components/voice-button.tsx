@@ -1,5 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import { useVoiceStore } from "@/stores/voiceStore";
 

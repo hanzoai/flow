@@ -12,16 +12,7 @@ import PageLayout from "../../components/common/pageLayout";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
 import { SkeletonCardComponent } from "../../components/common/skeletonCardComponent";
 import { TagsSelector } from "../../components/common/tagsSelectorComponent";
-import { Badge } from "../../components/ui/badge";
-import { Button } from "../../components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
+import { Badge, Button, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 import {
   STORE_PAGINATION_PAGE,
   STORE_PAGINATION_ROWS_COUNT,

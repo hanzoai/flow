@@ -5,8 +5,6 @@ import { ChatHeader } from "@/components/core/playgroundComponent/chat-view/chat
 import { ChatSidebar } from "@/components/core/playgroundComponent/chat-view/chat-header/components/chat-sidebar";
 import { useSendMessage } from "@/components/core/playgroundComponent/chat-view/hooks/use-send-message";
 import { useGetFlowId } from "@/components/core/playgroundComponent/hooks/use-get-flow-id";
-import { AnimatedConditional } from "@/components/ui/animated-close";
-import { useSimpleSidebar } from "@/components/ui/simple-sidebar";
 import useFlowStore from "@/stores/flowStore";
 import { useUtilityStore } from "@/stores/utilityStore";
 import type { FilePreviewType } from "@/types/components";
@@ -26,7 +24,6 @@ export function FlowPageSlidingContainerContent({
   setIsFullscreen,
 }: FlowPageSlidingContainerContentProps) {
   const currentFlowId = useGetFlowId();
-  const { setOpen, setWidth } = useSimpleSidebar();
   const inputs = useFlowStore((state) => state.inputs);
   const nodes = useFlowStore((state) => state.nodes);
   const isBuilding = useFlowStore((state) => state.isBuilding);
@@ -96,28 +93,15 @@ export function FlowPageSlidingContainerContent({
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [setOpen]);
-
-  useEffect(() => {
     setSidebarOpen(isFullscreen);
   }, [isFullscreen]);
 
   const handleExitFullscreen = () => {
     setIsFullscreen(false);
-    setOpen(true);
-    setWidth(218);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setIsFullscreen(false);
   };
 
   const handleEnterFullscreen = () => {
@@ -138,7 +122,7 @@ export function FlowPageSlidingContainerContent({
       onDrop={onDrop}
     >
       <div className="flex-1 flex overflow-hidden">
-        <AnimatedConditional isOpen={sidebarOpen} width="236px">
+        <>
           <div className="h-full overflow-y-auto border-r border-border w-218 bg-primary-foreground">
             <div className="p-4">
               <ChatSidebar
@@ -153,7 +137,7 @@ export function FlowPageSlidingContainerContent({
               />
             </div>
           </div>
-        </AnimatedConditional>
+        </>
         <div className="flex-1 flex flex-col overflow-hidden pt-2">
           <ChatHeader
             sessions={sessions}

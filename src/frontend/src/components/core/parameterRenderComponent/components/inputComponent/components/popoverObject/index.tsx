@@ -1,19 +1,7 @@
-import { PopoverAnchor } from "@radix-ui/react-popover";
+import { PopoverAnchor } from "@hanzo/ui";
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverContentWithoutPortal,
-} from "@/components/ui/popover";
+import { Command, CommandGroup, CommandInput, CommandItem, CommandList, Input, Popover, PopoverContent } from "@hanzo/ui";
 import { classNames, cn } from "@/utils/utils";
 
 const CustomInputPopoverObject = ({

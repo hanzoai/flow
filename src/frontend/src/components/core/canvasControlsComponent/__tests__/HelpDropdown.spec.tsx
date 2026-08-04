@@ -1,34 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { HelpDropdownView } from "../HelpDropdownView";
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...rest }) => <button {...rest}>{children}</button>,
-}));
 
-jest.mock("@/components/ui/dropdown-menu", () => ({
-  DropdownMenu: ({ children, open, onOpenChange }) => (
-    <div data-testid="dropdown-menu" data-open={open}>
-      <button
-        onClick={() => onOpenChange?.(!open)}
-        aria-expanded={open}
-        aria-haspopup="true"
-        type="button"
-      >
-        {children}
-      </button>
-    </div>
-  ),
-  DropdownMenuContent: ({ children }) => (
-    <div data-testid="dropdown-content">{children}</div>
-  ),
-  DropdownMenuTrigger: ({ children }) => (
-    <div data-testid="dropdown-trigger">{children}</div>
-  ),
-}));
 
-jest.mock("@/components/ui/separator", () => ({
-  Separator: () => <div data-testid="separator" />,
-}));
 
 jest.mock("../DropdownControlButton", () => ({
   __esModule: true,

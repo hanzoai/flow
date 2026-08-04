@@ -2,15 +2,7 @@ import { useState } from "react";
 import { mutateTemplate } from "@/CustomNodes/helpers/mutate-template";
 import type { handleOnNewValueType } from "@/CustomNodes/hooks/use-handle-new-value";
 import { ParameterRenderComponent } from "@/components/core/parameterRenderComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@hanzo/ui";
 import { usePostTemplateValue } from "@/controllers/API/queries/nodes/use-post-template-value";
 import { getCustomParameterTitle } from "@/customization/components/custom-parameter";
 import { track } from "@/customization/utils/analytics";

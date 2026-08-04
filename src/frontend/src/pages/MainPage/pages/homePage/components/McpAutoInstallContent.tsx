@@ -1,6 +1,6 @@
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import type { MCPTransport } from "@/controllers/API/queries/mcp/use-patch-install-mcp";
 import { toSpaceCase } from "@/utils/stringManipulation";
 import { cn } from "@/utils/utils";

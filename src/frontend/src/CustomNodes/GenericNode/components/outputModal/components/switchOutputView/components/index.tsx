@@ -1,4 +1,4 @@
-import { Textarea } from "../../../../../../../components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 
 export default function ErrorOutput({ value }: { value: string }) {
   return (

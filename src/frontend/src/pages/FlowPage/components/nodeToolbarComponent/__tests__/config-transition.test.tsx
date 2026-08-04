@@ -39,24 +39,6 @@ jest.mock(
   }),
 );
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    "data-testid": dataTestId,
-    asChild: _asChild,
-    ...props
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-    "data-testid"?: string;
-    asChild?: boolean;
-  }) => (
-    <button onClick={onClick} data-testid={dataTestId} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock("@/controllers/API/queries/nodes/use-post-template-value", () => ({
   usePostTemplateValue: () => ({}),
@@ -144,20 +126,6 @@ jest.mock("../../../../../components/common/genericIconComponent", () => ({
   ForwardedIconComponent: ({ name }: { name: string }) => <span>{name}</span>,
 }));
 
-jest.mock("../../../../../components/ui/select-custom", () => ({
-  Select: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  SelectContentWithoutPortal: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  SelectItem: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-}));
 
 jest.mock("../../../../../utils/reactflowUtils", () => ({
   checkHasToolMode: jest.fn(() => false),

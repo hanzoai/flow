@@ -5,8 +5,7 @@ import remarkGfm from "remark-gfm";
 import { normalizeTimeString } from "@/CustomNodes/GenericNode/components/NodeStatus/utils/format-run-time";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import { BorderTrail } from "@/components/core/border-trail";
-import { Button } from "@/components/ui/button";
-import { TextShimmer } from "@/components/ui/TextShimmer";
+import { Button } from "@hanzo/ui";
 import { BuildStatus } from "@/constants/enums";
 import useFlowStore from "@/stores/flowStore";
 import { cn } from "@/utils/utils";
@@ -82,11 +81,11 @@ export default function FlowBuildingComponent() {
   const buildingContent = useMemo(() => {
     if (!isBuilding) return null;
     return (
-      <TextShimmer duration={1}>
+      <>
         {statusBuilding.length > 0
           ? `Running ${statusBuilding[0]?.id}`
           : "Running flow"}
-      </TextShimmer>
+      </>
     );
   }, [isBuilding, statusBuilding]);
 

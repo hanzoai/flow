@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useUtilityStore } from "@/stores/utilityStore";
-import { Textarea } from "../../../../../../components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 import { classNames } from "../../../../../../utils/utils";
 
 const TextAreaWrapper = ({

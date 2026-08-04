@@ -1,14 +1,8 @@
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Loading from "@/components/ui/loading";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useDeleteMCPServer } from "@/controllers/API/queries/mcp/use-delete-mcp-server";
 import { useGetMCPServer } from "@/controllers/API/queries/mcp/use-get-mcp-server";
 import { useGetMCPServers } from "@/controllers/API/queries/mcp/use-get-mcp-servers";
@@ -189,7 +183,7 @@ export default function MCPServersPage() {
           </>
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <Loading />
+            <Spinner />
           </div>
         )}
       </div>

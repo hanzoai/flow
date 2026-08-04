@@ -1,5 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import Loading from "@/components/ui/loading";
+import { Spinner } from "@hanzo/gui";
 import { cn } from "@/utils/utils";
 
 type DeploymentPhase = "deploying" | "deployed";
@@ -39,7 +39,7 @@ export default function StepDeployStatus({
           )}
         >
           {isDeploying ? (
-            <Loading size={36} className="text-accent-indigo-foreground" />
+            <Spinner size={36} className="text-accent-indigo-foreground" />
           ) : (
             <ForwardedIconComponent
               name="CircleCheck"

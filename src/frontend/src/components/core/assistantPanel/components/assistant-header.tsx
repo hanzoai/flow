@@ -1,6 +1,6 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import {
   ASSISTANT_MAX_SESSIONS,
   ASSISTANT_TITLE,

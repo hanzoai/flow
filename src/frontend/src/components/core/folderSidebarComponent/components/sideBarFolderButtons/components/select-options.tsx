@@ -2,12 +2,7 @@ import { useTranslation } from "react-i18next";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { convertTestName } from "@/components/common/storeCardComponent/utils/convert-test-name";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select-custom";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@hanzo/ui";
 import type { FolderType } from "@/pages/MainPage/entities";
 import { cn } from "@/utils/utils";
 import { handleSelectChange } from "../helpers/handle-select-change";

@@ -20,9 +20,6 @@ jest.mock("@/components/common/genericIconComponent", () => {
 });
 
 // Mock ui components
-jest.mock("@/components/ui/button", () => ({
-  Button: (props) => <button {...props}>{props.children}</button>,
-}));
 
 describe("SortableListComponent reproduction", () => {
   it("should not trigger handleOnNewValue on initial render", async () => {

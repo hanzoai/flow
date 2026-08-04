@@ -6,7 +6,7 @@ import { createFileUpload } from "@/helpers/create-file-upload";
 import useFileSizeValidator from "@/shared/hooks/use-file-size-validator";
 import useAlertStore from "@/stores/alertStore";
 import IconComponent from "../../../../../components/common/genericIconComponent";
-import { Button } from "../../../../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import { CHAT_UPLOAD_IMAGE_EXTENSIONS } from "../../../../../constants/file-upload-constants";
 import useFlowsManagerStore from "../../../../../stores/flowsManagerStore";
 import type { IOFileInputProps } from "../../../../../types/components";

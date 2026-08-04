@@ -34,14 +34,7 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/loading", () => ({
-  __esModule: true,
-  default: () => <div data-testid="loading-spinner" />,
-}));
 
-jest.mock("@/components/ui/sidebar", () => ({
-  SidebarTrigger: ({ children }: any) => <div>{children}</div>,
-}));
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 

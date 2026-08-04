@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import Loading from "@/components/ui/loading";
+import { Button } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 
 interface NoInputViewProps {
   isBuilding: boolean;
@@ -32,7 +32,7 @@ const NoInputView = ({
           >
             <div className="flex items-center gap-2 rounded-md text-sm font-medium">
               Stop
-              <Loading className="h-4 w-4" />
+              <Spinner className="h-4 w-4" />
             </div>
           </Button>
         )}

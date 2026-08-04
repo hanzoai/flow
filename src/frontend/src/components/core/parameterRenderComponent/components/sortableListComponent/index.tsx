@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import ListSelectionComponent from "@/CustomNodes/GenericNode/components/ListSelectionComponent";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import type { InputProps } from "../../types";
 import HelperTextComponent from "../helperTextComponent";

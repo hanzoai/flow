@@ -1,7 +1,7 @@
 import FlowLogo from "@/assets/FlowLogo.svg?react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import CardsWrapComponent from "@/components/core/cardsWrapComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { useFolderStore } from "@/stores/foldersStore";
 import useFileDrop from "../../hooks/use-on-file-drop";
 

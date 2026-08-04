@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import ShortcutDisplay from "../shortcutDisplay";
 

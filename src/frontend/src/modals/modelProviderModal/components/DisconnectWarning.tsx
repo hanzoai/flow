@@ -1,5 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 interface DisconnectWarningProps {

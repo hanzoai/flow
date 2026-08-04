@@ -6,7 +6,7 @@ import { processNodeAdvancedFields } from "@/CustomNodes/helpers/process-node-ad
 import useUpdateAllNodes, {
   type UpdateNodesType,
 } from "@/CustomNodes/hooks/use-update-all-nodes";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { usePostValidateComponentCode } from "@/controllers/API/queries/nodes/use-post-validate-component-code";
 import UpdateComponentModal from "@/modals/updateComponentModal";
 import useAlertStore from "@/stores/alertStore";

@@ -3,7 +3,7 @@
 ## Overview
 **Hanzo Flow** is a powerful platform for building and deploying AI-powered agents and workflows. It provides developers with both a visual authoring experience and built-in API and MCP servers.
 
-**Upstream**: Hanzo Flow (MIT). Internal package name `flow`; canonical env prefix `FLOW_*` (legacy `FLOW_*` retained only for backwards compatibility — do not introduce new `FLOW_*` references).
+Internal package name is `flow`; the env prefix is `FLOW_` and nothing else. OSS attribution lives in `NOTICE`.
 
 ## Tech Stack
 - **Backend**: Python (FastAPI, SQLModel, Alembic)
@@ -32,17 +32,15 @@ Three Python packages in a uv workspace:
 - Entry point: `hanzo-flow = "flow.launcher:main"` (root pyproject.toml)
 - Entry point: `flow-base = "flow.launcher:main"` (base pyproject.toml)
 - Hatch build target: `packages = ["flow"]` (base), `packages = ["src/backend/flow"]` (root)
-- The `flow` compat shim package has been removed (was at `src/backend/base/flow/`)
-- The `flow` package dir has been renamed to `flow`
 
-### PyPI package names (unchanged)
-- `flow` -- root package name in pyproject.toml
-- `flow-base` -- base package name in pyproject.toml
-- `lfx` -- executor package name
+### PyPI package names
+- `flow` -- root package
+- `flow-base` -- base package
+- `lfx` -- executor package
 
-### Environment variables (backwards compat)
-- `FLOW_*` env vars are kept for backwards compatibility (e.g. `FLOW_DATABASE_URL`, `FLOW_LOG_LEVEL`)
-- These are defined in `lfx/src/lfx/services/settings/base.py` via pydantic-settings
+### Environment variables
+- Prefix is `FLOW_` and nothing else (e.g. `FLOW_DATABASE_URL`, `FLOW_LOG_LEVEL`)
+- Declared once, via `env_prefix="FLOW_"` in `src/lfx/src/lfx/services/settings/base.py:657`
 
 ### Key classes
 - `FlowApplication` -- Gunicorn application class (`flow.server`)
@@ -51,7 +49,7 @@ Three Python packages in a uv workspace:
 ## Key Files
 - `pyproject.toml` -- Root project config (PyPI name: flow)
 - `src/backend/base/pyproject.toml` -- Base package config (PyPI name: flow-base)
-- `src/backend/base/flow/launcher.py` -- Main entry point (was flow_launcher.py)
+- `src/backend/base/flow/launcher.py` -- Main entry point
 - `src/backend/base/flow/__main__.py` -- CLI commands (typer app)
 - `src/backend/base/flow/main.py` -- FastAPI app factory
 - `src/backend/base/flow/alembic/` -- Database migrations

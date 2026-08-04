@@ -1,8 +1,7 @@
-import * as Form from "@radix-ui/react-form";
 import type React from "react";
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@hanzo/ui";
 import type { InputProps } from "../../../types/components";
 import { cn } from "../../../utils/utils";
 import { Input } from "../../ui/input";
@@ -89,11 +88,11 @@ export const EditFlowSettings: React.FC<
 
   return (
     <>
-      <Form.Field name="name">
+      <>
         <div className="edit-flow-arrangement">
-          <Form.Label className="text-mmd font-medium">
+          <label className="text-mmd font-medium">
             Name{setName ? "" : ":"}
-          </Form.Label>
+          </label>
           {isMaxLength && (
             <span className="edit-flow-span">Character limit reached</span>
           )}
@@ -107,7 +106,7 @@ export const EditFlowSettings: React.FC<
           )}
         </div>
         {setName ? (
-          <Form.Control asChild>
+          <>
             <Input
               className="nopan nodelete nodrag noflow mt-2 font-normal"
               onChange={handleNameChange}
@@ -124,33 +123,26 @@ export const EditFlowSettings: React.FC<
               autoFocus
               disabled={locked}
             />
-          </Form.Control>
+          </>
         ) : (
           <span className="font-normal text-muted-foreground word-break-break-word">
             {name}
           </span>
         )}
-        <Form.Message match="valueMissing" className="field-invalid">
-          Please enter a name
-        </Form.Message>
-        <Form.Message
-          match={(value) => !!(value && invalidNameList.includes(value))}
-          className="field-invalid"
-        >
-          Flow name already exists
-        </Form.Message>
-      </Form.Field>
-      <Form.Field name="description">
+        
+        
+      </>
+      <>
         <div className="edit-flow-arrangement mt-2">
-          <Form.Label className="text-mmd font-medium">
+          <label className="text-mmd font-medium">
             Description{setDescription ? "" : ":"}
-          </Form.Label>
+          </label>
           {isMaxDescriptionLength && (
             <span className="edit-flow-span">Character limit reached</span>
           )}
         </div>
         {setDescription ? (
-          <Form.Control asChild>
+          <>
             <Textarea
               name="description"
               id="description"
@@ -165,7 +157,7 @@ export const EditFlowSettings: React.FC<
               onKeyDown={handleDescriptionKeyDown}
               disabled={locked}
             />
-          </Form.Control>
+          </>
         ) : (
           <div
             className={cn(
@@ -176,16 +168,14 @@ export const EditFlowSettings: React.FC<
             {description === "" ? "No description" : description}
           </div>
         )}
-        <Form.Message match="valueMissing" className="field-invalid">
-          Please enter a description
-        </Form.Message>
+        
         <div className="mt-3">
           <div className="flex items-center gap-2">
             <div>
               <div className="flex items-center gap-2">
-                <Form.Label className="text-mmd font-medium">
+                <label className="text-mmd font-medium">
                   Lock Flow
-                </Form.Label>
+                </label>
 
                 <ForwardedIconComponent
                   name={locked ? "Lock" : "Unlock"}
@@ -206,7 +196,7 @@ export const EditFlowSettings: React.FC<
             />
           </div>
         </div>
-      </Form.Field>
+      </>
     </>
   );
 };

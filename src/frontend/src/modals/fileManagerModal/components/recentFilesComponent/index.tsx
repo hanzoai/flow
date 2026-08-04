@@ -1,9 +1,7 @@
 import Fuse from "fuse.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { Button, Checkbox, Input } from "@hanzo/ui";
 import { useDeleteFilesV2 } from "@/controllers/API/queries/file-management/use-delete-files";
 import { usePostRenameFileV2 } from "@/controllers/API/queries/file-management/use-put-rename-file";
 import { CustomLink } from "@/customization/components/custom-link";

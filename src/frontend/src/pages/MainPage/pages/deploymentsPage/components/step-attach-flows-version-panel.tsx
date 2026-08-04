@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import type { FlowType } from "@/types/flow";
 import type { FlowVersionEntry } from "@/types/flow/version";
 import { cn } from "@/utils/utils";

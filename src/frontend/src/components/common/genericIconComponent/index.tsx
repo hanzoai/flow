@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useDarkStore } from "../../../stores/darkStore";
 import { IconComponentProps } from "../../../types/components";
 import { getCachedIcon, getNodeIcon } from "../../../utils/styleUtils";
@@ -110,7 +109,7 @@ export const ForwardedIconComponent = memo(
 
       const fallback = showFallback ? (
         <div className={cn(className, "flex items-center justify-center")}>
-          <Skeleton className="h-4 w-4" />
+          
         </div>
       ) : (
         <div className={className}></div>

@@ -1,15 +1,6 @@
-import * as Form from "@radix-ui/react-form";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../../../../../components/core/parameterRenderComponent/components/inputComponent";
-import { Button } from "../../../../../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../../../../../components/ui/card";
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@hanzo/ui";
 
 type PasswordFormComponentProps = {
   password: string;
@@ -30,7 +21,7 @@ const PasswordFormComponent = ({
   const { t } = useTranslation();
   return (
     <>
-      <Form.Root
+      <form
         onSubmit={(event) => {
           handlePatchPassword(password, cnfPassword, handleInput);
           event.preventDefault();
@@ -45,7 +36,7 @@ const PasswordFormComponent = ({
           </CardHeader>
           <CardContent>
             <div className="flex w-full gap-4">
-              <Form.Field name="password" className="w-full">
+              <>
                 <InputComponent
                   id="pasword"
                   onChange={(value) => {
@@ -57,11 +48,9 @@ const PasswordFormComponent = ({
                   placeholder={t("settings.passwordPlaceholder")}
                   className="w-full"
                 />
-                <Form.Message match="valueMissing" className="field-invalid">
-                  {t("settings.passwordRequired")}
-                </Form.Message>
-              </Form.Field>
-              <Form.Field name="cnfPassword" className="w-full">
+                
+              </>
+              <>
                 <InputComponent
                   id="cnfPassword"
                   onChange={(value) => {
@@ -76,19 +65,17 @@ const PasswordFormComponent = ({
                   className="w-full"
                 />
 
-                <Form.Message className="field-invalid" match="valueMissing">
-                  {t("settings.confirmPasswordRequired")}
-                </Form.Message>
-              </Form.Field>
+                
+              </>
             </div>
           </CardContent>
           <CardFooter className="border-t px-6 py-4">
-            <Form.Submit asChild>
+            <>
               <Button type="submit">{t("settings.saveButton")}</Button>
-            </Form.Submit>
+            </>
           </CardFooter>
         </Card>
-      </Form.Root>
+      </form>
     </>
   );
 };

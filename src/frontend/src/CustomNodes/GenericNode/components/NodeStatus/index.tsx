@@ -6,7 +6,7 @@ import useIconStatus from "@/CustomNodes/hooks/use-icons-status";
 import useUpdateValidationStatus from "@/CustomNodes/hooks/use-update-validation-status";
 import useValidationStatusString from "@/CustomNodes/hooks/use-validation-status-string";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import { BuildStatus } from "@/constants/enums";
 import { usePostTemplateValue } from "@/controllers/API/queries/nodes/use-post-template-value";

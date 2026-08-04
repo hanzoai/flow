@@ -1,7 +1,7 @@
 import { type FC, useEffect, useMemo, useState } from "react";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import IconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { DISCORD_URL, GITHUB_URL } from "@/constants/constants";
 import { useGetUserData, useUpdateUser } from "@/controllers/API/queries/auth";
 import ModalsComponent from "@/pages/MainPage/components/modalsComponent";

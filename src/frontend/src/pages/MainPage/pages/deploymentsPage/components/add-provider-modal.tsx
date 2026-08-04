@@ -1,13 +1,6 @@
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Badge, Button, Dialog, DialogContent, DialogDescription, DialogTitle } from "@hanzo/ui";
 import { usePostProviderAccount } from "@/controllers/API/queries/deployment-provider-accounts/use-post-provider-account";
 import { useErrorAlert } from "../hooks/use-error-alert";
 import type { ProviderCredentials } from "../types";

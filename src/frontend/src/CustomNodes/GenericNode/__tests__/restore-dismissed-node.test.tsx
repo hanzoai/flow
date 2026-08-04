@@ -35,24 +35,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   default: () => null,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    "data-testid": dataTestId,
-    unstyled: _unstyled,
-    ...props
-  }: {
-    children: React.ReactNode;
-    onClick?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
-    "data-testid"?: string;
-    unstyled?: boolean;
-  }) => (
-    <button onClick={onClick} data-testid={dataTestId} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock(
   "@/controllers/API/queries/nodes/use-post-validate-component-code",

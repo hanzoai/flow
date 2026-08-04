@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import IconComponent from "../../../../../components/common/genericIconComponent";
 import InputComponent from "../../../../../components/core/parameterRenderComponent/components/inputComponent";
-import { Input } from "../../../../../components/ui/input";
+import { Input } from "@hanzo/ui";
 import { useGetGlobalVariables } from "../../../../../controllers/API/queries/variables";
 import { classNames } from "../../../../../utils/utils";
 

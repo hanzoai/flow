@@ -1,17 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Loading from "@/components/ui/loading";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetKnowledgeBaseChunks } from "@/controllers/API/queries/knowledge-bases/use-get-knowledge-base-chunks";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import ChunkCard from "./components/ChunkCard";
@@ -110,12 +101,12 @@ export const SourceChunksPage = () => {
           <div className="xl:container flex items-center">
             <div className="h-7 w-10 transition-all group-data-[open=true]/sidebar-wrapper:md:w-0 lg:hidden">
               <div className="relative left-0 opacity-100 transition-all group-data-[open=true]/sidebar-wrapper:md:opacity-0">
-                <SidebarTrigger>
+                <>
                   <ForwardedIconComponent
                     name="PanelLeftOpen"
                     aria-hidden="true"
                   />
-                </SidebarTrigger>
+                </>
               </div>
             </div>
             <Button
@@ -150,7 +141,7 @@ export const SourceChunksPage = () => {
         <div className="flex flex-1 flex-col overflow-hidden">
           {isLoading ? (
             <div className="flex flex-1 w-full flex-col items-center justify-center gap-3">
-              <Loading size={36} />
+              <Spinner size={36} />
               <span className="text-sm text-muted-foreground pt-3">
                 Loading Chunks...
               </span>

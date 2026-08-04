@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import {
   convertObjToArray,

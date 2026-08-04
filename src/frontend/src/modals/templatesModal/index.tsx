@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { Button } from "@hanzo/ui";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import { track } from "@/customization/utils/analytics";
 import useAddFlow from "@/hooks/flows/use-add-flow";
@@ -82,7 +81,7 @@ export default function TemplatesModal({
     <BaseModal size="templates" open={open} setOpen={setOpen} className="p-0">
       <BaseModal.Content className="flex flex-col p-0">
         <div className="flex h-full">
-          <SidebarProvider width="15rem" defaultOpen={false}>
+          <>
             <Nav
               categories={categories}
               currentTab={currentTab}
@@ -128,7 +127,7 @@ export default function TemplatesModal({
                 </div>
               </BaseModal.Footer>
             </main>
-          </SidebarProvider>
+          </>
         </div>
       </BaseModal.Content>
     </BaseModal>

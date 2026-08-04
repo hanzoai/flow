@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import type { TableOptionsTypeAPI } from "@/types/api";
 import { cn } from "@/utils/utils";
 

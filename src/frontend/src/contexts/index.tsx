@@ -3,7 +3,7 @@ import { ReactFlowProvider } from "@xyflow/react";
 import type { ReactNode } from "react";
 import { GradientWrapper } from "@/components/common/GradientWrapper";
 import { CustomWrapper } from "@/customization/custom-wrapper";
-import { TooltipProvider } from "../components/ui/tooltip";
+import { TooltipProvider } from "@hanzo/ui";
 import { ApiInterceptor } from "../controllers/API/api";
 import { AuthProvider } from "./authContext";
 

@@ -1,4 +1,3 @@
-import * as Form from "@radix-ui/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,8 +6,7 @@ import { useLoginUser } from "@/controllers/API/queries/auth";
 import { CustomLink } from "@/customization/components/custom-link";
 import { useSanitizeRedirectUrl } from "@/hooks/use-sanitize-redirect-url";
 import InputComponent from "../../components/core/parameterRenderComponent/components/inputComponent";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Button, Input } from "@hanzo/ui";
 import { CONTROL_LOGIN_STATE, IS_AUTO_LOGIN } from "../../constants/constants";
 import { AuthContext } from "../../contexts/authContext";
 import useAlertStore from "../../stores/alertStore";
@@ -61,7 +59,7 @@ export default function LoginPage(): JSX.Element {
   }
 
   return (
-    <Form.Root
+    <form
       onSubmit={(event) => {
         if (password === "") {
           event.preventDefault();
@@ -83,13 +81,13 @@ export default function LoginPage(): JSX.Element {
             Sign in to HanzoFlow
           </span>
           <div className="mb-3 w-full">
-            <Form.Field name="username">
-              <Form.Label className="data-[invalid]:label-invalid">
+            <>
+              <label className="data-[invalid]:label-invalid">
                 {t("auth.usernameLabel")}{" "}
                 <span className="font-medium text-destructive">*</span>
-              </Form.Label>
+              </label>
 
-              <Form.Control asChild>
+              <>
                 <Input
                   type="username"
                   onChange={({ target: { value } }) => {
@@ -100,19 +98,17 @@ export default function LoginPage(): JSX.Element {
                   required
                   placeholder={t("auth.usernamePlaceholder")}
                 />
-              </Form.Control>
+              </>
 
-              <Form.Message match="valueMissing" className="field-invalid">
-                {t("auth.usernameRequired")}
-              </Form.Message>
-            </Form.Field>
+              
+            </>
           </div>
           <div className="mb-3 w-full">
-            <Form.Field name="password">
-              <Form.Label className="data-[invalid]:label-invalid">
+            <>
+              <label className="data-[invalid]:label-invalid">
                 {t("auth.passwordLabel")}{" "}
                 <span className="font-medium text-destructive">*</span>
-              </Form.Label>
+              </label>
 
               <InputComponent
                 onChange={(value) => {
@@ -126,17 +122,15 @@ export default function LoginPage(): JSX.Element {
                 className="w-full"
               />
 
-              <Form.Message className="field-invalid" match="valueMissing">
-                {t("auth.passwordRequired")}
-              </Form.Message>
-            </Form.Field>
+              
+            </>
           </div>
           <div className="w-full">
-            <Form.Submit asChild>
+            <>
               <Button className="mr-3 mt-6 w-full" type="submit">
                 {t("auth.signInButton")}
               </Button>
-            </Form.Submit>
+            </>
           </div>
           <div className="w-full">
             <CustomLink to="/signup">
@@ -147,6 +141,6 @@ export default function LoginPage(): JSX.Element {
           </div>
         </div>
       </div>
-    </Form.Root>
+    </form>
   );
 }

@@ -1,10 +1,8 @@
-import * as Form from "@radix-ui/react-form";
 import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Button, Checkbox } from "@hanzo/ui";
 import { CONTROL_NEW_USER } from "../../constants/constants";
 import { AuthContext } from "../../contexts/authContext";
 import type {
@@ -81,7 +79,7 @@ export default function UserManagementModal({
         />
       </BaseModal.Header>
       <BaseModal.Content>
-        <Form.Root
+        <form
           onSubmit={(event) => {
             if (password !== confirmPassword) {
               event.preventDefault();
@@ -94,7 +92,7 @@ export default function UserManagementModal({
           }}
         >
           <div className="grid gap-5">
-            <Form.Field name="username">
+            <>
               <div
                 style={{
                   display: "flex",
@@ -102,12 +100,12 @@ export default function UserManagementModal({
                   justifyContent: "space-between",
                 }}
               >
-                <Form.Label className="data-[invalid]:label-invalid">
+                <label className="data-[invalid]:label-invalid">
                   Username{" "}
                   <span className="font-medium text-destructive">*</span>
-                </Form.Label>
+                </label>
               </div>
-              <Form.Control asChild>
+              <>
                 <input
                   onChange={({ target: { value } }) => {
                     handleInput({ target: { name: "username", value } });
@@ -118,18 +116,13 @@ export default function UserManagementModal({
                   required
                   placeholder="Username"
                 />
-              </Form.Control>
-              <Form.Message match="valueMissing" className="field-invalid">
-                Please enter your username
-              </Form.Message>
-            </Form.Field>
+              </>
+              
+            </>
 
             <div className="flex flex-row">
               <div className="mr-3 basis-1/2">
-                <Form.Field
-                  name="password"
-                  serverInvalid={password != confirmPassword}
-                >
+                <>
                   <div
                     style={{
                       display: "flex",
@@ -137,7 +130,7 @@ export default function UserManagementModal({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Form.Label className="data-[invalid]:label-invalid flex">
+                    <label className="data-[invalid]:label-invalid flex">
                       Password{" "}
                       <span className="ml-1 mr-1 font-medium text-destructive">
                         *
@@ -156,9 +149,9 @@ export default function UserManagementModal({
                           strokeWidth={1.5}
                         />
                       )}
-                    </Form.Label>
+                    </label>
                   </div>
-                  <Form.Control asChild>
+                  <>
                     <input
                       onChange={({ target: { value } }) => {
                         handleInput({ target: { name: "password", value } });
@@ -169,25 +162,18 @@ export default function UserManagementModal({
                       required={data ? false : true}
                       type={pwdVisible ? "text" : "password"}
                     />
-                  </Form.Control>
+                  </>
 
-                  <Form.Message className="field-invalid" match="valueMissing">
-                    Please enter a password
-                  </Form.Message>
+                  
 
                   {password != confirmPassword && (
-                    <Form.Message className="field-invalid">
-                      Passwords do not match
-                    </Form.Message>
+                    
                   )}
-                </Form.Field>
+                </>
               </div>
 
               <div className="basis-1/2">
-                <Form.Field
-                  name="confirmpassword"
-                  serverInvalid={password != confirmPassword}
-                >
+                <>
                   <div
                     style={{
                       display: "flex",
@@ -195,7 +181,7 @@ export default function UserManagementModal({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Form.Label className="data-[invalid]:label-invalid flex">
+                    <label className="data-[invalid]:label-invalid flex">
                       Confirm password{" "}
                       <span className="ml-1 mr-1 font-medium text-destructive">
                         *
@@ -218,9 +204,9 @@ export default function UserManagementModal({
                           strokeWidth={1.5}
                         />
                       )}
-                    </Form.Label>
+                    </label>
                   </div>
-                  <Form.Control asChild>
+                  <>
                     <input
                       onChange={(input) => {
                         setConfirmPassword(input.target.value);
@@ -230,19 +216,17 @@ export default function UserManagementModal({
                       required={data ? false : true}
                       type={confirmPwdVisible ? "text" : "password"}
                     />
-                  </Form.Control>
-                  <Form.Message className="field-invalid" match="valueMissing">
-                    Please confirm your password
-                  </Form.Message>
-                </Form.Field>
+                  </>
+                  
+                </>
               </div>
             </div>
             <div className="flex gap-8">
-              <Form.Field name="is_active">
+              <>
                 <div>
-                  <Form.Label className="data-[invalid]:label-invalid mr-3">
+                  <label className="data-[invalid]:label-invalid mr-3">
                     Active
-                  </Form.Label>
+                  </label>
                   {data?.id === userData?.id ? (
                     <ShadTooltip content="You cannot deactivate your own account">
                       <span className="inline-block cursor-not-allowed">
@@ -256,7 +240,7 @@ export default function UserManagementModal({
                       </span>
                     </ShadTooltip>
                   ) : (
-                    <Form.Control asChild>
+                    <>
                       <Checkbox
                         value={isActive}
                         checked={isActive}
@@ -267,17 +251,17 @@ export default function UserManagementModal({
                           setIsActive(value);
                         }}
                       />
-                    </Form.Control>
+                    </>
                   )}
                 </div>
-              </Form.Field>
+              </>
               {userData?.is_superuser && (
-                <Form.Field name="is_superuser">
+                <>
                   <div>
-                    <Form.Label className="data-[invalid]:label-invalid mr-3">
+                    <label className="data-[invalid]:label-invalid mr-3">
                       Superuser
-                    </Form.Label>
-                    <Form.Control asChild>
+                    </label>
+                    <>
                       <Checkbox
                         checked={isSuperUser}
                         value={isSuperUser}
@@ -290,9 +274,9 @@ export default function UserManagementModal({
                           setIsSuperUser(value);
                         }}
                       />
-                    </Form.Control>
+                    </>
                   </div>
-                </Form.Field>
+                </>
               )}
             </div>
           </div>
@@ -308,11 +292,11 @@ export default function UserManagementModal({
               {cancelText}
             </Button>
 
-            <Form.Submit asChild>
+            <>
               <Button className="mt-8">{confirmationText}</Button>
-            </Form.Submit>
+            </>
           </div>
-        </Form.Root>
+        </form>
       </BaseModal.Content>
     </BaseModal>
   );

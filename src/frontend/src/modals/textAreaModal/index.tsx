@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import IconComponent from "../../components/common/genericIconComponent";
-import { Button } from "../../components/ui/button";
-import { Textarea } from "../../components/ui/textarea";
+import { Button, Textarea } from "@hanzo/ui";
 import type { textModalPropsType } from "../../types/components";
 import { handleKeyDown } from "../../utils/reactflowUtils";
 import { classNames } from "../../utils/utils";

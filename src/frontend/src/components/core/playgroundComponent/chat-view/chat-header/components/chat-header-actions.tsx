@@ -1,6 +1,6 @@
 import React from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 
 interface ChatHeaderActionsProps {
   isFullscreen: boolean;

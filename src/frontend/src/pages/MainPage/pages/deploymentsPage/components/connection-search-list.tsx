@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import type { ConnectionItem } from "../types";
 import { CheckboxSelectItem } from "./radio-select-item";

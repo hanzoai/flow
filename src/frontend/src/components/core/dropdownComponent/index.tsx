@@ -1,4 +1,4 @@
-import { PopoverAnchor } from "@radix-ui/react-popover";
+import { PopoverAnchor } from "@hanzo/ui";
 import Fuse from "fuse.js";
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

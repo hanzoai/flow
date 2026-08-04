@@ -5,8 +5,7 @@ import { useUtilityStore } from "@/stores/utilityStore";
 import IconComponent from "../../components/common/genericIconComponent";
 import { TagsSelector } from "../../components/common/tagsSelectorComponent";
 import EditFlowSettings from "../../components/core/editFlowSettingsComponent";
-import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Button, Checkbox } from "@hanzo/ui";
 import {
   getStoreComponents,
   saveFlowStore,

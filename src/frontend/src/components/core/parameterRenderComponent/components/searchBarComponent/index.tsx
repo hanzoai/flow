@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input } from "@hanzo/ui";
 
 interface SearchBarComponentProps {
   searchCategories?: string[];

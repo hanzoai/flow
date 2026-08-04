@@ -4,7 +4,7 @@ import {
   CHAT_UPLOAD_ATTACHMENT_TOOLTIP,
 } from "@/constants/file-upload-constants";
 import ForwardedIconComponent from "../../../../../../components/common/genericIconComponent";
-import { Button } from "../../../../../../components/ui/button";
+import { Button } from "@hanzo/ui";
 
 const UploadFileButton = ({
   fileInputRef,

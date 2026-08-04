@@ -63,18 +63,8 @@ jest.mock("../components/InspectionPanelFields", () => {
 });
 
 // Mock Separator
-jest.mock("@/components/ui/separator", () => ({
-  Separator: () => <hr data-testid="separator" />,
-}));
 
 // Mock Button
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 // Mock utils
 jest.mock("@/utils/utils", () => ({

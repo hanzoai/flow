@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { customGetHostProtocol } from "@/customization/utils/custom-get-host-protocol";
 import { cn } from "@/utils/utils";
 

@@ -1,14 +1,6 @@
-import { DialogClose } from "@radix-ui/react-dialog";
+import { DialogClose } from "@hanzo/ui";
 import { Trash2 } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/dialog";
+import { Button, Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@hanzo/ui";
 
 export default function DeleteConfirmationModal({
   children,

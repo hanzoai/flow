@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@hanzo/ui";
 import type { Deployment, ProviderAccount } from "../types";
 
 // ---------------------------------------------------------------------------
@@ -104,9 +104,6 @@ jest.mock(
     },
 );
 
-jest.mock("@/components/ui/loading", () =>
-  jest.fn(() => <span data-testid="loading-spinner" />),
-);
 
 // Mock hooks that the context depends on internally
 jest.mock(

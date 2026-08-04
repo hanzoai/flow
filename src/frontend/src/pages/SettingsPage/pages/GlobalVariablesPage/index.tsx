@@ -19,8 +19,7 @@ import type { GlobalVariable } from "@/types/global_variables";
 import IconComponent, {
   ForwardedIconComponent,
 } from "../../../../components/common/genericIconComponent";
-import { Badge } from "../../../../components/ui/badge";
-import { Button } from "../../../../components/ui/button";
+import { Badge, Button } from "@hanzo/ui";
 import useAlertStore from "../../../../stores/alertStore";
 
 export default function GlobalVariablesPage() {

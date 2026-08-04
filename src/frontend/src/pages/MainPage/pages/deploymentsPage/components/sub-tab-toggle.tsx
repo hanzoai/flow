@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 export type DeploymentSubTab = "deployments" | "providers";

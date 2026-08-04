@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button, Input } from "@hanzo/ui";
 import IconComponent from "../../../components/common/genericIconComponent";
 
 export const ContentRenderKey = ({

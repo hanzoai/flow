@@ -1,7 +1,6 @@
 import IconComponent, {
   ForwardedIconComponent,
 } from "../../../../../../components/common/genericIconComponent";
-import { Skeleton } from "../../../../../../components/ui/skeleton";
 import formatFileName from "../utils/format-file-name";
 
 const supImgFiles = ["png", "jpg", "jpeg", "gif", "bmp", "webp", "image"];
@@ -49,10 +48,10 @@ export default function FilePreview({
             } cursor-wait rounded-lg border border-ring bg-background transition duration-300`}
           >
             <div className="ml-3 flex h-full w-full items-center gap-2 text-sm">
-              <Skeleton className="h-10 w-10 rounded-lg" />
+              
               <div className="flex flex-col gap-1">
-                <Skeleton className="h-3 w-48" />
-                <Skeleton className="h-3 w-10" />
+                
+                
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { NodeToolbar } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import ShadTooltip from "../../../../components/common/shadTooltipComponent";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import { GradientGroup } from "../../../../icons/GradientSparkles";
 import useFlowStore from "../../../../stores/flowStore";
 import { validateSelection } from "../../../../utils/reactflowUtils";

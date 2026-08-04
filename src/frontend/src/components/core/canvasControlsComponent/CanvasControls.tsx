@@ -3,7 +3,7 @@ import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import flowAssistantIcon from "@/assets/flow_assistant.svg";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { ENABLE_INSPECTION_PANEL } from "@/customization/feature-flags";
 import useAssistantManagerStore from "@/stores/assistantManagerStore";
 import useFlowStore from "@/stores/flowStore";

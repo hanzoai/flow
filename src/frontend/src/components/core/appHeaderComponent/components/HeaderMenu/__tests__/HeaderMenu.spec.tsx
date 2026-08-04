@@ -9,25 +9,6 @@ import {
   HeaderMenuToggle,
 } from "../index";
 
-jest.mock("@/components/ui/dropdown-menu", () => ({
-  DropdownMenu: ({ children }) => <div data-testid="dm">{children}</div>,
-  DropdownMenuTrigger: ({ children, ...rest }) => (
-    <button data-testid="trigger" {...rest}>
-      {children}
-    </button>
-  ),
-  DropdownMenuContent: ({ children, ...rest }) => (
-    <div data-testid="content" {...rest}>
-      {children}
-    </div>
-  ),
-  DropdownMenuItem: ({ children, ...rest }) => (
-    <div role="menuitem" {...rest}>
-      {children}
-    </div>
-  ),
-  DropdownMenuSeparator: (props) => <hr data-testid="sep" {...props} />,
-}));
 jest.mock("@/components/common/genericIconComponent", () => ({
   __esModule: true,
   default: ({ name }) => <span data-testid="icon">{name}</span>,

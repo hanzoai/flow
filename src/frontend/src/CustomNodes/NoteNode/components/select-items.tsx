@@ -1,15 +1,12 @@
 import { memo } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import {
-  SelectContentWithoutPortal,
-  SelectItem,
-} from "@/components/ui/select-custom";
+import { SelectContent, SelectItem } from "@hanzo/ui";
 import ToolbarSelectItem from "@/pages/FlowPage/components/nodeToolbarComponent/toolbarSelectItem";
 import type { NoteDataType } from "@/types/flow";
 
 export const SelectItems = memo(
   ({ shortcuts, data }: { shortcuts: any[]; data: NoteDataType }) => (
-    <SelectContentWithoutPortal>
+    <SelectContent>
       <SelectItem value="duplicate">
         <ToolbarSelectItem
           shortcut={
@@ -54,7 +51,7 @@ export const SelectItems = memo(
           </span>
         </div>
       </SelectItem>
-    </SelectContentWithoutPortal>
+    </SelectContent>
   ),
 );
 

@@ -68,49 +68,8 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    variant,
-    size,
-    className,
-    "data-testid": testId,
-    loading,
-    unstyled,
-    ...props
-  }: ButtonProps) => (
-    <button
-      onClick={onClick}
-      data-variant={variant}
-      data-size={size}
-      className={className}
-      data-testid={testId}
-      data-loading={loading}
-      data-unstyled={unstyled}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
 
-jest.mock("@/components/ui/input", () => ({
-  Input: ({ value, onChange, placeholder, ...props }: InputProps) => (
-    <input
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      {...props}
-    />
-  ),
-}));
 
-jest.mock("@/components/ui/sidebar", () => ({
-  SidebarTrigger: ({ children }: SidebarProps) => (
-    <button data-testid="sidebar-trigger">{children}</button>
-  ),
-}));
 
 jest.mock("@/modals/deleteConfirmationModal", () => ({
   __esModule: true,

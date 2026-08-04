@@ -1,11 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button, DialogDescription, DialogHeader, DialogTitle, Label } from "@hanzo/ui";
 import type { ProviderAccount } from "@/pages/MainPage/pages/deploymentsPage/types";
 
 interface ProviderPhaseContentProps {
@@ -33,16 +26,13 @@ export default function ProviderPhaseContent({
         </DialogDescription>
       </DialogHeader>
 
-      <RadioGroup value={selectedProviderId} onValueChange={onSelectProvider}>
+      <>
         {providers.map((provider) => (
           <div
             key={provider.id}
             className="flex items-center gap-3 rounded-lg border p-3"
           >
-            <RadioGroupItem
-              value={provider.id}
-              id={`provider-${provider.id}`}
-            />
+            
             <Label
               htmlFor={`provider-${provider.id}`}
               className="flex flex-1 cursor-pointer flex-col gap-0.5"
@@ -56,7 +46,7 @@ export default function ProviderPhaseContent({
             </Label>
           </div>
         ))}
-      </RadioGroup>
+      </>
 
       <div className="flex items-center justify-between pt-4">
         <Button variant="ghost" onClick={onCancel}>

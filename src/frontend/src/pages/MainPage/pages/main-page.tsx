@@ -2,7 +2,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import SideBarFoldersButtonsComponent from "@/components/core/folderSidebarComponent/components/sideBarFolderButtons";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { getAxiosErrorMessage } from "@/controllers/API/helpers/get-axios-error-message";
 import { useDeleteFolders } from "@/controllers/API/queries/folders";
 import CustomEmptyPageCommunity from "@/customization/components/custom-empty-page";
@@ -59,7 +58,7 @@ export default function CollectionPage(): JSX.Element {
   const showMainContent = shouldShowMainContent(flows, examples, folders);
 
   return (
-    <SidebarProvider width="280px">
+    <>
       {flows && examples && folders && showMainContent && (
         <SideBarFoldersButtonsComponent
           handleChangeFolder={(id: string) => {
@@ -98,6 +97,6 @@ export default function CollectionPage(): JSX.Element {
         setOpenDeleteFolderModal={setOpenDeleteFolderModal}
         handleDeleteFolder={handleDeleteFolder}
       />
-    </SidebarProvider>
+    </>
   );
 }

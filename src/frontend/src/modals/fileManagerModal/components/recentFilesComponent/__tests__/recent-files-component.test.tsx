@@ -21,11 +21,6 @@ type AlertStoreState = {
   setSuccessData: (args: unknown) => void;
 };
 
-jest.mock("@/components/ui/input", () => ({
-  Input: ({ value, onChange, ...props }: InputProps) => (
-    <input value={value} onChange={onChange} {...props} />
-  ),
-}));
 
 jest.mock("@/stores/alertStore", () => ({
   __esModule: true,
@@ -66,22 +61,7 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: ButtonProps) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
-jest.mock("@/components/ui/checkbox", () => ({
-  Checkbox: ({ checked, onCheckedChange, ...props }: CheckboxProps) => (
-    <input
-      type="checkbox"
-      aria-checked={checked}
-      onChange={() => onCheckedChange?.(!checked)}
-      {...props}
-    />
-  ),
-}));
 
 jest.mock("../../filesRendererComponent", () => ({
   __esModule: true,

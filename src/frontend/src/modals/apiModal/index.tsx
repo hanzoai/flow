@@ -1,8 +1,5 @@
 import { TweaksComponent } from "@/components/core/codeTabsComponent/components/tweaksComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Button, Input, Label, Separator } from "@hanzo/ui";
 import { CustomAPIGenerator } from "@/customization/components/custom-api-generator";
 import { CustomLink } from "@/customization/components/custom-link";
 import useSaveFlow from "@/hooks/flows/use-save-flow";

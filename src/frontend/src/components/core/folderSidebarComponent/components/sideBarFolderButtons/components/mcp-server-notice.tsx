@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import MCPFlow from "@/assets/MCPFlow.png";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 
 export const MCPServerNotice: FC<{

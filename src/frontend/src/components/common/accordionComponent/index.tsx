@@ -1,10 +1,4 @@
 import { useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import type { AccordionComponentType } from "@/types/components";
 import { cn } from "@/utils/utils";
 
@@ -38,30 +32,16 @@ export default function AccordionComponent({
 
   return (
     <>
-      <Accordion
-        type="single"
-        className="w-full"
-        value={value}
-        onValueChange={!disabled ? setValue : () => {}}
-      >
-        <AccordionItem value={keyValue!} className="border-b">
-          <AccordionTrigger
-            onClick={() => {
-              handleClick();
-            }}
-            disabled={disabled}
-            className={cn(
-              sideBar ? "w-full bg-muted px-[0.75rem] py-[0.5rem]" : "ml-3",
-              disabled ? "cursor-not-allowed" : "cursor-pointer",
-            )}
-          >
+      <>
+        <>
+          <>
             {trigger}
-          </AccordionTrigger>
-          <AccordionContent>
+          </>
+          <>
             <div className="AccordionContent flex flex-col">{children}</div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+          </>
+        </>
+      </>
     </>
   );
 }

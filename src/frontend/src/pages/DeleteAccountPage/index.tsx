@@ -1,7 +1,6 @@
 import { useState } from "react";
 import FlowLogo from "@/assets/FlowLogo.svg?react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Button, Input } from "@hanzo/ui";
 import BaseModal from "../../modals/baseModal";
 
 export default function DeleteAccountPage() {

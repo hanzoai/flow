@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import type { APIClassType } from "@/types/api";
 import { customStringify } from "@/utils/reactflowUtils";
-import { Badge } from "../../components/ui/badge";
-import { Button } from "../../components/ui/button";
+import { Badge, Button } from "@hanzo/ui";
 import { useDarkStore } from "../../stores/darkStore";
 import type { NodeDataType } from "../../types/flow";
 import BaseModal from "../baseModal";

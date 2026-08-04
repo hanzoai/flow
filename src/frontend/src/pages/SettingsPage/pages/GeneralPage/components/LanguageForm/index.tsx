@@ -3,20 +3,7 @@ import { useTranslation } from "react-i18next";
 import { loadLanguage } from "@/i18n";
 import { SUPPORTED_LANGUAGES } from "@/constants/languages";
 import { useTypesStore } from "@/stores/typesStore";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../../../../../components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 
 const LanguageFormComponent = () => {
   const { t, i18n } = useTranslation();

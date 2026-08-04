@@ -1,5 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import Loading from "@/components/ui/loading";
+import { Spinner } from "@hanzo/gui";
 import { cn } from "@/utils/utils";
 
 interface FilePreviewProps {
@@ -20,7 +20,7 @@ const FilePreview = ({ file, loading, error, onDelete }: FilePreviewProps) => {
       )}
     >
       {loading ? (
-        <Loading className="h-4 w-4" />
+        <Spinner className="h-4 w-4" />
       ) : isImage ? (
         <img
           src={URL.createObjectURL(file)}

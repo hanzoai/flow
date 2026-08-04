@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { SimpleSidebarTrigger } from "@/components/ui/simple-sidebar";
 
 interface PlaygroundButtonProps {
   hasIO: boolean;
@@ -24,9 +23,9 @@ const DisabledButton = () => (
 
 const PlaygroundButton = ({ hasIO }: PlaygroundButtonProps) => {
   return hasIO ? (
-    <SimpleSidebarTrigger>
+    <>
       <ButtonLabel />
-    </SimpleSidebarTrigger>
+    </>
   ) : (
     <ShadTooltip content="Add a Chat Input or Chat Output to use the playground">
       <div>

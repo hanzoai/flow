@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import useTheme from "@/customization/hooks/use-custom-theme";
 
 export const ThemeButtons = () => {

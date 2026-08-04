@@ -1,4 +1,4 @@
-import { TwitterLogoIcon } from "@radix-ui/react-icons";
+import { Twitter as TwitterLogoIcon } from "lucide-react";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 import { lazy } from "react";
 import { FaApple, FaDiscord, FaGithub } from "react-icons/fa";

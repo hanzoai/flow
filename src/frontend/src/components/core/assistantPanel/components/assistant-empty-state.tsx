@@ -1,6 +1,6 @@
 import flowAssistantIcon from "@/assets/flow_assistant.svg";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import {
   ASSISTANT_SUGGESTIONS,
   ASSISTANT_WELCOME_TEXT,

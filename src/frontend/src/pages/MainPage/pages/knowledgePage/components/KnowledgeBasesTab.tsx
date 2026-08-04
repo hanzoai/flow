@@ -4,9 +4,8 @@ import { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import TableComponent from "@/components/core/parameterRenderComponent/components/tableComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Loading from "@/components/ui/loading";
+import { Button, Input } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetKnowledgeBases } from "@/controllers/API/queries/knowledge-bases/use-get-knowledge-bases";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import { track } from "@/customization/utils/analytics";
@@ -181,7 +180,7 @@ const KnowledgeBasesTab = ({
   if (isLoading || !knowledgeBases || !Array.isArray(knowledgeBases)) {
     return (
       <div className="flex flex-1 w-full flex-col items-center justify-center gap-3">
-        <Loading size={36} />
+        <Spinner size={36} />
         <span className="text-sm text-muted-foreground pt-3">
           Loading Knowledge Bases...
         </span>

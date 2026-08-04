@@ -1,7 +1,7 @@
 import type { AgGridReact } from "ag-grid-react";
 import { useCallback, useRef, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import TableModal from "@/modals/tableModal";
 import type { ColumnField } from "@/types/utils/functions";
 import { FormatterType } from "@/types/utils/functions";

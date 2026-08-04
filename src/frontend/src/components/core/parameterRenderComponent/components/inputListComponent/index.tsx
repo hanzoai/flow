@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "../../../../../utils/utils";
 import { getPlaceholder } from "../../helpers/get-placeholder-disabled";
 import type { InputListComponentType, InputProps } from "../../types";

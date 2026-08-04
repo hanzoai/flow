@@ -9,9 +9,8 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import CardsWrapComponent from "@/components/core/cardsWrapComponent";
 import TableComponent from "@/components/core/parameterRenderComponent/components/tableComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import Loading from "@/components/ui/loading";
+import { Button, Input } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetFilesV2 } from "@/controllers/API/queries/file-management";
 import { useDeleteFilesV2 } from "@/controllers/API/queries/file-management/use-delete-files";
 import { usePostRenameFileV2 } from "@/controllers/API/queries/file-management/use-put-rename-file";
@@ -337,7 +336,7 @@ const FilesTab = ({
       <div className="flex h-full flex-col py-4">
         {!files || !Array.isArray(files) ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Loading />
+            <Spinner />
           </div>
         ) : files.length > 0 ? (
           <DragWrapComponent onFileDrop={onFileDrop}>

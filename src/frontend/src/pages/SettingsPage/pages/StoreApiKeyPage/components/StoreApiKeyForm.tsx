@@ -1,15 +1,6 @@
-import * as Form from "@radix-ui/react-form";
 import { useTranslation } from "react-i18next";
 import InputComponent from "../../../../../components/core/parameterRenderComponent/components/inputComponent";
-import { Button } from "../../../../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../../../../components/ui/card";
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@hanzo/ui";
 
 type StoreApiKeyFormComponentProps = {
   apikey: string;
@@ -30,7 +21,7 @@ const StoreApiKeyFormComponent = ({
   const { t } = useTranslation();
   return (
     <>
-      <Form.Root
+      <form
         onSubmit={(event) => {
           event.preventDefault();
           handleSaveKey(apikey, handleInput);
@@ -50,7 +41,7 @@ const StoreApiKeyFormComponent = ({
           <CardContent>
             <div className="flex w-full flex-col gap-3">
               <div className="flex w-full gap-4">
-                <Form.Field name="apikey" className="w-full">
+                <>
                   <InputComponent
                     id="apikey"
                     onChange={(value) => {
@@ -62,10 +53,8 @@ const StoreApiKeyFormComponent = ({
                     placeholder="Insert your API Key"
                     className="w-full"
                   />
-                  <Form.Message match="valueMissing" className="field-invalid">
-                    Please enter your API Key
-                  </Form.Message>
-                </Form.Field>
+                  
+                </>
               </div>
               <span className="pr-1 text-xs text-muted-foreground">
                 {t("store.createApiKey")}{" "}
@@ -81,7 +70,7 @@ const StoreApiKeyFormComponent = ({
             </div>
           </CardContent>
           <CardFooter className="border-t px-6 py-4">
-            <Form.Submit asChild>
+            <>
               <Button
                 loading={loadingApiKey}
                 type="submit"
@@ -89,10 +78,10 @@ const StoreApiKeyFormComponent = ({
               >
                 Save
               </Button>
-            </Form.Submit>
+            </>
           </CardFooter>
         </Card>
-      </Form.Root>
+      </form>
     </>
   );
 };

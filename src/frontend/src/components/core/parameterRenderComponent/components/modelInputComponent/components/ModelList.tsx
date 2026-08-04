@@ -1,9 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+import { CommandGroup, CommandItem, CommandList } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { ModelOption, SelectedModel } from "../types";
 

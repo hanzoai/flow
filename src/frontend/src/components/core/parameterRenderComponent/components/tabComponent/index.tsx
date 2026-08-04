@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
+import { Tabs, TabsList, TabsTrigger } from "@hanzo/ui";
 import { testIdCase } from "@/utils/utils";
 import type { InputProps, TabComponentType } from "../../types";
 

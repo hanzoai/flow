@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import type { ProviderCredentials } from "../types";
 
 interface ProviderCredentialsFormProps {

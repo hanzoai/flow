@@ -17,9 +17,6 @@ jest.mock("@/components/core/codeTabsComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/badge", () => ({
-  Badge: ({ children }: { children: ReactNode }) => <span>{children}</span>,
-}));
 
 describe("SpanDetail", () => {
   // Verifies that when no span is selected (null), the empty-state placeholder is shown with the prompt text.

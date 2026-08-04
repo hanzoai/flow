@@ -6,19 +6,13 @@ import useHandleOnNewValue from "@/CustomNodes/hooks/use-handle-new-value";
 import useHandleNodeClass from "@/CustomNodes/hooks/use-handle-node-class";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import ToggleShadComponent from "@/components/core/parameterRenderComponent/components/toggleShadComponent";
-import { Button } from "@/components/ui/button";
+import { Button, Select, SelectContent, SelectItem, SelectTrigger } from "@hanzo/ui";
 import { usePostTemplateValue } from "@/controllers/API/queries/nodes/use-post-template-value";
 import { usePostRetrieveVertexOrder } from "@/controllers/API/queries/vertex";
 import { customOpenNewTab } from "@/customization/utils/custom-open-new-tab";
 import useAddFlow from "@/hooks/flows/use-add-flow";
 import type { APIClassType } from "@/types/api";
 import IconComponent from "../../../../components/common/genericIconComponent";
-import {
-  Select,
-  SelectContentWithoutPortal,
-  SelectItem,
-  SelectTrigger,
-} from "../../../../components/ui/select-custom";
 import useAlertStore from "../../../../stores/alertStore";
 import { useDarkStore } from "../../../../stores/darkStore";
 import useFlowStore from "../../../../stores/flowStore";
@@ -647,7 +641,7 @@ const NodeToolbarComponent = memo(
                   </div>
                 </ShadTooltip>
               </SelectTrigger>
-              <SelectContentWithoutPortal
+              <SelectContent
                 className={"relative top-1 w-56 bg-background"}
               >
                 <SelectItem value={"save"}>
@@ -807,7 +801,7 @@ const NodeToolbarComponent = memo(
                     </span>
                   </div>
                 </SelectItem>
-              </SelectContentWithoutPortal>
+              </SelectContent>
             </Select>
           </div>
 

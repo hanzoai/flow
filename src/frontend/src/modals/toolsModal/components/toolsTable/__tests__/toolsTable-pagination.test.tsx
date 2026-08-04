@@ -14,44 +14,10 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   default: ({ children }: any) => <div>{children}</div>,
 }));
 
-jest.mock("@/components/ui/input", () => ({
-  Input: ({ value, onChange, placeholder, icon }: any) => (
-    <input
-      data-testid="search-input"
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      data-icon={icon}
-    />
-  ),
-}));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} data-testid={props["data-testid"]}>
-      {children}
-    </button>
-  ),
-}));
 
-jest.mock("@/components/ui/textarea", () => ({
-  Textarea: ({ value, onChange }: any) => (
-    <textarea data-testid="textarea" value={value} onChange={onChange} />
-  ),
-}));
 
-jest.mock("@/components/ui/separator", () => ({
-  Separator: () => <hr data-testid="separator" />,
-}));
 
-jest.mock("@/components/ui/sidebar", () => ({
-  Sidebar: ({ children }: any) => <div data-testid="sidebar">{children}</div>,
-  SidebarContent: ({ children }: any) => <div>{children}</div>,
-  SidebarFooter: ({ children }: any) => <div>{children}</div>,
-  SidebarGroup: ({ children }: any) => <div>{children}</div>,
-  SidebarGroupContent: ({ children }: any) => <div>{children}</div>,
-  useSidebar: () => ({ setOpen: jest.fn() }),
-}));
 
 // Mock TableComponent to test that pagination props are passed correctly
 jest.mock(

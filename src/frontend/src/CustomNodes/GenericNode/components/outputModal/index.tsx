@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button, Tabs, TabsList, TabsTrigger } from "@hanzo/ui";
 import useAlertStore from "@/stores/alertStore";
 import useFlowStore from "@/stores/flowStore";
 import BaseModal from "../../../../modals/baseModal";

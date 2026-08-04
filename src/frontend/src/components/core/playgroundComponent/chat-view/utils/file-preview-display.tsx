@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import Loading from "@/components/ui/loading";
+import { Spinner } from "@hanzo/gui";
 import { cn } from "@/utils/utils";
 import {
   extractFileInfo,
@@ -90,7 +90,7 @@ export default function FilePreviewDisplay({
         )}
       >
         {loading ? (
-          <Loading className="h-4 w-4" />
+          <Spinner className="h-4 w-4" />
         ) : previewUrl && !imageError ? (
           <img
             src={previewUrl}
@@ -130,7 +130,7 @@ export default function FilePreviewDisplay({
       )}
     >
       {loading ? (
-        <Loading className="h-4 w-4" />
+        <Spinner className="h-4 w-4" />
       ) : previewUrl && !imageError ? (
         <img
           src={previewUrl}

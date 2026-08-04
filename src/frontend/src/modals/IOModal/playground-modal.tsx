@@ -16,7 +16,7 @@ import { swatchColors } from "@/utils/styleUtils";
 import FlowLogo from "@/assets/FlowLogo.svg?react";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
-import { Button } from "../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import useAlertStore from "../../stores/alertStore";
 import useFlowStore from "../../stores/flowStore";
 import useFlowsManagerStore from "../../stores/flowsManagerStore";

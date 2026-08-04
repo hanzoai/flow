@@ -1,18 +1,6 @@
 import { useMemo } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Button, Input, Popover, PopoverContent, PopoverTrigger, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@hanzo/ui";
 import { formatDateLabel } from "./traceViewHelpers";
 import { DateRangePopoverProps } from "./types";
 

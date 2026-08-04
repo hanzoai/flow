@@ -86,43 +86,7 @@ jest.mock(
   }),
 );
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    unstyled,
-    size,
-    className,
-    disabled,
-    loading,
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-    unstyled?: boolean;
-    size?: string;
-    className?: string;
-    disabled?: boolean;
-    loading?: boolean;
-  }) => (
-    <button
-      onClick={onClick}
-      className={className}
-      disabled={disabled || loading}
-    >
-      {loading ? "Loading..." : children}
-    </button>
-  ),
-}));
 
-jest.mock("@/components/ui/tabs-button", () => ({
-  Tabs: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  TabsList: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  TabsTrigger: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-}));
 
 jest.mock("@/utils/utils", () => ({
   cn: (...args: (string | boolean | undefined)[]) =>

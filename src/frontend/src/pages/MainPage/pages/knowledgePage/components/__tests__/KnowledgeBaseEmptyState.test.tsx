@@ -64,13 +64,6 @@ jest.mock("@/components/common/genericIconComponent", () => {
   };
 });
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 const createTestWrapper = () => {
   const queryClient = new QueryClient({

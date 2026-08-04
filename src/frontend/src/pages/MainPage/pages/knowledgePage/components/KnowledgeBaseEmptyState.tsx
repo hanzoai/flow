@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import KnowledgeBaseUploadModal from "@/modals/knowledgeBaseUploadModal/KnowledgeBaseUploadModal";
 import useAlertStore from "@/stores/alertStore";
 import { useOptimisticKnowledgeBase } from "../hooks/useOptimisticKnowledgeBase";

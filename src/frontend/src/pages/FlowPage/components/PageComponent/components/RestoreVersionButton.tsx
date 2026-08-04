@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useSidebar } from "@/components/ui/sidebar";
+import { Button, Checkbox } from "@hanzo/ui";
 import useRestoreVersion from "@/hooks/flows/use-restore-version";
 import CanvasBanner, { CanvasBannerButton } from "./CanvasBanner";
 
@@ -19,22 +17,13 @@ export default function RestoreVersionButton({
   versionTag,
 }: RestoreVersionButtonProps) {
   const { restore, isRestoring } = useRestoreVersion(flowId);
-  const { setActiveSection } = useSidebar();
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [saveDraft, setSaveDraft] = useState(true);
 
   const handleRestore = async () => {
     setShowConfirm(false);
-    await restore(versionId, {
-      saveDraft,
-      onSuccess: () => {
-        // Switch sidebar away from "versions" to trigger the version sidebar's
-        // unmount cleanup, which re-enables auto-save and restores the
-        // inspection panel.
-        setActiveSection("components");
-      },
-    });
+    await restore(versionId, { saveDraft });
   };
 
   return (

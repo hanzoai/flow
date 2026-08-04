@@ -1,7 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Badge, Button, type ButtonProps } from "@hanzo/ui";
 
 export function CanvasBannerButton(props: ButtonProps) {
   return <Button {...props} />;

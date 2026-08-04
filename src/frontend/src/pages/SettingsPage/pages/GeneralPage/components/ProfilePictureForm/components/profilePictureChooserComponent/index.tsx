@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { ProfilePicturesQueryResponse } from "@/controllers/API/queries/files";
 import { customPreLoadImageUrl } from "@/customization/utils/custom-pre-load-image-url";
-import { Button } from "../../../../../../../../components/ui/button";
-import Loading from "../../../../../../../../components/ui/loading";
+import { Button } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useDarkStore } from "../../../../../../../../stores/darkStore";
 import { cn } from "../../../../../../../../utils/utils";
 import usePreloadImages from "./hooks/use-preload-images";
@@ -35,7 +35,7 @@ export default function ProfilePictureChooserComponent({
   return (
     <div className="flex flex-col justify-center gap-2">
       {loading || !imagesLoaded ? (
-        <Loading />
+        <Spinner />
       ) : (
         Object.keys(profilePictures!).map((folder, index) => (
           <div className="flex flex-col gap-2" key={index}>

@@ -9,9 +9,6 @@ jest.mock(
       return <span data-testid={`icon-${name}`} />;
     },
 );
-jest.mock("@/components/ui/loading", () =>
-  jest.fn(() => <span data-testid="loading-spinner" />),
-);
 
 import ProvidersTable from "../components/providers-table";
 

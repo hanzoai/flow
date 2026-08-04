@@ -6,18 +6,7 @@ import type { handleOnNewValueType } from "@/CustomNodes/hooks/use-handle-new-va
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import TableComponent from "@/components/core/parameterRenderComponent/components/tableComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import { Textarea } from "@/components/ui/textarea";
+import { Button, Input, Separator, Textarea } from "@hanzo/ui";
 import { parseString, sanitizeMcpName } from "@/utils/stringManipulation";
 
 export default function ToolsTable({
@@ -51,7 +40,6 @@ export default function ToolsTable({
   const skipSelectionReapply = useRef<number>(0);
   const [isGridReady, setIsGridReady] = useState(false);
 
-  const { setOpen: setSidebarOpen } = useSidebar();
 
   const getRowId = useMemo(() => {
     return (params: any) =>
@@ -306,7 +294,6 @@ export default function ToolsTable({
 
   const handleRowClicked = (event) => {
     setFocusedRow(event.data);
-    setSidebarOpen(true);
   };
 
   const rowName = useMemo(() => {
@@ -316,7 +303,7 @@ export default function ToolsTable({
   }, [focusedRow]);
 
   const handleClose = () => {
-    setSidebarOpen(false);
+    setFocusedRow(null);
   };
 
   const handleGridReady = () => {
@@ -356,11 +343,8 @@ export default function ToolsTable({
           />
         </div>
       </main>
-      <Sidebar
-        side="right"
-        className="flex h-full flex-col overflow-auto border-l border-border"
-      >
-        <SidebarContent className="flex flex-1 flex-col gap-2 overflow-y-auto p-0">
+      <>
+        <>
           {focusedRow &&
             (isAction || !focusedRow.readonly ? (
               <div className="flex flex-col gap-4 p-4">
@@ -431,8 +415,8 @@ export default function ToolsTable({
           {!isAction && actionArgs.length > 0 && <Separator />}
           {focusedRow && (
             <div className="flex h-full flex-col gap-4 p-2">
-              <SidebarGroup className="flex-1">
-                <SidebarGroupContent className="h-full">
+              <>
+                <>
                   <div className="flex h-full flex-col gap-4">
                     {actionArgs.length > 0 && (
                       <div className="flex flex-col gap-1.5">
@@ -467,12 +451,12 @@ export default function ToolsTable({
                       </div>
                     ))}
                   </div>
-                </SidebarGroupContent>
-              </SidebarGroup>
+                </>
+              </>
             </div>
           )}
-        </SidebarContent>
-        <SidebarFooter>
+        </>
+        <>
           <div className="flex justify-end w-full p-2">
             <Button
               variant="primary"
@@ -483,8 +467,8 @@ export default function ToolsTable({
               Close
             </Button>
           </div>
-        </SidebarFooter>
-      </Sidebar>
+        </>
+      </>
     </>
   );
 }

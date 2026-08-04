@@ -1,12 +1,6 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import type { ModelOption } from "@/components/core/parameterRenderComponent/components/modelInputComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import type { ChunkPreview } from "../types";
 import { ChunkPreviewCard } from "./ChunkPreviewCard";

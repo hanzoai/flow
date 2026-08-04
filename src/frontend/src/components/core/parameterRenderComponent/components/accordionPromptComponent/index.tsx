@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureTrigger,
-} from "@/components/ui/disclosure";
+import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from "@hanzo/ui";
 import { regexHighlight } from "@/constants/constants";
 import { usePostValidatePrompt } from "@/controllers/API/queries/nodes/use-post-validate-prompt";
 import MustachePromptModal from "@/modals/mustachePromptModal";
@@ -555,7 +550,7 @@ export default function AccordionPromptComponent({
 
   return (
     <div className={cn("relative w-full", disabled && "pointer-events-none")}>
-      <Disclosure open={isOpen} onOpenChange={setIsOpen}>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <div className="absolute right-0 -top-8 z-10 flex items-center gap-2">
           <Button
             type="button"
@@ -570,7 +565,7 @@ export default function AccordionPromptComponent({
               {isDoubleBrackets ? "{{+}}" : "{+}"}
             </span>
           </Button>
-          <DisclosureTrigger className="group/collapsible">
+          <CollapsibleTrigger className="group/collapsible">
             <div
               role="button"
               tabIndex={0}
@@ -584,10 +579,10 @@ export default function AccordionPromptComponent({
                 )}
               />
             </div>
-          </DisclosureTrigger>
+          </CollapsibleTrigger>
         </div>
 
-        <DisclosureContent>
+        <CollapsibleContent>
           <div className="relative">
             <div
               ref={contentEditableRef}
@@ -648,8 +643,8 @@ export default function AccordionPromptComponent({
               </div>
             )}
           </div>
-        </DisclosureContent>
-      </Disclosure>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

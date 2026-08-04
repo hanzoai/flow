@@ -49,19 +49,7 @@ jest.mock("@/components/core/border-trail", () => ({
   BorderTrail: () => <div data-testid="border-trail">Border Trail</div>,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, "data-testid": testId, ...props }: any) => (
-    <button onClick={onClick} data-testid={testId} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
-jest.mock("@/components/ui/TextShimmer", () => ({
-  TextShimmer: ({ children }: any) => (
-    <div data-testid="text-shimmer">{children}</div>
-  ),
-}));
 
 jest.mock("@/utils/utils", () => ({
   cn: (...classes: any[]) => classes.filter(Boolean).join(" "),

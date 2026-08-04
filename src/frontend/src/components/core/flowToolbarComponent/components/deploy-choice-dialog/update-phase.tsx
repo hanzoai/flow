@@ -1,9 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Button, DialogDescription, DialogFooter, DialogTitle } from "@hanzo/ui";
 import StepDeployStatus from "@/pages/MainPage/pages/deploymentsPage/components/step-deploy-status";
 
 interface UpdatePhaseContentProps {

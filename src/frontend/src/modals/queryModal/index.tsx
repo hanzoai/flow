@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Textarea } from "../../components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 
 import type { queryModalPropsType } from "../../types/components";
 import { handleKeyDown } from "../../utils/reactflowUtils";

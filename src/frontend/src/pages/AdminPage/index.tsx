@@ -12,17 +12,7 @@ import CustomLoader from "@/customization/components/custom-loader";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
-import { Button } from "../../components/ui/button";
-import { CheckBoxDiv } from "../../components/ui/checkbox";
-import { Input } from "../../components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import { Button, Input } from "@hanzo/ui";
 import {
   PAGINATION_PAGE,
   PAGINATION_ROWS_COUNT,
@@ -308,57 +298,53 @@ export default function AdminPage() {
                   (isPending ? " border-0" : "")
                 }
               >
-                <Table className={"table-fixed outline-1"}>
-                  <TableHeader
-                    className={
-                      isPending ? "hidden" : "table-fixed bg-muted outline-1"
-                    }
-                  >
-                    <TableRow>
-                      <TableHead className="h-10">
+                <>
+                  <>
+                    <>
+                      <>
                         {t("admin.columnId")}
-                      </TableHead>
-                      <TableHead className="h-10">
+                      </>
+                      <>
                         {t("admin.columnUsername")}
-                      </TableHead>
-                      <TableHead className="h-10">
+                      </>
+                      <>
                         {t("admin.columnActive")}
-                      </TableHead>
-                      <TableHead className="h-10">
+                      </>
+                      <>
                         {t("admin.columnSuperuser")}
-                      </TableHead>
-                      <TableHead className="h-10">
+                      </>
+                      <>
                         {t("admin.columnCreatedAt")}
-                      </TableHead>
-                      <TableHead className="h-10">
+                      </>
+                      <>
                         {t("admin.columnUpdatedAt")}
-                      </TableHead>
-                      <TableHead className="h-10 w-[100px] text-right"></TableHead>
-                    </TableRow>
-                  </TableHeader>
+                      </>
+                      <></>
+                    </>
+                  </>
                   {
-                    <TableBody className="border-b">
+                    <>
                       {userList.map((user: UserInputType, index) => (
-                        <TableRow key={user.id}>
-                          <TableCell className="truncate py-2 font-medium">
+                        <>
+                          <>
                             <ShadTooltip content={user.id}>
                               <span className="cursor-default">{user.id}</span>
                             </ShadTooltip>
-                          </TableCell>
-                          <TableCell className="truncate py-2">
+                          </>
+                          <>
                             <ShadTooltip content={user.username}>
                               <span className="cursor-default">
                                 {user.username}
                               </span>
                             </ShadTooltip>
-                          </TableCell>
-                          <TableCell className="relative left-1 truncate py-2 text-align-last-left">
+                          </>
+                          <>
                             {user.id === userData?.id ? (
                               <ShadTooltip
                                 content={t("admin.cannotDeactivateSelf")}
                               >
                                 <div className="flex w-fit cursor-not-allowed opacity-50">
-                                  <CheckBoxDiv checked={user.is_active} />
+                                  
                                 </div>
                               </ShadTooltip>
                             ) : (
@@ -387,13 +373,13 @@ export default function AdminPage() {
                                 </ConfirmationModal.Content>
                                 <ConfirmationModal.Trigger>
                                   <div className="flex w-fit">
-                                    <CheckBoxDiv checked={user.is_active} />
+                                    
                                   </div>
                                 </ConfirmationModal.Trigger>
                               </ConfirmationModal>
                             )}
-                          </TableCell>
-                          <TableCell className="relative left-1 truncate py-2 text-align-last-left">
+                          </>
+                          <>
                             <ConfirmationModal
                               size="x-small"
                               title={t("admin.editTitle")}
@@ -417,26 +403,26 @@ export default function AdminPage() {
                               </ConfirmationModal.Content>
                               <ConfirmationModal.Trigger>
                                 <div className="flex w-fit">
-                                  <CheckBoxDiv checked={user.is_superuser} />
+                                  
                                 </div>
                               </ConfirmationModal.Trigger>
                             </ConfirmationModal>
-                          </TableCell>
-                          <TableCell className="truncate py-2">
+                          </>
+                          <>
                             {
                               new Date(user.create_at!)
                                 .toISOString()
                                 .split("T")[0]
                             }
-                          </TableCell>
-                          <TableCell className="truncate py-2">
+                          </>
+                          <>
                             {
                               new Date(user.updated_at!)
                                 .toISOString()
                                 .split("T")[0]
                             }
-                          </TableCell>
-                          <TableCell className="flex w-[100px] py-2 text-right">
+                          </>
+                          <>
                             <div className="flex">
                               <UserManagementModal
                                 title={t("admin.editTitle")}
@@ -488,12 +474,12 @@ export default function AdminPage() {
                                 </ConfirmationModal.Trigger>
                               </ConfirmationModal>
                             </div>
-                          </TableCell>
-                        </TableRow>
+                          </>
+                        </>
                       ))}
-                    </TableBody>
+                    </>
                   }
-                </Table>
+                </>
               </div>
 
               <div className="mt-auto">
