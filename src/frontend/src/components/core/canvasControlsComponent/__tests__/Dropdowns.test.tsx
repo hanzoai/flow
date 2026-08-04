@@ -2,33 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import HelpDropdown from "../HelpDropdown";
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
-jest.mock("@/components/ui/dropdown-menu", () => ({
-  DropdownMenu: ({ children, ...props }: any) => (
-    <div data-testid="dropdown-menu" {...props}>
-      {children}
-    </div>
-  ),
-  DropdownMenuTrigger: ({ children, ...props }: any) => (
-    <div data-testid="dropdown-trigger" {...props}>
-      {children}
-    </div>
-  ),
-  DropdownMenuContent: ({ children, ...props }: any) => (
-    <div data-testid="dropdown-content" {...props}>
-      {children}
-    </div>
-  ),
-}));
 
-jest.mock("@/components/ui/separator", () => ({
-  Separator: () => <div data-testid="separator" />,
-}));
 
 jest.mock("@/components/common/genericIconComponent", () => ({
   __esModule: true,

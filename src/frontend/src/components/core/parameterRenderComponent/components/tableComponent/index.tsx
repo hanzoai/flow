@@ -1,5 +1,4 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useDarkStore } from "@/stores/darkStore";
 import { useTranslation } from "react-i18next";
 import "@/style/ag-theme-shadcn.css"; // Custom CSS applied to the grid
@@ -329,14 +328,14 @@ const TableComponent = forwardRef<
     if (props.rowData.length === 0 && displayEmptyAlert) {
       return (
         <div className="flex h-full w-full items-center justify-center rounded-md border">
-          <Alert variant={"default"} className="w-fit">
+          <>
             <ForwardedIconComponent
               name="AlertCircle"
               className="h-5 w-5 text-primary"
             />
-            <AlertTitle>{resolvedAlertTitle}</AlertTitle>
-            <AlertDescription>{resolvedAlertDescription}</AlertDescription>
-          </Alert>
+            <>{resolvedAlertTitle}</>
+            <>{resolvedAlertDescription}</>
+          </>
         </div>
       );
     }
@@ -344,16 +343,16 @@ const TableComponent = forwardRef<
     if (colDef.length === 0) {
       return (
         <div className="flex h-full w-full items-center justify-center rounded-md border">
-          <Alert variant={"default"} className="w-fit">
+          <>
             <ForwardedIconComponent
               name="AlertCircle"
               className="h-5 w-5 text-primary"
             />
-            <AlertTitle>{t("table.noColumnTitle")}</AlertTitle>
-            <AlertDescription>
+            <>{t("table.noColumnTitle")}</>
+            <>
               {t("table.noColumnDescription")}
-            </AlertDescription>
-          </Alert>
+            </>
+          </>
         </div>
       );
     }

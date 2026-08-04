@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { COLOR_OPTIONS } from "@/constants/constants";
 import type { NoteDataType } from "@/types/flow";
 import { cn } from "@/utils/utils";

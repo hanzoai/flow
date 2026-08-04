@@ -1,7 +1,7 @@
 import { Panel } from "@xyflow/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { memo, useEffect, useState } from "react";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@hanzo/ui";
 import type { AllNodeType } from "@/types/flow";
 import { cn } from "@/utils/utils";
 import InspectionPanelFields from "./components/InspectionPanelFields";

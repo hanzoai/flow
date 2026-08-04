@@ -7,7 +7,7 @@ import {
 import { CustomAPIGenerator } from "@/customization/components/custom-api-generator";
 import { useDarkStore } from "@/stores/darkStore";
 import IconComponent from "../../components/common/genericIconComponent";
-import { Button } from "../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import getWidgetCode from "../apiModal/utils/get-widget-code";
 import BaseModal from "../baseModal";
 

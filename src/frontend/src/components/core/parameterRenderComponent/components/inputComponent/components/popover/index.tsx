@@ -1,21 +1,9 @@
-import { PopoverAnchor } from "@radix-ui/react-popover";
+import { PopoverAnchor } from "@hanzo/ui";
 import { X } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Badge } from "@/components/ui/badge";
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverContentWithoutPortal,
-} from "@/components/ui/popover";
+import { Badge, Command, CommandGroup, CommandInput, CommandItem, CommandList, Popover, PopoverContent } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 const OptionBadge = ({

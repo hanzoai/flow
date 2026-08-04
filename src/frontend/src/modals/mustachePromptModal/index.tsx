@@ -5,9 +5,7 @@ import { usePostValidatePrompt } from "@/controllers/API/queries/nodes/use-post-
 import IconComponent from "../../components/common/genericIconComponent";
 import SanitizedHTMLWrapper from "../../components/common/sanitizedHTMLWrapper";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
-import { Badge } from "../../components/ui/badge";
-import { Button } from "../../components/ui/button";
-import { Textarea } from "../../components/ui/textarea";
+import { Badge, Button, Textarea } from "@hanzo/ui";
 import { MAX_WORDS_HIGHLIGHT } from "../../constants/constants";
 import useAlertStore from "../../stores/alertStore";
 import { PromptModalType } from "../../types/components";

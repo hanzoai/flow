@@ -1,5 +1,5 @@
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { Provider } from "./types";
 

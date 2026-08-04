@@ -4,13 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import FlowSettingsComponent from "@/components/core/flowSettingsComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button, Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@hanzo/ui";
 import { useTranslation } from "react-i18next";
 import { useGetRefreshFlowsQuery } from "@/controllers/API/queries/flows/use-get-refresh-flows-query";
 import { useGetFoldersQuery } from "@/controllers/API/queries/folders/use-get-folders";

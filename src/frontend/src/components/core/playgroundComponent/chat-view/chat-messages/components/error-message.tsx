@@ -4,13 +4,6 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import CodeTabsComponent from "@/components/core/codeTabsComponent";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { TextShimmer } from "@/components/ui/TextShimmer";
 import { ChatMessageType, ContentBlock } from "@/types/chat";
 import { cn } from "@/utils/utils";
 import { extractErrorMessage } from "../utils/extract-error-message";
@@ -101,9 +94,9 @@ function ErrorLoadingState() {
         </div>
       </div>
       <div className="flex items-center">
-        <TextShimmer className="" duration={1}>
+        <>
           Flow running...
-        </TextShimmer>
+        </>
       </div>
     </motion.div>
   );
@@ -132,9 +125,9 @@ function ErrorAccordion({
   };
 
   return (
-    <Accordion type="single" collapsible className="w-full p-0">
-      <AccordionItem value="error-details" className="border-0">
-        <AccordionTrigger className="hover:no-underline [&>svg]:hidden p-0">
+    <>
+      <>
+        <>
           <div className="flex flex-col gap-2 w-full">
             <div className="flex items-center justify-between gap-2 w-full">
               <div className="flex items-center gap-2">
@@ -152,8 +145,8 @@ function ErrorAccordion({
               />
             </div>
           </div>
-        </AccordionTrigger>
-        <AccordionContent className="pt-2">
+        </>
+        <>
           <div>
             {content.field && <p className="text-xs">Field: {content.field}</p>}
             {content.component && (
@@ -167,9 +160,9 @@ function ErrorAccordion({
               </p>
             )}
           </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+        </>
+      </>
+    </>
   );
 }
 

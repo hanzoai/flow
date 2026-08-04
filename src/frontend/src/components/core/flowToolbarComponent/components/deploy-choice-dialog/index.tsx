@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@hanzo/ui";
 import { usePatchSnapshot } from "@/controllers/API/queries/deployments";
 import { useGetDeploymentAttachments } from "@/controllers/API/queries/deployments/use-get-deployment-attachments";
 import { useGetDeployments } from "@/controllers/API/queries/deployments/use-get-deployments";

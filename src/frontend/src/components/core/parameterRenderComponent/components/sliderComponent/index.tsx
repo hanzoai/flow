@@ -1,4 +1,4 @@
-import * as SliderPrimitive from "@radix-ui/react-slider";
+import { Slider } from "@hanzo/ui";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { getMinOrMaxValue } from "@/components/core/parameterRenderComponent/components/sliderComponent/helpers/get-min-max-value";
@@ -252,44 +252,15 @@ export default function SliderComponent({
       </Case>
 
       <div className="flex cursor-default items-center justify-center">
-        <SliderPrimitive.Root
-          className="relative flex h-5 w-full touch-none select-none items-center"
+        <Slider
+          data-testid={`slider_track${editNode ? "_advanced" : ""}`}
           value={[valueAsNumber]}
           onValueChange={handleChange}
           min={min}
           max={max}
           step={step}
           disabled={disabled}
-        >
-          <SliderPrimitive.Track
-            data-testid={`slider_track${editNode ? "_advanced" : ""}`}
-            className={clsx(
-              "relative h-1 w-full grow rounded-full",
-              isDark ? "bg-muted" : "bg-border",
-            )}
-          >
-            <SliderPrimitive.Range
-              className="absolute h-full rounded-full bg-gradient-to-r from-accent-indigo-foreground to-accent-pink-foreground"
-              style={{
-                width: `${percentage}%`,
-                background: `linear-gradient(to right, rgb(79, 70, 229) 0%, ${getThumbColor(percentage)} ${percentage}%)`,
-              }}
-            />
-          </SliderPrimitive.Track>
-          <SliderPrimitive.Thumb
-            data-testid={`slider_thumb${editNode ? "_advanced" : ""}`}
-            className={clsx(
-              "block h-6 w-6 rounded-full border-2 border-background shadow-lg",
-              isGrabbing ? "cursor-grabbing" : "cursor-grab",
-              valueAsNumber === max && "relative left-1",
-            )}
-            onPointerDown={() => setIsGrabbing(true)}
-            onPointerUp={() => setIsGrabbing(false)}
-            style={{
-              backgroundColor: getThumbColor(percentage),
-            }}
-          />
-        </SliderPrimitive.Root>
+        />
       </div>
 
       {sliderButtons && (

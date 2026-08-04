@@ -69,28 +69,6 @@ jest.mock(
 );
 
 // Mock Input component from shadcn/ui
-jest.mock("@/components/ui/input", () => ({
-  Input: ({
-    placeholder,
-    value,
-    onChange,
-    disabled,
-    ...props
-  }: {
-    placeholder?: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    disabled?: boolean;
-  }) => (
-    <input
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      disabled={disabled}
-      {...props}
-    />
-  ),
-}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({

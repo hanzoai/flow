@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import ForwardedIconComponent from "../../../../../../components/common/genericIconComponent";
-import { Button } from "../../../../../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import SecretKeyModal from "../../../../../../modals/secretKeyModal";
 import { getModalPropsApiKey } from "../../helpers/get-modal-props";
 

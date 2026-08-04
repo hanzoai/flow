@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { Loading } from "@/components/ui/loading";
+import { Badge } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetTraceQuery } from "@/controllers/API/queries/traces";
 import { parseSpanStatus } from "@/controllers/API/queries/traces/helpers";
 import { formatSmartTimestamp } from "@/utils/dateTime";
@@ -55,32 +50,8 @@ export function TraceAccordionItem({
   }, []);
 
   return (
-    <AccordionItem
-      value={traceId}
-      className={cn(
-        "border-b border-border",
-        traceStatus === "error" && "bg-error/5",
-      )}
-    >
-      <AccordionTrigger
-        className={cn(
-          "px-4 py-3 hover:bg-muted/50",
-          traceStatus === "error" && "hover:bg-error/10",
-        )}
-        onClick={(e) => {
-          if (!onTraceClick) return;
-          e.preventDefault();
-          e.stopPropagation();
-          onTraceClick(traceId);
-        }}
-        onKeyDown={(e) => {
-          if (!onTraceClick) return;
-          if (e.key !== "Enter" && e.key !== " ") return;
-          e.preventDefault();
-          e.stopPropagation();
-          onTraceClick(traceId);
-        }}
-      >
+    <>
+      <>
         <div className="flex w-full items-center justify-between pr-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -149,11 +120,11 @@ export function TraceAccordionItem({
             )}
           </div>
         )}
-      </AccordionTrigger>
-      <AccordionContent className="px-0 pb-0">
+      </>
+      <>
         {isLoading ? (
           <div className="flex h-[500px] items-center justify-center">
-            <Loading size={24} className="text-primary" />
+            <Spinner size={24} className="text-primary" />
           </div>
         ) : trace ? (
           <div className="flex h-[500px] overflow-hidden border-t border-border">
@@ -176,7 +147,7 @@ export function TraceAccordionItem({
             Failed to load trace details
           </div>
         )}
-      </AccordionContent>
-    </AccordionItem>
+      </>
+    </>
   );
 }

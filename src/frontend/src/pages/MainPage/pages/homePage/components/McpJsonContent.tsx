@@ -1,8 +1,7 @@
 import { memo, ReactNode } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
+import { Button, Tabs, TabsList, TabsTrigger } from "@hanzo/ui";
 import type { MCPTransport } from "@/controllers/API/queries/mcp/use-patch-install-mcp";
 import { cn } from "@/utils/utils";
 import {

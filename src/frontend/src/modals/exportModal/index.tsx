@@ -5,7 +5,7 @@ import useFlowStore from "@/stores/flowStore";
 import type { FlowType } from "@/types/flow";
 import IconComponent from "../../components/common/genericIconComponent";
 import EditFlowSettings from "../../components/core/editFlowSettingsComponent";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Checkbox } from "@hanzo/ui";
 import useAlertStore from "../../stores/alertStore";
 import { useDarkStore } from "../../stores/darkStore";
 import { downloadFlow, removeApiKeys } from "../../utils/reactflowUtils";

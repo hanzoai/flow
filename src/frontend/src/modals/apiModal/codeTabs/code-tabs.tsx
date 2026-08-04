@@ -6,8 +6,7 @@ import {
 } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { useShallow } from "zustand/react/shallow";
 import IconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
+import { Button, Tabs, TabsList, TabsTrigger } from "@hanzo/ui";
 import { customCodeTabsClass } from "@/customization/constants";
 import { useIsAutoLogin } from "@/hooks/use-is-auto-login";
 import useAuthStore from "@/stores/authStore";

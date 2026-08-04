@@ -1,13 +1,7 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from "@hanzo/ui";
 import { usePostProviderAccount } from "@/controllers/API/queries/deployment-provider-accounts/use-post-provider-account";
 import { useGetDeployment } from "@/controllers/API/queries/deployments/use-get-deployment";
 import { useGetDeploymentAttachments } from "@/controllers/API/queries/deployments/use-get-deployment-attachments";

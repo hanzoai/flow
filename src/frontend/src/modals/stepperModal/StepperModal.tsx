@@ -1,10 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { switchCaseModalSize } from "../baseModal/helpers/switch-case-size";
 import { ProgressIndicator } from "./components/ProgressIndicator";

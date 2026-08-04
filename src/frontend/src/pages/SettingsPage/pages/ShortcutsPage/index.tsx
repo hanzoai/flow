@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { toCamelCase } from "@/utils/utils";
 import ForwardedIconComponent from "../../../../components/common/genericIconComponent";
 import TableComponent from "../../../../components/core/parameterRenderComponent/components/tableComponent";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import { defaultShortcuts } from "../../../../constants/constants";
 import { useShortcutsStore } from "../../../../stores/shortcuts";
 import CellRenderShortcuts from "./CellRenderWrapper";

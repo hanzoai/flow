@@ -2,7 +2,7 @@ import _ from "lodash";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import IconComponent from "../../../../../components/common/genericIconComponent";
-import { Input } from "../../../../../components/ui/input";
+import { Input } from "@hanzo/ui";
 import { classNames } from "../../../../../utils/utils";
 
 export type IOKeyPairInputProps = {

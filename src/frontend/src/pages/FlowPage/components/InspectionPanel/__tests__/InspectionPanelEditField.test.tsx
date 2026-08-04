@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@hanzo/ui";
 import type { NodeDataType } from "@/types/flow";
 import InspectionPanelEditField from "../components/InspectionPanelEditField";
 

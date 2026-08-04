@@ -1,12 +1,6 @@
 import { useTranslation } from "react-i18next";
 import IconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, Separator } from "@hanzo/ui";
 import { ENABLE_INSPECTION_PANEL } from "@/customization/feature-flags";
 import DropdownControlButton from "./DropdownControlButton";
 

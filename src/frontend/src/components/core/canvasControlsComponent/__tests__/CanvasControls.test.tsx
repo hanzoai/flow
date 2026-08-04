@@ -46,13 +46,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, title, ...rest }) => (
-    <button onClick={onClick} title={title} {...rest}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock("../CanvasControlsDropdown", () => ({
   __esModule: true,

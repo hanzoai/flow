@@ -1,12 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button, DialogDescription, DialogHeader, DialogTitle, Label } from "@hanzo/ui";
 import type {
   Deployment,
   ProviderAccount,
@@ -60,19 +53,13 @@ export default function DeploymentPhaseContent({
           />
         </div>
       ) : (
-        <RadioGroup
-          value={selectedDeployment}
-          onValueChange={onSelectDeployment}
-        >
+        <>
           {deployments.map((deployment) => (
             <div
               key={deployment.id}
               className="flex items-center gap-3 rounded-lg border p-3"
             >
-              <RadioGroupItem
-                value={deployment.id}
-                id={`deploy-${deployment.id}`}
-              />
+              
               <Label
                 htmlFor={`deploy-${deployment.id}`}
                 className="flex flex-1 cursor-pointer flex-col gap-0.5"
@@ -86,7 +73,7 @@ export default function DeploymentPhaseContent({
           ))}
 
           <div className="flex items-center gap-3 rounded-lg border p-3">
-            <RadioGroupItem value={NEW_DEPLOYMENT_VALUE} id="deploy-new" />
+            
             <Label
               htmlFor="deploy-new"
               className="flex flex-1 cursor-pointer flex-col gap-0.5"
@@ -99,7 +86,7 @@ export default function DeploymentPhaseContent({
               </span>
             </Label>
           </div>
-        </RadioGroup>
+        </>
       )}
 
       <div className="flex items-center justify-between pt-4">

@@ -26,29 +26,6 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    className,
-    ...props
-  }: {
-    children: React.ReactNode;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    disabled?: boolean;
-    className?: string;
-  } & Record<string, unknown>) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={className}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
 
 describe("AudioButton", () => {
   const defaultProps = {

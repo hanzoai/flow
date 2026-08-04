@@ -1,14 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 import { useGetProviderAccounts } from "@/controllers/API/queries/deployment-provider-accounts/use-get-provider-accounts";
 import { useGetDeploymentsByProviders } from "@/controllers/API/queries/deployments/use-get-deployments-by-providers";
 import { useFolderStore } from "@/stores/foldersStore";

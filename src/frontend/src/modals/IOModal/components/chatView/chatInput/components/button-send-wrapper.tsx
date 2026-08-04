@@ -1,6 +1,6 @@
-import Loading from "@/components/ui/loading";
+import { Button } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import useFlowStore from "@/stores/flowStore";
-import { Button } from "../../../../../../components/ui/button";
 import { Case } from "../../../../../../shared/components/caseComponent";
 import type { FilePreviewType } from "../../../../../../types/components";
 import { classNames } from "../../../../../../utils/utils";
@@ -63,7 +63,7 @@ const ButtonSendWrapper = ({
       <Case condition={showStopButton}>
         <div className="flex items-center gap-2 rounded-md text-sm font-medium">
           Stop
-          <Loading className="h-4 w-4" />
+          <Spinner className="h-4 w-4" />
         </div>
       </Case>
 

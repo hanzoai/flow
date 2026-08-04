@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { useGetFlowId } from "../../../hooks/use-get-flow-id";
 

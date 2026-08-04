@@ -4,11 +4,6 @@ import { MAX_TEXT_LENGTH } from "@/constants/constants";
 import type { LogsLogType, OutputLogType } from "@/types/api";
 import ForwardedIconComponent from "../../../../../../components/common/genericIconComponent";
 import DataOutputComponent from "../../../../../../components/core/dataOutputComponent";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "../../../../../../components/ui/alert";
 import { Case } from "../../../../../../shared/components/caseComponent";
 import TextOutputView from "../../../../../../shared/components/textOutputView";
 import useFlowStore from "../../../../../../stores/flowStore";
@@ -192,18 +187,18 @@ const SwitchOutputView: React.FC<SwitchOutputViewProps> = ({
 
       <Case condition={resultType === "stream" && !isToolOutput}>
         <div className="flex h-full w-full items-center justify-center align-middle">
-          <Alert variant={"default"} className="w-fit">
+          <>
             <ForwardedIconComponent
               name="AlertCircle"
               className="h-5 w-5 text-primary"
             />
-            <AlertTitle>{"Streaming is not supported"}</AlertTitle>
-            <AlertDescription>
+            <>{"Streaming is not supported"}</>
+            <>
               {
                 "Use the playground to interact with components that stream data"
               }
-            </AlertDescription>
-          </Alert>
+            </>
+          </>
         </div>
       </Case>
     </>

@@ -1,8 +1,7 @@
 import { RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { PopoverTrigger } from "@/components/ui/popover";
+import { Button, PopoverTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { ModelOption, SelectedModel } from "../types";
 

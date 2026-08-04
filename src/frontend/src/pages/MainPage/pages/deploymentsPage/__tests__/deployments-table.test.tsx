@@ -17,9 +17,6 @@ jest.mock("../components/deployment-expanded-row", () =>
     </tr>
   )),
 );
-jest.mock("@/components/ui/loading", () =>
-  jest.fn(() => <span data-testid="loading-spinner" />),
-);
 
 import DeploymentsTable from "../components/deployments-table";
 

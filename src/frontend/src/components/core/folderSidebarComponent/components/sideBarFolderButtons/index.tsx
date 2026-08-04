@@ -2,17 +2,6 @@ import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
 import { useUpdateUser } from "@/controllers/API/queries/auth";
 import {
@@ -377,22 +366,19 @@ const SideBarFoldersButtonsComponent = ({
   };
 
   return (
-    <Sidebar
-      collapsible={isMobile ? "offcanvas" : "none"}
-      data-testid="project-sidebar"
-    >
-      <SidebarHeader className="px-4 py-1">
+    <>
+      <>
         <HeaderButtons
           handleUploadFlowsToFolder={handleUploadFlowsToFolder}
           isUpdatingFolder={isUpdatingFolder}
           isPending={isPending}
           addNewFolder={addNewFolder}
         />
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup className="p-4 py-2">
-          <SidebarGroupContent>
-            <SidebarMenu>
+      </>
+      <>
+        <>
+          <>
+            <>
               {!loading ? (
                 folders.length === 0 ? (
                   <div className="px-2 py-5 text-center text-sm text-muted-foreground">
@@ -404,30 +390,9 @@ const SideBarFoldersButtonsComponent = ({
                       (folder) => folder.name === item.name,
                     )[0];
                     return (
-                      <SidebarMenuItem
-                        key={index}
-                        className="group/menu-button"
-                        onMouseEnter={() => setHoveredFolderId(item.id!)}
-                        onMouseLeave={() => setHoveredFolderId(null)}
-                      >
+                      <>
                         <div className="relative flex w-full">
-                          <SidebarMenuButton
-                            size="md"
-                            onDragOver={(e) => dragOver(e, item.id!)}
-                            onDragEnter={(e) => dragEnter(e, item.id!)}
-                            onDragLeave={dragLeave}
-                            onDrop={(e) => onDrop(e, item.id!)}
-                            key={item.id}
-                            data-testid={`sidebar-nav-${item.name}`}
-                            id={`sidebar-nav-${item.name}`}
-                            isActive={checkPathName(item.id!)}
-                            onClick={() => handleChangeFolder!(item.id!)}
-                            className={cn(
-                              "flex-grow pr-8",
-                              hoveredFolderId === item.id && "bg-accent",
-                              checkHoveringFolder(item.id!),
-                            )}
-                          >
+                          <>
                             <div
                               onDoubleClick={(event) => {
                                 handleDoubleClick(event, item);
@@ -453,7 +418,7 @@ const SideBarFoldersButtonsComponent = ({
                                 )}
                               </div>
                             </div>
-                          </SidebarMenuButton>
+                          </>
                           <div
                             className="absolute right-2 top-[0.45rem] flex items-center hover:text-foreground"
                             onClick={(e) => e.stopPropagation()}
@@ -471,7 +436,7 @@ const SideBarFoldersButtonsComponent = ({
                             />
                           </div>
                         </div>
-                      </SidebarMenuItem>
+                      </>
                     );
                   })
                 )
@@ -481,9 +446,9 @@ const SideBarFoldersButtonsComponent = ({
                   <SidebarFolderSkeleton />
                 </>
               )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+            </>
+          </>
+        </>
         <div className="flex-1" />
 
         {ENABLE_MCP_NOTICE && !isDismissedMcpDialog && (
@@ -491,34 +456,26 @@ const SideBarFoldersButtonsComponent = ({
             <MCPServerNotice handleDismissDialog={handleDismissMcpDialog} />
           </div>
         )}
-      </SidebarContent>
+      </>
       {ENABLE_FILE_MANAGEMENT && (
-        <SidebarFooter className="border-t">
+        <>
           <div className="grid w-full items-center gap-2 p-2">
             {/* TODO: Remove this on cleanup */}
             {ENABLE_DATASTAX_FLOW && <CustomStoreButton />}{" "}
             {ENABLE_KNOWLEDGE_BASES && (
-              <SidebarMenuButton
-                onClick={handleKnowledgeNavigation}
-                size="md"
-                className="text-sm"
-              >
+              <>
                 <ForwardedIconComponent name="Library" className="h-4 w-4" />
                 {t("sidebar.knowledge")}
-              </SidebarMenuButton>
+              </>
             )}
-            <SidebarMenuButton
-              onClick={handleFilesNavigation}
-              size="md"
-              className="text-sm"
-            >
+            <>
               <ForwardedIconComponent name="File" className="h-4 w-4" />
               {t("sidebar.myFiles")}
-            </SidebarMenuButton>
+            </>
           </div>
-        </SidebarFooter>
+        </>
       )}
-    </Sidebar>
+    </>
   );
 };
 export default SideBarFoldersButtonsComponent;

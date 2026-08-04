@@ -71,21 +71,7 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/badge", () => ({
-  Badge: ({ children, onClick, ...props }: any) => (
-    <span onClick={onClick} {...props}>
-      {children}
-    </span>
-  ),
-}));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock("../../nodeToolbarComponent/components/toolbar-button", () => ({
   ToolbarButton: ({ icon, onClick, dataTestId }: any) => (

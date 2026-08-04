@@ -1,5 +1,5 @@
 import { convertTestName } from "@/components/common/storeCardComponent/utils/convert-test-name";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import { nodeColorsName } from "@/utils/styleUtils";
 
 export default function HandleTooltipComponent({

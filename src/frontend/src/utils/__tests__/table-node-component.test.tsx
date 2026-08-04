@@ -71,19 +71,6 @@ jest.mock("@/components/common/shadTooltipComponent", () => {
 });
 
 // Mock the Button component
-jest.mock("../../components/ui/button", () => ({
-  Button: ({ children, onClick, disabled, className, ...props }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={className}
-      data-testid="table-trigger-button"
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
 
 // Mock the utils functions
 jest.mock("@/utils/utils", () => ({

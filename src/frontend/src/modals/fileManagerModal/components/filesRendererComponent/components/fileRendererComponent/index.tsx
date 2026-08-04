@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { Button, Checkbox, Input } from "@hanzo/ui";
 import { customPostUploadFileV2 } from "@/customization/hooks/use-custom-post-upload-file";
 import type { FileType } from "@/types/file_management";
 import { formatFileSize } from "@/utils/stringManipulation";

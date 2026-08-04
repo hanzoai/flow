@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Loading from "@/components/ui/loading";
+import { Spinner } from "@hanzo/gui";
 import { useGetTraceQuery } from "@/controllers/API/queries/traces";
 import { SpanDetail } from "./SpanDetail";
 import { SpanTree } from "./SpanTree";
@@ -82,7 +82,7 @@ export function TraceDetailView({ traceId, flowName }: TraceDetailViewProps) {
         data-testid="trace-detail-view-loading"
       >
         <div className="flex flex-col items-center gap-2 text-muted-foreground">
-          <Loading size={32} className="text-primary" />
+          <Spinner size={32} className="text-primary" />
           <span className="text-sm">Loading trace...</span>
         </div>
       </div>

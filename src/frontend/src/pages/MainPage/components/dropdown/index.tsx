@@ -1,5 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@hanzo/ui";
 import useAlertStore from "@/stores/alertStore";
 import type { FlowType } from "@/types/flow";
 import useDuplicateFlow from "../../hooks/use-handle-duplicate";

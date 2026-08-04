@@ -3,10 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Badge, Button, Input } from "@hanzo/ui";
 import { useDeleteDeleteFlows } from "@/controllers/API/queries/flows/use-delete-delete-flows";
 import { useGetDownloadFlows } from "@/controllers/API/queries/flows/use-get-download-flows";
 import { ENABLE_MCP } from "@/customization/feature-flags";
@@ -122,13 +119,13 @@ const HeaderComponent = ({
       >
         <div className="h-7 w-10 transition-all group-data-[open=true]/sidebar-wrapper:md:w-0 lg:hidden">
           <div className="relative left-0 opacity-100 transition-all group-data-[open=true]/sidebar-wrapper:md:opacity-0">
-            <SidebarTrigger>
+            <>
               <ForwardedIconComponent
                 name="PanelLeftOpen"
                 aria-hidden="true"
                 className=""
               />
-            </SidebarTrigger>
+            </>
           </div>
         </div>
         {folderName}

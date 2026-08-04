@@ -2,13 +2,7 @@ import { useReactFlow, useStore } from "@xyflow/react";
 import { useCallback, useEffect, useState } from "react";
 import { shallow } from "zustand/shallow";
 import IconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, Separator } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import { AllNodeType } from "@/types/flow";
 import DropdownControlButton from "./DropdownControlButton";

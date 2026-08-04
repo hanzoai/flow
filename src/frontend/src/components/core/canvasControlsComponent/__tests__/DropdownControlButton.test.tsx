@@ -12,11 +12,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   }) => <span data-testid={`icon-${name}`} className={className} />,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
 jest.mock("@/utils/utils", () => ({
   cn: (...args: any[]) => args.filter(Boolean).join(" "),

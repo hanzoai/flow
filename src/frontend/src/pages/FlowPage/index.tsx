@@ -3,14 +3,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useBlocker, useParams } from "react-router-dom";
 import { AssistantPanel } from "@/components/core/assistantPanel";
 import { FlowPageSlidingContainerContent } from "@/components/core/playgroundComponent/sliding-container/components/flow-page-sliding-container";
-import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
-import {
-  SimpleSidebar,
-  SimpleSidebarProvider,
-} from "@/components/ui/simple-sidebar";
 import { useGetFlow } from "@/controllers/API/queries/flows/use-get-flow";
 import { useGetTypes } from "@/controllers/API/queries/flows/use-get-types";
-import { ENABLE_NEW_SIDEBAR } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useApplyFlowToCanvas from "@/hooks/flows/use-apply-flow-to-canvas";
 import useSaveFlow from "@/hooks/flows/use-save-flow";
@@ -26,12 +20,7 @@ import { customStringify } from "@/utils/reactflowUtils";
 import { cn } from "@/utils/utils";
 import useFlowStore from "../../stores/flowStore";
 import useFlowsManagerStore from "../../stores/flowsManagerStore";
-import {
-  FlowSearchProvider,
-  FlowSidebarComponent,
-} from "./components/flowSidebarComponent";
 import Page from "./components/PageComponent";
-import { FlowInsightsContent } from "./components/TraceComponent/FlowInsightsContent";
 
 function FlowPageMainContent({
   flowId,
@@ -40,24 +29,6 @@ function FlowPageMainContent({
   flowId?: string;
   setIsLoading: (isLoading: boolean) => void;
 }): JSX.Element {
-  const { activeSection } = useSidebar();
-  const showTraces = ENABLE_NEW_SIDEBAR && activeSection === "traces";
-
-  if (showTraces) {
-    return (
-      <div
-        className="flex h-full w-full flex-col overflow-hidden"
-        data-testid="flow-insights-embedded"
-      >
-        <FlowInsightsContent
-          flowId={flowId}
-          refreshOnMount
-          showFlowActivityHeader
-        />
-      </div>
-    );
-  }
-
   return <Page setIsLoading={setIsLoading} />;
 }
 
@@ -277,32 +248,9 @@ export default function FlowPage({ view }: { view?: boolean }): JSX.Element {
         {currentFlow && (
           <div className="flex h-full overflow-hidden">
             {/* Main content + Playground Sidebar (right) */}
-            <SimpleSidebarProvider
-              width="326px"
-              minWidth={0.15}
-              maxWidth={0.6}
-              open={isSlidingContainerOpen}
-              onOpenChange={(open) => {
-                const wasOpen = isSlidingContainerOpen;
-                setSlidingContainerOpen(open);
-                if (open && !wasOpen) {
-                  setIsFullscreen(true);
-                }
-              }}
-              fullscreen={isFullscreen}
-              onMaxWidth={() => {
-                setIsFullscreen(true);
-                setSlidingContainerOpen(true);
-              }}
-            >
-              <SidebarProvider
-                width="17.5rem"
-                defaultOpen={!isMobile}
-                segmentedSidebar={ENABLE_NEW_SIDEBAR}
-              >
-                <FlowSearchProvider>
-                  {/* FlowSidebarComponent - stays in place */}
-                  {!view && <FlowSidebarComponent isLoading={isLoading} />}
+            <>
+              <>
+                <>
 
                   <main
                     className={cn(
@@ -319,15 +267,15 @@ export default function FlowPage({ view }: { view?: boolean }): JSX.Element {
                       />
                     </div>
                   </main>
-                </FlowSearchProvider>
-              </SidebarProvider>
-              <SimpleSidebar resizable={!isFullscreen} className="h-full">
+                </>
+              </>
+              <>
                 <FlowPageSlidingContainerContent
                   isFullscreen={isFullscreen}
                   setIsFullscreen={setIsFullscreen}
                 />
-              </SimpleSidebar>
-            </SimpleSidebarProvider>
+              </>
+            </>
           </div>
         )}
       </div>

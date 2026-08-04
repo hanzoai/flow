@@ -7,7 +7,7 @@ import { track } from "@/customization/utils/analytics";
 import useAddFlow from "@/hooks/flows/use-add-flow";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import { ForwardedIconComponent } from "../../../../components/common/genericIconComponent";
-import { Input } from "../../../../components/ui/input";
+import { Input } from "@hanzo/ui";
 import { useFolderStore } from "../../../../stores/foldersStore";
 import type { TemplateContentProps } from "../../../../types/templates/types";
 import { updateIds } from "../../../../utils/reactflowUtils";

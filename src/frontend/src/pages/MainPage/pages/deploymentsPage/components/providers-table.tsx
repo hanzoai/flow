@@ -1,20 +1,6 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Loading from "@/components/ui/loading";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { cn } from "@/utils/utils";
 import type { ProviderAccount } from "../types";
 
@@ -45,47 +31,43 @@ export default function ProvidersTable({
   onDeleteProvider,
 }: ProvidersTableProps) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>URL</TableHead>
-          <TableHead>Provider Key</TableHead>
-          <TableHead>Created</TableHead>
-          <TableHead className="w-10" />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <>
+      <>
+        <>
+          <>Name</>
+          <>URL</>
+          <>Provider Key</>
+          <>Created</>
+          
+        </>
+      </>
+      <>
         {providers.map((provider) => {
           const isDeleting = deletingId === provider.id;
           return (
-            <TableRow
-              key={provider.id}
-              data-testid={`provider-row-${provider.id}`}
-              className={cn(isDeleting && "pointer-events-none opacity-50")}
-            >
-              <TableCell>
+            <>
+              <>
                 <span className="font-medium">{provider.name}</span>
-              </TableCell>
-              <TableCell>
+              </>
+              <>
                 <span className="text-sm text-muted-foreground">
                   {typeof provider.provider_data?.url === "string"
                     ? truncateMiddle(provider.provider_data.url)
                     : "—"}
                 </span>
-              </TableCell>
-              <TableCell>
+              </>
+              <>
                 <span className="text-sm">{provider.provider_key}</span>
-              </TableCell>
-              <TableCell>
+              </>
+              <>
                 <span className="text-sm">
                   {formatDate(provider.created_at)}
                 </span>
-              </TableCell>
-              <TableCell>
+              </>
+              <>
                 {isDeleting ? (
                   <div className="flex h-8 w-8 items-center justify-center">
-                    <Loading size={16} className="text-muted-foreground" />
+                    <Spinner size={16} className="text-muted-foreground" />
                   </div>
                 ) : (
                   <DropdownMenu>
@@ -117,11 +99,11 @@ export default function ProvidersTable({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
-              </TableCell>
-            </TableRow>
+              </>
+            </>
           );
         })}
-      </TableBody>
-    </Table>
+      </>
+    </>
   );
 }

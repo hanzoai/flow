@@ -17,23 +17,8 @@ jest.mock("react-markdown", () => {
 });
 
 // Mock Input component
-jest.mock("@/components/ui/input", () => ({
-  Input: ({ value, onChange, onKeyDown, ...props }: any) => (
-    <input value={value} onChange={onChange} onKeyDown={onKeyDown} {...props} />
-  ),
-}));
 
 // Mock Textarea component
-jest.mock("@/components/ui/textarea", () => ({
-  Textarea: ({ value, onChange, onKeyDown, ...props }: any) => (
-    <textarea
-      value={value}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      {...props}
-    />
-  ),
-}));
 
 // Mock stores
 const mockTakeSnapshot = jest.fn();

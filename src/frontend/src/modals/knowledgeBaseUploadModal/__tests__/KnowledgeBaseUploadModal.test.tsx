@@ -132,7 +132,7 @@ jest.mock(
 
 // ── Imports after mocks ──────────────────────────────────────────────────────
 
-import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@hanzo/ui";
 import KnowledgeBaseUploadModal from "../KnowledgeBaseUploadModal";
 
 // ── Utilities ────────────────────────────────────────────────────────────────

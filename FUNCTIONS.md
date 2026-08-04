@@ -1,6 +1,6 @@
 # Flow → Hanzo Functions (Fission)
 
-Run a Flow (langflow-fork graph) as a Hanzo Function on the live Fission control
+Run a Flow graph as a Hanzo Function on the live Fission control
 plane (`fission` ns, `do-sfo3-hanzo-k8s`). Two compile models; GPU envs host the
 Zen-model nodes. Scaffold: `serverless/` (compiler + in-function runner).
 

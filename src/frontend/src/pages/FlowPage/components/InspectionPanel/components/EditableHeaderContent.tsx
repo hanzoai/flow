@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input, Textarea } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import type { NodeDataType } from "@/types/flow";

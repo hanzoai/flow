@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@hanzo/ui";
 import TypeToConfirmDeleteDialog from "../components/type-to-confirm-delete-dialog";
 
 function renderDialog(

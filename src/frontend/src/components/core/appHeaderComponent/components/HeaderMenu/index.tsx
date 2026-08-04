@@ -1,13 +1,7 @@
 import { ChevronsUpDown } from "lucide-react";
 import type React from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 export const HeaderMenu = ({ children }) => (

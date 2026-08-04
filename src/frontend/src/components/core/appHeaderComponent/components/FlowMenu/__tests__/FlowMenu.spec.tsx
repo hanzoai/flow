@@ -1,9 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import MenuBar from "../index";
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...rest }) => <button {...rest}>{children}</button>,
-}));
 jest.mock("@/components/common/genericIconComponent", () => ({
   __esModule: true,
   default: ({ name }) => <span data-testid="icon">{name}</span>,

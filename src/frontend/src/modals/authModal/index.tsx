@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
+import { Input, Label, Separator } from "@hanzo/ui";
 import { CustomLink } from "@/customization/components/custom-link";
 import type { AuthSettingsType } from "@/types/mcp";
 import { AUTH_METHODS_ARRAY } from "@/utils/mcpUtils";
@@ -163,10 +160,10 @@ const AuthModal = ({
             <span className="text-mmd font-medium text-muted-foreground">
               Auth type
             </span>
-            <RadioGroup value={authType} onValueChange={handleAuthTypeChange}>
+            <>
               {AUTH_METHODS_ARRAY.map((option) => (
                 <div key={option.id} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.id} id={option.id} />
+                  
                   <Label
                     htmlFor={option.id}
                     className="!text-mmd font-normal cursor-pointer flex items-center gap-3"
@@ -185,7 +182,7 @@ const AuthModal = ({
                   </Label>
                 </div>
               ))}
-            </RadioGroup>
+            </>
           </div>
           <div>
             {authType !== "none" && <Separator orientation="vertical" />}

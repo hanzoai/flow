@@ -35,13 +35,6 @@ jest.mock("@/CustomNodes/hooks/use-update-all-nodes", () => ({
   default: () => mockUpdateAllNodes,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, loading, ...props }: any) => (
-    <button onClick={onClick} data-loading={loading} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock(
   "@/controllers/API/queries/nodes/use-post-validate-component-code",

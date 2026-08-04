@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import useAlertStore from "@/stores/alertStore";
 import { cn } from "@/utils/utils";

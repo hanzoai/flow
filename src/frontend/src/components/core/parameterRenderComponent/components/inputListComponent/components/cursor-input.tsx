@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import { handleKeyDown } from "@/utils/reactflowUtils";
 import { cn } from "@/utils/utils";
 

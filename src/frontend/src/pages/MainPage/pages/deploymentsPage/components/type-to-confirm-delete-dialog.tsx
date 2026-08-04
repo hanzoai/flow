@@ -1,15 +1,7 @@
-import { DialogClose } from "@radix-ui/react-dialog";
+import { DialogClose } from "@hanzo/ui";
 import { AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Button, Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, Input } from "@hanzo/ui";
 
 interface TypeToConfirmDeleteDialogProps {
   open: boolean;

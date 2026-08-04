@@ -1,6 +1,6 @@
 import IconComponent from "@/components/common/genericIconComponent";
 import SimplifiedCodeTabComponent from "@/components/core/codeTabsComponent";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import {
   formatCost,
   formatJsonData,

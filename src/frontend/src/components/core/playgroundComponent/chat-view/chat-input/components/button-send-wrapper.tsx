@@ -1,6 +1,6 @@
 import { Square } from "lucide-react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import type { FilePreviewType } from "@/types/components";
 import { cn } from "@/utils/utils";

@@ -1,12 +1,8 @@
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { X as Cross2Icon } from "lucide-react";
 import { forwardRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import IconComponent from "../../components/common/genericIconComponent";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@hanzo/ui";
 import useAlertStore from "../../stores/alertStore";
 import type { AlertDropdownType } from "../../types/alerts";
 import SingleAlert from "./components/singleAlertComponent";

@@ -80,7 +80,6 @@ import {
 import {
   MemoizedBackground,
   MemoizedCanvasControls,
-  MemoizedSidebarTrigger,
 } from "./MemoizedComponents";
 import getRandomName from "./utils/get-random-name";
 import isWrappedWithClass from "./utils/is-wrapped-with-class";
@@ -941,7 +940,6 @@ export default function Page({
                 )}
               </>
             )}
-            <MemoizedSidebarTrigger />
             <SelectionMenu
               lastSelection={lastSelection}
               isVisible={selectionMenuVisible}

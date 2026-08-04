@@ -1,12 +1,7 @@
 import { useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select-custom";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 export interface SessionMoreMenuProps {

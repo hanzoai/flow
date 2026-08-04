@@ -2,12 +2,7 @@ import { cloneDeep } from "lodash";
 import { memo, useCallback, useMemo } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Select, SelectTrigger } from "@/components/ui/select-custom";
+import { Popover, PopoverContent, PopoverTrigger, Select, SelectTrigger } from "@hanzo/ui";
 import { COLOR_OPTIONS } from "@/constants/constants";
 import { customOpenNewTab } from "@/customization/utils/custom-open-new-tab";
 import useAlertStore from "@/stores/alertStore";

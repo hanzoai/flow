@@ -10,15 +10,6 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-  }) => <button onClick={onClick}>{children}</button>,
-}));
 
 jest.mock("@/utils/mcpUtils", () => ({
   AUTH_METHODS: {

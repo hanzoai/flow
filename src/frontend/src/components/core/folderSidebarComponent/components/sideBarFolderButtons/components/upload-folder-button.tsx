@@ -1,6 +1,6 @@
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 
 export const UploadFolderButton = ({ onClick, disabled }) => (
   <ShadTooltip content="Upload a flow" styleClasses="z-50">

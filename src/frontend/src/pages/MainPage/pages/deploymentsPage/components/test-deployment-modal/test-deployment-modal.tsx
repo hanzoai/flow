@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@hanzo/ui";
 import ChatHeader from "./chat-header";
 import ChatInput from "./chat-input";
 import ChatMessages from "./chat-messages";

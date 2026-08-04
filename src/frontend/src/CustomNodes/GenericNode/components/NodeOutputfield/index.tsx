@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { Badge } from "@/components/ui/badge";
+import { Badge, Button } from "@hanzo/ui";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import { useShortcutsStore } from "@/stores/shortcuts";
 import type { targetHandleType } from "@/types/flow";
@@ -18,7 +18,6 @@ import ForwardedIconComponent, {
   default as IconComponent,
 } from "../../../../components/common/genericIconComponent";
 import ShadTooltip from "../../../../components/common/shadTooltipComponent";
-import { Button } from "../../../../components/ui/button";
 import useFlowStore from "../../../../stores/flowStore";
 import { useTypesStore } from "../../../../stores/typesStore";
 import type { NodeOutputFieldComponentType } from "../../../../types/components";

@@ -33,16 +33,7 @@ jest.mock("@/components/core/codeTabsComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/badge", () => ({
-  Badge: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  ),
-}));
 
-jest.mock("@/components/ui/loading", () => ({
-  __esModule: true,
-  default: () => <div data-testid="loading" />,
-}));
 
 describe("TraceDetailView", () => {
   beforeEach(() => {

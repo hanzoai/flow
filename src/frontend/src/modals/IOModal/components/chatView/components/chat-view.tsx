@@ -2,7 +2,6 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { StickToBottom } from "use-stick-to-bottom";
 import FlowLogo from "@/assets/FlowLogo.svg?react";
 import { SafariScrollFix } from "@/components/common/safari-scroll-fix";
-import { TextEffectPerChar } from "@/components/ui/textAnimation";
 import CustomChatInput from "@/customization/components/custom-chat-input";
 import useCustomUseFileHandler from "@/customization/hooks/use-custom-use-file-handler";
 import { track } from "@/customization/utils/analytics";
@@ -205,9 +204,9 @@ export default function ChatView({
                       className="text-lg text-muted-foreground"
                       data-testid="new-chat-text"
                     >
-                      <TextEffectPerChar>
+                      <>
                         Test your flow with a chat prompt
-                      </TextEffectPerChar>
+                      </>
                     </p>
                   </div>
                 </div>

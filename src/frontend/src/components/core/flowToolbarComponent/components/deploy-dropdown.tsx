@@ -7,14 +7,7 @@ import React, {
 import { useHref } from "react-router-dom";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltipComponent from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Switch } from "@hanzo/ui";
 import { usePatchUpdateFlow } from "@/controllers/API/queries/flows/use-patch-update-flow";
 import { CustomLink } from "@/customization/components/custom-link";
 import { ENABLE_PUBLISH, ENABLE_WIDGET } from "@/customization/feature-flags";

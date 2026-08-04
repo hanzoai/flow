@@ -6,7 +6,7 @@ import "ace-builds/src-noconflict/theme-twilight";
 // import "ace-builds/webpack-resolver";
 import { useState } from "react";
 import IconComponent from "../../components/common/genericIconComponent";
-import { Button } from "../../components/ui/button";
+import { Button } from "@hanzo/ui";
 import BaseModal from "../baseModal";
 import TextEditorArea from "./components/textEditorArea";
 

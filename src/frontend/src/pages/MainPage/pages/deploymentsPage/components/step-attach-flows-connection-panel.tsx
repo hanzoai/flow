@@ -1,7 +1,6 @@
 import { memo } from "react";
 import InputComponent from "@/components/core/parameterRenderComponent/components/inputComponent";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button, Input } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import type { ConnectionItem, EnvVarEntry } from "../types";
 import { ConnectionSearchList } from "./connection-search-list";

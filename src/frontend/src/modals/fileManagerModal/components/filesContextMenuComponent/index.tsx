@@ -1,11 +1,6 @@
 import { type ReactNode, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@hanzo/ui";
 import { useDeleteFileV2 } from "@/controllers/API/queries/file-management/use-delete-file";
 import { useDuplicateFileV2 } from "@/customization/hooks/use-custom-duplicate-file";
 import { useCustomHandleSingleFileDownload } from "@/customization/hooks/use-custom-handle-single-file-download";

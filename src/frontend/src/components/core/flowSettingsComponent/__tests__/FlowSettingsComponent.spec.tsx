@@ -2,29 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import FlowSettingsComponent from "../index";
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, loading, ...rest }) => (
-    <button {...rest}>{children}</button>
-  ),
-}));
 
 // Simplify Radix Form to a native form that respects onSubmit
-jest.mock("@radix-ui/react-form", () => ({
-  __esModule: true,
-  Root: React.forwardRef<HTMLFormElement, any>(
-    ({ children, onSubmit }, ref) => (
-      <form onSubmit={onSubmit} ref={ref}>
-        {children}
-      </form>
-    ),
-  ),
-  Submit: ({ asChild, children }) => {
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as any, { type: "submit" });
-    }
-    return <button type="submit">Submit</button>;
-  },
-}));
 
 const mockSave = jest.fn();
 jest.mock("@/hooks/flows/use-save-flow", () => ({

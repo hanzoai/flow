@@ -1,11 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Badge, Button, DialogDescription, DialogHeader, DialogTitle } from "@hanzo/ui";
 import { useGetFlowVersionEntry } from "@/controllers/API/queries/flow-version/use-get-flow-version-entry";
 import type { FlowAttachment } from "./types";
 

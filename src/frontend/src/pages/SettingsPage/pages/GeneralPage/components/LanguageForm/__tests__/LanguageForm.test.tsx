@@ -29,49 +29,7 @@ jest.mock("@/stores/typesStore", () => ({
   ) => selector({ setTypes: mockSetTypes }),
 }));
 
-jest.mock("@/components/ui/select", () => ({
-  Select: ({
-    children,
-    value,
-    onValueChange,
-  }: {
-    children: React.ReactNode;
-    value?: string;
-    onValueChange?: (v: string) => void;
-  }) => (
-    <select value={value} onChange={(e) => onValueChange?.(e.target.value)}>
-      {children}
-    </select>
-  ),
-  SelectTrigger: () => null,
-  SelectValue: () => null,
-  SelectContent: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-  SelectItem: ({
-    children,
-    value,
-  }: {
-    children: React.ReactNode;
-    value: string;
-  }) => <option value={value}>{children}</option>,
-}));
 
-jest.mock("@/components/ui/card", () => ({
-  Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  CardHeader: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  CardTitle: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  CardDescription: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  CardContent: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-}));
 
 import LanguageFormComponent from "../index";
 

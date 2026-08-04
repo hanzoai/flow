@@ -1,20 +1,6 @@
-import { DialogClose } from "@radix-ui/react-dialog";
-import * as Form from "@radix-ui/react-form";
+import { DialogClose } from "@hanzo/ui";
 import React, { type ReactNode, useEffect } from "react";
-import { Button } from "../../components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogContentWithouFixed,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/dialog";
-import {
-  Dialog as Modal,
-  DialogContent as ModalContent,
-} from "../../components/ui/dialog-with-no-close";
+import { Button, Dialog, Dialog as Modal, DialogContent, DialogContent as ModalContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@hanzo/ui";
 import type { modalHeaderType } from "../../types/components";
 import { cn } from "../../utils/utils";
 import { switchCaseModalSize } from "./helpers/switch-case-size";
@@ -304,7 +290,7 @@ function BaseModal({
         <Dialog open={open} onOpenChange={setOpen}>
           {triggerChild}
           {dialogContentWithouFixed ? (
-            <DialogContentWithouFixed
+            <DialogContent
               onClick={(e) => e.stopPropagation()}
               onEscapeKeyDown={onEscapeKeyDown}
               onOpenAutoFocus={onOpenAutoFocus}
@@ -313,7 +299,7 @@ function BaseModal({
               style={customHeight || customWidth ? customStyle : undefined}
             >
               {onSubmit ? (
-                <Form.Root
+                <form
                   onSubmit={(event) => {
                     event.preventDefault();
                     onSubmit();
@@ -321,11 +307,11 @@ function BaseModal({
                   className={formClasses}
                 >
                   {modalContent}
-                </Form.Root>
+                </form>
               ) : (
                 modalContent
               )}
-            </DialogContentWithouFixed>
+            </DialogContent>
           ) : (
             <DialogContent
               onClick={(e) => e.stopPropagation()}
@@ -336,7 +322,7 @@ function BaseModal({
               style={customHeight || customWidth ? customStyle : undefined}
             >
               {onSubmit ? (
-                <Form.Root
+                <form
                   onSubmit={(event) => {
                     event.preventDefault();
                     onSubmit();
@@ -344,7 +330,7 @@ function BaseModal({
                   className={formClasses}
                 >
                   {modalContent}
-                </Form.Root>
+                </form>
               ) : (
                 modalContent
               )}

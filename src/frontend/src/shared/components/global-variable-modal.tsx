@@ -1,6 +1,6 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import GlobalVariableModal from "@/components/core/GlobalVariableModal/GlobalVariableModal";
-import { CommandItem } from "@/components/ui/command";
+import { CommandItem } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 const GeneralGlobalVariableModal = () => {

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs-button";
+import { Input, Label, Tabs, TabsList, TabsTrigger } from "@hanzo/ui";
 import { PROVIDER_VARIABLE_MAPPING } from "@/constants/providerConstants";
 import { useGetTypes } from "@/controllers/API/queries/flows/use-get-types";
 import {

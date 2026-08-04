@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import { cn } from "@/utils/utils";

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import type { FlowType } from "@/types/flow";
 import { cn } from "@/utils/utils";
 import type { ConnectionItem } from "../types";

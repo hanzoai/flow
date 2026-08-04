@@ -1,7 +1,6 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
-import Loading from "@/components/ui/loading";
-import { TableCell, TableRow } from "@/components/ui/table";
+import { Badge } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetDeploymentAttachments } from "@/controllers/API/queries/deployments/use-get-deployment-attachments";
 
 interface DeploymentExpandedRowProps {
@@ -20,12 +19,12 @@ export default function DeploymentExpandedRow({
   const flows = data?.flow_versions ?? [];
 
   return (
-    <TableRow className="hover:bg-transparent">
-      <TableCell colSpan={colSpan} className="p-0">
+    <>
+      <>
         <div className="border-t bg-muted/30 px-8 py-3">
           {isLoading ? (
             <div className="flex items-center gap-2 py-2">
-              <Loading size={14} className="text-muted-foreground" />
+              <Spinner size={14} className="text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
                 Loading attached flows...
               </span>
@@ -65,7 +64,7 @@ export default function DeploymentExpandedRow({
             </div>
           )}
         </div>
-      </TableCell>
-    </TableRow>
+      </>
+    </>
   );
 }

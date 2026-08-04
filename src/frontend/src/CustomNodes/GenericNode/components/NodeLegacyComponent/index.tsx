@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import { cn } from "@/utils/utils";
 import { useGetReplacementComponents } from "../../hooks/use-get-replacement-components";

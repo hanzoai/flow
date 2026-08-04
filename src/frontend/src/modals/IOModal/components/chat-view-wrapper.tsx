@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button, Separator } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import IconComponent from "../../../components/common/genericIconComponent";
 import type { ChatViewWrapperProps } from "../types/chat-view-wrapper";

@@ -1,7 +1,6 @@
 import { Outlet, type To } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SideBarButtonsComponent from "@/components/core/sidebarComponent";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { CustomStoreSidebar } from "@/customization/components/custom-store-sidebar";
 import {
   ENABLE_DATASTAX_FLOW,
@@ -115,14 +114,14 @@ export default function SettingsPage(): JSX.Element {
       title="Settings"
       description="Manage the general settings for HanzoFlow."
     >
-      <SidebarProvider width="15rem" defaultOpen={false}>
+      <>
         <SideBarButtonsComponent items={sidebarNavItems} />
         <main className="flex flex-1 overflow-hidden">
           <div className="flex flex-1 flex-col overflow-x-hidden pt-1">
             <Outlet />
           </div>
         </main>
-      </SidebarProvider>
+      </>
     </PageLayout>
   );
 }

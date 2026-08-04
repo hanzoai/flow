@@ -12,29 +12,7 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    className,
-    ...props
-  }: {
-    children: React.ReactNode;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    className?: string;
-  } & Record<string, unknown>) => (
-    <button onClick={onClick} className={className} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
-jest.mock("@/components/ui/loading", () => ({
-  __esModule: true,
-  default: ({ className }: { className?: string }) => (
-    <div data-testid="loading" className={className} />
-  ),
-}));
 
 jest.mock("@/shared/components/caseComponent", () => ({
   Case: ({

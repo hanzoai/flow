@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@hanzo/ui";
 import { useRefreshModelInputs } from "@/hooks/use-refresh-model-inputs";
 import ModelProvidersContent from "./components/ModelProvidersContent";
 

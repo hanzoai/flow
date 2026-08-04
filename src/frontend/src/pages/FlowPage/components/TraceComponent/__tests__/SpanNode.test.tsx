@@ -24,9 +24,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/badge", () => ({
-  Badge: ({ children }: { children: ReactNode }) => <span>{children}</span>,
-}));
 
 describe("SpanNode", () => {
   it("renders name, tokens, latency, and status", () => {

@@ -1,23 +1,7 @@
 import { Fragment, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Loading from "@/components/ui/loading";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Badge, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { cn } from "@/utils/utils";
 import { type Deployment, type DeploymentType } from "../types";
 import DeploymentExpandedRow from "./deployment-expanded-row";
@@ -93,33 +77,27 @@ export default function DeploymentsTable({
   };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Attached</TableHead>
-          <TableHead>Provider</TableHead>
-          <TableHead>Last Modified</TableHead>
-          <TableHead>Test</TableHead>
-          <TableHead className="w-10" />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <>
+      <>
+        <>
+          <>Name</>
+          <>Type</>
+          <>Attached</>
+          <>Provider</>
+          <>Last Modified</>
+          <>Test</>
+          
+        </>
+      </>
+      <>
         {deployments.map((deployment) => {
           const isDeleting = deletingId === deployment.id;
           const isExpanded = expandedIds.has(deployment.id);
           const hasAttachments = deployment.attached_count > 0;
           return (
             <Fragment key={deployment.id}>
-              <TableRow
-                data-testid={`deployment-row-${deployment.id}`}
-                className={cn(
-                  isDeleting && "pointer-events-none opacity-50",
-                  isExpanded && "border-b-0",
-                )}
-              >
-                <TableCell>
+              <>
+                <>
                   <div className="flex flex-col">
                     <span className="font-medium">{deployment.name}</span>
                     {deployment.description && (
@@ -128,11 +106,11 @@ export default function DeploymentsTable({
                       </span>
                     )}
                   </div>
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   <TypeBadge type={deployment.type} />
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   <button
                     type="button"
                     disabled={!hasAttachments}
@@ -155,18 +133,18 @@ export default function DeploymentsTable({
                     {deployment.attached_count}{" "}
                     {deployment.attached_count === 1 ? "flow" : "flows"}
                   </button>
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   <span className="text-sm">
                     {providerMap[deployment.provider_id ?? ""] ?? "—"}
                   </span>
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   <span className="text-sm">
                     {formatDate(deployment.updated_at)}
                   </span>
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -177,11 +155,11 @@ export default function DeploymentsTable({
                   >
                     <ForwardedIconComponent name="Play" className="h-4 w-4" />
                   </Button>
-                </TableCell>
-                <TableCell>
+                </>
+                <>
                   {isDeleting ? (
                     <div className="flex h-8 w-8 items-center justify-center">
-                      <Loading size={16} className="text-muted-foreground" />
+                      <Spinner size={16} className="text-muted-foreground" />
                     </div>
                   ) : (
                     <DropdownMenu>
@@ -233,8 +211,8 @@ export default function DeploymentsTable({
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}
-                </TableCell>
-              </TableRow>
+                </>
+              </>
               {isExpanded && (
                 <DeploymentExpandedRow
                   deploymentId={deployment.id}
@@ -244,7 +222,7 @@ export default function DeploymentsTable({
             </Fragment>
           );
         })}
-      </TableBody>
-    </Table>
+      </>
+    </>
   );
 }

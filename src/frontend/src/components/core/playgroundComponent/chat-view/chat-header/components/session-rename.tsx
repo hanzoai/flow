@@ -1,6 +1,6 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 
 interface SessionRenameProps {
   sessionId: string;

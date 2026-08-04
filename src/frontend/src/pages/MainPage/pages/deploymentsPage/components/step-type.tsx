@@ -1,15 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from "@hanzo/ui";
 import { useGetDeploymentLlms } from "@/controllers/API/queries/deployments/use-get-deployment-llms";
 import { cn } from "@/utils/utils";
 import { useDeploymentStepper } from "../contexts/deployment-stepper-context";

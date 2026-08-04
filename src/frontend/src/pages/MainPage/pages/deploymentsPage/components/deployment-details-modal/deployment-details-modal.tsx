@@ -1,12 +1,6 @@
 import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import Loading from "@/components/ui/loading";
+import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import { useGetDeployment } from "@/controllers/API/queries/deployments/use-get-deployment";
 import {
   type DeploymentFlowVersionItem,
@@ -86,7 +80,7 @@ export default function DeploymentDetailsModal({
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loading />
+            <Spinner />
           </div>
         ) : (
           <div className="flex flex-col gap-5 overflow-y-auto px-6 py-4">

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { AnimatedConditional } from "@/components/ui/animated-close";
 import useAlertStore from "@/stores/alertStore";
 import { cn } from "@/utils/utils";
 import { useRenameSession } from "../hooks/use-rename-session";
@@ -77,7 +76,7 @@ export function ChatHeader({
   });
 
   const moreMenu = (
-    <AnimatedConditional isOpen={isSessionDropdownVisible}>
+    <>
       <SessionMoreMenu
         onRename={handleEditStart}
         onMessageLogs={onMessageLogs}
@@ -101,7 +100,7 @@ export function ChatHeader({
           if (open) setSessionsDropdownOpen(false);
         }}
       />
-    </AnimatedConditional>
+    </>
   );
 
   return (
@@ -114,7 +113,7 @@ export function ChatHeader({
     >
       {!isFullscreen && (
         <div className="flex items-center gap-2 flex-[2_1_0] min-w-0">
-          <AnimatedConditional isOpen={isSessionDropdownVisible}>
+          <>
             <ChatSessionsDropdown
               sessions={sessions}
               onNewChat={onNewChat}
@@ -127,7 +126,7 @@ export function ChatHeader({
                 if (open) setMoreMenuOpen(false);
               }}
             />
-          </AnimatedConditional>
+          </>
           <ChatHeaderTitle
             key={currentSessionId ?? "header-title"}
             sessionTitle={sessionTitle}
@@ -153,21 +152,21 @@ export function ChatHeader({
         </div>
       )}
       <div className="relative flex items-center flex-1 justify-end min-h-xxs">
-        <AnimatedConditional isOpen={!isFullscreen}>
+        <>
           <ChatHeaderActions
             isFullscreen={false}
             onToggleFullscreen={onToggleFullscreen}
             onClose={onClose}
             renderPrefix={() => moreMenu}
           />
-        </AnimatedConditional>
-        <AnimatedConditional isOpen={isFullscreen}>
+        </>
+        <>
           <ChatHeaderActions
             isFullscreen={true}
             onToggleFullscreen={onToggleFullscreen}
             onClose={onClose}
           />
-        </AnimatedConditional>
+        </>
       </div>
       {currentSessionId && (
         <SessionLogsModal

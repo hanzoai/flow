@@ -38,17 +38,6 @@ jest.mock(
 );
 
 // Mock table components so we can render outside a real <table>
-jest.mock("@/components/ui/table", () => ({
-  TableRow: ({ children, ...props }: React.PropsWithChildren<object>) => (
-    <tr {...props}>{children}</tr>
-  ),
-  TableCell: ({
-    children,
-    ...props
-  }: React.PropsWithChildren<{ colSpan?: number }>) => (
-    <td {...props}>{children}</td>
-  ),
-}));
 
 import DeploymentExpandedRow from "../components/deployment-expanded-row";
 

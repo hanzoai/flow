@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 
 const ListItem = ({

@@ -6,8 +6,7 @@ import logoDarkPng from "@/assets/logo_dark.png";
 import logoLightPng from "@/assets/logo_light.png";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import CardsWrapComponent from "@/components/core/cardsWrapComponent";
-import { Button } from "@/components/ui/button";
-import { DotBackgroundDemo } from "@/components/ui/dot-background";
+import { Button } from "@hanzo/ui";
 import { DISCORD_URL, GITHUB_URL } from "@/constants/constants";
 import { useGetUserData, useUpdateUser } from "@/controllers/API/queries/auth";
 import useAuthStore from "@/stores/authStore";
@@ -50,7 +49,7 @@ export const EmptyPageCommunity = ({
   };
 
   return (
-    <DotBackgroundDemo>
+    <>
       <CardsWrapComponent
         dragMessage={t("home.dragFlowsOrComponents")}
         onFileDrop={handleFileDrop}
@@ -176,7 +175,7 @@ export const EmptyPageCommunity = ({
           {t("page.dragAndDropText")}
         </p>
       </CardsWrapComponent>
-    </DotBackgroundDemo>
+    </>
   );
 };
 

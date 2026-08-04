@@ -1,7 +1,6 @@
-import * as Form from "@radix-ui/react-form";
 import { cloneDeep } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import useSaveFlow from "@/hooks/flows/use-save-flow";
 import useAlertStore from "@/stores/alertStore";
 import useFlowStore from "@/stores/flowStore";
@@ -116,7 +115,7 @@ const FlowSettingsComponent = ({
     setDisableSave(isSaveDisabled(flow, nameLists, name, description, locked));
   }, [nameLists, flow, description, name, locked]);
   return (
-    <Form.Root onSubmit={handleSubmit} ref={formRef}>
+    <form onSubmit={handleSubmit} ref={formRef}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <EditFlowSettings
@@ -140,7 +139,7 @@ const FlowSettingsComponent = ({
           >
             Cancel
           </Button>
-          <Form.Submit asChild>
+          <>
             <Button
               variant="default"
               size="sm"
@@ -150,10 +149,10 @@ const FlowSettingsComponent = ({
             >
               Save
             </Button>
-          </Form.Submit>
+          </>
         </div>
       </div>
-    </Form.Root>
+    </form>
   );
 };
 

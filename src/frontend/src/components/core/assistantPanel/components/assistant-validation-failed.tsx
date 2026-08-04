@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AlertTriangle, ChevronDown, ChevronUp, Code2 } from "lucide-react";
 import SimplifiedCodeTabComponent from "@/components/core/codeTabsComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import type { AgenticResult } from "@/controllers/API/queries/agentic";
 
 interface AssistantValidationFailedProps {

@@ -1,7 +1,6 @@
-import * as Form from "@radix-ui/react-form";
 import { useEffect, useRef, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Input } from "@/components/ui/input";
+import { Input } from "@hanzo/ui";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import type { InputComponentType } from "@/types/components";
 import { handleKeyDown } from "@/utils/reactflowUtils";
@@ -70,7 +69,7 @@ export default function InputComponent({
   return (
     <div className="relative w-full">
       {isForm ? (
-        <Form.Control asChild>
+        <>
           <Input
             name={name}
             id={"form-" + id}
@@ -106,7 +105,7 @@ export default function InputComponent({
               if (blurOnEnter && e.key === "Enter") refInput.current?.blur();
             }}
           />
-        </Form.Control>
+        </>
       ) : (
         <>
           {isObjectOption ? (

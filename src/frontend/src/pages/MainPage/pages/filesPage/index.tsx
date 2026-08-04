@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import FilesTab from "./components/FilesTab";
 
 export const FilesPage = () => {
@@ -55,13 +54,13 @@ export const FilesPage = () => {
             >
               <div className="h-7 w-10 transition-all group-data-[open=true]/sidebar-wrapper:md:w-0 lg:hidden">
                 <div className="relative left-0 opacity-100 transition-all group-data-[open=true]/sidebar-wrapper:md:opacity-0">
-                  <SidebarTrigger>
+                  <>
                     <ForwardedIconComponent
                       name="PanelLeftOpen"
                       aria-hidden="true"
                       className=""
                     />
-                  </SidebarTrigger>
+                  </>
                 </div>
               </div>
               Files

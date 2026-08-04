@@ -40,13 +40,6 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
 };
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, ...props }: ButtonProps) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-}));
 
 jest.mock(
   "@/components/common/renderIconComponent/components/renderKey",

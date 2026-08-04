@@ -35,33 +35,8 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
-jest.mock("@/components/ui/dropdown-menu", () => ({
-  DropdownMenu: ({ children, ...props }: any) => (
-    <div data-testid="dropdown-menu" {...props}>
-      {children}
-    </div>
-  ),
-  DropdownMenuTrigger: ({ children, asChild, ...props }: any) => (
-    <div data-testid="dropdown-trigger" {...props}>
-      {children}
-    </div>
-  ),
-  DropdownMenuContent: ({ children, ...props }: any) => (
-    <div data-testid="dropdown-content" {...props}>
-      {children}
-    </div>
-  ),
-}));
 
-jest.mock("@/components/ui/separator", () => ({
-  Separator: () => <div data-testid="separator" />,
-}));
 
 jest.mock("../DropdownControlButton", () => ({
   __esModule: true,

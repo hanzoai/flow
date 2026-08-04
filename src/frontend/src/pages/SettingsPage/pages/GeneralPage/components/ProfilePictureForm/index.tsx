@@ -1,19 +1,10 @@
-import * as Form from "@radix-ui/react-form";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
   type ProfilePicturesQueryResponse,
   useGetProfilePicturesQuery,
 } from "@/controllers/API/queries/files";
-import { Button } from "../../../../../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../../../../../components/ui/card";
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@hanzo/ui";
 import { gradients } from "../../../../../../utils/styleUtils";
 import ProfilePictureChooserComponent from "./components/profilePictureChooserComponent";
 
@@ -35,7 +26,7 @@ const ProfilePictureFormComponent = ({
   const { isLoading, data, isFetching } = useGetProfilePicturesQuery();
 
   return (
-    <Form.Root
+    <form
       onSubmit={(event) => {
         handlePatchProfilePicture(profilePicture);
         event.preventDefault();
@@ -68,12 +59,12 @@ const ProfilePictureFormComponent = ({
           </div>
         </CardContent>
         <CardFooter className="border-t px-6 py-4">
-          <Form.Submit asChild>
+          <>
             <Button type="submit">{t("settings.saveButton")}</Button>
-          </Form.Submit>
+          </>
         </CardFooter>
       </Card>
-    </Form.Root>
+    </form>
   );
 };
 export default ProfilePictureFormComponent;

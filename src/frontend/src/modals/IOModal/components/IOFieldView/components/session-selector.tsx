@@ -2,13 +2,7 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import IconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select-custom";
+import { Input, Select, SelectContent, SelectItem, SelectTrigger } from "@hanzo/ui";
 import { useUpdateSessionName } from "@/controllers/API/queries/messages/use-rename-session";
 import { useGetFlowId } from "@/modals/IOModal/hooks/useGetFlowId";
 import useFlowStore from "@/stores/flowStore";

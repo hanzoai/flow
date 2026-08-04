@@ -1,6 +1,5 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button, Separator } from "@hanzo/ui";
 import type { KnowledgeBaseInfo } from "@/controllers/API/queries/knowledge-bases/use-get-knowledge-bases";
 
 interface KnowledgeBaseDrawerProps {

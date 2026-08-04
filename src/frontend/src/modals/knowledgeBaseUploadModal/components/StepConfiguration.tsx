@@ -2,22 +2,7 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ModelInputComponent, {
   type ModelOption,
 } from "@/components/core/parameterRenderComponent/components/modelInputComponent";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input, Label, Separator, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@hanzo/ui";
 import { cn } from "@/utils/utils";
 import { ACCEPTED_FILE_TYPES } from "../constants";
 import type { ColumnConfigRow } from "../types";

@@ -4,7 +4,7 @@ import {
   CHAT_UPLOAD_ATTACHMENT_ACCEPT,
   CHAT_UPLOAD_ATTACHMENT_TOOLTIP,
 } from "@/constants/file-upload-constants";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 
 interface UploadFileButtonProps {
   fileInputRef: React.RefObject<HTMLInputElement | null>;

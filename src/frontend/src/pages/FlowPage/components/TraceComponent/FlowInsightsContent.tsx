@@ -5,23 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import IconComponent from "@/components/common/genericIconComponent";
 import PaginatorComponent from "@/components/common/paginatorComponent";
 import TableComponent from "@/components/core/parameterRenderComponent/components/tableComponent";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button, Dialog, DialogContent, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 import { useGetTracesQuery } from "@/controllers/API/queries/traces";
 import { TraceListItem } from "@/controllers/API/queries/traces/types";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
@@ -174,33 +158,29 @@ export function FlowInsightsContent({
     if (groupedRows.length === 0 && !isLoading) {
       return (
         <div className="flex h-full w-full items-center justify-center rounded-md border">
-          <Alert variant="default" className="w-fit">
+          <>
             <IconComponent
               name="AlertCircle"
               className="h-5 w-5 text-primary"
             />
-            <AlertTitle>{t("table.noDataTitle")}</AlertTitle>
-            <AlertDescription>{t("table.noDataMessage")}</AlertDescription>
-          </Alert>
+            <>{t("table.noDataTitle")}</>
+            <>{t("table.noDataMessage")}</>
+          </>
         </div>
       );
     }
     return (
-      <Accordion
-        type="multiple"
-        defaultValue={expandedSessionIds}
-        className="h-full overflow-y-auto"
-      >
+      <>
         {groupedRows.map(([sessionId, sessionRows]) => (
-          <AccordionItem key={sessionId} value={sessionId}>
-            <AccordionTrigger className="px-4 text-sm">
+          <>
+            <>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <span className="font-medium text-foreground">Session</span>
                 <span className="font-mono text-xs">{sessionId}</span>
                 <span className="text-xs">{sessionRows.length} runs</span>
               </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4 pb-4">
+            </>
+            <>
               <TableComponent
                 key={`Executions-${sessionId}`}
                 readOnlyEdit
@@ -213,10 +193,10 @@ export function FlowInsightsContent({
                 headerHeight={sessionRows.length === 0 ? 0 : undefined}
                 onCellClicked={handleCellClicked}
               />
-            </AccordionContent>
-          </AccordionItem>
+            </>
+          </>
         ))}
-      </Accordion>
+      </>
     );
   }
 

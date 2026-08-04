@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import { handleKeyDown } from "@/utils/reactflowUtils";

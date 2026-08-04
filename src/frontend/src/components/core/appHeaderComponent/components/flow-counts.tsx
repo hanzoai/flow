@@ -1,6 +1,6 @@
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
-import { Button } from "@/components/ui/button";
+import { Button } from "@hanzo/ui";
 import { DISCORD_URL, GITHUB_URL } from "@/constants/constants";
 import { Case } from "@/shared/components/caseComponent";
 import { useDarkStore } from "@/stores/darkStore";

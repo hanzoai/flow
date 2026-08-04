@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import { TextShimmer } from "@/components/ui/TextShimmer";
 import { extractLanguage, isCodeBlock } from "@/utils/codeBlockUtils";
 import { cn } from "@/utils/utils";
 import CodeTabsComponent from "../../../../../../components/core/codeTabsComponent";
@@ -36,9 +35,9 @@ export const ErrorView = ({
             >
               <LogoIcon />
               <div className="flex items-center">
-                <TextShimmer className="" duration={1}>
+                <>
                   Flow running...
-                </TextShimmer>
+                </>
               </div>
             </motion.div>
           ) : (

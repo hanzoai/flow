@@ -1,11 +1,4 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../../components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 
 export default function CsvSelect({ node, handleChangeSelect }): JSX.Element {
   return (

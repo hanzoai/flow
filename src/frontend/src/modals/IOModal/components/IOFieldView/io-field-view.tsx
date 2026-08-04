@@ -9,7 +9,7 @@ import CsvOutputComponent from "../../../../components/core/csvOutputComponent";
 import DataOutputComponent from "../../../../components/core/dataOutputComponent";
 import InputListComponent from "../../../../components/core/parameterRenderComponent/components/inputListComponent";
 import PdfViewer from "../../../../components/core/pdfViewer";
-import { Textarea } from "../../../../components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 import {
   InputOutput,
   IOInputTypes,

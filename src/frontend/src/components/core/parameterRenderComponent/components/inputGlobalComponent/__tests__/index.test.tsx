@@ -23,11 +23,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   default: () => null,
 }));
 
-jest.mock("@/components/ui/command", () => ({
-  CommandItem: ({ children }: { children?: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-}));
 
 jest.mock(
   "@/components/core/parameterRenderComponent/components/inputComponent",

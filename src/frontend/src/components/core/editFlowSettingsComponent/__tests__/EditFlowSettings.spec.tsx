@@ -1,37 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import EditFlowSettings from "../index";
 
-jest.mock("@/components/ui/input", () => ({
-  Input: ({ ...props }) => <input {...props} />,
-}));
-jest.mock("@/components/ui/textarea", () => ({
-  Textarea: ({ ...props }) => <textarea {...props} />,
-}));
-jest.mock("@/components/ui/switch", () => ({
-  Switch: ({ checked, onCheckedChange, ...rest }) => (
-    <input
-      role="switch"
-      aria-checked={!!checked}
-      type="checkbox"
-      checked={!!checked}
-      onChange={(e) => onCheckedChange?.(e.target.checked)}
-      {...rest}
-    />
-  ),
-}));
 jest.mock("@/components/common/genericIconComponent", () => ({
   __esModule: true,
   default: () => <span />,
 }));
 // Mock Radix Form to avoid context requirement
-jest.mock("@radix-ui/react-form", () => ({
-  __esModule: true,
-  Field: ({ children }) => <div>{children}</div>,
-  Label: ({ children }) => <label>{children}</label>,
-  Control: ({ children }) => <>{children}</>,
-  Message: ({ children }) => <div>{children}</div>,
-  Root: ({ children }) => <form>{children}</form>,
-}));
 
 // Prevent importing utils that pull darkStore via side-effects
 jest.mock("@/utils/utils", () => ({

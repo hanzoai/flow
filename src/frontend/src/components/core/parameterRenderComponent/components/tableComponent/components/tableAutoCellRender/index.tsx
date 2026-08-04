@@ -5,7 +5,7 @@ import NumberReader from "@/components/common/numberReader";
 import ObjectRender from "@/components/common/objectRender";
 import StringReader from "@/components/common/stringReaderComponent";
 import DateReader from "@/components/core/dateReaderComponent";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@hanzo/ui";
 import { cn, isTimeStampString } from "@/utils/utils";
 import InputGlobalComponent from "../../../inputGlobalComponent";
 import ToggleShadComponent from "../../../toggleShadComponent";

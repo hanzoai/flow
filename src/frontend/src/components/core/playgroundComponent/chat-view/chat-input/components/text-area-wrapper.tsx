@@ -5,7 +5,7 @@ import {
 } from "@/constants/constants";
 import { useUtilityStore } from "@/stores/utilityStore";
 import type { FilePreviewType } from "@/types/components";
-import { Textarea } from "../../../../../../components/ui/textarea";
+import { Textarea } from "@hanzo/ui";
 import { classNames } from "../../../../../../utils/utils";
 
 interface TextAreaWrapperProps {

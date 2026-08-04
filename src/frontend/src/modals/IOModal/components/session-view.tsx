@@ -3,7 +3,7 @@ import type { NewValueParams, SelectionChangedEvent } from "ag-grid-community";
 import cloneDeep from "lodash/cloneDeep";
 import { useEffect, useMemo, useState } from "react";
 import { removeMessages } from "@/components/core/playgroundComponent/chat-view/utils/message-utils";
-import Loading from "@/components/ui/loading";
+import { Spinner } from "@hanzo/gui";
 import {
   useDeleteMessages,
   useGetMessagesQuery,
@@ -142,7 +142,7 @@ export default function SessionView({
 
   return isFetching ? (
     <div className="flex h-full w-full items-center justify-center align-middle">
-      <Loading></Loading>
+      <Spinner></Spinner>
     </div>
   ) : (
     <TableComponent

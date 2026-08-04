@@ -23,11 +23,6 @@ jest.mock("@/components/common/genericIconComponent", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/badge", () => ({
-  Badge: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  ),
-}));
 
 const rootDefaults = {
   id: "root-1",

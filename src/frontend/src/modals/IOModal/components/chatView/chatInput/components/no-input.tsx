@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import Loading from "@/components/ui/loading";
+import { Button } from "@hanzo/ui";
+import { Spinner } from "@hanzo/gui";
 import IconComponent from "../../../../../../components/common/genericIconComponent";
 import { ICON_STROKE_WIDTH } from "../../../../../../constants/constants";
 import { cn } from "../../../../../../utils/utils";
@@ -41,7 +41,7 @@ const NoInputView: React.FC<NoInputViewProps> = ({
           >
             <div className="flex items-center gap-2 rounded-md text-sm font-medium">
               Stop
-              <Loading className="h-4 w-4" />
+              <Spinner className="h-4 w-4" />
             </div>
           </Button>
         )}

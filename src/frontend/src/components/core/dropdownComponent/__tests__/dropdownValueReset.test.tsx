@@ -20,9 +20,6 @@ interface MockStoreSelectorFn<T> {
   (state: T): unknown;
 }
 
-jest.mock("@radix-ui/react-popover", () => ({
-  PopoverAnchor: ({ children }: MockChildrenProps) => <div>{children}</div>,
-}));
 
 jest.mock("fuse.js", () => {
   return jest.fn().mockImplementation(() => ({
@@ -94,30 +91,8 @@ jest.mock("@/components/common/shadTooltipComponent", () => ({
   default: ({ children }: MockChildrenProps) => <div>{children}</div>,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: MockButtonProps) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
-jest.mock("@/components/ui/command", () => ({
-  Command: ({ children }: MockChildrenProps) => <div>{children}</div>,
-  CommandGroup: ({ children }: MockChildrenProps) => <div>{children}</div>,
-  CommandItem: ({ children, onSelect }: MockCommandItemProps) => (
-    <div onClick={onSelect}>{children}</div>
-  ),
-  CommandList: ({ children }: MockChildrenProps) => <div>{children}</div>,
-  CommandSeparator: () => <hr />,
-}));
 
-jest.mock("@/components/ui/popover", () => ({
-  Popover: ({ children }: MockChildrenProps) => <div>{children}</div>,
-  PopoverContent: ({ children }: MockChildrenProps) => <div>{children}</div>,
-  PopoverContentWithoutPortal: ({ children }: MockChildrenProps) => (
-    <div>{children}</div>
-  ),
-  PopoverTrigger: ({ children }: MockChildrenProps) => <div>{children}</div>,
-}));
 
 const mockNodeClass: APIClassType = {
   template: {},
