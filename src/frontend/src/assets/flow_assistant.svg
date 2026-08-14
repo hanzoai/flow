@@ -2,7 +2,7 @@
 <g opacity="0.15">
 <path d="M0 14C0 6.26801 6.26801 0 14 0H34C41.732 0 48 6.26801 48 14V34C48 41.732 41.732 48 34 48H14C6.26801 48 0 41.732 0 34V14Z" fill="url(#pattern0_4664_4242)"/>
 </g>
-<path d="M14.5208 29.4167H17.2291L22.6458 24H25.3541L30.7708 18.5833H33.4791M22.6458 32.125H25.3541L30.7708 26.7083H33.4791M14.5208 21.2917H17.2291L22.6458 15.875H25.3541" stroke="#FF3276" stroke-width="1.80556" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5208 29.4167H17.2291L22.6458 24H25.3541L30.7708 18.5833H33.4791M22.6458 32.125H25.3541L30.7708 26.7083H33.4791M14.5208 21.2917H17.2291L22.6458 15.875H25.3541" stroke="#71717A" stroke-width="1.80556" stroke-linecap="round" stroke-linejoin="round"/>
 <defs>
 <pattern id="pattern0_4664_4242" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_4664_4242" transform="scale(0.002)"/>
