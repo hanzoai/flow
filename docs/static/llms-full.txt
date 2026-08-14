@@ -61,7 +61,7 @@ Follow Flow releases and GitHub for product direction; release notes at docs.
 
 - [GitHub repository](https://github.com/hanzoai/flow): Source code and issues
 - [Hanzo AI website](https://hanzo.ai): Main product site
-- [Discord](https://discord.gg/hanzo): Community chat
+- [Discord](https://discord.gg/CJCyAsm9Vr): Community chat
 
 ## Optional
 
