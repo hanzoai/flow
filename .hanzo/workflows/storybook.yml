@@ -116,4 +116,5 @@ jobs:
           slug: flow-storybook
           dir: src/frontend/storybook-static
         env:
-          HANZO_DEPLOY_TOKEN: ${{ secrets.HANZO_DEPLOY_TOKEN }}
+          KMS_CLIENT_ID: ${{ secrets.KMS_CLIENT_ID }}
+          KMS_CLIENT_SECRET: ${{ secrets.KMS_CLIENT_SECRET }}
