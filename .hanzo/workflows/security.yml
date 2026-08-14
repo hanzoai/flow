@@ -1,0 +1,59 @@
+name: security
+
+# Static analysis for the Python and TypeScript trees. This replaces two dead
+# scanners rather than restoring them.
+#
+# Both had stopped running for the same structural reason: the forge collects
+# workflows from the FIRST entry of WORKFLOW_DIRS that exists, so the day
+# .hanzo/workflows/ appeared, every file still under .github/workflows/ went
+# dark. 43 of them, including codeql.yml and mend.yml. Nothing went red, because
+# the checks that would go red were the ones no longer running.
+#
+# Neither could come back as written:
+#
+#   - codeql.yml ended in github/codeql-action/analyze under `security-events:
+#     write`. That permission names an upload to GitHub's code-scanning store,
+#     which is where CodeQL findings live — there is no such store here, and a
+#     scanner whose results have nowhere to go is not a scanner. Semgrep covers
+#     the same two languages CodeQL was configured for (python, javascript) and
+#     reports through the exit code, which this forge does have.
+#   - mend.yml fetched wss-unified-agent.jar and ran it against WS_APIKEY /
+#     WS_USERKEY / WS_WSS_URL. Those are a commercial Mend subscription; this
+#     org has no such account and no such secrets. Dependency/licence scanning
+#     is therefore GONE, not replaced — semgrep reads code, not a dependency
+#     graph, and pretending otherwise would be the more expensive mistake.
+#
+# Measured before it was written, on the tree at the time: 98 rules over 3558
+# git-tracked files in 20s, 4 ERROR findings. Fast enough to run on every push.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    # Must name a label a runner actually advertises. This fleet serves
+    # hanzo-build-linux-amd64 and deliberately offers no ubuntu-* label, so the
+    # `runs-on: ubuntu-latest` these files carried would not have failed — it
+    # would have queued until the timeout. Silence, not an error.
+    runs-on: hanzo-build-linux-amd64
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned. A scanner that changes rules underneath the build turns an
+      # unrelated commit red and teaches people to ignore it.
+      - name: install semgrep
+        run: python3 -m pip install --break-system-packages --quiet semgrep==1.167.0
+
+      # The whole tree, not a named list — an allowlist stops covering whatever
+      # is added after it is written. semgrep walks only git-tracked files, so
+      # node_modules and build output are already out of scope.
+      - name: enforce (ERROR — fails the build)
+        run: semgrep --config p/security-audit --config p/python --config p/javascript --error --severity=ERROR --metrics=off --timeout 300 --jobs 4 .
