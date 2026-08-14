@@ -48,7 +48,7 @@ export const gradients = [
 
 /*
 Specifications
-#FF3276 -> #F480FF
+#0A0A0A -> #F480FF
 #1A0250 -> #2F10FE
 #98F4FE -> #9BFEAA
 #F480FF -> #7528FC
@@ -59,7 +59,7 @@ Specifications
 #2F10FE -> #98F4FE
 */
 export const flowGradients = [
-  "linear-gradient(90deg, #FF3276 0%, #F480FF 100%)",
+  "linear-gradient(90deg, #0A0A0A 0%, #F480FF 100%)",
   "linear-gradient(90deg, #1A0250 0%, #2F10FE 100%)",
   "linear-gradient(90deg, #98F4FE 0%, #9BFEAA 100%)",
   "linear-gradient(90deg, #F480FF 0%, #7528FC 100%)",
