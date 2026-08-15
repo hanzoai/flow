@@ -15,8 +15,8 @@ from lfx.schema.data import Data
 
 
 class ClickhouseVectorStoreComponent(LCVectorStoreComponent):
-    display_name = "ClickHouse"
-    description = "ClickHouse Vector Store with search capabilities"
+    display_name = "Hanzo Datastore"
+    description = "Hanzo Datastore vector store with search capabilities"
     name = "Clickhouse"
     icon = "Clickhouse"
 
@@ -25,8 +25,8 @@ class ClickhouseVectorStoreComponent(LCVectorStoreComponent):
         IntInput(name="port", display_name="port", required=True, value=8123),
         StrInput(name="database", display_name="database", required=True),
         StrInput(name="table", display_name="Table name", required=True),
-        StrInput(name="username", display_name="The ClickHouse user name.", required=True),
-        SecretStrInput(name="password", display_name="Clickhouse Password", required=True),
+        StrInput(name="username", display_name="The Datastore user name.", required=True),
+        SecretStrInput(name="password", display_name="Datastore password", required=True),
         DropdownInput(
             name="index_type",
             display_name="index_type",
