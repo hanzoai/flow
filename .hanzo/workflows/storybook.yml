@@ -8,9 +8,9 @@ name: storybook
 # it is gone.
 #
 #   npm run build-storybook -> src/frontend/storybook-static
-#     -> sitedeploy
+#     -> site
 #
-# The publish mechanics are NOT here. They are bin/sitedeploy in hanzoai/ci,
+# The publish mechanics are NOT here. They are bin/site in hanzoai/ci,
 # reached through its action, and every static surface in the fleet calls that one
 # script — ensure-project, enqueue, presigned per-file upload, complete. A
 # contract transcribed per repo is a contract that drifts, and this file used to
