@@ -114,6 +114,9 @@ def _do_run_migrations(connection):
                 logger.info(f"Using default migration lock_key: {lock_key}")
 
             connection.execute(text("SET LOCAL lock_timeout = '180s';"))
+            # lock_key is an int either way above — a sha256 digest reduced mod 2**63-1,
+            # or the literal default. There is no string here to inject into.
+            # nosemgrep: python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
             connection.execute(text(f"SELECT pg_advisory_xact_lock({lock_key});"))
         context.run_migrations()
 
