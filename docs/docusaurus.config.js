@@ -29,15 +29,6 @@ const config = {
     defaultLocale: "en",
     locales: ["en"],
   },
-  headTags: [
-    {
-      tagName: "link",
-      attributes: {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Sora:wght@550;600&display=swap",
-      },
-    },
-  ],
 
   presets: [
     [

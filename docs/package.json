@@ -17,6 +17,7 @@
     "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
     "@easyops-cn/docusaurus-search-local": "^0.45.0",
+    "@hanzo/font": "^1.8.1",
     "@mdx-js/react": "^3.0.1",
     "clsx": "^1.2.1",
     "docusaurus-node-polyfills": "^1.0.0",
