@@ -617,6 +617,10 @@ class AuthService(BaseAuthService):
             not verified as this is a utility function, not an authentication function.
         """
         try:
+            # Reads a claim without authenticating it, which is safe only while nothing
+            # authorises on the result — today the only callers are this module's tests.
+            # If a request path ever needs the subject, verify the token instead.
+            # nosemgrep: python.jwt.security.unverified-jwt-decode.unverified-jwt-decode
             claims = jwt.decode(token, options={"verify_signature": False})
             user_id = claims["sub"]
             return UUID(user_id)
