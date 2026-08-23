@@ -142,7 +142,11 @@ def try_validate(token: str, *, validator: HanzoIAMValidator | None = None) -> I
     # Peek the issuer unverified: only tokens claiming OUR issuer are IAM tokens; anything
     # else is a local token and must fall back (not error).
     try:
+        # Unverified ON PURPOSE and only to read `iss`, which decides WHICH validator
+        # the token belongs to. Nothing is trusted from this: a token claiming our
+        # issuer goes to v.validate() below, which verifies the signature and raises.
         unverified = jwt.decode(
+            # nosemgrep: python.jwt.security.unverified-jwt-decode.unverified-jwt-decode
             token, options={"verify_signature": False, "verify_exp": False, "verify_aud": False}
         )
     except jwt.InvalidTokenError:
