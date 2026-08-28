@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json as _json
+import uuid
 from datetime import timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Annotated, Any
@@ -13,6 +14,7 @@ from lfx.utils.validate_cloud import raise_error_if_astra_cloud_disable_componen
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from flow.services.auth.utils import get_current_active_user, get_current_active_user_mcp
+from flow.services.deps import session_scope
 from flow.services.database.models.flow.model import Flow
 from flow.services.database.models.flow_version.model import FlowVersion
 from flow.services.database.models.message.model import MessageTable

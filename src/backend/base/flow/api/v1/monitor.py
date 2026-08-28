@@ -7,9 +7,16 @@ from fastapi_pagination.ext.sqlmodel import apaginate
 from sqlmodel import col, delete, select
 
 from flow.api.utils import DbSession, custom_params
+from flow.api.utils.flow_utils import compute_virtual_flow_id
 from flow.schema.message import MessageResponse
 from flow.services.auth.utils import get_current_active_user
 from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.message.crud import (
+    delete_messages_for_user,
+    delete_messages_for_user_by_session,
+    get_message_for_user,
+    get_messages_for_user_by_session,
+)
 from flow.services.database.models.message.model import MessageRead, MessageTable, MessageUpdate
 from flow.services.database.models.transactions.crud import transform_transaction_table_for_logs
 from flow.services.database.models.transactions.model import TransactionLogsResponse, TransactionTable

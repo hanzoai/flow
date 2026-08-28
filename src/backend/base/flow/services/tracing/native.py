@@ -318,9 +318,10 @@ class NativeTracer(BaseTracer):
                 )
                 await session.merge(trace)
 
+                resolved = []
                 for span_data in self.completed_spans:
                     try:
-                        span_uuid = UUID_(span_data["id"])
+                        span_uuid = UUID(span_data["id"])
                     except (ValueError, TypeError):
                         # Span IDs from LangChain callbacks are strings, not UUIDs — derive
                         # a stable UUID so the same span always maps to the same DB row.
@@ -329,13 +330,14 @@ class NativeTracer(BaseTracer):
                     parent_uuid = None
                     if span_data.get("parent_span_id"):
                         parent_id = span_data["parent_span_id"]
-                        if isinstance(parent_id, UUID_):
+                        if isinstance(parent_id, UUID):
                             parent_uuid = parent_id
                         else:
                             try:
-                                parent_uuid = UUID_(str(parent_id))
+                                parent_uuid = UUID(str(parent_id))
                             except (ValueError, TypeError):
                                 parent_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{self.trace_id}-{parent_id}")
+                    resolved.append((span_data, span_uuid, parent_uuid))
 
                 for span_data, span_uuid, parent_uuid in resolved:
                     span = SpanTable(
