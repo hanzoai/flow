@@ -20,16 +20,23 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import json
+import os
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from shutil import copy2
+from typing import TYPE_CHECKING, Any, Literal
 
 import aiofiles
 import orjson
 import yaml
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, EnvSettingsSource, PydanticBaseSettingsSource, SettingsConfigDict
 from typing_extensions import override
 
 from lfx.constants import BASE_COMPONENTS_PATH as BASE_COMPONENTS_PATH  # noqa: PLC0414  # re-export for back-compat
+from lfx.serialization.constants import MAX_ITEMS_LENGTH, MAX_TEXT_LENGTH
+from lfx.log.logger import logger
+from lfx.services.settings.constants import AGENTIC_VARIABLES, VARIABLES_TO_GET_FROM_ENVIRONMENT
+from lfx.utils.util_strings import is_valid_database_url, sanitize_database_url
 from lfx.services.settings.groups import (
     CacheSettings,
     ComponentsSettings,
@@ -269,10 +276,15 @@ class Settings(BaseSettings):
     """If set to True, Flow will keep track of each vertex builds (outputs) in the UI for any flow."""
 
     # Config
+    allow_custom_components: bool = True
+    """If False, blocks execution of components whose code does not match a known server template
+    (see SecuritySettings.allow_custom_components — this is the flat field the runtime reads)."""
     host: str = "localhost"
     """The host on which Flow will run."""
     port: int = 7860
     """The port on which Flow will run."""
+    root_path: str = ""
+    """ASGI root_path when Flow is served behind a prefix-stripping reverse proxy (empty = served at /)."""
     runtime_port: int | None = Field(default=None, exclude=True)
     """TEMPORARY: The port detected at runtime after checking for conflicts.
     This field is system-managed only and will be removed in future versions

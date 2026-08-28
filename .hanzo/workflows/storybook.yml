@@ -1,0 +1,120 @@
+name: storybook
+
+# The frontend storybook is a SITE, not an App.
+#
+# It used to publish through actions/deploy-pages
+# (.github/workflows/deploy-storybook.yml). That is a second deploy plane living
+# outside our own CI/CD, outside the Sites plane, and outside our analytics, so
+# it is gone.
+#
+#   npm run build-storybook -> src/frontend/storybook-static
+#     -> site
+#
+# The publish mechanics are NOT here. They are bin/site in hanzoai/ci,
+# reached through its action, and every static surface in the fleet calls that one
+# script — ensure-project, enqueue, presigned per-file upload, complete. A
+# contract transcribed per repo is a contract that drifts, and this file used to
+# carry its own copy of every call. It also SELF-PROVISIONS: the project is
+# created idempotently before the enqueue, so committing this file is enough to
+# stand the site up.
+#
+# THIS IS A SEPARATE FILE FROM .hanzo/workflows/deploy.yml ON PURPOSE. That one
+# builds and pushes ghcr.io/hanzoai/flow — the App the operator runs. An App is
+# a container the cluster executes; a Site is bytes S3 serves. They have
+# different outputs, different triggers and different failure modes, and folding
+# a storybook export into an image build would couple a docs publish to a
+# deployable release.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/frontend/**/*.stories.*'
+      - 'src/frontend/.storybook/**'
+      - 'src/frontend/package.json'
+      - 'src/frontend/package-lock.json'
+      - '.hanzo/workflows/storybook.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: storybook-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    # NOT ubuntu-latest. These run on the in-cluster act_runner, whose fleet
+    # advertises hanzo-build-linux-amd64. A label no runner answers does not
+    # fail — it queues until the 24h timeout, which is silence, not an error.
+    runs-on: hanzo-build-linux-amd64
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: build the static export
+        working-directory: src/frontend
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build-storybook
+          test -s storybook-static/index.html || {
+            echo "::error::storybook produced no storybook-static/index.html"; exit 1; }
+          # A storybook shell renders with zero stories and still writes a
+          # non-empty index.html, so assert the story index has entries rather
+          # than trusting the file's existence.
+          test -s storybook-static/index.json || {
+            echo "::error::storybook wrote no index.json — nothing was indexed"; exit 1; }
+          echo "exported $(find storybook-static -type f | wc -l) files"
+
+      # The ONE analytics wire: cloud's hosted tag (cloud apps/analytics/tag.go),
+      # which posts the canonical batch to POST /v1/event. There is no Segment,
+      # no Google Tag Manager, no second tracker, and no vendored copy of the
+      # tag — it is served from the origin that eats it so a page allowlists ONE
+      # host.
+      #
+      # The key is the project's OWN publishable key, read from the project this
+      # run is about to deploy. It is never a checked-in constant: pk- is
+      # write-only and publishable (same trust class as a Sentry DSN), so it
+      # belongs in the page, but its authority is the project record, which means
+      # rotation is one server-side change and not five repo edits.
+      #
+      # NO KEY => NO TAG, deliberately. A keyless beacon is accepted 200 into
+      # $public, a reserved tenant this org cannot read, so silence is the honest
+      # failure and we pick it over reporting into a tenant nobody reads.
+      #
+      # This is storybook's generated HTML, which no template of ours can reach,
+      # so the tag is stamped into the export. Same step, same shape, in every
+      # doc site in this fleet.
+      - name: wire the analytics tag
+        env:
+          DEPLOY_TOKEN: ${{ secrets.HANZO_DEPLOY_TOKEN }}
+        run: |
+          set -euo pipefail
+          KEY=$(curl -sS -H "Authorization: Bearer ${DEPLOY_TOKEN}" \
+                  "https://api.hanzo.ai/v1/projects/flow-storybook" | jq -r '.key // empty')
+          if [ -z "$KEY" ]; then
+            echo "::warning::project flow-storybook exposes no publishable key — publishing untagged rather than beaconing into \$public"
+            exit 0
+          fi
+          TAG="<script defer src=\"https://api.hanzo.ai/v1/event.js\" data-key=\"${KEY}\" data-product=\"flow-storybook\"></script>"
+          find src/frontend/storybook-static -name '*.html' -print0 \
+            | xargs -0 -r sed -i "s#</head>#${TAG}</head>#"
+          echo "tagged $(grep -rl 'v1/event.js' src/frontend/storybook-static | wc -l) pages"
+
+      # ONE credential. The 202 carries a prefix-scoped, 30-minute presigned POST
+      # grant, so nothing here holds a bucket key. Do NOT add SITES_S3_* — that is
+      # the standing shared-bucket credential the grant replaced, and it could
+      # overwrite every other org's site.
+      - name: Publish to the Sites plane
+        uses: https://git.hanzo.ai/hanzoai/ci/.github/actions/site@v1
+        with:
+          slug: flow-storybook
+          dir: src/frontend/storybook-static
+        env:
+          KMS_CLIENT_ID: ${{ secrets.KMS_CLIENT_ID }}
+          KMS_CLIENT_SECRET: ${{ secrets.KMS_CLIENT_SECRET }}

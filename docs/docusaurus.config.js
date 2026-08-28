@@ -6,8 +6,6 @@ const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const { remarkCodeHike } = require("@code-hike/mdx");
 
-const isProduction = process.env.NODE_ENV === "production";
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "HanzoFlow Documentation",
@@ -31,75 +29,6 @@ const config = {
     defaultLocale: "en",
     locales: ["en"],
   },
-  headTags: [
-    {
-      tagName: "link",
-      attributes: {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Sora:wght@550;600&display=swap",
-      },
-    },
-    ...(isProduction
-      ? [
-          // Google Consent Mode - Set defaults before Google tags load
-          {
-            tagName: "script",
-            attributes: {},
-            innerHTML: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-
-              // Set default consent to denied
-              gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'analytics_storage': 'denied'
-              });
-            `,
-          },
-          // TrustArc Consent Update Listener
-          {
-            tagName: "script",
-            attributes: {},
-            innerHTML: `
-              (function() {
-                function updateGoogleConsent() {
-                  if (typeof window.truste !== 'undefined' && window.truste.cma) {
-                    var consent = window.truste.cma.callApi('getConsent', window.location.href) || {};
-
-                    // Map TrustArc categories to Google consent types
-                    // Category 0 = Required, 1 = Functional, 2 = Advertising, 3 = Analytics
-                    var hasAdvertising = consent[2] === 1;
-                    var hasAnalytics = consent[3] === 1;
-
-                    gtag('consent', 'update', {
-                      'ad_storage': hasAdvertising ? 'granted' : 'denied',
-                      'ad_user_data': hasAdvertising ? 'granted' : 'denied',
-                      'ad_personalization': hasAdvertising ? 'granted' : 'denied',
-                      'analytics_storage': hasAnalytics ? 'granted' : 'denied'
-                    });
-                  }
-                }
-
-                // Listen for consent changes
-                if (window.addEventListener) {
-                  window.addEventListener('cm_data_subject_consent_changed', updateGoogleConsent);
-                  window.addEventListener('cm_consent_preferences_set', updateGoogleConsent);
-                }
-
-                // Initial check after TrustArc loads
-                if (document.readyState === 'complete') {
-                  updateGoogleConsent();
-                } else {
-                  window.addEventListener('load', updateGoogleConsent);
-                }
-              })();
-            `,
-          },
-        ]
-      : []),
-  ],
 
   presets: [
     [
@@ -144,9 +73,6 @@ const config = {
           changefreq: null,
           priority: null,
           ignorePatterns: [],
-        },
-        gtag: {
-          trackingID: "G-SLQFLQ3KPT",
         },
         blog: false,
         theme: {
@@ -200,7 +126,6 @@ const config = {
     },
     ["docusaurus-node-polyfills", { excludeAliases: ["console"] }],
     "docusaurus-plugin-image-zoom",
-    ["./src/plugins/segment", { segmentPublicWriteKey: process.env.SEGMENT_PUBLIC_WRITE_KEY, allowedInDev: true }],
     [
       "@docusaurus/plugin-client-redirects",
       {
@@ -524,7 +449,6 @@ const config = {
               {
                 html: `<div class="footer-links">
                   <span>© ${new Date().getFullYear()} Flow</span>
-                  <span id="preferenceCenterContainer"> ·&nbsp; <a href="#" onclick="if(typeof window !== 'undefined' && window.truste && window.truste.eu && window.truste.eu.clickListener) { window.truste.eu.clickListener(); } return false;" style="cursor: pointer;">Manage Privacy Choices</a></span>
                   </div>`,
               },
             ],

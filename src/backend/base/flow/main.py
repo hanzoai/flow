@@ -30,6 +30,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from flow.api import health_check_router, log_router
 from flow.api.router import router
 from flow.api.v1.mcp_projects import init_mcp_servers
+from flow.services.database.models.deployment.exceptions import DeploymentGuardError
 from flow.initial_setup.setup import (
     copy_profile_pictures,
     create_or_update_starter_projects,

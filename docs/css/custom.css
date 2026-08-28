@@ -3,14 +3,16 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+@import "@hanzo/font/css";
+
  :root {
   --ifm-navbar-link-hover-color: initial;
   --ifm-navbar-padding-vertical: 0;
   --ifm-global-radius: 10px;
   --ifm-navbar-item-padding-vertical: 0;
-  --ifm-font-family-base: "Geist", Inter, -apple-system, BlinkMacSystemFont,
+  --ifm-font-family-base: "Zen", -apple-system, BlinkMacSystemFont,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI emoji";
-  --ifm-font-family-monospace: "Geist Mono", "SFMono-Regular", "Roboto Mono",
+  --ifm-font-family-monospace: "Zen Mono", "SFMono-Regular", "Roboto Mono",
     Consolas, "Liberation Mono", Menlo, Courier, monospace;
   --ifm-heading-font-weight: 700;
   --ifm-line-height-base: 1.7;
@@ -98,7 +100,7 @@ html[data-theme="light"] .navbar__logo {
 
 /*
  * Inline Lucide icons in body copy (<Icon /> in MDX).
- * Default lucide-react size is 24px, which reads huge next to Geist body text.
+ * Default lucide-react size is 24px, which reads huge next to Zen body text.
  * Scale to the font (and keep card / explicit sizes overridable below).
  */
 .markdown p svg.lf-inline-icon,

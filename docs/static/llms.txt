@@ -21,7 +21,7 @@ Flow is open source (MIT). Run locally with `uv run flow run` (Python 3.10-3.13,
 
 - [GitHub repository](https://github.com/hanzoai/flow): Source code and issues
 - [Hanzo AI website](https://hanzo.ai): Main product site
-- [Discord](https://discord.gg/hanzo): Community chat
+- [Discord](https://discord.gg/CJCyAsm9Vr): Community chat
 
 ## Optional
 
