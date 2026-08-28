@@ -1,4 +1,6 @@
 import urllib
+# The TYPE only, for annotations. Parsing is defusedxml.fromstring, imported below.
+# nosemgrep: python.lang.security.use-defused-xml.use-defused-xml
 from xml.etree.ElementTree import Element
 
 from defusedxml.ElementTree import fromstring
