@@ -1,7 +1,4 @@
 @import "./style/custom-ace-overrides.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Prevent react flow to overflow the page */
 body {

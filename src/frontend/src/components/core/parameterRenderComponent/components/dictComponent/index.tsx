@@ -4,7 +4,7 @@ import { ICON_STROKE_WIDTH } from "@/constants/constants";
 import DictAreaModal from "../../../../../modals/dictAreaModal";
 import { classNames, cn, toTitleCase } from "../../../../../utils/utils";
 import ForwardedIconComponent from "../../../../common/genericIconComponent";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import type { InputProps } from "../../types";
 
 export default function DictComponent({

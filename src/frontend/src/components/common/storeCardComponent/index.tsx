@@ -9,14 +9,14 @@ import cloneFLowWithParent, {
   getInputsAndOutputs,
 } from "../../../utils/storeUtils";
 import { cn } from "../../../utils/utils";
-import { Button } from "../../ui/button";
+import { Button } from "@hanzo/ui";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../ui/card";
+} from "@hanzo/ui";
 import IconComponent from "../genericIconComponent";
 import ShadTooltip from "../shadTooltipComponent";
 import useDataEffect from "./hooks/use-data-effect";

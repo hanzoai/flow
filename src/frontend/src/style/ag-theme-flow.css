@@ -1,5 +1,5 @@
 /* set the background color of many elements across the grid */
-.ag-theme-shadcn {
+.ag-theme-flow {
   --ag-foreground-color: hsl(var(--foreground)) !important;
   --ag-background-color: hsl(var(--background)) !important;
   --ag-secondary-foreground-color: hsl(var(--secondary-foreground)) !important;
@@ -18,7 +18,7 @@
   --ag-checkbox-checked-color: hsl(var(--primary)) !important;
 }
 
-.ag-theme-shadcn .ag-paging-panel {
+.ag-theme-flow .ag-paging-panel {
   height: 3rem !important;
 }
 

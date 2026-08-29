@@ -3,7 +3,7 @@ import SanitizedHTMLWrapper from "@/components/common/sanitizedHTMLWrapper";
 import { regexHighlight } from "@/constants/constants";
 import PromptModal from "@/modals/promptModal";
 import { cn } from "../../../../../utils/utils";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import { getPlaceholder } from "../../helpers/get-placeholder-disabled";
 import type { InputProps, PromptAreaComponentType } from "../../types";
 

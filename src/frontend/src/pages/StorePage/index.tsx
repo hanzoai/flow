@@ -7,10 +7,10 @@ import StoreCardComponent from "@/components/common/storeCardComponent";
 import { CustomLink } from "@/customization/components/custom-link";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import { useUtilityStore } from "@/stores/utilityStore";
+import { Spinner } from "@hanzo/gui";
 import IconComponent from "../../components/common/genericIconComponent";
 import PageLayout from "../../components/common/pageLayout";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
-import { SkeletonCardComponent } from "../../components/common/skeletonCardComponent";
 import { TagsSelector } from "../../components/common/tagsSelectorComponent";
 import { Badge, Button, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@hanzo/ui";
 import {
@@ -334,11 +334,9 @@ export default function StorePage(): JSX.Element {
                 );
               })
             ) : (
-              <>
-                <SkeletonCardComponent />
-                <SkeletonCardComponent />
-                <SkeletonCardComponent />
-              </>
+              <div className="flex w-full items-center justify-center py-16">
+                <Spinner size="large" />
+              </div>
             )}
           </div>
 

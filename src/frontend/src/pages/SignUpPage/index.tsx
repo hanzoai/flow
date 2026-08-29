@@ -137,7 +137,9 @@ export default function SignUp(): JSX.Element {
               
 
               {password != cnfPassword && (
-                
+                <span className="field-invalid">
+                  {t("errors.passwordMismatch")}
+                </span>
               )}
             </>
           </div>

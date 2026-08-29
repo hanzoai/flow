@@ -1,15 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { CustomLink } from "@/customization/components/custom-link";
-import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "../../ui/sidebar";
+import { cn } from "@/utils/utils";
 
 type SideBarButtonsComponentProps = {
   items: {
@@ -24,38 +15,25 @@ const SideBarButtonsComponent = ({ items }: SideBarButtonsComponentProps) => {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const isMobile = useIsMobile();
-
   return (
-    <Sidebar collapsible={isMobile ? "icon" : "none"} className="border-none">
-      <SidebarContent className="pr-6">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item, index) => (
-                <SidebarMenuItem key={index}>
-                  <CustomLink to={item.href!} replace>
-                    <SidebarMenuButton
-                      size="md"
-                      isActive={
-                        item.href ? pathname.endsWith(item.href) : false
-                      }
-                      data-testid={`sidebar-nav-${item.title}`}
-                      tooltip={item.title}
-                    >
-                      {item.icon}
-                      <span className="block max-w-full truncate">
-                        {item.title}
-                      </span>
-                    </SidebarMenuButton>
-                  </CustomLink>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <nav className="flex flex-col gap-1 pr-6">
+      {items.map((item, index) => (
+        <CustomLink key={index} to={item.href!} replace>
+          <span
+            data-testid={`sidebar-nav-${item.title}`}
+            className={cn(
+              "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted",
+              item.href &&
+                pathname.endsWith(item.href) &&
+                "bg-muted font-medium",
+            )}
+          >
+            {item.icon}
+            <span className="block max-w-full truncate">{item.title}</span>
+          </span>
+        </CustomLink>
+      ))}
+    </nav>
   );
 };
 

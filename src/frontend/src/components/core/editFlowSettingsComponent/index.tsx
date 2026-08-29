@@ -4,8 +4,8 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import { Switch } from "@hanzo/ui";
 import type { InputProps } from "../../../types/components";
 import { cn } from "../../../utils/utils";
-import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
+import { Input } from "@hanzo/ui";
+import { Textarea } from "@hanzo/ui";
 
 export const EditFlowSettings: React.FC<
   InputProps & {

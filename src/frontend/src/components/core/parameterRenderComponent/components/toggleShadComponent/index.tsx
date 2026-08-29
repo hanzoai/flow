@@ -1,4 +1,4 @@
-import { Switch } from "../../../../ui/switch";
+import { Switch } from "@hanzo/ui";
 import type { InputProps, ToggleComponentType } from "../../types";
 
 export default function ToggleShadComponent({

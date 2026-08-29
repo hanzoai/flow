@@ -6,14 +6,14 @@ import {
 } from "@/constants/constants";
 import type { PaginatorComponentType } from "../../../types/components";
 import IconComponent from "../../common/genericIconComponent";
-import { Button } from "../../ui/button";
+import { Button } from "@hanzo/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
+} from "@hanzo/ui";
 
 export default function PaginatorComponent({
   pageSize = PAGINATION_SIZE,

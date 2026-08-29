@@ -14,7 +14,7 @@ import useFlowsManagerStore from "../../../../../stores/flowsManagerStore";
 import IconComponent, {
   ForwardedIconComponent,
 } from "../../../../common/genericIconComponent";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import { getPlaceholder } from "../../helpers/get-placeholder-disabled";
 import type { FileComponentType, InputProps } from "../../types";
 

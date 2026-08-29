@@ -10,7 +10,7 @@ import TableModal from "@/modals/tableModal";
 import { isMarkdownTable } from "@/utils/markdownUtils";
 import { FormatColumns, generateBackendColumnsFromValue } from "@/utils/utils";
 import { ForwardedIconComponent } from "../../../../common/genericIconComponent";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import type { InputProps, TableComponentType } from "../../types";
 
 export default function TableNodeComponent({

@@ -54,7 +54,7 @@ const Trigger: React.FC<TriggerProps> = ({
   // Only show the trigger as “visible” when there is usable child content
   const hasUsableChild = childCount > 0 && !isEmptyFragment;
 
-  // Ensure a valid element for Radix asChild (fragments can't receive props)
+  // asChild needs a real element (fragments cannot receive props)
   const triggerChild =
     hasUsableChild &&
     React.isValidElement(children) &&

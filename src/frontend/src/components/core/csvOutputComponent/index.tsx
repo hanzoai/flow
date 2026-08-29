@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useDarkStore } from "../../../stores/darkStore";
 import type { VertexBuildTypeAPI } from "../../../types/api";
 import ForwardedIconComponent from "../../common/genericIconComponent";
-import Loading from "../../ui/loading";
+import { Spinner } from "@hanzo/gui";
 import TableComponent from "../parameterRenderComponent/components/tableComponent";
 import { convertCSVToData } from "./helpers/convert-data-function";
 
@@ -123,7 +123,7 @@ function CsvOutputComponent({
       )}
       {status === "loading" && (
         <div className="flex h-full w-full items-center justify-center align-middle">
-          <Loading />
+          <Spinner />
         </div>
       )}
     </div>

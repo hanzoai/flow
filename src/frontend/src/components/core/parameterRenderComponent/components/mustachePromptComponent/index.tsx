@@ -2,7 +2,7 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import SanitizedHTMLWrapper from "@/components/common/sanitizedHTMLWrapper";
 import MustachePromptModal from "@/modals/mustachePromptModal";
 import { cn } from "../../../../../utils/utils";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import { getPlaceholder } from "../../helpers/get-placeholder-disabled";
 import type { InputProps, PromptAreaComponentType } from "../../types";
 

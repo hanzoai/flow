@@ -7,7 +7,6 @@ import useAlertStore from "@/stores/alertStore";
 import { type ColumnField, FormatterType } from "@/types/utils/functions";
 import "moment-timezone";
 import type { Cookies } from "react-cookie";
-import { twMerge } from "tailwind-merge";
 import {
   DRAG_EVENTS_CUSTOM_TYPESS,
   MESSAGES_TABLE_ORDER,
@@ -36,7 +35,8 @@ export function classNames(...classes: Array<string>): string {
 }
 
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs));
+  // No utility-class compiler anymore, so no merge semantics — plain compose.
+  return clsx(inputs);
 }
 
 export function toCamelCase(str: string): string {

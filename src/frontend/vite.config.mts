@@ -43,6 +43,28 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "build",
     },
+    resolve: {
+      // RN-ecosystem packages ship .web.js counterparts; prefer them.
+      extensions: [
+        ".web.tsx",
+        ".web.ts",
+        ".web.mjs",
+        ".web.js",
+        ".mjs",
+        ".mts",
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".json",
+      ],
+      alias: [
+        // @hanzo/gui renders through react-native-web in the browser.
+        { find: /^react-native$/, replacement: "react-native-web" },
+        // Icons resolve react-native-svg; use the gui web-safe build.
+        { find: "react-native-svg", replacement: "@hanzogui/react-native-svg" },
+      ],
+    },
     define: {
       "import.meta.env.BACKEND_URL": JSON.stringify(
         envHanzoFlow.BACKEND_URL ?? "http://localhost:7860",

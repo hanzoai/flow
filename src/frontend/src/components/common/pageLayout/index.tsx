@@ -1,8 +1,8 @@
 import type { To } from "react-router-dom";
 import { CustomBanner } from "@/customization/components/custom-banner";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
-import { Button } from "../../ui/button";
-import { Separator } from "../../ui/separator";
+import { Button } from "@hanzo/ui";
+import { Separator } from "@hanzo/ui";
 import ForwardedIconComponent from "../genericIconComponent";
 
 export default function PageLayout({

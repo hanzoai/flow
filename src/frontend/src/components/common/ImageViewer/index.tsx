@@ -3,7 +3,7 @@ import OpenSeadragon from "openseadragon";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useAlertStore from "../../../stores/alertStore";
-import { Separator } from "../../ui/separator";
+import { Separator } from "@hanzo/ui";
 import ForwardedIconComponent from "../genericIconComponent";
 
 export default function ImageViewer({ image }: { image: string }) {

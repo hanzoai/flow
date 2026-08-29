@@ -3,7 +3,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import IconComponent from "../../common/genericIconComponent";
-import Loading from "../../ui/loading";
+import { Spinner } from "@hanzo/gui";
 import ErrorComponent from "./Error";
 import NoDataPdf from "./noData";
 
@@ -86,7 +86,7 @@ export default function PdfViewer({ pdf }: { pdf: string }): JSX.Element {
         <Document
           loading={
             <div className="flex h-full w-full items-center justify-center align-middle">
-              <Loading />
+              <Spinner />
             </div>
           }
           onLoadSuccess={onDocumentLoadSuccess}

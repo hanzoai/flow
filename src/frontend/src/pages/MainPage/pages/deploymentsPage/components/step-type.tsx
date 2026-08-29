@@ -62,8 +62,8 @@ export default function StepType() {
   const [showScrollHint, setShowScrollHint] = useState(true);
   const contentRef = useCallback((node: HTMLDivElement | null) => {
     if (!node) return;
-    // Find the actual scrollable viewport inside Radix SelectContent
-    const viewport = node.querySelector("[data-radix-select-viewport]") ?? node;
+    // The select content itself scrolls; fall back to the node.
+    const viewport = node;
     const checkScroll = () => {
       const isAtBottom =
         viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 8;

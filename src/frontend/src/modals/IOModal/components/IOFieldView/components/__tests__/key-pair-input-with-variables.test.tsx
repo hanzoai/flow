@@ -68,7 +68,7 @@ jest.mock(
   }),
 );
 
-// Mock Input component from shadcn/ui
+// Mock the shared Input component
 
 const createWrapper = () => {
   const queryClient = new QueryClient({

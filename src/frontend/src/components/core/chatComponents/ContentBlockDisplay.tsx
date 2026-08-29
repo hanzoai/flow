@@ -12,11 +12,10 @@ import type { ContentBlock } from "@/types/chat";
 import { cn } from "@/utils/utils";
 import ForwardedIconComponent from "../../common/genericIconComponent";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../../ui/accordion";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@hanzo/ui";
 import ContentDisplay from "./ContentDisplay";
 import DurationDisplay from "./DurationDisplay";
 
@@ -121,10 +120,7 @@ export function ContentBlockDisplay({
 
         {(hideHeader || isExpanded) && (
           <div className="flex flex-col gap-2">
-            <Accordion
-              type="multiple"
-              className="w-full bg-transparent flex flex-col gap-2"
-            >
+            <div className="w-full bg-transparent flex flex-col gap-2">
               {toolItems.map(
                 ({ content, toolKey, blockIndex, contentIndex }, flatIdx) => {
                   const rawTitle =
@@ -139,12 +135,11 @@ export function ContentBlockDisplay({
                     toolElapsedTimes[toolKey] ?? content.duration ?? 0;
 
                   return (
-                    <AccordionItem
+                    <Collapsible
                       key={toolKey}
-                      value={toolKey}
                       className="border border-border rounded-lg overflow-hidden bg-background"
                     >
-                      <AccordionTrigger className="hover:bg-muted hover:no-underline px-3 py-2.5">
+                      <CollapsibleTrigger className="w-full hover:bg-muted px-3 py-2.5">
                         <div className="flex items-center justify-between w-full pr-2">
                           <div className="flex items-center gap-1 text-sm font-normal min-w-0 flex-1 overflow-hidden">
                             <div className="text-muted-foreground whitespace-nowrap flex-shrink-0">
@@ -162,8 +157,8 @@ export function ContentBlockDisplay({
                             </span>
                           </div>
                         </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pt-0">
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pt-0">
                         <div className="text-sm text-muted-foreground px-4 pb-4 max-h-96 overflow-auto">
                           <ContentDisplay
                             playgroundPage={playgroundPage}
@@ -171,12 +166,12 @@ export function ContentBlockDisplay({
                             chatId={`${chatId}-${blockIndex}-${contentIndex}`}
                           />
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
+                      </CollapsibleContent>
+                    </Collapsible>
                   );
                 },
               )}
-            </Accordion>
+            </div>
           </div>
         )}
       </motion.div>

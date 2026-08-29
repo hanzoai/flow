@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDurationStore } from "@/stores/durationStore";
 import { AnimatedNumber } from "../../common/animatedNumbers";
-import Loading from "../../ui/loading";
+import { Spinner } from "@hanzo/gui";
 
 interface DurationDisplayProps {
   duration?: number;
@@ -66,7 +66,7 @@ export default function DurationDisplay({
           : "text-muted-foreground"
       }`}
     >
-      {duration === undefined && <Loading className="h-3 w-3" />}
+      {duration === undefined && <Spinner size="small" />}
       <div className="w-fit">
         <AnimatedNumber
           value={secondsValue}

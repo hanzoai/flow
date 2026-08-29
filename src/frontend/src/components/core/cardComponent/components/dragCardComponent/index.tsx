@@ -1,7 +1,7 @@
 import type { FlowType } from "@/types/flow";
 import { cn } from "../../../../../utils/utils";
 import ForwardedIconComponent from "../../../../common/genericIconComponent";
-import { Card, CardHeader, CardTitle } from "../../../../ui/card";
+import { Card, CardHeader, CardTitle } from "@hanzo/ui";
 
 export default function DragCardComponent({ data }: { data: FlowType }) {
   return (

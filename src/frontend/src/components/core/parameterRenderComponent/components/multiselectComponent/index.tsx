@@ -3,20 +3,20 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "../../../../../utils/utils";
 import { default as ForwardedIconComponent } from "../../../../common/genericIconComponent";
 import ShadTooltip from "../../../../common/shadTooltipComponent";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "../../../../ui/command";
+} from "@hanzo/ui";
 import {
   Popover,
   PopoverContent,
   PopoverContentWithoutPortal,
   PopoverTrigger,
-} from "../../../../ui/popover";
+} from "@hanzo/ui";
 import type { InputProps, MultiselectComponentType } from "../../types";
 
 export default function MultiselectComponent({

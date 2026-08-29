@@ -1,7 +1,7 @@
 import { XCircle } from "lucide-react";
 import type { crashComponentPropsType } from "../../../types/components";
-import { Button } from "../../ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "../../ui/card";
+import { Button } from "@hanzo/ui";
+import { Card, CardContent, CardFooter, CardHeader } from "@hanzo/ui";
 
 export default function CrashErrorComponent({
   error,

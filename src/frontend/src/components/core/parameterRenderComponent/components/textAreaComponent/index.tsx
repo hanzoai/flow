@@ -6,7 +6,7 @@ import ComponentTextModal from "@/modals/textAreaModal";
 import { useUtilityStore } from "@/stores/utilityStore";
 import { cn } from "../../../../../utils/utils";
 import IconComponent from "../../../../common/genericIconComponent";
-import { Input } from "../../../../ui/input";
+import { Input } from "@hanzo/ui";
 import { getPlaceholder } from "../../helpers/get-placeholder-disabled";
 import type { InputProps, TextAreaComponentType } from "../../types";
 import { getIconName } from "../inputComponent/components/helpers/get-icon-name";

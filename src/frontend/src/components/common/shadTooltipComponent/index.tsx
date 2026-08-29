@@ -2,7 +2,7 @@ import type React from "react";
 import { forwardRef, memo, useMemo } from "react";
 import type { ShadToolTipType } from "../../../types/components";
 import { cn } from "../../../utils/utils";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@hanzo/ui";
 
 // Extract static styles
 const BASE_TOOLTIP_CLASSES =

@@ -1,3 +1,4 @@
+import { Spinner } from "@hanzo/gui";
 import { useState } from "react";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { ICON_STROKE_WIDTH } from "@/constants/constants";
@@ -5,9 +6,8 @@ import { ENABLE_MCP_COMPOSER } from "@/customization/feature-flags";
 import ToolsModal from "@/modals/toolsModal";
 import { cn, testIdCase } from "@/utils/utils";
 import { ForwardedIconComponent } from "../../../../common/genericIconComponent";
-import { Badge } from "../../../../ui/badge";
-import { Button } from "../../../../ui/button";
-import { Skeleton } from "../../../../ui/skeleton";
+import { Badge } from "@hanzo/ui";
+import { Button } from "@hanzo/ui";
 import type { InputProps, ToolsComponentType } from "../../types";
 
 export default function ToolsComponent({
@@ -98,9 +98,7 @@ export default function ToolsComponent({
 
         {!value ? (
           <div className="flex w-full flex-wrap gap-1 overflow-hidden py-1.5">
-            {[...Array(4)].map((_, index) => (
-              <Skeleton key={index} className="h-6 w-20 rounded-full" />
-            ))}
+            <Spinner size="small" />
           </div>
         ) : visibleActions.length > 0 ? (
           <div className="flex w-full flex-wrap gap-1 overflow-hidden py-1.5">

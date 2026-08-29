@@ -167,7 +167,7 @@ export default function UserManagementModal({
                   
 
                   {password != confirmPassword && (
-                    
+                    <span className="field-invalid">Passwords do not match</span>
                   )}
                 </>
               </div>

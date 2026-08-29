@@ -6,7 +6,7 @@ import useAlertStore from "@/stores/alertStore";
 import ListSelectionComponent from "../../../../../CustomNodes/GenericNode/components/ListSelectionComponent";
 import { cn } from "../../../../../utils/utils";
 import { default as ForwardedIconComponent } from "../../../../common/genericIconComponent";
-import { Button } from "../../../../ui/button";
+import { Button } from "@hanzo/ui";
 import type { InputProps } from "../../types";
 
 export default function McpComponent({

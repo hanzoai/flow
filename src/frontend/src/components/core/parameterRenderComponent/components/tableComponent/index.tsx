@@ -1,7 +1,7 @@
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import { useDarkStore } from "@/stores/darkStore";
 import { useTranslation } from "react-i18next";
-import "@/style/ag-theme-shadcn.css"; // Custom CSS applied to the grid
+import "@/style/ag-theme-flow.css"; // Custom CSS applied to the grid
 import type { ColDef } from "ag-grid-community";
 import type { TableOptionsTypeAPI } from "@/types/api";
 import { cn } from "@/utils/utils";
@@ -306,7 +306,7 @@ const TableComponent = forwardRef<
       if (!realRef.current?.api) return;
 
       const gridApi = realRef.current.api;
-      const containerElement = document.querySelector(".ag-theme-shadcn");
+      const containerElement = document.querySelector(".ag-theme-flow");
       if (!containerElement) return;
 
       const containerWidth = containerElement.clientWidth;
@@ -361,7 +361,7 @@ const TableComponent = forwardRef<
       <div
         className={cn(
           dark ? "ag-theme-quartz-dark" : "ag-theme-quartz",
-          "ag-theme-shadcn flex h-full flex-col",
+          "ag-theme-flow flex h-full flex-col",
           "relative",
         )} // applying the grid theme
       >

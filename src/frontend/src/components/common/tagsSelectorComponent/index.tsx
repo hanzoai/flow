@@ -1,5 +1,5 @@
 import { cn } from "../../../utils/utils";
-import { Badge } from "../../ui/badge";
+import { Badge } from "@hanzo/ui";
 import HorizontalScrollFadeComponent from "../horizontalScrollFadeComponent";
 
 export function TagsSelector({

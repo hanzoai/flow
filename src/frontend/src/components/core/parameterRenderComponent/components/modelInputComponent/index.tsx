@@ -11,13 +11,13 @@ import useFlowStore from "@/stores/flowStore";
 import type { APIClassType } from "@/types/api";
 import type { NodeDataType } from "@/types/flow";
 import ForwardedIconComponent from "../../../../common/genericIconComponent";
-import { Button } from "../../../../ui/button";
-import { Command } from "../../../../ui/command";
+import { Button } from "@hanzo/ui";
+import { Command } from "@hanzo/ui";
 import {
   Popover,
   PopoverContent,
   PopoverContentWithoutPortal,
-} from "../../../../ui/popover";
+} from "@hanzo/ui";
 import type { BaseInputProps } from "../../types";
 import ModelList from "./components/ModelList";
 import ModelTrigger from "./components/ModelTrigger";

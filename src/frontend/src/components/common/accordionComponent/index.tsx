@@ -1,6 +1,10 @@
 import { useState } from "react";
 import type { AccordionComponentType } from "@/types/components";
-import { cn } from "@/utils/utils";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@hanzo/ui";
 
 export default function AccordionComponent({
   trigger,
@@ -8,40 +12,22 @@ export default function AccordionComponent({
   disabled,
   open = [],
   keyValue,
-  sideBar,
 }: AccordionComponentType): JSX.Element {
-  const [value, setValue] = useState(
-    open.length === 0 ? "" : getOpenAccordion(),
+  const [expanded, setExpanded] = useState(
+    open.length === 0 ? false : open.includes(keyValue ?? ""),
   );
 
-  function getOpenAccordion(): string {
-    let value = "";
-    open.forEach((el) => {
-      if (el == keyValue) {
-        value = keyValue;
-      }
-    });
-    return value;
-  }
-
-  function handleClick(): void {
-    if (!disabled) {
-      value === "" ? setValue(keyValue!) : setValue("");
-    }
-  }
-
   return (
-    <>
-      <>
-        <>
-          <>
-            {trigger}
-          </>
-          <>
-            <div className="AccordionContent flex flex-col">{children}</div>
-          </>
-        </>
-      </>
-    </>
+    <Collapsible
+      open={expanded}
+      onOpenChange={(next: boolean) => {
+        if (!disabled) setExpanded(next);
+      }}
+    >
+      <CollapsibleTrigger className="w-full">{trigger}</CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="AccordionContent flex flex-col">{children}</div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

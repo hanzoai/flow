@@ -1,6 +1,6 @@
 import BaseModal from "../../../modals/baseModal";
 import type { fetchErrorComponentType } from "../../../types/components";
-import Loading from "../../ui/loading";
+import { Spinner } from "@hanzo/gui";
 
 export default function TimeoutErrorComponent({
   message,
@@ -20,7 +20,7 @@ export default function TimeoutErrorComponent({
       >
         <BaseModal.Content>
           <div role="status" className="m-auto flex flex-col items-center">
-            <Loading className={`h-16 w-16`} />
+            <Spinner size="large" />
             <br></br>
             <span className="text-lg text-primary">{message}</span>
             <span className="text-center text-lg text-primary">
