@@ -33,7 +33,7 @@ on:
       - 'src/frontend/.storybook/**'
       - 'src/frontend/package.json'
       - 'src/frontend/package-lock.json'
-      - '.hanzo/workflows/storybook.yml'
+      - '.github/workflows/storybook.yml'
   workflow_dispatch:
 
 concurrency:
