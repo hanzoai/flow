@@ -78,8 +78,7 @@ function ApiInterceptor() {
         if (shouldRetryRefresh) {
           if (
             error?.config?.url?.includes("github") ||
-            error?.config?.url?.includes("public") ||
-            error?.config?.url?.includes("auto_login")
+            error?.config?.url?.includes("public")
           ) {
             return Promise.reject(error);
           }

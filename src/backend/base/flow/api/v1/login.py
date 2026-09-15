@@ -133,13 +133,7 @@ async def auto_login(response: Response, db: DbSession):
 
         return tokens
 
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail={
-            "message": "Auto login is disabled.",
-            "auto_login": False,
-        },
-    )
+    return {"auto_login": False}
 
 
 @router.post("/refresh", include_in_schema=False)

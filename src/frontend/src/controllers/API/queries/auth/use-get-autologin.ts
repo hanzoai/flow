@@ -19,7 +19,7 @@ export interface AutoLoginResponse {
   health_check_max_retries: number;
 }
 
-export interface AutoLoginErrorResponse {
+export interface AutoLoginDisabledResponse {
   auto_login?: boolean;
 }
 
@@ -44,7 +44,9 @@ export const useGetAutoLogin: useQueryFunctionType<undefined, undefined> = (
     }
 
     try {
-      const response = await api.get<Users>(`${getURL("AUTOLOGIN")}`);
+      const response = await api.get<Users & AutoLoginDisabledResponse>(
+        `${getURL("AUTOLOGIN")}`,
+      );
       const user = response.data;
       if (user && user["access_token"]) {
         user["refresh_token"] = "auto";
@@ -52,15 +54,15 @@ export const useGetAutoLogin: useQueryFunctionType<undefined, undefined> = (
         setUserData(user);
         setAutoLogin(true);
         resetTimer();
+      } else if (user?.auto_login === false) {
+        // The backend answers {"auto_login": false} when auto-login is off.
+        setAutoLogin(false);
       }
     } catch (e) {
-      const error = e as AxiosError<AutoLoginErrorResponse>;
+      const error = e as AxiosError;
       if (error.name !== "CanceledError") {
         setAutoLogin(false);
-        // Don't retry if backend explicitly says auto-login is disabled
-        const autoLoginDisabledByBackend =
-          error.response?.data?.auto_login === false;
-        if (!isLoginPage && !autoLoginDisabledByBackend) {
+        if (!isLoginPage) {
           await handleAutoLoginError();
         }
       }
