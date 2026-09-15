@@ -14,6 +14,8 @@ from flow.api.v1.models import (
     get_model_names_for_provider,
     get_provider_from_variable_name,
 )
+from flow.api.v1.schemas.deployments import DetectVarsRequest, DetectVarsResponse
+from flow.services.database.models.flow_version.crud import get_flow_version_entries_by_ids
 from flow.services.database.models.variable.model import VariableCreate, VariableRead, VariableUpdate
 from flow.services.deps import get_variable_service
 from flow.services.variable.constants import CREDENTIAL_TYPE, GENERIC_TYPE

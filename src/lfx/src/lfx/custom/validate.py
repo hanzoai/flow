@@ -443,12 +443,7 @@ def prepare_global_scope(module):
                 exec_globals[variable_name] = sys.modules.get(variable_name, module_obj)
 
     for node in import_froms:
-        module_names_to_try = [node.module]
-
-        # If original module starts with flow, also try lfx equivalent
-        if node.module and node.module.startswith("flow."):
-            lfx_module_name = node.module.replace("flow.", "lfx.", 1)
-            module_names_to_try.append(lfx_module_name)
+        module_names_to_try = _get_module_fallbacks(node.module)
 
         success = False
         last_error = None

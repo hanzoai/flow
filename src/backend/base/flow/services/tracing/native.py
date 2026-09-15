@@ -20,6 +20,11 @@ from typing_extensions import override
 from flow.serialization.serialization import serialize
 from flow.services.database.models.traces.model import SpanStatus, SpanType
 from flow.services.tracing.base import BaseTracer
+from flow.services.tracing.span_sorting import (
+    FLOW_SPAN_NAMESPACE,
+    resolve_span_uuids,
+    topological_sort_spans,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -28,8 +33,6 @@ if TYPE_CHECKING:
     from lfx.graph.vertex.base import Vertex
 
     from flow.services.tracing.schema import Log
-
-FLOW_SPAN_NAMESPACE = UUID("a3e1c2d4-5b6f-7890-abcd-ef1234567890")
 
 TYPE_MAP = {
     "chain": SpanType.CHAIN,
@@ -318,26 +321,11 @@ class NativeTracer(BaseTracer):
                 )
                 await session.merge(trace)
 
-                resolved = []
-                for span_data in self.completed_spans:
-                    try:
-                        span_uuid = UUID(span_data["id"])
-                    except (ValueError, TypeError):
-                        # Span IDs from LangChain callbacks are strings, not UUIDs — derive
-                        # a stable UUID so the same span always maps to the same DB row.
-                        span_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{self.trace_id}-{span_data['id']}")
-
-                    parent_uuid = None
-                    if span_data.get("parent_span_id"):
-                        parent_id = span_data["parent_span_id"]
-                        if isinstance(parent_id, UUID):
-                            parent_uuid = parent_id
-                        else:
-                            try:
-                                parent_uuid = UUID(str(parent_id))
-                            except (ValueError, TypeError):
-                                parent_uuid = uuid5(FLOW_SPAN_NAMESPACE, f"{self.trace_id}-{parent_id}")
-                    resolved.append((span_data, span_uuid, parent_uuid))
+                # Pre-compute UUIDs and topologically sort so parents are inserted
+                # before children — required by PostgreSQL's immediate FK enforcement
+                # on span.parent_span_id → span.id.
+                resolved = resolve_span_uuids(self.completed_spans, self.trace_id)
+                resolved = topological_sort_spans(resolved)
 
                 for span_data, span_uuid, parent_uuid in resolved:
                     span = SpanTable(

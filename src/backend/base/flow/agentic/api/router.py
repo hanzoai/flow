@@ -30,7 +30,6 @@ from flow.agentic.services.flow_types import (
     MAX_VALIDATION_RETRIES,
 )
 from flow.agentic.services.provider_service import (
-    DEFAULT_MODELS,
     PREFERRED_PROVIDERS,
     get_default_model,
     get_enabled_providers_for_user,

@@ -9,6 +9,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import col, delete, func, select
 
 from flow.services.database.models.deployment.model import Deployment
+from flow.services.database.models.deployment.orm_guards import ensure_deployment_immutable_fields
+from flow.services.database.models.flow_version.model import FlowVersion
+from flow.services.database.models.flow_version_deployment_attachment.model import (
+    FlowVersionDeploymentAttachment,
+)
 from flow.services.database.utils import parse_uuid
 
 if TYPE_CHECKING:

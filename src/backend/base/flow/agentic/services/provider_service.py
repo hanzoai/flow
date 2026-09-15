@@ -12,7 +12,6 @@ from lfx.log.logger import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from flow.services.deps import get_variable_service
-from flow.services.variable.constants import CREDENTIAL_TYPE
 from flow.services.variable.service import DatabaseVariableService, VariableService
 
 # Preferred providers in order of priority

@@ -13,7 +13,7 @@ from fastapi.responses import StreamingResponse
 from lfx.services.settings.service import SettingsService
 from lfx.utils.helpers import build_content_type_from_extension
 
-from flow.api.utils import CurrentActiveUser, DbSession, ValidatedFileName
+from flow.api.utils import CurrentActiveUser, DbSession, ValidatedFileName, ValidatedFolderName
 from flow.api.v1.schemas import UploadFileResponse
 from flow.services.database.models.flow.model import Flow
 from flow.services.deps import get_settings_service, get_storage_service

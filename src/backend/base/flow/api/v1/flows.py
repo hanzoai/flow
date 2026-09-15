@@ -2,39 +2,47 @@ from __future__ import annotations
 
 import asyncio
 import io
-import json
 import threading
 import zipfile
-from datetime import datetime, timezone
 from typing import Annotated
 from uuid import UUID
 
 import orjson
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import StreamingResponse
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlmodel import apaginate
 from lfx.services.cache.utils import CACHE_MISS
 from sqlmodel import and_, col, select
 
-from flow.api.utils import CurrentActiveUser, DbSession, cascade_delete_flow, remove_api_keys, validate_is_component
-from flow.api.utils.core import normalize_code_for_import
+from flow.api.utils import (
+    CurrentActiveUser,
+    DbSession,
+    cascade_delete_flow,
+    normalize_code_for_import,
+    validate_is_component,
+)
 from flow.api.utils.zip_utils import extract_flows_from_zip
 from flow.api.v1.flows_helpers import (
+    _build_flows_download_response,
+    _get_safe_flow_path,
     _new_flow,
     _patch_flow,
     _read_flow,
+    _save_flow_to_fs,
     _update_existing_flow,
     _upsert_flow_list,
+    _verify_fs_path,
 )
 from flow.api.v1.mappers.deployments.sync import retry_flow_operation_on_deployment_guard
 from flow.api.v1.schemas import FlowListCreate
 from flow.helpers.user import get_user_by_flow_id_or_endpoint_name
-from flow.services.database.models.deployment.exceptions import araise_if_deployment_guard_error_or_skip
 from flow.initial_setup.constants import STARTER_FOLDER_NAME
 from flow.services.auth.utils import get_current_active_user
 from flow.services.cache.service import ThreadingInMemoryCache
+from flow.services.database.models.deployment.exceptions import (
+    araise_if_deployment_guard_error_or_skip,
+)
 from flow.services.database.models.flow.model import (
     AccessTypeEnum,
     Flow,
@@ -43,10 +51,12 @@ from flow.services.database.models.flow.model import (
     FlowRead,
     FlowUpdate,
 )
-from flow.services.database.models.flow.utils import get_webhook_component_in_flow
+
+# TODO: Full-version import/export is planned as a follow-up feature. When implemented,
+# re-add imports for create_flow_version_entry, get_flow_versions_with_provider_status, strip_version_data,
+# and FlowVersionError from the flow_version modules.
 from flow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
 from flow.services.database.models.folder.model import Folder
-from flow.services.database.models.folder.utils import get_default_folder_id
 from flow.services.deps import get_settings_service, get_storage_service
 from flow.services.storage.service import StorageService
 from flow.utils.compression import compress_response
@@ -505,34 +515,7 @@ async def download_multiple_file(
     if not flows:
         raise HTTPException(status_code=404, detail="No flows found.")
 
-    flows_without_api_keys = [remove_api_keys(flow.model_dump()) for flow in flows]
-
-    if len(flows_without_api_keys) > 1:
-        # Create a byte stream to hold the ZIP file
-        zip_stream = io.BytesIO()
-
-        # Create a ZIP file
-        with zipfile.ZipFile(zip_stream, "w") as zip_file:
-            for flow in flows_without_api_keys:
-                # Convert the flow object to JSON
-                flow_json = json.dumps(jsonable_encoder(flow))
-
-                # Write the JSON to the ZIP file
-                zip_file.writestr(f"{flow['name']}.json", flow_json)
-
-        # Seek to the beginning of the byte stream
-        zip_stream.seek(0)
-
-        # Generate the filename with the current datetime
-        current_time = datetime.now(tz=timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
-        filename = f"{current_time}_flow_flows.zip"
-
-        return StreamingResponse(
-            zip_stream,
-            media_type="application/x-zip-compressed",
-            headers={"Content-Disposition": f"attachment; filename={filename}"},
-        )
-    return flows_without_api_keys[0]
+    return _build_flows_download_response(flows)
 
 
 # 5 minutes

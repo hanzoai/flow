@@ -22,30 +22,9 @@ Two identifier domains coexist in these schemas:
 are defined by the provider adapter. Flow forwards them without
 interpreting their schema.
 
-Service-layer schema reuse (shared-kernel pattern)
----------------------------------------------------
-Three service-layer data schemas are imported and subclassed (via
-``_Strict*`` wrappers) rather than redefined in this module.  They act as
-a **shared kernel**: field definitions owned by the service layer that the
-API layer extends with stricter validation (``extra = "forbid"``).
-
-* ``BaseDeploymentData`` -- deployment metadata for creation
-* ``BaseDeploymentDataUpdate`` -- deployment metadata for partial updates
-* ``DeploymentConfig`` -- deployment configuration payload
-
-Additionally, ``DeploymentType`` is imported as a shared vocabulary enum.
-
-This coupling is intentional -- these schemas carry no Flow-managed
-identifiers and describe provider-facing data whose shape the API should
-track automatically.  If the service layer later introduces fields that
-must *not* be API-visible, replace the ``_Strict*`` subclass with an
-API-owned model and a mapping function.
-
-``BaseDeploymentData`` also carries an optional ``provider_spec`` dict
-(inherited from ``ProviderSpecModel``), an opaque provider-owned input
-payload similar to ``provider_data``.  ``DeploymentConfig`` carries an
-analogous ``provider_config`` dict.  ``BaseDeploymentDataUpdate`` has no
-opaque provider fields.
+DeploymentType is imported from the adapter service layer as shared
+vocabulary. Request/response models in this module are API-owned to keep
+the client-facing schema minimal and avoid exposing service-only fields.
 """
 
 from __future__ import annotations
@@ -157,18 +136,19 @@ def _validate_detect_vars_request_ids(values: list[UUID]) -> list[UUID]:
 class DeploymentProviderAccountCreateRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
-    provider_tenant_id: NonEmptyStr | None = Field(
-        default=None,
-        description="Provider-owned tenant/organization id. Flow persists this opaque value.",
+    name: NonEmptyStr = Field(
+        description=(
+            "User-chosen display name for this provider account. Must be unique per user within a provider_key."
+        ),
     )
-    provider_key: NonEmptyStr = Field(description="Deployment provider key.")
-    provider_url: NonEmptyStr = Field(
-        description="Provider service URL persisted in Flow DB for provider-account resolution.",
-    )
-    api_key: SecretStr = Field(
+    provider_key: DeploymentProviderKey = Field(description="Deployment provider key.")
+    provider_data: dict[str, Any] = Field(
         min_length=1,
         description=(
-            "Provider credential material. Stored by Flow as secret data and never returned in read responses."
+            "Provider-specific credential/metadata payload. "
+            "Contents are opaque to the API schema; the deployment mapper "
+            "for the target provider_key validates and extracts credentials "
+            "and provider metadata (for example URL/region and tenant/account identifiers)."
         ),
     )
 
@@ -203,15 +183,15 @@ class DeploymentProviderAccountUpdateRequest(BaseModel):
 
 class DeploymentProviderAccountGetResponse(BaseModel):
     id: UUID = Field(description="Flow DB provider-account UUID (`deployment_provider_account.id`).")
-    provider_tenant_id: str | None = Field(
+    name: str = Field(description="User-chosen display name for this provider account.")
+    provider_key: DeploymentProviderKey = Field(description="Official provider name used by Flow.")
+    provider_data: dict[str, Any] | None = Field(
         default=None,
         description=(
             "Provider-owned non-sensitive metadata for this provider account "
             "(for example URL, tenant/account identifiers). Credentials are excluded."
         ),
     )
-    provider_key: str = Field(description="Provider adapter key used by Flow.")
-    provider_url: str = Field(description="Provider service URL persisted in Flow DB.")
     created_at: datetime | None = Field(default=None, description="Flow DB row creation timestamp.")
     updated_at: datetime | None = Field(default=None, description="Flow DB row update timestamp.")
 
@@ -240,6 +220,8 @@ class _DeploymentResponseCommon(BaseModel):
     """Shared non-provider-data fields for deployment response schemas."""
 
     id: UUID = Field(description="Flow DB deployment UUID.")
+    provider_id: UUID = Field(description="Flow DB provider-account UUID (`deployment_provider_account.id`).")
+    provider_key: str = Field(description="Provider identifier (e.g. 'watsonx-orchestrate').")
     name: str
     description: str | None = None
     type: DeploymentType
@@ -391,169 +373,6 @@ class DeploymentStatusResponse(_DeploymentResponseWithProviderData):
     """API response for deployment status/health."""
 
 
-class DeploymentRedeployResponse(_DeploymentResponseBase):
-    """API response for redeployment."""
-
-
-class DeploymentDuplicateResponse(_DeploymentResponseBase):
-    """API response for deployment duplication."""
-
-
-# ---------------------------------------------------------------------------
-# Flow versions sub-resource schemas
-# ---------------------------------------------------------------------------
-
-
-class FlowVersionsAttach(BaseModel):
-    """Flow version ids to attach to a deployment."""
-
-    model_config = {"extra": "forbid"}
-
-    ids: list[UUID] = Field(
-        min_length=1,
-        description="Flow flow version ids to attach to the deployment.",
-    )
-
-    @field_validator("ids")
-    @classmethod
-    def validate_ids(cls, values: list[UUID]) -> list[UUID]:
-        return _validate_uuid_list(values, field_name="ids")
-
-
-class FlowVersionsPatch(BaseModel):
-    """Add or remove flow version bindings on an existing deployment."""
-
-    model_config = {"extra": "forbid"}
-
-    add: list[UUID] | None = Field(
-        None,
-        description="Flow flow version ids to attach to the deployment. Omit to leave unchanged.",
-    )
-    remove: list[UUID] | None = Field(
-        None,
-        description="Flow flow version ids to detach from the deployment. Omit to leave unchanged.",
-    )
-
-    @field_validator("add", "remove")
-    @classmethod
-    def validate_id_lists(cls, values: list[UUID] | None, info: ValidationInfo) -> list[UUID] | None:
-        if values is None:
-            return None
-        return _validate_uuid_list(values, field_name=info.field_name)
-
-    @model_validator(mode="after")
-    def validate_operations(self):
-        add_values = self.add or []
-        remove_values = self.remove or []
-
-        if not add_values and not remove_values:
-            msg = "At least one of 'add' or 'remove' must be provided."
-            raise ValueError(msg)
-
-        overlap = set(add_values).intersection(remove_values)
-        if overlap:
-            ids = ", ".join(sorted(str(v) for v in overlap))
-            msg = f"Flow version ids cannot be present in both 'add' and 'remove': {ids}."
-            raise ValueError(msg)
-        return self
-
-
-# ---------------------------------------------------------------------------
-# Strict API-layer wrappers (shared-kernel boundary)
-# ---------------------------------------------------------------------------
-# These thin subclasses inherit field definitions from the service layer and
-# add ``extra = "forbid"`` so API callers receive a 422 for unexpected fields
-# instead of having data silently dropped.  Subclassing (rather than
-# redefining fields) keeps the API in lock-step with the service contract.
-# If a service-layer field should NOT be API-visible, replace the relevant
-# subclass with an API-owned model and a mapping function.
-
-
-class _StrictBaseDeploymentData(BaseDeploymentData):
-    model_config = {"extra": "forbid"}
-
-
-class _StrictBaseDeploymentDataUpdate(BaseDeploymentDataUpdate):
-    model_config = {"extra": "forbid"}
-
-
-class _StrictDeploymentConfig(DeploymentConfig):
-    model_config = {"extra": "forbid"}
-
-
-# ---------------------------------------------------------------------------
-# Deployment config sub-resource schemas (API-owned)
-# ---------------------------------------------------------------------------
-
-
-class DeploymentConfigCreate(BaseModel):
-    """Config input for deployment creation.
-
-    Exactly one of ``reference_id`` or ``raw_payload`` must be provided.
-    """
-
-    model_config = {"extra": "forbid"}
-
-    reference_id: NonEmptyStr | None = Field(
-        default=None,
-        description="Provider-owned config reference id to bind to the deployment.",
-    )
-    raw_payload: _StrictDeploymentConfig | None = Field(
-        default=None,
-        description="Config payload to create and bind to the deployment.",
-    )
-
-    @model_validator(mode="after")
-    def validate_exactly_one(self) -> DeploymentConfigCreate:
-        if (self.reference_id is None) == (self.raw_payload is None):
-            msg = "Exactly one of 'reference_id' or 'raw_payload' must be provided."
-            raise ValueError(msg)
-        return self
-
-
-class DeploymentConfigBindingUpdate(BaseModel):
-    """Config binding patch for an existing deployment.
-
-    Exactly one of ``config_id``, ``raw_payload``, or ``unbind`` must be
-    provided:
-
-    * ``config_id`` — bind an existing config by reference.
-    * ``raw_payload`` — create a new config and bind it.
-    * ``unbind = true`` — detach the current config.
-    """
-
-    model_config = {"extra": "forbid"}
-
-    config_id: NonEmptyStr | None = Field(
-        default=None,
-        description="Provider-owned config id to bind to the deployment.",
-    )
-
-    raw_payload: _StrictDeploymentConfig | None = Field(
-        default=None,
-        description="Config payload to create and bind to the deployment.",
-    )
-
-    unbind: bool = Field(
-        default=False,
-        description="Set to true to detach the current config from the deployment.",
-    )
-
-    @model_validator(mode="after")
-    def validate_config_update(self) -> DeploymentConfigBindingUpdate:
-        provided = sum(
-            [
-                self.config_id is not None,
-                self.raw_payload is not None,
-                self.unbind,
-            ]
-        )
-        if provided != 1:
-            msg = "Exactly one of 'config_id', 'raw_payload', or 'unbind=true' must be provided."
-            raise ValueError(msg)
-        return self
-
-
 # ---------------------------------------------------------------------------
 # Deployment create / update request schemas
 # ---------------------------------------------------------------------------
@@ -563,7 +382,13 @@ class DeploymentCreateRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
     provider_id: UUID = Field(description="Flow DB provider-account UUID (`deployment_provider_account.id`).")
-    spec: _StrictBaseDeploymentData = Field(description="Deployment metadata (service-layer schema, no ID fields).")
+    name: NonEmptyStr = Field(description="Deployment display name.")
+    description: str = Field(
+        default="",
+        max_length=DEPLOYMENT_DESCRIPTION_MAX_LENGTH,
+        description="Deployment description.",
+    )
+    type: DeploymentType = Field(description="Deployment type.")
     project_id: UUID | None = Field(
         default=None,
         description="Flow DB project id to persist the deployment under. Defaults to user's Starter Project.",
@@ -607,12 +432,22 @@ class DeploymentUpdateRequest(BaseModel):
 class RunCreateRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
-    provider_id: UUID = Field(
-        description=(
-            "Flow DB provider-account UUID (`deployment_provider_account.id`). "
-            "Included alongside deployment_id to allow provider routing without an extra DB lookup."
-        ),
+    provider_data: dict[str, Any] | None = Field(
+        default=None,
+        description="Provider-owned opaque run input payload.",
     )
+
+
+class _RunResponseBase(BaseModel):
+    """Shared fields for run responses.
+
+    Only Flow-owned identifiers live at the top level.  All
+    provider-owned data (including the provider's ``id``)
+    is returned inside ``provider_data`` so that ownership boundaries
+    stay clear and a future Flow-managed run id won't
+    collide with provider terminology.
+    """
+
     deployment_id: UUID = Field(description="Flow DB deployment UUID.")
     provider_data: dict[str, Any] | None = Field(
         default=None,
@@ -621,11 +456,6 @@ class RunCreateRequest(BaseModel):
             "Contains at least ``id`` (the provider's opaque run identifier) "
             "when the provider has assigned one."
         ),
-    )
-    deployment_id: UUID = Field(description="Flow DB deployment UUID.")
-    provider_data: dict[str, Any] | None = Field(
-        default=None,
-        description="Provider-owned opaque execution result payload.",
     )
 
 

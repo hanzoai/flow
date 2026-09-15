@@ -11,40 +11,33 @@ from sqlalchemy import or_, update
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
-from flow.api.utils import CurrentActiveUser, DbSession, cascade_delete_flow, custom_params, remove_api_keys
-from flow.api.utils.mcp.config_utils import validate_mcp_server_for_project
-from flow.api.v1.auth_helpers import handle_auth_settings_update
-from flow.api.v1.flows import create_flows
-from flow.api.v1.mcp_projects import (
-    get_project_sse_url,  # noqa: F401
-    get_project_streamable_http_url,
-    register_project_with_composer,
+from flow.api.utils import (
+    CurrentActiveUser,
+    DbSession,
+    cascade_delete_flow,
+    custom_params,
 )
-from flow.api.v1.schemas import FlowListCreate
-from flow.api.v2.mcp import update_server
+from flow.api.v1.auth_helpers import handle_auth_settings_update
 from flow.api.v1.mappers.deployments.sync import (
     retry_flow_operation_on_deployment_guard,
     retry_project_operation_on_deployment_guard,
 )
+from flow.api.v1.mcp_projects import register_project_with_composer
 from flow.api.v1.projects_files import download_project_flows, upload_project_flows
 from flow.api.v1.projects_mcp_helpers import (
     cleanup_mcp_on_delete,
     handle_mcp_server_rename,
     register_mcp_servers_for_project,
 )
-from flow.helpers.flow import generate_unique_flow_name
-from flow.helpers.folders import generate_unique_folder_name
+from flow.initial_setup.constants import ASSISTANT_FOLDER_NAME, STARTER_FOLDER_NAME
+from flow.services.auth.mcp_encryption import encrypt_auth_settings
 from flow.services.database.models.deployment.exceptions import (
     araise_if_deployment_guard_error_or_skip,
     remap_flow_guard_for_project_delete,
 )
 from flow.services.database.models.deployment.guards import check_project_has_deployments
 from flow.services.database.models.deployment.orm_guards import ensure_flow_moves_allowed
-from flow.initial_setup.constants import ASSISTANT_FOLDER_NAME, STARTER_FOLDER_NAME
-from flow.services.auth.mcp_encryption import encrypt_auth_settings
-from flow.services.database.models.api_key.crud import create_api_key
-from flow.services.database.models.api_key.model import ApiKeyCreate
-from flow.services.database.models.flow.model import Flow, FlowCreate, FlowRead
+from flow.services.database.models.flow.model import Flow, FlowRead
 from flow.services.database.models.folder.constants import DEFAULT_FOLDER_NAME
 from flow.services.database.models.folder.model import (
     Folder,
@@ -54,7 +47,7 @@ from flow.services.database.models.folder.model import (
     FolderUpdate,
 )
 from flow.services.database.models.folder.pagination_model import FolderWithPaginatedFlows
-from flow.services.deps import get_service, get_settings_service, get_storage_service
+from flow.services.deps import get_service, get_settings_service
 from flow.services.schema import ServiceType
 
 router = APIRouter(prefix="/projects", tags=["Projects"])

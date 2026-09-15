@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json as _json
-import uuid
 from datetime import timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Annotated, Any
@@ -14,18 +13,12 @@ from lfx.utils.validate_cloud import raise_error_if_astra_cloud_disable_componen
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from flow.services.auth.utils import get_current_active_user, get_current_active_user_mcp
-from flow.services.deps import session_scope
 from flow.services.database.models.flow.model import Flow
-from flow.services.database.models.flow_version.model import FlowVersion
-from flow.services.database.models.message.model import MessageTable
-from flow.services.database.models.transactions.model import TransactionTable
 from flow.services.database.models.user.model import User
-from flow.services.database.models.vertex_builds.model import VertexBuildTable
 from flow.services.store.utils import get_lf_version_from_pypi
 from flow.utils.constants import FLOW_GLOBAL_VAR_HEADER_PREFIX
 
 if TYPE_CHECKING:
-    from flow.services.chat.service import ChatService
     from flow.services.store.schema import StoreComponentCreate
 
 
@@ -403,66 +396,6 @@ def custom_params(
     if page is None and size is None:
         return None
     return Params(page=page or MIN_PAGE_SIZE, size=size or MAX_PAGE_SIZE)
-
-
-async def verify_public_flow_and_get_user(flow_id: uuid.UUID, client_id: str | None) -> tuple[User, uuid.UUID]:
-    """Verify a public flow request and generate a deterministic flow ID.
-
-    This utility function:
-    1. Checks that a client_id cookie is provided
-    2. Verifies the flow exists and is marked as PUBLIC
-    3. Creates a deterministic UUID based on client_id and original flow_id
-    4. Retrieves the flow owner user for permission purposes
-
-    This function is used to support public flow endpoints that don't require
-    authentication but still need to operate within the permission model.
-
-    Args:
-        flow_id: The original flow ID to verify
-        client_id: The client ID from the request cookie
-
-    Returns:
-        tuple: (flow owner user, deterministic flow ID for tracking)
-
-    Raises:
-        HTTPException:
-            - 400 if no client_id is provided
-            - 403 if flow doesn't exist or isn't public
-            - 403 if unable to retrieve the flow owner user
-            - 403 if user is not found for public flow
-    """
-    if not client_id:
-        raise HTTPException(status_code=400, detail="No client_id cookie found")
-
-    # Check if the flow is public
-    async with session_scope() as session:
-        from sqlmodel import select
-
-        from flow.services.database.models.flow.model import AccessTypeEnum, Flow
-
-        flow = (await session.exec(select(Flow).where(Flow.id == flow_id))).first()
-        if not flow or flow.access_type is not AccessTypeEnum.PUBLIC:
-            raise HTTPException(status_code=403, detail="Flow is not public")
-
-    # Create a new flow ID using the client_id and flow_id
-    new_id = f"{client_id}_{flow_id}"
-    new_flow_id = uuid.uuid5(uuid.NAMESPACE_DNS, new_id)
-
-    # Get the user associated with the flow
-    try:
-        from flow.helpers.user import get_user_by_flow_id_or_endpoint_name
-
-        user = await get_user_by_flow_id_or_endpoint_name(str(flow_id))
-
-    except Exception as exc:
-        await logger.aexception(f"Error getting user for public flow {flow_id}")
-        raise HTTPException(status_code=403, detail="Flow is not accessible") from exc
-
-    if not user:
-        msg = f"User not found for public flow {flow_id}"
-        raise HTTPException(status_code=403, detail=msg)
-
-    return user, new_flow_id
 
 
 def extract_global_variables_from_headers(headers) -> dict[str, str]:

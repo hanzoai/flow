@@ -10,8 +10,11 @@ from sqlmodel import Column, DateTime, Field, Relationship, SQLModel, func
 from typing_extensions import Self
 
 from flow.schema.serialize import UUIDstr
-
-from .schemas import DeploymentProviderKey
+from flow.services.database.models.deployment_provider_account.schemas import DeploymentProviderKey
+from flow.services.database.models.deployment_provider_account.utils import (
+    validate_provider_url,
+    validate_tenant_url_consistency,
+)
 from flow.services.database.utils import (
     normalize_string_or_none,
     validate_non_empty_string,

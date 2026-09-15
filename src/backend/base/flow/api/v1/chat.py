@@ -43,9 +43,10 @@ from flow.api.v1.schemas import (
     VerticesOrderResponse,
 )
 from flow.exceptions.component import ComponentBuildError
-from flow.services.auth.utils import get_current_active_user
+from flow.services.auth.utils import get_current_active_user, get_current_user_optional
 from flow.services.chat.service import ChatService
-from flow.services.database.models.flow.model import Flow
+from flow.services.database.models.flow.model import AccessTypeEnum, Flow
+from flow.services.database.models.user.model import User
 from flow.services.deps import (
     get_chat_service,
     get_queue_service,

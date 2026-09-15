@@ -18,7 +18,7 @@ from lfx.base.mcp.util import (
 from lfx.custom.custom_component.component_with_cache import ComponentWithCache
 from lfx.inputs.inputs import InputTypes  # noqa: TC001
 from lfx.io import BoolInput, DictInput, DropdownInput, McpInput, MessageTextInput, Output
-from lfx.io.schema import flatten_schema, schema_to_flow_inputs
+from lfx.io.schema import schema_to_flow_inputs
 from lfx.log.logger import logger
 from lfx.schema.dataframe import DataFrame
 from lfx.schema.message import Message
@@ -633,9 +633,7 @@ class MCPToolsComponent(ComponentWithCache):
             if not tool or not hasattr(tool, "name"):
                 continue
             try:
-                flat_schema = flatten_schema(tool.args_schema.schema())
-                input_schema = create_input_schema_from_json_schema(flat_schema)
-                flow_inputs = schema_to_flow_inputs(input_schema)
+                flow_inputs = schema_to_flow_inputs(tool.args_schema)
                 inputs[tool.name] = flow_inputs
             except (AttributeError, ValueError, TypeError, KeyError) as e:
                 msg = f"Error getting inputs for tool {getattr(tool, 'name', 'unknown')}: {e!s}"
