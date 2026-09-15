@@ -38,11 +38,10 @@ concurrency:
 
 jobs:
   semgrep:
-    # Must name a label a runner actually advertises. This fleet serves
-    # hanzo-build-linux-amd64 and deliberately offers no ubuntu-* label, so the
-    # `runs-on: ubuntu-latest` these files carried would not have failed — it
-    # would have queued until the timeout. Silence, not an error.
-    runs-on: hanzo-build-linux-amd64
+    # Must name a label a runner actually advertises. Forge runners advertise
+    # linux-amd64 and no ubuntu-* label; a job asking for a label nobody serves
+    # does not fail, it queues until the timeout. Silence, not an error.
+    runs-on: linux-amd64
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4

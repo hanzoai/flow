@@ -1,0 +1,23 @@
+# Hanzo CI: read by hanzoai/ci's build.yml, which .hanzo/workflows/cicd.yml calls.
+#
+# One image for flow.hanzo.ai: flowweb (core/cmd/flowweb) serves the embedded UI
+# on :8080 and proxies the API to the Python backend on loopback (Dockerfile).
+
+# The image version is the project version in pyproject.toml. The root
+# package.json carries no version, so it is named here.
+version: 'pyproject.toml:sed -n ''s/^version = "\(.*\)"$/\1/p'' pyproject.toml'
+
+images:
+  - name: flow
+    context: .
+    dockerfile: Dockerfile
+    repo: ghcr.io/hanzoai/flow
+
+test:
+  - name: core
+    run: |
+      set -e
+      cd core
+      export GOWORK=off
+      go vet ./...
+      go test -count=1 ./...
