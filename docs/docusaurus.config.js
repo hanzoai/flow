@@ -403,7 +403,7 @@ const config = {
           },
           {
             position: "right",
-            href: "https://discord.gg/EqksyE2EX9",
+            href: "https://discord.gg/CJCyAsm9Vr",
             className: "header-discord-link",
             target: "_blank",
             rel: null,

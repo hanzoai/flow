@@ -633,7 +633,7 @@ def print_banner(host: str, port: int, protocol: str) -> None:
 
     info_text = (
         f"{github_icon} GitHub: Star for updates {arrow} https://github.com/hanzoai/flow\n"
-        f"{discord_icon} Discord: Join for support {arrow} https://discord.com/invite/EqksyE2EX9"
+        f"{discord_icon} Discord: Join for support {arrow} https://discord.com/invite/CJCyAsm9Vr"
     )
     telemetry_text = (
         (
@@ -660,7 +660,7 @@ def print_banner(host: str, port: int, protocol: str) -> None:
         fallback_message = (
             f"Welcome to {package_name}\n\n"
             "* GitHub: https://github.com/hanzoai/flow\n"
-            "# Discord: https://discord.com/invite/EqksyE2EX9\n\n"
+            "# Discord: https://discord.com/invite/CJCyAsm9Vr\n\n"
             f"{telemetry_text}\n\n"
             f"[OK] Open Flow -> {protocol}://{access_host}:{port}"
         )
@@ -671,7 +671,7 @@ def print_banner(host: str, port: int, protocol: str) -> None:
             # Last resort: use logger instead of print
             logger.info(f"Welcome to {package_name}")
             logger.info("GitHub: https://github.com/hanzoai/flow")
-            logger.info("Discord: https://discord.com/invite/EqksyE2EX9")
+            logger.info("Discord: https://discord.com/invite/CJCyAsm9Vr")
             logger.info(f"Open Flow: {protocol}://{access_host}:{port}")
 
 
