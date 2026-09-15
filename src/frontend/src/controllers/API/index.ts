@@ -15,7 +15,7 @@ import type { StoreComponentResponse } from "../../types/store";
 
 const GITHUB_API_URL = "https://api.github.com";
 const DISCORD_API_URL =
-  "https://discord.com/api/v9/invites/EqksyE2EX9?with_counts=true";
+  "https://discord.com/api/v9/invites/CJCyAsm9Vr?with_counts=true";
 
 export async function getRepoStars(owner: string, repo: string) {
   try {

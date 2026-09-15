@@ -63,7 +63,7 @@ export const EmptyPageCommunity = ({
                   src={logoLightPng}
                   alt="Hanzo Flow"
                   data-testid="empty_page_logo_light"
-                  className="relative top-8 h-40 pointer-events-none select-none"
+                  className="h-24 pointer-events-none select-none"
                 />
               </div>
               <div className="z-50 hidden dark:block">
@@ -71,7 +71,7 @@ export const EmptyPageCommunity = ({
                   src={logoDarkPng}
                   alt="Hanzo Flow"
                   data-testid="empty_page_logo_dark"
-                  className="relative top-8 h-40 pointer-events-none select-none"
+                  className="h-24 pointer-events-none select-none"
                 />
               </div>
               <span
