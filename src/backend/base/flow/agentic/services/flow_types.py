@@ -18,8 +18,14 @@ STREAMING_EVENT_TIMEOUT_SECONDS = 300.0
 # Assistant configuration
 MAX_VALIDATION_RETRIES = 3
 VALIDATION_UI_DELAY_SECONDS = 0.3
-FLOW_ASSISTANT_FLOW = "FlowAssistant"
-TRANSLATION_FLOW = "TranslationFlow"
+FLOW_ASSISTANT_FLOW = "FlowAssistant.json"
+TRANSLATION_FLOW = "translation_flow.py"
+
+OFF_TOPIC_REFUSAL_MESSAGE = (
+    "I appreciate your interest, but I'm the Flow Assistant and can only help with "
+    "Flow-related topics such as building components, creating flows, configuring "
+    "deployments, and troubleshooting issues. Could you rephrase your question about Flow?"
+)
 
 VALIDATION_RETRY_TEMPLATE = """The previous component code has an error. Please fix it.
 

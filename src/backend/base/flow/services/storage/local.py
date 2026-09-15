@@ -13,6 +13,8 @@ from flow.services.storage.service import StorageService
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+    import anyio
+
     from flow.services.session.service import SessionService
     from flow.services.settings.service import SettingsService
 

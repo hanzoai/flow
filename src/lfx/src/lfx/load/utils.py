@@ -31,6 +31,8 @@ def upload(file_path: str, host: str, flow_id: str, api_key: str | None = None):
     """
     try:
         url = f"{host}/v1/upload/{flow_id}"
+        resolved_api_key = api_key if api_key is not None else os.environ.get("FLOW_API_KEY")
+        headers = {"x-api-key": resolved_api_key} if resolved_api_key else {}
         with Path(file_path).open("rb") as file:
             response = httpx.post(url, files={"file": file}, headers=headers)
             if response.status_code in {httpx.codes.OK, httpx.codes.CREATED}:

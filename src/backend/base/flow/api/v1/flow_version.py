@@ -10,8 +10,10 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from flow.api.utils import CurrentActiveUser, DbSession, DbSessionReadOnly
+from flow.api.utils import CurrentActiveUser, DbSession
 from flow.api.utils.core import remove_api_keys
+from flow.api.v1.mappers.deployments.helpers import get_owned_provider_account_or_404
+from flow.api.v1.mappers.deployments.sync import sync_flow_version_attachments
 from flow.services.database.models.flow.model import Flow, FlowRead
 from flow.services.database.models.flow_version.crud import (
     create_flow_version_entry,

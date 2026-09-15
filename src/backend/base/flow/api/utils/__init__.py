@@ -5,7 +5,7 @@ from the core module. This ensures existing imports continue to work while
 allowing for better code organization.
 """
 
-# Re-export everything from core module to maintain backward compatibility
+# Re-export everything from core and flow_utils modules to maintain backward compatibility
 from flow.api.utils.core import (
     API_WORDS,
     MAX_PAGE_SIZE,
@@ -18,7 +18,6 @@ from flow.api.utils.core import (
     ValidatedFileName,
     ValidatedFolderName,
     build_input_keys_response,
-    cascade_delete_flow,
     check_flow_version,
     custom_params,
     extract_global_variables_from_headers,

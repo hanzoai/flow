@@ -71,53 +71,6 @@ def get_messages(*args: Any, **kwargs: Any):
 def store_message(*args: Any, **kwargs: Any):
     return _impl().store_message(*args, **kwargs)
 
-# Import the appropriate implementation
-if has_flow_memory():
-    try:
-        # Import full flow implementation
-        from flow.memory import (
-            aadd_messages,
-            aadd_messagetables,
-            add_messages,
-            adelete_messages,
-            aget_messages,
-            astore_message,
-            aupdate_messages,
-            delete_message,
-            delete_messages,
-            get_messages,
-            store_message,
-        )
-    except ImportError:
-        # Fallback to lfx implementation if flow import fails
-        from lfx.memory.stubs import (
-            aadd_messages,
-            aadd_messagetables,
-            add_messages,
-            adelete_messages,
-            aget_messages,
-            astore_message,
-            aupdate_messages,
-            delete_message,
-            delete_messages,
-            get_messages,
-            store_message,
-        )
-else:
-    # Use lfx implementation
-    from lfx.memory.stubs import (
-        aadd_messages,
-        aadd_messagetables,
-        add_messages,
-        adelete_messages,
-        aget_messages,
-        astore_message,
-        aupdate_messages,
-        delete_message,
-        delete_messages,
-        get_messages,
-        store_message,
-    )
 
 __all__ = [
     "aadd_messages",

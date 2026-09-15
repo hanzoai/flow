@@ -6,11 +6,7 @@ from lfx.log import logger
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlmodel import col, delete, func, select
 
-if TYPE_CHECKING:
-    from uuid import UUID
-
-    from sqlmodel.ext.asyncio.session import AsyncSession
-
+from flow.services.database.models.deployment.model import Deployment
 from flow.services.database.models.flow_version.exceptions import (
     FlowVersionConflictError,
     FlowVersionDeployedError,
@@ -18,6 +14,9 @@ from flow.services.database.models.flow_version.exceptions import (
 )
 from flow.services.database.models.flow_version.model import (
     FlowVersion,
+)
+from flow.services.database.models.flow_version_deployment_attachment.model import (
+    FlowVersionDeploymentAttachment,
 )
 from flow.services.deps import get_settings_service
 
