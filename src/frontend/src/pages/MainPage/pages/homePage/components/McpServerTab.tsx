@@ -75,7 +75,7 @@ const McpServerTab = ({ folderName }: { folderName: string }) => {
             in our
             <a
               className="text-accent-pink-foreground"
-              href="https://docs.flow.org/mcp-server"
+              href="https://docs.hanzo.ai/flow/mcp-server"
               target="_blank"
               rel="noreferrer"
             >
