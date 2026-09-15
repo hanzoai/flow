@@ -992,10 +992,9 @@ export const DEFAULT_FILE_PICKER_TIMEOUT = 60000;
 export const DISCORD_URL = "https://discord.com/invite/EqksyE2EX9";
 export const GITHUB_URL = "https://github.com/hanzoai/flow";
 export const TWITTER_URL = "https://x.com/flow_ai";
-export const DOCS_URL = "https://docs.flow.org";
+export const DOCS_URL = "https://docs.hanzo.ai/flow";
 export const DATASTAX_DOCS_URL =
   "https://docs.datastax.com/en/flow/index.html";
-export const DESKTOP_URL = "https://www.flow.org/desktop";
 export const BUG_REPORT_URL = "https://github.com/hanzoai/flow/issues";
 
 export const UUID_PARSING_ERROR = "uuid_parsing";

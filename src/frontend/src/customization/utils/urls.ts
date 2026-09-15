@@ -12,5 +12,5 @@ export function getHealthCheckUrl(): string {
 }
 
 export const FlowButtonRedirectTarget = () => {
-  return "https://flow.org";
+  return "https://hanzo.ai/flow";
 };

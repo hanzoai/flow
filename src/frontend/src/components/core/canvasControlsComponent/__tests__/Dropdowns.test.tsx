@@ -41,8 +41,7 @@ jest.mock("@/components/common/genericIconComponent", () => ({
 jest.mock("@/constants/constants", () => ({
   __esModule: true,
   DATASTAX_DOCS_URL: "https://docs.datastax.com",
-  DOCS_URL: "https://docs.flow.org",
-  DESKTOP_URL: "https://desktop.flow.org",
+  DOCS_URL: "https://docs.hanzo.ai/flow",
 }));
 
 jest.mock("@/customization/feature-flags", () => ({
@@ -100,19 +99,11 @@ describe("HelpDropdown", () => {
 
     fireEvent.click(screen.getByTestId("canvas_controls_dropdown_docs"));
     expect(window.open).toHaveBeenCalledWith(
-      "https://docs.flow.org",
+      "https://docs.hanzo.ai/flow",
       "_blank",
     );
 
     fireEvent.click(screen.getByTestId("canvas_controls_dropdown_shortcuts"));
     expect(mockNavigate).toHaveBeenCalledWith("/settings/shortcuts");
-
-    fireEvent.click(
-      screen.getByTestId("canvas_controls_dropdown_get_flow_desktop"),
-    );
-    expect(window.open).toHaveBeenCalledWith(
-      "https://desktop.flow.org",
-      "_blank",
-    );
   });
 });

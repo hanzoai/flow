@@ -42,7 +42,7 @@ const NoInputView = ({
           <a
             className="underline underline-offset-4"
             target="_blank"
-            href="https://docs.flow.org/components-io#chat-input"
+            href="https://docs.hanzo.ai/flow/components-io#chat-input"
             rel="noopener noreferrer"
           >
             Chat Input

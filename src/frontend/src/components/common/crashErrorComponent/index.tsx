@@ -28,7 +28,7 @@ export default function CrashErrorComponent({
                 <p>
                   Please report errors with detailed tracebacks on the{" "}
                   <a
-                    href="https://github.com/flow-ai/flow/issues"
+                    href="https://github.com/hanzoai/flow/issues"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-medium hover:underline"
@@ -47,7 +47,7 @@ export default function CrashErrorComponent({
                 <Button onClick={resetErrorBoundary}>Restart HanzoFlow</Button>
 
                 <a
-                  href="https://github.com/flow-ai/flow/issues/new"
+                  href="https://github.com/hanzoai/flow/issues/new"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
