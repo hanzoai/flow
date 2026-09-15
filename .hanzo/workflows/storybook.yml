@@ -18,8 +18,8 @@ name: storybook
 # created idempotently before the enqueue, so committing this file is enough to
 # stand the site up.
 #
-# THIS IS A SEPARATE FILE FROM .hanzo/workflows/deploy.yml ON PURPOSE. That one
-# builds and pushes ghcr.io/hanzoai/flow — the App the operator runs. An App is
+# THIS IS A SEPARATE FILE FROM cicd.yml ON PURPOSE. That one builds and pushes
+# ghcr.io/hanzoai/flow — the App the cluster runs. An App is
 # a container the cluster executes; a Site is bytes S3 serves. They have
 # different outputs, different triggers and different failure modes, and folding
 # a storybook export into an image build would couple a docs publish to a
@@ -33,7 +33,7 @@ on:
       - 'src/frontend/.storybook/**'
       - 'src/frontend/package.json'
       - 'src/frontend/package-lock.json'
-      - '.github/workflows/storybook.yml'
+      - '.hanzo/workflows/storybook.yml'
   workflow_dispatch:
 
 concurrency:
@@ -42,10 +42,10 @@ concurrency:
 
 jobs:
   site:
-    # NOT ubuntu-latest. These run on the in-cluster act_runner, whose fleet
-    # advertises hanzo-build-linux-amd64. A label no runner answers does not
-    # fail — it queues until the 24h timeout, which is silence, not an error.
-    runs-on: hanzo-build-linux-amd64
+    # NOT ubuntu-latest. Forge runners advertise linux-amd64. A label no runner
+    # answers does not fail — it queues until the 24h timeout, which is silence,
+    # not an error.
+    runs-on: linux-amd64
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
