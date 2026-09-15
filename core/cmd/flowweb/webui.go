@@ -22,10 +22,11 @@ var frontendFS embed.FS
 
 // apiPrefixes go to the backend, never the SPA — an unmatched path here is the
 // backend's real JSON 404, never index.html (so a client never gets HTML where it
-// expects JSON). Everything else is a client-side route → the SPA shell.
+// expects JSON). The backend mounts its API at /v1 and /v2 (src/backend/base/flow/api/router.py).
+// Everything else is a client-side route → the SPA shell.
 var apiPrefixes = []string{
-	"/api/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
-	"/.well-known/", "/logs", "/metrics",
+	"/v1/", "/v2/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
+	"/.well-known/", "/logs",
 }
 
 type handler struct {
