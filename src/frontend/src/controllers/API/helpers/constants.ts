@@ -1,5 +1,4 @@
 import { getBaseUrl } from "@/customization/utils/urls";
-import { BASE_URL_API_V2 } from "../../../constants/constants";
 
 export const URLs = {
   TRANSACTIONS: `monitor/transactions`,
@@ -50,13 +49,12 @@ export const URLs = {
 export function getURL(
   key: keyof typeof URLs,
   params: Record<string, unknown> = {},
-  v2: boolean = false,
 ) {
   let url = URLs[key];
   for (const paramKey of Object.keys(params)) {
     url += `/${params[paramKey]}`;
   }
-  return `${v2 ? BASE_URL_API_V2 : getBaseUrl()}${url}`;
+  return `${getBaseUrl()}${url}`;
 }
 
 export type URLsType = typeof URLs;

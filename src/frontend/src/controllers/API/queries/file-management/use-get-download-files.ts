@@ -19,7 +19,7 @@ export const useGetDownloadFilesV2: useMutationFunctionType<
     let response;
     if (params.ids.length === 1) {
       response = await fetch(
-        `${getURL("FILE_MANAGEMENT", { id: params.ids[0] }, true)}`,
+        `${getURL("FILE_MANAGEMENT", { id: params.ids[0] })}`,
         {
           headers: {
             Accept: "*/*",
@@ -29,7 +29,7 @@ export const useGetDownloadFilesV2: useMutationFunctionType<
       );
     } else {
       response = await fetch(
-        `${getURL("FILE_MANAGEMENT", { mode: "batch/" }, true)}`,
+        `${getURL("FILE_MANAGEMENT", { mode: "batch/" })}`,
         {
           method: "POST",
           body: JSON.stringify(params.ids),

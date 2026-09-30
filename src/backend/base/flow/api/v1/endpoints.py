@@ -1024,7 +1024,7 @@ async def create_upload_file(
     Authorization is handled by the ``get_flow`` dependency, which requires an
     authenticated user and verifies flow ownership.  Mirrors the
     ``max_file_size_upload`` guard on the non-deprecated twin at
-    ``/api/v1/files/upload/{flow_id}`` so authenticated callers can't fill
+    ``/v1/files/upload/{flow_id}`` so authenticated callers can't fill
     disk through this route either.
     """
     try:

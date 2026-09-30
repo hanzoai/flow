@@ -154,7 +154,7 @@ export default function ModelInputComponent({
     // This ensures importing a flow shows the importing user's full enabled
     // list rather than the intersection of the two sets.
     //
-    // Cross-type guard: `providersData` from ``GET /api/v1/models`` is NOT
+    // Cross-type guard: `providersData` from ``GET /v1/models`` is NOT
     // filtered by ``model_type`` (the hook doesn't pass one), and the merged
     // ``enabled_models`` map treats llm + embeddings as a single flat
     // provider→name→bool record.  Without this check, text-embedding models

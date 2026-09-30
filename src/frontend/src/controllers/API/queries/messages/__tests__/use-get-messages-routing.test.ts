@@ -56,7 +56,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: (key: string) => `api/v1/${key.toLowerCase()}`,
+  getURL: (key: string) => `v1/${key.toLowerCase()}`,
 }));
 
 jest.mock("@/utils/utils", () => ({
@@ -101,7 +101,7 @@ describe("useGetMessagesQuery - Routing Logic", () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     expect(mockApiGet).toHaveBeenCalledWith(
-      "api/v1/messages",
+      "v1/messages",
       expect.objectContaining({
         params: expect.objectContaining({ flow_id: FLOW_ID }),
       }),
@@ -117,7 +117,7 @@ describe("useGetMessagesQuery - Routing Logic", () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     expect(mockApiGet).toHaveBeenCalledWith(
-      "api/v1/messages/shared",
+      "v1/messages/shared",
       expect.objectContaining({ params: { source_flow_id: SOURCE_FLOW_ID } }),
     );
   });

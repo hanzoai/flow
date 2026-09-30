@@ -19,7 +19,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments/providers"),
+  getURL: jest.fn(() => "/v1/deployments/providers"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -42,7 +42,7 @@ describe("useGetProviderAccounts", () => {
     useGetProviderAccounts({});
     await flushPromises();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments/providers", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments/providers", {
       params: { page: 1, size: 20 },
     });
   });
@@ -55,7 +55,7 @@ describe("useGetProviderAccounts", () => {
     useGetProviderAccounts({ page: 2, size: 10 });
     await flushPromises();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments/providers", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments/providers", {
       params: { page: 2, size: 10 },
     });
   });

@@ -9,7 +9,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments/providers"),
+  getURL: jest.fn(() => "/v1/deployments/providers"),
 }));
 
 const mockMutate = jest.fn(
@@ -56,7 +56,7 @@ describe("usePostProviderAccount", () => {
     await mutation.mutate(validPayload);
 
     expect(mockApiPost).toHaveBeenCalledWith(
-      "/api/v1/deployments/providers",
+      "/v1/deployments/providers",
       validPayload,
     );
   });

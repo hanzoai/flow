@@ -80,7 +80,7 @@ def get_llm(
     # ``get_language_model_options``, does not inject ``model_class`` into
     # each model's metadata).  This happens for example immediately after a
     # user configures a provider and the frontend augments its dropdown from
-    # ``/api/v1/models`` before the backend has repopulated
+    # ``/v1/models`` before the backend has repopulated
     # ``template[model]["options"]``; the resulting stored selection only
     # carries the raw ``create_model_metadata`` fields, so we have to derive
     # ``model_class`` from the provider mapping that

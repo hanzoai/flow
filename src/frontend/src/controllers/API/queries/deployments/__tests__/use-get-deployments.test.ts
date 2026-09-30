@@ -21,7 +21,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -44,7 +44,7 @@ describe("useGetDeployments", () => {
     useGetDeployments({ provider_id: "prov-1" });
     await flushPromises();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments", {
       params: {
         provider_id: "prov-1",
         page: 1,
@@ -67,7 +67,7 @@ describe("useGetDeployments", () => {
     });
     await flushPromises();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments", {
       params: {
         provider_id: "prov-1",
         flow_ids: ["f1", "f2"],

@@ -26,7 +26,7 @@ export const useDeleteMCPServer: useMutationFunctionType<
   ): Promise<DeleteMCPServerResponse> {
     try {
       const res = await api.delete(
-        `${getURL("MCP_SERVERS", undefined, true)}/${payload.name}`,
+        `${getURL("MCP_SERVERS")}/${payload.name}`,
       );
 
       return {

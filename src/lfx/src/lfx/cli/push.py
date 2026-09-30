@@ -1,6 +1,6 @@
 """lfx push -- push normalized flow JSON to a remote Flow instance.
 
-Uses stable flow IDs for upsert (PUT /api/v1/flows/{id}), so repeated pushes
+Uses stable flow IDs for upsert (PUT /v1/flows/{id}), so repeated pushes
 are idempotent: the first push creates the flow, subsequent ones update it in
 place without changing its ID on the remote instance.
 

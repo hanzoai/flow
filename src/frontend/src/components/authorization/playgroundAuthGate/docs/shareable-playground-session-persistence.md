@@ -381,7 +381,7 @@ Use strict equality `autoLogin === false` instead of `!autoLogin`. Treat `null` 
 
 ### 6.2 API Contracts
 
-#### GET /api/v1/monitor/messages/shared/sessions
+#### GET /v1/monitor/messages/shared/sessions
 
 **Purpose**: List session IDs for a shared flow, scoped to the authenticated user.
 
@@ -397,7 +397,7 @@ source_flow_id: UUID (required) — The original public flow ID from the URL
 
 ---
 
-#### GET /api/v1/monitor/messages/shared
+#### GET /v1/monitor/messages/shared
 
 **Purpose**: Get messages for a shared flow, scoped to the authenticated user.
 
@@ -430,7 +430,7 @@ order_by: string (optional, default: "timestamp") — Allowed: timestamp, sender
 
 ---
 
-#### PUT /api/v1/monitor/messages/shared/{message_id}
+#### PUT /v1/monitor/messages/shared/{message_id}
 
 **Purpose**: Update a message on a shared flow (e.g., persist `build_duration`).
 
@@ -443,7 +443,7 @@ order_by: string (optional, default: "timestamp") — Allowed: timestamp, sender
 
 ---
 
-#### DELETE /api/v1/monitor/messages/shared/session/{session_id}
+#### DELETE /v1/monitor/messages/shared/session/{session_id}
 
 **Purpose**: Delete all messages in a session on a shared flow.
 
@@ -453,7 +453,7 @@ order_by: string (optional, default: "timestamp") — Allowed: timestamp, sender
 
 ---
 
-#### PATCH /api/v1/monitor/messages/shared/session/{old_session_id}
+#### PATCH /v1/monitor/messages/shared/session/{old_session_id}
 
 **Purpose**: Rename a session on a shared flow.
 

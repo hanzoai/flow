@@ -130,8 +130,8 @@ class WorkflowJobResponse(BaseModel):
         """Automatically populate links for the client."""
         if not self.links:
             self.links = {
-                "status": f"/v2/workflows?job_id={self.job_id!s}",
-                "stop": "/v2/workflows/stop",
+                "status": f"/v1/workflows?job_id={self.job_id!s}",
+                "stop": "/v1/workflows/stop",
             }
         return self
 

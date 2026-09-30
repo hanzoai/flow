@@ -63,7 +63,7 @@ class FlowClient:
         return headers
 
     def _url(self, path: str) -> str:
-        return f"{self.server_url}/api/v1{path}"
+        return f"{self.server_url}/v1{path}"
 
     async def get(self, path: str, **kwargs: Any) -> Any:
         url = self._url(path)

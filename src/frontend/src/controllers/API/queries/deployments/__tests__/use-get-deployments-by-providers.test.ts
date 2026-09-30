@@ -5,7 +5,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 // Capture the config passed to useQueries so we can test combine and queryFn
@@ -66,7 +66,7 @@ describe("useGetDeploymentsByProviders", () => {
     useGetDeploymentsByProviders(["prov-1"]);
     await capturedConfig.queries[0].queryFn();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments", {
       params: { provider_id: "prov-1", page: 1, size: 20 },
     });
   });
@@ -79,7 +79,7 @@ describe("useGetDeploymentsByProviders", () => {
     useGetDeploymentsByProviders(["prov-1"], "folder-1");
     await capturedConfig.queries[0].queryFn();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments", {
       params: {
         provider_id: "prov-1",
         project_id: "folder-1",

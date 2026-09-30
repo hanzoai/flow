@@ -312,7 +312,7 @@ describe("getNewCurlCode", () => {
       expect(result.steps).toHaveLength(2);
 
       // Check upload step
-      expect(result.steps[0].code).toContain("/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files");
       expect(result.steps[0].code).toContain('--form "file=@your_file_1.pdf"');
 
       // Check execute step
@@ -336,7 +336,7 @@ describe("getNewCurlCode", () => {
       expect(result.steps).toHaveLength(2);
 
       // Check upload step
-      expect(result.steps[0].code).toContain("/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files");
       expect(result.steps[0].code).toContain('--form "file=@your_file_1.pdf"');
     });
 
@@ -358,7 +358,7 @@ describe("getNewCurlCode", () => {
       // Check both uploads
       expect(result.steps[0].code).toContain("your_file_1.pdf");
       expect(result.steps[0].code).toContain("your_file_2.pdf");
-      expect(result.steps[0].code).toContain("/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files");
     });
   });
 
@@ -405,7 +405,7 @@ describe("getNewCurlCode", () => {
 
       // Check upload step
       expect(result.steps[0].code).toContain("curl.exe --request POST");
-      expect(result.steps[0].code).toContain("/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files");
     });
   });
 
@@ -428,7 +428,7 @@ describe("getNewCurlCode", () => {
 
       // Check for both v1 and v2 API uploads
       expect(result.steps[0].code).toContain("/v1/files/upload/");
-      expect(result.steps[0].code).toContain("/v2/files");
+      expect(result.steps[0].code).toContain("/v1/files");
 
       // Check all upload counter placeholders
       expect(result.steps[1].code).toContain(

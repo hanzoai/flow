@@ -10,7 +10,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: (key: string) => `api/v1/${key.toLowerCase()}`,
+  getURL: (key: string) => `v1/${key.toLowerCase()}`,
 }));
 
 jest.mock("@/modals/IOModal/helpers/playground-auth", () => ({
@@ -60,7 +60,7 @@ describe("persistMessageProperties", () => {
 
     expect(mockPut).toHaveBeenCalledTimes(1);
     expect(mockPut).toHaveBeenCalledWith(
-      `api/v1/messages/${MESSAGE_ID}`,
+      `v1/messages/${MESSAGE_ID}`,
       PAYLOAD,
     );
   });
@@ -73,7 +73,7 @@ describe("persistMessageProperties", () => {
 
     expect(mockPut).toHaveBeenCalledTimes(1);
     expect(mockPut).toHaveBeenCalledWith(
-      `api/v1/messages/shared/${MESSAGE_ID}`,
+      `v1/messages/shared/${MESSAGE_ID}`,
       PAYLOAD,
       { params: { source_flow_id: "real-flow-id-123" } },
     );
@@ -122,7 +122,7 @@ describe("persistMessageProperties", () => {
     persistMessageProperties(MESSAGE_ID, complexPayload);
 
     expect(mockPut).toHaveBeenCalledWith(
-      `api/v1/messages/${MESSAGE_ID}`,
+      `v1/messages/${MESSAGE_ID}`,
       complexPayload,
     );
   });

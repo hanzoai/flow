@@ -5,7 +5,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/variables"),
+  getURL: jest.fn(() => "/v1/variables"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -43,7 +43,7 @@ describe("usePostDetectEnvVars", () => {
     await mutation.mutate(payload);
 
     expect(mockApiPost).toHaveBeenCalledWith(
-      "/api/v1/variables/detections",
+      "/v1/variables/detections",
       payload,
     );
   });

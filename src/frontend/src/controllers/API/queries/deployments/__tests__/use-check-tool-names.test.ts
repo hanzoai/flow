@@ -8,7 +8,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -47,7 +47,7 @@ describe("useCheckToolNames", () => {
     expect(capturedQueryFn).not.toBeNull();
     capturedQueryFn!();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments/snapshots", {
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments/snapshots", {
       params: {
         provider_id: "prov-1",
         names: ["my_tool", "other_tool"],
@@ -67,7 +67,7 @@ describe("useCheckToolNames", () => {
 
     const calledUrl = mockApiGet.mock.calls[0][0];
     expect(calledUrl).not.toContain("check-names");
-    expect(calledUrl).toBe("/api/v1/deployments/snapshots");
+    expect(calledUrl).toBe("/v1/deployments/snapshots");
   });
 
   // ---------------------------------------------------------------------------

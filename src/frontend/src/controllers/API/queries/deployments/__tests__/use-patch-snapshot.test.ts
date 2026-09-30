@@ -9,7 +9,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -45,7 +45,7 @@ describe("usePatchSnapshot", () => {
     });
 
     expect(mockApiPatch).toHaveBeenCalledWith(
-      "/api/v1/deployments/snapshots/snap-abc",
+      "/v1/deployments/snapshots/snap-abc",
       { flow_version_id: "fv-1" },
     );
   });

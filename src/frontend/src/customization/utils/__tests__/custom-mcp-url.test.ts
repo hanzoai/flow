@@ -17,7 +17,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      "https://custom.example.com/api/v1/mcp/project/proj-1/streamable",
+      "https://custom.example.com/v1/mcp/project/proj-1/streamable",
     );
   });
 
@@ -28,7 +28,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      "https://override.example.com/api/v1/mcp/project/proj-1/streamable",
+      "https://override.example.com/v1/mcp/project/proj-1/streamable",
     );
   });
 
@@ -39,7 +39,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      "https://api-default.example.com/api/v1/mcp/project/proj-1/streamable",
+      "https://api-default.example.com/v1/mcp/project/proj-1/streamable",
     );
   });
 
@@ -50,7 +50,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      `${window.location.origin}/api/v1/mcp/project/proj-1/streamable`,
+      `${window.location.origin}/v1/mcp/project/proj-1/streamable`,
     );
   });
 
@@ -60,7 +60,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      "https://example.com/api/v1/mcp/project/proj-1/streamable",
+      "https://example.com/v1/mcp/project/proj-1/streamable",
     );
   });
 
@@ -70,7 +70,7 @@ describe("customGetMCPUrl", () => {
     const url = customGetMCPUrl("proj-1");
 
     expect(url).toBe(
-      "https://example.com/api/v1/mcp/project/proj-1/streamable",
+      "https://example.com/v1/mcp/project/proj-1/streamable",
     );
   });
 
@@ -79,7 +79,7 @@ describe("customGetMCPUrl", () => {
 
     const url = customGetMCPUrl("proj-1", {}, "sse");
 
-    expect(url).toBe("https://example.com/api/v1/mcp/project/proj-1/sse");
+    expect(url).toBe("https://example.com/v1/mcp/project/proj-1/sse");
   });
 
   it("returns composer URL when useComposer is true and streamableHttpUrl is set", () => {

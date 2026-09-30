@@ -140,7 +140,7 @@ class FlowClient(_ClientCommon):
     ) -> list[Flow]:
         resp = self._request(
             "GET",
-            "/api/v1/flows/",
+            "/v1/flows/",
             params=self._build_flow_list_params(
                 folder_id=folder_id,
                 remove_example_flows=remove_example_flows,
@@ -154,17 +154,17 @@ class FlowClient(_ClientCommon):
         return self._validate_model_list(Flow, resp.json())
 
     def get_flow(self, flow_id: UUID | str) -> Flow:
-        resp = self._request("GET", f"/api/v1/flows/{flow_id}")
+        resp = self._request("GET", f"/v1/flows/{flow_id}")
         return self._validate_model(Flow, resp.json())
 
     def create_flow(self, flow: FlowCreate) -> Flow:
-        resp = self._request("POST", "/api/v1/flows/", json=self._model_payload(flow))
+        resp = self._request("POST", "/v1/flows/", json=self._model_payload(flow))
         return self._validate_model(Flow, resp.json())
 
     def update_flow(self, flow_id: UUID | str, update: FlowUpdate) -> Flow:
         resp = self._request(
             "PATCH",
-            f"/api/v1/flows/{flow_id}",
+            f"/v1/flows/{flow_id}",
             json=self._model_payload(update),
         )
         return self._validate_model(Flow, resp.json())
@@ -177,13 +177,13 @@ class FlowClient(_ClientCommon):
         """
         resp = self._request(
             "PUT",
-            f"/api/v1/flows/{flow_id}",
+            f"/v1/flows/{flow_id}",
             json=self._model_payload(flow),
         )
         return self._upsert_result(Flow, resp)
 
     def delete_flow(self, flow_id: UUID | str) -> None:
-        self._request("DELETE", f"/api/v1/flows/{flow_id}")
+        self._request("DELETE", f"/v1/flows/{flow_id}")
 
     def run_flow(
         self,
@@ -192,7 +192,7 @@ class FlowClient(_ClientCommon):
     ) -> RunResponse:
         resp = self._request(
             "POST",
-            f"/api/v1/run/{flow_id_or_endpoint}",
+            f"/v1/run/{flow_id_or_endpoint}",
             json=self._model_payload(request),
         )
         return self._validate_model(RunResponse, resp.json())
@@ -244,7 +244,7 @@ class FlowClient(_ClientCommon):
                     response = chunk.final_response()
         """
         return self._iter_stream(
-            f"/api/v1/run/{flow_id_or_endpoint}",
+            f"/v1/run/{flow_id_or_endpoint}",
             self._build_stream_payload(
                 input_value=input_value,
                 input_type=input_type,
@@ -275,27 +275,27 @@ class FlowClient(_ClientCommon):
     # ------------------------------------------------------------------
 
     def list_projects(self) -> list[Project]:
-        resp = self._request("GET", "/api/v1/projects/")
+        resp = self._request("GET", "/v1/projects/")
         return self._validate_model_list(Project, resp.json())
 
     def get_project(self, project_id: UUID | str) -> ProjectWithFlows:
-        resp = self._request("GET", f"/api/v1/projects/{project_id}")
+        resp = self._request("GET", f"/v1/projects/{project_id}")
         return self._validate_model(ProjectWithFlows, resp.json())
 
     def create_project(self, project: ProjectCreate) -> Project:
-        resp = self._request("POST", "/api/v1/projects/", json=self._model_payload(project))
+        resp = self._request("POST", "/v1/projects/", json=self._model_payload(project))
         return self._validate_model(Project, resp.json())
 
     def update_project(self, project_id: UUID | str, update: ProjectUpdate) -> Project:
         resp = self._request(
             "PATCH",
-            f"/api/v1/projects/{project_id}",
+            f"/v1/projects/{project_id}",
             json=self._model_payload(update),
         )
         return self._validate_model(Project, resp.json())
 
     def delete_project(self, project_id: UUID | str) -> None:
-        self._request("DELETE", f"/api/v1/projects/{project_id}")
+        self._request("DELETE", f"/v1/projects/{project_id}")
 
     def download_project(self, project_id: UUID | str) -> dict[str, bytes]:
         """Download all flows in a project.
@@ -306,14 +306,14 @@ class FlowClient(_ClientCommon):
         Raises :class:`ValueError` if the archive contains more than 500
         entries or any single entry exceeds 50 MB (zip-bomb protection).
         """
-        resp = self._request("GET", f"/api/v1/projects/download/{project_id}")
+        resp = self._request("GET", f"/v1/projects/download/{project_id}")
         return self._extract_project_archive(resp.content)
 
     def upload_project(self, zip_bytes: bytes) -> list[Flow]:
         """Upload a project ZIP archive and return the created flows."""
         resp = self._request(
             "POST",
-            "/api/v1/projects/upload/",
+            "/v1/projects/upload/",
             content=zip_bytes,
             headers={"Content-Type": "application/octet-stream"},
         )
@@ -327,7 +327,7 @@ class FlowClient(_ClientCommon):
         """Upload or update a flow from a local JSON file.
 
         The ``id`` field embedded in the file is used for upsert
-        (create-or-update via ``PUT /api/v1/flows/{id}``).
+        (create-or-update via ``PUT /v1/flows/{id}``).
         Returns ``(flow, created)`` where ``created`` is ``True`` when the
         flow was newly created and ``False`` when it was updated::
 

@@ -159,7 +159,7 @@ describe("getNewJsApiCode", () => {
         "// Step 1: Upload file for File/VideoFile fileNode1",
       );
       expect(code).toContain("createFormData('your_file_1.pdf')");
-      expect(code).toContain("/v2/files");
+      expect(code).toContain("/v1/files");
       expect(code).toContain("filePath1");
     });
 
@@ -179,7 +179,7 @@ describe("getNewJsApiCode", () => {
         "// Step 1: Upload file for File/VideoFile videoNode1",
       );
       expect(code).toContain("createFormData('your_file_1.pdf')");
-      expect(code).toContain("/v2/files");
+      expect(code).toContain("/v1/files");
       expect(code).toContain("filePath1");
     });
 
@@ -232,7 +232,7 @@ describe("getNewJsApiCode", () => {
       expect(code).toContain(
         "// Step 3: Upload file for File/VideoFile videoNode1",
       );
-      expect(code).toContain("/v2/files");
+      expect(code).toContain("/v1/files");
 
       // Check for flow execution step
       expect(code).toContain("// Step 4: Execute flow with all file paths");

@@ -7,7 +7,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: (key: string) => `http://localhost/api/v1/${key.toLowerCase()}`,
+  getURL: (key: string) => `http://localhost/v1/${key.toLowerCase()}`,
 }));
 
 import { useFlowEvents } from "../use-flow-events";

@@ -185,7 +185,7 @@ describe("getNewPythonApiCode", () => {
         "# Step 1: Upload file for File/VideoFile fileNode1",
       );
       expect(code).toContain('with open("your_file_1.pdf", "rb") as f:');
-      expect(code).toContain('f"{base_url}/v2/files"');
+      expect(code).toContain('f"{base_url}/v1/files"');
       expect(code).toContain('file_path_1 = response.json()["path"]');
 
       // Check for flow execution step
@@ -209,7 +209,7 @@ describe("getNewPythonApiCode", () => {
         "# Step 1: Upload file for File/VideoFile videoNode1",
       );
       expect(code).toContain('with open("your_file_1.pdf", "rb") as f:');
-      expect(code).toContain('f"{base_url}/v2/files"');
+      expect(code).toContain('f"{base_url}/v1/files"');
       expect(code).toContain('file_path_1 = response.json()["path"]');
 
       // Check for flow execution step
@@ -268,7 +268,7 @@ describe("getNewPythonApiCode", () => {
       expect(code).toContain(
         "# Step 3: Upload file for File/VideoFile videoNode1",
       );
-      expect(code).toContain("/v2/files");
+      expect(code).toContain("/v1/files");
 
       // Check for flow execution step
       expect(code).toContain("# Step 4: Execute flow with all file paths");

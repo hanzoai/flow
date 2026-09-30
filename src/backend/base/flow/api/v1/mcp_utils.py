@@ -138,7 +138,7 @@ async def handle_list_resources(project_id=None):
             ####################################################
             # When a user uploads a file inside a flow
             # (e.g., via the File Read component),
-            # it hits /v2/files (POST),
+            # it hits /v1/files (POST),
             # which saves files at the user-level.
             # So the above query for flow files is not enough.
             # So we list all user files for the current user.
@@ -226,7 +226,7 @@ async def handle_read_resource(uri: str, project_id: UUID | str | None = None) -
 
             if flow is None:
                 # The namespace segment may refer to the user's own bucket (user-level
-                # files uploaded via /api/v2/files) rather than a flow id.
+                # files uploaded via /v1/files) rather than a flow id.
                 if str(current_user.id) != str(namespace_id):
                     msg = "Resource not found or access denied"
                     raise ValueError(msg)

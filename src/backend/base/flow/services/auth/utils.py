@@ -54,7 +54,7 @@ class OAuth2PasswordBearerCookie(OAuth2PasswordBearer):
         return None
 
 
-oauth2_login = OAuth2PasswordBearerCookie(tokenUrl="api/v1/login", auto_error=False)
+oauth2_login = OAuth2PasswordBearerCookie(tokenUrl="v1/login", auto_error=False)
 
 API_KEY_NAME = "x-api-key"
 

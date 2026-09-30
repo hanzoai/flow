@@ -40,7 +40,7 @@ export const useAddMCPServer: useMutationFunctionType<
       }
 
       const res = await api.post(
-        `${getURL("MCP_SERVERS", undefined, true)}/${body.name}`,
+        `${getURL("MCP_SERVERS")}/${body.name}`,
         payload,
       );
 

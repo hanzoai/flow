@@ -26,7 +26,7 @@ jest
   });
 
 jest.mock("@/customization/config-constants", () => ({
-  BASE_URL_API: "http://localhost:7860/api/v1/",
+  BASE_URL_API: "http://localhost:7860/v1/",
 }));
 
 // Mocking the customization layer for the user avatar is how we prove the

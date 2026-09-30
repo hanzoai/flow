@@ -21,7 +21,7 @@ export const usePostRegistration: useMutationFunctionType<
   const postRegistrationFn = async (
     payload: IRegistrationRequest,
   ): Promise<IRegistrationResponse> => {
-    const response = await api.post(`${getURL("REGISTRATION", {}, true)}/`, {
+    const response = await api.post(`${getURL("REGISTRATION")}/`, {
       email: payload.email,
     });
     return response.data;

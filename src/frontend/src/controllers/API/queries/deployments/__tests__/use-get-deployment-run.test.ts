@@ -5,7 +5,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -42,7 +42,7 @@ describe("useGetDeploymentRun", () => {
     });
 
     expect(mockApiGet).toHaveBeenCalledWith(
-      "/api/v1/deployments/dep-1/runs/exec-1",
+      "/v1/deployments/dep-1/runs/exec-1",
     );
   });
 
@@ -58,7 +58,7 @@ describe("useGetDeploymentRun", () => {
     });
 
     expect(mockApiGet).toHaveBeenCalledWith(
-      "/api/v1/deployments/dep-1/runs/exec%2Fwith%20spaces",
+      "/v1/deployments/dep-1/runs/exec%2Fwith%20spaces",
     );
   });
 

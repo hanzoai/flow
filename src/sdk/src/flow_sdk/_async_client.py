@@ -130,7 +130,7 @@ class AsyncFlowClient(_ClientCommon):
     ) -> list[Flow]:
         resp = await self._request(
             "GET",
-            "/api/v1/flows/",
+            "/v1/flows/",
             params=self._build_flow_list_params(
                 folder_id=folder_id,
                 remove_example_flows=remove_example_flows,
@@ -144,17 +144,17 @@ class AsyncFlowClient(_ClientCommon):
         return self._validate_model_list(Flow, resp.json())
 
     async def get_flow(self, flow_id: UUID | str) -> Flow:
-        resp = await self._request("GET", f"/api/v1/flows/{flow_id}")
+        resp = await self._request("GET", f"/v1/flows/{flow_id}")
         return self._validate_model(Flow, resp.json())
 
     async def create_flow(self, flow: FlowCreate) -> Flow:
-        resp = await self._request("POST", "/api/v1/flows/", json=self._model_payload(flow))
+        resp = await self._request("POST", "/v1/flows/", json=self._model_payload(flow))
         return self._validate_model(Flow, resp.json())
 
     async def update_flow(self, flow_id: UUID | str, update: FlowUpdate) -> Flow:
         resp = await self._request(
             "PATCH",
-            f"/api/v1/flows/{flow_id}",
+            f"/v1/flows/{flow_id}",
             json=self._model_payload(update),
         )
         return self._validate_model(Flow, resp.json())
@@ -163,13 +163,13 @@ class AsyncFlowClient(_ClientCommon):
         """Create-or-update by stable ID. Returns ``(flow, created)``."""
         resp = await self._request(
             "PUT",
-            f"/api/v1/flows/{flow_id}",
+            f"/v1/flows/{flow_id}",
             json=self._model_payload(flow),
         )
         return self._upsert_result(Flow, resp)
 
     async def delete_flow(self, flow_id: UUID | str) -> None:
-        await self._request("DELETE", f"/api/v1/flows/{flow_id}")
+        await self._request("DELETE", f"/v1/flows/{flow_id}")
 
     async def run_flow(
         self,
@@ -178,7 +178,7 @@ class AsyncFlowClient(_ClientCommon):
     ) -> RunResponse:
         resp = await self._request(
             "POST",
-            f"/api/v1/run/{flow_id_or_endpoint}",
+            f"/v1/run/{flow_id_or_endpoint}",
             json=self._model_payload(request),
         )
         return self._validate_model(RunResponse, resp.json())
@@ -275,7 +275,7 @@ class AsyncFlowClient(_ClientCommon):
                     response = chunk.final_response()
         """
         return self._aiter_stream(
-            f"/api/v1/run/{flow_id_or_endpoint}",
+            f"/v1/run/{flow_id_or_endpoint}",
             self._build_stream_payload(
                 input_value=input_value,
                 input_type=input_type,
@@ -306,27 +306,27 @@ class AsyncFlowClient(_ClientCommon):
     # ------------------------------------------------------------------
 
     async def list_projects(self) -> list[Project]:
-        resp = await self._request("GET", "/api/v1/projects/")
+        resp = await self._request("GET", "/v1/projects/")
         return self._validate_model_list(Project, resp.json())
 
     async def get_project(self, project_id: UUID | str) -> ProjectWithFlows:
-        resp = await self._request("GET", f"/api/v1/projects/{project_id}")
+        resp = await self._request("GET", f"/v1/projects/{project_id}")
         return self._validate_model(ProjectWithFlows, resp.json())
 
     async def create_project(self, project: ProjectCreate) -> Project:
-        resp = await self._request("POST", "/api/v1/projects/", json=self._model_payload(project))
+        resp = await self._request("POST", "/v1/projects/", json=self._model_payload(project))
         return self._validate_model(Project, resp.json())
 
     async def update_project(self, project_id: UUID | str, update: ProjectUpdate) -> Project:
         resp = await self._request(
             "PATCH",
-            f"/api/v1/projects/{project_id}",
+            f"/v1/projects/{project_id}",
             json=self._model_payload(update),
         )
         return self._validate_model(Project, resp.json())
 
     async def delete_project(self, project_id: UUID | str) -> None:
-        await self._request("DELETE", f"/api/v1/projects/{project_id}")
+        await self._request("DELETE", f"/v1/projects/{project_id}")
 
     async def download_project(self, project_id: UUID | str) -> dict[str, bytes]:
         """Download all flows in a project.
@@ -334,13 +334,13 @@ class AsyncFlowClient(_ClientCommon):
         Raises :class:`ValueError` if the archive contains more than 500
         entries or any single entry exceeds 50 MB (zip-bomb protection).
         """
-        resp = await self._request("GET", f"/api/v1/projects/download/{project_id}")
+        resp = await self._request("GET", f"/v1/projects/download/{project_id}")
         return self._extract_project_archive(resp.content)
 
     async def upload_project(self, zip_bytes: bytes) -> list[Flow]:
         resp = await self._request(
             "POST",
-            "/api/v1/projects/upload/",
+            "/v1/projects/upload/",
             content=zip_bytes,
             headers={"Content-Type": "application/octet-stream"},
         )

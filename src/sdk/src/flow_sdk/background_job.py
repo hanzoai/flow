@@ -3,7 +3,7 @@
 Wraps an :class:`asyncio.Task` so callers can start a flow run and poll or
 await it without blocking the event loop.  Mirrors the ``BackgroundJob`` API
 from flow-ai/sdk PR #1 (Janardan Singh Kavia, IBM Corp., Apache 2.0)
-adapted for the Flow V1 ``/api/v1/run/{id}`` endpoint.
+adapted for the Flow V1 ``/v1/run/{id}`` endpoint.
 
 Typical usage::
 

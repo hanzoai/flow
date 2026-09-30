@@ -9,7 +9,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments/providers"),
+  getURL: jest.fn(() => "/v1/deployments/providers"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -40,7 +40,7 @@ describe("useDeleteProviderAccount", () => {
     await mutation.mutate({ provider_id: "prov-1" });
 
     expect(mockApiDelete).toHaveBeenCalledWith(
-      "/api/v1/deployments/providers/prov-1",
+      "/v1/deployments/providers/prov-1",
     );
   });
 

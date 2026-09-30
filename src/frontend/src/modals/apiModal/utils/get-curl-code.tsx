@@ -169,14 +169,14 @@ ${getApiSampleHeaders("curl")}
     if (detectedPlatform === "powershell") {
       uploadCommands.push(
         `curl.exe --request POST \`
-     --url "${baseUrl}/v2/files" \`
+     --url "${baseUrl}/v1/files" \`
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_file_${uploadCounter}.pdf"`,
       );
     } else {
       uploadCommands.push(
         `curl --request POST \\
-     --url "${baseUrl}/v2/files" \\
+     --url "${baseUrl}/v1/files" \\
      ${shouldDisplayApiKey ? '--header "x-api-key: YOUR_API_KEY_HERE" \\' : getApiSampleHeaders("curl")}
      --form "file=@your_file_${uploadCounter}.pdf"`,
       );

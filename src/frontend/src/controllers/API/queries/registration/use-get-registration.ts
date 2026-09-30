@@ -16,7 +16,7 @@ export const useGetRegistration: useQueryFunctionType<
   const { query } = UseRequestProcessor();
 
   const getRegistration = async (): Promise<RegistrationInfo> => {
-    const res = await api.get(`${getURL("REGISTRATION", {}, true)}/`);
+    const res = await api.get(`${getURL("REGISTRATION")}/`);
     return res.data;
   };
 

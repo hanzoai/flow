@@ -28,7 +28,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: (key: string) => `api/v1/${key.toLowerCase()}`,
+  getURL: (key: string) => `v1/${key.toLowerCase()}`,
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -67,7 +67,7 @@ describe("useGetSessionsFromFlowQuery - Routing Logic", () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     expect(mockApiGet).toHaveBeenCalledWith(
-      "api/v1/messages/shared/sessions",
+      "v1/messages/shared/sessions",
       expect.objectContaining({ params: { source_flow_id: SOURCE_FLOW_ID } }),
     );
   });

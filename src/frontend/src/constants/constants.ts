@@ -1,9 +1,6 @@
 // src/constants/constants.ts
 
-import {
-  BASE_URL_API as CUSTOM_BASE_URL_API,
-  BASE_URL_API_V2 as CUSTOM_BASE_URL_API_V2,
-} from "../customization/config-constants";
+import { BASE_URL_API as CUSTOM_BASE_URL_API } from "../customization/config-constants";
 import { customDefaultShortcuts } from "../customization/constants";
 import type { languageMap } from "../types/components";
 
@@ -606,8 +603,6 @@ export const ADMIN_HEADER_DESCRIPTION =
   "Navigate through this section to efficiently oversee all application users. From here, you can seamlessly manage user accounts.";
 
 export const BASE_URL_API = CUSTOM_BASE_URL_API || "/v1/";
-
-export const BASE_URL_API_V2 = CUSTOM_BASE_URL_API_V2 || "/v2/";
 
 /**
  * URLs excluded from error retries.

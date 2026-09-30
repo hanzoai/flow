@@ -24,7 +24,7 @@ import type {
 
 // Mock getURL before importing the module under test
 jest.mock("../../../helpers/constants", () => ({
-  getURL: jest.fn(() => "http://localhost/api/v1/agentic/assist/stream"),
+  getURL: jest.fn(() => "http://localhost/v1/agentic/assist/stream"),
 }));
 
 import { postAssistStream } from "../use-post-assist-stream";

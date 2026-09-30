@@ -19,7 +19,7 @@ jest.mock("@/controllers/API/api", () => ({
 }));
 
 jest.mock("@/controllers/API/helpers/constants", () => ({
-  getURL: jest.fn(() => "/api/v1/deployments"),
+  getURL: jest.fn(() => "/v1/deployments"),
 }));
 
 jest.mock("@/controllers/API/services/request-processor", () => ({
@@ -40,7 +40,7 @@ describe("useGetDeployment", () => {
     useGetDeployment({ deploymentId: "dep-1" });
     await flushPromises();
 
-    expect(mockApiGet).toHaveBeenCalledWith("/api/v1/deployments/dep-1");
+    expect(mockApiGet).toHaveBeenCalledWith("/v1/deployments/dep-1");
   });
 
   it("uses correct query key", () => {

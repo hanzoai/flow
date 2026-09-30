@@ -1,6 +1,6 @@
 """Component registry cache — fetches and searches component types.
 
-Loads the full component catalog from /api/v1/all and provides
+Loads the full component catalog from /v1/all and provides
 pure search/describe functions.
 """
 
