@@ -106,7 +106,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r hanzo && useradd -r -g hanzo -d /app/data hanzo
+# uid 1000, the uid that owns the data flow.hanzo.ai's volume already holds, so
+# the process can open its own database without a securityContext override.
+RUN groupadd -r -g 1000 hanzo && useradd -r -u 1000 -g hanzo -d /app/data hanzo
 
 WORKDIR /app
 
