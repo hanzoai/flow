@@ -22,12 +22,17 @@ var frontendFS embed.FS
 
 // apiPrefixes go to the backend, never the SPA — an unmatched path here is the
 // backend's real JSON 404, never index.html (so a client never gets HTML where it
-// expects JSON). The backend mounts its API at /v1 and /v2 (src/backend/base/flow/api/router.py).
+// expects JSON). The backend mounts its API at /v1 (src/backend/base/flow/api/router.py).
 // Everything else is a client-side route → the SPA shell.
 var apiPrefixes = []string{
-	"/v1/", "/v2/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
+	"/v1/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
 	"/.well-known/", "/logs",
 }
+
+// retired is the namespace no route lives under. It answers 404 rather than
+// the SPA shell, so a caller still using it fails loudly instead of parsing
+// index.html as its reply.
+const retired = "/api"
 
 type handler struct {
 	fsys  fs.FS
@@ -55,6 +60,10 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	upath := r.URL.Path
 	if !strings.HasPrefix(upath, "/") {
 		upath = "/" + upath
+	}
+	if upath == retired || strings.HasPrefix(upath, retired+"/") {
+		http.NotFound(w, r)
+		return
 	}
 	// API + backend surfaces → the flow backend verbatim (all methods).
 	for _, p := range apiPrefixes {

@@ -37,10 +37,6 @@ router_v1 = APIRouter(
     prefix="/v1",
 )
 
-router_v2 = APIRouter(
-    prefix="/v2",
-)
-
 
 def include_deployment_router(target_router: APIRouter) -> None:
     """Mount deployment routes only when the deployments feature is enabled."""
@@ -86,14 +82,16 @@ def _include_agentic_router():
 
 _include_agentic_router()
 
-router_v2.include_router(files_router_v2)
-router_v2.include_router(mcp_router_v2)
-router_v2.include_router(registration_router_v2)
-router_v2.include_router(workflow_router_v2)
+# The upstream v2 surface lives under /v1 too: one version, one prefix. Its
+# paths do not collide with v1's — v2 files are /files and /files/{file_id}
+# where every v1 files route has two or more segments, and v2 MCP is
+# /mcp/servers where v1 MCP is /mcp/sse, /mcp/ and /mcp/streamable.
+router_v1.include_router(files_router_v2)
+router_v1.include_router(mcp_router_v2)
+router_v1.include_router(registration_router_v2)
+router_v1.include_router(workflow_router_v2)
 
-# API is mounted at the root — subdomain (api.*) already namespaces the
-# service so /api/ on top is redundant double-prefix. /v1 + /v2 hang off
-# the root directly, per the global /v1/ canonical-path rule.
+# The API hangs off the root at /v1: the host already names the service, so
+# an /api/ prefix on top would say it twice.
 router = APIRouter()
 router.include_router(router_v1)
-router.include_router(router_v2)

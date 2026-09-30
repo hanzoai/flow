@@ -50,7 +50,7 @@
   <script>
     // When the real Vite bundle is embedded, this file is overwritten by the app's
     // own index.html. As a standalone landing, nudge signed-in users to the builder.
-    fetch('/api/v1/auto_login', { credentials: 'include' })
+    fetch('/v1/auto_login', { credentials: 'include' })
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d && d.frontend_timeout !== undefined) location.replace('/flows'); })
       .catch(() => {});
