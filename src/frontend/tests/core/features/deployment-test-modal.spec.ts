@@ -11,7 +11,7 @@ import {
 
 async function setupBaseRoutes(page: Page) {
   // Register broad catch-all FIRST so specific routes (registered after) take priority via LIFO
-  await page.route("**/api/v1/deployments*", (route) => {
+  await page.route("**/v1/deployments*", (route) => {
     const url = route.request().url();
     // Run routes are handled per-test; fall through for those
     if (url.includes("/dep-1/runs") || url.includes("/runs")) {
@@ -25,7 +25,7 @@ async function setupBaseRoutes(page: Page) {
     });
   });
 
-  await page.route("**/api/v1/deployments/providers*", (route) => {
+  await page.route("**/v1/deployments/providers*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -73,7 +73,7 @@ test(
 
     await setupBaseRoutes(page);
 
-    await page.route("**/api/v1/deployments/dep-1/runs/exec-1", (route) => {
+    await page.route("**/v1/deployments/dep-1/runs/exec-1", (route) => {
       runCallCount++;
       const isCompleted = runCallCount > 1;
       route.fulfill({
@@ -85,7 +85,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1/runs", async (route) => {
+    await page.route("**/v1/deployments/dep-1/runs", async (route) => {
       if (route.request().method() === "POST") {
         const body = route.request().postDataJSON() as Record<string, unknown>;
         capturedRequestBody = body;
@@ -128,7 +128,7 @@ test(
 
     await setupBaseRoutes(page);
 
-    await page.route("**/api/v1/deployments/dep-1/runs/exec-1", (route) => {
+    await page.route("**/v1/deployments/dep-1/runs/exec-1", (route) => {
       runCallCount++;
       const isCompleted = runCallCount > 1;
       route.fulfill({
@@ -140,7 +140,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1/runs", async (route) => {
+    await page.route("**/v1/deployments/dep-1/runs", async (route) => {
       if (route.request().method() === "POST") {
         route.fulfill({
           status: 200,
@@ -180,7 +180,7 @@ test(
 
     await setupBaseRoutes(page);
 
-    await page.route("**/api/v1/deployments/dep-1/runs/exec-1", (route) => {
+    await page.route("**/v1/deployments/dep-1/runs/exec-1", (route) => {
       runCallCount++;
       const isCompleted = runCallCount > 1;
       route.fulfill({
@@ -192,7 +192,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1/runs", async (route) => {
+    await page.route("**/v1/deployments/dep-1/runs", async (route) => {
       if (route.request().method() === "POST") {
         route.fulfill({
           status: 200,
@@ -237,7 +237,7 @@ test(
 
     await setupBaseRoutes(page);
 
-    await page.route("**/api/v1/deployments/dep-1/runs/exec-1", (route) => {
+    await page.route("**/v1/deployments/dep-1/runs/exec-1", (route) => {
       runCallCount++;
       const isCompleted = runCallCount % 2 === 0;
       route.fulfill({
@@ -249,7 +249,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1/runs", async (route) => {
+    await page.route("**/v1/deployments/dep-1/runs", async (route) => {
       if (route.request().method() === "POST") {
         const body = route.request().postDataJSON() as Record<string, unknown>;
         capturedBodies.push(body);
@@ -312,7 +312,7 @@ test(
 
     await setupBaseRoutes(page);
 
-    await page.route("**/api/v1/deployments/dep-1/runs/exec-1", (route) => {
+    await page.route("**/v1/deployments/dep-1/runs/exec-1", (route) => {
       runCallCount++;
       const isCompleted = runCallCount > 1;
       route.fulfill({
@@ -324,7 +324,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1/runs", async (route) => {
+    await page.route("**/v1/deployments/dep-1/runs", async (route) => {
       if (route.request().method() === "POST") {
         route.fulfill({
           status: 200,

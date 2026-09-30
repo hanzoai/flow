@@ -1,6 +1,6 @@
 """Deployments API create/update matrix runner.
 
-This script exercises `/api/v1/deployments` over HTTP and focuses on
+This script exercises `/v1/deployments` over HTTP and focuses on
 create/update payload-heavy scenarios for the Watsonx Orchestrate provider.
 
 Warning:
@@ -1009,16 +1009,16 @@ class DeploymentsApiParallelE2E:
         return results
 
     async def _call_create(self, payload: dict[str, Any]) -> HttpResponseEnvelope:
-        response = await self._client.post("/api/v1/deployments", json=payload)
+        response = await self._client.post("/v1/deployments", json=payload)
         return self._normalize_response(response)
 
     async def _call_update(self, payload: dict[str, Any]) -> HttpResponseEnvelope:
-        response = await self._client.patch(f"/api/v1/deployments/{payload['deployment_id']}", json=payload["body"])
+        response = await self._client.patch(f"/v1/deployments/{payload['deployment_id']}", json=payload["body"])
         return self._normalize_response(response)
 
     async def _call_update_chain_add_remove(self, payload: dict[str, Any]) -> HttpResponseEnvelope:
         add_response = await self._client.patch(
-            f"/api/v1/deployments/{payload['deployment_id']}",
+            f"/v1/deployments/{payload['deployment_id']}",
             json={
                 "provider_data": self._provider_data_update(
                     upsert_flows=[
@@ -1036,7 +1036,7 @@ class DeploymentsApiParallelE2E:
         if normalized_add.status_code >= HTTP_STATUS_MULTIPLE_CHOICES:
             return normalized_add
         remove_response = await self._client.patch(
-            f"/api/v1/deployments/{payload['deployment_id']}",
+            f"/v1/deployments/{payload['deployment_id']}",
             json={
                 "provider_data": self._provider_data_update(
                     remove_flows=[payload["add_flow_version_id"]],
@@ -1593,7 +1593,7 @@ class DeploymentsApiParallelE2E:
             msg = f"refusing to delete unmanaged deployment id: {deployment_id}"
             raise RuntimeError(msg)
         response = await self._client.delete(
-            f"/api/v1/deployments/{deployment_id}",
+            f"/v1/deployments/{deployment_id}",
             params={"include_provider": str(include_provider).lower()},
         )
         if response.status_code not in {HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND}:
@@ -1673,7 +1673,7 @@ class DeploymentsApiParallelE2E:
         created_flow_ids = list(self.created_flow_ids)
         for index, flow_id in enumerate(created_flow_ids, start=1):
             print(f"cleanup: deleting flow {index}/{len(created_flow_ids)} {flow_id} ...")
-            response = await self._client.delete(f"/api/v1/flows/{flow_id}")
+            response = await self._client.delete(f"/v1/flows/{flow_id}")
             if response.status_code in {HTTP_STATUS_OK, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND}:
                 self.created_flow_ids.discard(flow_id)
                 if response.status_code == HTTP_STATUS_NOT_FOUND:
@@ -1812,7 +1812,7 @@ class DeploymentsApiParallelE2E:
         provider_id = self.created_provider_account_id
         if provider_id is None:
             return
-        response = await self._client.delete(f"/api/v1/deployments/providers/{provider_id}")
+        response = await self._client.delete(f"/v1/deployments/providers/{provider_id}")
         if response.status_code in {HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND}:
             self.created_provider_account_id = None
             return
@@ -1840,7 +1840,7 @@ class DeploymentsApiParallelE2E:
         size = 50
         while True:
             response = await self._client.get(
-                "/api/v1/deployments/providers",
+                "/v1/deployments/providers",
                 params={"page": page, "size": size},
             )
             normalized = self._normalize_response(response)
@@ -1884,7 +1884,7 @@ class DeploymentsApiParallelE2E:
         }
         if self.provider_tenant_id:
             create_payload["provider_data"]["tenant_id"] = self.provider_tenant_id
-        response = await self._client.post("/api/v1/deployments/providers", json=create_payload)
+        response = await self._client.post("/v1/deployments/providers", json=create_payload)
         normalized = self._normalize_response(response)
         if normalized.status_code != HTTP_STATUS_CREATED:
             msg = f"creating provider account failed: status={normalized.status_code} detail={normalized.detail}"
@@ -1914,7 +1914,7 @@ class DeploymentsApiParallelE2E:
         for starter_path in starter_paths:
             starter_payload = self._load_starter_project_payload(starter_path)
             flow_payload = self._build_flow_create_payload(starter_payload=starter_payload, starter_path=starter_path)
-            flow_response = await self._client.post("/api/v1/flows/", json=flow_payload)
+            flow_response = await self._client.post("/v1/flows/", json=flow_payload)
             flow_envelope = self._normalize_response(flow_response)
             if flow_envelope.status_code != HTTP_STATUS_CREATED:
                 msg = (
@@ -1930,7 +1930,7 @@ class DeploymentsApiParallelE2E:
             self.created_flow_ids.add(flow_id)
 
             snapshot_response = await self._client.post(
-                f"/api/v1/flows/{flow_id}/versions/",
+                f"/v1/flows/{flow_id}/versions/",
                 json={"description": f"e2e version from {starter_path.stem}"},
             )
             snapshot_envelope = self._normalize_response(snapshot_response)
@@ -2056,7 +2056,7 @@ def _parse_csv(raw: str) -> list[str]:
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run deployments API create/update matrix against /api/v1/deployments."
+        description="Run deployments API create/update matrix against /v1/deployments."
     )
     parser.add_argument("--base-url", default=os.getenv("FLOW_BASE_URL", "http://localhost:7860"))
     parser.add_argument("--api-key", default=os.getenv("FLOW_API_KEY", ""))

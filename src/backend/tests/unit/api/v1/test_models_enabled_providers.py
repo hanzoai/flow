@@ -62,7 +62,7 @@ def google_credential():
 @pytest.mark.usefixtures("active_user")
 async def test_enabled_providers_empty_initially(client: AsyncClient, logged_in_headers):
     """Test that enabled_providers returns empty status when no credentials exist."""
-    response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+    response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -76,14 +76,14 @@ async def test_enabled_providers_empty_initially(client: AsyncClient, logged_in_
 async def test_enabled_providers_after_credential_creation(client: AsyncClient, openai_credential, logged_in_headers):
     """Test that provider status changes after credential creation."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     openai_var_name = _provider_variable_mapping.get("OpenAI")
     for var in all_vars.json():
         if var.get("name") == openai_var_name:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Check initial status
-    initial_response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+    initial_response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     initial_result = initial_response.json()
 
     assert initial_response.status_code == status.HTTP_200_OK
@@ -94,14 +94,14 @@ async def test_enabled_providers_after_credential_creation(client: AsyncClient, 
     # Mock API validation - mock where it's used (in the variable endpoint)
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None  # validate_model_provider_key returns None on success
-        create_response = await client.post("api/v1/variables/", json=variable_payload, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=variable_payload, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
 
     # Check status after credential creation
     # Mock validation for enabled_providers endpoint as well
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        after_response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+        after_response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     after_result = after_response.json()
 
     assert after_response.status_code == status.HTTP_200_OK
@@ -118,7 +118,7 @@ async def test_enabled_providers_multiple_credentials(
 ):
     """Test provider status with multiple credentials."""
     # Clean up any existing variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     var_names = {
         _provider_variable_mapping.get("OpenAI"),
         _provider_variable_mapping.get("Anthropic"),
@@ -126,7 +126,7 @@ async def test_enabled_providers_multiple_credentials(
     }
     for var in all_vars.json():
         if var.get("name") in var_names:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create multiple credentials using variables endpoint
     openai_var = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
@@ -136,14 +136,14 @@ async def test_enabled_providers_multiple_credentials(
     # Mock API validations
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        await client.post("api/v1/variables/", json=openai_var, headers=logged_in_headers)
-        await client.post("api/v1/variables/", json=anthropic_var, headers=logged_in_headers)
-        await client.post("api/v1/variables/", json=google_var, headers=logged_in_headers)
+        await client.post("v1/variables/", json=openai_var, headers=logged_in_headers)
+        await client.post("v1/variables/", json=anthropic_var, headers=logged_in_headers)
+        await client.post("v1/variables/", json=google_var, headers=logged_in_headers)
 
     # Check enabled providers - mock validation for enabled_providers endpoint
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+        response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -160,35 +160,35 @@ async def test_enabled_providers_multiple_credentials(
 async def test_enabled_providers_after_credential_deletion(client: AsyncClient, openai_credential, logged_in_headers):
     """Test that provider status updates after credential deletion."""
     # Get initial OpenAI credentials to clean up (using variables endpoint)
-    all_variables = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_variables = await client.get("v1/variables/", headers=logged_in_headers)
     openai_var_name = _provider_variable_mapping.get("OpenAI")
     for var in all_variables.json():
         if var.get("name") == openai_var_name:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create credential using variables endpoint
     variable_payload = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
     # Mock API validation
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        create_response = await client.post("api/v1/variables/", json=variable_payload, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=variable_payload, headers=logged_in_headers)
     created_credential = create_response.json()
     credential_id = created_credential["id"]
 
     # Verify enabled - mock validation for enabled_providers endpoint as well
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        enabled_response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+        enabled_response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     enabled_result = enabled_response.json()
     assert "OpenAI" in enabled_result["enabled_providers"]
     assert enabled_result["provider_status"]["OpenAI"] is True
 
     # Delete credential
-    delete_response = await client.delete(f"api/v1/variables/{credential_id}", headers=logged_in_headers)
+    delete_response = await client.delete(f"v1/variables/{credential_id}", headers=logged_in_headers)
     assert delete_response.status_code == status.HTTP_204_NO_CONTENT
 
     # Verify disabled
-    disabled_response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+    disabled_response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
     disabled_result = disabled_response.json()
     assert "OpenAI" not in disabled_result["enabled_providers"]
     # When no credentials exist, provider_status may be empty or OpenAI should be False
@@ -201,14 +201,14 @@ async def test_enabled_providers_filter_by_specific_providers(
 ):
     """Test filtering enabled_providers by specific providers."""
     # Clean up any existing variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     var_names = {
         _provider_variable_mapping.get("OpenAI"),
         _provider_variable_mapping.get("Anthropic"),
     }
     for var in all_vars.json():
         if var.get("name") in var_names:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create credentials using variables endpoint
     openai_var = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
@@ -217,14 +217,14 @@ async def test_enabled_providers_filter_by_specific_providers(
     # Mock API validations
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        await client.post("api/v1/variables/", json=openai_var, headers=logged_in_headers)
-        await client.post("api/v1/variables/", json=anthropic_var, headers=logged_in_headers)
+        await client.post("v1/variables/", json=openai_var, headers=logged_in_headers)
+        await client.post("v1/variables/", json=anthropic_var, headers=logged_in_headers)
 
     # Request specific providers (only providers that are in the mapping) - mock validation
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
         response = await client.get(
-            "api/v1/models/enabled_providers?providers=OpenAI&providers=Anthropic", headers=logged_in_headers
+            "v1/models/enabled_providers?providers=OpenAI&providers=Anthropic", headers=logged_in_headers
         )
     result = response.json()
 
@@ -238,7 +238,7 @@ async def test_enabled_providers_filter_by_specific_providers(
 
     # Test filtering with non-existent provider (should not error, just return empty)
     response2 = await client.get(
-        "api/v1/models/enabled_providers?providers=NonExistentProvider", headers=logged_in_headers
+        "v1/models/enabled_providers?providers=NonExistentProvider", headers=logged_in_headers
     )
     result2 = response2.json()
     assert response2.status_code == status.HTTP_200_OK
@@ -251,23 +251,23 @@ async def test_enabled_providers_filter_by_specific_providers(
 async def test_variables_credential_redaction(client: AsyncClient, openai_credential, logged_in_headers):
     """Test that credential variables have credentials properly redacted."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     openai_var_name = _provider_variable_mapping.get("OpenAI")
     for var in all_vars.json():
         if var.get("name") == openai_var_name:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create a credential using variables endpoint
     variable_payload = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
     # Mock API validation
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        create_response = await client.post("api/v1/variables/", json=variable_payload, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=variable_payload, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     created_credential = create_response.json()
 
     # Get all variables
-    response = await client.get("api/v1/variables/", headers=logged_in_headers)
+    response = await client.get("v1/variables/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -290,14 +290,14 @@ async def test_variables_multiple_credentials_all_redacted(
 ):
     """Test that all credentials are redacted when fetching all variables."""
     # Clean up any existing variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     var_names = {
         _provider_variable_mapping.get("OpenAI"),
         _provider_variable_mapping.get("Anthropic"),
     }
     for var in all_vars.json():
         if var.get("name") in var_names:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create multiple credentials using variables endpoint
     openai_var = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
@@ -306,14 +306,14 @@ async def test_variables_multiple_credentials_all_redacted(
     # Mock API validations
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        create_response1 = await client.post("api/v1/variables/", json=openai_var, headers=logged_in_headers)
-        create_response2 = await client.post("api/v1/variables/", json=anthropic_var, headers=logged_in_headers)
+        create_response1 = await client.post("v1/variables/", json=openai_var, headers=logged_in_headers)
+        create_response2 = await client.post("v1/variables/", json=anthropic_var, headers=logged_in_headers)
 
     assert create_response1.status_code == status.HTTP_201_CREATED
     assert create_response2.status_code == status.HTTP_201_CREATED
 
     # Get all variables
-    response = await client.get("api/v1/variables/", headers=logged_in_headers)
+    response = await client.get("v1/variables/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -329,28 +329,28 @@ async def test_variables_multiple_credentials_all_redacted(
 async def test_enabled_providers_reflects_models_endpoint(client: AsyncClient, openai_credential, logged_in_headers):
     """Test that /models endpoint reflects same is_enabled status as /enabled_providers."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     openai_var_name = _provider_variable_mapping.get("OpenAI")
     for var in all_vars.json():
         if var.get("name") == openai_var_name:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     # Create credential using variables endpoint
     variable_payload = _create_variable_payload(openai_credential["provider"], openai_credential["value"])
     # Mock API validation
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        await client.post("api/v1/variables/", json=variable_payload, headers=logged_in_headers)
+        await client.post("v1/variables/", json=variable_payload, headers=logged_in_headers)
 
     # Get enabled providers and models - mock validation in unified_models so providers are marked enabled
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
 
-        enabled_response = await client.get("api/v1/models/enabled_providers", headers=logged_in_headers)
+        enabled_response = await client.get("v1/models/enabled_providers", headers=logged_in_headers)
         enabled_result = enabled_response.json()
 
         # Get models (which should include provider information)
-        models_response = await client.get("api/v1/models", headers=logged_in_headers)
+        models_response = await client.get("v1/models", headers=logged_in_headers)
         models_result = models_response.json()
 
     assert models_response.status_code == status.HTTP_200_OK
@@ -371,11 +371,11 @@ async def test_security_credential_value_never_exposed_in_variables_endpoint(
 ):
     """Critical security test: ensure credential values are NEVER exposed in plain text."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     openai_var_name = _provider_variable_mapping.get("OpenAI")
     for var in all_vars.json():
         if var.get("name") == openai_var_name:
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     original_value = openai_credential["value"]
 
@@ -384,11 +384,11 @@ async def test_security_credential_value_never_exposed_in_variables_endpoint(
     # Mock API validation
     with mock.patch("flow.api.v1.variable.validate_model_provider_key") as mock_validate:
         mock_validate.return_value = None
-        create_response = await client.post("api/v1/variables/", json=variable_payload, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=variable_payload, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
 
     # Get all variables - this is the security-critical path
-    response = await client.get("api/v1/variables/", headers=logged_in_headers)
+    response = await client.get("v1/variables/", headers=logged_in_headers)
     result = response.json()
 
     # CRITICAL: Original value must NEVER appear in response
@@ -405,7 +405,7 @@ async def test_security_credential_value_never_exposed_in_variables_endpoint(
 @pytest.mark.usefixtures("active_user")
 async def test_provider_variable_mapping_returns_full_variable_info(client: AsyncClient, logged_in_headers):
     """Test that provider-variable-mapping endpoint returns full variable info for each provider."""
-    response = await client.get("api/v1/models/provider-variable-mapping", headers=logged_in_headers)
+    response = await client.get("v1/models/provider-variable-mapping", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -442,7 +442,7 @@ async def test_provider_variable_mapping_returns_full_variable_info(client: Asyn
 @pytest.mark.usefixtures("active_user")
 async def test_provider_variable_mapping_multi_variable_provider(client: AsyncClient, logged_in_headers):
     """Test that IBM WatsonX returns multiple required variables."""
-    response = await client.get("api/v1/models/provider-variable-mapping", headers=logged_in_headers)
+    response = await client.get("v1/models/provider-variable-mapping", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -524,7 +524,7 @@ async def test_list_models_returns_live_ollama_models_when_configured(client: As
             side_effect=mock_get_live_models,
         ),
     ):
-        response = await client.get("api/v1/models", headers=logged_in_headers)
+        response = await client.get("v1/models", headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
@@ -556,7 +556,7 @@ async def test_list_models_ollama_empty_when_live_fetch_returns_empty(client: As
             return_value=[],
         ),
     ):
-        response = await client.get("api/v1/models", headers=logged_in_headers)
+        response = await client.get("v1/models", headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_200_OK
     data = response.json()

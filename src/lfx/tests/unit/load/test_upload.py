@@ -1,10 +1,10 @@
 """Regression tests for the SDK upload helper after the auth change.
 
-After PR #12831, the server's ``/api/v1/upload/{flow_id}`` endpoint requires
+After PR #12831, the server's ``/v1/upload/{flow_id}`` endpoint requires
 authentication.  The SDK helpers in :mod:`lfx.load.utils` were updated to
 forward an optional ``api_key`` (or ``FLOW_API_KEY`` env var) as the
 ``x-api-key`` header so existing callers can pass credentials without
-rewriting against the non-deprecated ``/api/v1/files/upload/{flow_id}``
+rewriting against the non-deprecated ``/v1/files/upload/{flow_id}``
 route.
 """
 

@@ -55,7 +55,7 @@ class TestLoopComponentWithAPI(ComponentTestBaseWithClient):
         vector_store = orjson.loads(json_loop_test)
         data = vector_store["data"]
         vector_store = FlowCreate(name="Flow", description="description", data=data, endpoint_name="f")
-        response = await client.post("api/v1/flows/", json=vector_store.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=vector_store.model_dump(), headers=logged_in_headers)
         response.raise_for_status()
         return response.json()["id"]
 

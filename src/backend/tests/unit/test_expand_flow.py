@@ -546,7 +546,7 @@ class TestExpandFlowEndpoint:
             "edges": [],
         }
 
-        response = await client.post("api/v1/flows/expand/", json=compact_data)
+        response = await client.post("v1/flows/expand/", json=compact_data)
 
         # Should return 401 or 403 without auth
         assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
@@ -559,7 +559,7 @@ class TestExpandFlowEndpoint:
             "edges": [],
         }
 
-        response = await client.post("api/v1/flows/expand/", json=compact_data, headers=logged_in_headers)
+        response = await client.post("v1/flows/expand/", json=compact_data, headers=logged_in_headers)
 
         # Component might not exist in test env, but endpoint should work
         assert response.status_code in [status.HTTP_200_OK, status.HTTP_400_BAD_REQUEST]
@@ -570,7 +570,7 @@ class TestExpandFlowEndpoint:
             "edges": [],
         }
 
-        response = await client.post("api/v1/flows/expand/", json=compact_data, headers=logged_in_headers)
+        response = await client.post("v1/flows/expand/", json=compact_data, headers=logged_in_headers)
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "not found" in response.json()["detail"]
@@ -588,7 +588,7 @@ class TestExpandFlowEndpoint:
             ],
         }
 
-        response = await client.post("api/v1/flows/expand/", json=compact_data, headers=logged_in_headers)
+        response = await client.post("v1/flows/expand/", json=compact_data, headers=logged_in_headers)
 
         # Should fail due to missing source node
         assert response.status_code == status.HTTP_400_BAD_REQUEST

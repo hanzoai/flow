@@ -1,7 +1,7 @@
 """Direct Watsonx adapter scenario runner.
 
 Runs scenario matrices against `WatsonxOrchestrateDeploymentService` directly
-(no `/api/v1/deployments` calls).
+(no `/v1/deployments` calls).
 
 Warning:
 --------

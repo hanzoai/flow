@@ -69,7 +69,7 @@ export const ATTACHMENTS_MOCK = {
   total: 1,
 };
 
-// Shape returned by GET /api/v1/deployments/llms — used in create stepper
+// Shape returned by GET /v1/deployments/llms — used in create stepper
 export const LLMS_MOCK = {
   provider_data: {
     models: [{ model_name: "ibm/granite-13b-chat" }],

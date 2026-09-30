@@ -3,7 +3,7 @@ from httpx import AsyncClient
 
 
 async def test_create_folder(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/api_key/", headers=logged_in_headers)
+    response = await client.get("v1/api_key/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -21,7 +21,7 @@ async def test_create_api_key_route(client: AsyncClient, logged_in_headers, acti
         "api_key": "string",
         "user_id": str(active_user.id),
     }
-    response = await client.post("api/v1/api_key/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/api_key/", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -43,10 +43,10 @@ async def test_delete_api_key_route(client: AsyncClient, logged_in_headers, acti
         "api_key": "string",
         "user_id": str(active_user.id),
     }
-    response_ = await client.post("api/v1/api_key/", json=basic_case, headers=logged_in_headers)
+    response_ = await client.post("v1/api_key/", json=basic_case, headers=logged_in_headers)
     id_ = response_.json()["id"]
 
-    response = await client.delete(f"api/v1/api_key/{id_}", headers=logged_in_headers)
+    response = await client.delete(f"v1/api_key/{id_}", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -56,7 +56,7 @@ async def test_delete_api_key_route(client: AsyncClient, logged_in_headers, acti
 
 async def test_save_store_api_key(client: AsyncClient, logged_in_headers):
     basic_case = {"api_key": "string"}
-    response = await client.post("api/v1/api_key/store", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/api_key/store", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -80,7 +80,7 @@ async def test_delete_api_key_route_unauthorized(client: AsyncClient, logged_in_
         "api_key": "string",
         "user_id": str(active_user.id),
     }
-    response = await client.post("api/v1/api_key/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/api_key/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
     user1_api_key_id = response.json()["id"]
 
@@ -103,20 +103,20 @@ async def test_delete_api_key_route_unauthorized(client: AsyncClient, logged_in_
 
     # Login as second user
     login_data = {"username": "testuser2", "password": "testpassword2"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == status.HTTP_200_OK
     user2_token = response.json()["access_token"]
     user2_headers = {"Authorization": f"Bearer {user2_token}"}
 
     # Try to delete first user's API key using second user's credentials
-    response = await client.delete(f"api/v1/api_key/{user1_api_key_id}", headers=user2_headers)
+    response = await client.delete(f"v1/api_key/{user1_api_key_id}", headers=user2_headers)
 
     # Should fail with 400 error (API Key not found - we don't reveal it exists)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "API Key not found" in response.json()["detail"]
 
     # Verify the first user's API key still exists by trying to delete it with correct credentials
-    response = await client.delete(f"api/v1/api_key/{user1_api_key_id}", headers=logged_in_headers)
+    response = await client.delete(f"v1/api_key/{user1_api_key_id}", headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["detail"] == "API Key deleted"
 

@@ -35,7 +35,7 @@ async def test_create_flow_with_nonexistent_folder_id_assigns_default_folder(
         "folder_id": non_existent_folder_id,
     }
 
-    response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -60,7 +60,7 @@ async def test_create_flow_without_folder_id_assigns_default_folder(
         "data": {},
     }
 
-    response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -103,7 +103,7 @@ async def test_create_flow_after_all_folders_deleted_creates_default_folder(
         "data": {},
     }
 
-    response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -134,7 +134,7 @@ async def test_update_flow_with_nonexistent_folder_id_assigns_default_folder(
         "name": "Flow to Update",
         "data": {},
     }
-    flow_response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    flow_response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
     assert flow_response.status_code == status.HTTP_201_CREATED
     flow_id = flow_response.json()["id"]
 
@@ -145,7 +145,7 @@ async def test_update_flow_with_nonexistent_folder_id_assigns_default_folder(
         "folder_id": non_existent_folder_id,  # This folder doesn't exist
     }
 
-    update_response = await client.patch(f"api/v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
+    update_response = await client.patch(f"v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
 
     assert update_response.status_code == status.HTTP_200_OK
     result = update_response.json()
@@ -171,7 +171,7 @@ async def test_update_flow_without_folder_id_keeps_existing_folder(client: Async
         "name": "Flow to Update",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
     original_folder_id = create_response.json()["folder_id"]
@@ -181,7 +181,7 @@ async def test_update_flow_without_folder_id_keeps_existing_folder(client: Async
         "name": "Updated Flow Name",
     }
 
-    update_response = await client.patch(f"api/v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
+    update_response = await client.patch(f"v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
 
     assert update_response.status_code == status.HTTP_200_OK
     result = update_response.json()
@@ -211,7 +211,7 @@ async def test_upload_flow_with_nonexistent_folder_id_assigns_default(
     file_content = json.dumps(flow_data)
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("flow.json", file_content, "application/json")},
         headers=logged_in_headers,
     )
@@ -247,13 +247,13 @@ async def test_flow_created_is_retrievable_in_folder(client: AsyncClient, logged
         "name": "Retrievable Flow",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
     folder_id = create_response.json()["folder_id"]
 
     # List flows in the folder
-    response = await client.get(f"api/v1/folders/{folder_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/folders/{folder_id}", headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
 
     # Check if the flow is in the folder's flows list
@@ -285,7 +285,7 @@ async def test_upsert_flow_with_nonexistent_folder_id_on_create(client: AsyncCli
         "folder_id": non_existent_folder_id,
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
 
     # The request should be rejected with 400 Bad Request since folder doesn't exist
     # This is the expected behavior based on the existing test_upsert_flow_returns_400_for_invalid_folder_id

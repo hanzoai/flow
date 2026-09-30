@@ -70,7 +70,7 @@ class TestWorkflowDeveloperAPIProtection:
 
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.post(
-            "api/v2/workflows",
+            "v1/workflows",
             json=request_data,
             headers=headers,
         )
@@ -91,7 +91,7 @@ class TestWorkflowDeveloperAPIProtection:
 
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.post(
-            "api/v2/workflows/stop",
+            "v1/workflows/stop",
             json=request_data,
             headers=headers,
         )
@@ -127,7 +127,7 @@ class TestWorkflowDeveloperAPIProtection:
 
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.post(
-            "api/v2/workflows",
+            "v1/workflows",
             json=request_data,
             headers=headers,
         )
@@ -147,7 +147,7 @@ class TestWorkflowDeveloperAPIProtection:
         """Test GET workflow endpoint is allowed when developer API is enabled - job not found."""
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.get(
-            "api/v2/workflows?job_id=550e8400-e29b-41d4-a716-446655440001",  # Non-existent job ID
+            "v1/workflows?job_id=550e8400-e29b-41d4-a716-446655440001",  # Non-existent job ID
             headers=headers,
         )
 
@@ -170,7 +170,7 @@ class TestWorkflowDeveloperAPIProtection:
 
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.post(
-            "api/v2/workflows/stop",
+            "v1/workflows/stop",
             json=request_data,
             headers=headers,
         )
@@ -191,7 +191,7 @@ class TestWorkflowDeveloperAPIProtection:
         """Test GET workflow endpoint is blocked when developer API is disabled."""
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.get(
-            "api/v2/workflows?job_id=550e8400-e29b-41d4-a716-446655440001",
+            "v1/workflows?job_id=550e8400-e29b-41d4-a716-446655440001",
             headers=headers,
         )
 
@@ -226,7 +226,7 @@ class TestWorkflowDeveloperAPIProtection:
 
             headers = {"x-api-key": created_api_key.api_key}
             response = await client.post(
-                "api/v2/workflows",
+                "v1/workflows",
                 json=request_data,
                 headers=headers,
             )
@@ -261,7 +261,7 @@ class TestWorkflowDeveloperAPIProtection:
         # The endpoint should return 501 regardless of whether the job exists
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.get(
-            "api/v2/workflows?job_id=550e8400-e29b-41d4-a716-446655440002",
+            "v1/workflows?job_id=550e8400-e29b-41d4-a716-446655440002",
             headers=headers,
         )
 
@@ -283,7 +283,7 @@ class TestWorkflowDeveloperAPIProtection:
 
         headers = {"x-api-key": created_api_key.api_key}
         response = await client.post(
-            "api/v2/workflows/stop",
+            "v1/workflows/stop",
             json=request_data,
             headers=headers,
         )
@@ -308,7 +308,7 @@ class TestWorkflowDeveloperAPIProtection:
         }
 
         response = await client.post(
-            "api/v2/workflows",
+            "v1/workflows",
             json=request_data,
         )
         # The API returns 403 Forbidden for missing API keys (not 401 Unauthorized)
@@ -342,7 +342,7 @@ class TestWorkflowErrorHandling:
         request_data = {"flow_id": flow_id, "background": False, "stream": False, "inputs": None}
 
         headers = {"x-api-key": created_api_key.api_key}
-        response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+        response = await client.post("v1/workflows", json=request_data, headers=headers)
 
         assert response.status_code == 404
         result = response.json()
@@ -365,7 +365,7 @@ class TestWorkflowErrorHandling:
             mock_get_flow.side_effect = OperationalError("statement", "params", "orig")
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 503
             result = response.json()
@@ -399,7 +399,7 @@ class TestWorkflowErrorHandling:
             request_data = {"flow_id": str(flow_id), "background": False, "stream": False, "inputs": None}
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 400
             result = response.json()
@@ -440,7 +440,7 @@ class TestWorkflowErrorHandling:
             request_data = {"flow_id": str(flow_id), "background": False, "stream": False, "inputs": None}
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 400
             result = response.json()
@@ -493,7 +493,7 @@ class TestWorkflowErrorHandling:
                 patch("flow.api.v2.workflow.EXECUTION_TIMEOUT", 0.5),  # 0.5 second timeout
             ):
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 408
                 result = response.json()
@@ -540,7 +540,7 @@ class TestWorkflowErrorHandling:
             }
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             # Now background mode is partially implemented and should NOT return 501
             # It should return a WorkflowJobResponse (wrapped in WorkflowExecutionResponse or similar)
@@ -590,7 +590,7 @@ class TestWorkflowErrorHandling:
             }
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 501
             result = response.json()
@@ -615,7 +615,7 @@ class TestWorkflowErrorHandling:
         request_data = {"flow_id": flow_id, "background": False, "stream": False, "inputs": None}
 
         headers = {"x-api-key": created_api_key.api_key}
-        response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+        response = await client.post("v1/workflows", json=request_data, headers=headers)
 
         assert response.status_code == 404
         result = response.json()
@@ -663,7 +663,7 @@ class TestWorkflowErrorHandling:
                 mock_execute.side_effect = WorkflowValidationError("Test validation error")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 400
                 result = response.json()
@@ -678,7 +678,7 @@ class TestWorkflowErrorHandling:
                     await session.delete(flow)
 
         # Test GET /workflow without API key
-        response = await client.get("api/v2/workflows?job_id=550e8400-e29b-41d4-a716-446655440001")
+        response = await client.get("v1/workflows?job_id=550e8400-e29b-41d4-a716-446655440001")
         assert response.status_code == 403
         assert "API key must be passed" in response.json()["detail"]
 
@@ -722,7 +722,7 @@ class TestWorkflowSyncExecution:
             request_data = {"flow_id": str(flow_id), "background": False, "stream": False, "inputs": None}
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -775,7 +775,7 @@ class TestWorkflowSyncExecution:
                 mock_run.side_effect = Exception("Component execution failed: LLM API key not configured")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 # Component errors should return 200 with error in body
                 assert response.status_code == 200
@@ -843,7 +843,7 @@ class TestWorkflowSyncExecution:
                 mock_run.return_value = ([mock_run_output], "session-456")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -924,7 +924,7 @@ class TestWorkflowSyncExecution:
                 mock_run.return_value = ([mock_run_output], "session-789")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -989,7 +989,7 @@ class TestWorkflowSyncExecution:
                 mock_run.return_value = ([mock_run_output], "session-101")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -1048,7 +1048,7 @@ class TestWorkflowSyncExecution:
                 mock_run.return_value = ([mock_chat_output, mock_file_output], "session-202")
 
                 headers = {"x-api-key": created_api_key.api_key}
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -1089,7 +1089,7 @@ class TestWorkflowSyncExecution:
             request_data = {"flow_id": str(flow_id), "background": False, "stream": False, "inputs": None}
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+            response = await client.post("v1/workflows", json=request_data, headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1132,7 +1132,7 @@ class TestWorkflowSyncExecution:
 
         # Test POST /workflow/stop without API key
         response = await client.post(
-            "api/v2/workflows/stop",
+            "v1/workflows/stop",
             json={"job_id": "550e8400-e29b-41d4-a716-446655440001"},
         )
         assert response.status_code == 403
@@ -1196,7 +1196,7 @@ class TestWorkflowBackgroundQueueing:
                 mock_task_service.fire_and_forget_task.return_value.set_result(mock_job_id)
                 mock_get_task_service.return_value = mock_task_service
 
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -1227,7 +1227,7 @@ class TestWorkflowBackgroundQueueing:
             "background": True,
         }
         headers = {"x-api-key": created_api_key.api_key}
-        response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+        response = await client.post("v1/workflows", json=request_data, headers=headers)
         assert response.status_code == 404
         detail = response.json()["detail"]
         message = detail["message"] if isinstance(detail, dict) else detail
@@ -1260,7 +1260,7 @@ class TestWorkflowBackgroundQueueing:
                 mock_task_service.fire_and_forget_task.side_effect = Exception("Queueing failed")
                 mock_get_task_service.return_value = mock_task_service
 
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
                 assert response.status_code == 500
                 detail = response.json()["detail"]
                 message = detail["message"] if isinstance(detail, dict) else detail
@@ -1296,7 +1296,7 @@ class TestWorkflowBackgroundQueueing:
 
             with patch("flow.api.v2.workflow.run_graph_internal") as mock_run:
                 mock_run.side_effect = Exception("Internal execution engine failure")
-                response = await client.post("api/v2/workflows", json=request_data, headers=headers)
+                response = await client.post("v1/workflows", json=request_data, headers=headers)
 
                 assert response.status_code == 200
                 result = response.json()
@@ -1348,7 +1348,7 @@ class TestWorkflowStatus:
             mock_get_job_service.return_value = mock_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1371,7 +1371,7 @@ class TestWorkflowStatus:
             mock_get_job_service.return_value = mock_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 404
             result = response.json()
@@ -1398,7 +1398,7 @@ class TestWorkflowStatus:
             mock_get_job_service.return_value = mock_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 500
             result = response.json()
@@ -1438,7 +1438,7 @@ class TestWorkflowStatus:
             mock_reconstruct.return_value = {"flow_id": str(flow_id), "status": "completed", "outputs": {}}
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1469,7 +1469,7 @@ class TestWorkflowStatus:
 
             headers = {"x-api-key": created_api_key.api_key}
             # Add timeout to client.get to avoid hanging if something goes wrong
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 408
             result = response.json()
@@ -1521,7 +1521,7 @@ class TestWorkflowStop:
             mock_get_task_service.return_value = mock_task_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows/stop", json={"job_id": job_id}, headers=headers)
+            response = await client.post("v1/workflows/stop", json={"job_id": job_id}, headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1545,7 +1545,7 @@ class TestWorkflowStop:
             mock_get_job_service.return_value = mock_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows/stop", json={"job_id": job_id}, headers=headers)
+            response = await client.post("v1/workflows/stop", json={"job_id": job_id}, headers=headers)
 
             assert response.status_code == 404
             result = response.json()
@@ -1572,7 +1572,7 @@ class TestWorkflowStop:
             mock_get_job_service.return_value = mock_service
 
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.post("api/v2/workflows/stop", json={"job_id": job_id}, headers=headers)
+            response = await client.post("v1/workflows/stop", json={"job_id": job_id}, headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1606,7 +1606,7 @@ class TestWorkflowIDORProtection:
         created_user_two_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """GET /api/v2/workflows returns 404 when the job belongs to a different user.
+        """GET /v1/workflows returns 404 when the job belongs to a different user.
 
         GHSA-qfw4-cjhf-3g3q: job status must not be visible cross-user.
         Ownership is enforced at the SQL level — unauthorized access returns 404.
@@ -1627,7 +1627,7 @@ class TestWorkflowIDORProtection:
 
         try:
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 404
             result = response.json()
@@ -1646,7 +1646,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """GET /api/v2/workflows returns 200 when the job belongs to the requesting user."""
+        """GET /v1/workflows returns 200 when the job belongs to the requesting user."""
         job_id = uuid4()
         owner_user_id = created_api_key.user_id
 
@@ -1663,7 +1663,7 @@ class TestWorkflowIDORProtection:
 
         try:
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1682,7 +1682,7 @@ class TestWorkflowIDORProtection:
         created_user_two_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """POST /api/v2/workflows/stop returns 404 when the job belongs to a different user.
+        """POST /v1/workflows/stop returns 404 when the job belongs to a different user.
 
         GHSA-qfw4-cjhf-3g3q: job cancellation must not be allowed cross-user.
         Ownership is enforced at the SQL level — unauthorized access returns 404.
@@ -1704,7 +1704,7 @@ class TestWorkflowIDORProtection:
         try:
             headers = {"x-api-key": created_api_key.api_key}
             response = await client.post(
-                "api/v2/workflows/stop",
+                "v1/workflows/stop",
                 json={"job_id": str(job_id)},
                 headers=headers,
             )
@@ -1726,7 +1726,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """POST /api/v2/workflows/stop succeeds when the job belongs to the requesting user."""
+        """POST /v1/workflows/stop succeeds when the job belongs to the requesting user."""
         job_id = uuid4()
         owner_user_id = created_api_key.user_id
 
@@ -1744,7 +1744,7 @@ class TestWorkflowIDORProtection:
         try:
             headers = {"x-api-key": created_api_key.api_key}
             response = await client.post(
-                "api/v2/workflows/stop",
+                "v1/workflows/stop",
                 json={"job_id": str(job_id)},
                 headers=headers,
             )
@@ -1763,7 +1763,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """GET /api/v2/workflows does NOT block legacy jobs where user_id is NULL.
+        """GET /v1/workflows does NOT block legacy jobs where user_id is NULL.
 
         Jobs created before the fix have user_id=None and must not be broken.
         """
@@ -1782,7 +1782,7 @@ class TestWorkflowIDORProtection:
 
         try:
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 200
             result = response.json()
@@ -1800,7 +1800,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """POST /api/v2/workflows/stop does NOT block legacy jobs where user_id is NULL.
+        """POST /v1/workflows/stop does NOT block legacy jobs where user_id is NULL.
 
         Jobs created before the ownership fix have user_id=None and must not be
         broken by the ownership check (parity with the equivalent GET test).
@@ -1821,7 +1821,7 @@ class TestWorkflowIDORProtection:
         try:
             headers = {"x-api-key": created_api_key.api_key}
             response = await client.post(
-                "api/v2/workflows/stop",
+                "v1/workflows/stop",
                 json={"job_id": str(job_id)},
                 headers=headers,
             )
@@ -1842,7 +1842,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """POST /api/v2/workflows/stop returns 404 for non-WORKFLOW job types.
+        """POST /v1/workflows/stop returns 404 for non-WORKFLOW job types.
 
         Prevents stop endpoint from cancelling ingestion or evaluation jobs.
         """
@@ -1862,7 +1862,7 @@ class TestWorkflowIDORProtection:
         try:
             headers = {"x-api-key": created_api_key.api_key}
             response = await client.post(
-                "api/v2/workflows/stop",
+                "v1/workflows/stop",
                 json={"job_id": str(job_id)},
                 headers=headers,
             )
@@ -1883,7 +1883,7 @@ class TestWorkflowIDORProtection:
         created_api_key,
         mock_settings_dev_api_enabled,  # noqa: ARG002
     ):
-        """GET /api/v2/workflows returns 404 for non-WORKFLOW job types.
+        """GET /v1/workflows returns 404 for non-WORKFLOW job types.
 
         Prevents status endpoint from exposing ingestion or evaluation jobs.
         """
@@ -1902,7 +1902,7 @@ class TestWorkflowIDORProtection:
 
         try:
             headers = {"x-api-key": created_api_key.api_key}
-            response = await client.get(f"api/v2/workflows?job_id={job_id}", headers=headers)
+            response = await client.get(f"v1/workflows?job_id={job_id}", headers=headers)
 
             assert response.status_code == 404
             result = response.json()
@@ -1953,7 +1953,7 @@ class TestWorkflowIDORProtection:
 
                 alice_headers = {"x-api-key": created_api_key.api_key}
                 response = await client.post(
-                    "api/v2/workflows",
+                    "v1/workflows",
                     json={
                         "flow_id": str(flow_id),
                         "background": True,
@@ -1971,7 +1971,7 @@ class TestWorkflowIDORProtection:
             # Bob queries Alice's job — must be 404 (ownership enforced at SQL level)
             bob_headers = {"x-api-key": created_user_two_api_key.api_key}
             response = await client.get(
-                f"api/v2/workflows?job_id={job_id_str}",
+                f"v1/workflows?job_id={job_id_str}",
                 headers=bob_headers,
             )
 

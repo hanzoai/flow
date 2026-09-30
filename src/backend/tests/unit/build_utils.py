@@ -9,7 +9,7 @@ from lfx.log.logger import logger
 
 async def create_flow(client: AsyncClient, flow_data: str, headers: dict[str, str]) -> UUID:
     """Create a flow and return its ID."""
-    response = await client.post("api/v1/flows/", json=json.loads(flow_data), headers=headers)
+    response = await client.post("v1/flows/", json=json.loads(flow_data), headers=headers)
     assert response.status_code == codes.CREATED
     return UUID(response.json()["id"])
 
@@ -20,7 +20,7 @@ async def build_flow(
     """Start a flow build and return the job_id."""
     if json is None:
         json = {}
-    response = await client.post(f"api/v1/build/{flow_id}/flow", json=json, headers=headers)
+    response = await client.post(f"v1/build/{flow_id}/flow", json=json, headers=headers)
     assert response.status_code == codes.OK
     return response.json()
 
@@ -29,7 +29,7 @@ async def get_build_events(client: AsyncClient, job_id: str, headers: dict[str, 
     """Get events for a build job."""
     # Add Accept header for NDJSON format
     headers_with_accept = {**headers, "Accept": "application/x-ndjson"}
-    return await client.get(f"api/v1/build/{job_id}/events", headers=headers_with_accept)
+    return await client.get(f"v1/build/{job_id}/events", headers=headers_with_accept)
 
 
 async def consume_and_assert_stream(response, job_id, timeout=30.0):

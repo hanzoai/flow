@@ -325,7 +325,7 @@ async def test_sync_flows_from_fs(client: AsyncClient, logged_in_headers):
             "locked": False,
             "fs_path": flow_filename,
         }
-        response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
         assert response.status_code == 201, f"Failed to create flow: {response.text}"
         created_flow = response.json()
         flow_id = created_flow["id"]
@@ -350,7 +350,7 @@ async def test_sync_flows_from_fs(client: AsyncClient, logged_in_headers):
 
         result = {}
         for i in range(10):
-            response = await client.get(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+            response = await client.get(f"v1/flows/{flow_id}", headers=logged_in_headers)
             result = response.json()
             if result["name"] == "new name":
                 break
@@ -477,7 +477,7 @@ async def test_copy_profile_pictures_source_exists():
 @pytest.mark.usefixtures("client")
 async def test_profile_pictures_available_via_api(client: AsyncClient, logged_in_headers):
     """Test that profile pictures are available via the API after app startup."""
-    response = await client.get("api/v1/files/profile_pictures/list", headers=logged_in_headers)
+    response = await client.get("v1/files/profile_pictures/list", headers=logged_in_headers)
 
     assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.json()}"
 
@@ -499,7 +499,7 @@ async def test_profile_pictures_available_via_api(client: AsyncClient, logged_in
 async def test_profile_picture_can_be_downloaded(client: AsyncClient, logged_in_headers):
     """Test that a profile picture can be downloaded via the API."""
     response = await client.get(
-        "api/v1/files/profile_pictures/Space/046-rocket.svg",
+        "v1/files/profile_pictures/Space/046-rocket.svg",
         headers=logged_in_headers,
     )
 

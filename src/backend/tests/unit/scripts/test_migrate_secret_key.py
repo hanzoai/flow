@@ -483,12 +483,12 @@ class TestMigrationWithRealDatabase:
             "type": CREDENTIAL_TYPE,
             "default_fields": [],
         }
-        response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=credential_variable, headers=logged_in_headers)
         assert response.status_code == 201
         created_var = response.json()
 
         # Read the variable back
-        response = await client.get("api/v1/variables/", headers=logged_in_headers)
+        response = await client.get("v1/variables/", headers=logged_in_headers)
         assert response.status_code == 200
         all_vars = response.json()
 
@@ -501,7 +501,7 @@ class TestMigrationWithRealDatabase:
         assert our_var["value"] is None or our_var["value"] != credential_variable["value"]
 
         # Cleanup
-        await client.delete(f"api/v1/variables/{created_var['id']}", headers=logged_in_headers)
+        await client.delete(f"v1/variables/{created_var['id']}", headers=logged_in_headers)
 
     async def test_create_folder_via_api(
         self,
@@ -517,12 +517,12 @@ class TestMigrationWithRealDatabase:
             "name": f"Test Project {uuid4().hex[:8]}",
             "description": "Test project for migration",
         }
-        response = await client.post("api/v1/folders/", json=project_data, headers=logged_in_headers)
+        response = await client.post("v1/folders/", json=project_data, headers=logged_in_headers)
         assert response.status_code == 201
         created_folder = response.json()
 
         # Cleanup
-        await client.delete(f"api/v1/folders/{created_folder['id']}", headers=logged_in_headers)
+        await client.delete(f"v1/folders/{created_folder['id']}", headers=logged_in_headers)
 
 
 @pytest.mark.usefixtures("client")

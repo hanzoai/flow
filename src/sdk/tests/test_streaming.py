@@ -17,7 +17,7 @@ from flow_sdk.models import RunResponse
 
 _BASE_URL = "http://flow.test"
 _FLOW_ID = "00000000-0000-0000-0000-000000000001"
-_RUN_ENDPOINT = f"/api/v1/run/{_FLOW_ID}"
+_RUN_ENDPOINT = f"/v1/run/{_FLOW_ID}"
 
 
 def _sse_body(*events: dict[str, Any]) -> bytes:

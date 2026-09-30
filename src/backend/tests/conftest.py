@@ -479,7 +479,7 @@ async def test_user(client):
         username="testuser",
         password="testpassword",  # noqa: S106
     )
-    response = await client.post("api/v1/users/", json=user_data.model_dump())
+    response = await client.post("v1/users/", json=user_data.model_dump())
     assert response.status_code == 201
     user = response.json()
     yield user
@@ -525,7 +525,7 @@ async def active_user(client):  # noqa: ARG001
 @pytest.fixture
 async def logged_in_headers(client, active_user):
     login_data = {"username": active_user.username, "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     a_token = tokens["access_token"]
@@ -561,7 +561,7 @@ async def active_super_user(client):  # noqa: ARG001
 @pytest.fixture
 async def logged_in_headers_super_user(client, active_super_user):
     login_data = {"username": active_super_user.username, "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     a_token = tokens["access_token"]
@@ -607,12 +607,12 @@ async def added_flow_webhook_test(client, json_webhook_test, logged_in_headers):
     flow = orjson.loads(json_webhook_test)
     data = flow["data"]
     flow = FlowCreate(name="Basic Chat", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -620,12 +620,12 @@ async def added_flow_chat_input(client, json_chat_input, logged_in_headers):
     flow = orjson.loads(json_chat_input)
     data = flow["data"]
     flow = FlowCreate(name="Chat Input", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -633,12 +633,12 @@ async def added_flow_two_outputs(client, json_two_outputs, logged_in_headers):
     flow = orjson.loads(json_two_outputs)
     data = flow["data"]
     flow = FlowCreate(name="Two Outputs", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -646,12 +646,12 @@ async def added_vector_store(client, json_vector_store, logged_in_headers):
     vector_store = orjson.loads(json_vector_store)
     data = vector_store["data"]
     vector_store = FlowCreate(name="Vector Store", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=vector_store.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=vector_store.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == vector_store.name
     assert response.json()["data"] == vector_store.data
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -661,12 +661,12 @@ async def added_webhook_test(client, json_webhook_test, logged_in_headers):
     webhook_test = FlowCreate(
         name="Webhook Test", description="description", data=data, endpoint_name=webhook_test["endpoint_name"]
     )
-    response = await client.post("api/v1/flows/", json=webhook_test.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=webhook_test.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == webhook_test.name
     assert response.json()["data"] == webhook_test.data
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -675,10 +675,10 @@ async def flow_component(client: AsyncClient, logged_in_headers):
     graph = Graph(start=chat_input, end=chat_input)
     graph_dict = graph.dump(name="Chat Input Component")
     flow = FlowCreate(**graph_dict)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -786,10 +786,10 @@ async def get_simple_api_test(client, logged_in_headers, json_simple_api_test):
     flow = orjson.loads(json_simple_api_test)
     data = flow["data"]
     flow = FlowCreate(name="Simple API Test", data=data, description="Simple API Test")
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     yield response.json()
-    await client.delete(f"api/v1/flows/{response.json()['id']}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{response.json()['id']}", headers=logged_in_headers)
 
 
 @pytest.fixture(name="starter_project")

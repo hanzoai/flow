@@ -14,7 +14,7 @@ import {
 
 async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
   // Register broad catch-all FIRST so specific routes (registered after) take priority via LIFO
-  await page.route("**/api/v1/deployments*", (route) => {
+  await page.route("**/v1/deployments*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -22,7 +22,7 @@ async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
     });
   });
 
-  await page.route("**/api/v1/deployments/configs*", (route) => {
+  await page.route("**/v1/deployments/configs*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -30,7 +30,7 @@ async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
     });
   });
 
-  await page.route("**/api/v1/deployments/llms*", (route) => {
+  await page.route("**/v1/deployments/llms*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -38,7 +38,7 @@ async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
     });
   });
 
-  await page.route("**/api/v1/deployments/providers*", (route) => {
+  await page.route("**/v1/deployments/providers*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -46,7 +46,7 @@ async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
     });
   });
 
-  await page.route("**/api/v1/deployments/dep-1", (route) => {
+  await page.route("**/v1/deployments/dep-1", (route) => {
     if (route.request().method() === "PATCH") {
       route.fulfill({
         status: 200,
@@ -62,7 +62,7 @@ async function setupRoutes(page: Parameters<typeof test>[2]["page"]) {
     }
   });
 
-  await page.route("**/api/v1/deployments/dep-1/flows*", (route) => {
+  await page.route("**/v1/deployments/dep-1/flows*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -194,7 +194,7 @@ test(
     // Step: Review → click Update (final step)
     const patchRequestPromise = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/dep-1") &&
+        req.url().includes("/v1/deployments/dep-1") &&
         req.method() === "PATCH",
     );
 
@@ -230,7 +230,7 @@ test(
     let patchCalled = false;
     page.on("request", (req) => {
       if (
-        req.url().includes("/api/v1/deployments/dep-1") &&
+        req.url().includes("/v1/deployments/dep-1") &&
         req.method() === "PATCH"
       ) {
         patchCalled = true;
@@ -256,7 +256,7 @@ async function setupRoutesWithConnections(
   folderId: string,
 ) {
   // Broad catch-all FIRST
-  await page.route("**/api/v1/deployments*", (route) => {
+  await page.route("**/v1/deployments*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -264,7 +264,7 @@ async function setupRoutesWithConnections(
     });
   });
 
-  await page.route("**/api/v1/deployments/configs*", (route) => {
+  await page.route("**/v1/deployments/configs*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -272,7 +272,7 @@ async function setupRoutesWithConnections(
     });
   });
 
-  await page.route("**/api/v1/deployments/llms*", (route) => {
+  await page.route("**/v1/deployments/llms*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -280,7 +280,7 @@ async function setupRoutesWithConnections(
     });
   });
 
-  await page.route("**/api/v1/deployments/providers*", (route) => {
+  await page.route("**/v1/deployments/providers*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -288,7 +288,7 @@ async function setupRoutesWithConnections(
     });
   });
 
-  await page.route("**/api/v1/deployments/dep-1", (route) => {
+  await page.route("**/v1/deployments/dep-1", (route) => {
     if (route.request().method() === "PATCH") {
       route.fulfill({
         status: 200,
@@ -305,7 +305,7 @@ async function setupRoutesWithConnections(
   });
 
   // Attachments with provider_data containing app_ids
-  await page.route("**/api/v1/deployments/dep-1/flows*", (route) => {
+  await page.route("**/v1/deployments/dep-1/flows*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -314,7 +314,7 @@ async function setupRoutesWithConnections(
   });
 
   // Flows list
-  await page.route("**/api/v1/flows/**", (route) => {
+  await page.route("**/v1/flows/**", (route) => {
     const url = route.request().url();
     if (url.includes("/versions/")) {
       route.fulfill({
@@ -333,7 +333,7 @@ async function setupRoutesWithConnections(
   });
 
   // Global variables
-  await page.route("**/api/v1/variables**", (route) => {
+  await page.route("**/v1/variables**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -342,7 +342,7 @@ async function setupRoutesWithConnections(
   });
 
   // Env var detection
-  await page.route("**/api/v1/variables/detections**", (route) => {
+  await page.route("**/v1/variables/detections**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -366,7 +366,7 @@ test(
     // Capture folder ID from the projects API before bootstrap
     const projectsResponsePromise = page.waitForResponse(
       (resp) =>
-        resp.url().includes("/api/v1/projects") && resp.status() === 200,
+        resp.url().includes("/v1/projects") && resp.status() === 200,
       { timeout: 30000 },
     );
 
@@ -427,7 +427,7 @@ test(
     // Intercept the PATCH request and verify its body
     const patchRequestPromise = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/dep-1") &&
+        req.url().includes("/v1/deployments/dep-1") &&
         req.method() === "PATCH",
     );
 
@@ -464,7 +464,7 @@ test(
 
     const projectsResponsePromise = page.waitForResponse(
       (resp) =>
-        resp.url().includes("/api/v1/projects") && resp.status() === 200,
+        resp.url().includes("/v1/projects") && resp.status() === 200,
       { timeout: 30000 },
     );
 
@@ -522,7 +522,7 @@ test(
 
     const patchRequestPromise = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/dep-1") &&
+        req.url().includes("/v1/deployments/dep-1") &&
         req.method() === "PATCH",
     );
 

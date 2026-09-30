@@ -80,7 +80,7 @@ async def test_project_authentication_settings(client: AsyncClient, logged_in_he
             mock_encrypt.return_value = {"encrypted": "apikey_auth"}
 
             response = await client.post(
-                "api/v1/projects/",
+                "v1/projects/",
                 json={"name": "Auth Test 1", "description": "", "flows_list": [], "components_list": []},
                 headers=logged_in_headers,
             )
@@ -101,7 +101,7 @@ async def test_project_authentication_settings(client: AsyncClient, logged_in_he
         mock_get_settings.return_value = mock_service
 
         response = await client.post(
-            "api/v1/projects/",
+            "v1/projects/",
             json={"name": "Auth Test 2", "description": "", "flows_list": [], "components_list": []},
             headers=logged_in_headers,
         )
@@ -115,7 +115,7 @@ async def test_project_authentication_settings(client: AsyncClient, logged_in_he
 @pytest.mark.asyncio
 async def test_create_project_blocks_moving_deployed_flow(client: AsyncClient, logged_in_headers, active_user):
     flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "integration-deployed-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -131,7 +131,7 @@ async def test_create_project_blocks_moving_deployed_flow(client: AsyncClient, l
     )
 
     create_resp = await client.post(
-        "api/v1/projects/",
+        "v1/projects/",
         json={"name": "integration-target-project", "flows_list": [str(flow_id)], "components_list": []},
         headers=logged_in_headers,
     )

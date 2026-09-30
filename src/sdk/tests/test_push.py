@@ -50,7 +50,7 @@ def _client() -> FlowClient:
 
 @respx.mock
 def test_upsert_flow_create():
-    respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(201, json=_FLOW_PAYLOAD))
+    respx.put(f"{_BASE}/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(201, json=_FLOW_PAYLOAD))
     from flow_sdk.models import FlowCreate
 
     client = _client()
@@ -67,7 +67,7 @@ def test_upsert_flow_create():
 
 @respx.mock
 def test_upsert_flow_update():
-    respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(200, json=_FLOW_PAYLOAD))
+    respx.put(f"{_BASE}/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(200, json=_FLOW_PAYLOAD))
     from flow_sdk.models import FlowCreate
 
     client = _client()
@@ -83,7 +83,7 @@ def test_upsert_flow_update():
 
 @respx.mock
 def test_upsert_flow_not_found_raises():
-    respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(
+    respx.put(f"{_BASE}/v1/flows/{_FLOW_ID}").mock(
         return_value=httpx.Response(404, json={"detail": "Flow not found"})
     )
     from flow_sdk.models import FlowCreate
@@ -100,7 +100,7 @@ def test_upsert_flow_not_found_raises():
 
 @respx.mock
 def test_upsert_flow_conflict_raises():
-    respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(
+    respx.put(f"{_BASE}/v1/flows/{_FLOW_ID}").mock(
         return_value=httpx.Response(409, json={"detail": "Name must be unique"})
     )
     from flow_sdk.models import FlowCreate
@@ -133,9 +133,9 @@ def test_push_command_creates_flow(tmp_path: Path):
         encoding="utf-8",
     )
 
-    respx.put(f"{_BASE}/api/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(201, json=_FLOW_PAYLOAD))
+    respx.put(f"{_BASE}/v1/flows/{_FLOW_ID}").mock(return_value=httpx.Response(201, json=_FLOW_PAYLOAD))
     # projects list (empty -- no project targeting in this test)
-    respx.get(f"{_BASE}/api/v1/projects/").mock(return_value=httpx.Response(200, json=[]))
+    respx.get(f"{_BASE}/v1/projects/").mock(return_value=httpx.Response(200, json=[]))
 
     # Write an environments config
     env_file = tmp_path / "flow-environments.toml"
@@ -211,12 +211,12 @@ def test_push_command_project_dir(tmp_path: Path):
     project_id = UUID("cccccccc-0000-0000-0000-000000000001")
     project_payload = {"id": str(project_id), "name": "My Project", "description": None, "parent_id": None}
 
-    respx.get(f"{_BASE}/api/v1/projects/").mock(return_value=httpx.Response(200, json=[]))
-    respx.post(f"{_BASE}/api/v1/projects/").mock(return_value=httpx.Response(201, json=project_payload))
+    respx.get(f"{_BASE}/v1/projects/").mock(return_value=httpx.Response(200, json=[]))
+    respx.post(f"{_BASE}/v1/projects/").mock(return_value=httpx.Response(201, json=project_payload))
 
     for fid in flow_ids:
         payload = {**_FLOW_PAYLOAD, "id": str(fid)}
-        respx.put(f"{_BASE}/api/v1/flows/{fid}").mock(return_value=httpx.Response(201, json=payload))
+        respx.put(f"{_BASE}/v1/flows/{fid}").mock(return_value=httpx.Response(201, json=payload))
 
     env_file = tmp_path / "flow-environments.toml"
     env_file.write_text(

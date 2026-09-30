@@ -295,19 +295,19 @@ class TestClientHeaders:
 class TestClientUrl:
     def test_basic_path(self):
         client = FlowClient(server_url="http://localhost:7860")
-        assert client._url("/flows/") == "http://localhost:7860/api/v1/flows/"
+        assert client._url("/flows/") == "http://localhost:7860/v1/flows/"
 
     def test_trailing_slash_stripped(self):
         client = FlowClient(server_url="http://localhost:7860/")
-        assert client._url("/flows/") == "http://localhost:7860/api/v1/flows/"
+        assert client._url("/flows/") == "http://localhost:7860/v1/flows/"
 
     def test_nested_path(self):
         client = FlowClient(server_url="http://host:8000")
-        assert client._url("/flows/abc-123") == "http://host:8000/api/v1/flows/abc-123"
+        assert client._url("/flows/abc-123") == "http://host:8000/v1/flows/abc-123"
 
     def test_default_server_url(self):
         client = FlowClient()
-        assert client._url("/test") == f"{client.server_url}/api/v1/test"
+        assert client._url("/test") == f"{client.server_url}/v1/test"
 
 
 class TestClientInit:

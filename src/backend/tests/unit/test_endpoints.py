@@ -32,7 +32,7 @@ async def run_post(client, flow_id, headers, post_data):
         AssertionError: If the response status code is not 200.
     """
     response = await client.post(
-        f"api/v1/process/{flow_id}",
+        f"v1/process/{flow_id}",
         headers=headers,
         json=post_data,
     )
@@ -134,11 +134,11 @@ PROMPT_REQUEST = {
 async def test_get_all(client: AsyncClient, logged_in_headers):
     """Tests the retrieval of all available components from the API.
 
-    Sends a GET request to the `api/v1/all` endpoint and verifies that the returned component names
+    Sends a GET request to the `v1/all` endpoint and verifies that the returned component names
     correspond to files in the components directory. Also checks for the presence of specific components
     such as "ChatInput", "Prompt", and "ChatOutput" in the response.
     """
-    response = await client.get("api/v1/all", headers=logged_in_headers)
+    response = await client.get("v1/all", headers=logged_in_headers)
     assert response.status_code == 200
     dir_reader = DirectoryReader(BASE_COMPONENTS_PATH)
     files = dir_reader.get_files()
@@ -163,7 +163,7 @@ import math
 def square(x):
     return x ** 2
 """
-    response1 = await client.post("api/v1/validate/code", json={"code": code1}, headers=logged_in_headers)
+    response1 = await client.post("v1/validate/code", json={"code": code1}, headers=logged_in_headers)
     assert response1.status_code == 200
     assert response1.json() == {"imports": {"errors": []}, "function": {"errors": []}}
 
@@ -174,7 +174,7 @@ import non_existent_module
 def square(x):
     return x ** 2
 """
-    response2 = await client.post("api/v1/validate/code", json={"code": code2}, headers=logged_in_headers)
+    response2 = await client.post("v1/validate/code", json={"code": code2}, headers=logged_in_headers)
     assert response2.status_code == 200
     assert response2.json() == {
         "imports": {"errors": ["No module named 'non_existent_module'"]},
@@ -188,7 +188,7 @@ import math
 def square(x)
     return x ** 2
 """
-    response3 = await client.post("api/v1/validate/code", json={"code": code3}, headers=logged_in_headers)
+    response3 = await client.post("v1/validate/code", json={"code": code3}, headers=logged_in_headers)
     assert response3.status_code == 200
     assert response3.json() == {
         "imports": {"errors": []},
@@ -196,11 +196,11 @@ def square(x)
     }
 
     # Test case with invalid JSON payload
-    response4 = await client.post("api/v1/validate/code", json={"invalid_key": code1}, headers=logged_in_headers)
+    response4 = await client.post("v1/validate/code", json={"invalid_key": code1}, headers=logged_in_headers)
     assert response4.status_code == 422
 
     # Test case with an empty code string
-    response5 = await client.post("api/v1/validate/code", json={"code": ""}, headers=logged_in_headers)
+    response5 = await client.post("v1/validate/code", json={"code": ""}, headers=logged_in_headers)
     assert response5.status_code == 200
     assert response5.json() == {"imports": {"errors": []}, "function": {"errors": []}}
 
@@ -211,7 +211,7 @@ import math
 def square(x)
     return x ** 2
 """
-    response6 = await client.post("api/v1/validate/code", json={"code": code6}, headers=logged_in_headers)
+    response6 = await client.post("v1/validate/code", json={"code": code6}, headers=logged_in_headers)
     assert response6.status_code == 200
     assert response6.json() == {
         "imports": {"errors": []},
@@ -238,7 +238,7 @@ INVALID_PROMPT = "This is an invalid prompt without any input variable."
 
 async def test_valid_prompt(client: AsyncClient, logged_in_headers):
     PROMPT_REQUEST["template"] = VALID_PROMPT
-    response = await client.post("api/v1/validate/prompt", json=PROMPT_REQUEST, headers=logged_in_headers)
+    response = await client.post("v1/validate/prompt", json=PROMPT_REQUEST, headers=logged_in_headers)
     assert response.status_code == 200
     assert response.json()["input_variables"] == ["product"]
 
@@ -246,7 +246,7 @@ async def test_valid_prompt(client: AsyncClient, logged_in_headers):
 async def test_invalid_prompt(client: AsyncClient, logged_in_headers):
     PROMPT_REQUEST["template"] = INVALID_PROMPT
     response = await client.post(
-        "api/v1/validate/prompt",
+        "v1/validate/prompt",
         json=PROMPT_REQUEST,
         headers=logged_in_headers,
     )
@@ -265,7 +265,7 @@ async def test_invalid_prompt(client: AsyncClient, logged_in_headers):
 )
 async def test_various_prompts(client, logged_in_headers, prompt, expected_input_variables):
     PROMPT_REQUEST["template"] = prompt
-    response = await client.post("api/v1/validate/prompt", json=PROMPT_REQUEST, headers=logged_in_headers)
+    response = await client.post("v1/validate/prompt", json=PROMPT_REQUEST, headers=logged_in_headers)
     assert response.status_code == 200
     assert response.json()["input_variables"] == expected_input_variables
 
@@ -295,7 +295,7 @@ async def test_get_vertices_blocks_custom_components_when_disabled(
     monkeypatch.setattr(get_settings_service().settings, "allow_custom_components", False)
 
     flow_id = added_flow_webhook_test["id"]
-    response = await client.post(f"/api/v1/build/{flow_id}/vertices", headers=logged_in_headers)
+    response = await client.post(f"/v1/build/{flow_id}/vertices", headers=logged_in_headers)
 
     assert response.status_code == 400
     assert "outdated components must be updated before running" in response.json()["detail"]
@@ -582,7 +582,7 @@ async def test_invalid_flow_id(client, created_api_key):
 @pytest.mark.benchmark
 async def test_starter_projects(client, created_api_key):
     headers = {"x-api-key": created_api_key.api_key}
-    response = await client.get("api/v1/starter-projects/", headers=headers)
+    response = await client.get("v1/starter-projects/", headers=headers)
     assert response.status_code == status.HTTP_200_OK, response.text
 
 
@@ -720,7 +720,7 @@ async def test_user_cannot_run_other_users_flow(client: AsyncClient, simple_api_
 
     LE-639: post-fix behavior is 404 (not 403) so we don't leak flow existence
     via a 403-vs-404 oracle.  See ``get_flow_for_api_key_user`` in
-    ``api/v1/endpoints.py``.
+    ``v1/endpoints.py``.
     """
     # simple_api_test belongs to active_user, but we're using user_two's API key
     headers = {"x-api-key": user_two_api_key}
@@ -860,14 +860,14 @@ async def test_user_cannot_run_other_users_flow_session_endpoint(
             )
     try:
         login_response = await client.post(
-            "api/v1/login",
+            "v1/login",
             data={"username": other_username, "password": other_password},
         )
         assert login_response.status_code == 200
         other_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
         flow_id = simple_api_test["id"]  # owned by active_user via logged_in_headers
-        response = await client.post(f"/api/v1/run/session/{flow_id}", headers=other_headers)
+        response = await client.post(f"/v1/run/session/{flow_id}", headers=other_headers)
 
         assert response.status_code == status.HTTP_404_NOT_FOUND, response.text
         assert "permission" not in response.text.lower()
@@ -897,7 +897,7 @@ async def test_run_rejects_malformed_user_id_query_param(client: AsyncClient, si
 
     for bad in ("not-a-uuid", "", "12345"):
         response = await client.post(
-            f"/api/v1/run/{flow_id}",
+            f"/v1/run/{flow_id}",
             headers=headers,
             params={"user_id": bad},
         )
@@ -964,12 +964,12 @@ async def test_user_can_access_multiple_own_flows(
     # Create two flows for the same user
     flow1_data = orjson.loads(json_simple_api_test)
     flow1 = FlowCreate(name="Flow 1", data=flow1_data["data"], description="First flow")
-    response1 = await client.post("api/v1/flows/", json=flow1.model_dump(), headers=logged_in_headers)
+    response1 = await client.post("v1/flows/", json=flow1.model_dump(), headers=logged_in_headers)
     assert response1.status_code == 201
     flow1_id = response1.json()["id"]
 
     flow2 = FlowCreate(name="Flow 2", data=flow1_data["data"], description="Second flow")
-    response2 = await client.post("api/v1/flows/", json=flow2.model_dump(), headers=logged_in_headers)
+    response2 = await client.post("v1/flows/", json=flow2.model_dump(), headers=logged_in_headers)
     assert response2.status_code == 201
     flow2_id = response2.json()["id"]
 
@@ -983,8 +983,8 @@ async def test_user_can_access_multiple_own_flows(
     assert response_flow2.status_code == status.HTTP_200_OK, response_flow2.text
 
     # Cleanup
-    await client.delete(f"api/v1/flows/{flow1_id}", headers=logged_in_headers)
-    await client.delete(f"api/v1/flows/{flow2_id}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{flow1_id}", headers=logged_in_headers)
+    await client.delete(f"v1/flows/{flow2_id}", headers=logged_in_headers)
 
 
 # ============================================================================
@@ -1129,7 +1129,7 @@ async def test_openai_responses_rejects_cross_user_flow_access(
             "stream": False,
         }
         response = await client.post(
-            "/api/v1/responses",
+            "/v1/responses",
             json=payload,
             headers={"x-api-key": attacker_api_key},
         )

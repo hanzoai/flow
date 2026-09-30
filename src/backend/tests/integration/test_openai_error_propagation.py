@@ -23,7 +23,7 @@ async def test_openai_pre_streaming_error_format(client: AsyncClient, created_ap
     }
 
     response = await client.post(
-        "api/v1/responses",
+        "v1/responses",
         json=payload,
         headers=headers,
     )
@@ -61,7 +61,7 @@ async def test_openai_streaming_runtime_error_format(client: AsyncClient, create
     }
 
     response = await client.post(
-        "api/v1/responses",
+        "v1/responses",
         json=payload,
         headers=headers,
     )
@@ -110,7 +110,7 @@ async def test_openai_streaming_success_finish_reason(client: AsyncClient, creat
     }
 
     response = await client.post(
-        "api/v1/responses",
+        "v1/responses",
         json=payload,
         headers=headers,
     )

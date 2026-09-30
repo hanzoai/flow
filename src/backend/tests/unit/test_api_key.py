@@ -11,14 +11,14 @@ async def api_key(
 ):
     api_key = ApiKeyCreate(name="test-api-key")
 
-    response = await client.post("api/v1/api_key/", json=api_key.model_dump(mode="json"), headers=logged_in_headers)
+    response = await client.post("v1/api_key/", json=api_key.model_dump(mode="json"), headers=logged_in_headers)
     assert response.status_code == 200, response.text
     return response.json()
 
 
 @pytest.mark.usefixtures("api_key")
 async def test_get_api_keys(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/api_key/", headers=logged_in_headers)
+    response = await client.get("v1/api_key/", headers=logged_in_headers)
     assert response.status_code == 200, response.text
     data = response.json()
     assert "total_count" in data
@@ -30,7 +30,7 @@ async def test_get_api_keys(client: AsyncClient, logged_in_headers):
 
 async def test_create_api_key(client: AsyncClient, logged_in_headers):
     api_key_name = "test-api-key"
-    response = await client.post("api/v1/api_key/", json={"name": api_key_name}, headers=logged_in_headers)
+    response = await client.post("v1/api_key/", json={"name": api_key_name}, headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     assert "name" in data
@@ -42,7 +42,7 @@ async def test_create_api_key(client: AsyncClient, logged_in_headers):
 @pytest.mark.usefixtures("active_user")
 async def test_delete_api_key(client, logged_in_headers, api_key):
     api_key_id = api_key["id"]
-    response = await client.delete(f"api/v1/api_key/{api_key_id}", headers=logged_in_headers)
+    response = await client.delete(f"v1/api_key/{api_key_id}", headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     assert data["detail"] == "API Key deleted"

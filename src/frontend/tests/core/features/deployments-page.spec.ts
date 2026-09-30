@@ -23,7 +23,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -31,7 +31,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -57,7 +57,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -65,7 +65,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -90,7 +90,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -98,7 +98,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -125,7 +125,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -133,7 +133,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -158,7 +158,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -166,7 +166,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -193,7 +193,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -201,7 +201,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -230,7 +230,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -238,7 +238,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -272,7 +272,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -280,7 +280,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1", (route) => {
+    await page.route("**/v1/deployments/dep-1", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -288,7 +288,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -306,7 +306,7 @@ test(
 
     const deleteRequest = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/dep-1") &&
+        req.url().includes("/v1/deployments/dep-1") &&
         req.method() === "DELETE",
     );
 
@@ -327,7 +327,7 @@ test(
 
     let deleteRequestCount = 0;
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -335,7 +335,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/dep-1", (route) => {
+    await page.route("**/v1/deployments/dep-1", (route) => {
       if (route.request().method() === "DELETE") {
         deleteRequestCount++;
         route.fulfill({
@@ -348,7 +348,7 @@ test(
       }
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

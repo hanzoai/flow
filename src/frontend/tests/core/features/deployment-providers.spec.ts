@@ -24,7 +24,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -32,7 +32,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -55,7 +55,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -63,7 +63,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -89,7 +89,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -97,7 +97,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -134,7 +134,7 @@ test(
 
     let postCalled = false;
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       const method = route.request().method();
 
       if (method === "POST") {
@@ -156,7 +156,7 @@ test(
       }
     });
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -178,7 +178,7 @@ test(
 
     const postRequest = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/providers") &&
+        req.url().includes("/v1/deployments/providers") &&
         req.method() === "POST",
     );
 
@@ -201,7 +201,7 @@ test(
       "Requires FLOW_FEATURE_WXO_DEPLOYMENTS=true",
     );
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -209,7 +209,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers/prov-1", (route) => {
+    await page.route("**/v1/deployments/providers/prov-1", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -217,7 +217,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       const method = route.request().method();
       if (method === "GET") {
         route.fulfill({
@@ -243,7 +243,7 @@ test(
 
     const deleteRequest = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments/providers/prov-1") &&
+        req.url().includes("/v1/deployments/providers/prov-1") &&
         req.method() === "DELETE",
     );
 
@@ -264,7 +264,7 @@ test(
 
     let deleteRequestCount = 0;
 
-    await page.route("**/api/v1/deployments*", (route) => {
+    await page.route("**/v1/deployments*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -272,7 +272,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers/prov-1", (route) => {
+    await page.route("**/v1/deployments/providers/prov-1", (route) => {
       deleteRequestCount++;
       route.fulfill({
         status: 200,
@@ -281,7 +281,7 @@ test(
       });
     });
 
-    await page.route("**/api/v1/deployments/providers*", (route) => {
+    await page.route("**/v1/deployments/providers*", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

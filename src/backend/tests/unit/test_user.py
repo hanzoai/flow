@@ -45,7 +45,7 @@ async def super_user_headers(
             else auth_settings.SUPERUSER_PASSWORD
         ),
     }
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     a_token = tokens["access_token"]
@@ -93,7 +93,7 @@ async def test_user_waiting_for_approval(client):
         await session.commit()
 
     login_data = {"username": "waitingforapproval", "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 400
     assert response.json()["detail"] == "Waiting for approval"
 
@@ -110,7 +110,7 @@ async def test_user_waiting_for_approval(client):
 @pytest.mark.api_key_required
 async def test_deactivated_user_cannot_login(client: AsyncClient, deactivated_user):
     login_data = {"username": deactivated_user.username, "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 401, response.json()
     assert response.json()["detail"] == "Inactive user", response.text
 
@@ -118,7 +118,7 @@ async def test_deactivated_user_cannot_login(client: AsyncClient, deactivated_us
 @pytest.mark.usefixtures("deactivated_user")
 async def test_deactivated_user_cannot_access(client: AsyncClient, logged_in_headers):
     # Assuming the headers for deactivated_user
-    response = await client.get("api/v1/users/", headers=logged_in_headers)
+    response = await client.get("v1/users/", headers=logged_in_headers)
     assert response.status_code == 403, response.status_code
     assert response.json()["detail"] == "The user doesn't have enough privileges", response.text
 
@@ -132,7 +132,7 @@ async def test_data_consistency_after_update(client: AsyncClient, active_user, l
     assert response.status_code == 200, response.json()
 
     # Fetch the updated user from the database
-    response = await client.get("api/v1/users/whoami", headers=logged_in_headers)
+    response = await client.get("v1/users/whoami", headers=logged_in_headers)
     assert response.status_code == 401, response.json()
     assert response.json()["detail"] == "User not found or is inactive."
 
@@ -144,7 +144,7 @@ async def test_data_consistency_after_delete(client: AsyncClient, test_user, sup
     assert response.status_code == 200, response.json()
 
     # Attempt to fetch the deleted user from the database
-    response = await client.get("api/v1/users/", headers=super_user_headers)
+    response = await client.get("v1/users/", headers=super_user_headers)
     assert response.status_code == 200
     assert all(user["id"] != user_id for user in response.json()["users"])
 
@@ -163,7 +163,7 @@ async def test_inactive_user(client: AsyncClient):
         await session.commit()
 
     login_data = {"username": "inactiveuser", "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 401
     assert response.json()["detail"] == "Inactive user"
 
@@ -175,14 +175,14 @@ def test_add_user(test_user):
 
 @pytest.mark.api_key_required
 async def test_read_all_users(client: AsyncClient, super_user_headers):
-    response = await client.get("api/v1/users/", headers=super_user_headers)
+    response = await client.get("v1/users/", headers=super_user_headers)
     assert response.status_code == 200, response.json()
     assert isinstance(response.json()["users"], list)
 
 
 @pytest.mark.api_key_required
 async def test_normal_user_cant_read_all_users(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/users/", headers=logged_in_headers)
+    response = await client.get("v1/users/", headers=logged_in_headers)
     assert response.status_code == 403, response.json()
     assert response.json() == {"detail": "The user doesn't have enough privileges"}
 
@@ -219,7 +219,7 @@ async def test_patch_reset_password(client: AsyncClient, active_user, logged_in_
     assert response.status_code == 200, response.json()
     # Now we need to test if the new password works
     login_data = {"username": active_user.username, "password": "newpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
 
 
@@ -358,7 +358,7 @@ async def test_user_can_update_profile_picture(client: AsyncClient, active_user,
     assert response.status_code == 200, f"Failed to update profile picture: {response.json()}"
 
     # Verify the profile image was updated
-    response = await client.get("api/v1/users/whoami", headers=logged_in_headers)
+    response = await client.get("v1/users/whoami", headers=logged_in_headers)
     assert response.status_code == 200
     user_data = response.json()
     assert user_data["profile_image"] == profile_image
@@ -377,7 +377,7 @@ async def test_user_profile_picture_persists(client: AsyncClient, active_user, l
 
     # Check it persists in multiple requests
     for _ in range(3):
-        response = await client.get("api/v1/users/whoami", headers=logged_in_headers)
+        response = await client.get("v1/users/whoami", headers=logged_in_headers)
         assert response.status_code == 200
         assert response.json()["profile_image"] == profile_image
 
@@ -400,7 +400,7 @@ async def test_user_can_change_profile_picture_multiple_times(client: AsyncClien
         assert response.status_code == 200
 
         # Verify the update
-        response = await client.get("api/v1/users/whoami", headers=logged_in_headers)
+        response = await client.get("v1/users/whoami", headers=logged_in_headers)
         assert response.status_code == 200
         assert response.json()["profile_image"] == profile_image
 
@@ -408,7 +408,7 @@ async def test_user_can_change_profile_picture_multiple_times(client: AsyncClien
 @pytest.mark.api_key_required
 async def test_profile_pictures_endpoint_returns_files(client: AsyncClient, logged_in_headers):
     """Test that the profile pictures list endpoint returns files after app startup."""
-    response = await client.get("api/v1/files/profile_pictures/list", headers=logged_in_headers)
+    response = await client.get("v1/files/profile_pictures/list", headers=logged_in_headers)
 
     assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.json()}"
 
@@ -426,7 +426,7 @@ async def test_profile_pictures_endpoint_returns_files(client: AsyncClient, logg
 async def test_profile_picture_image_can_be_accessed(client: AsyncClient, logged_in_headers):
     """Test that profile picture images can be accessed/downloaded."""
     # First get the list of available profile pictures
-    response = await client.get("api/v1/files/profile_pictures/list", headers=logged_in_headers)
+    response = await client.get("v1/files/profile_pictures/list", headers=logged_in_headers)
     assert response.status_code == 200
 
     files = response.json()["files"]
@@ -436,6 +436,6 @@ async def test_profile_picture_image_can_be_accessed(client: AsyncClient, logged
     first_file = files[0]
     folder, filename = first_file.split("/", 1)
 
-    response = await client.get(f"api/v1/files/profile_pictures/{folder}/{filename}", headers=logged_in_headers)
+    response = await client.get(f"v1/files/profile_pictures/{folder}/{filename}", headers=logged_in_headers)
     assert response.status_code == 200, f"Failed to access profile picture: {first_file}"
     assert len(response.content) > 0, "Profile picture should have content"

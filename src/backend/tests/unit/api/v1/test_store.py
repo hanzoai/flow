@@ -3,7 +3,7 @@ from httpx import AsyncClient
 
 
 async def test_check_if_store_is_enabled(client: AsyncClient):
-    response = await client.get("api/v1/store/check/")
+    response = await client.get("v1/store/check/")
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK

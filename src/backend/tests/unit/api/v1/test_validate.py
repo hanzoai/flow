@@ -10,7 +10,7 @@ from pprint import pprint
 var = {"a": 1, "b": 2}
 pprint(var)
     """
-    response = await client.post("api/v1/validate/code", json={"code": good_code}, headers=logged_in_headers)
+    response = await client.post("v1/validate/code", json={"code": good_code}, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -51,7 +51,7 @@ async def test_post_validate_prompt(client: AsyncClient, logged_in_headers):
             "metadata": {},
         },
     }
-    response = await client.post("api/v1/validate/prompt", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/validate/prompt", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -67,7 +67,7 @@ async def test_post_validate_prompt_with_invalid_data(client: AsyncClient, logge
         # Missing required fields
         "frontend_node": {"template": {}, "is_input": True},
     }
-    response = await client.post("api/v1/validate/prompt", json=invalid_case, headers=logged_in_headers)
+    response = await client.post("v1/validate/prompt", json=invalid_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
@@ -75,5 +75,5 @@ async def test_post_validate_code_with_unauthenticated_user(client: AsyncClient)
     code = """
     print("Hello World")
     """
-    response = await client.post("api/v1/validate/code", json={"code": code}, headers={"Authorization": "Bearer fake"})
+    response = await client.post("v1/validate/code", json={"code": code}, headers={"Authorization": "Bearer fake"})
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

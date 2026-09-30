@@ -1,7 +1,7 @@
 """Regression test for webhook SSE real-time event delivery.
 
-Bug: After POST /api/v1/webhook/{flow_id}, the UI's Inspect Output panel never shows
-the Webhook build because the SSE endpoint `/api/v1/webhook-events/{flow_id}` was
+Bug: After POST /v1/webhook/{flow_id}, the UI's Inspect Output panel never shows
+the Webhook build because the SSE endpoint `/v1/webhook-events/{flow_id}` was
 returning 403 to the frontend subscriber. As a result the frontend `flowPool` stayed
 empty and the Inspect Output panel showed "Please build the component first".
 
@@ -52,7 +52,7 @@ async def test_should_not_return_403_when_accessing_webhook_sse_endpoint_with_va
 ):
     """Direct reproduction: SSE must accept `x-api-key` query param."""
     flow_id = added_webhook_test["id"]
-    sse_url = f"api/v1/webhook-events/{flow_id}?x-api-key={created_api_key.api_key}"
+    sse_url = f"v1/webhook-events/{flow_id}?x-api-key={created_api_key.api_key}"
 
     await _assert_sse_not_forbidden(client, sse_url)
 
@@ -69,7 +69,7 @@ async def test_should_not_return_403_when_accessing_webhook_sse_endpoint_with_va
     the real end-user scenario.
     """
     login_response = await client.post(
-        "api/v1/login",
+        "v1/login",
         data={"username": active_user.username, "password": "testpassword"},
     )
     assert login_response.status_code == 200
@@ -78,7 +78,7 @@ async def test_should_not_return_403_when_accessing_webhook_sse_endpoint_with_va
     assert "access_token_lf" in client.cookies
 
     flow_id = added_webhook_test["id"]
-    sse_url = f"api/v1/webhook-events/{flow_id}"
+    sse_url = f"v1/webhook-events/{flow_id}"
 
     await _assert_sse_not_forbidden(client, sse_url)
 
@@ -103,7 +103,7 @@ async def test_should_not_return_403_on_sse_endpoint_when_webhook_auth_enable_is
         settings_service.auth_settings.WEBHOOK_AUTH_ENABLE = True
 
         flow_id = added_webhook_test["id"]
-        sse_url = f"api/v1/webhook-events/{flow_id}?x-api-key={created_api_key.api_key}"
+        sse_url = f"v1/webhook-events/{flow_id}?x-api-key={created_api_key.api_key}"
 
         await _assert_sse_not_forbidden(client, sse_url)
     finally:

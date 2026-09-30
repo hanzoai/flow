@@ -37,13 +37,13 @@ async def test_create_flow(client: AsyncClient, json_flow: str, logged_in_header
     flow = orjson.loads(json_flow)
     data = flow["data"]
     flow = FlowCreate(name=str(uuid4()), description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
     # flow is optional so we can create a flow without a flow
     flow = FlowCreate(name=str(uuid4()))
-    response = await client.post("api/v1/flows/", json=flow.model_dump(exclude_unset=True), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(exclude_unset=True), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
@@ -54,25 +54,25 @@ async def test_read_flows(client: AsyncClient, json_flow: str, logged_in_headers
     flow_data = orjson.loads(json_flow)
     data = flow_data["data"]
     flow = FlowCreate(name=str(uuid4()), description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
 
     flow = FlowCreate(name=str(uuid4()), description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
 
-    response = await client.get("api/v1/flows/", headers=logged_in_headers)
+    response = await client.get("v1/flows/", headers=logged_in_headers)
     assert response.status_code == 200
     assert len(response.json()) > 0
 
 
 async def test_read_flows_pagination_with_params(client: AsyncClient, logged_in_headers):
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 3, "size": 10, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 3, "size": 10, "get_all": False}
     )
     assert response.status_code == 200
     assert response.json()["page"] == 3
@@ -87,12 +87,12 @@ async def test_read_flows_pagination_with_flows(client: AsyncClient, logged_in_h
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     flow_ids = []
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 3, "size": 10, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 3, "size": 10, "get_all": False}
     )
     assert response.status_code == 200
     assert response.json()["page"] == 3
@@ -102,7 +102,7 @@ async def test_read_flows_pagination_with_flows(client: AsyncClient, logged_in_h
     assert len(response.json()["items"]) == 10
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 4, "size": 10, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 4, "size": 10, "get_all": False}
     )
     assert response.status_code == 200
     assert response.json()["page"] == 4
@@ -116,11 +116,11 @@ async def test_read_flows_custom_page_size(client: AsyncClient, logged_in_header
     number_of_flows = 30
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 1, "size": 15, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 1, "size": 15, "get_all": False}
     )
     assert response.status_code == 200
     assert response.json()["page"] == 1
@@ -135,12 +135,12 @@ async def test_read_flows_invalid_page(client: AsyncClient, logged_in_headers):
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     flow_ids = []
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 0, "size": 10, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 0, "size": 10, "get_all": False}
     )
     assert response.status_code == 422  # Assuming 422 is the status code for invalid input
 
@@ -150,12 +150,12 @@ async def test_read_flows_invalid_size(client: AsyncClient, logged_in_headers):
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     flow_ids = []
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"page": 1, "size": 0, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"page": 1, "size": 0, "get_all": False}
     )
     assert response.status_code == 422  # Assuming 422 is the status code for invalid input
 
@@ -164,10 +164,10 @@ async def test_read_flows_no_pagination_params(client: AsyncClient, logged_in_he
     number_of_flows = 30
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
 
-    response = await client.get("api/v1/flows/", headers=logged_in_headers, params={"get_all": False})
+    response = await client.get("v1/flows/", headers=logged_in_headers, params={"get_all": False})
     assert response.status_code == 200
     # Assert default pagination values, adjust these according to your API's default behavior
     assert response.json()["page"] == 1
@@ -185,11 +185,11 @@ async def test_read_flows_components_only_paginated(client: AsyncClient, logged_
     ]
 
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
 
     response = await client.get(
-        "api/v1/flows/", headers=logged_in_headers, params={"components_only": True, "get_all": False}
+        "v1/flows/", headers=logged_in_headers, params={"components_only": True, "get_all": False}
     )
 
     assert response.status_code == 200
@@ -208,9 +208,9 @@ async def test_read_flows_components_only(client: AsyncClient, logged_in_headers
         for i in range(number_of_flows)
     ]
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
-    response = await client.get("api/v1/flows/", headers=logged_in_headers, params={"components_only": True})
+    response = await client.get("v1/flows/", headers=logged_in_headers, params={"components_only": True})
     assert response.status_code == 200
     response_json = response.json()
     assert all(flow["is_component"] is True for flow in response_json)
@@ -221,12 +221,12 @@ async def test_read_flow(client: AsyncClient, json_flow: str, logged_in_headers)
     data = flow["data"]
     unique_name = str(uuid4())
     flow = FlowCreate(name=unique_name, description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     flow_id = response.json()["id"]  # flow_id should be a UUID but is a string
     # turn it into a UUID
     flow_id = UUID(flow_id)
 
-    response = await client.get(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{flow_id}", headers=logged_in_headers)
     assert response.status_code == 200
     assert response.json()["name"] == flow.name
     assert response.json()["data"] == flow.data
@@ -238,7 +238,7 @@ async def test_update_flow(client: AsyncClient, json_flow: str, logged_in_header
     data = flow["data"]
 
     flow = FlowCreate(name="Test Flow", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
 
     flow_id = response.json()["id"]
     updated_flow = FlowUpdate(
@@ -246,7 +246,7 @@ async def test_update_flow(client: AsyncClient, json_flow: str, logged_in_header
         description="updated description",
         data=data,
     )
-    response = await client.patch(f"api/v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
 
     assert response.status_code == 200
     assert response.json()["name"] == updated_flow.name
@@ -259,9 +259,9 @@ async def test_delete_flow(client: AsyncClient, json_flow: str, logged_in_header
     flow = orjson.loads(json_flow)
     data = flow["data"]
     flow = FlowCreate(name="Test Flow", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     flow_id = response.json()["id"]
-    response = await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    response = await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)
     assert response.status_code == 200
     assert response.json()["message"] == "Flow deleted successfully"
 
@@ -273,11 +273,11 @@ async def test_delete_flows(client: AsyncClient, logged_in_headers):
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     flow_ids = []
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
-    response = await client.request("DELETE", "api/v1/flows/", headers=logged_in_headers, json=flow_ids)
+    response = await client.request("DELETE", "v1/flows/", headers=logged_in_headers, json=flow_ids)
     assert response.status_code == 200, response.content
     assert response.json().get("deleted") == number_of_flows
 
@@ -289,7 +289,7 @@ async def test_delete_flows_with_transaction_and_build(client: AsyncClient, logg
     flows = [FlowCreate(name=f"Flow {i}", description="description", data={}) for i in range(number_of_flows)]
     flow_ids = []
     for flow in flows:
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
@@ -321,13 +321,13 @@ async def test_delete_flows_with_transaction_and_build(client: AsyncClient, logg
             artifacts=build.get("artifacts"),
         )
 
-    response = await client.request("DELETE", "api/v1/flows/", headers=logged_in_headers, json=flow_ids)
+    response = await client.request("DELETE", "v1/flows/", headers=logged_in_headers, json=flow_ids)
     assert response.status_code == 200, response.content
     assert response.json().get("deleted") == number_of_flows
 
     for flow_id in flow_ids:
         response = await client.request(
-            "GET", "api/v1/monitor/transactions", params={"flow_id": flow_id}, headers=logged_in_headers
+            "GET", "v1/monitor/transactions", params={"flow_id": flow_id}, headers=logged_in_headers
         )
         assert response.status_code == 200
         json_response = response.json()
@@ -335,7 +335,7 @@ async def test_delete_flows_with_transaction_and_build(client: AsyncClient, logg
 
     for flow_id in flow_ids:
         response = await client.request(
-            "GET", "api/v1/monitor/builds", params={"flow_id": flow_id}, headers=logged_in_headers
+            "GET", "v1/monitor/builds", params={"flow_id": flow_id}, headers=logged_in_headers
         )
         assert response.status_code == 200
         assert response.json() == {"vertex_builds": {}}
@@ -347,7 +347,7 @@ async def test_delete_folder_with_flows_with_transaction_and_build(client: Async
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description", components_list=[], flows_list=[])
 
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201, f"Expected status code 201, but got {response.status_code}"
 
     created_folder = response.json()
@@ -359,7 +359,7 @@ async def test_delete_folder_with_flows_with_transaction_and_build(client: Async
     flow_ids = []
     for flow in flows:
         flow.folder_id = folder_id
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_ids.append(response.json()["id"])
 
@@ -395,12 +395,12 @@ async def test_delete_folder_with_flows_with_transaction_and_build(client: Async
             artifacts=build.get("artifacts"),
         )
 
-    response = await client.request("DELETE", f"api/v1/projects/{folder_id}", headers=logged_in_headers)
+    response = await client.request("DELETE", f"v1/projects/{folder_id}", headers=logged_in_headers)
     assert response.status_code == 204
 
     for flow_id in flow_ids:
         response = await client.request(
-            "GET", "api/v1/monitor/transactions", params={"flow_id": flow_id}, headers=logged_in_headers
+            "GET", "v1/monitor/transactions", params={"flow_id": flow_id}, headers=logged_in_headers
         )
         assert response.status_code == 200, response.json()
         json_response = response.json()
@@ -408,7 +408,7 @@ async def test_delete_folder_with_flows_with_transaction_and_build(client: Async
 
     for flow_id in flow_ids:
         response = await client.request(
-            "GET", "api/v1/monitor/builds", params={"flow_id": flow_id}, headers=logged_in_headers
+            "GET", "v1/monitor/builds", params={"flow_id": flow_id}, headers=logged_in_headers
         )
         assert response.status_code == 200
         assert response.json() == {"vertex_builds": {}}
@@ -419,14 +419,14 @@ async def test_get_flows_from_folder_pagination(client: AsyncClient, logged_in_h
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description", components_list=[], flows_list=[])
 
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201, f"Expected status code 201, but got {response.status_code}"
 
     created_folder = response.json()
     folder_id = created_folder["id"]
 
     response = await client.get(
-        f"api/v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 1, "size": 50}
+        f"v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 1, "size": 50}
     )
     assert response.status_code == 200
     assert response.json()["folder"]["name"] == folder_name
@@ -443,14 +443,14 @@ async def test_get_flows_from_folder_pagination_with_params(client: AsyncClient,
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description", components_list=[], flows_list=[])
 
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201, f"Expected status code 201, but got {response.status_code}"
 
     created_folder = response.json()
     folder_id = created_folder["id"]
 
     response = await client.get(
-        f"api/v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 3, "size": 10}
+        f"v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 3, "size": 10}
     )
     assert response.status_code == 200
     assert response.json()["folder"]["name"] == folder_name
@@ -476,7 +476,7 @@ async def test_create_flows(client: AsyncClient, json_flow: str, logged_in_heade
         ]
     )
     # Make request to endpoint
-    response = await client.post("api/v1/flows/batch/", json=flow_list.dict(), headers=logged_in_headers)
+    response = await client.post("v1/flows/batch/", json=flow_list.dict(), headers=logged_in_headers)
     # Check response status code
     assert response.status_code == 201
     # Check response data
@@ -505,7 +505,7 @@ async def test_upload_file(client: AsyncClient, json_flow: str, logged_in_header
     )
     file_contents = orjson_dumps(flow_list.dict())
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("examples.json", file_contents, "application/json")},
         headers=logged_in_headers,
     )
@@ -553,7 +553,7 @@ async def test_download_file(
         flow_ids = [str(db_flow.id) for db_flow in saved_flows]  # Convert UUIDs to strings
         flow_ids_json = json.dumps(flow_ids)
         response = await client.post(
-            "api/v1/flows/download/",
+            "v1/flows/download/",
             data=flow_ids_json,
             headers={**logged_in_headers, "Content-Type": "application/json"},
         )
@@ -590,12 +590,12 @@ async def test_download_single_flow_returns_normalized_json(client: AsyncClient,
         },
     )
 
-    create_response = await client.post("api/v1/flows/", json=flow_payload.model_dump(), headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=flow_payload.model_dump(), headers=logged_in_headers)
     assert create_response.status_code == 201
     flow_id = create_response.json()["id"]
 
     download_response = await client.post(
-        "api/v1/flows/download/",
+        "v1/flows/download/",
         data=json.dumps([flow_id]),
         headers={**logged_in_headers, "Content-Type": "application/json"},
     )
@@ -634,7 +634,7 @@ async def test_upload_zip_file_to_flows(client: AsyncClient, json_flow: str, log
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("flows.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -665,7 +665,7 @@ async def test_upload_zip_file_to_projects(client: AsyncClient, json_flow: str, 
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": ("My Project.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -678,7 +678,7 @@ async def test_upload_zip_file_to_projects(client: AsyncClient, json_flow: str, 
 
     # Verify the project name was derived from the ZIP filename
     folder_id = folder_ids.pop()
-    project_response = await client.get(f"api/v1/projects/{folder_id}", headers=logged_in_headers)
+    project_response = await client.get(f"v1/projects/{folder_id}", headers=logged_in_headers)
     assert project_response.status_code == 200
     assert project_response.json()["name"].startswith("My Project")
 
@@ -692,7 +692,7 @@ async def test_upload_empty_zip_returns_400(client: AsyncClient, logged_in_heade
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("empty.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -730,7 +730,7 @@ async def test_download_then_upload_roundtrip(client: AsyncClient, json_flow: st
 
     # Download as ZIP
     download_response = await client.post(
-        "api/v1/flows/download/",
+        "v1/flows/download/",
         data=json.dumps(flow_ids),
         headers={**logged_in_headers, "Content-Type": "application/json"},
     )
@@ -739,7 +739,7 @@ async def test_download_then_upload_roundtrip(client: AsyncClient, json_flow: st
 
     # Re-upload the ZIP
     upload_response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("flows.zip", download_response.content, "application/zip")},
         headers=logged_in_headers,
     )
@@ -762,7 +762,7 @@ async def test_upload_zip_with_invalid_json(client: AsyncClient, json_flow: str,
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("mixed.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -789,7 +789,7 @@ async def test_upload_zip_exceeding_max_entries(client: AsyncClient, json_flow: 
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("too_many.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -821,7 +821,7 @@ async def test_upload_zip_with_oversized_entry(client: AsyncClient, json_flow: s
 
     zip_buffer.seek(0)
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("oversized.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -856,7 +856,7 @@ async def test_upload_zip_with_mixed_valid_invalid(client: AsyncClient, json_flo
 
     zip_buffer.seek(0)
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("mixed.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -880,7 +880,7 @@ async def test_upload_zip_to_projects_filename_none(client: AsyncClient, json_fl
 
     # filename=".zip" → rsplit gives ("", "zip") → "" is falsy → "Imported Project"
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": (".zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -889,7 +889,7 @@ async def test_upload_zip_to_projects_filename_none(client: AsyncClient, json_fl
     assert len(response_data) == 1
 
     folder_id = response_data[0]["folder_id"]
-    project_response = await client.get(f"api/v1/projects/{folder_id}", headers=logged_in_headers)
+    project_response = await client.get(f"v1/projects/{folder_id}", headers=logged_in_headers)
     assert project_response.status_code == 200
     assert project_response.json()["name"].startswith("Imported Project")
 
@@ -926,7 +926,7 @@ async def test_upload_json_file_to_projects_rejoins_code_lines(client: AsyncClie
     }
 
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": ("project.json", json.dumps(payload).encode("utf-8"), "application/json")},
         headers=logged_in_headers,
     )
@@ -939,7 +939,7 @@ async def test_upload_json_file_to_projects_rejoins_code_lines(client: AsyncClie
         == "print('alpha')\nprint('beta')"
     )
 
-    project_response = await client.get(f"api/v1/projects/{response_data[0]['folder_id']}", headers=logged_in_headers)
+    project_response = await client.get(f"v1/projects/{response_data[0]['folder_id']}", headers=logged_in_headers)
     assert project_response.status_code == 200
     assert project_response.json()["name"].startswith(project_name)
 
@@ -948,7 +948,7 @@ async def test_upload_json_file_to_projects_rejoins_code_lines(client: AsyncClie
 async def test_download_project_zip_sanitizes_flow_names(client: AsyncClient, json_flow: str, logged_in_headers):
     """Project ZIP downloads must sanitize flow names to prevent Zip Slip paths."""
     project_response = await client.post(
-        "api/v1/projects/",
+        "v1/projects/",
         json={"name": f"Download Project {uuid4()}", "description": "", "flows_list": [], "components_list": []},
         headers=logged_in_headers,
     )
@@ -957,7 +957,7 @@ async def test_download_project_zip_sanitizes_flow_names(client: AsyncClient, js
 
     flow = orjson.loads(json_flow)
     create_response = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={
             "name": "../escaped-flow",
             "description": "path traversal test",
@@ -969,7 +969,7 @@ async def test_download_project_zip_sanitizes_flow_names(client: AsyncClient, js
     )
     assert create_response.status_code == 201
 
-    download_response = await client.get(f"api/v1/projects/download/{project_id}", headers=logged_in_headers)
+    download_response = await client.get(f"v1/projects/download/{project_id}", headers=logged_in_headers)
     assert download_response.status_code == 200
 
     with zipfile.ZipFile(io.BytesIO(download_response.content), "r") as zip_file:
@@ -994,7 +994,7 @@ async def test_upload_bad_zip_file_returns_400(client: AsyncClient, logged_in_he
     corrupt_zip = b"garbage" * 10 + valid_zip[-22:]
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("corrupt.zip", corrupt_zip, "application/zip")},
         headers=logged_in_headers,
     )
@@ -1007,7 +1007,7 @@ async def test_upload_bad_zip_file_returns_400(client: AsyncClient, logged_in_he
 async def test_upload_no_file_to_flows_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading with no file to flows endpoint returns 400."""
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         headers=logged_in_headers,
     )
     assert response.status_code == 400
@@ -1018,7 +1018,7 @@ async def test_upload_no_file_to_flows_returns_400(client: AsyncClient, logged_i
 async def test_upload_no_file_to_projects_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading with no file to projects endpoint returns 400."""
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         headers=logged_in_headers,
     )
     assert response.status_code == 400
@@ -1029,7 +1029,7 @@ async def test_upload_no_file_to_projects_returns_400(client: AsyncClient, logge
 async def test_upload_empty_file_to_flows_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading an empty file to flows endpoint returns 400."""
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("empty.json", b"", "application/json")},
         headers=logged_in_headers,
     )
@@ -1041,7 +1041,7 @@ async def test_upload_empty_file_to_flows_returns_400(client: AsyncClient, logge
 async def test_upload_empty_file_to_projects_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading an empty file to projects endpoint returns 400."""
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": ("empty.json", b"", "application/json")},
         headers=logged_in_headers,
     )
@@ -1053,7 +1053,7 @@ async def test_upload_empty_file_to_projects_returns_400(client: AsyncClient, lo
 async def test_upload_invalid_json_to_flows_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading invalid JSON content to flows endpoint returns 400."""
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("bad.json", b"this is not json", "application/json")},
         headers=logged_in_headers,
     )
@@ -1065,7 +1065,7 @@ async def test_upload_invalid_json_to_flows_returns_400(client: AsyncClient, log
 async def test_upload_invalid_json_to_projects_returns_400(client: AsyncClient, logged_in_headers):
     """Uploading invalid JSON content to projects endpoint returns 400."""
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": ("bad.json", b"this is not json", "application/json")},
         headers=logged_in_headers,
     )
@@ -1086,7 +1086,7 @@ async def test_upload_zip_to_projects_batch_name_dedup(client: AsyncClient, json
     zip_buffer.seek(0)
 
     response = await client.post(
-        "api/v1/projects/upload/",
+        "v1/projects/upload/",
         files={"file": ("dedup_test.zip", zip_buffer.getvalue(), "application/zip")},
         headers=logged_in_headers,
     )
@@ -1101,14 +1101,14 @@ async def test_upload_zip_to_projects_batch_name_dedup(client: AsyncClient, json
 @pytest.mark.usefixtures("active_user")
 async def test_create_flow_with_invalid_data(client: AsyncClient, logged_in_headers):
     flow = {"name": "a" * 256, "data": "Invalid flow data"}
-    response = await client.post("api/v1/flows/", json=flow, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow, headers=logged_in_headers)
     assert response.status_code == 422
 
 
 @pytest.mark.usefixtures("active_user")
 async def test_get_nonexistent_flow(client: AsyncClient, logged_in_headers):
     uuid = uuid4()
-    response = await client.get(f"api/v1/flows/{uuid}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{uuid}", headers=logged_in_headers)
     assert response.status_code == 404
 
 
@@ -1117,11 +1117,11 @@ async def test_update_flow_idempotency(client: AsyncClient, json_flow: str, logg
     flow_data = orjson.loads(json_flow)
     data = flow_data["data"]
     flow_data = FlowCreate(name="Test Flow", description="description", data=data)
-    response = await client.post("api/v1/flows/", json=flow_data.dict(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow_data.dict(), headers=logged_in_headers)
     flow_id = response.json()["id"]
     updated_flow = FlowCreate(name="Updated Flow", description="description", data=data)
-    response1 = await client.put(f"api/v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
-    response2 = await client.put(f"api/v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
+    response1 = await client.put(f"v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
+    response2 = await client.put(f"v1/flows/{flow_id}", json=updated_flow.model_dump(), headers=logged_in_headers)
     assert response1.json() == response2.json()
 
 
@@ -1135,20 +1135,20 @@ async def test_update_nonexistent_flow(client: AsyncClient, json_flow: str, logg
         description="description",
         data=data,
     )
-    response = await client.patch(f"api/v1/flows/{uuid}", json=updated_flow.model_dump(), headers=logged_in_headers)
+    response = await client.patch(f"v1/flows/{uuid}", json=updated_flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 404, response.text
 
 
 @pytest.mark.usefixtures("active_user")
 async def test_delete_nonexistent_flow(client: AsyncClient, logged_in_headers):
     uuid = uuid4()
-    response = await client.delete(f"api/v1/flows/{uuid}", headers=logged_in_headers)
+    response = await client.delete(f"v1/flows/{uuid}", headers=logged_in_headers)
     assert response.status_code == 404
 
 
 @pytest.mark.usefixtures("active_user")
 async def test_read_only_starter_projects(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/flows/basic_examples/", headers=logged_in_headers)
+    response = await client.get("v1/flows/basic_examples/", headers=logged_in_headers)
     starter_projects = await load_starter_projects()
     assert response.status_code == 200
     assert len(response.json()) == len(starter_projects)
@@ -1197,13 +1197,13 @@ async def test_read_folder(client: AsyncClient, logged_in_headers):
     # Create a new project
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description")
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     created_folder = response.json()
     folder_id = created_folder["id"]
 
     # Read the project
-    response = await client.get(f"api/v1/projects/{folder_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/projects/{folder_id}", headers=logged_in_headers)
     assert response.status_code == 200
     folder_data = response.json()
     assert folder_data["name"] == folder_name
@@ -1217,14 +1217,14 @@ async def test_read_folder_with_pagination(client: AsyncClient, logged_in_header
     # Create a new project
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description")
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     created_folder = response.json()
     folder_id = created_folder["id"]
 
     # Read the project with pagination
     response = await client.get(
-        f"api/v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 1, "size": 10}
+        f"v1/projects/{folder_id}", headers=logged_in_headers, params={"page": 1, "size": 10}
     )
     assert response.status_code == 200
     folder_data = response.json()
@@ -1244,7 +1244,7 @@ async def test_read_folder_with_flows(client: AsyncClient, json_flow: str, logge
     folder_name = f"Test Project {uuid4()}"
     flow_name = f"Test Flow {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description")
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     created_folder = response.json()
     folder_id = created_folder["id"]
@@ -1254,11 +1254,11 @@ async def test_read_folder_with_flows(client: AsyncClient, json_flow: str, logge
     data = flow_data["data"]
     flow = FlowCreate(name=flow_name, description="description", data=data)
     flow.folder_id = folder_id
-    response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
 
     # Read the project with flows
-    response = await client.get(f"api/v1/projects/{folder_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/projects/{folder_id}", headers=logged_in_headers)
     assert response.status_code == 200
     folder_data = response.json()
     assert folder_data["name"] == folder_name
@@ -1270,7 +1270,7 @@ async def test_read_folder_with_flows(client: AsyncClient, json_flow: str, logge
 @pytest.mark.usefixtures("active_user")
 async def test_read_nonexistent_folder(client: AsyncClient, logged_in_headers):
     nonexistent_id = str(uuid4())
-    response = await client.get(f"api/v1/projects/{nonexistent_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/projects/{nonexistent_id}", headers=logged_in_headers)
     assert response.status_code == 404
     assert response.json()["detail"] == "Project not found"
 
@@ -1280,7 +1280,7 @@ async def test_read_folder_with_search(client: AsyncClient, json_flow: str, logg
     # Create a new project
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description")
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     created_folder = response.json()
     folder_id = created_folder["id"]
@@ -1298,12 +1298,12 @@ async def test_read_folder_with_search(client: AsyncClient, json_flow: str, logg
     )
     flow1.folder_id = folder_id
     flow2.folder_id = folder_id
-    await client.post("api/v1/flows/", json=flow1.model_dump(), headers=logged_in_headers)
-    await client.post("api/v1/flows/", json=flow2.model_dump(), headers=logged_in_headers)
+    await client.post("v1/flows/", json=flow1.model_dump(), headers=logged_in_headers)
+    await client.post("v1/flows/", json=flow2.model_dump(), headers=logged_in_headers)
 
     # Read the project with search
     response = await client.get(
-        f"api/v1/projects/{folder_id}", headers=logged_in_headers, params={"search": "Test", "page": 1, "size": 10}
+        f"v1/projects/{folder_id}", headers=logged_in_headers, params={"search": "Test", "page": 1, "size": 10}
     )
     assert response.status_code == 200
     folder_data = response.json()
@@ -1316,7 +1316,7 @@ async def test_read_folder_with_component_filter(client: AsyncClient, json_flow:
     # Create a new project
     folder_name = f"Test Project {uuid4()}"
     project = FolderCreate(name=folder_name, description="Test project description")
-    response = await client.post("api/v1/projects/", json=project.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/projects/", json=project.model_dump(), headers=logged_in_headers)
     assert response.status_code == 201
     created_folder = response.json()
     folder_id = created_folder["id"]
@@ -1332,11 +1332,11 @@ async def test_read_folder_with_component_filter(client: AsyncClient, json_flow:
         is_component=True,
     )
     component_flow.folder_id = folder_id
-    await client.post("api/v1/flows/", json=component_flow.model_dump(), headers=logged_in_headers)
+    await client.post("v1/flows/", json=component_flow.model_dump(), headers=logged_in_headers)
 
     # Read the project with component filter
     response = await client.get(
-        f"api/v1/projects/{folder_id}", headers=logged_in_headers, params={"is_component": True, "page": 1, "size": 10}
+        f"v1/projects/{folder_id}", headers=logged_in_headers, params={"is_component": True, "page": 1, "size": 10}
     )
     assert response.status_code == 200
     folder_data = response.json()

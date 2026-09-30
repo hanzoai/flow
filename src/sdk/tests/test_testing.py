@@ -201,8 +201,8 @@ def test_run_response_all_text_outputs_skips_none():
 
 @respx.mock
 def test_flow_runner_calls_run_flow():
-    """FlowRunner.__call__ hits POST /api/v1/run/<endpoint>."""
-    respx.post(f"{_BASE}/api/v1/run/my-endpoint").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
+    """FlowRunner.__call__ hits POST /v1/run/<endpoint>."""
+    respx.post(f"{_BASE}/v1/run/my-endpoint").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
     runner = FlowRunner(_sync_client())
     response = runner("my-endpoint", "Hello!")
 
@@ -214,7 +214,7 @@ def test_flow_runner_calls_run_flow():
 @respx.mock
 def test_flow_runner_passes_tweaks():
     """FlowRunner forwards tweaks inside the JSON body."""
-    route = respx.post(f"{_BASE}/api/v1/run/ep").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
+    route = respx.post(f"{_BASE}/v1/run/ep").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
     runner = FlowRunner(_sync_client())
     runner("ep", "Q", tweaks={"MyComponent": {"param": "value"}})
 
@@ -228,7 +228,7 @@ def test_flow_runner_passes_tweaks():
 @respx.mock
 def test_flow_runner_default_input_type():
     """FlowRunner defaults to input_type='chat' and output_type='chat'."""
-    route = respx.post(f"{_BASE}/api/v1/run/ep").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
+    route = respx.post(f"{_BASE}/v1/run/ep").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
     runner = FlowRunner(_sync_client())
     runner("ep")
 
@@ -246,8 +246,8 @@ def test_flow_runner_default_input_type():
 
 @respx.mock
 async def test_async_flow_runner_calls_run_flow():
-    """AsyncFlowRunner.__call__ hits POST /api/v1/run/<endpoint> asynchronously."""
-    respx.post(f"{_BASE}/api/v1/run/async-ep").mock(return_value=httpx.Response(200, json=_TEXT_RUN_RESPONSE))
+    """AsyncFlowRunner.__call__ hits POST /v1/run/<endpoint> asynchronously."""
+    respx.post(f"{_BASE}/v1/run/async-ep").mock(return_value=httpx.Response(200, json=_TEXT_RUN_RESPONSE))
     runner = AsyncFlowRunner(_async_client())
     response = await runner("async-ep", "Hi async!")
 
@@ -258,7 +258,7 @@ async def test_async_flow_runner_calls_run_flow():
 @respx.mock
 async def test_async_flow_runner_multi_output():
     """AsyncFlowRunner returns all outputs correctly."""
-    respx.post(f"{_BASE}/api/v1/run/multi-ep").mock(return_value=httpx.Response(200, json=_MULTI_RUN_RESPONSE))
+    respx.post(f"{_BASE}/v1/run/multi-ep").mock(return_value=httpx.Response(200, json=_MULTI_RUN_RESPONSE))
     runner = AsyncFlowRunner(_async_client())
     response = await runner("multi-ep", "Query")
 
@@ -276,7 +276,7 @@ def test_flow_runner_accepts_uuid():
     from uuid import UUID
 
     flow_id = UUID("dddddddd-0000-0000-0000-000000000001")
-    respx.post(f"{_BASE}/api/v1/run/{flow_id}").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
+    respx.post(f"{_BASE}/v1/run/{flow_id}").mock(return_value=httpx.Response(200, json=_CHAT_RUN_RESPONSE))
     runner = FlowRunner(_sync_client())
     response = runner(flow_id, "Hello by UUID")
 

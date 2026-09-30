@@ -41,7 +41,7 @@ async def test_build_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
 async def test_build_flow_from_request_data(client, json_memory_chatbot_no_llm, logged_in_headers):
     """Test building a flow from request data."""
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
-    response = await client.get(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{flow_id}", headers=logged_in_headers)
     flow_data = response.json()
 
     # Start the build and get job_id
@@ -62,7 +62,7 @@ async def test_build_flow_validates_request_data_instead_of_stale_db_flow(
 ):
     """When request data is provided, preflight validation should use it instead of the saved flow."""
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
-    response = await client.get(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{flow_id}", headers=logged_in_headers)
     flow_data = response.json()
     request_data = json.loads(json.dumps(flow_data["data"]))
     request_data["nodes"][0]["data"]["node"]["display_name"] = "Updated Request Flow"
@@ -78,7 +78,7 @@ async def test_build_flow_validates_request_data_instead_of_stale_db_flow(
     )
 
     response = await client.post(
-        f"api/v1/build/{flow_id}/flow",
+        f"v1/build/{flow_id}/flow",
         json={"data": request_data},
         headers=logged_in_headers,
     )
@@ -91,13 +91,13 @@ async def test_build_flow_with_frozen_path(client, json_memory_chatbot_no_llm, l
     """Test building a flow with a frozen path."""
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
 
-    response = await client.get(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{flow_id}", headers=logged_in_headers)
     flow_data = response.json()
     flow_data["data"]["nodes"][0]["data"]["node"]["frozen"] = True
 
     # Update the flow with frozen path
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json=FlowUpdate(name="Flow", description="description", data=flow_data["data"]).model_dump(),
         headers=logged_in_headers,
     )
@@ -144,7 +144,7 @@ async def test_build_flow_invalid_job_id(client, logged_in_headers):
 async def test_build_flow_invalid_flow_id(client, logged_in_headers):
     """Test starting a build with an invalid flow ID."""
     invalid_flow_id = uuid.uuid4()
-    response = await client.post(f"api/v1/build/{invalid_flow_id}/flow", json={}, headers=logged_in_headers)
+    response = await client.post(f"v1/build/{invalid_flow_id}/flow", json={}, headers=logged_in_headers)
     assert response.status_code == codes.NOT_FOUND
 
 
@@ -225,7 +225,7 @@ async def test_build_flow_polling(client, json_memory_chatbot_no_llm, logged_in_
                         # Set a timeout for the request
                         response = await asyncio.wait_for(
                             self.client.get(
-                                f"api/v1/build/{self.job_id}/events?event_delivery=polling",
+                                f"v1/build/{self.job_id}/events?event_delivery=polling",
                                 headers=headers,
                             ),
                             timeout=self.poll_timeout,
@@ -330,7 +330,7 @@ async def test_cancel_build_unexpected_error(client, json_memory_chatbot_no_llm,
 
     try:
         # Try to cancel the build - should return 500 Internal Server Error
-        cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=logged_in_headers)
+        cancel_response = await client.post(f"v1/build/{job_id}/cancel", headers=logged_in_headers)
         assert cancel_response.status_code == codes.INTERNAL_SERVER_ERROR
 
         # Verify the error message
@@ -365,7 +365,7 @@ async def test_cancel_build_success(client, json_memory_chatbot_no_llm, logged_i
 
     try:
         # Try to cancel the build (should return success)
-        cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=logged_in_headers)
+        cancel_response = await client.post(f"v1/build/{job_id}/cancel", headers=logged_in_headers)
         assert cancel_response.status_code == codes.OK
 
         # Verify the response structure indicates success
@@ -386,7 +386,7 @@ async def test_cancel_nonexistent_build(client, logged_in_headers):
     invalid_job_id = str(uuid.uuid4())
 
     # Try to cancel a non-existent build
-    response = await client.post(f"api/v1/build/{invalid_job_id}/cancel", headers=logged_in_headers)
+    response = await client.post(f"v1/build/{invalid_job_id}/cancel", headers=logged_in_headers)
     assert response.status_code == codes.NOT_FOUND
     assert "Job not found" in response.json()["detail"]
 
@@ -415,7 +415,7 @@ async def test_cancel_build_failure(client, json_memory_chatbot_no_llm, logged_i
 
     try:
         # Try to cancel the build (should return failure but success=False)
-        cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=logged_in_headers)
+        cancel_response = await client.post(f"v1/build/{job_id}/cancel", headers=logged_in_headers)
         assert cancel_response.status_code == codes.OK
 
         # Verify the response structure indicates failure
@@ -456,7 +456,7 @@ async def test_cancel_build_with_cancelled_error(client, json_memory_chatbot_no_
     try:
         # Try to cancel the build - should return failure when CancelledError is raised
         # since our implementation treats CancelledError as a failed cancellation
-        cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=logged_in_headers)
+        cancel_response = await client.post(f"v1/build/{job_id}/cancel", headers=logged_in_headers)
         assert cancel_response.status_code == codes.OK
 
         # Verify the response structure indicates failure
@@ -489,7 +489,7 @@ async def test_should_have_public_events_endpoint_accessible_without_auth(client
     # Assert 1 — the PUBLIC events endpoint is accessible without auth
     # Returns 404 "Job not found" (route exists, but job doesn't) — NOT 401/403
     events_response = await client.get(
-        f"api/v1/build_public_tmp/{fake_job_id}/events?event_delivery=polling",
+        f"v1/build_public_tmp/{fake_job_id}/events?event_delivery=polling",
         headers={"Accept": "application/x-ndjson"},
     )
     assert events_response.status_code == codes.NOT_FOUND
@@ -513,7 +513,7 @@ async def test_should_have_public_cancel_endpoint_accessible_without_auth(client
     # The PUBLIC cancel endpoint is accessible without auth
     # Returns 404 "Job not found" (route exists, but job doesn't) — NOT 401/403
     cancel_response = await client.post(
-        f"api/v1/build_public_tmp/{fake_job_id}/cancel",
+        f"v1/build_public_tmp/{fake_job_id}/cancel",
         headers={"Content-Type": "application/json"},
     )
     assert cancel_response.status_code == codes.NOT_FOUND
@@ -533,7 +533,7 @@ async def test_build_public_tmp_ignores_data_parameter(client, json_memory_chatb
 
     # Make the flow public
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -547,7 +547,7 @@ async def test_build_public_tmp_ignores_data_parameter(client, json_memory_chatb
 
     # Attempt to build with malicious data - FastAPI will silently ignore it
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={
             "inputs": {"session": "test_session"},
             "data": malicious_data,  # This will be silently ignored by FastAPI
@@ -579,7 +579,7 @@ async def test_build_public_tmp_checks_public_access_before_validation(
     )
 
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": "test_session"}},
         headers={"Content-Type": "application/json"},
     )
@@ -599,11 +599,11 @@ async def test_build_flow_cross_user_blocked(client, json_memory_chatbot_no_llm,
     victim_flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     attacker_headers = {"Authorization": f"Bearer {response.json()['access_token']}"}
 
-    response = await client.post(f"api/v1/build/{victim_flow_id}/flow", json={}, headers=attacker_headers)
+    response = await client.post(f"v1/build/{victim_flow_id}/flow", json={}, headers=attacker_headers)
     assert response.status_code == 404
 
 
@@ -614,7 +614,7 @@ async def test_build_flow_unauthenticated_blocked(client, json_memory_chatbot_no
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     # Clear any cookies retained from previous tests to ensure a truly unauthenticated request.
     client.cookies.clear()
-    response = await client.post(f"api/v1/build/{flow_id}/flow", json={})
+    response = await client.post(f"v1/build/{flow_id}/flow", json={})
     assert response.status_code == 403
 
 
@@ -623,7 +623,7 @@ async def test_build_flow_unauthenticated_blocked(client, json_memory_chatbot_no
 async def test_build_flow_nonexistent_flow_returns_404(client, logged_in_headers):
     """Non-existent flow UUID must return 404."""
     nonexistent_id = uuid.uuid4()
-    response = await client.post(f"api/v1/build/{nonexistent_id}/flow", json={}, headers=logged_in_headers)
+    response = await client.post(f"v1/build/{nonexistent_id}/flow", json={}, headers=logged_in_headers)
     assert response.status_code == 404
 
 
@@ -640,7 +640,7 @@ async def test_build_events_cross_user_blocked(client, json_memory_chatbot_no_ll
     job_id = build_response["job_id"]
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     attacker_headers = {"Authorization": f"Bearer {response.json()['access_token']}"}
 
@@ -660,18 +660,18 @@ async def test_build_flow_public_flow_accessible_by_other_user(
     """
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
     assert patch_response.status_code == 200
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     other_headers = {"Authorization": f"Bearer {response.json()['access_token']}"}
 
-    response = await client.post(f"api/v1/build/{flow_id}/flow", json={}, headers=other_headers)
+    response = await client.post(f"v1/build/{flow_id}/flow", json={}, headers=other_headers)
     assert response.status_code == 200
 
 
@@ -688,11 +688,11 @@ async def test_cancel_build_cross_user_blocked(client, json_memory_chatbot_no_ll
     job_id = build_response["job_id"]
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     attacker_headers = {"Authorization": f"Bearer {response.json()['access_token']}"}
 
-    response = await client.post(f"api/v1/build/{job_id}/cancel", headers=attacker_headers)
+    response = await client.post(f"v1/build/{job_id}/cancel", headers=attacker_headers)
     assert response.status_code == 404
 
 
@@ -709,7 +709,7 @@ async def test_build_public_tmp_without_data_parameter(client, json_memory_chatb
 
     # Make the flow public
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -720,7 +720,7 @@ async def test_build_public_tmp_without_data_parameter(client, json_memory_chatb
 
     # Build without providing data parameter
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": "test_session"}},
         headers={"Content-Type": "application/json"},
     )
@@ -742,7 +742,7 @@ async def test_get_build_events_public_tmp_job_accessible_by_any_auth_user(
     """
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -750,7 +750,7 @@ async def test_get_build_events_public_tmp_job_accessible_by_any_auth_user(
 
     client.cookies.set("client_id", "test-public-tmp-events-client")
     start_response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={},
         headers={"Content-Type": "application/json"},
     )
@@ -758,7 +758,7 @@ async def test_get_build_events_public_tmp_job_accessible_by_any_auth_user(
     job_id = start_response.json()["job_id"]
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    login_response = await client.post("api/v1/login", data=login_data)
+    login_response = await client.post("v1/login", data=login_data)
     assert login_response.status_code == codes.OK
     other_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
@@ -785,7 +785,7 @@ async def test_cancel_build_public_tmp_job_accessible_by_any_auth_user(
     """
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -793,7 +793,7 @@ async def test_cancel_build_public_tmp_job_accessible_by_any_auth_user(
 
     client.cookies.set("client_id", "test-public-tmp-cancel-client")
     start_response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={},
         headers={"Content-Type": "application/json"},
     )
@@ -801,7 +801,7 @@ async def test_cancel_build_public_tmp_job_accessible_by_any_auth_user(
     job_id = start_response.json()["job_id"]
 
     login_data = {"username": user_two.username, "password": "hashed_password"}  # pragma: allowlist secret
-    login_response = await client.post("api/v1/login", data=login_data)
+    login_response = await client.post("v1/login", data=login_data)
     assert login_response.status_code == codes.OK
     other_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
@@ -812,7 +812,7 @@ async def test_cancel_build_public_tmp_job_accessible_by_any_auth_user(
 
     monkeypatch.setattr(flow.api.v1.chat, "cancel_flow_build", mock_cancel_flow_build)
 
-    cancel_response = await client.post(f"api/v1/build/{job_id}/cancel", headers=other_headers)
+    cancel_response = await client.post(f"v1/build/{job_id}/cancel", headers=other_headers)
     assert cancel_response.status_code == codes.OK
     assert cancel_response.json()["success"] is True
 
@@ -884,7 +884,7 @@ async def test_build_public_tmp_namespaces_caller_session(
 ):
     """Caller-supplied session equal to the real flow UUID is wrapped under the namespace.
 
-    The threat: /api/v1/run hands out session_id == flow_id by default, and the
+    The threat: /v1/run hands out session_id == flow_id by default, and the
     flow UUID is visible in URLs. Without namespacing, an unauthenticated caller
     can pass that UUID as inputs.session and a Memory component reads its history.
     """
@@ -892,7 +892,7 @@ async def test_build_public_tmp_namespaces_caller_session(
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -906,7 +906,7 @@ async def test_build_public_tmp_namespaces_caller_session(
     victim_session = str(flow_id)
 
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": victim_session}},
         headers={"Content-Type": "application/json"},
     )
@@ -929,7 +929,7 @@ async def test_build_public_tmp_session_already_namespaced_unchanged(
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -944,7 +944,7 @@ async def test_build_public_tmp_session_already_namespaced_unchanged(
     already_scoped = f"{namespace}:thread-1"
 
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": already_scoped}},
         headers={"Content-Type": "application/json"},
     )
@@ -960,7 +960,7 @@ async def test_build_public_tmp_isolates_disjoint_clients(
     """Different client_ids submitting the same session string land in disjoint namespaces."""
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -973,7 +973,7 @@ async def test_build_public_tmp_isolates_disjoint_clients(
 
     _send_unauthenticated(client, "client-A")
     response_a = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": shared_session}},
         headers={"Content-Type": "application/json"},
     )
@@ -983,7 +983,7 @@ async def test_build_public_tmp_isolates_disjoint_clients(
     captured.clear()
     _send_unauthenticated(client, "client-B")
     response_b = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": shared_session}},
         headers={"Content-Type": "application/json"},
     )
@@ -1003,7 +1003,7 @@ async def test_build_public_tmp_no_session_passthrough(
     """No inputs supplied: namespacing is skipped; downstream falls back to the virtual flow ID."""
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -1014,7 +1014,7 @@ async def test_build_public_tmp_no_session_passthrough(
 
     _send_unauthenticated(client, "ns-default-client")
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": None},
         headers={"Content-Type": "application/json"},
     )
@@ -1037,7 +1037,7 @@ async def test_build_public_tmp_empty_session_is_namespaced(
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -1050,7 +1050,7 @@ async def test_build_public_tmp_empty_session_is_namespaced(
     _send_unauthenticated(client, client_id)
 
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": ""}},
         headers={"Content-Type": "application/json"},
     )
@@ -1072,7 +1072,7 @@ async def test_build_public_tmp_authenticated_namespace_uses_user_id(
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -1083,7 +1083,7 @@ async def test_build_public_tmp_authenticated_namespace_uses_user_id(
 
     client.cookies.set("client_id", "should-be-ignored")
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": "thread-A"}},
         headers={**logged_in_headers, "Content-Type": "application/json"},
     )
@@ -1111,7 +1111,7 @@ async def test_build_public_tmp_namespacing_blocks_memory_query_collision(
 
     flow_id = await create_flow(client, json_memory_chatbot_no_llm, logged_in_headers)
     patch_response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"access_type": "PUBLIC"},
         headers=logged_in_headers,
     )
@@ -1130,7 +1130,7 @@ async def test_build_public_tmp_namespacing_blocks_memory_query_collision(
     _send_unauthenticated(client, "leak-test-client")
 
     response = await client.post(
-        f"api/v1/build_public_tmp/{flow_id}/flow",
+        f"v1/build_public_tmp/{flow_id}/flow",
         json={"inputs": {"session": victim_session}},
         headers={"Content-Type": "application/json"},
     )

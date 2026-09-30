@@ -232,7 +232,7 @@ async def test_handle_project_streamable_messages_success(
 ):
     """Test successful handling of project messages over Streamable HTTP."""
     response = await client.post(
-        f"api/v1/mcp/project/{user_test_project.id}/streamable",
+        f"v1/mcp/project/{user_test_project.id}/streamable",
         headers=logged_in_headers,
         json={"type": "test", "content": "message"},
     )
@@ -246,7 +246,7 @@ async def test_handle_project_messages_success(
 ):
     """Test successful handling of project messages over SSE."""
     response = await client.post(
-        f"api/v1/mcp/project/{user_test_project.id}",
+        f"v1/mcp/project/{user_test_project.id}",
         headers=logged_in_headers,
         json={"type": "test", "content": "message"},
     )
@@ -257,7 +257,7 @@ async def test_handle_project_messages_success(
 async def test_update_project_mcp_settings_invalid_json(client: AsyncClient, user_test_project, logged_in_headers):
     """Test updating MCP settings with invalid JSON."""
     response = await client.patch(
-        f"api/v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json="invalid"
+        f"v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json="invalid"
     )
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
@@ -322,7 +322,7 @@ async def test_update_project_mcp_settings_success(
 
     # Make the real PATCH request
     response = await client.patch(
-        f"api/v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
+        f"v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
     )
 
     # Assert response
@@ -345,7 +345,7 @@ async def test_update_project_mcp_settings_invalid_project(client: AsyncClient, 
     nonexistent_project_id = uuid4()
 
     # Try to access the project
-    response = await client.get(f"api/v1/mcp/project/{nonexistent_project_id}/sse", headers=logged_in_headers)
+    response = await client.get(f"v1/mcp/project/{nonexistent_project_id}/sse", headers=logged_in_headers)
 
     # Verify the response
     assert response.status_code == 404
@@ -360,7 +360,7 @@ async def test_update_project_mcp_settings_other_user_project(
     # This test disables MCP Composer to test JWT token-based access control
 
     # Try to access the other user's project using active_user's credentials
-    response = await client.get(f"api/v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
+    response = await client.get(f"v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
 
     # Verify the response
     assert response.status_code == 404
@@ -375,7 +375,7 @@ async def test_update_project_mcp_settings_other_user_project_with_composer(
     assert enable_mcp_composer  # Fixture ensures MCP Composer is enabled
 
     # Try to access the other user's project using active_user's JWT credentials
-    response = await client.get(f"api/v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
+    response = await client.get(f"v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
 
     # Verify the response - should get 401 because JWT tokens aren't accepted
     assert response.status_code == 401
@@ -401,7 +401,7 @@ async def test_update_project_mcp_settings_empty_settings(client: AsyncClient, u
 
     # Make the request to the actual endpoint
     response = await client.patch(
-        f"api/v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
+        f"v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
     )
 
     # Verify response - the real endpoint should handle empty settings correctly
@@ -412,7 +412,7 @@ async def test_update_project_mcp_settings_empty_settings(client: AsyncClient, u
 async def test_user_can_only_access_own_projects(client: AsyncClient, other_test_project, logged_in_headers):
     """Test that a user can only access their own projects."""
     # Try to access the other user's project using first user's credentials
-    response = await client.get(f"api/v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
+    response = await client.get(f"v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
     # Should fail with 404 as first user cannot see second user's project
     assert response.status_code == 404
     assert response.json()["detail"] == "Project not found"
@@ -444,7 +444,7 @@ async def test_user_data_isolation_with_real_db(
 
     try:
         # Test that first user can't see the project
-        response = await client.get(f"api/v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
+        response = await client.get(f"v1/mcp/project/{other_test_project.id}/sse", headers=logged_in_headers)
 
         # Should fail with 404
         assert response.status_code == 404
@@ -533,7 +533,7 @@ async def test_user_can_update_own_flow_mcp_settings(
 
     # Make the PATCH request to update settings
     response = await client.patch(
-        f"api/v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
+        f"v1/mcp/project/{user_test_project.id}", headers=logged_in_headers, json=json_payload
     )
 
     # Should succeed as the user owns this project and flow

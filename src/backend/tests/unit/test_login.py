@@ -23,13 +23,13 @@ async def test_login_successful(client, test_user):
     except IntegrityError:
         pass
 
-    response = await client.post("api/v1/login", data={"username": "testuser", "password": "testpassword"})
+    response = await client.post("v1/login", data={"username": "testuser", "password": "testpassword"})
     assert response.status_code == 200
     assert "access_token" in response.json()
 
 
 async def test_login_unsuccessful_wrong_username(client):
-    response = await client.post("api/v1/login", data={"username": "wrongusername", "password": "testpassword"})
+    response = await client.post("v1/login", data={"username": "wrongusername", "password": "testpassword"})
     assert response.status_code == 401
     assert response.json()["detail"] == "Incorrect username or password"
 
@@ -39,14 +39,14 @@ async def test_login_unsuccessful_wrong_password(client, test_user, async_sessio
     async_session.add(test_user)
     await async_session.commit()
 
-    response = await client.post("api/v1/login", data={"username": "testuser", "password": "wrongpassword"})
+    response = await client.post("v1/login", data={"username": "testuser", "password": "wrongpassword"})
     assert response.status_code == 401
     assert response.json()["detail"] == "Incorrect username or password"
 
 
 async def test_session_endpoint_unauthenticated(client):
     """Test /session endpoint returns authenticated=False for unauthenticated requests."""
-    response = await client.get("api/v1/session")
+    response = await client.get("v1/session")
     assert response.status_code == 200
     data = response.json()
     assert data["authenticated"] is False
@@ -56,7 +56,7 @@ async def test_session_endpoint_unauthenticated(client):
 
 async def test_session_endpoint_authenticated(client, logged_in_headers):
     """Test /session endpoint returns user info for authenticated requests."""
-    response = await client.get("api/v1/session", headers=logged_in_headers)
+    response = await client.get("v1/session", headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     assert data["authenticated"] is True
@@ -71,7 +71,7 @@ async def test_session_endpoint_no_api_key_in_response(client, logged_in_headers
     This is a security check to ensure API keys are not exposed in HTTP response bodies,
     even to authenticated users. API keys should only be stored in httponly cookies.
     """
-    response = await client.get("api/v1/session", headers=logged_in_headers)
+    response = await client.get("v1/session", headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     assert data["authenticated"] is True

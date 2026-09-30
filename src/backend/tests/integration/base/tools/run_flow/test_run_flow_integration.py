@@ -23,7 +23,7 @@ class TestRunFlowEndToEnd:
 
         # First, create a folder for our flows
         folder_response = await client.post(
-            "api/v1/folders/",
+            "v1/folders/",
             json={"name": "Test Folder", "description": "Folder for integration tests"},
             headers=logged_in_headers,
         )
@@ -39,7 +39,7 @@ class TestRunFlowEndToEnd:
 
         # Create target flow via API (uses real database)
         response = await client.post(
-            "api/v1/flows/",
+            "v1/flows/",
             json=target_flow.model_dump(mode="json"),
             headers=logged_in_headers,
         )
@@ -55,7 +55,7 @@ class TestRunFlowEndToEnd:
         wrapper_flow = FlowCreate(**wrapper_dict, folder_id=folder_id)
 
         wrapper_response = await client.post(
-            "api/v1/flows/",
+            "v1/flows/",
             json=wrapper_flow.model_dump(mode="json"),
             headers=logged_in_headers,
         )
@@ -100,9 +100,9 @@ class TestRunFlowEndToEnd:
             assert target_flow_id in flow_ids
         finally:
             # Cleanup
-            await client.delete(f"api/v1/flows/{target_flow_id}", headers=logged_in_headers)
-            await client.delete(f"api/v1/flows/{wrapper_flow_id}", headers=logged_in_headers)
-            await client.delete(f"api/v1/folders/{folder_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{target_flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{wrapper_flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/folders/{folder_id}", headers=logged_in_headers)
 
     @pytest.mark.asyncio
     async def test_run_flow_with_inputs_and_outputs(self, active_user):
@@ -151,7 +151,7 @@ class TestRunFlowComponentWithTools:
 
         # Create a folder for our flows
         folder_response = await client.post(
-            "api/v1/folders/",
+            "v1/folders/",
             json={"name": "Tool Test Folder", "description": "Folder for tool generation tests"},
             headers=logged_in_headers,
         )
@@ -167,7 +167,7 @@ class TestRunFlowComponentWithTools:
         tool_flow = FlowCreate(**graph_dict, folder_id=folder_id, user_id=str(active_user.id))
 
         # Create tool flow via API (will be associated with active_user via logged_in_headers)
-        response = await client.post("api/v1/flows/", json=tool_flow.model_dump(mode="json"), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=tool_flow.model_dump(mode="json"), headers=logged_in_headers)
         assert response.status_code == 201
         flow_data = response.json()
         flow_id = flow_data["id"]
@@ -182,7 +182,7 @@ class TestRunFlowComponentWithTools:
         wrapper_flow = FlowCreate(**wrapper_dict, folder_id=folder_id, user_id=str(active_user.id))
 
         wrapper_response = await client.post(
-            "api/v1/flows/",
+            "v1/flows/",
             json=wrapper_flow.model_dump(mode="json"),
             headers=logged_in_headers,
         )
@@ -223,9 +223,9 @@ class TestRunFlowComponentWithTools:
             assert isinstance(tools, list), "Expected tools to be a list"
         finally:
             # Cleanup
-            await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
-            await client.delete(f"api/v1/flows/{wrapper_flow_id}", headers=logged_in_headers)
-            await client.delete(f"api/v1/folders/{folder_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{wrapper_flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/folders/{folder_id}", headers=logged_in_headers)
 
 
 class TestRunFlowOutputResolution:
@@ -245,7 +245,7 @@ class TestRunFlowOutputResolution:
         flow = FlowCreate(**graph_dict)
 
         # Create flow via API
-        response = await client.post("api/v1/flows/", json=flow.model_dump(mode="json"), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(mode="json"), headers=logged_in_headers)
         assert response.status_code == 201
         flow_data = response.json()
         flow_id = flow_data["id"]
@@ -281,7 +281,7 @@ class TestRunFlowOutputResolution:
             assert real_graph.flow_name == flow_name
         finally:
             # Cleanup
-            await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)
 
 
 class TestRunFlowCaching:
@@ -302,7 +302,7 @@ class TestRunFlowCaching:
         flow = FlowCreate(**graph_dict)
 
         # Create flow via API
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_data = response.json()
         flow_id = flow_data["id"]
@@ -332,7 +332,7 @@ class TestRunFlowCaching:
             assert graph1 == graph2, "Expected same graph instance from cache"
         finally:
             # Cleanup
-            await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)
 
 
 @pytest.fixture
@@ -461,7 +461,7 @@ class TestRunFlowInternalLogic:
         flow = FlowCreate(**graph_dict)
 
         # Create flow via API
-        response = await client.post("api/v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
+        response = await client.post("v1/flows/", json=flow.model_dump(), headers=logged_in_headers)
         assert response.status_code == 201
         flow_data = response.json()
         flow_id = flow_data["id"]
@@ -511,4 +511,4 @@ class TestRunFlowInternalLogic:
 
         finally:
             # Cleanup
-            await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+            await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)

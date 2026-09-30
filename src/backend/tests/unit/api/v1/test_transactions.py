@@ -465,14 +465,14 @@ class TestTransactionsEndpoint:
 
     async def test_get_transactions_requires_auth(self, client: AsyncClient):
         """Test that GET /monitor/transactions requires authentication."""
-        response = await client.get("api/v1/monitor/transactions?flow_id=00000000-0000-0000-0000-000000000000")
+        response = await client.get("v1/monitor/transactions?flow_id=00000000-0000-0000-0000-000000000000")
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     @pytest.mark.usefixtures("active_user")
     async def test_get_transactions_returns_paginated_response(self, client: AsyncClient, logged_in_headers):
         """Test that GET /monitor/transactions returns paginated response."""
         flow_id = "00000000-0000-0000-0000-000000000000"
-        response = await client.get(f"api/v1/monitor/transactions?flow_id={flow_id}", headers=logged_in_headers)
+        response = await client.get(f"v1/monitor/transactions?flow_id={flow_id}", headers=logged_in_headers)
 
         assert response.status_code == status.HTTP_200_OK
         result = response.json()
@@ -488,7 +488,7 @@ class TestTransactionsEndpoint:
         """Test GET /monitor/transactions with custom pagination parameters."""
         flow_id = "00000000-0000-0000-0000-000000000000"
         response = await client.get(
-            f"api/v1/monitor/transactions?flow_id={flow_id}&page=1&size=10", headers=logged_in_headers
+            f"v1/monitor/transactions?flow_id={flow_id}&page=1&size=10", headers=logged_in_headers
         )
 
         assert response.status_code == status.HTTP_200_OK
@@ -499,20 +499,20 @@ class TestTransactionsEndpoint:
     @pytest.mark.usefixtures("active_user")
     async def test_get_transactions_requires_flow_id(self, client: AsyncClient, logged_in_headers):
         """Test that GET /monitor/transactions requires flow_id parameter."""
-        response = await client.get("api/v1/monitor/transactions", headers=logged_in_headers)
+        response = await client.get("v1/monitor/transactions", headers=logged_in_headers)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     @pytest.mark.usefixtures("active_user")
     async def test_get_transactions_invalid_flow_id_format(self, client: AsyncClient, logged_in_headers):
         """Test GET /monitor/transactions with invalid flow_id format."""
-        response = await client.get("api/v1/monitor/transactions?flow_id=invalid-uuid", headers=logged_in_headers)
+        response = await client.get("v1/monitor/transactions?flow_id=invalid-uuid", headers=logged_in_headers)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     @pytest.mark.usefixtures("active_user")
     async def test_get_transactions_response_structure(self, client: AsyncClient, logged_in_headers):
         """Test that transaction response items have the expected structure."""
         flow_id = uuid4()
-        response = await client.get(f"api/v1/monitor/transactions?flow_id={flow_id}", headers=logged_in_headers)
+        response = await client.get(f"v1/monitor/transactions?flow_id={flow_id}", headers=logged_in_headers)
 
         assert response.status_code == status.HTTP_200_OK
         result = response.json()

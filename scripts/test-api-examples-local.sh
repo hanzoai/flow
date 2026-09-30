@@ -10,7 +10,7 @@ SUITES="${SUITES:-curl,python,javascript}"
 EXECUTE_MODE="${EXECUTE_MODE:-true}"
 
 export FLOW_AUTO_LOGIN="${FLOW_AUTO_LOGIN:-true}"
-# /api/v2/workflows (docs Python workflow examples) requires this. Always enable for this
+# /v1/workflows (docs Python workflow examples) requires this. Always enable for this
 # harness so a user-wide FLOW_DEVELOPER_API_ENABLED=false does not break the suite.
 export FLOW_DEVELOPER_API_ENABLED=true
 
@@ -33,7 +33,7 @@ cleanup() {
 trap cleanup EXIT
 
 # If PORT is already taken, Hanzo Flow may bind to PORT+1 while this script still uses PORT for
-# curl and examples — you then hit the wrong server (e.g. 403 on /api/v2/workflows without dev API).
+# curl and examples — you then hit the wrong server (e.g. 403 on /v1/workflows without dev API).
 port_is_in_use() {
   local host="$1" port="$2"
   uv run python - "$host" "$port" <<'PY'
@@ -74,7 +74,7 @@ if port_is_in_use "$HOST" "$PORT"; then
   echo "Port $REQUESTED_PORT was in use; using $PORT for this run (set FLOW_PORT to pin a port)."
 fi
 
-echo "Starting Hanzo Flow on http://$HOST:$PORT (developer API enabled for /api/v2/workflows)"
+echo "Starting Hanzo Flow on http://$HOST:$PORT (developer API enabled for /v1/workflows)"
 # Set on the command line so the server process always sees it (macOS launcher/exec paths).
 FLOW_DEVELOPER_API_ENABLED=true uv run flow run --backend-only --host "$HOST" --port "$PORT" >/tmp/flow-server.log 2>&1 &
 echo $! >/tmp/flow-server.pid
@@ -116,14 +116,14 @@ last_status = None
 # Fail fast: short timeouts and small retry budget.
 for attempt in range(1, 9):
     try:
-        resp = session.get(f"{base}/api/v1/auto_login", timeout=8)
+        resp = session.get(f"{base}/v1/auto_login", timeout=8)
         last_status = ("auto_login", resp.status_code)
         if resp.status_code == 200:
             token = resp.json()["access_token"]
             break
 
         resp2 = session.post(
-            f"{base}/api/v1/login",
+            f"{base}/v1/login",
             data={"username": user, "password": password},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=8,
@@ -142,7 +142,7 @@ if not token:
     raise RuntimeError(f"Could not log in after retries (last {last_status})")
 
 key_resp = session.post(
-    f"{base}/api/v1/api_key/",
+    f"{base}/v1/api_key/",
     headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
     json={"name": "local-docs-examples"},
     timeout=8,
@@ -180,7 +180,7 @@ headers = {"accept": "application/json", "Content-Type": "application/json", "x-
 try:
     project_name = f"api-example-project-{uuid.uuid4().hex[:8]}"
     project_resp = requests.post(
-        f"{base_url}/api/v1/projects/",
+        f"{base_url}/v1/projects/",
         headers=headers,
         json={"name": project_name, "description": "Local docs examples bootstrap", "components_list": [], "flows_list": []},
         timeout=20,
@@ -193,7 +193,7 @@ try:
 
     flow_name = f"api-example-flow-{uuid.uuid4().hex[:8]}"
     flow_resp = requests.post(
-        f"{base_url}/api/v1/flows/",
+        f"{base_url}/v1/flows/",
         headers=headers,
         json={
             "name": flow_name,
@@ -209,7 +209,7 @@ try:
         raise RuntimeError(f"Flow creation returned no id: {flow_data}")
 
     build_resp = requests.post(
-        f"{base_url}/api/v1/build/{flow_id}/flow",
+        f"{base_url}/v1/build/{flow_id}/flow",
         headers=headers,
         json={},
         timeout=20,
@@ -223,7 +223,7 @@ try:
     project_zip_path = Path("/tmp/flow-project-import.zip")
     try:
         export_resp = requests.get(
-            f"{base_url}/api/v1/projects/download/{project_id}",
+            f"{base_url}/v1/projects/download/{project_id}",
             headers={"accept": "application/json", "x-api-key": api_key},
             timeout=30,
         )

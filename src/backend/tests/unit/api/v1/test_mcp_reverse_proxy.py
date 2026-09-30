@@ -22,10 +22,10 @@ class TestSseTransportRootPath:
 
     @pytest.fixture
     def transport(self):
-        return SseServerTransport("/api/v1/mcp/")
+        return SseServerTransport("/v1/mcp/")
 
     def test_endpoint_stored(self, transport):
-        assert transport._endpoint == "/api/v1/mcp/"
+        assert transport._endpoint == "/v1/mcp/"
 
     def test_project_transport_endpoint(self):
         """get_project_sse stores the correct endpoint path."""
@@ -37,7 +37,7 @@ class TestSseTransportRootPath:
         # Clean up after the test
         try:
             sse = get_project_sse(project_id)
-            assert sse._endpoint == f"/api/v1/mcp/project/{project_id_str}/"
+            assert sse._endpoint == f"/v1/mcp/project/{project_id_str}/"
         finally:
             project_sse_transports.pop(project_id_str, None)
 
@@ -75,7 +75,7 @@ class TestForwardedPrefixMiddleware:
             scope = {
                 "type": "http",
                 "method": "GET",
-                "path": "/api/v1/mcp/sse",
+                "path": "/v1/mcp/sse",
                 "root_path": "",
                 "query_string": b"",
                 "headers": raw_headers,
@@ -127,7 +127,7 @@ class TestForwardedPrefixMiddleware:
             scope = {
                 "type": "http",
                 "method": "GET",
-                "path": "/api/v1/mcp/sse",
+                "path": "/v1/mcp/sse",
                 "root_path": "",
                 "query_string": b"",
                 "headers": [(b"x-forwarded-prefix", b"/attacker-prefix")],

@@ -75,23 +75,23 @@ FAKE_FLOW_ID = "00000000-0000-0000-0000-000000000001"
 
 
 async def test_get_shared_sessions_requires_auth(client: AsyncClient):
-    response = await client.get(f"api/v1/monitor/messages/shared/sessions?source_flow_id={FAKE_FLOW_ID}")
+    response = await client.get(f"v1/monitor/messages/shared/sessions?source_flow_id={FAKE_FLOW_ID}")
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 async def test_get_shared_messages_requires_auth(client: AsyncClient):
-    response = await client.get(f"api/v1/monitor/messages/shared?source_flow_id={FAKE_FLOW_ID}")
+    response = await client.get(f"v1/monitor/messages/shared?source_flow_id={FAKE_FLOW_ID}")
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 async def test_delete_shared_session_requires_auth(client: AsyncClient):
-    response = await client.delete(f"api/v1/monitor/messages/shared/session/test-session?source_flow_id={FAKE_FLOW_ID}")
+    response = await client.delete(f"v1/monitor/messages/shared/session/test-session?source_flow_id={FAKE_FLOW_ID}")
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 async def test_rename_shared_session_requires_auth(client: AsyncClient):
     response = await client.patch(
-        f"api/v1/monitor/messages/shared/session/old-session?new_session_id=new-session&source_flow_id={FAKE_FLOW_ID}"
+        f"v1/monitor/messages/shared/session/old-session?new_session_id=new-session&source_flow_id={FAKE_FLOW_ID}"
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -99,7 +99,7 @@ async def test_rename_shared_session_requires_auth(client: AsyncClient):
 async def test_update_shared_message_requires_auth(client: AsyncClient):
     fake_msg_id = "00000000-0000-0000-0000-000000000002"
     response = await client.put(
-        f"api/v1/monitor/messages/shared/{fake_msg_id}?source_flow_id={FAKE_FLOW_ID}",
+        f"v1/monitor/messages/shared/{fake_msg_id}?source_flow_id={FAKE_FLOW_ID}",
         json={"text": "updated"},
     )
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -150,7 +150,7 @@ async def shared_messages_setup(active_user):
 async def test_get_shared_sessions_returns_user_sessions(client: AsyncClient, logged_in_headers, shared_messages_setup):
     source_flow_id = shared_messages_setup["source_flow_id"]
     response = await client.get(
-        f"api/v1/monitor/messages/shared/sessions?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared/sessions?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
     )
     assert response.status_code == status.HTTP_200_OK
@@ -164,7 +164,7 @@ async def test_get_shared_sessions_returns_user_sessions(client: AsyncClient, lo
 async def test_get_shared_messages_returns_messages(client: AsyncClient, logged_in_headers, shared_messages_setup):
     source_flow_id = shared_messages_setup["source_flow_id"]
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
         headers=logged_in_headers,
     )
     assert response.status_code == status.HTTP_200_OK
@@ -178,7 +178,7 @@ async def test_get_shared_messages_empty_for_wrong_flow(client: AsyncClient, log
     """Requesting messages for a flow the user hasn't interacted with returns empty."""
     random_flow_id = uuid.uuid4()
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={random_flow_id}",
+        f"v1/monitor/messages/shared?source_flow_id={random_flow_id}",
         headers=logged_in_headers,
     )
     assert response.status_code == status.HTTP_200_OK
@@ -191,21 +191,21 @@ async def test_delete_shared_session_removes_messages(client: AsyncClient, logge
 
     # Delete session-1
     response = await client.delete(
-        f"api/v1/monitor/messages/shared/session/test-session-1?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared/session/test-session-1?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
     # Verify session-1 messages are gone
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
         headers=logged_in_headers,
     )
     assert response.json() == []
 
     # Verify session-2 messages still exist
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-2",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-2",
         headers=logged_in_headers,
     )
     assert len(response.json()) == 1
@@ -216,7 +216,7 @@ async def test_rename_shared_session(client: AsyncClient, logged_in_headers, sha
     source_flow_id = shared_messages_setup["source_flow_id"]
 
     response = await client.patch(
-        f"api/v1/monitor/messages/shared/session/test-session-1"
+        f"v1/monitor/messages/shared/session/test-session-1"
         f"?new_session_id=renamed-session&source_flow_id={source_flow_id}",
         headers=logged_in_headers,
     )
@@ -238,7 +238,7 @@ async def test_shared_messages_isolated_between_users(
 
     # User A can see their messages
     response_a = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
     )
     assert response_a.status_code == status.HTTP_200_OK
@@ -246,13 +246,13 @@ async def test_shared_messages_isolated_between_users(
 
     # Log in as User B
     login_data = {"username": user_two.username, "password": "hashed_password"}
-    login_response = await client.post("api/v1/login", data=login_data)
+    login_response = await client.post("v1/login", data=login_data)
     assert login_response.status_code == 200
     user_b_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
     # User B sees EMPTY messages for the same source_flow_id
     response_b = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}",
         headers=user_b_headers,
     )
     assert response_b.status_code == status.HTTP_200_OK
@@ -260,7 +260,7 @@ async def test_shared_messages_isolated_between_users(
 
     # User B also sees no sessions
     response_b_sessions = await client.get(
-        f"api/v1/monitor/messages/shared/sessions?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared/sessions?source_flow_id={source_flow_id}",
         headers=user_b_headers,
     )
     assert response_b_sessions.status_code == status.HTTP_200_OK
@@ -274,7 +274,7 @@ async def test_update_shared_message_updates_properties(client: AsyncClient, log
 
     # Get a message to update
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}&session_id=test-session-1",
         headers=logged_in_headers,
     )
     messages = response.json()
@@ -283,7 +283,7 @@ async def test_update_shared_message_updates_properties(client: AsyncClient, log
 
     # Update the message properties with build_duration
     response = await client.put(
-        f"api/v1/monitor/messages/shared/{message_id}?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared/{message_id}?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
         json={"properties": {"build_duration": 1500}},
     )
@@ -301,7 +301,7 @@ async def test_update_shared_message_returns_404_for_wrong_flow(
 
     # Get a real message ID
     response = await client.get(
-        f"api/v1/monitor/messages/shared?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
     )
     message_id = response.json()[0]["id"]
@@ -309,7 +309,7 @@ async def test_update_shared_message_returns_404_for_wrong_flow(
     # Try to update with a different source_flow_id
     wrong_flow_id = uuid.uuid4()
     response = await client.put(
-        f"api/v1/monitor/messages/shared/{message_id}?source_flow_id={wrong_flow_id}",
+        f"v1/monitor/messages/shared/{message_id}?source_flow_id={wrong_flow_id}",
         headers=logged_in_headers,
         json={"properties": {"build_duration": 9999}},
     )
@@ -325,7 +325,7 @@ async def test_update_shared_message_returns_404_for_nonexistent_id(
     fake_msg_id = uuid.uuid4()
 
     response = await client.put(
-        f"api/v1/monitor/messages/shared/{fake_msg_id}?source_flow_id={source_flow_id}",
+        f"v1/monitor/messages/shared/{fake_msg_id}?source_flow_id={source_flow_id}",
         headers=logged_in_headers,
         json={"text": "should not work"},
     )

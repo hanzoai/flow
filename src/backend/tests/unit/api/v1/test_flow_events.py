@@ -5,7 +5,7 @@ from starlette import status
 async def _create_flow(client: AsyncClient, headers: dict) -> str:
     """Create a minimal flow and return its id."""
     response = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "event-test-flow", "data": {}},
         headers=headers,
     )
@@ -17,7 +17,7 @@ async def test_create_and_get_flow_events(client: AsyncClient, logged_in_headers
     flow_id = await _create_flow(client, logged_in_headers)
 
     response = await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "component_added", "summary": "Added OpenAI"},
         headers=logged_in_headers,
     )
@@ -28,7 +28,7 @@ async def test_create_and_get_flow_events(client: AsyncClient, logged_in_headers
     assert "timestamp" in event
 
     response = await client.get(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         params={"since": 0.0},
         headers=logged_in_headers,
     )
@@ -43,20 +43,20 @@ async def test_get_events_cursor_based(client: AsyncClient, logged_in_headers):
     flow_id = await _create_flow(client, logged_in_headers)
 
     r1 = await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "component_added", "summary": "First"},
         headers=logged_in_headers,
     )
     first_ts = r1.json()["timestamp"]
 
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "connection_added", "summary": "Second"},
         headers=logged_in_headers,
     )
 
     response = await client.get(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         params={"since": first_ts},
         headers=logged_in_headers,
     )
@@ -69,18 +69,18 @@ async def test_settled_on_flow_settled_event(client: AsyncClient, logged_in_head
     flow_id = await _create_flow(client, logged_in_headers)
 
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "component_added", "summary": "Added"},
         headers=logged_in_headers,
     )
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "flow_settled", "summary": "Done"},
         headers=logged_in_headers,
     )
 
     response = await client.get(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         params={"since": 0.0},
         headers=logged_in_headers,
     )
@@ -93,18 +93,18 @@ async def test_full_event_lifecycle(client: AsyncClient, logged_in_headers):
     flow_id = await _create_flow(client, logged_in_headers)
 
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "component_added", "summary": "Added OpenAI"},
         headers=logged_in_headers,
     )
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "connection_added", "summary": "Connected to Chat Output"},
         headers=logged_in_headers,
     )
 
     response = await client.get(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         params={"since": 0.0},
         headers=logged_in_headers,
     )
@@ -113,13 +113,13 @@ async def test_full_event_lifecycle(client: AsyncClient, logged_in_headers):
     assert data["settled"] is False
 
     await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "flow_settled", "summary": "Built a RAG pipeline"},
         headers=logged_in_headers,
     )
 
     response = await client.get(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         params={"since": 0.0},
         headers=logged_in_headers,
     )
@@ -133,14 +133,14 @@ async def test_nonexistent_flow_returns_404(client: AsyncClient, logged_in_heade
     fake_id = "00000000-0000-0000-0000-000000000000"
 
     response = await client.get(
-        f"api/v1/flows/{fake_id}/events",
+        f"v1/flows/{fake_id}/events",
         params={"since": 0.0},
         headers=logged_in_headers,
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
     response = await client.post(
-        f"api/v1/flows/{fake_id}/events",
+        f"v1/flows/{fake_id}/events",
         json={"type": "component_added", "summary": "Should fail"},
         headers=logged_in_headers,
     )
@@ -151,7 +151,7 @@ async def test_invalid_event_type_returns_422(client: AsyncClient, logged_in_hea
     flow_id = await _create_flow(client, logged_in_headers)
 
     response = await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "invalid_type", "summary": "bad event"},
         headers=logged_in_headers,
     )
@@ -162,7 +162,7 @@ async def test_missing_event_type_returns_422(client: AsyncClient, logged_in_hea
     flow_id = await _create_flow(client, logged_in_headers)
 
     response = await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"summary": "no type field"},
         headers=logged_in_headers,
     )
@@ -173,7 +173,7 @@ async def test_summary_max_length_returns_422(client: AsyncClient, logged_in_hea
     flow_id = await _create_flow(client, logged_in_headers)
 
     response = await client.post(
-        f"api/v1/flows/{flow_id}/events",
+        f"v1/flows/{flow_id}/events",
         json={"type": "component_added", "summary": "x" * 501},
         headers=logged_in_headers,
     )

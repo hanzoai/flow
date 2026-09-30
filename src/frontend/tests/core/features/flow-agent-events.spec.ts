@@ -24,7 +24,7 @@ test.describe("Flow Agent Events", () => {
 
       // Post an event via the page's fetch (uses the page's auth cookies/headers)
       await page.evaluate(async (fid: string) => {
-        await fetch(`/api/v1/flows/${fid}/events`, {
+        await fetch(`/v1/flows/${fid}/events`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -41,7 +41,7 @@ test.describe("Flow Agent Events", () => {
 
       // Post a flow_settled event
       await page.evaluate(async (fid: string) => {
-        await fetch(`/api/v1/flows/${fid}/events`, {
+        await fetch(`/v1/flows/${fid}/events`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

@@ -300,7 +300,7 @@ class TestDeleteEndpoint:
         mock_root.return_value = tmp_path
         (tmp_path / "activeuser" / "My_KB").mkdir(parents=True)
 
-        response = await client.delete("api/v1/knowledge_bases/My_KB", headers=logged_in_headers)
+        response = await client.delete("v1/knowledge_bases/My_KB", headers=logged_in_headers)
 
         assert response.status_code == 200
 
@@ -312,14 +312,14 @@ class TestDeleteEndpoint:
         mock_root.return_value = tmp_path
         (tmp_path / "activeuser" / "My_KB").mkdir(parents=True)
 
-        response = await client.delete("api/v1/knowledge_bases/My_KB", headers=logged_in_headers)
+        response = await client.delete("v1/knowledge_bases/My_KB", headers=logged_in_headers)
 
         assert response.status_code == 500
         assert "may be in use" in response.json()["detail"]
         mock_delete.assert_called_once()
 
     async def test_should_return_404_when_kb_not_found(self, client, logged_in_headers):
-        response = await client.delete("api/v1/knowledge_bases/NonExistent_KB", headers=logged_in_headers)
+        response = await client.delete("v1/knowledge_bases/NonExistent_KB", headers=logged_in_headers)
 
         assert response.status_code == 404
 
@@ -340,7 +340,7 @@ class TestBulkDeleteEndpoint:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["KB1", "KB2"]},
         )
@@ -362,7 +362,7 @@ class TestBulkDeleteEndpoint:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["KB1", "KB2"]},
         )
@@ -381,7 +381,7 @@ class TestBulkDeleteEndpoint:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["KB1", "Ghost"]},
         )

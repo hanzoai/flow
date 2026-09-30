@@ -37,7 +37,7 @@ async def other_active_user(client):  # noqa: ARG001
 @pytest.fixture
 async def other_logged_in_headers(client: AsyncClient, other_active_user):
     login_data = {"username": other_active_user.username, "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     return {"Authorization": f"Bearer {tokens['access_token']}"}
@@ -112,7 +112,7 @@ async def test_get_monitor_builds_does_not_return_other_users_data(
     cross_user_monitor_data,
 ):
     own_response = await client.get(
-        "api/v1/monitor/builds",
+        "v1/monitor/builds",
         params={"flow_id": cross_user_monitor_data["owned_flow_id"]},
         headers=logged_in_headers,
     )
@@ -120,7 +120,7 @@ async def test_get_monitor_builds_does_not_return_other_users_data(
     assert own_response.json()["vertex_builds"]
 
     foreign_response = await client.get(
-        "api/v1/monitor/builds",
+        "v1/monitor/builds",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=logged_in_headers,
     )
@@ -128,7 +128,7 @@ async def test_get_monitor_builds_does_not_return_other_users_data(
     assert foreign_response.json() == {"vertex_builds": {}}
 
     owner_response = await client.get(
-        "api/v1/monitor/builds",
+        "v1/monitor/builds",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=other_logged_in_headers,
     )
@@ -144,14 +144,14 @@ async def test_delete_monitor_builds_cannot_delete_other_users_data(
     cross_user_monitor_data,
 ):
     delete_response = await client.delete(
-        "api/v1/monitor/builds",
+        "v1/monitor/builds",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=logged_in_headers,
     )
     assert delete_response.status_code == 204, delete_response.text
 
     owner_response = await client.get(
-        "api/v1/monitor/builds",
+        "v1/monitor/builds",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=other_logged_in_headers,
     )
@@ -167,7 +167,7 @@ async def test_get_monitor_transactions_does_not_return_other_users_data(
     cross_user_monitor_data,
 ):
     own_response = await client.get(
-        "api/v1/monitor/transactions",
+        "v1/monitor/transactions",
         params={"flow_id": cross_user_monitor_data["owned_flow_id"]},
         headers=logged_in_headers,
     )
@@ -175,7 +175,7 @@ async def test_get_monitor_transactions_does_not_return_other_users_data(
     assert len(own_response.json()["items"]) == 1
 
     foreign_response = await client.get(
-        "api/v1/monitor/transactions",
+        "v1/monitor/transactions",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=logged_in_headers,
     )
@@ -184,7 +184,7 @@ async def test_get_monitor_transactions_does_not_return_other_users_data(
     assert foreign_response.json()["total"] == 0
 
     owner_response = await client.get(
-        "api/v1/monitor/transactions",
+        "v1/monitor/transactions",
         params={"flow_id": cross_user_monitor_data["foreign_flow_id"]},
         headers=other_logged_in_headers,
     )

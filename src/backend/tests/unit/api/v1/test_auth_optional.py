@@ -17,7 +17,7 @@ async def test_optional_auth_returns_user_with_valid_bearer(client: AsyncClient,
     # the endpoint proceeds (may fail on flow validation, but NOT on auth)
     fake_flow_id = "00000000-0000-0000-0000-000000000099"
     response = await client.post(
-        f"api/v1/build_public_tmp/{fake_flow_id}/flow",
+        f"v1/build_public_tmp/{fake_flow_id}/flow",
         headers=logged_in_headers,
         json={"inputs": None},
     )
@@ -34,7 +34,7 @@ async def test_optional_auth_returns_none_without_credentials(
     """No credentials should still allow the endpoint to proceed (anonymous mode)."""
     fake_flow_id = "00000000-0000-0000-0000-000000000099"
     response = await client.post(
-        f"api/v1/build_public_tmp/{fake_flow_id}/flow",
+        f"v1/build_public_tmp/{fake_flow_id}/flow",
         json={"inputs": None},
     )
     # Without auth AND without client_id cookie → 400 (no client_id)
@@ -48,7 +48,7 @@ async def test_optional_auth_returns_none_with_invalid_token(
     """Invalid Bearer token should not block the request — falls back to anonymous."""
     fake_flow_id = "00000000-0000-0000-0000-000000000099"
     response = await client.post(
-        f"api/v1/build_public_tmp/{fake_flow_id}/flow",
+        f"v1/build_public_tmp/{fake_flow_id}/flow",
         headers={"Authorization": "Bearer invalid-expired-token"},
         json={"inputs": None},
     )
@@ -64,7 +64,7 @@ async def test_optional_auth_returns_none_with_invalid_api_key(
     """Invalid API key should not block the request — falls back to anonymous."""
     fake_flow_id = "00000000-0000-0000-0000-000000000099"
     response = await client.post(
-        f"api/v1/build_public_tmp/{fake_flow_id}/flow",
+        f"v1/build_public_tmp/{fake_flow_id}/flow",
         headers={"x-api-key": "invalid-api-key"},
         json={"inputs": None},
     )

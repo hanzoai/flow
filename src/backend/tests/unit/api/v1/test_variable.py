@@ -30,7 +30,7 @@ def credential_variable():
 
 @pytest.mark.usefixtures("active_user")
 async def test_create_variable(client: AsyncClient, generic_variable, logged_in_headers):
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -44,9 +44,9 @@ async def test_create_variable(client: AsyncClient, generic_variable, logged_in_
 
 @pytest.mark.usefixtures("active_user")
 async def test_create_variable__variable_name_already_exists(client: AsyncClient, generic_variable, logged_in_headers):
-    await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
 
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -60,7 +60,7 @@ async def test_create_variable__variable_name_and_value_cannot_be_empty(
     generic_variable["name"] = ""
     generic_variable["value"] = ""
 
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -71,7 +71,7 @@ async def test_create_variable__variable_name_and_value_cannot_be_empty(
 async def test_create_variable__variable_name_cannot_be_empty(client: AsyncClient, generic_variable, logged_in_headers):
     generic_variable["name"] = ""
 
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -84,7 +84,7 @@ async def test_create_variable__variable_value_cannot_be_empty(
 ):
     generic_variable["value"] = ""
 
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -98,7 +98,7 @@ async def test_create_variable__httpexception(client: AsyncClient, credential_va
 
     with mock.patch("flow.services.auth.utils.encrypt_api_key") as m:
         m.side_effect = HTTPException(status_code=status_code, detail=generic_message)
-        response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=credential_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_418_IM_A_TEAPOT
@@ -111,7 +111,7 @@ async def test_create_variable__exception(client: AsyncClient, credential_variab
 
     with mock.patch("flow.services.auth.utils.encrypt_api_key") as m:
         m.side_effect = Exception(generic_message)
-        response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=credential_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -121,14 +121,14 @@ async def test_create_variable__exception(client: AsyncClient, credential_variab
 @pytest.mark.usefixtures("active_user")
 async def test_read_variables(client: AsyncClient, generic_variable, credential_variable, logged_in_headers):
     # Create a generic variable
-    create_response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    create_response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
 
     # Create a credential variable
-    create_response = await client.post("api/v1/variables/", json=credential_variable, headers=logged_in_headers)
+    create_response = await client.post("v1/variables/", json=credential_variable, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
 
-    response = await client.get("api/v1/variables/", headers=logged_in_headers)
+    response = await client.get("v1/variables/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -150,12 +150,12 @@ async def test_read_variables(client: AsyncClient, generic_variable, credential_
 
 @pytest.mark.usefixtures("active_user")
 async def test_read_variables__empty(client: AsyncClient, logged_in_headers):
-    all_variables = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_variables = await client.get("v1/variables/", headers=logged_in_headers)
     all_variables = all_variables.json()
     for variable in all_variables:
-        await client.delete(f"api/v1/variables/{variable.get('id')}", headers=logged_in_headers)
+        await client.delete(f"v1/variables/{variable.get('id')}", headers=logged_in_headers)
 
-    response = await client.get("api/v1/variables/", headers=logged_in_headers)
+    response = await client.get("v1/variables/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -172,7 +172,7 @@ async def test_read_variables__(client: AsyncClient, logged_in_headers):
         new_callable=mock.AsyncMock,
         side_effect=Exception(generic_message),
     ):
-        response = await client.get("api/v1/variables/", headers=logged_in_headers)
+        response = await client.get("v1/variables/", headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert generic_message in response.json().get("detail", "")
@@ -180,7 +180,7 @@ async def test_read_variables__(client: AsyncClient, logged_in_headers):
 
 @pytest.mark.usefixtures("active_user")
 async def test_update_variable(client: AsyncClient, generic_variable, logged_in_headers):
-    saved = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    saved = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     saved = saved.json()
     generic_variable["id"] = saved.get("id")
     generic_variable["name"] = "new_name"
@@ -189,7 +189,7 @@ async def test_update_variable(client: AsyncClient, generic_variable, logged_in_
     generic_variable["default_fields"] = ["new_field"]
 
     response = await client.patch(
-        f"api/v1/variables/{saved.get('id')}", json=generic_variable, headers=logged_in_headers
+        f"v1/variables/{saved.get('id')}", json=generic_variable, headers=logged_in_headers
     )
     result = response.json()
 
@@ -204,7 +204,7 @@ async def test_update_variable__exception(client: AsyncClient, generic_variable,
     wrong_id = uuid4()
     generic_variable["id"] = str(wrong_id)
 
-    response = await client.patch(f"api/v1/variables/{wrong_id}", json=generic_variable, headers=logged_in_headers)
+    response = await client.patch(f"v1/variables/{wrong_id}", json=generic_variable, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -213,9 +213,9 @@ async def test_update_variable__exception(client: AsyncClient, generic_variable,
 
 @pytest.mark.usefixtures("active_user")
 async def test_delete_variable(client: AsyncClient, generic_variable, logged_in_headers):
-    response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     saved = response.json()
-    response = await client.delete(f"api/v1/variables/{saved.get('id')}", headers=logged_in_headers)
+    response = await client.delete(f"v1/variables/{saved.get('id')}", headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -224,7 +224,7 @@ async def test_delete_variable(client: AsyncClient, generic_variable, logged_in_
 async def test_delete_variable__exception(client: AsyncClient, logged_in_headers):
     wrong_id = uuid4()
 
-    response = await client.delete(f"api/v1/variables/{wrong_id}", headers=logged_in_headers)
+    response = await client.delete(f"v1/variables/{wrong_id}", headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
 
@@ -233,10 +233,10 @@ async def test_delete_variable__exception(client: AsyncClient, logged_in_headers
 async def test_create_variable__openai_api_key_validation_success(client: AsyncClient, logged_in_headers):
     """Test successful OpenAI API key validation."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OPENAI_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     openai_variable = {
         "name": "OPENAI_API_KEY",
@@ -248,7 +248,7 @@ async def test_create_variable__openai_api_key_validation_success(client: AsyncC
     # Mock successful OpenAI API call
     with mock.patch("langchain_openai.ChatOpenAI.invoke") as mock_invoke:
         mock_invoke.return_value = "test response"
-        response = await client.post("api/v1/variables/", json=openai_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=openai_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_201_CREATED
@@ -260,10 +260,10 @@ async def test_create_variable__openai_api_key_validation_success(client: AsyncC
 async def test_create_variable__openai_api_key_validation_failure(client: AsyncClient, logged_in_headers):
     """Test failed OpenAI API key validation."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OPENAI_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     openai_variable = {
         "name": "OPENAI_API_KEY",
@@ -275,7 +275,7 @@ async def test_create_variable__openai_api_key_validation_failure(client: AsyncC
     # Mock failed OpenAI API call with authentication error
     with mock.patch("langchain_openai.ChatOpenAI.invoke") as mock_invoke:
         mock_invoke.side_effect = Exception("401 authentication failed")
-        response = await client.post("api/v1/variables/", json=openai_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=openai_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -286,10 +286,10 @@ async def test_create_variable__openai_api_key_validation_failure(client: AsyncC
 async def test_create_variable__anthropic_api_key_validation_success(client: AsyncClient, logged_in_headers):
     """Test successful Anthropic API key validation."""
     # Clean up any existing ANTHROPIC_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "ANTHROPIC_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     anthropic_variable = {
         "name": "ANTHROPIC_API_KEY",
@@ -301,7 +301,7 @@ async def test_create_variable__anthropic_api_key_validation_success(client: Asy
     # Mock successful Anthropic API call
     with mock.patch("langchain_anthropic.ChatAnthropic.invoke") as mock_invoke:
         mock_invoke.return_value = "test response"
-        response = await client.post("api/v1/variables/", json=anthropic_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=anthropic_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_201_CREATED
@@ -313,10 +313,10 @@ async def test_create_variable__anthropic_api_key_validation_success(client: Asy
 async def test_create_variable__anthropic_api_key_validation_failure(client: AsyncClient, logged_in_headers):
     """Test failed Anthropic API key validation."""
     # Clean up any existing ANTHROPIC_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "ANTHROPIC_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     anthropic_variable = {
         "name": "ANTHROPIC_API_KEY",
@@ -328,7 +328,7 @@ async def test_create_variable__anthropic_api_key_validation_failure(client: Asy
     # Mock failed Anthropic API call with authentication error
     with mock.patch("langchain_anthropic.ChatAnthropic.invoke") as mock_invoke:
         mock_invoke.side_effect = Exception("Invalid API key provided")
-        response = await client.post("api/v1/variables/", json=anthropic_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=anthropic_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -339,10 +339,10 @@ async def test_create_variable__anthropic_api_key_validation_failure(client: Asy
 async def test_create_variable__google_api_key_validation_success(client: AsyncClient, logged_in_headers):
     """Test successful Google API key validation."""
     # Clean up any existing GOOGLE_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "GOOGLE_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     google_variable = {
         "name": "GOOGLE_API_KEY",
@@ -354,7 +354,7 @@ async def test_create_variable__google_api_key_validation_success(client: AsyncC
     # Mock successful Google API call
     with mock.patch("langchain_google_genai.ChatGoogleGenerativeAI.invoke") as mock_invoke:
         mock_invoke.return_value = "test response"
-        response = await client.post("api/v1/variables/", json=google_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=google_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_201_CREATED
@@ -366,10 +366,10 @@ async def test_create_variable__google_api_key_validation_success(client: AsyncC
 async def test_create_variable__ollama_base_url_validation_success(client: AsyncClient, logged_in_headers):
     """Test successful Ollama base URL validation."""
     # Clean up any existing OLLAMA_BASE_URL variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OLLAMA_BASE_URL":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     ollama_variable = {
         "name": "OLLAMA_BASE_URL",
@@ -382,7 +382,7 @@ async def test_create_variable__ollama_base_url_validation_success(client: Async
     with mock.patch("requests.get") as mock_get:
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {"models": []}
-        response = await client.post("api/v1/variables/", json=ollama_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=ollama_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_201_CREATED
@@ -394,10 +394,10 @@ async def test_create_variable__ollama_base_url_validation_success(client: Async
 async def test_create_variable__ollama_base_url_validation_failure(client: AsyncClient, logged_in_headers):
     """Test failed Ollama base URL validation."""
     # Clean up any existing OLLAMA_BASE_URL variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OLLAMA_BASE_URL":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     ollama_variable = {
         "name": "OLLAMA_BASE_URL",
@@ -409,7 +409,7 @@ async def test_create_variable__ollama_base_url_validation_failure(client: Async
     # Mock failed Ollama API call
     with mock.patch("requests.get") as mock_get:
         mock_get.return_value.status_code = 404
-        response = await client.post("api/v1/variables/", json=ollama_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=ollama_variable, headers=logged_in_headers)
         result = response.json()
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -420,10 +420,10 @@ async def test_create_variable__ollama_base_url_validation_failure(client: Async
 async def test_create_variable__model_provider_network_error_allows_creation(client: AsyncClient, logged_in_headers):
     """Test that network errors don't prevent variable creation."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OPENAI_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     openai_variable = {
         "name": "OPENAI_API_KEY",
@@ -435,7 +435,7 @@ async def test_create_variable__model_provider_network_error_allows_creation(cli
     # Mock network error (not an auth error)
     with mock.patch("langchain_openai.ChatOpenAI.invoke") as mock_invoke:
         mock_invoke.side_effect = Exception("Network timeout")
-        response = await client.post("api/v1/variables/", json=openai_variable, headers=logged_in_headers)
+        response = await client.post("v1/variables/", json=openai_variable, headers=logged_in_headers)
 
         # Should succeed despite network error
         assert response.status_code == status.HTTP_201_CREATED
@@ -445,10 +445,10 @@ async def test_create_variable__model_provider_network_error_allows_creation(cli
 async def test_delete_provider_credential_cleans_up_disabled_models(client: AsyncClient, logged_in_headers):
     """Test that deleting a provider credential cleans up disabled models for that provider."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OPENAI_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     openai_variable = {
         "name": "OPENAI_API_KEY",
@@ -460,14 +460,14 @@ async def test_delete_provider_credential_cleans_up_disabled_models(client: Asyn
     # Mock successful OpenAI API call to create credential
     with mock.patch("langchain_openai.ChatOpenAI.invoke") as mock_invoke:
         mock_invoke.return_value = "test response"
-        create_response = await client.post("api/v1/variables/", json=openai_variable, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=openai_variable, headers=logged_in_headers)
         assert create_response.status_code == status.HTTP_201_CREATED
         created_var = create_response.json()
 
     # Disable some OpenAI models
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key"):
         disable_response = await client.post(
-            "api/v1/models/enabled_models",
+            "v1/models/enabled_models",
             json=[
                 {"provider": "OpenAI", "model_id": "gpt-4", "enabled": False},
                 {"provider": "OpenAI", "model_id": "gpt-3.5-turbo", "enabled": False},
@@ -477,11 +477,11 @@ async def test_delete_provider_credential_cleans_up_disabled_models(client: Asyn
         assert disable_response.status_code == status.HTTP_200_OK
 
     # Delete the credential - should clean up disabled models
-    delete_response = await client.delete(f"api/v1/variables/{created_var['id']}", headers=logged_in_headers)
+    delete_response = await client.delete(f"v1/variables/{created_var['id']}", headers=logged_in_headers)
     assert delete_response.status_code == status.HTTP_204_NO_CONTENT
 
     # Verify disabled models are cleaned up - check that the disabled models variable is gone or cleared
-    all_vars_after = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars_after = await client.get("v1/variables/", headers=logged_in_headers)
     disabled_models_var = next(
         (v for v in all_vars_after.json() if v.get("name") == "__disabled_models__"),
         None,
@@ -499,10 +499,10 @@ async def test_delete_provider_credential_cleans_up_disabled_models(client: Asyn
 async def test_delete_provider_credential_cleans_up_enabled_models(client: AsyncClient, logged_in_headers):
     """Test that deleting a provider credential cleans up explicitly enabled models for that provider."""
     # Clean up any existing OPENAI_API_KEY variables
-    all_vars = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars = await client.get("v1/variables/", headers=logged_in_headers)
     for var in all_vars.json():
         if var.get("name") == "OPENAI_API_KEY":
-            await client.delete(f"api/v1/variables/{var['id']}", headers=logged_in_headers)
+            await client.delete(f"v1/variables/{var['id']}", headers=logged_in_headers)
 
     openai_variable = {
         "name": "OPENAI_API_KEY",
@@ -514,14 +514,14 @@ async def test_delete_provider_credential_cleans_up_enabled_models(client: Async
     # Mock successful OpenAI API call to create credential
     with mock.patch("langchain_openai.ChatOpenAI.invoke") as mock_invoke:
         mock_invoke.return_value = "test response"
-        create_response = await client.post("api/v1/variables/", json=openai_variable, headers=logged_in_headers)
+        create_response = await client.post("v1/variables/", json=openai_variable, headers=logged_in_headers)
         assert create_response.status_code == status.HTTP_201_CREATED
         created_var = create_response.json()
 
     # Enable some non-default OpenAI models (explicitly enable models that aren't default)
     with mock.patch("lfx.base.models.unified_models.validate_model_provider_key"):
         enable_response = await client.post(
-            "api/v1/models/enabled_models",
+            "v1/models/enabled_models",
             json=[
                 {"provider": "OpenAI", "model_id": "gpt-4-turbo-preview", "enabled": True},
             ],
@@ -530,11 +530,11 @@ async def test_delete_provider_credential_cleans_up_enabled_models(client: Async
         assert enable_response.status_code == status.HTTP_200_OK
 
     # Delete the credential - should clean up enabled models
-    delete_response = await client.delete(f"api/v1/variables/{created_var['id']}", headers=logged_in_headers)
+    delete_response = await client.delete(f"v1/variables/{created_var['id']}", headers=logged_in_headers)
     assert delete_response.status_code == status.HTTP_204_NO_CONTENT
 
     # Verify enabled models are cleaned up
-    all_vars_after = await client.get("api/v1/variables/", headers=logged_in_headers)
+    all_vars_after = await client.get("v1/variables/", headers=logged_in_headers)
     enabled_models_var = next(
         (v for v in all_vars_after.json() if v.get("name") == "__enabled_models__"),
         None,
@@ -558,12 +558,12 @@ async def test_delete_non_provider_credential_does_not_cleanup_models(client: As
         "default_fields": [],
     }
 
-    create_response = await client.post("api/v1/variables/", json=generic_variable, headers=logged_in_headers)
+    create_response = await client.post("v1/variables/", json=generic_variable, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     created_var = create_response.json()
 
     # Delete the variable - should not trigger any cleanup
-    delete_response = await client.delete(f"api/v1/variables/{created_var['id']}", headers=logged_in_headers)
+    delete_response = await client.delete(f"v1/variables/{created_var['id']}", headers=logged_in_headers)
     assert delete_response.status_code == status.HTTP_204_NO_CONTENT
 
 
@@ -596,7 +596,7 @@ async def test_detect_env_vars_endpoint__returns_detected_names(client: AsyncCli
         mock.patch("flow.api.v1.variable.get_variable_service", return_value=variable_service),
     ):
         response = await client.post(
-            "api/v1/variables/detections",
+            "v1/variables/detections",
             json={"flow_version_ids": [str(flow_version_id)]},
             headers=logged_in_headers,
         )
@@ -620,7 +620,7 @@ async def test_detect_env_vars_endpoint__rejects_missing_nodes(client: AsyncClie
         mock.patch("flow.api.v1.variable.get_variable_service", return_value=variable_service),
     ):
         response = await client.post(
-            "api/v1/variables/detections",
+            "v1/variables/detections",
             json={"flow_version_ids": [str(flow_version_id)]},
             headers=logged_in_headers,
         )

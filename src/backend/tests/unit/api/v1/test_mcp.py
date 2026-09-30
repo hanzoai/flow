@@ -114,27 +114,27 @@ def mock_current_user_ctx(mock_user):
 # Test the HEAD /sse endpoint (checks server availability)
 async def test_mcp_sse_head_endpoint(client: AsyncClient):
     """Test HEAD /sse endpoint returns 200 OK."""
-    response = await client.head("api/v1/mcp/sse")
+    response = await client.head("v1/mcp/sse")
     assert response.status_code == status.HTTP_200_OK
 
 
 # Test the HEAD /sse endpoint without authentication
 async def test_mcp_sse_head_endpoint_no_auth(client: AsyncClient):
     """Test HEAD /sse endpoint without authentication returns 200 OK (HEAD requests don't require auth)."""
-    response = await client.head("api/v1/mcp/sse")
+    response = await client.head("v1/mcp/sse")
     assert response.status_code == status.HTTP_200_OK
 
 
 async def test_mcp_sse_get_endpoint_invalid_auth(client: AsyncClient):
     """Test GET /sse endpoint with invalid authentication returns 401."""
     headers = {"Authorization": "Bearer invalid_token"}
-    response = await client.get("api/v1/mcp/sse", headers=headers)
+    response = await client.get("v1/mcp/sse", headers=headers)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 async def test_mcp_sse_post_endpoint(client: AsyncClient, mock_sse_transport):
     """Test POST / endpoint for SSE transport succeeds without auth."""
-    response = await client.post("api/v1/mcp/", json={"type": "test"})
+    response = await client.post("v1/mcp/", json={"type": "test"})
 
     assert response.status_code == status.HTTP_200_OK
     mock_sse_transport.handle_post_message.assert_called_once()
@@ -143,7 +143,7 @@ async def test_mcp_sse_post_endpoint(client: AsyncClient, mock_sse_transport):
 async def test_mcp_post_endpoint_success(client: AsyncClient, logged_in_headers, mock_sse_transport):
     """Test POST / endpoint successfully handles MCP messages with auth."""
     test_message = {"type": "test", "content": "message"}
-    response = await client.post("api/v1/mcp/", headers=logged_in_headers, json=test_message)
+    response = await client.post("v1/mcp/", headers=logged_in_headers, json=test_message)
 
     assert response.status_code == status.HTTP_200_OK
     mock_sse_transport.handle_post_message.assert_called_once()
@@ -151,13 +151,13 @@ async def test_mcp_post_endpoint_success(client: AsyncClient, logged_in_headers,
 
 async def test_mcp_post_endpoint_no_auth(client: AsyncClient):
     """Test POST / endpoint without authentication returns 400 (current behavior)."""
-    response = await client.post("api/v1/mcp/", json={})
+    response = await client.post("v1/mcp/", json={})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_mcp_post_endpoint_invalid_json(client: AsyncClient, logged_in_headers):
     """Test POST / endpoint with invalid JSON returns 400."""
-    response = await client.post("api/v1/mcp/", headers=logged_in_headers, content="invalid json")
+    response = await client.post("v1/mcp/", headers=logged_in_headers, content="invalid json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -165,7 +165,7 @@ async def test_mcp_sse_post_endpoint_disconnect_error(client: AsyncClient, mock_
     """Test POST / endpoint handles disconnection errors correctly for SSE."""
     mock_sse_transport.handle_post_message.side_effect = BrokenPipeError("Simulated disconnect")
 
-    response = await client.post("api/v1/mcp/", json={"type": "test"})
+    response = await client.post("v1/mcp/", json={"type": "test"})
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_sse_transport.handle_post_message.assert_called_once()
@@ -175,7 +175,7 @@ async def test_mcp_post_endpoint_disconnect_error(client: AsyncClient, logged_in
     """Test POST / endpoint handles disconnection errors correctly with auth."""
     mock_sse_transport.handle_post_message.side_effect = BrokenPipeError("Simulated disconnect")
 
-    response = await client.post("api/v1/mcp/", headers=logged_in_headers, json={"type": "test"})
+    response = await client.post("v1/mcp/", headers=logged_in_headers, json={"type": "test"})
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "MCP Server disconnected" in response.json()["detail"]
@@ -186,7 +186,7 @@ async def test_mcp_sse_post_endpoint_server_error(client: AsyncClient, mock_sse_
     """Test POST / endpoint handles server errors correctly for SSE."""
     mock_sse_transport.handle_post_message.side_effect = Exception("Internal server error")
 
-    response = await client.post("api/v1/mcp/", json={"type": "test"})
+    response = await client.post("v1/mcp/", json={"type": "test"})
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
 
@@ -195,7 +195,7 @@ async def test_mcp_post_endpoint_server_error(client: AsyncClient, logged_in_hea
     """Test POST / endpoint handles server errors correctly with auth."""
     mock_sse_transport.handle_post_message.side_effect = Exception("Internal server error")
 
-    response = await client.post("api/v1/mcp/", headers=logged_in_headers, json={"type": "test"})
+    response = await client.post("v1/mcp/", headers=logged_in_headers, json={"type": "test"})
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert "Internal server error" in response.json()["detail"]
@@ -209,7 +209,7 @@ async def test_mcp_streamable_post_endpoint(
 ):
     """Test POST /streamable endpoint successfully handles MCP messages."""
     test_message = {"type": "test", "content": "message"}
-    response = await client.post("api/v1/mcp/streamable", headers=logged_in_headers, json=test_message)
+    response = await client.post("v1/mcp/streamable", headers=logged_in_headers, json=test_message)
 
     assert response.status_code == status.HTTP_200_OK
     mock_streamable_http_manager.handle_request.assert_called_once()
@@ -217,7 +217,7 @@ async def test_mcp_streamable_post_endpoint(
 
 async def test_mcp_streamable_post_endpoint_no_auth(client: AsyncClient):
     """Test POST /streamable endpoint without authentication returns 403 Forbidden."""
-    response = await client.post("api/v1/mcp/streamable", json={})
+    response = await client.post("v1/mcp/streamable", json={})
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
@@ -227,7 +227,7 @@ async def test_mcp_streamable_post_endpoint_disconnect_error(
     """Test POST /streamable endpoint handles disconnection errors correctly."""
     mock_streamable_http_manager.handle_request.side_effect = BrokenPipeError("Simulated disconnect")
 
-    response = await client.post("api/v1/mcp/streamable", headers=logged_in_headers, json={"type": "test"})
+    response = await client.post("v1/mcp/streamable", headers=logged_in_headers, json={"type": "test"})
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     mock_streamable_http_manager.handle_request.assert_called_once()
@@ -239,7 +239,7 @@ async def test_mcp_streamable_post_endpoint_server_error(
     """Test POST /streamable endpoint handles server errors correctly."""
     mock_streamable_http_manager.handle_request.side_effect = Exception("Internal server error")
 
-    response = await client.post("api/v1/mcp/streamable", headers=logged_in_headers, json={"type": "test"})
+    response = await client.post("v1/mcp/streamable", headers=logged_in_headers, json={"type": "test"})
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
 
@@ -251,7 +251,7 @@ async def test_mcp_streamable_get_endpoint(
     mock_streamable_http_manager,
 ):
     """Test GET /streamable endpoint successfully handles MCP messages."""
-    response = await client.get("api/v1/mcp/streamable", headers=logged_in_headers)
+    response = await client.get("v1/mcp/streamable", headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
     mock_streamable_http_manager.handle_request.assert_called_once()
 
@@ -262,20 +262,20 @@ async def test_mcp_streamable_delete_endpoint(
     mock_streamable_http_manager,
 ):
     """Test DELETE /streamable endpoint successfully handles MCP messages."""
-    response = await client.delete("api/v1/mcp/streamable", headers=logged_in_headers)
+    response = await client.delete("v1/mcp/streamable", headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
     mock_streamable_http_manager.handle_request.assert_called_once()
 
 
 async def test_mcp_streamable_get_endpoint_no_auth(client: AsyncClient):
     """Test GET /streamable endpoint without authentication returns 403 Forbidden."""
-    response = await client.get("api/v1/mcp/streamable")
+    response = await client.get("v1/mcp/streamable")
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 async def test_mcp_streamable_delete_endpoint_no_auth(client: AsyncClient):
     """Test DELETE /streamable endpoint without authentication returns 403 Forbidden."""
-    response = await client.delete("api/v1/mcp/streamable")
+    response = await client.delete("v1/mcp/streamable")
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 

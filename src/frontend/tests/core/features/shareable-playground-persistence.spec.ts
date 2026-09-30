@@ -15,7 +15,7 @@ import { initialGPTsetup } from "../../utils/initialGPTsetup";
  * Helper: mock auto-login as disabled and log in manually.
  */
 async function setupAutoLoginOff(page: any) {
-  await page.route("**/api/v1/auto_login", (route: any) => {
+  await page.route("**/v1/auto_login", (route: any) => {
     route.fulfill({
       status: 500,
       contentType: "application/json",

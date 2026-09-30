@@ -54,7 +54,7 @@ async def other_active_user(client):  # noqa: ARG001
 @pytest.fixture
 async def other_logged_in_headers(client: AsyncClient, other_active_user):
     login_data = {"username": other_active_user.username, "password": "testpassword"}
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     return {"Authorization": f"Bearer {tokens['access_token']}"}
@@ -159,7 +159,7 @@ async def messages_with_datetime_session_id(session, active_user):  # noqa: ARG0
 @pytest.mark.api_key_required
 async def test_delete_messages(client: AsyncClient, created_messages, logged_in_headers):
     response = await client.request(
-        "DELETE", "api/v1/monitor/messages", json=[str(msg.id) for msg in created_messages], headers=logged_in_headers
+        "DELETE", "v1/monitor/messages", json=[str(msg.id) for msg in created_messages], headers=logged_in_headers
     )
     assert response.status_code == 204, response.text
     assert response.reason_phrase == "No Content"
@@ -169,13 +169,13 @@ async def test_delete_messages(client: AsyncClient, created_messages, logged_in_
 async def test_get_messages_does_not_return_other_users_messages(
     client: AsyncClient, logged_in_headers, other_logged_in_headers, cross_user_messages
 ):
-    response = await client.get("api/v1/monitor/messages", headers=logged_in_headers)
+    response = await client.get("v1/monitor/messages", headers=logged_in_headers)
     assert response.status_code == 200, response.text
     returned_ids = {message["id"] for message in response.json()}
     assert str(cross_user_messages["owned_message"].id) in returned_ids
     assert str(cross_user_messages["foreign_message"].id) not in returned_ids
 
-    other_response = await client.get("api/v1/monitor/messages", headers=other_logged_in_headers)
+    other_response = await client.get("v1/monitor/messages", headers=other_logged_in_headers)
     assert other_response.status_code == 200, other_response.text
     other_returned_ids = {message["id"] for message in other_response.json()}
     assert str(cross_user_messages["foreign_message"].id) in other_returned_ids
@@ -187,7 +187,7 @@ async def test_update_message(client: AsyncClient, logged_in_headers, created_me
     message_id = created_message.id
     message_update = MessageUpdate(text="Updated content")
     response = await client.put(
-        f"api/v1/monitor/messages/{message_id}", json=message_update.model_dump(), headers=logged_in_headers
+        f"v1/monitor/messages/{message_id}", json=message_update.model_dump(), headers=logged_in_headers
     )
     assert response.status_code == 200, response.text
     updated_message = MessageRead(**response.json())
@@ -199,7 +199,7 @@ async def test_update_message_not_found(client: AsyncClient, logged_in_headers):
     non_existent_id = UUID("00000000-0000-0000-0000-000000000000")
     message_update = MessageUpdate(text="Updated content")
     response = await client.put(
-        f"api/v1/monitor/messages/{non_existent_id}", json=message_update.model_dump(), headers=logged_in_headers
+        f"v1/monitor/messages/{non_existent_id}", json=message_update.model_dump(), headers=logged_in_headers
     )
     assert response.status_code == 404, response.text
     assert response.json()["detail"] == "Message not found"
@@ -213,17 +213,17 @@ async def test_delete_messages_cannot_delete_other_users_messages(
 
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages",
+        "v1/monitor/messages",
         json=[foreign_message_id],
         headers=logged_in_headers,
     )
     assert response.status_code == 204, response.text
 
-    own_view = await client.get("api/v1/monitor/messages", headers=logged_in_headers)
+    own_view = await client.get("v1/monitor/messages", headers=logged_in_headers)
     assert own_view.status_code == 200, own_view.text
     assert str(cross_user_messages["owned_message"].id) in {message["id"] for message in own_view.json()}
 
-    other_view = await client.get("api/v1/monitor/messages", headers=other_logged_in_headers)
+    other_view = await client.get("v1/monitor/messages", headers=other_logged_in_headers)
     assert other_view.status_code == 200, other_view.text
     assert foreign_message_id in {message["id"] for message in other_view.json()}
 
@@ -234,14 +234,14 @@ async def test_update_message_cannot_update_other_users_message(
 ):
     foreign_message_id = cross_user_messages["foreign_message"].id
     response = await client.put(
-        f"api/v1/monitor/messages/{foreign_message_id}",
+        f"v1/monitor/messages/{foreign_message_id}",
         json=MessageUpdate(text="Hijacked").model_dump(),
         headers=logged_in_headers,
     )
     assert response.status_code == 404, response.text
     assert response.json()["detail"] == "Message not found"
 
-    other_view = await client.get("api/v1/monitor/messages", headers=other_logged_in_headers)
+    other_view = await client.get("v1/monitor/messages", headers=other_logged_in_headers)
     assert other_view.status_code == 200, other_view.text
     foreign_message = next(message for message in other_view.json() if message["id"] == str(foreign_message_id))
     assert foreign_message["text"] == "Foreign message"
@@ -250,12 +250,12 @@ async def test_update_message_cannot_update_other_users_message(
 @pytest.mark.api_key_required
 async def test_delete_messages_session(client: AsyncClient, created_messages, logged_in_headers):
     session_id = "session_id2"
-    response = await client.delete(f"api/v1/monitor/messages/session/{session_id}", headers=logged_in_headers)
+    response = await client.delete(f"v1/monitor/messages/session/{session_id}", headers=logged_in_headers)
     assert response.status_code == 204
     assert response.reason_phrase == "No Content"
 
     assert len(created_messages) == 3
-    response = await client.get("api/v1/monitor/messages", headers=logged_in_headers)
+    response = await client.get("v1/monitor/messages", headers=logged_in_headers)
     assert response.status_code == 200
     assert len(response.json()) == 0
 
@@ -265,17 +265,17 @@ async def test_delete_messages_session_cannot_delete_other_users_messages(
     client: AsyncClient, logged_in_headers, cross_user_messages, other_logged_in_headers
 ):
     response = await client.delete(
-        f"api/v1/monitor/messages/session/{cross_user_messages['foreign_session_id']}",
+        f"v1/monitor/messages/session/{cross_user_messages['foreign_session_id']}",
         headers=logged_in_headers,
     )
     assert response.status_code == 204, response.text
 
-    own_view = await client.get("api/v1/monitor/messages", headers=logged_in_headers)
+    own_view = await client.get("v1/monitor/messages", headers=logged_in_headers)
     assert own_view.status_code == 200, own_view.text
     assert str(cross_user_messages["owned_message"].id) in {message["id"] for message in own_view.json()}
 
     other_view = await client.get(
-        "api/v1/monitor/messages",
+        "v1/monitor/messages",
         headers=other_logged_in_headers,
         params={"session_id": cross_user_messages["foreign_session_id"]},
     )
@@ -291,7 +291,7 @@ async def test_successfully_update_session_id(client, logged_in_headers, created
     new_session_id = "new_session_id"
 
     response = await client.patch(
-        f"api/v1/monitor/messages/session/{old_session_id}",
+        f"v1/monitor/messages/session/{old_session_id}",
         params={"new_session_id": new_session_id},
         headers=logged_in_headers,
     )
@@ -303,7 +303,7 @@ async def test_successfully_update_session_id(client, logged_in_headers, created
         assert message["session_id"] == new_session_id
 
     response = await client.get(
-        "api/v1/monitor/messages", headers=logged_in_headers, params={"session_id": new_session_id}
+        "v1/monitor/messages", headers=logged_in_headers, params={"session_id": new_session_id}
     )
     assert response.status_code == 200
     assert len(response.json()) == len(created_messages)
@@ -327,14 +327,14 @@ async def test_update_session_id_cannot_modify_other_users_messages(
     client: AsyncClient, logged_in_headers, cross_user_messages, other_logged_in_headers
 ):
     response = await client.patch(
-        f"api/v1/monitor/messages/session/{cross_user_messages['foreign_session_id']}",
+        f"v1/monitor/messages/session/{cross_user_messages['foreign_session_id']}",
         params={"new_session_id": "hijacked-session"},
         headers=logged_in_headers,
     )
     assert response.status_code == 404, response.text
     assert response.json()["detail"] == "No messages found with the given session ID"
 
-    other_view = await client.get("api/v1/monitor/messages", headers=other_logged_in_headers)
+    other_view = await client.get("v1/monitor/messages", headers=other_logged_in_headers)
     assert other_view.status_code == 200, other_view.text
     foreign_message = next(
         message for message in other_view.json() if message["id"] == str(cross_user_messages["foreign_message"].id)
@@ -369,7 +369,7 @@ async def test_get_messages_with_url_encoded_datetime_session_id(
 
     # Test with URL-encoded session ID
     response = await client.get(
-        "api/v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
+        "v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
     )
 
     assert response.status_code == 200, response.text
@@ -394,7 +394,7 @@ async def test_get_messages_with_non_encoded_datetime_session_id(
 
     # Test with non-encoded session ID (should still work due to unquote being safe for non-encoded strings)
     response = await client.get(
-        "api/v1/monitor/messages", params={"session_id": datetime_session_id}, headers=logged_in_headers
+        "v1/monitor/messages", params={"session_id": datetime_session_id}, headers=logged_in_headers
     )
 
     assert response.status_code == 200, response.text
@@ -430,7 +430,7 @@ async def test_get_messages_with_various_encoded_characters(client: AsyncClient,
 
     # Test with URL-encoded session ID
     response = await client.get(
-        "api/v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
+        "v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
     )
 
     assert response.status_code == 200, response.text
@@ -447,7 +447,7 @@ async def test_get_messages_empty_result_with_encoded_nonexistent_session(client
     encoded_session_id = quote(nonexistent_session_id)
 
     response = await client.get(
-        "api/v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
+        "v1/monitor/messages", params={"session_id": encoded_session_id}, headers=logged_in_headers
     )
 
     assert response.status_code == 200, response.text
@@ -468,7 +468,7 @@ async def test_delete_messages_sessions_bulk(
     session_ids = ["bulk_session_a", "bulk_session_b"]
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=session_ids,
         headers=logged_in_headers,
     )
@@ -479,13 +479,13 @@ async def test_delete_messages_sessions_bulk(
 
     # Verify that messages for the deleted sessions are gone
     for sid in session_ids:
-        response = await client.get("api/v1/monitor/messages", params={"session_id": sid}, headers=logged_in_headers)
+        response = await client.get("v1/monitor/messages", params={"session_id": sid}, headers=logged_in_headers)
         assert response.status_code == 200
         assert response.json() == [], f"Expected no messages for session {sid!r}"
 
     # Verify that messages for the untouched session are still present
     response = await client.get(
-        "api/v1/monitor/messages", params={"session_id": "bulk_session_c"}, headers=logged_in_headers
+        "v1/monitor/messages", params={"session_id": "bulk_session_c"}, headers=logged_in_headers
     )
     assert response.status_code == 200
     assert len(response.json()) == 1
@@ -501,7 +501,7 @@ async def test_delete_messages_sessions_all(
     session_ids = ["bulk_session_a", "bulk_session_b", "bulk_session_c"]
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=session_ids,
         headers=logged_in_headers,
     )
@@ -510,7 +510,7 @@ async def test_delete_messages_sessions_all(
     assert data["deleted_count"] == 3
 
     # All messages should be gone
-    response = await client.get("api/v1/monitor/messages", headers=logged_in_headers)
+    response = await client.get("v1/monitor/messages", headers=logged_in_headers)
     assert response.status_code == 200
     assert response.json() == []
 
@@ -520,7 +520,7 @@ async def test_delete_messages_sessions_empty_list(client: AsyncClient, logged_i
     """Bulk-delete with an empty list should succeed without error."""
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=[],
         headers=logged_in_headers,
     )
@@ -535,7 +535,7 @@ async def test_delete_messages_sessions_nonexistent(client: AsyncClient, logged_
     """Bulk-delete with session IDs that don't exist should succeed (no-op) and return 0 deleted."""
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=["nonexistent_session_1", "nonexistent_session_2"],
         headers=logged_in_headers,
     )
@@ -555,7 +555,7 @@ async def test_delete_messages_sessions_partial_match(
     session_ids = ["bulk_session_a", "does_not_exist"]
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=session_ids,
         headers=logged_in_headers,
     )
@@ -572,7 +572,7 @@ async def test_delete_messages_sessions_exceeds_limit(client: AsyncClient, logge
     session_ids = [f"session_{i}" for i in range(501)]
     response = await client.request(
         "DELETE",
-        "api/v1/monitor/messages/sessions",
+        "v1/monitor/messages/sessions",
         json=session_ids,
         headers=logged_in_headers,
     )

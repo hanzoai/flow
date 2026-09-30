@@ -21,7 +21,7 @@ async function setupDeploymentMocks(
   snapshotsMock: object = SNAPSHOTS_EMPTY_MOCK,
 ) {
   // Broad catch-all registered FIRST so specific routes (registered after) take priority via LIFO
-  await page.route("**/api/v1/deployments*", (route) => {
+  await page.route("**/v1/deployments*", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -30,7 +30,7 @@ async function setupDeploymentMocks(
   });
 
   // Snapshots (used for duplicate tool name check on review step)
-  await page.route("**/api/v1/deployments/snapshots**", (route) => {
+  await page.route("**/v1/deployments/snapshots**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -39,7 +39,7 @@ async function setupDeploymentMocks(
   });
 
   // Provider accounts
-  await page.route("**/api/v1/deployments/providers**", (route) => {
+  await page.route("**/v1/deployments/providers**", (route) => {
     if (route.request().method() === "GET") {
       route.fulfill({
         status: 200,
@@ -52,7 +52,7 @@ async function setupDeploymentMocks(
   });
 
   // LLMs
-  await page.route("**/api/v1/deployments/llms**", (route) => {
+  await page.route("**/v1/deployments/llms**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -61,7 +61,7 @@ async function setupDeploymentMocks(
   });
 
   // Deployment configs (connections)
-  await page.route("**/api/v1/deployments/configs**", (route) => {
+  await page.route("**/v1/deployments/configs**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -70,7 +70,7 @@ async function setupDeploymentMocks(
   });
 
   // Flows list — inject the captured folderId so the component's folder filter passes
-  await page.route("**/api/v1/flows/**", (route) => {
+  await page.route("**/v1/flows/**", (route) => {
     const url = route.request().url();
     if (url.includes("/versions/")) {
       route.fulfill({
@@ -89,7 +89,7 @@ async function setupDeploymentMocks(
   });
 
   // Global variables (used in attach-flows step)
-  await page.route("**/api/v1/variables**", (route) => {
+  await page.route("**/v1/variables**", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -109,7 +109,7 @@ async function openDeploymentStepper(
   // the real myCollectionId. The step-attach-flows component filters flows by
   // folder_id === myCollectionId, so mock flows must carry the same id.
   const projectsResponsePromise = page.waitForResponse(
-    (resp) => resp.url().includes("/api/v1/projects") && resp.status() === 200,
+    (resp) => resp.url().includes("/v1/projects") && resp.status() === 200,
     { timeout: 30000 },
   );
 
@@ -371,7 +371,7 @@ test(
     await openDeploymentStepper(page);
 
     // Set up POST deployments mock (after bootstrap, before deploy click)
-    await page.route("**/api/v1/deployments", (route) => {
+    await page.route("**/v1/deployments", (route) => {
       if (route.request().method() === "POST") {
         route.fulfill({
           status: 201,
@@ -387,7 +387,7 @@ test(
     // Watch for the POST request
     const postRequestPromise = page.waitForRequest(
       (req) =>
-        req.url().includes("/api/v1/deployments") &&
+        req.url().includes("/v1/deployments") &&
         req.method() === "POST" &&
         !req.url().includes("/providers") &&
         !req.url().includes("/llms") &&
@@ -518,7 +518,7 @@ test(
     await expect(page.getByTestId("deployment-stepper-next")).toBeDisabled();
 
     // Override the snapshots mock to return empty (unique name) for the next check
-    await page.route("**/api/v1/deployments/snapshots**", (route) => {
+    await page.route("**/v1/deployments/snapshots**", (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

@@ -163,7 +163,7 @@ async def test_create_provider_account_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
     response = await client.post(
-        "api/v1/deployments/providers",
+        "v1/deployments/providers",
         json={"provider_key": "watsonx-orchestrate", "name": "Test", "provider_data": {"foo": "bar"}},
         headers=logged_in_headers,
     )
@@ -181,7 +181,7 @@ async def test_update_provider_account_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
     response = await client.patch(
-        f"api/v1/deployments/providers/{uuid4()}",
+        f"v1/deployments/providers/{uuid4()}",
         json={"name": "Test", "provider_data": {"foo": "bar"}},
         headers=logged_in_headers,
     )
@@ -198,7 +198,7 @@ async def test_update_provider_account_telemetry(
 async def test_delete_provider_account_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
-    response = await client.delete(f"api/v1/deployments/providers/{uuid4()}", headers=logged_in_headers)
+    response = await client.delete(f"v1/deployments/providers/{uuid4()}", headers=logged_in_headers)
     assert response.status_code == status.HTTP_204_NO_CONTENT
     mock_telemetry_service.log_package_deployment_provider.assert_awaited_once()
     payload = mock_telemetry_service.log_package_deployment_provider.call_args[0][0]
@@ -213,7 +213,7 @@ async def test_create_deployment_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
     response = await client.post(
-        "api/v1/deployments",
+        "v1/deployments",
         json={"provider_id": str(uuid4()), "name": "Test", "type": "agent", "provider_data": {}},
         headers=logged_in_headers,
     )
@@ -230,7 +230,7 @@ async def test_create_deployment_telemetry(
 async def test_update_deployment_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
-    response = await client.patch(f"api/v1/deployments/{uuid4()}", json={"name": "Test"}, headers=logged_in_headers)
+    response = await client.patch(f"v1/deployments/{uuid4()}", json={"name": "Test"}, headers=logged_in_headers)
     assert response.status_code == status.HTTP_200_OK
     mock_telemetry_service.log_package_deployment.assert_awaited_once()
     payload = mock_telemetry_service.log_package_deployment.call_args[0][0]
@@ -244,7 +244,7 @@ async def test_update_deployment_telemetry(
 async def test_delete_deployment_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
-    response = await client.delete(f"api/v1/deployments/{uuid4()}", headers=logged_in_headers)
+    response = await client.delete(f"v1/deployments/{uuid4()}", headers=logged_in_headers)
     assert response.status_code == status.HTTP_204_NO_CONTENT
     mock_telemetry_service.log_package_deployment.assert_awaited_once()
     payload = mock_telemetry_service.log_package_deployment.call_args[0][0]
@@ -259,7 +259,7 @@ async def test_create_deployment_run_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
     response = await client.post(
-        f"api/v1/deployments/{uuid4()}/runs", json={"provider_data": {}}, headers=logged_in_headers
+        f"v1/deployments/{uuid4()}/runs", json={"provider_data": {}}, headers=logged_in_headers
     )
     assert response.status_code == status.HTTP_201_CREATED, response.json()
     mock_telemetry_service.log_package_deployment_run.assert_awaited_once()
@@ -275,7 +275,7 @@ async def test_update_snapshot_telemetry(
     client: AsyncClient, mock_telemetry_service, mock_adapter, mock_mapper, mock_db_crud, logged_in_headers
 ):
     response = await client.patch(
-        "api/v1/deployments/snapshots/snap-1", json={"flow_version_id": str(uuid4())}, headers=logged_in_headers
+        "v1/deployments/snapshots/snap-1", json={"flow_version_id": str(uuid4())}, headers=logged_in_headers
     )
     assert response.status_code == status.HTTP_200_OK
     mock_telemetry_service.log_package_deployment.assert_awaited_once()
@@ -292,7 +292,7 @@ async def test_create_provider_account_telemetry_error(
 ):
     mock_adapter.verify_credentials.side_effect = ValueError("Invalid credentials")
     response = await client.post(
-        "api/v1/deployments/providers",
+        "v1/deployments/providers",
         json={"provider_key": "watsonx-orchestrate", "name": "Test", "provider_data": {"foo": "bar"}},
         headers=logged_in_headers,
     )
@@ -314,7 +314,7 @@ async def test_cross_route_smoke_exception_after_provider_set(
     # Simulate an error during adapter.create after the provider has been set in the route
     mock_adapter.create.side_effect = RuntimeError("Something went wrong")
     response = await client.post(
-        "api/v1/deployments",
+        "v1/deployments",
         json={"provider_id": str(uuid4()), "name": "Test", "type": "agent", "provider_data": {}},
         headers=logged_in_headers,
     )

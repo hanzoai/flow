@@ -78,7 +78,7 @@ async def test_create_flow(client: AsyncClient, logged_in_headers):
         "folder_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         "fs_path": flow_filename,
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -108,7 +108,7 @@ async def test_read_flows(client: AsyncClient, logged_in_headers):
         "page": 1,
         "size": 50,
     }
-    response = await client.get("api/v1/flows/", params=params, headers=logged_in_headers)
+    response = await client.get("v1/flows/", params=params, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -118,7 +118,7 @@ async def test_read_flows(client: AsyncClient, logged_in_headers):
 async def test_get_flows_with_malformed_bearer_token_returns_401(client: AsyncClient):
     """CT-010: GET /v1/flows with malformed Bearer token must return 401 Unauthorized."""
     headers = {"Authorization": "Bearer invalid.token.here"}
-    response = await client.get("api/v1/flows/", headers=headers)
+    response = await client.get("v1/flows/", headers=headers)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
     data = response.json()
     assert "detail" in data
@@ -139,9 +139,9 @@ async def test_read_flow(client: AsyncClient, logged_in_headers):
         "tags": ["string"],
         "folder_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     }
-    response_ = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response_ = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     id_ = response_.json()["id"]
-    response = await client.get(f"api/v1/flows/{id_}", headers=logged_in_headers)
+    response = await client.get(f"v1/flows/{id_}", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -178,7 +178,7 @@ async def test_update_flow(client: AsyncClient, logged_in_headers):
         "folder_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     }
     basic_case["name"] = name
-    response_ = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response_ = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     id_ = response_.json()["id"]
 
     # Use relative path - absolute paths outside allowed directory are rejected
@@ -186,7 +186,7 @@ async def test_update_flow(client: AsyncClient, logged_in_headers):
     basic_case["name"] = updated_name
     basic_case["fs_path"] = flow_filename
 
-    response = await client.patch(f"api/v1/flows/{id_}", json=basic_case, headers=logged_in_headers)
+    response = await client.patch(f"v1/flows/{id_}", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     assert isinstance(result, dict), "The result must be a dictionary"
@@ -214,12 +214,12 @@ async def test_patch_flow_keeps_existing_endpoint_when_not_provided(client: Asyn
         "endpoint_name": "keep_patch_endpoint",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"name": "patch_endpoint_flow_updated"},
         headers=logged_in_headers,
     )
@@ -235,12 +235,12 @@ async def test_patch_flow_allows_clearing_endpoint_with_null(client: AsyncClient
         "endpoint_name": "clear_patch_endpoint",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"endpoint_name": None},
         headers=logged_in_headers,
     )
@@ -252,7 +252,7 @@ async def test_patch_flow_allows_clearing_endpoint_with_null(client: AsyncClient
 async def test_patch_flow_updates_access_and_action_fields(client: AsyncClient, logged_in_headers):
     """PATCH should persist public-sharing and MCP action metadata fields."""
     create_response = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "patch_access_type_flow", "data": {}},
         headers=logged_in_headers,
     )
@@ -260,7 +260,7 @@ async def test_patch_flow_updates_access_and_action_fields(client: AsyncClient, 
     flow_id = create_response.json()["id"]
 
     response = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={
             "access_type": "PUBLIC",
             "action_name": "shared_action",
@@ -295,7 +295,7 @@ async def test_create_flows(client: AsyncClient, logged_in_headers):
         case["endpoint_name"] = f"string_{i}"
         cases.append(case)
 
-    response = await client.post("api/v1/flows/batch/", json={"flows": cases}, headers=logged_in_headers)
+    response = await client.post("v1/flows/batch/", json={"flows": cases}, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -305,7 +305,7 @@ async def test_create_flows(client: AsyncClient, logged_in_headers):
 
 async def test_create_flows_with_explicit_folder(client: AsyncClient, logged_in_headers):
     project_response = await client.post(
-        "api/v1/projects/",
+        "v1/projects/",
         json={"name": "batch-folder-target", "description": "", "flows_list": [], "components_list": []},
         headers=logged_in_headers,
     )
@@ -331,7 +331,7 @@ async def test_create_flows_with_explicit_folder(client: AsyncClient, logged_in_
         case["endpoint_name"] = f"string_folder_{i}"
         cases.append(case)
 
-    response = await client.post("api/v1/flows/batch/", json={"flows": cases}, headers=logged_in_headers)
+    response = await client.post("v1/flows/batch/", json={"flows": cases}, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -341,7 +341,7 @@ async def test_create_flows_with_explicit_folder(client: AsyncClient, logged_in_
 
 
 async def test_read_basic_examples(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/flows/basic_examples/", headers=logged_in_headers)
+    response = await client.get("v1/flows/basic_examples/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -373,7 +373,7 @@ async def test_read_flows_user_isolation(client: AsyncClient, logged_in_headers,
 
     # Login as the other user to get headers
     login_data = {"username": "other_test_user", "password": "testpassword"}  # pragma: allowlist secret
-    response = await client.post("api/v1/login", data=login_data)
+    response = await client.post("v1/login", data=login_data)
     assert response.status_code == 200
     tokens = response.json()
     other_user_headers = {"Authorization": f"Bearer {tokens['access_token']}"}
@@ -423,13 +423,13 @@ async def test_read_flows_user_isolation(client: AsyncClient, logged_in_headers,
     }
 
     # Create flows using the appropriate user headers
-    response1 = await client.post("api/v1/flows/", json=flow_user1_1, headers=logged_in_headers)
+    response1 = await client.post("v1/flows/", json=flow_user1_1, headers=logged_in_headers)
     assert response1.status_code == status.HTTP_201_CREATED
 
-    response2 = await client.post("api/v1/flows/", json=flow_user1_2, headers=logged_in_headers)
+    response2 = await client.post("v1/flows/", json=flow_user1_2, headers=logged_in_headers)
     assert response2.status_code == status.HTTP_201_CREATED
 
-    response3 = await client.post("api/v1/flows/", json=flow_user2_1, headers=other_user_headers)
+    response3 = await client.post("v1/flows/", json=flow_user2_1, headers=other_user_headers)
     assert response3.status_code == status.HTTP_201_CREATED
 
     # Test read_flows for user 1 - should only return user 1's flows
@@ -442,7 +442,7 @@ async def test_read_flows_user_isolation(client: AsyncClient, logged_in_headers,
         "size": 50,
     }
 
-    response_user1 = await client.get("api/v1/flows/", params=params, headers=logged_in_headers)
+    response_user1 = await client.get("v1/flows/", params=params, headers=logged_in_headers)
     result_user1 = response_user1.json()
 
     assert response_user1.status_code == status.HTTP_200_OK
@@ -459,7 +459,7 @@ async def test_read_flows_user_isolation(client: AsyncClient, logged_in_headers,
         assert str(flow["user_id"]) == str(active_user.id), f"Flow {flow['name']} should belong to user 1"
 
     # Test read_flows for user 2 - should only return user 2's flows
-    response_user2 = await client.get("api/v1/flows/", params=params, headers=other_user_headers)
+    response_user2 = await client.get("v1/flows/", params=params, headers=other_user_headers)
     result_user2 = response_user2.json()
 
     assert response_user2.status_code == status.HTTP_200_OK
@@ -490,7 +490,7 @@ async def test_create_flow_rejects_absolute_path_outside_allowed_directory(clien
         "data": {},
         "fs_path": "/etc/passwd",  # Absolute path outside allowed directory should be rejected
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "within" in response.json()["detail"].lower() or "outside" in response.json()["detail"].lower()
 
@@ -502,7 +502,7 @@ async def test_create_flow_rejects_directory_traversal(client: AsyncClient, logg
         "data": {},
         "fs_path": "../../etc/passwd",  # Directory traversal should be rejected
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert (
         "directory traversal" in response.json()["detail"].lower()
@@ -517,7 +517,7 @@ async def test_create_flow_rejects_null_bytes(client: AsyncClient, logged_in_hea
         "data": {},
         "fs_path": "file\x00name.json",  # Null byte should be rejected
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "absolute paths" in response.json()["detail"].lower() or "null" in response.json()["detail"].lower()
 
@@ -532,7 +532,7 @@ async def test_create_flow_rejects_windows_absolute_path_outside_allowed_directo
         "fs_path": "C:\\Windows\\System32\\config\\sam",  # Windows absolute path outside
         # allowed directory should be rejected
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "within" in response.json()["detail"].lower() or "outside" in response.json()["detail"].lower()
 
@@ -544,7 +544,7 @@ async def test_create_flow_accepts_relative_path(client: AsyncClient, logged_in_
         "data": {},
         "fs_path": "my_flow.json",  # Valid relative path
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_201_CREATED
 
 
@@ -555,7 +555,7 @@ async def test_create_flow_accepts_nested_relative_path(client: AsyncClient, log
         "data": {},
         "fs_path": "subfolder/my_flow.json",  # Valid nested relative path
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_201_CREATED
 
 
@@ -566,7 +566,7 @@ async def test_update_flow_rejects_absolute_path_outside_allowed_directory(clien
         "name": "test_flow",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
@@ -575,7 +575,7 @@ async def test_update_flow_rejects_absolute_path_outside_allowed_directory(clien
         update_case = {
             "fs_path": temp_file.name,
         }
-    update_response = await client.patch(f"api/v1/flows/{flow_id}", json=update_case, headers=logged_in_headers)
+    update_response = await client.patch(f"v1/flows/{flow_id}", json=update_case, headers=logged_in_headers)
     assert update_response.status_code == status.HTTP_400_BAD_REQUEST
     assert "within" in update_response.json()["detail"].lower() or "outside" in update_response.json()["detail"].lower()
 
@@ -587,7 +587,7 @@ async def test_update_flow_accepts_relative_path(client: AsyncClient, logged_in_
         "name": "test_flow",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
@@ -595,7 +595,7 @@ async def test_update_flow_accepts_relative_path(client: AsyncClient, logged_in_
     update_case = {
         "fs_path": "updated_flow.json",
     }
-    update_response = await client.patch(f"api/v1/flows/{flow_id}", json=update_case, headers=logged_in_headers)
+    update_response = await client.patch(f"v1/flows/{flow_id}", json=update_case, headers=logged_in_headers)
     assert update_response.status_code == status.HTTP_200_OK
 
 
@@ -610,7 +610,7 @@ async def test_create_flow_rejects_empty_path(client: AsyncClient, logged_in_hea
         "data": {},
         "fs_path": "",  # Empty string
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     # Empty string should be rejected by validation
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -622,7 +622,7 @@ async def test_create_flow_allows_none_path(client: AsyncClient, logged_in_heade
         "data": {},
         # fs_path not provided (None)
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_201_CREATED
 
 
@@ -633,7 +633,7 @@ async def test_create_flow_rejects_multiple_traversal(client: AsyncClient, logge
         "data": {},
         "fs_path": "../../../etc/passwd",  # Multiple traversals
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -644,7 +644,7 @@ async def test_create_flow_rejects_traversal_in_subpath(client: AsyncClient, log
         "data": {},
         "fs_path": "subfolder/../../etc/passwd",  # Traversal in subpath
     }
-    response = await client.post("api/v1/flows/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=basic_case, headers=logged_in_headers)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -662,7 +662,7 @@ async def test_upload_flow_rejects_absolute_path(client: AsyncClient, logged_in_
     file_content = json.dumps({"flows": [flow_data]})
 
     response = await client.post(
-        "api/v1/flows/upload/",
+        "v1/flows/upload/",
         files={"file": ("flows.json", file_content, "application/json")},
         headers=logged_in_headers,
     )
@@ -681,7 +681,7 @@ async def test_upsert_flow_creates_new_flow_with_specified_id(client: AsyncClien
         "data": {},
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -697,7 +697,7 @@ async def test_upsert_flow_updates_existing_flow(client: AsyncClient, logged_in_
         "description": "initial description",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
@@ -707,7 +707,7 @@ async def test_upsert_flow_updates_existing_flow(client: AsyncClient, logged_in_
         "description": "updated description",
         "data": {"nodes": [], "edges": []},
     }
-    response = await client.put(f"api/v1/flows/{flow_id}", json=updated_flow, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{flow_id}", json=updated_flow, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_200_OK
     result = response.json()
@@ -737,17 +737,17 @@ async def test_upsert_flow_returns_404_for_other_users_flow(client: AsyncClient,
 
     # Login as other user and create a flow
     login_data = {"username": "other_user_for_upsert_test", "password": "testpassword"}  # pragma: allowlist secret
-    login_response = await client.post("api/v1/login", data=login_data)
+    login_response = await client.post("v1/login", data=login_data)
     assert login_response.status_code == status.HTTP_200_OK, f"Login failed: {login_response.text}"
     other_user_headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
 
     flow_data = {"name": "other_user_flow", "data": {}}
-    create_response = await client.post("api/v1/flows/", json=flow_data, headers=other_user_headers)
+    create_response = await client.post("v1/flows/", json=flow_data, headers=other_user_headers)
     other_user_flow_id = create_response.json()["id"]
 
     # Try to upsert other user's flow with original user's credentials
     update_data = {"name": "trying_to_steal", "data": {}}
-    response = await client.put(f"api/v1/flows/{other_user_flow_id}", json=update_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{other_user_flow_id}", json=update_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "not found" in response.json()["detail"].lower()
@@ -770,7 +770,7 @@ async def test_upsert_flow_returns_400_for_invalid_folder_id(client: AsyncClient
         "folder_id": non_existent_folder_id,
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "folder not found" in response.json()["detail"].lower()
@@ -784,7 +784,7 @@ async def test_upsert_flow_returns_409_for_endpoint_name_conflict_on_create(clie
         "endpoint_name": "unique_endpoint",
         "data": {},
     }
-    await client.post("api/v1/flows/", json=first_flow, headers=logged_in_headers)
+    await client.post("v1/flows/", json=first_flow, headers=logged_in_headers)
 
     # Try to create new flow via PUT with same endpoint_name
     specified_id = str(uuid.uuid4())
@@ -794,7 +794,7 @@ async def test_upsert_flow_returns_409_for_endpoint_name_conflict_on_create(clie
         "data": {},
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=second_flow, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=second_flow, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert "endpoint" in response.json()["detail"].lower()
@@ -807,7 +807,7 @@ async def test_upsert_flow_auto_renames_name_on_create_conflict(client: AsyncCli
         "name": "duplicate_name",
         "data": {},
     }
-    await client.post("api/v1/flows/", json=first_flow, headers=logged_in_headers)
+    await client.post("v1/flows/", json=first_flow, headers=logged_in_headers)
 
     # Create new flow via PUT with same name - should auto-rename
     specified_id = str(uuid.uuid4())
@@ -816,7 +816,7 @@ async def test_upsert_flow_auto_renames_name_on_create_conflict(client: AsyncCli
         "data": {},
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=second_flow, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=second_flow, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -829,14 +829,14 @@ async def test_upsert_flow_returns_409_for_name_conflict_on_update(client: Async
     first_flow = {"name": "flow_one", "data": {}}
     second_flow = {"name": "flow_two", "data": {}}
 
-    await client.post("api/v1/flows/", json=first_flow, headers=logged_in_headers)
-    second_response = await client.post("api/v1/flows/", json=second_flow, headers=logged_in_headers)
+    await client.post("v1/flows/", json=first_flow, headers=logged_in_headers)
+    second_response = await client.post("v1/flows/", json=second_flow, headers=logged_in_headers)
     second_flow_id = second_response.json()["id"]
 
     # Try to update second flow to have first flow's name
     update_data = {"name": "flow_one", "data": {}}  # Conflict with first flow
 
-    response = await client.put(f"api/v1/flows/{second_flow_id}", json=update_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{second_flow_id}", json=update_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert "name" in response.json()["detail"].lower()
@@ -848,14 +848,14 @@ async def test_upsert_flow_returns_409_for_endpoint_conflict_on_update(client: A
     first_flow = {"name": "endpoint_flow_one", "endpoint_name": "endpoint_one", "data": {}}
     second_flow = {"name": "endpoint_flow_two", "endpoint_name": "endpoint_two", "data": {}}
 
-    await client.post("api/v1/flows/", json=first_flow, headers=logged_in_headers)
-    second_response = await client.post("api/v1/flows/", json=second_flow, headers=logged_in_headers)
+    await client.post("v1/flows/", json=first_flow, headers=logged_in_headers)
+    second_response = await client.post("v1/flows/", json=second_flow, headers=logged_in_headers)
     second_flow_id = second_response.json()["id"]
 
     # Try to update second flow to have first flow's endpoint_name
     update_data = {"name": "endpoint_flow_two", "endpoint_name": "endpoint_one", "data": {}}
 
-    response = await client.put(f"api/v1/flows/{second_flow_id}", json=update_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{second_flow_id}", json=update_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert "endpoint" in response.json()["detail"].lower()
@@ -865,14 +865,14 @@ async def test_upsert_flow_keeps_existing_folder_on_update_when_not_provided(cli
     """Test that PUT keeps existing folder_id when not provided during UPDATE."""
     # Create a flow (will be assigned to default folder)
     initial_flow = {"name": "folder_test_flow", "data": {}}
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     flow_id = create_response.json()["id"]
     original_folder_id = create_response.json()["folder_id"]
 
     # Update via PUT without providing folder_id
     update_data = {"name": "folder_test_flow_updated", "data": {}}
 
-    response = await client.put(f"api/v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_200_OK
     result = response.json()
@@ -886,12 +886,12 @@ async def test_upsert_flow_keeps_existing_endpoint_when_not_provided(client: Asy
         "endpoint_name": "keep_upsert_endpoint",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
     response = await client.put(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"name": "upsert_endpoint_flow_updated", "data": {}},
         headers=logged_in_headers,
     )
@@ -907,12 +907,12 @@ async def test_upsert_flow_allows_clearing_endpoint_with_null(client: AsyncClien
         "endpoint_name": "clear_upsert_endpoint",
         "data": {},
     }
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     assert create_response.status_code == status.HTTP_201_CREATED
     flow_id = create_response.json()["id"]
 
     response = await client.put(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"name": "upsert_clear_endpoint_flow", "endpoint_name": None, "data": {}},
         headers=logged_in_headers,
     )
@@ -931,7 +931,7 @@ async def test_upsert_flow_ignores_user_id_from_body(client: AsyncClient, logged
         "user_id": fake_user_id,  # Should be ignored
     }
 
-    response = await client.put(f"api/v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{specified_id}", json=flow_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_201_CREATED
     result = response.json()
@@ -943,13 +943,13 @@ async def test_upsert_flow_allows_updating_own_flow_name(client: AsyncClient, lo
     """Test that PUT allows updating a flow to keep the same name (no conflict with itself)."""
     # Create a flow
     initial_flow = {"name": "self_update_flow", "description": "initial", "data": {}}
-    create_response = await client.post("api/v1/flows/", json=initial_flow, headers=logged_in_headers)
+    create_response = await client.post("v1/flows/", json=initial_flow, headers=logged_in_headers)
     flow_id = create_response.json()["id"]
 
     # Update the flow keeping the same name but changing description
     update_data = {"name": "self_update_flow", "description": "updated", "data": {}}
 
-    response = await client.put(f"api/v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
+    response = await client.put(f"v1/flows/{flow_id}", json=update_data, headers=logged_in_headers)
 
     assert response.status_code == status.HTTP_200_OK
     result = response.json()
@@ -959,7 +959,7 @@ async def test_upsert_flow_allows_updating_own_flow_name(client: AsyncClient, lo
 
 async def test_delete_flow_with_deployed_versions_returns_409(client: AsyncClient, logged_in_headers, active_user):
     flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "deployed-delete-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -974,14 +974,14 @@ async def test_delete_flow_with_deployed_versions_returns_409(client: AsyncClien
         project_id=source_project_id,
     )
 
-    delete_resp = await client.delete(f"api/v1/flows/{flow_id}", headers=logged_in_headers)
+    delete_resp = await client.delete(f"v1/flows/{flow_id}", headers=logged_in_headers)
     assert delete_resp.status_code == status.HTTP_409_CONFLICT
     assert "cannot be deleted because it has deployed versions" in delete_resp.json()["detail"].lower()
 
 
 async def test_bulk_delete_with_deployed_flow_returns_409(client: AsyncClient, logged_in_headers, active_user):
     deployed_flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "deployed-bulk-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -991,7 +991,7 @@ async def test_bulk_delete_with_deployed_flow_returns_409(client: AsyncClient, l
     source_project_id = UUID(deployed_payload["folder_id"])
 
     undeployed_flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "undeployed-bulk-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -1006,7 +1006,7 @@ async def test_bulk_delete_with_deployed_flow_returns_409(client: AsyncClient, l
 
     delete_resp = await client.request(
         "DELETE",
-        "api/v1/flows/",
+        "v1/flows/",
         json=[str(deployed_flow_id), undeployed_flow_id],
         headers=logged_in_headers,
     )
@@ -1018,7 +1018,7 @@ async def test_patch_flow_folder_move_with_deployed_versions_returns_409(
     client: AsyncClient, logged_in_headers, active_user
 ):
     flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "deployed-patch-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -1028,7 +1028,7 @@ async def test_patch_flow_folder_move_with_deployed_versions_returns_409(
     source_project_id = UUID(flow_payload["folder_id"])
 
     project_resp = await client.post(
-        "api/v1/projects/",
+        "v1/projects/",
         json={"name": "patch-target-project", "description": "", "flows_list": [], "components_list": []},
         headers=logged_in_headers,
     )
@@ -1042,7 +1042,7 @@ async def test_patch_flow_folder_move_with_deployed_versions_returns_409(
     )
 
     patch_resp = await client.patch(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={"folder_id": target_project_id},
         headers=logged_in_headers,
     )
@@ -1054,7 +1054,7 @@ async def test_upsert_flow_folder_move_with_deployed_versions_returns_409(
     client: AsyncClient, logged_in_headers, active_user
 ):
     flow_resp = await client.post(
-        "api/v1/flows/",
+        "v1/flows/",
         json={"name": "deployed-put-flow", "data": {"nodes": [], "edges": []}},
         headers=logged_in_headers,
     )
@@ -1064,7 +1064,7 @@ async def test_upsert_flow_folder_move_with_deployed_versions_returns_409(
     source_project_id = UUID(flow_payload["folder_id"])
 
     project_resp = await client.post(
-        "api/v1/projects/",
+        "v1/projects/",
         json={"name": "put-target-project", "description": "", "flows_list": [], "components_list": []},
         headers=logged_in_headers,
     )
@@ -1078,7 +1078,7 @@ async def test_upsert_flow_folder_move_with_deployed_versions_returns_409(
     )
 
     put_resp = await client.put(
-        f"api/v1/flows/{flow_id}",
+        f"v1/flows/{flow_id}",
         json={
             "name": "deployed-put-flow-updated",
             "data": {"nodes": [], "edges": []},

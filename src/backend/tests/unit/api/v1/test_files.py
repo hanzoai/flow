@@ -205,7 +205,7 @@ async def test_upload_file(files_client, files_created_api_key, files_flow):
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
@@ -224,7 +224,7 @@ async def test_download_file(files_client, files_created_api_key, files_flow):
 
     # First upload a file
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
@@ -235,7 +235,7 @@ async def test_download_file(files_client, files_created_api_key, files_flow):
     file_name = file_path.split("/")[-1]
 
     # Then try to download it
-    response = await files_client.get(f"api/v1/files/download/{files_flow.id}/{file_name}", headers=headers)
+    response = await files_client.get(f"v1/files/download/{files_flow.id}/{file_name}", headers=headers)
     assert response.status_code == 200
     assert response.content == b"test content"
 
@@ -245,14 +245,14 @@ async def test_list_files(files_client, files_created_api_key, files_flow):
 
     # First upload a file
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
     assert response.status_code == 201
 
     # Then list the files
-    response = await files_client.get(f"api/v1/files/list/{files_flow.id}", headers=headers)
+    response = await files_client.get(f"v1/files/list/{files_flow.id}", headers=headers)
     assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.json()}"
     files = response.json()["files"]
     assert len(files) == 1
@@ -262,7 +262,7 @@ async def test_list_files(files_client, files_created_api_key, files_flow):
 async def test_delete_file(files_client, files_created_api_key, files_flow):
     headers = {"x-api-key": files_created_api_key.api_key}
 
-    response = await files_client.delete(f"api/v1/files/delete/{files_flow.id}/test.txt", headers=headers)
+    response = await files_client.delete(f"v1/files/delete/{files_flow.id}/test.txt", headers=headers)
     assert response.status_code == 200
     assert response.json() == {"message": "File test.txt deleted successfully"}
 
@@ -275,7 +275,7 @@ async def test_file_operations(files_client, files_created_api_key, files_flow):
 
     # Step 1: Upload the file
     response = await files_client.post(
-        f"api/v1/files/upload/{flow_id}",
+        f"v1/files/upload/{flow_id}",
         files={"file": (file_name, file_content)},
         headers=headers,
     )
@@ -292,23 +292,23 @@ async def test_file_operations(files_client, files_created_api_key, files_flow):
     full_file_name = response_json["file_path"].split("/")[-1]
 
     # Step 2: List files in the folder
-    response = await files_client.get(f"api/v1/files/list/{files_flow.id}", headers=headers)
+    response = await files_client.get(f"v1/files/list/{files_flow.id}", headers=headers)
     assert response.status_code == 200
     assert full_file_name in response.json()["files"]
 
     # Step 3: Download the file and verify its content
-    response = await files_client.get(f"api/v1/files/download/{files_flow.id}/{full_file_name}", headers=headers)
+    response = await files_client.get(f"v1/files/download/{files_flow.id}/{full_file_name}", headers=headers)
     assert response.status_code == 200
     assert response.content == file_content
     assert response.headers["content-type"] == "application/octet-stream"
 
     # Step 4: Delete the file
-    response = await files_client.delete(f"api/v1/files/delete/{files_flow.id}/{full_file_name}", headers=headers)
+    response = await files_client.delete(f"v1/files/delete/{files_flow.id}/{full_file_name}", headers=headers)
     assert response.status_code == 200
     assert response.json() == {"message": f"File {full_file_name} deleted successfully"}
 
     # Verify that the file is indeed deleted
-    response = await files_client.get(f"api/v1/files/list/{files_flow.id}", headers=headers)
+    response = await files_client.get(f"v1/files/list/{files_flow.id}", headers=headers)
     assert full_file_name not in response.json()["files"]
 
 
@@ -321,7 +321,7 @@ async def test_upload_file_size_limit(files_client, files_created_api_key, files
     small_file = ("small_file.txt", small_content, "application/octet-stream")
     headers["Content-Length"] = str(len(small_content))
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": small_file},
         headers=headers,
     )
@@ -333,7 +333,7 @@ async def test_upload_file_size_limit(files_client, files_created_api_key, files
     bio = BytesIO(large_content)
     headers["Content-Length"] = str(len(large_content))
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("large_file.txt", bio, "application/octet-stream")},
         headers=headers,
     )
@@ -396,7 +396,7 @@ async def test_list_profile_pictures(setup_profile_pictures, files_client):  # n
         files_client: HTTP client for making API requests
         setup_profile_pictures: Fixture that sets up profile pictures directory
     """
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.json()}"
 
     data = response.json()
@@ -422,7 +422,7 @@ async def test_download_profile_picture_space_rocket(setup_profile_pictures, fil
         files_client: HTTP client for making API requests
         setup_profile_pictures: Fixture that sets up profile pictures directory
     """
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200
 
     # Verify content type
@@ -447,7 +447,7 @@ async def test_download_profile_picture_people(setup_profile_pictures, files_cli
         setup_profile_pictures: Fixture that sets up profile pictures directory
     """
     # List available people profile pictures first
-    list_response = await files_client.get("api/v1/files/profile_pictures/list")
+    list_response = await files_client.get("v1/files/profile_pictures/list")
     assert list_response.status_code == 200
     people_files = [f for f in list_response.json()["files"] if f.startswith("People/")]
 
@@ -459,7 +459,7 @@ async def test_download_profile_picture_people(setup_profile_pictures, files_cli
 
     # Test downloading the first available people profile picture
     first_people_file = people_files[0].replace("People/", "")
-    response = await files_client.get(f"api/v1/files/profile_pictures/People/{first_people_file}")
+    response = await files_client.get(f"v1/files/profile_pictures/People/{first_people_file}")
     assert response.status_code == 200
 
     # Verify content type
@@ -479,7 +479,7 @@ async def test_download_profile_picture_not_found(setup_profile_pictures, files_
         files_client: HTTP client for making API requests
         setup_profile_pictures: Fixture that sets up profile pictures directory
     """
-    response = await files_client.get("api/v1/files/profile_pictures/Space/nonexistent.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/nonexistent.svg")
     assert response.status_code == 404
 
     data = response.json()
@@ -501,7 +501,7 @@ async def test_profile_pictures_with_s3_storage(setup_profile_pictures, files_cl
     monkeypatch.setenv("FLOW_STORAGE_TYPE", "s3")
 
     # List should still work (from local filesystem)
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200
     data = response.json()
     # Should have profile pictures (app copies them during init)
@@ -509,7 +509,7 @@ async def test_profile_pictures_with_s3_storage(setup_profile_pictures, files_cl
     assert "Space/046-rocket.svg" in data["files"], "Should have rocket profile picture"
 
     # Download should still work (from local filesystem)
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200
     assert b"<svg" in response.content
 
@@ -525,17 +525,17 @@ async def test_profile_pictures_different_file_types(setup_profile_pictures, fil
         setup_profile_pictures: Fixture that sets up profile pictures directory
     """
     # Test SVG content type (all real profile pictures are SVGs)
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200
     assert "image/svg+xml" in response.headers["content-type"]
 
     # Test with a people profile picture
-    list_response = await files_client.get("api/v1/files/profile_pictures/list")
+    list_response = await files_client.get("v1/files/profile_pictures/list")
     people_files = [f for f in list_response.json()["files"] if f.startswith("People/")]
 
     if people_files:
         first_people_file = people_files[0].replace("People/", "")
-        response = await files_client.get(f"api/v1/files/profile_pictures/People/{first_people_file}")
+        response = await files_client.get(f"v1/files/profile_pictures/People/{first_people_file}")
         assert response.status_code == 200
         # All profile pictures should be SVGs
         assert "image/svg+xml" in response.headers["content-type"]
@@ -577,7 +577,7 @@ async def test_download_profile_picture_fallback_to_package(empty_config_dir, fi
     in config_dir, they should be served from the package's bundled directory.
     """
     # The 046-rocket.svg should be found in the package's bundled directory
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200, (
         f"Expected 200, got {response.status_code}. Fallback to package profile pictures should work."
     )
@@ -597,7 +597,7 @@ async def test_list_profile_pictures_fallback_to_package(empty_config_dir, files
     This tests the list fallback from PR #10758 - when config_dir has no
     profile pictures, it should list from the package's bundled directory.
     """
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200
 
     data = response.json()
@@ -619,7 +619,7 @@ async def test_download_profile_picture_not_found_in_both_locations(empty_config
     This ensures the fallback logic correctly returns 404 when the file
     is not found in either location.
     """
-    response = await files_client.get("api/v1/files/profile_pictures/Space/nonexistent-file-xyz.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/nonexistent-file-xyz.svg")
     assert response.status_code == 404
 
     data = response.json()
@@ -633,7 +633,7 @@ async def test_download_profile_picture_invalid_folder(empty_config_dir, files_c
     Only 'People' and 'Space' folders are whitelisted for security.
     Invalid folder names should be rejected with 400 Bad Request.
     """
-    response = await files_client.get("api/v1/files/profile_pictures/InvalidFolder/file.svg")
+    response = await files_client.get("v1/files/profile_pictures/InvalidFolder/file.svg")
     assert response.status_code == 400
 
     data = response.json()
@@ -655,7 +655,7 @@ async def test_download_profile_picture_config_dir_takes_precedence(setup_profil
     space_dir.mkdir(parents=True, exist_ok=True)
     (space_dir / "046-rocket.svg").write_bytes(custom_svg)
 
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200
 
     # Should get the config_dir version, not the package version
@@ -676,7 +676,7 @@ async def test_list_profile_pictures_config_dir_takes_precedence(setup_profile_p
     space_dir.mkdir(parents=True, exist_ok=True)
     (space_dir / "custom-test-file.svg").write_bytes(b"<svg></svg>")
 
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200
 
     data = response.json()
@@ -693,7 +693,7 @@ async def test_download_profile_picture_path_traversal_attempt(empty_config_dir,
     using '../' should not work.
     """
     # Try path traversal to access parent directories
-    response = await files_client.get("api/v1/files/profile_pictures/../../../etc/passwd")
+    response = await files_client.get("v1/files/profile_pictures/../../../etc/passwd")
     # Should be 400 (invalid input), 404 (not found), or 422 (validation error)
     assert response.status_code in [400, 404, 422, 500]
 
@@ -704,7 +704,7 @@ async def test_download_profile_picture_special_characters_in_filename(empty_con
     Filenames with spaces or special characters should be handled properly.
     """
     # Test with URL-encoded space (the real file has a space: "042-space shuttle.svg")
-    response = await files_client.get("api/v1/files/profile_pictures/Space/042-space%20shuttle.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/042-space%20shuttle.svg")
     # Should work if the file exists with that name, or 404 if not
     assert response.status_code in [200, 404]
 
@@ -714,7 +714,7 @@ async def test_list_profile_pictures_empty_response_format(empty_config_dir, fil
 
     The response should always have the correct format: {"files": [...]}
     """
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200
 
     data = response.json()
@@ -738,7 +738,7 @@ async def test_download_profile_picture_content_is_valid_svg(empty_config_dir, f
     This ensures the fallback serves actual SVG content, not corrupted data.
     """
     # Download the rocket from package fallback
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200
 
     content = response.content
@@ -783,7 +783,7 @@ async def test_profile_pictures_fallback_with_partial_config_dir(partial_config_
     """
     # For list: since we have at least one file in People, it should NOT fallback completely
     # The current implementation only falls back if BOTH people AND space are empty
-    response = await files_client.get("api/v1/files/profile_pictures/list")
+    response = await files_client.get("v1/files/profile_pictures/list")
     assert response.status_code == 200
 
     data = response.json()
@@ -793,7 +793,7 @@ async def test_profile_pictures_fallback_with_partial_config_dir(partial_config_
     assert "People/test-person.svg" in files
 
     # For download: Space files should still work via fallback to package
-    response = await files_client.get("api/v1/files/profile_pictures/Space/046-rocket.svg")
+    response = await files_client.get("v1/files/profile_pictures/Space/046-rocket.svg")
     assert response.status_code == 200, "Space files should fallback to package"
 
 
@@ -820,7 +820,7 @@ async def test_download_image_for_browser(files_client, files_created_api_key, f
     )
 
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test_image.png", png_content, "image/png")},
         headers=headers,
     )
@@ -832,7 +832,7 @@ async def test_download_image_for_browser(files_client, files_created_api_key, f
 
     # Download the image - simulates browser <img> tag behavior
     response = await files_client.get(
-        f"api/v1/files/images/{files_flow.id}/{file_name}",
+        f"v1/files/images/{files_flow.id}/{file_name}",
         headers=headers,
     )
 
@@ -856,7 +856,7 @@ async def test_download_image_returns_correct_content_type(files_client, files_c
     )
 
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test.png", png_content, "image/png")},
         headers=headers,
     )
@@ -866,7 +866,7 @@ async def test_download_image_returns_correct_content_type(files_client, files_c
     file_name = file_path.split("/")[-1]
 
     # Download image
-    response = await files_client.get(f"api/v1/files/images/{files_flow.id}/{file_name}", headers=headers)
+    response = await files_client.get(f"v1/files/images/{files_flow.id}/{file_name}", headers=headers)
 
     assert response.status_code == 200
     assert "image/png" in response.headers.get("content-type", "")
@@ -878,7 +878,7 @@ async def test_download_image_rejects_non_image_files(files_client, files_create
 
     # Upload a text file
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("test.txt", b"not an image", "text/plain")},
         headers=headers,
     )
@@ -888,7 +888,7 @@ async def test_download_image_rejects_non_image_files(files_client, files_create
     file_name = file_path.split("/")[-1]
 
     # Try to download via /images endpoint (should fail)
-    response = await files_client.get(f"api/v1/files/images/{files_flow.id}/{file_name}", headers=headers)
+    response = await files_client.get(f"v1/files/images/{files_flow.id}/{file_name}", headers=headers)
 
     # Should reject non-image content types
     assert response.status_code == 500
@@ -906,7 +906,7 @@ async def test_download_image_requires_authentication(files_client, files_create
     )
 
     response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("auth_required.png", png_content, "image/png")},
         headers=headers,
     )
@@ -916,7 +916,7 @@ async def test_download_image_requires_authentication(files_client, files_create
     file_name = file_path.split("/")[-1]
 
     # No auth header: browser-like unauthenticated request must be rejected.
-    response = await files_client.get(f"api/v1/files/images/{files_flow.id}/{file_name}")
+    response = await files_client.get(f"v1/files/images/{files_flow.id}/{file_name}")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -928,7 +928,7 @@ async def test_download_image_with_invalid_flow_id(files_client, files_created_a
     fake_flow_id = uuid.uuid4()
     headers = {"x-api-key": files_created_api_key.api_key}
 
-    response = await files_client.get(f"api/v1/files/images/{fake_flow_id}/nonexistent.png", headers=headers)
+    response = await files_client.get(f"v1/files/images/{fake_flow_id}/nonexistent.png", headers=headers)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -947,7 +947,7 @@ async def test_download_image_returns_404_for_other_users_flow(
     )
 
     upload_response = await files_client.post(
-        f"api/v1/files/upload/{files_flow.id}",
+        f"v1/files/upload/{files_flow.id}",
         files={"file": ("browser_test.png", png_content, "image/png")},
         headers=owner_headers,
     )
@@ -958,7 +958,7 @@ async def test_download_image_returns_404_for_other_users_flow(
 
     # Hide resource existence across tenants by returning 404 for non-owners.
     download_response = await files_client.get(
-        f"api/v1/files/images/{files_flow.id}/{file_name}",
+        f"v1/files/images/{files_flow.id}/{file_name}",
         headers=other_headers,
     )
 
@@ -988,7 +988,7 @@ async def test_download_file_path_traversal_rejected(
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.get(
-        f"api/v1/files/download/{files_flow.id}/{malicious_filename}",
+        f"v1/files/download/{files_flow.id}/{malicious_filename}",
         headers=headers,
     )
 
@@ -1019,7 +1019,7 @@ async def test_download_file_forward_slash_traversal_blocked(
     providing defense in depth before our validation layer is reached.
     """
     headers = {"x-api-key": files_created_api_key.api_key}
-    url = f"api/v1/files/download/{files_flow.id}/{malicious_filename}"
+    url = f"v1/files/download/{files_flow.id}/{malicious_filename}"
     response = await files_client.get(url, headers=headers)
 
     # FastAPI returns 404 because the path with slashes doesn't match any route
@@ -1041,7 +1041,7 @@ async def test_download_file_forward_slash_traversal_blocked(
 async def test_download_image_path_traversal_rejected(files_client, files_flow, malicious_filename):
     """Test that path traversal attempts are rejected on /images endpoint."""
     response = await files_client.get(
-        f"api/v1/files/images/{files_flow.id}/{malicious_filename}",
+        f"v1/files/images/{files_flow.id}/{malicious_filename}",
     )
 
     assert response.status_code == 400, f"Path traversal should be rejected: {malicious_filename}"
@@ -1064,7 +1064,7 @@ async def test_download_image_path_traversal_rejected(files_client, files_flow, 
 )
 async def test_download_image_forward_slash_traversal_blocked(files_client, files_flow, malicious_filename):
     """Test that forward slash path traversal is blocked by FastAPI routing on /images endpoint."""
-    url = f"api/v1/files/images/{files_flow.id}/{malicious_filename}"
+    url = f"v1/files/images/{files_flow.id}/{malicious_filename}"
     response = await files_client.get(url)
 
     # FastAPI returns 404 because the path with slashes doesn't match any route
@@ -1088,7 +1088,7 @@ async def test_delete_file_path_traversal_rejected(files_client, files_created_a
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.delete(
-        f"api/v1/files/delete/{files_flow.id}/{malicious_filename}",
+        f"v1/files/delete/{files_flow.id}/{malicious_filename}",
         headers=headers,
     )
 
@@ -1115,7 +1115,7 @@ async def test_delete_file_forward_slash_traversal_blocked(
 ):
     """Test that forward slash path traversal is blocked by FastAPI routing on /delete endpoint."""
     headers = {"x-api-key": files_created_api_key.api_key}
-    url = f"api/v1/files/delete/{files_flow.id}/{malicious_filename}"
+    url = f"v1/files/delete/{files_flow.id}/{malicious_filename}"
     response = await files_client.delete(url, headers=headers)
 
     # FastAPI returns 404 because the path with slashes doesn't match any route

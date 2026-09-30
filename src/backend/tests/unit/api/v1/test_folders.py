@@ -17,7 +17,7 @@ async def test_create_folder(client: AsyncClient, logged_in_headers, basic_case)
     # Configure client to follow redirects
     client.follow_redirects = True
 
-    response = await client.post("api/v1/folders/", json=basic_case, headers=logged_in_headers)
+    response = await client.post("v1/folders/", json=basic_case, headers=logged_in_headers)
     result = response.json()
 
     # Check that we're getting a valid response from the projects endpoint
@@ -33,7 +33,7 @@ async def test_read_folders(client: AsyncClient, logged_in_headers):
     # Configure client to follow redirects
     client.follow_redirects = True
 
-    response = await client.get("api/v1/folders/", headers=logged_in_headers)
+    response = await client.get("v1/folders/", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -46,11 +46,11 @@ async def test_read_folder(client: AsyncClient, logged_in_headers, basic_case):
     client.follow_redirects = True
 
     # Create a folder first
-    response_ = await client.post("api/v1/folders/", json=basic_case, headers=logged_in_headers)
+    response_ = await client.post("v1/folders/", json=basic_case, headers=logged_in_headers)
     id_ = response_.json()["id"]
 
     # Get the folder
-    response = await client.get(f"api/v1/folders/{id_}", headers=logged_in_headers)
+    response = await client.get(f"v1/folders/{id_}", headers=logged_in_headers)
     result = response.json()
 
     # The response structure may be different depending on whether pagination is enabled
@@ -87,11 +87,11 @@ async def test_update_folder(client: AsyncClient, logged_in_headers, basic_case)
     update_case["name"] = "Updated Folder"
 
     # Create a folder first
-    response_ = await client.post("api/v1/folders/", json=basic_case, headers=logged_in_headers)
+    response_ = await client.post("v1/folders/", json=basic_case, headers=logged_in_headers)
     id_ = response_.json()["id"]
 
     # Update the folder
-    response = await client.patch(f"api/v1/folders/{id_}", json=update_case, headers=logged_in_headers)
+    response = await client.patch(f"v1/folders/{id_}", json=update_case, headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK

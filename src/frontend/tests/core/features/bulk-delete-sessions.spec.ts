@@ -50,7 +50,7 @@ test.describe("Bulk Delete Sessions", () => {
   async function setupApiInterceptor(page: Page) {
     const apiCalls: string[] = [];
 
-    await page.route("**/api/v1/monitor/messages/sessions*", (route) => {
+    await page.route("**/v1/monitor/messages/sessions*", (route) => {
       const method = route.request().method();
       const url = route.request().url();
       apiCalls.push(`${method} ${url}`);

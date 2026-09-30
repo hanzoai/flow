@@ -173,7 +173,7 @@ class TestPreviewChunks:
     async def test_preview_chunks_basic(self, client: AsyncClient, logged_in_headers, sample_text_file):
         file_name, file_content = sample_text_file
         response = await client.post(
-            "api/v1/knowledge_bases/preview-chunks",
+            "v1/knowledge_bases/preview-chunks",
             headers=logged_in_headers,
             files={"files": (file_name, io.BytesIO(file_content.encode()), "text/plain")},
             data={
@@ -200,7 +200,7 @@ class TestKnowledgeBaseAPI:
         mock_root.return_value = tmp_path
         kb_name = "New_KB"
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": kb_name,
@@ -231,7 +231,7 @@ class TestKnowledgeBaseAPI:
         victim_dir = tmp_path / "victim_user" / "evil_kb"
 
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": "../victim_user/evil_kb",
@@ -261,7 +261,7 @@ class TestKnowledgeBaseAPI:
         evil_dir = tmp_path / "evil_absolute"
 
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": str(evil_dir),
@@ -295,7 +295,7 @@ class TestKnowledgeBaseAPI:
         victim_kb.mkdir(parents=True)
 
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": "../activeuser_evil/secret_kb",
@@ -324,7 +324,7 @@ class TestKnowledgeBaseAPI:
         (tmp_path / "victim_user" / "secret_kb").mkdir(parents=True)
 
         await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": "../victim_user/secret_kb",
@@ -341,7 +341,7 @@ class TestKnowledgeBaseAPI:
 
     async def test_create_kb_name_too_short(self, client: AsyncClient, logged_in_headers):
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": "ab",
@@ -360,7 +360,7 @@ class TestKnowledgeBaseAPI:
         (kb_user_path / "Duplicate_KB").mkdir()
 
         response = await client.post(
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={
                 "name": "Duplicate KB",
@@ -399,7 +399,7 @@ class TestKnowledgeBaseAPI:
         mock_job_service.return_value = mock_job_service_inst
         mock_job_service_inst.get_latest_jobs_by_asset_ids = AsyncMock(return_value={})
 
-        response = await client.get("api/v1/knowledge_bases", headers=logged_in_headers)
+        response = await client.get("v1/knowledge_bases", headers=logged_in_headers)
         assert response.status_code == 200
         data = response.json()
         assert len(data) >= 1
@@ -422,7 +422,7 @@ class TestKnowledgeBaseAPI:
         }
         (kb_path / "embedding_metadata.json").write_text(json.dumps(meta))
 
-        response = await client.get("api/v1/knowledge_bases/Detail_KB", headers=logged_in_headers)
+        response = await client.get("v1/knowledge_bases/Detail_KB", headers=logged_in_headers)
         assert response.status_code == 200
         data = response.json()
         assert data["chunks"] == 5
@@ -436,7 +436,7 @@ class TestKnowledgeBaseAPI:
         mock_root.return_value = tmp_path
         (tmp_path / "activeuser" / "To_Delete").mkdir(parents=True, exist_ok=True)
 
-        response = await client.delete("api/v1/knowledge_bases/To_Delete", headers=logged_in_headers)
+        response = await client.delete("v1/knowledge_bases/To_Delete", headers=logged_in_headers)
         assert response.status_code == 200
         mock_delete.assert_called_once()
 
@@ -453,7 +453,7 @@ class TestKnowledgeBaseAPI:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["KB1", "KB2", "NonExistent"]},
         )
@@ -476,7 +476,7 @@ class TestKnowledgeBaseAPI:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["../victim_user/secret_kb"]},
         )
@@ -499,7 +499,7 @@ class TestKnowledgeBaseAPI:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["../../other_root/secret_kb"]},
         )
@@ -524,7 +524,7 @@ class TestKnowledgeBaseAPI:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["../activeuser_evil/secret_kb"]},
         )
@@ -553,7 +553,7 @@ class TestKnowledgeBaseAPI:
 
         response = await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["%2e%2e%2fvictim_user%2fsecret_kb"]},
         )
@@ -575,7 +575,7 @@ class TestKnowledgeBaseAPI:
 
         await client.request(
             "DELETE",
-            "api/v1/knowledge_bases",
+            "v1/knowledge_bases",
             headers=logged_in_headers,
             json={"kb_names": ["../victim_user/secret_kb"]},
         )
@@ -621,7 +621,7 @@ class TestKnowledgeBaseAPI:
         mock_job_inst.create_job = AsyncMock(return_value=MagicMock(job_id=uuid.uuid4()))
 
         response = await client.post(
-            "api/v1/knowledge_bases/Ingest-KB/ingest",
+            "v1/knowledge_bases/Ingest-KB/ingest",
             headers=logged_in_headers,
             files={"files": (file_name, io.BytesIO(file_content.encode()), "text/plain")},
             data={"source_name": "test-source"},
@@ -635,7 +635,7 @@ class TestKnowledgeBaseAPI:
     async def test_ingest_non_existent_kb(self, mock_root, client: AsyncClient, logged_in_headers, tmp_path):
         mock_root.return_value = tmp_path
         response = await client.post(
-            "api/v1/knowledge_bases/NonExistent/ingest",
+            "v1/knowledge_bases/NonExistent/ingest",
             headers=logged_in_headers,
             files={"files": ("test.txt", io.BytesIO(b"content"), "text/plain")},
         )
@@ -649,7 +649,7 @@ class TestKnowledgeBaseAPI:
         mock_meta.return_value = {"embedding_provider": None, "embedding_model": None}
 
         response = await client.post(
-            "api/v1/knowledge_bases/Invalid-KB/ingest",
+            "v1/knowledge_bases/Invalid-KB/ingest",
             headers=logged_in_headers,
             files={"files": ("test.txt", io.BytesIO(b"content"), "text/plain")},
         )
@@ -678,7 +678,7 @@ class TestKnowledgeBaseAPI:
         mock_chroma.return_value._collection = mock_collection
 
         # Test search
-        response = await client.get("api/v1/knowledge_bases/KB1/chunks?search=content", headers=logged_in_headers)
+        response = await client.get("v1/knowledge_bases/KB1/chunks?search=content", headers=logged_in_headers)
         assert response.status_code == 200
         data = response.json()
         assert len(data["chunks"]) == 2
@@ -693,7 +693,7 @@ class TestKnowledgeBaseAPI:
             "documents": ["page 2 content"],
             "metadatas": [{}],
         }
-        response = await client.get("api/v1/knowledge_bases/KB1/chunks?page=2&limit=10", headers=logged_in_headers)
+        response = await client.get("v1/knowledge_bases/KB1/chunks?page=2&limit=10", headers=logged_in_headers)
         assert response.status_code == 200
         data = response.json()
         assert data["page"] == 2
@@ -709,7 +709,7 @@ class TestKnowledgeBaseAPI:
     ):
         mock_root.return_value = tmp_path
 
-        response = await client.get("api/v1/knowledge_bases/MissingKB/chunks", headers=logged_in_headers)
+        response = await client.get("v1/knowledge_bases/MissingKB/chunks", headers=logged_in_headers)
 
         assert response.status_code == 404
 
@@ -851,7 +851,7 @@ class TestCancelIngestion:
 
         with mock_patch("flow.services.deps.get_service", side_effect=get_service_side_effect):
             response = await client.post(
-                "api/v1/knowledge_bases/Test_KB/cancel",
+                "v1/knowledge_bases/Test_KB/cancel",
                 headers=logged_in_headers,
             )
 
@@ -877,7 +877,7 @@ class TestCancelIngestion:
         mock_job_service_inst.get_latest_jobs_by_asset_ids = AsyncMock(return_value={})
 
         response = await client.post(
-            "api/v1/knowledge_bases/Test_KB/cancel",
+            "v1/knowledge_bases/Test_KB/cancel",
             headers=logged_in_headers,
         )
 
@@ -889,7 +889,7 @@ class TestCancelIngestion:
         mock_root.return_value = tmp_path
 
         response = await client.post(
-            "api/v1/knowledge_bases/NonExistent_KB/cancel",
+            "v1/knowledge_bases/NonExistent_KB/cancel",
             headers=logged_in_headers,
         )
 

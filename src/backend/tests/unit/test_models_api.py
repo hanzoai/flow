@@ -9,7 +9,7 @@ def _flatten_models(result_json):
 
 @pytest.mark.asyncio
 async def test_models_endpoint_default(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/models", headers=logged_in_headers)
+    response = await client.get("v1/models", headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     providers = {entry["provider"] for entry in data}
@@ -23,7 +23,7 @@ async def test_models_endpoint_default(client: AsyncClient, logged_in_headers):
 
 @pytest.mark.asyncio
 async def test_models_endpoint_filter_provider(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/models", params={"provider": "Anthropic"}, headers=logged_in_headers)
+    response = await client.get("v1/models", params={"provider": "Anthropic"}, headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
@@ -32,7 +32,7 @@ async def test_models_endpoint_filter_provider(client: AsyncClient, logged_in_he
 
 @pytest.mark.asyncio
 async def test_models_endpoint_filter_model_type(client: AsyncClient, logged_in_headers):
-    response = await client.get("api/v1/models", params={"model_type": "embeddings"}, headers=logged_in_headers)
+    response = await client.get("v1/models", params={"model_type": "embeddings"}, headers=logged_in_headers)
     assert response.status_code == 200
     data = response.json()
     models = list(_flatten_models(data))

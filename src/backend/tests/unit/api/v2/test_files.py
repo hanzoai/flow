@@ -139,7 +139,7 @@ async def test_upload_file(files_client, files_created_api_key):
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
@@ -160,7 +160,7 @@ async def test_should_not_persist_in_my_files_when_upload_is_ephemeral(files_cli
 
     # Upload with ephemeral=true
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("playground_image.png", b"fake image content")},
         params={"ephemeral": "true"},
         headers=headers,
@@ -171,7 +171,7 @@ async def test_should_not_persist_in_my_files_when_upload_is_ephemeral(files_cli
     assert "path" in upload_response
 
     # The file must NOT appear in the user's file list
-    list_response = await files_client.get("api/v2/files", headers=headers)
+    list_response = await files_client.get("v1/files", headers=headers)
     assert list_response.status_code == 200
     file_names = [f["name"] for f in list_response.json()]
     assert "playground_image" not in file_names, (
@@ -197,7 +197,7 @@ async def test_should_return_path_with_forward_slashes_when_uploading_file(files
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test_path.txt", b"path test content")},
         headers=headers,
     )
@@ -210,7 +210,7 @@ async def test_should_return_path_with_forward_slashes_when_uploading_file(files
     )
 
     # Verify the upload path matches what GET /files returns
-    list_response = await files_client.get("api/v2/files", headers=headers)
+    list_response = await files_client.get("v1/files", headers=headers)
     assert list_response.status_code == 200
 
     listed_paths = [f["path"] for f in list_response.json()]
@@ -225,7 +225,7 @@ async def test_download_file(files_client, files_created_api_key):
 
     # First upload a file
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
@@ -233,7 +233,7 @@ async def test_download_file(files_client, files_created_api_key):
     upload_response = response.json()
 
     # Then try to download it
-    response = await files_client.get(f"api/v2/files/{upload_response['id']}", headers=headers)
+    response = await files_client.get(f"v1/files/{upload_response['id']}", headers=headers)
 
     assert response.status_code == 200
     assert response.content == b"test content"
@@ -245,7 +245,7 @@ async def test_download_file_not_found(files_client, files_created_api_key):
 
     # Try to download a file that doesn't exist
     fake_file_id = "00000000-0000-0000-0000-000000000000"
-    response = await files_client.get(f"api/v2/files/{fake_file_id}", headers=headers)
+    response = await files_client.get(f"v1/files/{fake_file_id}", headers=headers)
 
     assert response.status_code == 404
     error_response = response.json()
@@ -257,14 +257,14 @@ async def test_list_files(files_client, files_created_api_key):
 
     # First upload a file
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
     assert response.status_code == 201
 
     # Then list the files
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     assert len(files) == 1
@@ -274,14 +274,14 @@ async def test_delete_file(files_client, files_created_api_key):
     headers = {"x-api-key": files_created_api_key.api_key}
 
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
     assert response.status_code == 201
     upload_response = response.json()
 
-    response = await files_client.delete(f"api/v2/files/{upload_response['id']}", headers=headers)
+    response = await files_client.delete(f"v1/files/{upload_response['id']}", headers=headers)
     assert response.status_code == 200
     assert response.json() == {"detail": "File test deleted successfully"}
 
@@ -291,7 +291,7 @@ async def test_edit_file(files_client, files_created_api_key):
 
     # First upload a file
     response = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("test.txt", b"test content")},
         headers=headers,
     )
@@ -299,7 +299,7 @@ async def test_edit_file(files_client, files_created_api_key):
     upload_response = response.json()
 
     # Then list the files
-    response = await files_client.put(f"api/v2/files/{upload_response['id']}?name=potato.txt", headers=headers)
+    response = await files_client.put(f"v1/files/{upload_response['id']}?name=potato.txt", headers=headers)
     assert response.status_code == 200
     file = response.json()
     assert file["name"] == "potato.txt"
@@ -310,7 +310,7 @@ async def test_upload_list_delete_and_validate_files(files_client, files_created
 
     # Upload two files
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("file1.txt", b"content1")},
         headers=headers,
     )
@@ -318,7 +318,7 @@ async def test_upload_list_delete_and_validate_files(files_client, files_created
     file1 = response1.json()
 
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("file2.txt", b"content2")},
         headers=headers,
     )
@@ -326,7 +326,7 @@ async def test_upload_list_delete_and_validate_files(files_client, files_created
     file2 = response2.json()
 
     # List files and validate both are present
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     file_names = [f["name"] for f in files]
@@ -338,11 +338,11 @@ async def test_upload_list_delete_and_validate_files(files_client, files_created
     assert len(files) == 2
 
     # Delete one file
-    response = await files_client.delete(f"api/v2/files/{file1['id']}", headers=headers)
+    response = await files_client.delete(f"v1/files/{file1['id']}", headers=headers)
     assert response.status_code == 200
 
     # List files again and validate only the other remains
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     file_names = [f["name"] for f in files]
@@ -360,7 +360,7 @@ async def test_upload_files_with_same_name_creates_unique_names(files_client, fi
 
     # Upload first file
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("duplicate.txt", b"content1")},
         headers=headers,
     )
@@ -370,7 +370,7 @@ async def test_upload_files_with_same_name_creates_unique_names(files_client, fi
 
     # Upload second file with same name
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("duplicate.txt", b"content2")},
         headers=headers,
     )
@@ -380,7 +380,7 @@ async def test_upload_files_with_same_name_creates_unique_names(files_client, fi
 
     # Upload third file with same name
     response3 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("duplicate.txt", b"content3")},
         headers=headers,
     )
@@ -389,20 +389,20 @@ async def test_upload_files_with_same_name_creates_unique_names(files_client, fi
     assert file3["name"] == "duplicate (2)"
 
     # Verify all files can be downloaded with their unique content
-    download1 = await files_client.get(f"api/v2/files/{file1['id']}", headers=headers)
+    download1 = await files_client.get(f"v1/files/{file1['id']}", headers=headers)
     assert download1.status_code == 200
     assert download1.content == b"content1"
 
-    download2 = await files_client.get(f"api/v2/files/{file2['id']}", headers=headers)
+    download2 = await files_client.get(f"v1/files/{file2['id']}", headers=headers)
     assert download2.status_code == 200
     assert download2.content == b"content2"
 
-    download3 = await files_client.get(f"api/v2/files/{file3['id']}", headers=headers)
+    download3 = await files_client.get(f"v1/files/{file3['id']}", headers=headers)
     assert download3.status_code == 200
     assert download3.content == b"content3"
 
     # List files and verify all three are present with unique names
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     file_names = [f["name"] for f in files]
@@ -418,7 +418,7 @@ async def test_upload_files_without_extension_creates_unique_names(files_client,
 
     # Upload first file without extension
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("noextension", b"content1")},
         headers=headers,
     )
@@ -428,7 +428,7 @@ async def test_upload_files_without_extension_creates_unique_names(files_client,
 
     # Upload second file with same name
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("noextension", b"content2")},
         headers=headers,
     )
@@ -437,11 +437,11 @@ async def test_upload_files_without_extension_creates_unique_names(files_client,
     assert file2["name"] == "noextension (1)"
 
     # Verify both files can be downloaded
-    download1 = await files_client.get(f"api/v2/files/{file1['id']}", headers=headers)
+    download1 = await files_client.get(f"v1/files/{file1['id']}", headers=headers)
     assert download1.status_code == 200
     assert download1.content == b"content1"
 
-    download2 = await files_client.get(f"api/v2/files/{file2['id']}", headers=headers)
+    download2 = await files_client.get(f"v1/files/{file2['id']}", headers=headers)
     assert download2.status_code == 200
     assert download2.content == b"content2"
 
@@ -452,7 +452,7 @@ async def test_upload_files_with_different_extensions_same_name(files_client, fi
 
     # Upload file with .txt extension
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("document.txt", b"text content")},
         headers=headers,
     )
@@ -462,7 +462,7 @@ async def test_upload_files_with_different_extensions_same_name(files_client, fi
 
     # Upload file with .md extension and same root name
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("document.md", b"markdown content")},
         headers=headers,
     )
@@ -472,7 +472,7 @@ async def test_upload_files_with_different_extensions_same_name(files_client, fi
 
     # Upload another .txt file with same root name
     response3 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("document.txt", b"more text content")},
         headers=headers,
     )
@@ -490,7 +490,7 @@ async def test_mcp_servers_file_replacement(files_client, files_created_api_key,
 
     # Upload first _mcp_servers file
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": (mcp_file_ext, b'{"servers": ["server1"]}')},
         headers=headers,
     )
@@ -500,7 +500,7 @@ async def test_mcp_servers_file_replacement(files_client, files_created_api_key,
 
     # Upload second _mcp_servers file - should replace the first one
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": (mcp_file_ext, b'{"servers": ["server2"]}')},
         headers=headers,
     )
@@ -510,19 +510,19 @@ async def test_mcp_servers_file_replacement(files_client, files_created_api_key,
 
     # Note: _mcp_servers files are filtered out from the regular file list
     # This is expected behavior since they're managed separately
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     mcp_files = [f for f in files if f["name"] == mcp_file]
     assert len(mcp_files) == 0  # MCP servers files are filtered out from regular list
 
     # Verify the second file can be downloaded with the updated content
-    download2 = await files_client.get(f"api/v2/files/{file2['id']}", headers=headers)
+    download2 = await files_client.get(f"v1/files/{file2['id']}", headers=headers)
     assert download2.status_code == 200
     assert download2.content == b'{"servers": ["server2"]}'
 
     # Verify the first file no longer exists (should return 404)
-    download1 = await files_client.get(f"api/v2/files/{file1['id']}", headers=headers)
+    download1 = await files_client.get(f"v1/files/{file1['id']}", headers=headers)
     assert download1.status_code == 404
 
     # Verify the file IDs are different (new file replaced old one)
@@ -535,7 +535,7 @@ async def test_unique_filename_counter_handles_gaps(files_client, files_created_
 
     # Upload original file
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("gaptest.txt", b"content1")},
         headers=headers,
     )
@@ -545,7 +545,7 @@ async def test_unique_filename_counter_handles_gaps(files_client, files_created_
 
     # Upload second file (should be gaptest (1))
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("gaptest.txt", b"content2")},
         headers=headers,
     )
@@ -555,7 +555,7 @@ async def test_unique_filename_counter_handles_gaps(files_client, files_created_
 
     # Upload third file (should be gaptest (2))
     response3 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("gaptest.txt", b"content3")},
         headers=headers,
     )
@@ -564,12 +564,12 @@ async def test_unique_filename_counter_handles_gaps(files_client, files_created_
     assert file3["name"] == "gaptest (2)"
 
     # Delete the middle file (gaptest (1))
-    delete_response = await files_client.delete(f"api/v2/files/{file2['id']}", headers=headers)
+    delete_response = await files_client.delete(f"v1/files/{file2['id']}", headers=headers)
     assert delete_response.status_code == 200
 
     # Upload another file - should be gaptest (3), not filling the gap
     response4 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("gaptest.txt", b"content4")},
         headers=headers,
     )
@@ -578,7 +578,7 @@ async def test_unique_filename_counter_handles_gaps(files_client, files_created_
     assert file4["name"] == "gaptest (3)"
 
     # Verify final state
-    response = await files_client.get("api/v2/files", headers=headers)
+    response = await files_client.get("v1/files", headers=headers)
     assert response.status_code == 200
     files = response.json()
     file_names = [f["name"] for f in files]
@@ -595,7 +595,7 @@ async def test_unique_filename_path_storage(files_client, files_created_api_key)
 
     # Upload two files with same name
     response1 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("pathtest.txt", b"path content 1")},
         headers=headers,
     )
@@ -603,7 +603,7 @@ async def test_unique_filename_path_storage(files_client, files_created_api_key)
     file1 = response1.json()
 
     response2 = await files_client.post(
-        "api/v2/files",
+        "v1/files",
         files={"file": ("pathtest.txt", b"path content 2")},
         headers=headers,
     )
@@ -613,11 +613,11 @@ async def test_unique_filename_path_storage(files_client, files_created_api_key)
     # Verify both files have different paths and can be downloaded independently
     assert file1["path"] != file2["path"]
 
-    download1 = await files_client.get(f"api/v2/files/{file1['id']}", headers=headers)
+    download1 = await files_client.get(f"v1/files/{file1['id']}", headers=headers)
     assert download1.status_code == 200
     assert download1.content == b"path content 1"
 
-    download2 = await files_client.get(f"api/v2/files/{file2['id']}", headers=headers)
+    download2 = await files_client.get(f"v1/files/{file2['id']}", headers=headers)
     assert download2.status_code == 200
     assert download2.content == b"path content 2"
 
@@ -778,7 +778,7 @@ class TestS3FileOperations:
         headers = {"x-api-key": s3_files_created_api_key.api_key}
 
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_test.txt", b"S3 test content")},
             headers=headers,
         )
@@ -794,7 +794,7 @@ class TestS3FileOperations:
 
         # Upload file
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_download_test.txt", b"S3 download content")},
             headers=headers,
         )
@@ -802,7 +802,7 @@ class TestS3FileOperations:
         upload_response = response.json()
 
         # Download file
-        response = await s3_files_client.get(f"api/v2/files/{upload_response['id']}", headers=headers)
+        response = await s3_files_client.get(f"v1/files/{upload_response['id']}", headers=headers)
 
         assert response.status_code == 200
         assert response.content == b"S3 download content"
@@ -813,14 +813,14 @@ class TestS3FileOperations:
 
         # Upload a file
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_list_test.txt", b"S3 list content")},
             headers=headers,
         )
         assert response.status_code == 201
 
         # List files
-        response = await s3_files_client.get("api/v2/files", headers=headers)
+        response = await s3_files_client.get("v1/files", headers=headers)
         assert response.status_code == 200
         files = response.json()
         assert len(files) >= 1
@@ -833,7 +833,7 @@ class TestS3FileOperations:
 
         # Upload a file
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_delete_test.txt", b"S3 delete content")},
             headers=headers,
         )
@@ -841,19 +841,19 @@ class TestS3FileOperations:
         upload_response = response.json()
 
         # Delete the file
-        response = await s3_files_client.delete(f"api/v2/files/{upload_response['id']}", headers=headers)
+        response = await s3_files_client.delete(f"v1/files/{upload_response['id']}", headers=headers)
         assert response.status_code == 200
         assert response.json() == {"detail": "File s3_delete_test deleted successfully"}
 
         # Verify file is deleted from database
-        response = await s3_files_client.get("api/v2/files", headers=headers)
+        response = await s3_files_client.get("v1/files", headers=headers)
         assert response.status_code == 200
         files = response.json()
         file_names = [f["name"] for f in files]
         assert "s3_delete_test" not in file_names
 
         # Verify file is deleted from S3 (should return 404)
-        response = await s3_files_client.get(f"api/v2/files/{upload_response['id']}", headers=headers)
+        response = await s3_files_client.get(f"v1/files/{upload_response['id']}", headers=headers)
         assert response.status_code == 404
 
     async def test_s3_upload_list_delete_multiple_files(self, s3_files_client, s3_files_created_api_key):
@@ -862,7 +862,7 @@ class TestS3FileOperations:
 
         # Upload two files
         response1 = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_file1.txt", b"S3 content1")},
             headers=headers,
         )
@@ -870,7 +870,7 @@ class TestS3FileOperations:
         file1 = response1.json()
 
         response2 = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_file2.txt", b"S3 content2")},
             headers=headers,
         )
@@ -878,7 +878,7 @@ class TestS3FileOperations:
         file2 = response2.json()
 
         # List files and validate both are present
-        response = await s3_files_client.get("api/v2/files", headers=headers)
+        response = await s3_files_client.get("v1/files", headers=headers)
         assert response.status_code == 200
         files = response.json()
         file_names = [f["name"] for f in files]
@@ -889,11 +889,11 @@ class TestS3FileOperations:
         assert file2["id"] in file_ids
 
         # Delete one file
-        response = await s3_files_client.delete(f"api/v2/files/{file1['id']}", headers=headers)
+        response = await s3_files_client.delete(f"v1/files/{file1['id']}", headers=headers)
         assert response.status_code == 200
 
         # List files again and validate only the other remains
-        response = await s3_files_client.get("api/v2/files", headers=headers)
+        response = await s3_files_client.get("v1/files", headers=headers)
         assert response.status_code == 200
         files = response.json()
         file_names = [f["name"] for f in files]
@@ -912,7 +912,7 @@ class TestS3FileOperations:
 
         # Upload binary file
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_binary.bin", binary_data)},
             headers=headers,
         )
@@ -920,7 +920,7 @@ class TestS3FileOperations:
         upload_response = response.json()
 
         # Download and verify binary data
-        response = await s3_files_client.get(f"api/v2/files/{upload_response['id']}", headers=headers)
+        response = await s3_files_client.get(f"v1/files/{upload_response['id']}", headers=headers)
         assert response.status_code == 200
         assert response.content == binary_data
 
@@ -930,7 +930,7 @@ class TestS3FileOperations:
 
         # Upload a file
         response = await s3_files_client.post(
-            "api/v2/files",
+            "v1/files",
             files={"file": ("s3_cleanup_test.txt", b"S3 cleanup content")},
             headers=headers,
         )
@@ -942,7 +942,7 @@ class TestS3FileOperations:
         user_id = file_path.split("/")[0]
 
         # Delete the file
-        response = await s3_files_client.delete(f"api/v2/files/{upload_response['id']}", headers=headers)
+        response = await s3_files_client.delete(f"v1/files/{upload_response['id']}", headers=headers)
         assert response.status_code == 200
 
         # Verify file is actually deleted from S3 by checking directly

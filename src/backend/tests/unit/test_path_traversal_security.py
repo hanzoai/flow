@@ -16,7 +16,7 @@ async def test_upload_file_rejects_directory_traversal(client: AsyncClient, logg
     files = {"file": (malicious_filename, b"malicious content", "text/plain")}
 
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -31,7 +31,7 @@ async def test_upload_file_rejects_backslash_traversal(client: AsyncClient, logg
     files = {"file": (malicious_filename, b"malicious content", "text/plain")}
 
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -46,7 +46,7 @@ async def test_upload_file_rejects_absolute_path(client: AsyncClient, logged_in_
     files = {"file": (malicious_filename, b"malicious content", "text/plain")}
 
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -66,7 +66,7 @@ async def test_upload_file_rejects_complex_traversal(client: AsyncClient, logged
     for filename in malicious_filenames:
         files = {"file": (filename, b"malicious content", "text/plain")}
         response = await client.post(
-            "api/v2/files/",
+            "v1/files/",
             files=files,
             headers=logged_in_headers,
         )
@@ -87,7 +87,7 @@ async def test_upload_file_accepts_valid_filename(client: AsyncClient, logged_in
     for filename in valid_filenames:
         files = {"file": (filename, b"legitimate content", "text/plain")}
         response = await client.post(
-            "api/v2/files/",
+            "v1/files/",
             files=files,
             headers=logged_in_headers,
         )
@@ -102,7 +102,7 @@ async def test_upload_file_rejects_path_with_slashes(client: AsyncClient, logged
     # Filenames with slashes should be rejected to prevent path traversal
     files = {"file": ("subdir/nested/file.txt", b"content", "text/plain")}
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -116,7 +116,7 @@ async def test_upload_file_rejects_empty_filename(client: AsyncClient, logged_in
     """Test that empty filename is rejected."""
     files = {"file": ("", b"content", "text/plain")}
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -133,7 +133,7 @@ async def test_upload_and_download_legitimate_file(client: AsyncClient, logged_i
     # Upload
     files = {"file": (filename, content, "application/pdf")}
     upload_response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -146,7 +146,7 @@ async def test_upload_and_download_legitimate_file(client: AsyncClient, logged_i
     # Download
     file_id = data["id"]
     download_response = await client.get(
-        f"api/v2/files/{file_id}",
+        f"v1/files/{file_id}",
         headers=logged_in_headers,
     )
 
@@ -165,7 +165,7 @@ async def test_upload_file_no_path_escape_via_null_bytes(client: AsyncClient, lo
     for filename in malicious_filenames:
         files = {"file": (filename, b"malicious", "text/plain")}
         response = await client.post(
-            "api/v2/files/",
+            "v1/files/",
             files=files,
             headers=logged_in_headers,
         )
@@ -195,7 +195,7 @@ async def test_storage_layer_path_containment_check(client: AsyncClient, logged_
     files = {"file": (malicious_filename, b"you got pwned", "text/plain")}
 
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )
@@ -225,7 +225,7 @@ async def test_upload_file_with_unicode_filename(client: AsyncClient, logged_in_
     for filename in unicode_filenames:
         files = {"file": (filename, b"content", "text/plain")}
         response = await client.post(
-            "api/v2/files/",
+            "v1/files/",
             files=files,
             headers=logged_in_headers,
         )
@@ -238,7 +238,7 @@ async def test_upload_file_preserves_extension(client: AsyncClient, logged_in_he
     """Test that file extensions are preserved correctly."""
     files = {"file": ("document.pdf", b"PDF content", "application/pdf")}
     response = await client.post(
-        "api/v2/files/",
+        "v1/files/",
         files=files,
         headers=logged_in_headers,
     )

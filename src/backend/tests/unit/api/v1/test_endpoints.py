@@ -11,7 +11,7 @@ from lfx.custom.utils import build_custom_component_template
 
 
 async def test_get_version(client: AsyncClient):
-    response = await client.get("api/v1/version")
+    response = await client.get("v1/version")
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -23,7 +23,7 @@ async def test_get_version(client: AsyncClient):
 
 async def test_get_config_basic(client: AsyncClient, logged_in_headers: dict):
     """Test basic authenticated /config endpoint returns expected structure."""
-    response = await client.get("api/v1/config", headers=logged_in_headers)
+    response = await client.get("v1/config", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -46,7 +46,7 @@ async def test_update_component_outputs(client: AsyncClient, logged_in_headers: 
         field_value=True,
         template={},
     )
-    response = await client.post("api/v1/custom_component/update", json=request.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/custom_component/update", json=request.model_dump(), headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -82,7 +82,7 @@ async def test_update_component_model_name_options(client: AsyncClient, logged_i
     )
 
     # Make the request to update the component
-    response = await client.post("api/v1/custom_component/update", json=request.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/custom_component/update", json=request.model_dump(), headers=logged_in_headers)
     result = response.json()
 
     # Verify the response
@@ -123,7 +123,7 @@ class TestMetadataComponent(Component):
 """
 
     request = CustomComponentRequest(code=component_code)
-    response = await client.post("api/v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
+    response = await client.post("v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -169,10 +169,10 @@ class ConsistencyTestComponent(Component):
     # Make two identical requests
     request = CustomComponentRequest(code=component_code)
 
-    response1 = await client.post("api/v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
+    response1 = await client.post("v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
     # result1 = response1.json()
 
-    response2 = await client.post("api/v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
+    response2 = await client.post("v1/custom_component", json=request.model_dump(), headers=logged_in_headers)
     # result2 = response2.json()
 
     # Both requests should succeed
@@ -190,13 +190,13 @@ class ConsistencyTestComponent(Component):
 
 async def test_get_config_without_authentication_returns_public_config(client: AsyncClient):
     """Test that /config returns public config when accessed without authentication."""
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     assert response.status_code == status.HTTP_200_OK
 
 
 async def test_get_config_unauthenticated_returns_expected_fields(client: AsyncClient):
     """Test that unauthenticated /config response contains only public-safe fields."""
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -216,7 +216,7 @@ async def test_get_config_unauthenticated_returns_expected_fields(client: AsyncC
 
 async def test_get_config_unauthenticated_does_not_expose_sensitive_fields(client: AsyncClient):
     """Test that unauthenticated /config response does not contain sensitive configuration fields."""
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -241,7 +241,7 @@ async def test_get_config_unauthenticated_does_not_expose_sensitive_fields(clien
 
 async def test_get_config_unauthenticated_returns_correct_field_types(client: AsyncClient):
     """Test that unauthenticated /config response fields have correct types."""
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -267,7 +267,7 @@ async def test_get_config_returns_500_on_settings_error(client: AsyncClient, mon
     # Patch get_settings_service at the module level
     monkeypatch.setattr("flow.api.v1.endpoints.get_settings_service", raise_settings_error)
 
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     result = response.json()
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -276,7 +276,7 @@ async def test_get_config_returns_500_on_settings_error(client: AsyncClient, mon
 
 async def test_get_config_authenticated_returns_full_config(client: AsyncClient, logged_in_headers: dict):
     """Test that authenticated /config returns full ConfigResponse with all settings."""
-    response = await client.get("api/v1/config", headers=logged_in_headers)
+    response = await client.get("v1/config", headers=logged_in_headers)
     result = response.json()
 
     assert response.status_code == status.HTTP_200_OK
@@ -296,14 +296,14 @@ async def test_get_config_authenticated_returns_full_config(client: AsyncClient,
 async def test_get_config_returns_mcp_base_url(client: AsyncClient, logged_in_headers: dict):
     """Test that /config includes mcp_base_url for both authenticated and unauthenticated responses."""
     # Authenticated
-    response = await client.get("api/v1/config", headers=logged_in_headers)
+    response = await client.get("v1/config", headers=logged_in_headers)
     result = response.json()
     assert response.status_code == status.HTTP_200_OK
     assert "mcp_base_url" in result, "Authenticated response must contain 'mcp_base_url'"
     assert isinstance(result["mcp_base_url"], str), "mcp_base_url must be a string"
 
     # Unauthenticated
-    response = await client.get("api/v1/config")
+    response = await client.get("v1/config")
     result = response.json()
     assert response.status_code == status.HTTP_200_OK
     assert "mcp_base_url" in result, "Public response must contain 'mcp_base_url'"
@@ -312,7 +312,7 @@ async def test_get_config_returns_mcp_base_url(client: AsyncClient, logged_in_he
 
 async def test_get_config_mcp_base_url_defaults_to_empty(client: AsyncClient, logged_in_headers: dict):
     """Test that mcp_base_url defaults to empty string when FLOW_MCP_BASE_URL is not set."""
-    response = await client.get("api/v1/config", headers=logged_in_headers)
+    response = await client.get("v1/config", headers=logged_in_headers)
     result = response.json()
     assert response.status_code == status.HTTP_200_OK
     assert result["mcp_base_url"] == ""
@@ -325,20 +325,20 @@ async def test_get_config_mcp_base_url_from_settings(client: AsyncClient, logged
     settings_service = get_settings_service()
     monkeypatch.setattr(settings_service.settings, "mcp_base_url", "https://flow.example.com")
 
-    response = await client.get("api/v1/config", headers=logged_in_headers)
+    response = await client.get("v1/config", headers=logged_in_headers)
     result = response.json()
     assert response.status_code == status.HTTP_200_OK
     assert result["mcp_base_url"] == "https://flow.example.com"
 
 
 async def test_deprecated_upload_rejects_unauthenticated(client: AsyncClient, flow):
-    """Regression: the deprecated /api/v1/upload/{flow_id} must require auth.
+    """Regression: the deprecated /v1/upload/{flow_id} must require auth.
 
     Previously this endpoint accepted uploads without any credentials, letting
     anonymous callers write arbitrary files into a flow's cache folder.
     """
     response = await client.post(
-        f"api/v1/upload/{flow.id}",
+        f"v1/upload/{flow.id}",
         files={"file": ("test.txt", b"test content")},
     )
     assert response.status_code != status.HTTP_201_CREATED, (
@@ -353,7 +353,7 @@ async def test_deprecated_upload_rejects_unauthenticated(client: AsyncClient, fl
 async def test_deprecated_upload_authenticated_succeeds(client: AsyncClient, logged_in_headers: dict, flow):
     """The deprecated endpoint still works for the flow's owner."""
     response = await client.post(
-        f"api/v1/upload/{flow.id}",
+        f"v1/upload/{flow.id}",
         files={"file": ("test.txt", b"test content")},
         headers=logged_in_headers,
     )
@@ -371,7 +371,7 @@ async def test_deprecated_upload_enforces_max_file_size(
 
     Without this guard, an authenticated user could still fill disk through
     this route by uploading arbitrarily large files, bypassing the limit the
-    non-deprecated twin at /api/v1/files/upload/{flow_id} already enforces.
+    non-deprecated twin at /v1/files/upload/{flow_id} already enforces.
     """
     from flow.services.deps import get_settings_service
 
@@ -380,7 +380,7 @@ async def test_deprecated_upload_enforces_max_file_size(
     oversized = b"x" * (2 * 1024 * 1024)  # 2 MB, exceeds the limit
 
     response = await client.post(
-        f"api/v1/upload/{flow.id}",
+        f"v1/upload/{flow.id}",
         files={"file": ("big.bin", oversized)},
         headers=logged_in_headers,
     )
