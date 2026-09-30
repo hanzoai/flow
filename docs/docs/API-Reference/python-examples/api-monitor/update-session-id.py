@@ -9,7 +9,7 @@ flow_id = os.environ.get("FLOW_ID", "")
 headers = {"accept": "application/json", "x-api-key": api_key}
 
 list_resp = requests.get(
-    f"{base}/api/v1/monitor/messages",
+    f"{base}/v1/monitor/messages",
     headers=headers,
     params={"flow_id": flow_id},
     timeout=30,
@@ -24,7 +24,7 @@ old_session_id = messages[0]["session_id"]
 new_session_id = f"{old_session_id}-migrated"
 
 response = requests.patch(
-    f"{base}/api/v1/monitor/messages/session/{old_session_id}",
+    f"{base}/v1/monitor/messages/session/{old_session_id}",
     headers=headers,
     params={"new_session_id": new_session_id},
     timeout=30,

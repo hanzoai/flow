@@ -64,7 +64,7 @@ To use the **Webhook** component in a flow, do the following:
     The following example sends a payload containing `id`, `name`, and `email` strings:
 
     ```bash
-    curl -X POST "http://localhost:7860/api/v1/webhook/FLOW_ID" \
+    curl -X POST "http://localhost:7860/v1/webhook/FLOW_ID" \
         -H "Content-Type: application/json" \
         -H "x-api-key: FLOW_API_KEY" \
         -d '{"id": "12345", "name": "alex", "email": "alex@email.com"}'
@@ -98,7 +98,7 @@ When webhook authentication is enabled, you must provide a Hanzo Flow API key wi
 
 To include the API key with a request as an HTTP header:
 ```bash
-curl -X POST "http://FLOW_SERVER_ADDRESS/api/v1/webhook/FLOW_ID" \
+curl -X POST "http://FLOW_SERVER_ADDRESS/v1/webhook/FLOW_ID" \
     -H "Content-Type: application/json" \
     -H "x-api-key: FLOW_API_KEY" \
     -d '{"id": "12345", "name": "alex", "email": "alex@email.com"}'
@@ -106,7 +106,7 @@ curl -X POST "http://FLOW_SERVER_ADDRESS/api/v1/webhook/FLOW_ID" \
 
 To include the API key with a request as a query parameter:
 ```bash
-curl -X POST "http://FLOW_SERVER_ADDRESS/api/v1/webhook/FLOW_ID?x-api-key=FLOW_API_KEY" \
+curl -X POST "http://FLOW_SERVER_ADDRESS/v1/webhook/FLOW_ID?x-api-key=FLOW_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"id": "12345", "name": "alex", "email": "alex@email.com"}'
 ```

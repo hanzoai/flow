@@ -15,6 +15,6 @@ payload = {
     "inputs": {},
 }
 
-response = requests.post(f"{base}/api/v2/workflows", headers=headers, json=payload, timeout=60)
+response = requests.post(f"{base}/v1/workflows", headers=headers, json=payload, timeout=60)
 response.raise_for_status()
 print(response.text)

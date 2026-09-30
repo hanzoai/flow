@@ -16,7 +16,7 @@ JWT authentication with the HS256 algorithm is enabled by default, but can be co
 <details closed>
 <summary>About the JWT structure and contents</summary>
 
-When a user logs in with their username and password at the `/api/v1/login` endpoint, Hanzo Flow validates the credentials and creates a JWT token containing the user's identity and expiration time. This token is then used for subsequent API requests instead of sending credentials with each request.
+When a user logs in with their username and password at the `/v1/login` endpoint, Hanzo Flow validates the credentials and creates a JWT token containing the user's identity and expiration time. This token is then used for subsequent API requests instead of sending credentials with each request.
 
 A JWT consists of three parts separated by dots (`.`):
 
@@ -319,7 +319,7 @@ Access tokens authenticate API requests and typically expire within 15 minutes t
 Refresh tokens obtain new access tokens without requiring the user to log in again.
 Refresh tokens typically expire within 7 to 30 days.
 
-When an access token expires, the client can use the refresh token to get a new access token from the `/api/v1/refresh` endpoint.
+When an access token expires, the client can use the refresh token to get a new access token from the `/v1/refresh` endpoint.
 This maintains the user's session without prompting for credentials again.
 
 ## See also

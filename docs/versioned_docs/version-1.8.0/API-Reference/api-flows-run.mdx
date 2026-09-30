@@ -29,7 +29,7 @@ This flow requires a chat input string (`input_value`), and uses default values 
 ```python
 import requests
 
-url = "http://FLOW_SERVER_URL/api/v1/run/FLOW_ID"
+url = "http://FLOW_SERVER_URL/v1/run/FLOW_ID"
 
 # Request payload
 payload = {
@@ -75,7 +75,7 @@ const options = {
   body: JSON.stringify(payload)
 };
 
-fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID', options)
+fetch('http://FLOW_SERVER_URL/v1/run/FLOW_ID', options)
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(err => console.error(err));
@@ -86,7 +86,7 @@ fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID', options)
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID" \
+  "$FLOW_SERVER_URL/v1/run/$FLOW_ID" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -156,7 +156,7 @@ To stream LLM token responses, append the `?stream=true` query parameter to the 
 ```python
 import requests
 
-url = "http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true"
+url = "http://FLOW_SERVER_URL/v1/run/FLOW_ID?stream=true"
 
 # Request payload
 payload = {
@@ -202,7 +202,7 @@ const options = {
   body: JSON.stringify(payload)
 };
 
-fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true', options)
+fetch('http://FLOW_SERVER_URL/v1/run/FLOW_ID?stream=true', options)
   .then(async response => {
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
@@ -223,7 +223,7 @@ fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true', options)
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID?stream=true" \
+  "$FLOW_SERVER_URL/v1/run/$FLOW_ID?stream=true" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -297,7 +297,7 @@ The following example is truncated to illustrate a series of `token` events as w
 ```python
 import requests
 
-url = "http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true"
+url = "http://FLOW_SERVER_URL/v1/run/FLOW_ID?stream=true"
 
 # Request payload with tweaks
 payload = {
@@ -359,7 +359,7 @@ const options = {
   body: JSON.stringify(payload)
 };
 
-fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true', options)
+fetch('http://FLOW_SERVER_URL/v1/run/FLOW_ID?stream=true', options)
   .then(async response => {
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
@@ -380,7 +380,7 @@ fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID?stream=true', options)
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID?stream=true" \
+  "$FLOW_SERVER_URL/v1/run/$FLOW_ID?stream=true" \
   -H "Content-Type: application/json" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -417,7 +417,7 @@ You don't need to create these variables in Hanzo Flow's Global Variables sectio
 ```python
 import requests
 
-url = "http://FLOW_SERVER_URL/api/v1/run/FLOW_ID"
+url = "http://FLOW_SERVER_URL/v1/run/FLOW_ID"
 
 # Request payload
 payload = {
@@ -465,7 +465,7 @@ const options = {
   body: JSON.stringify(payload)
 };
 
-fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID', options)
+fetch('http://FLOW_SERVER_URL/v1/run/FLOW_ID', options)
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(err => console.error(err));
@@ -476,7 +476,7 @@ fetch('http://FLOW_SERVER_URL/api/v1/run/FLOW_ID', options)
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID" \
+  "$FLOW_SERVER_URL/v1/run/$FLOW_ID" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "X-FLOW-GLOBAL-VAR-OPENAI_API_KEY: sk-..." \
@@ -506,7 +506,7 @@ For more information, see [Trigger flows with webhooks](/webhook).
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/webhook/$FLOW_ID" \
+  "$FLOW_SERVER_URL/v1/webhook/$FLOW_ID" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{"data": "example-data"}'

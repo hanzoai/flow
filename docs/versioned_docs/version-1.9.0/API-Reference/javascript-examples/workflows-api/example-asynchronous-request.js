@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_SERVER_URL ?? ""}/api/v2/workflows`;
+const url = `${process.env.FLOW_SERVER_URL ?? ""}/v1/workflows`;
 
 const options = {
   method: 'POST',

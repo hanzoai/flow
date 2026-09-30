@@ -90,7 +90,7 @@ For an example of constructing file upload requests in JavaScript, see the [Crea
     import json
 
     # 1. Set the upload URL
-    url = "http://FLOW_SERVER_ADDRESS/api/v2/files/"
+    url = "http://FLOW_SERVER_ADDRESS/v1/files/"
 
     # 2. Prepare the file and payload
     payload = {}
@@ -111,7 +111,7 @@ For an example of constructing file upload requests in JavaScript, see the [Crea
     uploaded_path = uploaded_data.get('path')
 
     # 5. Call the Hanzo Flow run endpoint with the uploaded file path
-    run_url = "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"
+    run_url = "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID"
     run_payload = {
         "input_value": "CHAT_INPUT",
         "output_type": "chat",
@@ -141,7 +141,7 @@ For an example of constructing file upload requests in JavaScript, see the [Crea
 
     This script contains two requests.
 
-    The first request uploads a file, such as `fake-resume.txt`, to your Hanzo Flow server at the `/v2/files` endpoint. This request returns a file path that can be referenced in subsequent Hanzo Flow requests, such as `02791d46-812f-4988-ab1c-7c430214f8d5/fake-resume.txt`
+    The first request uploads a file, such as `fake-resume.txt`, to your Hanzo Flow server at the `/v1/files` endpoint. This request returns a file path that can be referenced in subsequent Hanzo Flow requests, such as `02791d46-812f-4988-ab1c-7c430214f8d5/fake-resume.txt`
 
     The second request sends a chat message to the Hanzo Flow flow at the `/v1/run/` endpoint.
     The `tweaks` parameter includes the path to the uploaded file as the variable `uploaded_path`, and sends this file directly to the **Read File** component.
@@ -204,7 +204,7 @@ file_paths = {
 
 def chat_with_flow(input_message, file_paths):
     """Compare the contents of these two files."""
-    run_url = f"{FLOW_SERVER_ADDRESS}/api/v1/run/{FLOW_ID}"
+    run_url = f"{FLOW_SERVER_ADDRESS}/v1/run/{FLOW_ID}"
     # Prepare tweaks with both file paths
     tweaks = {}
     for component_id, file_path in file_paths.items():
@@ -215,7 +215,7 @@ You can also use a [**Directory** component](/directory) to load all files in a 
 
 ### Upload external files at runtime
 
-To upload files from another machine that isn't your local environment, your Hanzo Flow server must first be accessible over the internet. Then, authenticated users can upload files to your public Hanzo Flow server's `/v2/files/` endpoint, as shown in the tutorial. For more information, see [Hanzo Flow deployment overview](/deployment-overview).
+To upload files from another machine that isn't your local environment, your Hanzo Flow server must first be accessible over the internet. Then, authenticated users can upload files to your public Hanzo Flow server's `/v1/files/` endpoint, as shown in the tutorial. For more information, see [Hanzo Flow deployment overview](/deployment-overview).
 
 ### Preload files outside the chat session
 

@@ -9,7 +9,7 @@ flow_id = os.environ.get("FLOW_ID", "")
 headers = {"accept": "application/json", "Content-Type": "application/json", "x-api-key": api_key}
 
 list_resp = requests.get(
-    f"{base}/api/v1/monitor/messages",
+    f"{base}/v1/monitor/messages",
     headers=headers,
     params={"flow_id": flow_id},
     timeout=30,
@@ -24,7 +24,7 @@ message_id = messages[0]["id"]
 payload = {"text": "testing 1234"}
 
 response = requests.put(
-    f"{base}/api/v1/monitor/messages/{message_id}",
+    f"{base}/v1/monitor/messages/{message_id}",
     headers=headers,
     json=payload,
     timeout=30,

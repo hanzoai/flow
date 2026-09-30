@@ -36,7 +36,7 @@ Get started with Hanzo Flow by loading a template flow, running it, and then ser
 
         # Send request
         curl --request POST \
-        --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
+        --url "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID" \
         --header "Content-Type: application/json" \
         --header "x-api-key: $FLOW_API_KEY" \
         --data '{
@@ -121,7 +121,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
     ```python
     import requests
 
-    url = "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
+    url = "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID"  # The complete API endpoint URL for this flow
 
     # Request payload configuration
     payload = {
@@ -170,7 +170,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
         body: JSON.stringify(payload)
     };
 
-    fetch('http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID', options)
+    fetch('http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID', options)
         .then(response => response.json())
         .then(response => console.log(response))
         .catch(err => console.error(err));
@@ -181,7 +181,7 @@ Hanzo Flow provides code snippets to help you get started with the Hanzo Flow AP
 
     ```bash
     curl --request POST \
-         --url 'http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false' \
+         --url 'http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID?stream=false' \
          --header 'Content-Type: application/json' \
          --header "x-api-key: FLOW_API_KEY" \
          --data '{
@@ -388,7 +388,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
     import requests
     import json
 
-    url = "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID"
+    url = "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID"
 
     def ask_agent(question):
         payload = {
@@ -457,7 +457,7 @@ This script runs a question-and-answer chat in your terminal and stores the agen
         output: process.stdout
     });
 
-    const url = 'http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID';
+    const url = 'http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID';
 
     // Store the previous answer from askAgent response
     let previousAnswer = null;

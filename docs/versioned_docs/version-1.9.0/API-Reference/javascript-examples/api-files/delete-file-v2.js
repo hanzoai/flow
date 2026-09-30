@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_URL ?? ""}/api/v2/files/${process.env.FILE_ID ?? ""}`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/files/${process.env.FILE_ID ?? ""}`;
 
 const options = {
   method: 'DELETE',

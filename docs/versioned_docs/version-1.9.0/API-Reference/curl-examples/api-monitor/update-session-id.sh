@@ -1,4 +1,4 @@
 curl -X PATCH \
-  "$FLOW_URL/api/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
+  "$FLOW_URL/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"

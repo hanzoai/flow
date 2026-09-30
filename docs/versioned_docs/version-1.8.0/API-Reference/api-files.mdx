@@ -5,14 +5,14 @@ slug: /api-files
 
 Use the `/files` endpoints to move files between your local machine and Hanzo Flow.
 
-All `/files` endpoints (both `/v1/files` and `/v2/files`) require authentication with a Hanzo Flow API key.
+All `/files` endpoints (both `/v1/files` and `/v1/files`) require authentication with a Hanzo Flow API key.
 You can only access files that belong to your own user account, even as a superuser.
 
-## Differences between `/v1/files` and `/v2/files`
+## Differences between `/v1/files` and `/v1/files`
 
 There are two versions of the `/files` endpoints.
 
-`/v2/files` offers the following improvements over `/v1/files`:
+`/v1/files` offers the following improvements over `/v1/files`:
 
 - `/v2` files are organized by `user_id` instead of `flow_id`.
   This means files are owned by users, and they aren't attached to specific flows.
@@ -21,7 +21,7 @@ There are two versions of the `/files` endpoints.
 - `/v2` supports bulk upload and delete.
 - `/v2` responses contain more descriptive metadata.
 
-However, `/v2/files` doesn't support image files.
+However, `/v1/files` doesn't support image files.
 To send image files to your flows through the API, use [Upload image files (v1)](#upload-image-files-v1).
 
 ## Files/V1 endpoints
@@ -35,7 +35,7 @@ Replace **FILE_NAME** with the uploaded file name.
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/files/upload/$FLOW_ID" \
+  "$FLOW_URL/v1/files/upload/$FLOW_ID" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -67,7 +67,7 @@ To change this limit, set the `FLOW_MAX_FILE_SIZE_UPLOAD` [environment variable]
 1. Attach the image to a `POST /v1/files/upload/$FLOW_ID` request with `--form` (`-F`) and the file path:
 
     ```bash
-    curl -X POST "$FLOW_URL/api/v1/files/upload/$FLOW_ID" \
+    curl -X POST "$FLOW_URL/v1/files/upload/$FLOW_ID" \
       -H "Content-Type: multipart/form-data" \
       -H "x-api-key: $FLOW_API_KEY" \
       -F "file=@PATH/TO/FILE.png"
@@ -90,7 +90,7 @@ To change this limit, set the `FLOW_MAX_FILE_SIZE_UPLOAD` [environment variable]
 
     ```bash
     curl -X POST \
-        "$FLOW_URL/api/v1/run/a430cc57-06bb-4c11-be39-d3d4de68d2c4?stream=false" \
+        "$FLOW_URL/v1/run/a430cc57-06bb-4c11-be39-d3d4de68d2c4?stream=false" \
         -H "Content-Type: application/json" \
         -H "x-api-key: $FLOW_API_KEY" \
         -d '{
@@ -116,7 +116,7 @@ List all files associated with a specific flow.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/files/list/$FLOW_ID" \
+  "$FLOW_URL/v1/files/list/$FLOW_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -138,7 +138,7 @@ Download a specific file from a flow.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/files/download/$FLOW_ID/2024-12-30_15-19-43_your_file.txt" \
+  "$FLOW_URL/v1/files/download/$FLOW_ID/2024-12-30_15-19-43_your_file.txt" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   --output downloaded_file.txt
@@ -159,7 +159,7 @@ Delete a specific file from a flow.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/files/delete/$FLOW_ID/2024-12-30_15-19-43_your_file.txt" \
+  "$FLOW_URL/v1/files/delete/$FLOW_ID/2024-12-30_15-19-43_your_file.txt" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -179,7 +179,7 @@ curl -X DELETE \
 
 Use the `/files` endpoints to move files between your local machine and Hanzo Flow.
 
-The `/v2/files` endpoints can be authenticated by an API key or JWT.
+The `/v1/files` endpoints can be authenticated by an API key or JWT.
 To create a Hanzo Flow API key and export it as an environment variable, see [Get started with the Hanzo Flow API](/api-reference-api-examples).
 
 ### Upload file (v2)
@@ -192,7 +192,7 @@ The file is uploaded in the format `USER_ID/FILE_ID.FILE_EXTENSION`, such as `07
 
     ```bash
     curl -X GET \
-      "$FLOW_URL/api/v1/users/whoami" \
+      "$FLOW_URL/v1/users/whoami" \
       -H "accept: application/json" \
       -H "x-api-key: $FLOW_API_KEY"
     ```
@@ -211,7 +211,7 @@ You must include the ampersand (`@`) in the request to instruct curl to upload t
 
     ```bash
     curl -X POST \
-      "$FLOW_URL/api/v2/files" \
+      "$FLOW_URL/v1/files" \
       -H "accept: application/json" \
       -H "Content-Type: multipart/form-data" \
       -H "x-api-key: $FLOW_API_KEY" \
@@ -233,7 +233,7 @@ You must include the ampersand (`@`) in the request to instruct curl to upload t
 ### Send files to your flows (v2)
 
 :::info
-The `/v2/files` endpoint can't send image files to flows.
+The `/v1/files` endpoint can't send image files to flows.
 To send image files to your flows through the API, see [Upload image files (v1)](#upload-image-files-v1).
 :::
 
@@ -242,14 +242,14 @@ To use an uploaded file in a flow, send the file path to a flow with a [**Read F
 
 The default file limit is 1024 MB. To configure this value, change the `FLOW_MAX_FILE_SIZE_UPLOAD` [environment variable](/environment-variables).
 
-1. To send a file to your flow with the API, POST the file to the `/api/v2/files` endpoint.
+1. To send a file to your flow with the API, POST the file to the `/v1/files` endpoint.
 
     Replace **FILE_NAME.EXTENSION** with the name and extension of the file you want to upload.
     This is the same step described in [Upload file (v2)](#upload-file-v2), but since you need the filename to upload to your flow, it is included here.
 
     ```bash
     curl -X POST \
-      "$FLOW_URL/api/v2/files" \
+      "$FLOW_URL/v1/files" \
       -H "accept: application/json" \
       -H "Content-Type: multipart/form-data" \
       -H "x-api-key: $FLOW_API_KEY" \
@@ -275,7 +275,7 @@ This component loads files into flows from your local machine or Hanzo Flow file
 
     ```text
     curl --request POST \
-      --url "$FLOW_URL/api/v1/run/$FLOW_ID" \
+      --url "$FLOW_URL/v1/run/$FLOW_ID" \
       --header "Content-Type: application/json" \
       --header "x-api-key: $FLOW_API_KEY" \
       --data '{
@@ -302,7 +302,7 @@ List all files associated with your user account.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v2/files" \
+  "$FLOW_URL/v1/files" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -332,7 +332,7 @@ You must specify the file type you expect in the `--output` value.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v2/files/c7b22c4c-d5e0-4ec9-af97-5d85b7657a34" \
+  "$FLOW_URL/v1/files/c7b22c4c-d5e0-4ec9-af97-5d85b7657a34" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   --output downloaded_file.txt
@@ -353,7 +353,7 @@ Change a file name.
 
 ```bash
 curl -X PUT \
-  "$FLOW_URL/api/v2/files/$FILE_ID?name=new_file_name" \
+  "$FLOW_URL/v1/files/$FILE_ID?name=new_file_name" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -379,7 +379,7 @@ Delete a specific file by its ID.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v2/files/$FILE_ID" \
+  "$FLOW_URL/v1/files/$FILE_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -401,7 +401,7 @@ Delete all files associated with your user account.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v2/files" \
+  "$FLOW_URL/v1/files" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```

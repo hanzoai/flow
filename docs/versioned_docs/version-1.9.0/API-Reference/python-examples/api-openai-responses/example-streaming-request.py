@@ -2,7 +2,7 @@ import os
 
 import requests
 
-url = f"{os.getenv('FLOW_SERVER_URL', '')}/api/v1/responses"
+url = f"{os.getenv('FLOW_SERVER_URL', '')}/v1/responses"
 
 headers = {
     "x-api-key": f"{os.getenv('FLOW_API_KEY', '')}",

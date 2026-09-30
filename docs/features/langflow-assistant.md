@@ -589,7 +589,7 @@ Opening the assistant panel felt sluggish when there were previous chat messages
 **Status**: Accepted
 
 #### Context
-The original validation (`validate_component_code`) only performed static AST analysis — syntax, class name extraction, overlapping I/O names, return statements. Code with valid syntax but wrong imports (e.g., `from lfx.base import Component` instead of `from lfx.custom import Component`) passed validation, was marked as `validated: true`, and showed "Add to Canvas". Clicking it failed silently because the `/api/v1/custom_component` endpoint performed real instantiation.
+The original validation (`validate_component_code`) only performed static AST analysis — syntax, class name extraction, overlapping I/O names, return statements. Code with valid syntax but wrong imports (e.g., `from lfx.base import Component` instead of `from lfx.custom import Component`) passed validation, was marked as `validated: true`, and showed "Add to Canvas". Clicking it failed silently because the `/v1/custom_component` endpoint performed real instantiation.
 
 #### Decision
 Add a second validation phase (`validate_component_runtime`) that attempts to instantiate the component using `Component(_code=code)` + `build_custom_component_template()`. If runtime validation fails, the error is fed back into the retry loop.
@@ -736,7 +736,7 @@ Session history is stored in browser `localStorage` (key: `flow-assistant-sessio
 
 ### 6.2 API Contracts
 
-#### POST /api/v1/agentic/assist/stream
+#### POST /v1/agentic/assist/stream
 
 **Purpose**: Generate component or answer question with streaming progress updates
 
@@ -808,7 +808,7 @@ Event: `cancelled`
 
 ---
 
-#### GET /api/v1/agentic/check-config
+#### GET /v1/agentic/check-config
 
 **Purpose**: Check if assistant is properly configured and return available providers
 
@@ -837,7 +837,7 @@ Event: `cancelled`
 
 ---
 
-#### POST /api/v1/agentic/assist
+#### POST /v1/agentic/assist
 
 **Purpose**: Non-streaming version of assist (prefer streaming for better UX)
 

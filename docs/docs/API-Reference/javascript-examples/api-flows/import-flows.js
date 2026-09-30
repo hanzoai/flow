@@ -7,7 +7,7 @@ const flowImportPath = process.env.FLOW_IMPORT_FILE || defaultFlowImport;
 const flowBuf = fs.readFileSync(flowImportPath);
 const flowName = path.basename(flowImportPath);
 
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/flows/upload/?folder_id=${process.env.FOLDER_ID ?? ""}`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/flows/upload/?folder_id=${process.env.FOLDER_ID ?? ""}`;
 
 const formData = new FormData();
 formData.append("file", new Blob([flowBuf], { type: "application/json" }), flowName);

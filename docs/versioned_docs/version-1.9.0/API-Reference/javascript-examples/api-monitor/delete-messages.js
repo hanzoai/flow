@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/monitor/messages`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/monitor/messages`;
 
 const options = {
   method: 'DELETE',

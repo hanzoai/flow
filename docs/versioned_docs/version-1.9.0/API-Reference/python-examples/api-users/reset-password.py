@@ -7,7 +7,7 @@ api_key = os.environ.get("FLOW_API_KEY", "")
 
 headers = {"Content-Type": "application/json", "x-api-key": api_key}
 
-who = requests.get(f"{base}/api/v1/users/whoami", headers=headers, timeout=30)
+who = requests.get(f"{base}/v1/users/whoami", headers=headers, timeout=30)
 who.raise_for_status()
 user_id = who.json()["id"]
 
@@ -15,7 +15,7 @@ user_id = who.json()["id"]
 payload = {"password": "DocsExampleResetPass2025!"}
 
 response = requests.patch(
-    f"{base}/api/v1/users/{user_id}/reset-password",
+    f"{base}/v1/users/{user_id}/reset-password",
     headers=headers,
     json=payload,
     timeout=30,

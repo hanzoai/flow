@@ -3,7 +3,7 @@ DEFAULT_PROJECT_IMPORT_FILE="$SCRIPT_DIR/../../fixtures/project-import.json"
 PROJECT_IMPORT_FILE="${PROJECT_IMPORT_JSON:-${PROJECT_IMPORT_FILE:-$DEFAULT_PROJECT_IMPORT_FILE}}"
 
 curl -X POST \
-  "$FLOW_URL/api/v1/projects/upload/" \
+  "$FLOW_URL/v1/projects/upload/" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -H "x-api-key: $FLOW_API_KEY" \

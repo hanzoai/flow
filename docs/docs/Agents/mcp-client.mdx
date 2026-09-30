@@ -41,7 +41,7 @@ This component has two modes, depending on the type of server you want to access
     * **STDIO**: Enter the MCP server's **Name**, **Command**, and any **Arguments** and **Environment Variables** the server uses, and then click **Add Server**.
     For example, to start a [Fetch](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch) server, the **Command** is `uvx mcp-server-fetch`.
     * **HTTP/SSE**: Enter your MCP server's **Name**, **URL**, and any **Headers** and **Environment Variables** the server uses, and then click **Add Server**.
-    The default **URL** for Hanzo Flow MCP servers is `http://localhost:7860/api/v1/mcp/project/PROJECT_ID/streamable` or `http://localhost:7860/api/v1/mcp/streamable`. For more information, see [Connect to a Hanzo Flow MCP server](#mcp-http-mode).
+    The default **URL** for Hanzo Flow MCP servers is `http://localhost:7860/v1/mcp/project/PROJECT_ID/streamable` or `http://localhost:7860/v1/mcp/streamable`. For more information, see [Connect to a Hanzo Flow MCP server](#mcp-http-mode).
 
 5. To configure headers for your MCP server, enter each header in the **Headers** fields as key-value pairs.
     You can use [global variables](/configuration-global-variables) in header values by entering the global variable name as the header value.
@@ -82,8 +82,8 @@ To leverage flows-as-tools, register your Hanzo Flow MCP endpoint as a server fi
  Open **Settings** > **MCP Servers** or the <McpIcon /> **MCP** section in the flow sidebar, click <Icon name="Plus" aria-hidden="true"/> **Add MCP Server**, and select **HTTP/SSE** mode.
 
 2. In the **MCP URL** field, enter your Hanzo Flow server's MCP endpoint.
-   - For project-specific servers: `http://localhost:7860/api/v1/mcp/project/PROJECT_ID/streamable`
-   - For global MCP server: `http://localhost:7860/api/v1/mcp/streamable`
+   - For project-specific servers: `http://localhost:7860/v1/mcp/project/PROJECT_ID/streamable`
+   - For global MCP server: `http://localhost:7860/v1/mcp/streamable`
    - Default for Hanzo Flow Desktop: `http://localhost:7868/`
 
    All flows available from the targeted server are treated as tools. For authentication and project URLs, see [Use Hanzo Flow as an MCP server](/mcp-server).
@@ -150,7 +150,7 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
     FLOW_API_KEY = os.getenv("FLOW_API_KEY")
     MCP_TOOLS_COMPONENT_ID = "MCPTools-Bzahc"
 
-    url = f"{FLOW_SERVER_ADDRESS}/api/v1/run/{FLOW_ID}?stream=false"
+    url = f"{FLOW_SERVER_ADDRESS}/v1/run/{FLOW_ID}?stream=false"
     headers = {
         "Content-Type": "application/json",
         "x-api-key": FLOW_API_KEY
@@ -185,7 +185,7 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
     const FLOW_API_KEY = process.env.FLOW_API_KEY || "";
     const MCP_TOOLS_COMPONENT_ID = "MCPTools-Bzahc";
 
-    const url = `${FLOW_SERVER_ADDRESS}/api/v1/run/${FLOW_ID}?stream=false`;
+    const url = `${FLOW_SERVER_ADDRESS}/v1/run/${FLOW_ID}?stream=false`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -220,7 +220,7 @@ The component's ID is displayed in the **Controls** pane, such as `MCPTools-Bzah
 
     ```bash
     curl --request POST \
-      --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID?stream=false" \
+      --url "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID?stream=false" \
       --header "Content-Type: application/json" \
       --header "x-api-key: FLOW_API_KEY" \
       --data '{

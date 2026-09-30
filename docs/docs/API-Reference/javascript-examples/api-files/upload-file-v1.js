@@ -7,7 +7,7 @@ const uploadPath = process.env.SAMPLE_UPLOAD_FILE || defaultUpload;
 const uploadBuf = fs.readFileSync(uploadPath);
 const uploadName = path.basename(uploadPath);
 
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/files/upload/${process.env.FLOW_ID ?? ""}`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/files/upload/${process.env.FLOW_ID ?? ""}`;
 
 const formData = new FormData();
 formData.append("file", new Blob([uploadBuf]), uploadName);

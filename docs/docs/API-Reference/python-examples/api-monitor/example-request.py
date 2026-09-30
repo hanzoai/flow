@@ -7,7 +7,7 @@ api_key = os.environ.get("FLOW_API_KEY", "")
 flow_id = os.environ.get("FLOW_ID", "")
 
 response = requests.get(
-    f"{base_url}/api/v1/monitor/traces",
+    f"{base_url}/v1/monitor/traces",
     params={"flow_id": flow_id, "page": 1, "size": 50},
     headers={"x-api-key": api_key, "accept": "application/json"},
     timeout=30,

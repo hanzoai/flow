@@ -53,7 +53,7 @@ This tutorial uses Chroma DB.
 
 ## Load data and generate embeddings
 
-To load data and generate embeddings, you can use the visual editor or the `/v2/files` endpoint.
+To load data and generate embeddings, you can use the visual editor or the `/v1/files` endpoint.
 
 The visual editor option is simpler, but it is only recommended for scenarios where the user who created the flow is the same user who loads data into the database.
 
@@ -70,7 +70,7 @@ In situations where many users load data or you need to load data programmatical
 </TabItem>
 <TabItem value="API" label="Hanzo Flow API">
 
-To load data programmatically, use the `/v2/files/` and `/v1/run/$FLOW_ID` endpoints. The first endpoint loads a file to your Hanzo Flow server, and then returns an uploaded file path. The second endpoint runs the **Load Data Flow**, referencing the uploaded file path, to chunk, embed, and load the data into the vector store.
+To load data programmatically, use the `/v1/files/` and `/v1/run/$FLOW_ID` endpoints. The first endpoint loads a file to your Hanzo Flow server, and then returns an uploaded file path. The second endpoint runs the **Load Data Flow**, referencing the uploaded file path, to chunk, embed, and load the data into the vector store.
 
 :::tip
 For an example of constructing file upload requests in Python, see the [Create a chatbot that can ingest files tutorial](/chat-with-files#send-requests-to-your-flow-from-a-python-application).
@@ -89,7 +89,7 @@ data.append('file', new Blob([fileBuffer]), 'FILE_NAME');
 const headers = { 'x-api-key': 'FLOW_API_KEY' };
 
 // 2. Upload the file to Hanzo Flow
-const uploadRes = await fetch('FLOW_SERVER_ADDRESS/api/v2/files/', {
+const uploadRes = await fetch('FLOW_SERVER_ADDRESS/v1/files/', {
   method: 'POST',
   headers,
   body: data
@@ -108,7 +108,7 @@ const payload = {
     }
   }
 };
-const runRes = await fetch('FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID', {
+const runRes = await fetch('FLOW_SERVER_ADDRESS/v1/run/FLOW_ID', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json', 'x-api-key': 'FLOW_API_KEY' },
   body: JSON.stringify(payload)

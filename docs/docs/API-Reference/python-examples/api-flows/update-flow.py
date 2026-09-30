@@ -15,6 +15,6 @@ payload = {
     "locked": False,
 }
 
-response = requests.patch(f"{base}/api/v1/flows/{flow_id}", headers=headers, json=payload, timeout=30)
+response = requests.patch(f"{base}/v1/flows/{flow_id}", headers=headers, json=payload, timeout=30)
 response.raise_for_status()
 print(response.text)

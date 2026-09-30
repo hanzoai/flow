@@ -14,6 +14,6 @@ payload = {
     "description": "Updated via API docs Python example",
 }
 
-response = requests.patch(f"{base}/api/v1/projects/{project_id}", headers=headers, json=payload, timeout=30)
+response = requests.patch(f"{base}/v1/projects/{project_id}", headers=headers, json=payload, timeout=30)
 response.raise_for_status()
 print(response.text)

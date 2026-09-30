@@ -1,5 +1,5 @@
 curl -v -X DELETE \
-  "$FLOW_URL/api/v1/monitor/messages" \
+  "$FLOW_URL/v1/monitor/messages" \
   -H "accept: */*" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \

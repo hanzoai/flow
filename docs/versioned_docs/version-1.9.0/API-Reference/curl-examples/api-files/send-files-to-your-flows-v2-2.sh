@@ -1,5 +1,5 @@
 curl --request POST \
-  --url "$FLOW_URL/api/v1/run/$FLOW_ID" \
+  --url "$FLOW_URL/v1/run/$FLOW_ID" \
   --header "Content-Type: application/json" \
   --header "x-api-key: $FLOW_API_KEY" \
   --data '{

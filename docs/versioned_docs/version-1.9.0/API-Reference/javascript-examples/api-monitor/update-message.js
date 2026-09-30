@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160`;
 
 const options = {
   method: 'PUT',

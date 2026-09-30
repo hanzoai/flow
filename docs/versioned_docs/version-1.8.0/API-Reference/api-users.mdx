@@ -13,7 +13,7 @@ Requires authentication as a superuser if the Hanzo Flow server has authenticati
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/users/" \
+  "$FLOW_URL/v1/users/" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -56,7 +56,7 @@ Retrieve information about the authenticated user.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/users/whoami" \
+  "$FLOW_URL/v1/users/whoami" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -88,7 +88,7 @@ Requires authentication as a superuser if the Hanzo Flow server has authenticati
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/users/?skip=0&limit=10" \
+  "$FLOW_URL/v1/users/?skip=0&limit=10" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -165,7 +165,7 @@ This example activates the specified user's account and makes them a superuser:
 
 ```bash
 curl -X PATCH \
-  "$FLOW_URL/api/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8" \
+  "$FLOW_URL/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -206,7 +206,7 @@ Requires authentication as the target user.
 
 ```bash
 curl -X PATCH \
-  "$FLOW_URL/api/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8/reset-password" \
+  "$FLOW_URL/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8/reset-password" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -246,7 +246,7 @@ Requires authentication as a superuser if the Hanzo Flow server has authenticati
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8" \
+  "$FLOW_URL/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```

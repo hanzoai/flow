@@ -85,7 +85,7 @@ For example, the following curl command includes a tweak that disables the **Sto
 
 ```bash
 curl --request POST \
-  --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
+  --url "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID" \
   --header "Content-Type: application/json" \
   --header "x-api-key: FLOW_API_KEY" \
   --data '{
@@ -112,7 +112,7 @@ If you want your requests to use an alias instead of the actual flow ID, you can
 
 4. To save the change, close the **Input Schema** pane.
 
-The automatically generated code snippets now use your new endpoint name instead of the original flow ID, such as `url = "http://localhost:7868/api/v1/run/flow-customer-database-agent"`.
+The automatically generated code snippets now use your new endpoint name instead of the original flow ID, such as `url = "http://localhost:7868/v1/run/flow-customer-database-agent"`.
 
 ## Embed a flow into a website {#embedded-chat-widget}
 
@@ -530,7 +530,7 @@ For more information, see [Use Hanzo Flow as an MCP server](/mcp-server) and [Us
 
 ## Run flows with the OpenAI Responses compatible endpoint {#openai-responses-api}
 
-Hanzo Flow includes an OpenAI Responses API-compatible endpoint at `/api/v1/responses` that allows you to use existing OpenAI client libraries and code with minimal modifications.
+Hanzo Flow includes an OpenAI Responses API-compatible endpoint at `/v1/responses` that allows you to use existing OpenAI client libraries and code with minimal modifications.
 
 For more information, see [OpenAI Responses API](/api-openai-responses).
 

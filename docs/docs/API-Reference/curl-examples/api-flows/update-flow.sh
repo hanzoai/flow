@@ -1,5 +1,5 @@
 curl -X PATCH \
-  "$FLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$FLOW_URL/v1/flows/$FLOW_ID" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \

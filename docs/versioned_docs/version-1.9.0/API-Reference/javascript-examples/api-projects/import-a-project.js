@@ -7,7 +7,7 @@ const projectPath = process.env.PROJECT_IMPORT_FILE || defaultProjectZip;
 const projectBuf = fs.readFileSync(projectPath);
 const projectName = path.basename(projectPath);
 
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/projects/upload/`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/projects/upload/`;
 
 const formData = new FormData();
 formData.append("file", new Blob([projectBuf], { type: "application/zip" }), projectName);

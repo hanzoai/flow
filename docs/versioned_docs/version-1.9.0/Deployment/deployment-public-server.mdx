@@ -68,7 +68,7 @@ For example:
 
 ```bash
 curl -X POST \
-  "PUBLIC_SERVER_DOMAIN/api/v1/webhook/FLOW_ID" \
+  "PUBLIC_SERVER_DOMAIN/v1/webhook/FLOW_ID" \
   -H "Content-Type: application/json" \
   -H "x-api-key: FLOW_API_KEY" \
   -d '{"data": "example-data"}'
@@ -84,7 +84,7 @@ For example, the following code snippet calls an ngrok domain to trigger the spe
     ```python
     import requests
 
-    url = "https://3f7c-73-64-93-151.ngrok-free.app/api/v1/run/d764c4b8-5cec-4c0f-9de0-4b419b11901a"  # The complete API endpoint URL for this flow
+    url = "https://3f7c-73-64-93-151.ngrok-free.app/v1/run/d764c4b8-5cec-4c0f-9de0-4b419b11901a"  # The complete API endpoint URL for this flow
 
     # Request payload configuration
     payload = {

@@ -7,7 +7,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 Hanzo Flow includes an endpoint that is compatible with the [OpenAI Responses API](https://platform.openai.com/docs/api-reference/responses).
-It is available at `POST /api/v1/responses`.
+It is available at `POST /v1/responses`.
 
 This endpoint allows you to use existing OpenAI client libraries with minimal code changes.
 You only need to replace the `model` name, such as `gpt-4`, with your `flow_id`.
@@ -40,7 +40,7 @@ In the following examples, replace the values for `FLOW_SERVER_URL`, `FLOW_API_K
 from openai import OpenAI
 
 client = OpenAI(
-  base_url="FLOW_SERVER_URL/api/v1/",
+  base_url="FLOW_SERVER_URL/v1/",
   default_headers={"x-api-key": "FLOW_API_KEY"},
   api_key="dummy-api-key" # Required by OpenAI SDK but not used by Hanzo Flow
 )
@@ -60,7 +60,7 @@ print(response.output_text)
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  baseURL: "FLOW_SERVER_URL/api/v1/",
+  baseURL: "FLOW_SERVER_URL/v1/",
   defaultHeaders: {
     "x-api-key": "FLOW_API_KEY"
   },
@@ -102,7 +102,7 @@ If you need these in a different format or want a downloadable calendar, let me 
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/responses" \
+  "$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -225,7 +225,7 @@ When you set `"stream": true` with your request, the API returns a stream where 
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/responses" \
+  "$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -291,7 +291,7 @@ First Message:
 
 ```bash
 curl -X POST \
-  "http://$FLOW_SERVER_URL/api/v1/responses" \
+  "http://$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -335,7 +335,7 @@ Follow-up message:
 
 ```bash
 curl -X POST \
-  "http://$FLOW_SERVER_URL/api/v1/responses" \
+  "http://$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -380,7 +380,7 @@ Optionally, you can use your own session ID values for the `previous_response_id
 
 ```bash
 curl -X POST \
-  "http://$FLOW_SERVER_URL/api/v1/responses" \
+  "http://$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -425,7 +425,7 @@ This example uses the same flow as the other `previous_response_id` examples, bu
 
 ## Retrieve tool call results {#tool-call-results}
 
-When you send a request to the `/api/v1/responses` endpoint to run a flow that includes tools or function calls, you can retrieve the raw tool execution details by adding `"include": ["tool_call.results"]` to the request payload.
+When you send a request to the `/v1/responses` endpoint to run a flow that includes tools or function calls, you can retrieve the raw tool execution details by adding `"include": ["tool_call.results"]` to the request payload.
 
 Without the `include` parameter, tool calls return basic function call information, but not the raw tool results.
 For example:
@@ -444,7 +444,7 @@ To get the raw `results` of each tool execution, add  `include: ["tool_call.resu
 
 ```bash
 curl -X POST \
-  "http://$FLOW_SERVER_URL/api/v1/responses" \
+  "http://$FLOW_SERVER_URL/v1/responses" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -547,7 +547,7 @@ This example demonstrates passing an `OPENAI_API_KEY` variable, which is a varia
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/responses" \
+  "$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -H "X-FLOW-GLOBAL-VAR-OPENAI_API_KEY: sk-..." \
@@ -616,7 +616,7 @@ The `usage` field is always present in the response, either with token counts or
 from openai import OpenAI
 
 client = OpenAI(
-  base_url="FLOW_SERVER_URL/api/v1/",
+  base_url="FLOW_SERVER_URL/v1/",
   default_headers={"x-api-key": "FLOW_API_KEY"},
   api_key="dummy-api-key"
 )
@@ -642,7 +642,7 @@ else:
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  baseURL: "FLOW_SERVER_URL/api/v1/",
+  baseURL: "FLOW_SERVER_URL/v1/",
   defaultHeaders: {
     "x-api-key": "FLOW_API_KEY"
   },
@@ -669,7 +669,7 @@ if (response.usage) {
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/responses" \
+  "$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

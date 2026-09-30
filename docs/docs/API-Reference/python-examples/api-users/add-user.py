@@ -13,6 +13,6 @@ payload = {
     "password": "securepassword123",
 }
 
-response = requests.post(f"{base}/api/v1/users/", headers=headers, json=payload, timeout=30)
+response = requests.post(f"{base}/v1/users/", headers=headers, json=payload, timeout=30)
 response.raise_for_status()
 print(response.text)

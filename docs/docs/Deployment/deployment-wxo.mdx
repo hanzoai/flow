@@ -100,13 +100,13 @@ From the **Projects** page, click **Deployments** to open the deployment managem
 After you deploy your flow to IBM watsonx Orchestrate, you can connect to it through the Hanzo Flow deployment run endpoints.
 
 Don't use the `/run` endpoint for flows deployed to IBM watsonx Orchestrate.
-Instead use `POST /api/v1/deployments/{deployment_id}/runs` to start a run, and `GET /api/v1/deployments/{deployment_id}/runs/{run_id}` to check its status.
+Instead use `POST /v1/deployments/{deployment_id}/runs` to start a run, and `GET /v1/deployments/{deployment_id}/runs/{run_id}` to check its status.
 
 Endpoint paths must be prefixed with your Hanzo Flow server URL, such as `http://localhost:7860`.
 
 ### Create deployment run endpoint
 
-**Endpoint:** `POST /api/v1/deployments/{deployment_id}/runs`
+**Endpoint:** `POST /v1/deployments/{deployment_id}/runs`
 
 **Description:** Start a run for a deployed flow and return a provider-owned run ID that you can poll for status.
 
@@ -118,7 +118,7 @@ Endpoint paths must be prefixed with your Hanzo Flow server URL, such as `http:/
 ```python
 import requests
 
-url = "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs"
+url = "http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs"
 
 payload = {
     "provider_data": {
@@ -158,7 +158,7 @@ const options = {
   body: JSON.stringify(payload)
 };
 
-fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs", options)
+fetch("http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs", options)
   .then((response) => response.json())
   .then((response) => console.log(response))
   .catch((err) => console.error(err));
@@ -169,7 +169,7 @@ fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs", option
 
 ```bash
 curl --request POST \
-     --url "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs" \
+     --url "http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs" \
      --header "Content-Type: application/json" \
      --header "x-api-key: FLOW_API_KEY" \
      --data '{
@@ -217,7 +217,7 @@ Use `provider_data.id` as the `run_id` when checking the run status.
 
 ### Get deployment run status endpoint
 
-**Endpoint:** `GET /api/v1/deployments/{deployment_id}/runs/{run_id}`
+**Endpoint:** `GET /v1/deployments/{deployment_id}/runs/{run_id}`
 
 **Description:** Retrieve the current status and result of a deployment run.
 
@@ -229,7 +229,7 @@ Use `provider_data.id` as the `run_id` when checking the run status.
 ```python
 import requests
 
-url = "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID"
+url = "http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID"
 
 headers = {
     "Content-Type": "application/json",
@@ -254,7 +254,7 @@ const options = {
   }
 };
 
-fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID", options)
+fetch("http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID", options)
   .then((response) => response.json())
   .then((response) => console.log(response))
   .catch((err) => console.error(err));
@@ -265,7 +265,7 @@ fetch("http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID",
 
 ```bash
 curl --request GET \
-     --url "http://FLOW_SERVER_ADDRESS/api/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID" \
+     --url "http://FLOW_SERVER_ADDRESS/v1/deployments/DEPLOYMENT_ID/runs/RUN_ID" \
      --header "Content-Type: application/json" \
      --header "x-api-key: FLOW_API_KEY"
 ```

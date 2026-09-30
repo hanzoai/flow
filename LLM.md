@@ -57,3 +57,18 @@ Three Python packages in a uv workspace:
 - `src/backend/base/flow/alembic/` -- Database migrations
 - `Dockerfile` -- Production container
 - `Makefile` -- Build automation
+
+## API prefix: /v1, never /api or /v2
+The API hangs off the root at `/v1` (`src/backend/base/flow/api/router.py`). The
+upstream v2 surface is folded into it: `/v1/files` + `/v1/files/{id}` (user files),
+`/v1/mcp/servers`, `/v1/workflows`, `/v1/registration` — none collides with a v1
+path. The frontend's one base is `BASE_URL_API = "/v1/"` and `getURL(key, params)`
+has no version switch. In the image, `flowweb` (core/cmd/flowweb) serves the UI on
+:8080, proxies `/v1/`, `/health*`, `/docs`, `/openapi.json` and `/logs` to the
+backend on 127.0.0.1:7860, and answers anything under `/api` with 404 rather than
+the SPA shell.
+
+Gates: `core/cmd/flowweb/prefix_test.go` (runs in CI via hanzo.yml's `core` test)
+fails on a first-party `/api/` or `/v2/` path literal in src/, and
+`src/backend/tests/unit/api/test_route_prefix.py` fails on a mounted route under
+either.

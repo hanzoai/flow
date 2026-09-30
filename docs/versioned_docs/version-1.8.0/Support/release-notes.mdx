@@ -26,7 +26,7 @@ To avoid the impact of potential breaking changes and test new versions, the Han
 
     ```bash
     curl -X GET \
-    "$FLOW_SERVER_URL/api/v1/projects/download/$PROJECT_ID" \
+    "$FLOW_SERVER_URL/v1/projects/download/$PROJECT_ID" \
       -H "accept: application/json" \
       -H "x-api-key: $FLOW_API_KEY"
     ```
@@ -135,7 +135,7 @@ For all changes, see the [Changelog](https://github.com/hanzoai/flow/releases).
 
     The Developer API is part of a larger effort to improve Hanzo Flow's APIs with enhanced capabilities and better developer experience.
     The Developer API now includes `/v2/workflow` endpoints for executing flows with enhanced error handling, timeout protection, and structured responses.
-    The synchronous execution endpoint is available at `POST /api/v2/workflows`.
+    The synchronous execution endpoint is available at `POST /v1/workflows`.
     For more information, see [Workflow API (Beta)](/workflow-api).
 
 - Traces and trace view
@@ -362,7 +362,7 @@ This is expected behavior.
 
 - OpenAI Responses API compatibility
 
-  Hanzo Flow now includes an endpoint that is compatible with the [OpenAI Responses API](https://platform.openai.com/docs/api-reference/responses) at `POST /api/v1/responses`.
+  Hanzo Flow now includes an endpoint that is compatible with the [OpenAI Responses API](https://platform.openai.com/docs/api-reference/responses) at `POST /v1/responses`.
   This allows you to use existing OpenAI client libraries with minimal code changes by replacing the `model` name with your `flow_id`.
   The endpoint supports streaming responses, conversation continuity, tool call results, and global variable passing through headers.
   For more information, see [OpenAI Responses API](/api-openai-responses).

@@ -23,6 +23,6 @@ def _flow_doc(suffix: str) -> dict:
 
 payload = {"flows": [_flow_doc("A"), _flow_doc("B")]}
 
-response = requests.post(f"{base}/api/v1/flows/batch/", headers=headers, json=payload, timeout=30)
+response = requests.post(f"{base}/v1/flows/batch/", headers=headers, json=payload, timeout=30)
 response.raise_for_status()
 print(response.text)

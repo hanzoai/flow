@@ -9,7 +9,7 @@ api_key = os.environ.get("FLOW_API_KEY", "")
 headers = {"Content-Type": "application/json", "x-api-key": api_key}
 
 start = requests.post(
-    f"{base}/api/v2/workflows",
+    f"{base}/v1/workflows",
     headers=headers,
     json={"flow_id": flow_id, "background": True, "stream": False, "inputs": {}},
     timeout=60,
@@ -18,7 +18,7 @@ start.raise_for_status()
 job_id = start.json()["job_id"]
 
 stop = requests.post(
-    f"{base}/api/v2/workflows/stop",
+    f"{base}/v1/workflows/stop",
     headers=headers,
     json={"job_id": job_id},
     timeout=60,

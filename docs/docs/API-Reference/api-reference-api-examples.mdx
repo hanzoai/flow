@@ -287,14 +287,14 @@ Other endpoints are helpful for specific use cases, such as administration and f
     * GET `/v1/files/list/{flow_id}`: List files for a flow.
     * DELETE `/v1/files/delete/{flow_id}/{file_name}`: Delete a file from a flow.
   * Files (v2)
-    * POST `/v2/files` (alias `/v2/files/`): Upload a file owned by the current user.
-    * GET `/v2/files` (alias `/v2/files/`): List files owned by the current user.
-    * DELETE `/v2/files/batch/`: Delete multiple files by IDs.
-    * POST `/v2/files/batch/`: Download multiple files as a ZIP by IDs.
-    * GET `/v2/files/{file_id}`: Download a file by ID (or return raw content internally).
-    * PUT `/v2/files/{file_id}`: Edit a file name by ID.
-    * DELETE `/v2/files/{file_id}`: Delete a file by ID.
-    * DELETE `/v2/files` (alias `/v2/files/`): Delete all files for the current user.
+    * POST `/v1/files` (alias `/v1/files/`): Upload a file owned by the current user.
+    * GET `/v1/files` (alias `/v1/files/`): List files owned by the current user.
+    * DELETE `/v1/files/batch/`: Delete multiple files by IDs.
+    * POST `/v1/files/batch/`: Download multiple files as a ZIP by IDs.
+    * GET `/v1/files/{file_id}`: Download a file by ID (or return raw content internally).
+    * PUT `/v1/files/{file_id}`: Edit a file name by ID.
+    * DELETE `/v1/files/{file_id}`: Delete a file by ID.
+    * DELETE `/v1/files` (alias `/v1/files/`): Delete all files for the current user.
 
 * [API keys and authentication](/api-keys-and-authentication):
   * GET `/v1/api_key/`: List API keys for the current user.

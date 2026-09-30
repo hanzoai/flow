@@ -82,10 +82,10 @@ For more information, see the [Kubernetes documentation](https://kubernetes.io/d
     kubectl port-forward -n flow svc/my-flow-app-with-flow-flow-runtime 7860:7860
     ```
 
-3. Confirm you can access the API by calling `http://localhost:7860/api/v1/flows/`:
+3. Confirm you can access the API by calling `http://localhost:7860/v1/flows/`:
 
     ```shell
-    curl -v http://localhost:7860/api/v1/flows/
+    curl -v http://localhost:7860/v1/flows/
     ```
 
     A successful request returns a list of flows.
@@ -95,11 +95,11 @@ The following example gets the first flow ID from the flows list, and then runs 
 
     ```shell
     # Get flow ID
-    id=$(curl -s "http://localhost:7860/api/v1/flows/" | jq -r '.[0].id')
+    id=$(curl -s "http://localhost:7860/v1/flows/" | jq -r '.[0].id')
 
     # Run flow
     curl -X POST \
-        "http://localhost:7860/api/v1/run/$id?stream=false" \
+        "http://localhost:7860/v1/run/$id?stream=false" \
         -H 'Content-Type: application/json' \
         -d '{
           "input_value": "Hello!",

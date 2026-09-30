@@ -1,5 +1,5 @@
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v1/responses" \
+  "$FLOW_SERVER_URL/v1/responses" \
   -H "x-api-key: $FLOW_API_KEY" \
   -H "Content-Type: application/json" \
   -H "X-FLOW-GLOBAL-VAR-OPENAI_API_KEY: sk-..." \

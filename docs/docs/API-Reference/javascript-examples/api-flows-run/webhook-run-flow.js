@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_SERVER_URL ?? ""}/api/v1/webhook/${process.env.FLOW_ID ?? ""}`;
+const url = `${process.env.FLOW_SERVER_URL ?? ""}/v1/webhook/${process.env.FLOW_ID ?? ""}`;
 
 const options = {
   method: 'POST',

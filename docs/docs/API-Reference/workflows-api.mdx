@@ -41,7 +41,7 @@ The Workflow API is part of the Hanzo Flow Developer v2 API and offers enhanced 
 **Endpoint:**
 
 ```
-POST /api/v2/workflows
+POST /v1/workflows
 ```
 
 **Description:** Execute a workflow synchronously and receive complete results immediately upon completion.
@@ -160,7 +160,7 @@ The response includes an `outputs` field containing component-level results. Eac
 
 ## Get workflow status endpoint
 
-**Endpoint:** `GET /api/v2/workflows`
+**Endpoint:** `GET /v1/workflows`
 
 **Description:** Retrieve the status and results of a workflow execution by job ID.
 
@@ -235,7 +235,7 @@ The response includes a `status` field that indicates the current state of the w
 
 ## Stop workflow endpoint
 
-**Endpoint:** `POST /api/v2/workflows/stop`
+**Endpoint:** `POST /v1/workflows/stop`
 
 **Description:** Stop a running workflow execution by job ID.
 

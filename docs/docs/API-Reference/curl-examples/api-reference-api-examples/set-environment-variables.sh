@@ -6,7 +6,7 @@ export PROJECT_ID="${PROJECT_ID:-1415de42-8f01-4f36-bf34-539f23e47466}"
 
 # Use environment variables in API requests
 curl --request POST \
-  --url "$FLOW_SERVER_URL/api/v1/run/$FLOW_ID?stream=false" \
+  --url "$FLOW_SERVER_URL/v1/run/$FLOW_ID?stream=false" \
   --header "Content-Type: application/json" \
   --header "x-api-key: $FLOW_API_KEY" \
   --data '{

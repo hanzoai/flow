@@ -6,7 +6,7 @@ base = os.environ.get("FLOW_URL") or os.environ.get("FLOW_SERVER_URL", "")
 flow_id = os.environ.get("FLOW_ID", "")
 api_key = os.environ.get("FLOW_API_KEY", "")
 
-url = f"{base}/api/v1/run/{flow_id}"
+url = f"{base}/v1/run/{flow_id}"
 
 headers = {
     "Content-Type": "application/json",

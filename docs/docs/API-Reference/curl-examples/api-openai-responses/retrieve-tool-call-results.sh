@@ -1,7 +1,7 @@
 BASE_URL="${FLOW_SERVER_URL:-$FLOW_URL}"
 
 curl -X POST \
-  "$BASE_URL/api/v1/responses" \
+  "$BASE_URL/v1/responses" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d @- <<EOF

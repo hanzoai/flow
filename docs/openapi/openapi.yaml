@@ -3,7 +3,7 @@ info:
   title: Flow
   version: 1.7.0
 paths:
-  /api/v1/build/{flow_id}/vertices:
+  /v1/build/{flow_id}/vertices:
     post:
       tags:
       - Chat
@@ -64,7 +64,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build/{flow_id}/flow:
+  /v1/build/{flow_id}/flow:
     post:
       tags:
       - Chat
@@ -148,7 +148,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build/{job_id}/events:
+  /v1/build/{job_id}/events:
     get:
       tags:
       - Chat
@@ -180,7 +180,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build/{job_id}/cancel:
+  /v1/build/{job_id}/cancel:
     post:
       tags:
       - Chat
@@ -207,7 +207,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build/{flow_id}/vertices/{vertex_id}:
+  /v1/build/{flow_id}/vertices/{vertex_id}:
     post:
       tags:
       - Chat
@@ -259,7 +259,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build/{flow_id}/{vertex_id}/stream:
+  /v1/build/{flow_id}/{vertex_id}/stream:
     get:
       tags:
       - Chat
@@ -305,7 +305,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/build_public_tmp/{flow_id}/flow:
+  /v1/build_public_tmp/{flow_id}/flow:
     post:
       tags:
       - Chat
@@ -392,7 +392,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/all:
+  /v1/all:
     get:
       tags:
       - Base
@@ -412,7 +412,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/run/{flow_id_or_name}:
+  /v1/run/{flow_id_or_name}:
     post:
       tags:
       - Base
@@ -485,7 +485,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/webhook/{flow_id_or_name}:
+  /v1/webhook/{flow_id_or_name}:
     post:
       tags:
       - Base
@@ -528,7 +528,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/run/advanced/{flow_id}:
+  /v1/run/advanced/{flow_id}:
     post:
       tags:
       - Base
@@ -593,7 +593,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/process/{_flow_id}:
+  /v1/process/{_flow_id}:
     post:
       tags:
       - Base
@@ -621,7 +621,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/predict/{_flow_id}:
+  /v1/predict/{_flow_id}:
     post:
       tags:
       - Base
@@ -649,7 +649,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/task/{_task_id}:
+  /v1/task/{_task_id}:
     get:
       tags:
       - Base
@@ -680,7 +680,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/upload/{flow_id}:
+  /v1/upload/{flow_id}:
     post:
       tags:
       - Base
@@ -718,7 +718,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/version:
+  /v1/version:
     get:
       tags:
       - Base
@@ -730,7 +730,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/custom_component:
+  /v1/custom_component:
     post:
       tags:
       - Base
@@ -759,7 +759,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/custom_component/update:
+  /v1/custom_component/update:
     post:
       tags:
       - Base
@@ -794,7 +794,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/config:
+  /v1/config:
     get:
       tags:
       - Base
@@ -810,7 +810,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConfigResponse'
-  /api/v1/validate/code:
+  /v1/validate/code:
     post:
       tags:
       - Validate
@@ -839,7 +839,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/validate/prompt:
+  /v1/validate/prompt:
     post:
       tags:
       - Validate
@@ -864,7 +864,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/store/check/:
+  /v1/store/check/:
     get:
       tags:
       - Components Store
@@ -876,7 +876,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/store/check/api_key:
+  /v1/store/check/api_key:
     get:
       tags:
       - Components Store
@@ -892,7 +892,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/store/components/:
+  /v1/store/components/:
     post:
       tags:
       - Components Store
@@ -1034,7 +1034,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/store/components/{component_id}:
+  /v1/store/components/{component_id}:
     patch:
       tags:
       - Components Store
@@ -1101,7 +1101,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/store/tags:
+  /v1/store/tags:
     get:
       tags:
       - Components Store
@@ -1117,7 +1117,7 @@ paths:
                   $ref: '#/components/schemas/TagResponse'
                 type: array
                 title: Response Get Tags Api V1 Store Tags Get
-  /api/v1/store/users/likes:
+  /v1/store/users/likes:
     get:
       tags:
       - Components Store
@@ -1138,7 +1138,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/store/users/likes/{component_id}:
+  /v1/store/users/likes/{component_id}:
     post:
       tags:
       - Components Store
@@ -1169,7 +1169,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/flows/:
+  /v1/flows/:
     post:
       tags:
       - Flows
@@ -1333,7 +1333,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/flows/{flow_id}:
+  /v1/flows/{flow_id}:
     get:
       tags:
       - Flows
@@ -1432,7 +1432,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/flows/public_flow/{flow_id}:
+  /v1/flows/public_flow/{flow_id}:
     get:
       tags:
       - Flows
@@ -1460,7 +1460,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/flows/batch/:
+  /v1/flows/batch/:
     post:
       tags:
       - Flows
@@ -1493,7 +1493,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/flows/upload/:
+  /v1/flows/upload/:
     post:
       tags:
       - Flows
@@ -1536,7 +1536,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/flows/download/:
+  /v1/flows/download/:
     post:
       tags:
       - Flows
@@ -1569,7 +1569,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/flows/basic_examples/:
+  /v1/flows/basic_examples/:
     get:
       tags:
       - Flows
@@ -1588,7 +1588,7 @@ paths:
                   $ref: '#/components/schemas/FlowRead'
                 type: array
                 title: Response Read Basic Examples Api V1 Flows Basic Examples  Get
-  /api/v1/users/:
+  /v1/users/:
     post:
       tags:
       - Users
@@ -1652,7 +1652,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/users/whoami:
+  /v1/users/whoami:
     get:
       tags:
       - Users
@@ -1670,7 +1670,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/users/{user_id}:
+  /v1/users/{user_id}:
     patch:
       tags:
       - Users
@@ -1740,7 +1740,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/users/{user_id}/reset-password:
+  /v1/users/{user_id}/reset-password:
     patch:
       tags:
       - Users
@@ -1778,7 +1778,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/api_key/:
+  /v1/api_key/:
     get:
       tags:
       - APIKey
@@ -1823,7 +1823,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/api_key/{api_key_id}:
+  /v1/api_key/{api_key_id}:
     delete:
       tags:
       - APIKey
@@ -1853,7 +1853,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/api_key/store:
+  /v1/api_key/store:
     post:
       tags:
       - APIKey
@@ -1881,7 +1881,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/login:
+  /v1/login:
     post:
       tags:
       - Login
@@ -1906,7 +1906,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/auto_login:
+  /v1/auto_login:
     get:
       tags:
       - Login
@@ -1918,7 +1918,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/refresh:
+  /v1/refresh:
     post:
       tags:
       - Login
@@ -1930,7 +1930,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/logout:
+  /v1/logout:
     post:
       tags:
       - Login
@@ -1942,7 +1942,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/variables/:
+  /v1/variables/:
     get:
       tags:
       - Variables
@@ -1992,7 +1992,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/variables/{variable_id}:
+  /v1/variables/{variable_id}:
     patch:
       tags:
       - Variables
@@ -2057,7 +2057,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/upload/{flow_id}:
+  /v1/files/upload/{flow_id}:
     post:
       tags:
       - Files
@@ -2094,7 +2094,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/download/{flow_id}/{file_name}:
+  /v1/files/download/{flow_id}/{file_name}:
     get:
       tags:
       - Files
@@ -2126,7 +2126,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/images/{flow_id}/{file_name}:
+  /v1/files/images/{flow_id}/{file_name}:
     get:
       tags:
       - Files
@@ -2158,7 +2158,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/profile_pictures/{folder_name}/{file_name}:
+  /v1/files/profile_pictures/{folder_name}/{file_name}:
     get:
       tags:
       - Files
@@ -2189,7 +2189,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/profile_pictures/list:
+  /v1/files/profile_pictures/list:
     get:
       tags:
       - Files
@@ -2201,7 +2201,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/files/list/{flow_id}:
+  /v1/files/list/{flow_id}:
     get:
       tags:
       - Files
@@ -2231,7 +2231,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/files/delete/{flow_id}/{file_name}:
+  /v1/files/delete/{flow_id}/{file_name}:
     delete:
       tags:
       - Files
@@ -2267,7 +2267,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/builds:
+  /v1/monitor/builds:
     get:
       tags:
       - Monitor
@@ -2316,7 +2316,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/messages/sessions:
+  /v1/monitor/messages/sessions:
     get:
       tags:
       - Monitor
@@ -2353,7 +2353,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/messages:
+  /v1/monitor/messages:
     get:
       tags:
       - Monitor
@@ -2446,7 +2446,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/messages/{message_id}:
+  /v1/monitor/messages/{message_id}:
     put:
       tags:
       - Monitor
@@ -2483,7 +2483,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/messages/session/{old_session_id}:
+  /v1/monitor/messages/session/{old_session_id}:
     patch:
       tags:
       - Monitor
@@ -2525,7 +2525,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/messages/session/{session_id}:
+  /v1/monitor/messages/session/{session_id}:
     delete:
       tags:
       - Monitor
@@ -2547,7 +2547,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/monitor/transactions:
+  /v1/monitor/transactions:
     get:
       tags:
       - Monitor
@@ -2595,7 +2595,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/folders/:
+  /v1/folders/:
     get:
       tags:
       - Folders
@@ -2625,7 +2625,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FolderRead'
-  /api/v1/folders/{folder_id}:
+  /v1/folders/{folder_id}:
     get:
       tags:
       - Folders
@@ -2743,7 +2743,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/folders/download/{folder_id}:
+  /v1/folders/download/{folder_id}:
     get:
       tags:
       - Folders
@@ -2770,7 +2770,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/folders/upload/:
+  /v1/folders/upload/:
     post:
       tags:
       - Folders
@@ -2787,7 +2787,7 @@ paths:
                   $ref: '#/components/schemas/FlowRead'
                 type: array
                 title: Response Upload File Redirect Api V1 Folders Upload  Post
-  /api/v1/projects/:
+  /v1/projects/:
     get:
       tags:
       - Projects
@@ -2835,7 +2835,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/projects/{project_id}:
+  /v1/projects/{project_id}:
     get:
       tags:
       - Projects
@@ -2968,7 +2968,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/projects/download/{project_id}:
+  /v1/projects/download/{project_id}:
     get:
       tags:
       - Projects
@@ -2999,7 +2999,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/projects/upload/:
+  /v1/projects/upload/:
     post:
       tags:
       - Projects
@@ -3032,7 +3032,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/starter-projects/:
+  /v1/starter-projects/:
     get:
       tags:
       - Flows
@@ -3053,7 +3053,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/knowledge_bases/:
+  /v1/knowledge_bases/:
     get:
       tags:
       - Knowledge Bases
@@ -3104,7 +3104,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/knowledge_bases:
+  /v1/knowledge_bases:
     get:
       tags:
       - Knowledge Bases
@@ -3156,7 +3156,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/knowledge_bases/{kb_name}:
+  /v1/knowledge_bases/{kb_name}:
     get:
       tags:
       - Knowledge Bases
@@ -3220,7 +3220,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/sse:
+  /v1/mcp/sse:
     get:
       tags:
       - mcp
@@ -3233,7 +3233,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/mcp/:
+  /v1/mcp/:
     post:
       tags:
       - mcp
@@ -3245,7 +3245,7 @@ paths:
           content:
             application/json:
               schema: {}
-  /api/v1/voice/elevenlabs/voice_ids:
+  /v1/voice/elevenlabs/voice_ids:
     get:
       tags:
       - Voice
@@ -3262,7 +3262,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v1/mcp/project/{project_id}:
+  /v1/mcp/project/{project_id}:
     get:
       tags:
       - mcp_projects
@@ -3373,7 +3373,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/project/{project_id}/sse:
+  /v1/mcp/project/{project_id}/sse:
     get:
       tags:
       - mcp_projects
@@ -3401,7 +3401,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/project/{project_id}/:
+  /v1/mcp/project/{project_id}/:
     post:
       tags:
       - mcp_projects
@@ -3429,7 +3429,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/project/{project_id}/install:
+  /v1/mcp/project/{project_id}/install:
     post:
       tags:
       - mcp_projects
@@ -3466,7 +3466,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/project/{project_id}/composer-url:
+  /v1/mcp/project/{project_id}/composer-url:
     get:
       tags:
       - mcp_projects
@@ -3503,7 +3503,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/mcp/project/{project_id}/installed:
+  /v1/mcp/project/{project_id}/installed:
     get:
       tags:
       - mcp_projects
@@ -3535,7 +3535,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/responses:
+  /v1/responses:
     post:
       tags:
       - OpenAI Responses API
@@ -3570,7 +3570,7 @@ paths:
       security:
       - API key query: []
       - API key header: []
-  /api/v2/files/:
+  /v1/files/:
     get:
       tags:
       - Files
@@ -3636,7 +3636,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v2/files:
+  /v1/files:
     get:
       tags:
       - Files
@@ -3702,7 +3702,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v2/files/batch/:
+  /v1/files/batch/:
     post:
       tags:
       - Files
@@ -3767,7 +3767,7 @@ paths:
       - OAuth2PasswordBearer: []
       - API key query: []
       - API key header: []
-  /api/v2/files/{file_id}:
+  /v1/files/{file_id}:
     get:
       tags:
       - Files
@@ -3877,7 +3877,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v2/mcp/servers:
+  /v1/mcp/servers:
     get:
       tags:
       - MCP
@@ -3909,7 +3909,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v2/mcp/servers/{server_name}:
+  /v1/mcp/servers/{server_name}:
     get:
       tags:
       - MCP
@@ -8409,7 +8409,7 @@ components:
       flows:
         password:
           scopes: {}
-          tokenUrl: api/v1/login
+          tokenUrl: v1/login
     API key query:
       type: apiKey
       in: query

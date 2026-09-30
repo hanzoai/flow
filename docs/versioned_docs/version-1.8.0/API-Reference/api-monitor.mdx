@@ -31,7 +31,7 @@ Retrieve Vertex builds for a specific flow.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
+  "$FLOW_URL/v1/monitor/builds?flow_id=$FLOW_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -407,7 +407,7 @@ Delete Vertex builds for a specific flow.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/monitor/builds?flow_id=$FLOW_ID" \
+  "$FLOW_URL/v1/monitor/builds?flow_id=$FLOW_ID" \
   -H "accept: */*" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -432,7 +432,7 @@ Retrieve a list of all messages:
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/monitor/messages" \
+  "$FLOW_URL/v1/monitor/messages" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -445,7 +445,7 @@ This example retrieves messages sent by `Machine` and `AI` in a given chat sessi
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/monitor/messages?flow_id=$FLOW_ID&session_id=01ce083d-748b-4b8d-97b6-33adbb6a528a&sender=Machine&sender_name=AI&order_by=timestamp" \
+  "$FLOW_URL/v1/monitor/messages?flow_id=$FLOW_ID&session_id=01ce083d-748b-4b8d-97b6-33adbb6a528a&sender=Machine&sender_name=AI&order_by=timestamp" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -496,7 +496,7 @@ This example deletes the message retrieved in the previous `GET /messages` examp
 
 ```bash
 curl -v -X DELETE \
-  "$FLOW_URL/api/v1/monitor/messages" \
+  "$FLOW_URL/v1/monitor/messages" \
   -H "accept: */*" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -520,7 +520,7 @@ This example updates the `text` value of message `3ab66cc6-c048-48f8-ab07-570f5a
 
 ```bash
 curl -X PUT \
-  "$FLOW_URL/api/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160" \
+  "$FLOW_URL/v1/monitor/messages/3ab66cc6-c048-48f8-ab07-570f5af7b160" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -570,7 +570,7 @@ This example updates the `session_ID` value `01ce083d-748b-4b8d-97b6-33adbb6a528
 
 ```bash
 curl -X PATCH \
-  "$FLOW_URL/api/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
+  "$FLOW_URL/v1/monitor/messages/session/01ce083d-748b-4b8d-97b6-33adbb6a528a?new_session_id=different_session_id" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -619,7 +619,7 @@ Delete all messages for a specific session.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/monitor/messages/session/different_session_id_2" \
+  "$FLOW_URL/v1/monitor/messages/session/different_session_id_2" \
   -H "accept: */*" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -654,7 +654,7 @@ api_key = os.getenv("FLOW_API_KEY")
 flow_id = "YOUR_FLOW_ID"
 
 response = requests.get(
-    f"{base_url}/api/v1/monitor/traces",
+    f"{base_url}/v1/monitor/traces",
     params={"flow_id": flow_id, "page": 1, "size": 50},
     headers={"x-api-key": api_key, "accept": "application/json"},
     timeout=10,
@@ -673,7 +673,7 @@ const apiKey = process.env.FLOW_API_KEY!;
 const flowId = "YOUR_FLOW_ID";
 
 async function listTraces() {
-  const url = new URL("/api/v1/monitor/traces", baseUrl);
+  const url = new URL("/v1/monitor/traces", baseUrl);
   url.searchParams.set("flow_id", flowId);
   url.searchParams.set("page", "1");
   url.searchParams.set("size", "50");
@@ -704,7 +704,7 @@ export FLOW_SERVER_URL="http://localhost:7860"
 export FLOW_API_KEY="YOUR_FLOW_API_KEY"
 export FLOW_ID="YOUR_FLOW_ID"
 
-curl -s "$FLOW_SERVER_URL/api/v1/monitor/traces?flow_id=$FLOW_ID&page=1&size=50" \
+curl -s "$FLOW_SERVER_URL/v1/monitor/traces?flow_id=$FLOW_ID&page=1&size=50" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   | jq .
@@ -756,7 +756,7 @@ This information is also available in [flow logs](/logging).
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/monitor/transactions?flow_id=$FLOW_ID&page=1&size=50" \
+  "$FLOW_URL/v1/monitor/transactions?flow_id=$FLOW_ID&page=1&size=50" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```

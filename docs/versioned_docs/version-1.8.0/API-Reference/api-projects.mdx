@@ -11,7 +11,7 @@ Get a list of Hanzo Flow projects, including project IDs, names, and description
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/projects/" \
+  "$FLOW_URL/v1/projects/" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -38,7 +38,7 @@ Create a new project.
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/projects/" \
+  "$FLOW_URL/v1/projects/" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -69,7 +69,7 @@ Adding a flow to a project moves the flow from its previous location. The flow i
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/projects/" \
+  "$FLOW_URL/v1/projects/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -93,7 +93,7 @@ To find the UUID of your project, call the [read projects](#read-projects) endpo
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/projects/$PROJECT_ID" \
+  "$FLOW_URL/v1/projects/$PROJECT_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -124,7 +124,7 @@ If you send the same values multiple times, the update is still processed, even 
 
 ```bash
 curl -X PATCH \
-  "$FLOW_URL/api/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331" \
+  "$FLOW_URL/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -160,7 +160,7 @@ Delete a specific project.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/projects/$PROJECT_ID" \
+  "$FLOW_URL/v1/projects/$PROJECT_ID" \
   -H "accept: */*" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -182,7 +182,7 @@ The `--output` flag is optional.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/projects/download/$PROJECT_ID" \
+  "$FLOW_URL/v1/projects/download/$PROJECT_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   --output flow-project.zip
@@ -194,7 +194,7 @@ Import a project and its flows by uploading a Hanzo Flow project zip file:
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/projects/upload/" \
+  "$FLOW_URL/v1/projects/upload/" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -H "x-api-key: $FLOW_API_KEY" \

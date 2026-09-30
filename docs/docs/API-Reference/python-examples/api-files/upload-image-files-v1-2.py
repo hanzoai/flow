@@ -14,13 +14,13 @@ image_path = Path(os.environ.get("SAMPLE_IMAGE_FILE", str(fixtures / "sample-upl
 headers = {"accept": "application/json", "x-api-key": api_key}
 
 upload = requests.post(
-    f"{base}/api/v1/files/upload/{flow_id}",
+    f"{base}/v1/files/upload/{flow_id}",
     headers=headers,
     files={"file": (image_path.name, image_path.read_bytes(), "image/png")},
     timeout=30,
 )
 upload.raise_for_status()
 
-listed = requests.get(f"{base}/api/v1/files/list/{flow_id}", headers=headers, timeout=30)
+listed = requests.get(f"{base}/v1/files/list/{flow_id}", headers=headers, timeout=30)
 listed.raise_for_status()
 print(json.dumps({"upload": upload.json(), "list": listed.json()}))

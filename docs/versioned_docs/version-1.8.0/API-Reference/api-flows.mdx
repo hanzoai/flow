@@ -13,7 +13,7 @@ Creates a new flow.
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/flows/" \
+  "$FLOW_URL/v1/flows/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -65,7 +65,7 @@ Creates multiple new flows, returning an array of flow objects.
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/flows/batch/" \
+  "$FLOW_URL/v1/flows/batch/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -117,7 +117,7 @@ Retrieves a specific flow by its ID.
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$FLOW_URL/v1/flows/$FLOW_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -150,7 +150,7 @@ Retrieve all flows with pagination:
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/flows/?remove_example_flows=false&components_only=false&get_all=true&header_flows=false&page=1&size=50" \
+  "$FLOW_URL/v1/flows/?remove_example_flows=false&components_only=false&get_all=true&header_flows=false&page=1&size=50" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -159,7 +159,7 @@ To retrieve flows from a specific project, use the `project_id` query parameter:
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/flows/?remove_example_flows=true&components_only=false&get_all=false&project_id=$PROJECT_ID&header_flows=false&page=1&size=1" \
+  "$FLOW_URL/v1/flows/?remove_example_flows=true&components_only=false&get_all=false&project_id=$PROJECT_ID&header_flows=false&page=1&size=1" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -170,7 +170,7 @@ Retrieves a list of sample flows:
 
 ```bash
 curl -X GET \
-  "$FLOW_URL/api/v1/flows/basic_examples/" \
+  "$FLOW_URL/v1/flows/basic_examples/" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -183,7 +183,7 @@ This example changes the value for `endpoint_name` from a random UUID to `my_new
 
 ```bash
 curl -X PATCH \
-  "$FLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$FLOW_URL/v1/flows/$FLOW_ID" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -228,7 +228,7 @@ Deletes a specific flow by its ID.
 
 ```bash
 curl -X DELETE \
-  "$FLOW_URL/api/v1/flows/$FLOW_ID" \
+  "$FLOW_URL/v1/flows/$FLOW_ID" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -252,7 +252,7 @@ This endpoint downloads a ZIP file containing [Hanzo Flow JSON files](/concepts-
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/flows/download/" \
+  "$FLOW_URL/v1/flows/download/" \
   -H "accept: application/json" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
@@ -279,13 +279,13 @@ curl -X POST \
 Imports flows by uploading a [Hanzo Flow-compatible JSON file](/concepts-flows-import#flow-json-file-contents).
 
 To specify a target project for the flow, include the query parameter `folder_id`.
-The target `folder_id` must already exist before uploading a flow. Call the [/api/v1/projects/](/api-projects#read-projects) endpoint for a list of available folders and projects.
+The target `folder_id` must already exist before uploading a flow. Call the [/v1/projects/](/api-projects#read-projects) endpoint for a list of available folders and projects.
 
 This example uploads a local file named `agent-with-astra-db-tool.json` to a folder specified by a `FOLDER_ID` variable:
 
 ```bash
 curl -X POST \
-  "$FLOW_URL/api/v1/flows/upload/?folder_id=$FOLDER_ID" \
+  "$FLOW_URL/v1/flows/upload/?folder_id=$FOLDER_ID" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -H "x-api-key: $FLOW_API_KEY" \

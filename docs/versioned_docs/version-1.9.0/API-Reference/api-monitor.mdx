@@ -326,7 +326,7 @@ const apiKey = process.env.FLOW_API_KEY!;
 const flowId = "YOUR_FLOW_ID";
 
 async function listTraces() {
-  const url = new URL("/api/v1/monitor/traces", baseUrl);
+  const url = new URL("/v1/monitor/traces", baseUrl);
   url.searchParams.set("flow_id", flowId);
   url.searchParams.set("page", "1");
   url.searchParams.set("size", "50");

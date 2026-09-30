@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_SERVER_URL ?? ""}/api/v2/workflows?job_id=job_id_1234567890`;
+const url = `${process.env.FLOW_SERVER_URL ?? ""}/v1/workflows?job_id=job_id_1234567890`;
 
 const options = {
   method: 'GET',

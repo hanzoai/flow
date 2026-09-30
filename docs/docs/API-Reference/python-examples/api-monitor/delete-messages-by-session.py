@@ -2,7 +2,7 @@ import os
 
 import requests
 
-url = f"{os.getenv('FLOW_URL', '')}/api/v1/monitor/messages/session/different_session_id_2"
+url = f"{os.getenv('FLOW_URL', '')}/v1/monitor/messages/session/different_session_id_2"
 
 headers = {
     "accept": "*/*",

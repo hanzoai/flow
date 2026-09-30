@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8/reset-password`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/users/10c1c6a2-ab8a-4748-8700-0e4832fd5ce8/reset-password`;
 
 const options = {
   method: 'PATCH',

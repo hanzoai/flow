@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_URL ?? ""}/api/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331`;
+const url = `${process.env.FLOW_URL ?? ""}/v1/projects/b408ddb9-6266-4431-9be8-e04a62758331`;
 
 const options = {
   method: 'PATCH',

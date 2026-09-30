@@ -8,7 +8,7 @@ api_key = os.environ.get("FLOW_API_KEY", "")
 headers = {"accept": "application/json", "Content-Type": "application/json", "x-api-key": api_key}
 
 create = requests.post(
-    f"{base}/api/v1/flows/",
+    f"{base}/v1/flows/",
     headers=headers,
     json={
         "name": "docs-example-delete-me",
@@ -20,6 +20,6 @@ create = requests.post(
 create.raise_for_status()
 flow_id = create.json()["id"]
 
-delete = requests.delete(f"{base}/api/v1/flows/{flow_id}", headers=headers, timeout=30)
+delete = requests.delete(f"{base}/v1/flows/{flow_id}", headers=headers, timeout=30)
 delete.raise_for_status()
 print(delete.text)

@@ -2,7 +2,7 @@ import os
 
 import requests
 
-url = f"{os.getenv('FLOW_SERVER_URL', '')}/api/v1/run/{os.getenv('FLOW_ID', '')}?stream=true"
+url = f"{os.getenv('FLOW_SERVER_URL', '')}/v1/run/{os.getenv('FLOW_ID', '')}?stream=true"
 
 headers = {
     "accept": "application/json",

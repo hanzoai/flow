@@ -19,7 +19,7 @@ If you set a custom session ID in a payload, all downstream components use the u
 Replace `FLOW_SERVER_ADDRESS`, `FLOW_ID`, and `FLOW_API_KEY` with the values from your Hanzo Flow deployment.
 ```
 curl --request POST \
-  --url "http://FLOW_SERVER_ADDRESS/api/v1/run/FLOW_ID" \
+  --url "http://FLOW_SERVER_ADDRESS/v1/run/FLOW_ID" \
   --header "Content-Type: application/json" \
   --header "x-api-key: $FLOW_API_KEY" \
   --data '{

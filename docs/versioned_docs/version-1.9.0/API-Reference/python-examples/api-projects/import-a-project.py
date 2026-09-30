@@ -13,7 +13,7 @@ import_path = Path(os.environ.get("PROJECT_IMPORT_JSON", str(default_json)))
 headers = {"accept": "application/json", "x-api-key": api_key}
 
 files = {"file": (import_path.name, import_path.read_bytes(), "application/json")}
-response = requests.post(f"{base}/api/v1/projects/upload/", headers=headers, files=files, timeout=60)
+response = requests.post(f"{base}/v1/projects/upload/", headers=headers, files=files, timeout=60)
 
 response.raise_for_status()
 print(response.text)

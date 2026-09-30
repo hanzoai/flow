@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  baseURL: "FLOW_SERVER_URL/api/v1/",
+  baseURL: "FLOW_SERVER_URL/v1/",
   defaultHeaders: {
     "x-api-key": "FLOW_API_KEY"
   },

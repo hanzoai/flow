@@ -19,7 +19,7 @@ Defined in `src/backend/tests/conftest.py`. Async `httpx.AsyncClient` connected 
 
 ```python
 async def test_login_endpoint(client):
-    response = await client.post("api/v1/login", data={"username": "foo", "password": "bar"})
+    response = await client.post("v1/login", data={"username": "foo", "password": "bar"})
     assert response.status_code == 200
 ```
 
@@ -116,7 +116,7 @@ Never edit a past alembic migration. Run `make alembic-upgrade` end-to-end befor
 ```python
 async def test_flows_endpoint(client, logged_in_headers):
     flow_data = {"name": "Test", "data": {"nodes": [], "edges": []}}
-    response = await client.post("api/v1/flows/", json=flow_data, headers=logged_in_headers)
+    response = await client.post("v1/flows/", json=flow_data, headers=logged_in_headers)
     assert response.status_code == 201
 ```
 

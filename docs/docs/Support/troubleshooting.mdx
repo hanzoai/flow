@@ -282,7 +282,7 @@ Your `args` array must include `"--headers"`, `"x-api-key"`, and your key value.
         "--headers",
         "x-api-key",
         "YOUR_API_KEY",
-        "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+        "http://FLOW_SERVER_ADDRESS/v1/mcp/project/PROJECT_ID/streamable"
       ]
     }
   }
@@ -311,7 +311,7 @@ If Claude for Desktop doesn't use your server's tools correctly, try explicitly 
           "command": "PATH_TO_UVX",
           "args": [
             "mcp-proxy",
-            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/v1/mcp/project/PROJECT_ID/streamable"
           ]
         }
       }
@@ -330,7 +330,7 @@ If Claude for Desktop doesn't use your server's tools correctly, try explicitly 
             "-y",
             "supergateway",
             "--sse",
-            "http://FLOW_SERVER_ADDRESS/api/v1/mcp/project/PROJECT_ID/streamable"
+            "http://FLOW_SERVER_ADDRESS/v1/mcp/project/PROJECT_ID/streamable"
           ]
         }
       }

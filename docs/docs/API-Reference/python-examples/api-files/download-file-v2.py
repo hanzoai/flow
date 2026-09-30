@@ -13,7 +13,7 @@ upload_path = Path(os.environ.get("SAMPLE_UPLOAD_FILE", str(fixtures / "sample-u
 headers = {"accept": "application/json", "x-api-key": api_key}
 
 upload = requests.post(
-    f"{base}/api/v2/files",
+    f"{base}/v1/files",
     headers=headers,
     files={"file": (upload_path.name, upload_path.read_bytes(), "text/plain")},
     timeout=30,
@@ -22,7 +22,7 @@ upload.raise_for_status()
 file_id = upload.json()["id"]
 
 download = requests.get(
-    f"{base}/api/v2/files/{file_id}",
+    f"{base}/v1/files/{file_id}",
     headers=headers,
     timeout=30,
 )

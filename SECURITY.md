@@ -59,7 +59,7 @@ The API Request component allows arbitrary HTTP requests within a flow. In versi
 
 ### External Control of File Name or Path (Fixed in 1.7.1)
 
-When creating a flow through the `/api/v1/flows/` endpoint, if an arbitrary path is specified in the request body's `fs_path`, the server serializes the flow object into JSON and creates/overwrites a file at that path. In versions < 1.7.1, there is no path restriction, normalization, or allowed directory enforcement, so absolute paths (e.g., `/etc/poc.txt`) are interpreted as-is.
+When creating a flow through the `/v1/flows/` endpoint, if an arbitrary path is specified in the request body's `fs_path`, the server serializes the flow object into JSON and creates/overwrites a file at that path. In versions < 1.7.1, there is no path restriction, normalization, or allowed directory enforcement, so absolute paths (e.g., `/etc/poc.txt`) are interpreted as-is.
 
 **Potential security impact:**
 - Authenticated arbitrary file write (within server permission scope): Risk of corrupting configuration/log/task files, disrupting application behavior, and tampering with files read by other components
@@ -86,7 +86,7 @@ Versions `1.6.0` through `1.6.3` have a critical bug where environment variables
 
 ### Code Execution Vulnerability (Fixed in 1.3.0)
 
-Hanzo Flow allows users to define and run **custom code components** through endpoints like `/api/v1/validate/code`. In versions < 1.3.0, this endpoint did not enforce authentication or proper sandboxing, allowing **unauthenticated arbitrary code execution**.
+Hanzo Flow allows users to define and run **custom code components** through endpoints like `/v1/validate/code`. In versions < 1.3.0, this endpoint did not enforce authentication or proper sandboxing, allowing **unauthenticated arbitrary code execution**.
 
 This means an attacker could send malicious code to the endpoint and have it executed on the server—leading to full system compromise, including data theft, remote shell access, or lateral movement within the network.
 

@@ -15,7 +15,7 @@ headers = {
 
 # Export needs at least two flows to return a ZIP; a single id returns JSON.
 extra = requests.post(
-    f"{base}/api/v1/flows/",
+    f"{base}/v1/flows/",
     headers=headers,
     json={
         "name": "docs-export-temp-flow",
@@ -30,11 +30,11 @@ extra_id = extra.json()["id"]
 
 payload = [flow_id, extra_id]
 
-response = requests.post(f"{base}/api/v1/flows/download/", headers=headers, json=payload, timeout=60)
+response = requests.post(f"{base}/v1/flows/download/", headers=headers, json=payload, timeout=60)
 response.raise_for_status()
 
 with open("flow-flows.zip", "wb") as f:
     f.write(response.content)
 print("Saved response to flow-flows.zip")
 
-requests.delete(f"{base}/api/v1/flows/{extra_id}", headers=headers, timeout=30)
+requests.delete(f"{base}/v1/flows/{extra_id}", headers=headers, timeout=30)

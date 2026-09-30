@@ -3,7 +3,7 @@ import os
 import requests
 
 url = (
-    f"{os.getenv('FLOW_URL', '')}/api/v1/files/delete/{os.getenv('FLOW_ID', '')}/2024-12-30_15-19-43_your_file.txt"
+    f"{os.getenv('FLOW_URL', '')}/v1/files/delete/{os.getenv('FLOW_ID', '')}/2024-12-30_15-19-43_your_file.txt"
 )
 
 headers = {

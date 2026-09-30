@@ -21,7 +21,7 @@ payload = {
 }
 
 response = requests.post(
-    f"{base}/api/v1/run/{flow_id}?stream=false",
+    f"{base}/v1/run/{flow_id}?stream=false",
     headers=headers,
     json=payload,
     timeout=60,

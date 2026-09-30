@@ -14,7 +14,7 @@ headers = {
 payload = {"data": "example-data"}
 
 response = requests.post(
-    f"{base}/api/v1/webhook/{flow_id}",
+    f"{base}/v1/webhook/{flow_id}",
     headers=headers,
     json=payload,
     timeout=60,

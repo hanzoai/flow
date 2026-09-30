@@ -25,7 +25,7 @@ The Workflow API is part of the Hanzo Flow Developer v2 API and offers enhanced 
 **Endpoint:**
 
 ```
-POST /api/v2/workflows
+POST /v1/workflows
 ```
 
 **Description:** Execute a workflow synchronously and receive complete results immediately upon completion.
@@ -41,7 +41,7 @@ Execute a workflow synchronously and receive complete results immediately:
 ```python
 import requests
 
-url = f"{FLOW_SERVER_URL}/api/v2/workflows"
+url = f"{FLOW_SERVER_URL}/v1/workflows"
 headers = {
     "Content-Type": "application/json",
     "x-api-key": FLOW_API_KEY
@@ -67,7 +67,7 @@ print(response.json())
 ```typescript
 import axios from 'axios';
 
-const url = `${FLOW_SERVER_URL}/api/v2/workflows`;
+const url = `${FLOW_SERVER_URL}/v1/workflows`;
 
 const payload = {
   flow_id: "flow_67ccd2be17f0819081ff3bb2cf6508e60bb6a6b452d3795b",
@@ -101,7 +101,7 @@ runWorkflow();
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v2/workflows" \
+  "$FLOW_SERVER_URL/v1/workflows" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -136,7 +136,7 @@ The asynchronous request contains `stream` parameter, but streaming is not yet s
 ```python
 import requests
 
-url = f"{FLOW_SERVER_URL}/api/v2/workflows"
+url = f"{FLOW_SERVER_URL}/v1/workflows"
 headers = {
     "Content-Type": "application/json",
     "x-api-key": FLOW_API_KEY
@@ -163,7 +163,7 @@ print(response.json())  # Returns job_id immediately
 ```typescript
 import axios from 'axios';
 
-const url = `${FLOW_SERVER_URL}/api/v2/workflows`;
+const url = `${FLOW_SERVER_URL}/v1/workflows`;
 
 const payload = {
   flow_id: "flow_67ccd2be17f0819081ff3bb2cf6508e60bb6a6b452d3795b",
@@ -198,7 +198,7 @@ runWorkflow();
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v2/workflows" \
+  "$FLOW_SERVER_URL/v1/workflows" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{
@@ -277,7 +277,7 @@ The response includes an `outputs` field containing component-level results. Eac
 
 ## Get workflow status endpoint
 
-**Endpoint:** `GET /api/v2/workflows`
+**Endpoint:** `GET /v1/workflows`
 
 **Description:** Retrieve the status and results of a workflow execution by job ID.
 
@@ -289,7 +289,7 @@ The response includes an `outputs` field containing component-level results. Eac
 ```python
 import requests
 
-url = f"{FLOW_SERVER_URL}/api/v2/workflows"
+url = f"{FLOW_SERVER_URL}/v1/workflows"
 params = {
     "job_id": "job_id_1234567890"
 }
@@ -309,7 +309,7 @@ print(response.json())
 import axios from 'axios';
 
 const jobId = 'job_id_1234567890';
-const url = `${FLOW_SERVER_URL}/api/v2/workflows`;
+const url = `${FLOW_SERVER_URL}/v1/workflows`;
 
 const getWorkflowStatus = async () => {
   try {
@@ -336,7 +336,7 @@ getWorkflowStatus();
 
 ```bash
 curl -X GET \
-  "$FLOW_SERVER_URL/api/v2/workflows?job_id=job_id_1234567890" \
+  "$FLOW_SERVER_URL/v1/workflows?job_id=job_id_1234567890" \
   -H "accept: application/json" \
   -H "x-api-key: $FLOW_API_KEY"
 ```
@@ -395,7 +395,7 @@ The response includes a `status` field that indicates the current state of the w
 
 ## Stop workflow endpoint
 
-**Endpoint:** `POST /api/v2/workflows/stop`
+**Endpoint:** `POST /v1/workflows/stop`
 
 **Description:** Stop a running workflow execution by job ID.
 
@@ -407,7 +407,7 @@ The response includes a `status` field that indicates the current state of the w
 ```python
 import requests
 
-url = f"{FLOW_SERVER_URL}/api/v2/workflows/stop"
+url = f"{FLOW_SERVER_URL}/v1/workflows/stop"
 headers = {
     "Content-Type": "application/json",
     "x-api-key": FLOW_API_KEY
@@ -426,7 +426,7 @@ print(response.json())
 ```typescript
 import axios from 'axios';
 
-const url = `${FLOW_SERVER_URL}/api/v2/workflows/stop`;
+const url = `${FLOW_SERVER_URL}/v1/workflows/stop`;
 
 const payload = {
   job_id: "job_id_1234567890"
@@ -454,7 +454,7 @@ stopWorkflow();
 
 ```bash
 curl -X POST \
-  "$FLOW_SERVER_URL/api/v2/workflows/stop" \
+  "$FLOW_SERVER_URL/v1/workflows/stop" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $FLOW_API_KEY" \
   -d '{

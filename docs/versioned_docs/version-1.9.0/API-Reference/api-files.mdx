@@ -65,14 +65,14 @@ import exampleJavascriptApiFilesDeleteAllFilesV2 from '!!raw-loader!@site/docs/A
 
 Use the `/files` endpoints to move files between your local machine and Hanzo Flow.
 
-All `/files` endpoints (both `/v1/files` and `/v2/files`) require authentication with a Hanzo Flow API key.
+All `/files` endpoints (both `/v1/files` and `/v1/files`) require authentication with a Hanzo Flow API key.
 You can only access files that belong to your own user account, even as a superuser.
 
-## Differences between `/v1/files` and `/v2/files`
+## Differences between `/v1/files` and `/v1/files`
 
 There are two versions of the `/files` endpoints.
 
-`/v2/files` offers the following improvements over `/v1/files`:
+`/v1/files` offers the following improvements over `/v1/files`:
 
 - `/v2` files are organized by `user_id` instead of `flow_id`.
   This means files are owned by users, and they aren't attached to specific flows.
@@ -81,7 +81,7 @@ There are two versions of the `/files` endpoints.
 - `/v2` supports bulk upload and delete.
 - `/v2` responses contain more descriptive metadata.
 
-However, `/v2/files` doesn't support image files.
+However, `/v1/files` doesn't support image files.
 To send image files to your flows through the API, use [Upload image files (v1)](#upload-image-files-v1).
 
 ## Files/V1 endpoints
@@ -277,7 +277,7 @@ Delete a specific file from a flow.
 
 Use the `/files` endpoints to move files between your local machine and Hanzo Flow.
 
-The `/v2/files` endpoints can be authenticated by an API key or JWT.
+The `/v1/files` endpoints can be authenticated by an API key or JWT.
 To create a Hanzo Flow API key and export it as an environment variable, see [Get started with the Hanzo Flow API](/api-reference-api-examples).
 
 ### Upload file (v2)
@@ -349,7 +349,7 @@ You must include the ampersand (`@`) in the request to instruct curl to upload t
 ### Send files to your flows (v2)
 
 :::info
-The `/v2/files` endpoint can't send image files to flows.
+The `/v1/files` endpoint can't send image files to flows.
 To send image files to your flows through the API, see [Upload image files (v1)](#upload-image-files-v1).
 :::
 
@@ -358,7 +358,7 @@ To use an uploaded file in a flow, send the file path to a flow with a [**Read F
 
 The default file limit is 1024 MB. To configure this value, change the `FLOW_MAX_FILE_SIZE_UPLOAD` [environment variable](/environment-variables).
 
-1. To send a file to your flow with the API, POST the file to the `/api/v2/files` endpoint.
+1. To send a file to your flow with the API, POST the file to the `/v1/files` endpoint.
 
     Replace **FILE_NAME.EXTENSION** with the name and extension of the file you want to upload.
     This is the same step described in [Upload file (v2)](#upload-file-v2), but since you need the filename to upload to your flow, it is included here.

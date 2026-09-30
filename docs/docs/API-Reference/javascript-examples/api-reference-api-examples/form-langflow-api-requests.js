@@ -1,4 +1,4 @@
-const url = `${process.env.FLOW_SERVER_URL ?? ""}/api/v1/run/${process.env.FLOW_ID ?? ""}?stream=false`;
+const url = `${process.env.FLOW_SERVER_URL ?? ""}/v1/run/${process.env.FLOW_ID ?? ""}?stream=false`;
 
 const options = {
   method: 'POST',
