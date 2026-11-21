@@ -2,6 +2,8 @@
 
 # Hanzo Flow
 
+[![Open in Hanzo](https://hanzo.app/badges/open-in-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/flow&ref=main&action=open) [![Edit with Hanzo](https://hanzo.app/badges/edit-with-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/flow&ref=main&action=edit) [![Deploy with Hanzo](https://hanzo.app/badges/deploy-with-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/flow&ref=main&action=deploy)
+
 [![Release Notes](https://img.shields.io/github/release/hanzoai/flow?style=flat-square)](https://github.com/hanzoai/flow/releases)
 [![PyPI - License](https://img.shields.io/badge/license-MIT-orange)](https://opensource.org/licenses/MIT)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/hanzoflow?style=flat-square)](https://pypistats.org/packages/hanzoflow)
