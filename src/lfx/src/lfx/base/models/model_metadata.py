@@ -72,23 +72,7 @@ MODEL_PROVIDER_METADATA: dict[str, Any] = {
     "Hanzo Enso": {
         "icon": "Hanzo",
         "max_tokens_field_name": "max_tokens",
-        "variables": [
-            {
-                "variable_name": "Hanzo API Key",
-                "variable_key": "HANZO_API_KEY",
-                "required": False,
-                "is_secret": True,
-                "is_list": False,
-                "options": [],
-                "langchain_param": "api_key",
-                "component_metadata": {
-                    "mapping_field": "api_key",
-                    "required": False,
-                    "advanced": True,
-                    "info": "Optional: signed-in Hanzo IAM sessions route through Hanzo Enso automatically. Set HANZO_API_KEY to override.",
-                },
-            }
-        ],
+        "variables": [],
         "api_docs_url": "https://docs.hanzo.ai/enso",
         "mapping": {
             "model_class": "ChatOpenAI",

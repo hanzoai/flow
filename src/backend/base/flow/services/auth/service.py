@@ -180,6 +180,11 @@ class AuthService(BaseAuthService):
         iam_user = await self._authenticate_with_iam(token, db)
         if iam_user is not None:
             return iam_user
+        from flow.services.auth.iam import iam_enabled
+
+        if iam_enabled():
+            msg = "Hanzo IAM bearer token required"
+            raise AuthInvalidTokenError(msg)
         from flow.services.auth.utils import ACCESS_TOKEN_TYPE, get_jwt_verification_key
 
         settings_service = self.settings

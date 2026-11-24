@@ -19,31 +19,12 @@ router = APIRouter(tags=["Users"], prefix="/users")
 
 
 @router.post("/", response_model=UserRead, status_code=201)
-async def add_user(
-    user: UserCreate,
-    session: DbSession,
-) -> User:
-    """Add a new user to the database.
-
-    This endpoint allows public user registration (sign up).
-    User activation is controlled by the NEW_USER_IS_ACTIVE setting.
-    """
-    settings_service = get_settings_service()
-
-    new_user = User.model_validate(user, from_attributes=True)
-    try:
-        new_user.password = get_auth_service().get_password_hash(user.password)
-        new_user.is_active = settings_service.auth_settings.NEW_USER_IS_ACTIVE
-        session.add(new_user)
-        await session.flush()
-        await session.refresh(new_user)
-        folder = await get_or_create_default_folder(session, new_user.id)
-        if not folder:
-            raise HTTPException(status_code=500, detail="Error creating default project")
-    except IntegrityError as e:
-        raise HTTPException(status_code=400, detail="This username is unavailable.") from e
-
-    return new_user
+async def add_user() -> User:
+    """Local user signup is removed; accounts are managed exclusively by Hanzo IAM."""
+    raise HTTPException(
+        status_code=410,
+        detail="Account registration is managed exclusively by Hanzo IAM (https://hanzo.ai).",
+    )
 
 
 @router.get("/whoami", response_model=UserRead)
@@ -113,33 +94,11 @@ async def patch_user(
 
 
 @router.patch("/{user_id}/reset-password", response_model=UserRead)
-async def reset_password(
-    user_id: UUID,
-    user_update: UserUpdate,
-    user: CurrentActiveUser,
-    session: DbSession,
-) -> User:
-    """Reset a user's password."""
-    if user_id != user.id:
-        raise HTTPException(status_code=404, detail="You can't change another user's password")
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if user_update.password is None:
-        raise HTTPException(status_code=400, detail="Password is required for password reset")
-
-    auth = get_auth_service()
-    if auth.verify_password(user_update.password, user.password):
-        raise HTTPException(status_code=400, detail="You can't use your current password")
-
-    new_password = auth.get_password_hash(user_update.password)
-    user.password = new_password
-
-    await session.flush()
-    await session.refresh(user)
-
-    return user
+async def reset_password() -> User:
+    raise HTTPException(
+        status_code=410,
+        detail="Password management is handled exclusively by Hanzo IAM (https://hanzo.ai).",
+    )
 
 
 @router.delete("/{user_id}")
