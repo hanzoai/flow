@@ -133,7 +133,21 @@ def get_jwt_signing_key(settings_service: SettingsService) -> str:
 async def api_key_security(
     query_param: Annotated[str | None, Security(api_key_query)],
     header_param: Annotated[str | None, Security(api_key_header)],
+    token: Annotated[str | None, Security(oauth2_login)] = None,
 ) -> UserRead | None:
+    # Accept a Hanzo IAM Bearer JWT (or session cookie) on /v1/run and /v1/responses
+    # so callers authenticate with one unified Hanzo IAM identity without needing a
+    # separate Flow API key.
+    if not query_param and not header_param and token:
+        from flow.services.database.models.user.model import UserRead
+        from flow.services.deps import session_scope
+
+        try:
+            async with session_scope() as db:
+                user = await _auth_service().get_current_user(token, None, None, db)
+                return UserRead.model_validate(user, from_attributes=True)
+        except AuthenticationError as e:
+            raise _auth_error_to_http(e) from e
     return await _auth_service().api_key_security(query_param, header_param)
 
 
