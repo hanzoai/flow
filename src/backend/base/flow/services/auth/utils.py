@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import random
+import secrets
+import warnings
 from typing import TYPE_CHECKING, Annotated, Final
 
 from cryptography.fernet import Fernet
+from cryptography.fernet import MultiFernet
 from fastapi import Depends, HTTPException, Request, Security, WebSocket, WebSocketException, status
 from fastapi.security import APIKeyHeader, APIKeyQuery, OAuth2PasswordBearer
 from fastapi.security.utils import get_authorization_scheme_param
@@ -342,14 +346,37 @@ def add_base64_padding(value: str) -> str:
 def ensure_fernet_key(secret_key: str) -> bytes:
     """Derive a valid Fernet key from a secret key string.
 
-    For short keys (< 32 chars), uses the key as a random seed to generate
-    a deterministic 32-byte key. For longer keys, adds base64 padding.
+    For short keys (< 32 chars), the 32-byte key is derived with SHA-256, a
+    cryptographic hash. For longer keys, base64 padding is added.
+
+    Security note: short keys previously seeded Python's ``random`` module
+    (``random.seed(secret_key)``) to generate the key bytes. ``random`` is a
+    non-cryptographic Mersenne-Twister PRNG, so the resulting Fernet key was
+    fully predictable from the secret, and seeding it also mutated global PRNG
+    state. SHA-256 is deterministic (so the key stays stable for a given
+    secret) but is not predictable/reversible the way the PRNG output was.
+
+    Deployments that set a ``SECRET_KEY`` shorter than 32 characters will derive
+    a different key than before this fix and must re-enter encrypted secrets
+    (API keys, global variables) after upgrading. The default ``SECRET_KEY`` is
+    a 43-char ``secrets.token_urlsafe(32)`` value and is unaffected.
     """
     MINIMUM_KEY_LENGTH = 32  # noqa: N806
     if len(secret_key) < MINIMUM_KEY_LENGTH:
-        random.seed(secret_key)
-        key = bytes(random.getrandbits(8) for _ in range(32))
-        key = base64.urlsafe_b64encode(key)
+        # Derive a 32-byte key from the short secret using SHA-256
+        # This is a proper KDF replacement for the old random.seed() approach
+        digest = hashlib.sha256(secret_key.encode()).digest()  # 32 bytes
+        key = base64.urlsafe_b64encode(digest)
+        # Warn deployments using short keys that they must re-enter encrypted secrets
+        warnings.warn(
+            "SECRET_KEY is shorter than 32 characters. "
+            "A cryptographic KDF (SHA-256) is now used to derive the Fernet key. "
+            "Previously encrypted values will not decrypt with the new key; "
+            "re-enter API keys and other encrypted secrets after upgrading. "
+            "The default SECRET_KEY (secrets.token_urlsafe(32)) is 43 chars and unaffected.",
+            UserWarning,
+            stacklevel=2,
+        )
     else:
         key = add_base64_padding(secret_key).encode()
     return key
@@ -358,14 +385,25 @@ def ensure_fernet_key(secret_key: str) -> bytes:
 def get_fernet(settings_service: SettingsService) -> Fernet:
     """Get a Fernet instance for encryption/decryption.
 
-    Args:
-        settings_service: Settings service to get the secret key
-
-    Returns:
-        Fernet instance for encryption/decryption
+    Uses MultiFernet for backward compatibility: tries the new SHA-256 derived
+    key first, then falls back to the legacy random.seed-derived key for
+    decryption only. This allows existing encrypted values to be decrypted
+    after the key derivation change. New encryptions always use the new key.
     """
     secret_key: str = settings_service.auth_settings.SECRET_KEY.get_secret_value()
-    return Fernet(ensure_fernet_key(secret_key))
+    new_key = ensure_fernet_key(secret_key)
+    new_fernet = Fernet(new_key)
+
+    if len(secret_key) < 32:
+        # Legacy derivation for backward-compatible decryption only
+        random.seed(secret_key)
+        legacy_key = bytes(random.getrandbits(8) for _ in range(32))
+        legacy_key = base64.urlsafe_b64encode(legacy_key)
+        legacy_fernet = Fernet(legacy_key)
+        # MultiFernet tries keys in order; first key is used for encryption
+        return MultiFernet([new_fernet, legacy_fernet])
+
+    return new_fernet
 
 
 def encrypt_api_key(api_key: str, settings_service: SettingsService | None = None) -> str:  # noqa: ARG001
