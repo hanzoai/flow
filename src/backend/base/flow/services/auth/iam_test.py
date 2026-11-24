@@ -156,3 +156,30 @@ def test_user_iam_token_roundtrip():
     current_iam_token.set("jwt-ctx")
     assert get_user_iam_token("user-42") == "jwt-ctx"
     current_iam_token.set(None)
+
+
+def test_user_iam_token_normalizes_uuid_formats():
+    from uuid import UUID
+
+    from flow.services.auth.iam import current_iam_token, get_user_iam_token, set_user_iam_token
+
+    raw_hex = "12aaab39c6e64fb48ce0c8e435b66439"
+    uid = UUID(raw_hex)
+    current_iam_token.set(None)
+    set_user_iam_token(str(uid), "iam-jwt-uuid")
+    assert get_user_iam_token(raw_hex) == "iam-jwt-uuid"
+    assert get_user_iam_token(str(uid)) == "iam-jwt-uuid"
+
+
+def test_hanzo_enso_credentials_fallback_when_api_key_is_var_name(monkeypatch):
+    from uuid import UUID
+
+    from lfx.base.models.unified_models.credentials import get_api_key_for_provider
+
+    from flow.services.auth.iam import current_iam_token, set_user_iam_token
+
+    monkeypatch.delenv("HANZO_API_KEY", raising=False)
+    uid = UUID("12aaab39-c6e6-4fb4-8ce0-c8e435b66439")
+    current_iam_token.set(None)
+    set_user_iam_token(str(uid), "iam-jwt-fallback")
+    assert get_api_key_for_provider(uid, "Hanzo Enso", "HANZO_API_KEY") == "iam-jwt-fallback"

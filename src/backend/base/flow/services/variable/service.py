@@ -201,7 +201,25 @@ class DatabaseVariableService(VariableService, Service):
     ) -> str:
         # we get the credential from the database
         # credential = session.query(Variable).filter(Variable.user_id == user_id, Variable.name == name).first()
-        variable = await self.get_variable_object(user_id, name, session)
+        try:
+            variable = await self.get_variable_object(user_id, name, session)
+        except ValueError:
+            if name == "HANZO_API_KEY":
+                if field == "session_id":
+                    msg = (
+                        f"variable {name} of type 'Credential' cannot be used in a Session ID field "
+                        "because its purpose is to prevent the exposure of values."
+                    )
+                    raise TypeError(msg) from None
+                env_val = os.getenv("HANZO_API_KEY")
+                if env_val and env_val.strip():
+                    return env_val.strip()
+                from flow.services.auth.iam import get_user_iam_token
+
+                iam_tok = get_user_iam_token(str(user_id))
+                if iam_tok:
+                    return iam_tok
+            raise
 
         if variable.type == CREDENTIAL_TYPE and field == "session_id":
             msg = (

@@ -119,7 +119,7 @@
         "data": {
           "id": "note-v8JKB",
           "node": {
-            "description": "# 📖 README\nLeverage the **Needle Search API** and an **Agent** to gather and summarize your invoice data quickly and accurately.\n\n## Prerequisites\n\n* A **Collection** and an **API Key** from your [Needle.ai](https://needle-ai.com) deployment\n* An [OpenAI API key](https://platform.openai.com/)\n\n## Quick start\n\n1. Configure your **Model Provider** with your API credentials.\n\n2. Load your invoices into your Needle Collection. \n\n3. In the **Needle Search** tool, add your **Needle Collection ID** and **Needle API Key**.\n\n4. Open the **Playground** and query your invoices. The **Agent** component determines the correct query and search size for data retrieval.\n",
+            "description": "# 📖 README\nLeverage the **Needle Search API** and an **Agent** to gather and summarize your invoice data quickly and accurately.\n\n## Prerequisites\n\n* A **Collection** and an **API Key** from your [Needle.ai](https://needle-ai.com) deployment\n* Signed in with your Hanzo account (**Hanzo Enso** is enabled automatically — no external API key needed)\n\n## Quick start\n\n1. **Hanzo Enso** (`enso`) is pre-configured for your signed-in Hanzo account.\n\n2. Load your invoices into your Needle Collection. \n\n3. In the **Needle Search** tool, add your **Needle Collection ID** and **Needle API Key**.\n\n4. Open the **Playground** and query your invoices. The **Agent** component determines the correct query and search size for data retrieval.\n",
             "display_name": "",
             "documentation": "",
             "template": {
