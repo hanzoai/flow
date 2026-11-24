@@ -95,13 +95,18 @@ def get_unified_models_detailed(
             }
         )
 
-    # Mark the first 5 models in each provider as default (based on list order)
-    # and optionally filter to only defaults
-    default_model_count = 5  # Number of default models per provider
+    # Mark the first 5 models per (provider, model_type) as default (based on list
+    # order) while preserving any model explicitly flagged default=True in its
+    # catalog metadata (so LLMs never crowd out embedding models like zen-embedding-3).
+    default_model_count = 5  # Number of default models per provider per model_type
 
     for prov, models in provider_map.items():
-        for i, model in enumerate(models):
-            if i < default_model_count:
+        per_type_count: dict[str, int] = {}
+        for model in models:
+            mtype = model["metadata"].get("model_type", "llm")
+            idx = per_type_count.get(mtype, 0)
+            per_type_count[mtype] = idx + 1
+            if model["metadata"].get("default") is True or idx < default_model_count:
                 model["metadata"]["default"] = True
             else:
                 model["metadata"]["default"] = False
