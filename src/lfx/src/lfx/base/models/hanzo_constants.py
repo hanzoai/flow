@@ -64,12 +64,6 @@ HANZO_MODELS_DETAILED = [
     ),
     create_model_metadata(
         provider=HANZO_PROVIDER_NAME,
-        name="enso-hybrid",
-        icon="Hanzo",
-        tool_calling=True,
-    ),
-    create_model_metadata(
-        provider=HANZO_PROVIDER_NAME,
         name="hanzo/zen",
         icon="Hanzo",
         tool_calling=True,
