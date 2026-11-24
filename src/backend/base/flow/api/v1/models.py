@@ -4,6 +4,7 @@ import json
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from lfx.base.models.hanzo_constants import HANZO_PROVIDER_NAME, hanzo_enso_auto_enabled
 from lfx.base.models.model_utils import replace_with_live_models
 from lfx.base.models.unified_models import (
     get_model_provider_metadata,
@@ -174,9 +175,10 @@ async def list_models(
     # Get default model if model_type is specified
     default_provider = None
     if model_type:
+        normalized_mt = "embedding" if model_type in ("embedding", "embeddings") else "language"
         try:
             default_model_result = await get_default_model(
-                session=session, current_user=current_user, model_type=model_type
+                session=session, current_user=current_user, model_type=normalized_mt
             )
             if default_model_result.get("default_model"):
                 default_provider = default_model_result["default_model"].get("provider")
@@ -271,20 +273,26 @@ async def get_enabled_providers(
         # Build a set of all variable names we have
         all_variable_names = {var.name for var in all_variables}
 
-        # Get the provider-variable mapping
-        provider_variable_map = get_model_provider_variable_mapping()
+        # Check ALL known providers (including zero-variable IAM-managed providers like Hanzo Enso)
+        all_providers = list(get_model_provider_metadata().keys())
+        hanzo_auto = hanzo_enso_auto_enabled()
 
-        # Check which providers have all required variables saved
         enabled_providers = []
         provider_status = {}
 
-        for provider in provider_variable_map:
-            # Get ALL variables for this provider
-            provider_vars = get_provider_all_variables(provider)
+        for provider in all_providers:
+            if provider == HANZO_PROVIDER_NAME:
+                is_ready = hanzo_auto
+                provider_status[provider] = is_ready
+                if is_ready:
+                    enabled_providers.append(provider)
+                continue
 
-            # Check if all REQUIRED variables are present
+            provider_vars = get_provider_all_variables(provider)
             required_vars = [v for v in provider_vars if v.get("required", False)]
-            all_required_present = all(v.get("variable_key") in all_variable_names for v in required_vars)
+            all_required_present = bool(required_vars) and all(
+                v.get("variable_key") in all_variable_names for v in required_vars
+            )
 
             provider_status[provider] = all_required_present
             if all_required_present:
@@ -330,6 +338,8 @@ async def validate_provider(
     """
     from lfx.base.models.unified_models import validate_model_provider_key
 
+    if request.provider == HANZO_PROVIDER_NAME and hanzo_enso_auto_enabled():
+        return ValidateProviderResponse(valid=True, error=None)
     try:
         # Validate the credentials
         validate_model_provider_key(request.provider, request.variables)
@@ -744,6 +754,22 @@ async def get_default_model(
     except ValueError:
         # Variable not found
         pass
+    if hanzo_enso_auto_enabled():
+        if model_type in ("embedding", "embeddings"):
+            return {
+                "default_model": {
+                    "provider": HANZO_PROVIDER_NAME,
+                    "model_name": "zen-embedding-3",
+                    "model_type": "embedding",
+                }
+            }
+        return {
+            "default_model": {
+                "provider": HANZO_PROVIDER_NAME,
+                "model_name": "enso",
+                "model_type": "language",
+            }
+        }
     return {"default_model": None}
 
 

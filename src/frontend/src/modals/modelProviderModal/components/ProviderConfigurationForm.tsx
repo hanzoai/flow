@@ -339,6 +339,22 @@ const ProviderConfigurationForm = ({
             </Button>
           </div>
         </div>
+      ) : selectedProvider.provider === "Hanzo Enso" ? (
+        <div className="flex flex-col gap-2 rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 font-medium text-foreground">
+            <ForwardedIconComponent
+              name="Check"
+              className="h-4 w-4 text-accent-emerald-foreground"
+            />
+            <span>Managed automatically via Hanzo IAM</span>
+          </div>
+          <p>
+            Authenticated with your signed-in Hanzo session against{" "}
+            <code className="font-mono text-foreground">https://api.hanzo.ai/v1</code>.
+            Hanzo Enso LLMs and <code className="font-mono text-foreground">zen-embedding-3</code>{" "}
+            embeddings are active out of the box with no manual API key required.
+          </p>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           <Button

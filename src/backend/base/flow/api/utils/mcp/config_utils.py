@@ -111,7 +111,7 @@ async def validate_mcp_server_for_project(
         MCPServerValidationResult with validation details
     """
     # Generate server name that would be used for this project
-    server_name = f"lf-{sanitize_mcp_name(project_name)[: (MAX_MCP_SERVER_NAME_LENGTH - 4)]}"
+    server_name = f"hanzo-{sanitize_mcp_name(project_name)[: (MAX_MCP_SERVER_NAME_LENGTH - 7)]}"
 
     try:
         existing_servers = await get_server_list(user, session, storage_service, settings_service)

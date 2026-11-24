@@ -813,7 +813,7 @@ async def install_mcp_config(
             await logger.adebug("Windows detected, using cmd command")
 
         name = project.name
-        server_name = f"lf-{sanitize_mcp_name(name)[: (MAX_MCP_SERVER_NAME_LENGTH - 4)]}"
+        server_name = f"hanzo-{sanitize_mcp_name(name)[: (MAX_MCP_SERVER_NAME_LENGTH - 7)]}"
 
         # Create the MCP configuration
         server_config: dict[str, Any] = {
