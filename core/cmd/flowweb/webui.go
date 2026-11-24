@@ -25,7 +25,7 @@ var frontendFS embed.FS
 // expects JSON). The backend mounts its API at /v1 (src/backend/base/flow/api/router.py).
 // Everything else is a client-side route → the SPA shell.
 var apiPrefixes = []string{
-	"/v1/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
+	"/v1/", "/callback/", "/health", "/health_check", "/openapi.json", "/docs", "/redoc",
 	"/.well-known/", "/logs",
 }
 

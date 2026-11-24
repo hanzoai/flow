@@ -29,6 +29,8 @@ func TestHandlerRoutes(t *testing.T) {
 		{http.MethodPost, "/v1/login", true, http.StatusOK},
 		{http.MethodGet, "/v1", true, http.StatusOK},
 		{http.MethodGet, "/v1/files", true, http.StatusOK},
+		{http.MethodGet, "/callback", true, http.StatusOK},
+		{http.MethodGet, "/callbacks", false, http.StatusOK},
 		{http.MethodGet, "/api/v1/version", false, http.StatusNotFound},
 		{http.MethodPost, "/api/v1/login", false, http.StatusNotFound},
 		{http.MethodGet, "/api", false, http.StatusNotFound},

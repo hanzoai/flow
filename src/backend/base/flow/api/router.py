@@ -27,6 +27,7 @@ from flow.api.v1 import (
     validate_router,
     variables_router,
 )
+from flow.api.v1.login import iam_callback_router
 from flow.api.v1.voice_mode import router as voice_mode_router
 from flow.api.v2 import files_router as files_router_v2
 from flow.api.v2 import mcp_router as mcp_router_v2
@@ -95,3 +96,4 @@ router_v1.include_router(workflow_router_v2)
 # an /api/ prefix on top would say it twice.
 router = APIRouter()
 router.include_router(router_v1)
+router.include_router(iam_callback_router)

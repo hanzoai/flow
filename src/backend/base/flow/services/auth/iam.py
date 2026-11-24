@@ -5,30 +5,37 @@ resolves it to a multi-tenant principal: (org, project, user). It mirrors the cl
 principal model (principal.Org / principal.Project) so a single IAM login is the same
 session across console, studio, and flow.
 
-The module is self-contained and side-effect-free: it verifies a token and returns an
-IAMPrincipal, and exposes context vars the data layer scopes queries on. Wiring lives
-in services/auth/service.py; the DB user upsert + org/project query-scoping are the
-follow-on phases that build on this seam.
-
 Enabled by env (no compat alias — forward-only):
-    FLOW_IAM_ISSUER    the IAM token issuer, e.g. https://iam.hanzo.ai  (presence = enabled)
-    FLOW_IAM_JWKS_URL  the JWKS endpoint (default: <issuer>/.well-known/jwks)
-    FLOW_IAM_AUDIENCE  optional expected audience (the flow app's IAM client id)
+    FLOW_IAM_ISSUER         the IAM token issuer, e.g. https://hanzo.id  (presence = enabled)
+    FLOW_IAM_JWKS_URL       the JWKS endpoint (default: <issuer>/v1/iam/.well-known/jwks)
+    FLOW_IAM_CLIENT_ID      the OAuth client id (default: hanzo-flow)
+    FLOW_IAM_CLIENT_SECRET  optional OAuth client secret (PKCE S256 works without one)
+    FLOW_IAM_REDIRECT_URI   optional fixed callback URI (default: <request origin>/callback)
+    FLOW_IAM_AUTHORIZE_URL  optional authorize endpoint (default: <issuer>/v1/iam/oauth/authorize)
+    FLOW_IAM_TOKEN_URL      optional token endpoint (default: <issuer>/v1/iam/oauth/token)
+    FLOW_IAM_LOGOUT_URL     optional logout endpoint (default: <issuer>/v1/iam/oauth/logout)
+    FLOW_IAM_AUDIENCE       optional expected audience
 """
 
 from __future__ import annotations
 
+import base64
+import hashlib
 import os
+import secrets
 from contextvars import ContextVar
 from dataclasses import dataclass
 from functools import lru_cache
 
 import jwt
 
-# Per-request tenant scope the data layer reads (phase c scopes every query on these).
+# Per-request tenant scope the data layer reads.
 # Set after a token validates; unset for anonymous/local paths (value None = no scope).
 current_org: ContextVar[str | None] = ContextVar("flow_iam_org", default=None)
 current_project: ContextVar[str | None] = ContextVar("flow_iam_project", default=None)
+
+# Asymmetric algorithms published by hanzo.id JWKS — never HS* or none.
+_ALLOWED_ALGS = ["RS256", "RS512", "ES256", "ES384", "ES512"]
 
 
 @dataclass(frozen=True)
@@ -49,14 +56,36 @@ class IAMConfig:
     issuer: str
     jwks_url: str
     audience: str = ""
-    # Claim names — org falls back to the `owner` claim.
+    client_id: str = "hanzo-flow"
+    client_secret: str = ""
+    redirect_uri: str = ""
+    authorize_url: str = ""
+    token_url: str = ""
+    logout_url: str = ""
+    # Claim names — org falls back through `organization` and `owner`.
     org_claim: str = "org"
     org_fallback_claim: str = "owner"
     project_claim: str = "project"
     subject_claim: str = "sub"
     username_claim: str = "name"
     email_claim: str = "email"
-    admin_claim: str = "isAdmin"
+
+    def resolved_authorize_url(self) -> str:
+        return self.authorize_url or f"{self.issuer}/v1/iam/oauth/authorize"
+
+    def resolved_token_url(self) -> str:
+        return self.token_url or f"{self.issuer}/v1/iam/oauth/token"
+
+    def resolved_logout_url(self) -> str:
+        return self.logout_url or f"{self.issuer}/v1/iam/oauth/logout"
+
+
+def pkce_pair() -> tuple[str, str]:
+    """Generate an RFC 7636 S256 (code_verifier, code_challenge) pair."""
+    verifier = secrets.token_urlsafe(48)
+    digest = hashlib.sha256(verifier.encode("ascii")).digest()
+    challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
+    return verifier, challenge
 
 
 @lru_cache(maxsize=1)
@@ -65,8 +94,18 @@ def iam_config() -> IAMConfig | None:
     issuer = os.getenv("FLOW_IAM_ISSUER", "").strip().rstrip("/")
     if not issuer:
         return None
-    jwks_url = os.getenv("FLOW_IAM_JWKS_URL", "").strip() or f"{issuer}/.well-known/jwks"
-    return IAMConfig(issuer=issuer, jwks_url=jwks_url, audience=os.getenv("FLOW_IAM_AUDIENCE", "").strip())
+    jwks_url = os.getenv("FLOW_IAM_JWKS_URL", "").strip() or f"{issuer}/v1/iam/.well-known/jwks"
+    return IAMConfig(
+        issuer=issuer,
+        jwks_url=jwks_url,
+        audience=os.getenv("FLOW_IAM_AUDIENCE", "").strip(),
+        client_id=os.getenv("FLOW_IAM_CLIENT_ID", "").strip() or "hanzo-flow",
+        client_secret=os.getenv("FLOW_IAM_CLIENT_SECRET", "").strip(),
+        redirect_uri=os.getenv("FLOW_IAM_REDIRECT_URI", "").strip(),
+        authorize_url=os.getenv("FLOW_IAM_AUTHORIZE_URL", "").strip(),
+        token_url=os.getenv("FLOW_IAM_TOKEN_URL", "").strip(),
+        logout_url=os.getenv("FLOW_IAM_LOGOUT_URL", "").strip(),
+    )
 
 
 def iam_enabled() -> bool:
@@ -77,8 +116,9 @@ class HanzoIAMValidator:
     """Verifies a Hanzo IAM JWT against the IAM JWKS and extracts the tenant principal.
 
     The JWKS client is created from `cfg.jwks_url`; a `signing_key` may be injected to
-    verify against a known key without network (used by tests). Verification pins RS256
-    and enforces issuer (and audience when configured) — no alg-confusion, no unsigned.
+    verify against a known key without network (used by tests). Verification pins
+    asymmetric JWKS algorithms and enforces issuer (and audience when configured) —
+    no alg-confusion, no unsigned.
     """
 
     def __init__(self, cfg: IAMConfig, signing_key: str | None = None) -> None:
@@ -97,7 +137,7 @@ class HanzoIAMValidator:
         failure (bad signature, wrong issuer/audience, expired, missing org/subject)."""
         options = {"require": ["exp", "iss", self.cfg.subject_claim]}
         kwargs: dict = {
-            "algorithms": ["RS256"],
+            "algorithms": _ALLOWED_ALGS,
             "issuer": self.cfg.issuer,
             "options": options,
         }
@@ -107,18 +147,33 @@ class HanzoIAMValidator:
             options["verify_aud"] = False
         claims = jwt.decode(token, self._key_for(token), **kwargs)
 
-        org = str(claims.get(self.cfg.org_claim) or claims.get(self.cfg.org_fallback_claim) or "").strip()
+        owner = str(claims.get("owner") or "").strip()
+        org = str(
+            claims.get(self.cfg.org_claim)
+            or claims.get("organization")
+            or claims.get(self.cfg.org_fallback_claim)
+            or ""
+        ).strip()
         subject = str(claims.get(self.cfg.subject_claim) or "").strip()
         if not org or not subject:
             msg = "IAM token missing org or subject"
             raise jwt.InvalidTokenError(msg)
+        username = str(
+            claims.get(self.cfg.username_claim)
+            or claims.get("preferred_username")
+            or claims.get("displayName")
+            or ""
+        ).strip()
+        # SuperAdmin iff IAM-validated owner == "admin" in the reserved admin org.
+        # Organization-level isAdmin is never promoted to global superuser.
+        is_super_admin = owner == "admin"
         return IAMPrincipal(
             user_id=subject,
             org=org,
-            username=str(claims.get(self.cfg.username_claim) or "").strip(),
+            username=username,
             email=str(claims.get(self.cfg.email_claim) or "").strip(),
             project=str(claims.get(self.cfg.project_claim) or "").strip(),
-            is_admin=bool(claims.get(self.cfg.admin_claim, False)),
+            is_admin=is_super_admin,
         )
 
 

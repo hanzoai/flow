@@ -1,6 +1,6 @@
 import * as Form from "@radix-ui/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import FlowLogo from "@/assets/FlowLogo.svg?react";
 import { useLoginUser } from "@/controllers/API/queries/auth";
@@ -9,7 +9,7 @@ import { useSanitizeRedirectUrl } from "@/hooks/use-sanitize-redirect-url";
 import InputComponent from "../../components/core/parameterRenderComponent/components/inputComponent";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { CONTROL_LOGIN_STATE, IS_AUTO_LOGIN } from "../../constants/constants";
+import { CONTROL_LOGIN_STATE } from "../../constants/constants";
 import { AuthContext } from "../../contexts/authContext";
 import useAlertStore from "../../stores/alertStore";
 import type { LoginType } from "../../types/api";
@@ -18,9 +18,15 @@ import type {
   loginInputStateType,
 } from "../../types/components";
 
+type IamConfig = {
+  enabled: boolean;
+  login_url?: string;
+};
+
 export default function LoginPage(): JSX.Element {
   const [inputState, setInputState] =
     useState<loginInputStateType>(CONTROL_LOGIN_STATE);
+  const [iamConfig, setIamConfig] = useState<IamConfig | null>(null);
 
   const { password, username } = inputState;
 
@@ -29,6 +35,25 @@ export default function LoginPage(): JSX.Element {
   const { t } = useTranslation();
   const { login, clearAuthSession } = useContext(AuthContext);
   const setErrorData = useAlertStore((state) => state.setErrorData);
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectParam = searchParams.get("redirect");
+  const authError = searchParams.get("error");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/v1/iam/config", { credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : { enabled: false }))
+      .then((data: IamConfig) => {
+        if (!cancelled) setIamConfig(data?.enabled ? data : { enabled: false });
+      })
+      .catch(() => {
+        if (!cancelled) setIamConfig({ enabled: false });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function handleInput({
     target: { name, value },
@@ -60,6 +85,60 @@ export default function LoginPage(): JSX.Element {
     });
   }
 
+  function startIamSignIn() {
+    const base = iamConfig?.login_url || "/v1/iam/login";
+    const qs = redirectParam
+      ? `?redirect=${encodeURIComponent(redirectParam)}`
+      : "";
+    window.location.assign(`${base}${qs}`);
+  }
+
+  // Avoid flashing the local password form while discovering IAM SSO mode.
+  if (iamConfig === null) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-muted">
+        <FlowLogo
+          title="Hanzo Flow logo"
+          className="h-10 w-10 scale-[1.5] opacity-80"
+        />
+      </div>
+    );
+  }
+
+  if (iamConfig.enabled) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-muted px-4">
+        <div className="flex w-80 flex-col items-center justify-center gap-3 text-center">
+          <FlowLogo
+            title="Hanzo Flow logo"
+            className="mb-3 h-10 w-10 scale-[1.5]"
+          />
+          <h1 className="text-2xl font-semibold tracking-tight text-primary">
+            Sign in to Hanzo Flow
+          </h1>
+          <p className="mb-3 text-sm text-muted-foreground">
+            Use your Hanzo account to continue.
+          </p>
+          {authError && (
+            <div
+              role="alert"
+              className="mb-2 w-full rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive"
+            >
+              Sign-in failed ({authError.replace(/_/g, " ")}). Please try again.
+            </div>
+          )}
+          <Button
+            type="button"
+            className="w-full"
+            onClick={startIamSignIn}
+          >
+            Continue with Hanzo
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Form.Root
       onSubmit={(event) => {
@@ -76,11 +155,11 @@ export default function LoginPage(): JSX.Element {
       <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
         <div className="flex w-72 flex-col items-center justify-center gap-2">
           <FlowLogo
-            title="HanzoFlow logo"
+            title="Hanzo Flow logo"
             className="mb-4 h-10 w-10 scale-[1.5]"
           />
           <span className="mb-6 text-2xl font-semibold text-primary">
-            Sign in to HanzoFlow
+            Sign in to Hanzo Flow
           </span>
           <div className="mb-3 w-full">
             <Form.Field name="username">

@@ -22,8 +22,29 @@ export default function SignUp(): JSX.Element {
     useState<signUpInputStateType>(CONTROL_INPUT_STATE);
 
   const [isDisabled, setDisableBtn] = useState<boolean>(true);
+  const [checkingIam, setCheckingIam] = useState<boolean>(true);
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/v1/iam/config", { credentials: "same-origin" })
+      .then((res) => (res.ok ? res.json() : { enabled: false }))
+      .then((data: { enabled?: boolean; login_url?: string }) => {
+        if (cancelled) return;
+        if (data?.enabled) {
+          window.location.replace(data.login_url || "/v1/iam/login");
+          return;
+        }
+        setCheckingIam(false);
+      })
+      .catch(() => {
+        if (!cancelled) setCheckingIam(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const { password, cnfPassword, username } = inputState;
   const setSuccessData = useAlertStore((state) => state.setSuccessData);
   const setErrorData = useAlertStore((state) => state.setErrorData);
@@ -73,6 +94,17 @@ export default function SignUp(): JSX.Element {
     });
   }
 
+  if (checkingIam) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-muted">
+        <FlowLogo
+          title="Hanzo Flow logo"
+          className="h-10 w-10 scale-[1.5] opacity-80"
+        />
+      </div>
+    );
+  }
+
   return (
     <Form.Root
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
@@ -89,11 +121,11 @@ export default function SignUp(): JSX.Element {
       <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
         <div className="flex w-72 flex-col items-center justify-center gap-2">
           <FlowLogo
-            title="HanzoFlow logo"
+            title="Hanzo Flow logo"
             className="mb-4 h-10 w-10 scale-[1.5]"
           />
           <span className="mb-6 text-2xl font-semibold text-primary">
-            Sign up for HanzoFlow
+            Sign up for Hanzo Flow
           </span>
           <div className="mb-3 w-full">
             <Form.Field name="username">
