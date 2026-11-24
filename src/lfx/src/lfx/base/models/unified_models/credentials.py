@@ -22,10 +22,23 @@ from .provider_queries import (
 def get_api_key_for_provider(user_id: UUID | str | None, provider: str, api_key: str | None = None) -> str | None:
     """Get API key from component input or global variables.
 
-    When api_key is set to an environment variable name (e.g. ANTHROPIC_API_KEY),
-    that name is resolved from os.environ or global variables so imported flows
-    can reference credentials without storing the raw key.
+    Hanzo Enso authenticates exclusively via the signed-in Hanzo IAM session token
+    (with headless HANZO_API_KEY env fallback only when running outside IAM).
     """
+    if provider == "Hanzo Enso":
+        has_uid = user_id is not None and not (isinstance(user_id, str) and user_id == "None")
+        try:
+            from flow.services.auth.iam import get_user_iam_token
+
+            iam_tok = get_user_iam_token(str(user_id) if has_uid else None)
+            if iam_tok:
+                return iam_tok
+        except Exception:  # noqa: BLE001
+            pass
+        env_val = os.getenv("HANZO_API_KEY")
+        if env_val and env_val.strip():
+            return env_val.strip()
+        return None
 
     # Resolve variable name (canonical or custom e.g. MY_OPENAI_API_KEY) from env or global vars
     def _resolve_var_name(var_name: str) -> str | None:
