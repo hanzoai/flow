@@ -37,6 +37,13 @@ current_project: ContextVar[str | None] = ContextVar("flow_iam_project", default
 # Asymmetric algorithms published by hanzo.id JWKS — never HS* or none.
 _ALLOWED_ALGS = ["RS256", "RS512", "ES256", "ES384", "ES512"]
 
+# Explicit User-Agent so Cloudflare WAF does not 403 Python's default urllib UA
+# when fetching the IAM JWKS document.
+_JWKS_HEADERS = {
+    "User-Agent": "hanzo-flow/1.8 (+https://flow.hanzo.ai)",
+    "Accept": "application/json",
+}
+
 
 @dataclass(frozen=True)
 class IAMPrincipal:
@@ -124,7 +131,11 @@ class HanzoIAMValidator:
     def __init__(self, cfg: IAMConfig, signing_key: str | None = None) -> None:
         self.cfg = cfg
         self._signing_key = signing_key
-        self._jwks: jwt.PyJWKClient | None = None if signing_key else jwt.PyJWKClient(cfg.jwks_url)
+        self._jwks: jwt.PyJWKClient | None = (
+            None
+            if signing_key
+            else jwt.PyJWKClient(cfg.jwks_url, headers=_JWKS_HEADERS, cache_keys=True, lifespan=3600)
+        )
 
     def _key_for(self, token: str) -> str:
         if self._signing_key is not None:
