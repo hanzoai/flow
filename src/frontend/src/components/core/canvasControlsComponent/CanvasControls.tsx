@@ -85,22 +85,20 @@ const CanvasControls = ({
             className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-md hover:bg-muted"
             onClick={handleAssistantClick}
           >
-            {/* Muted icon - normal state */}
+            {/* Muted Hanzo mark - normal state */}
             <svg
-              width="18"
-              height="18"
-              viewBox="0 0 16 16"
+              width="16"
+              height="16"
+              viewBox="0 0 67 67"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="absolute inset-0 m-auto text-muted-foreground transition-opacity duration-150 group-hover:opacity-0"
             >
-              <path
-                d="M2.1665 11.3333H3.83317L7.1665 8H8.83317L12.1665 4.66667H13.8332M7.1665 13H8.83317L12.1665 9.66667H13.8332M2.1665 6.33333H3.83317L7.1665 3H8.83317"
-                stroke="currentColor"
-                strokeWidth="1.11111"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M22.21 67V44.6369H0V67H22.21Z" fill="currentColor" />
+              <path d="M66.7038 22.3184H22.2534L0.0878906 44.6367H44.4634L66.7038 22.3184Z" fill="currentColor" />
+              <path d="M22.21 0H0V22.3184H22.21V0Z" fill="currentColor" />
+              <path d="M66.7198 0H44.5098V22.3184H66.7198V0Z" fill="currentColor" />
+              <path d="M66.7198 67V44.6369H44.5098V67H66.7198Z" fill="currentColor" />
             </svg>
             {/* Colorful icon - hover state */}
             <img

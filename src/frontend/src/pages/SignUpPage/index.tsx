@@ -96,10 +96,10 @@ export default function SignUp(): JSX.Element {
 
   if (checkingIam) {
     return (
-      <div className="flex h-screen w-full flex-col items-center justify-center bg-muted">
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
         <FlowLogo
-          title="Hanzo Flow logo"
-          className="h-10 w-10 scale-[1.5] opacity-80"
+          title="Hanzo Flow"
+          className="h-12 w-12 text-foreground opacity-80"
         />
       </div>
     );
@@ -118,11 +118,11 @@ export default function SignUp(): JSX.Element {
       }}
       className="h-screen w-full"
     >
-      <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
+      <div className="flex h-full w-full flex-col items-center justify-center bg-background">
         <div className="flex w-72 flex-col items-center justify-center gap-2">
           <FlowLogo
-            title="Hanzo Flow logo"
-            className="mb-4 h-10 w-10 scale-[1.5]"
+            title="Hanzo Flow"
+            className="mb-4 h-12 w-12 text-foreground"
           />
           <span className="mb-6 text-2xl font-semibold text-primary">
             Sign up for Hanzo Flow

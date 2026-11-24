@@ -431,8 +431,8 @@ export default function IOModal({
                       variant="primary"
                       className="w-full !rounded-xl shadow-lg"
                     >
-                      <FlowLogo />
-                      <div className="text-sm">Built with HanzoFlow</div>
+                      <FlowLogo className="h-4 w-4" />
+                      <div className="text-sm">Built with Hanzo Flow</div>
                     </Button>
                   </div>
                 )}
@@ -443,14 +443,14 @@ export default function IOModal({
                 <ShadTooltip
                   styleClasses="z-50"
                   side="right"
-                  content="Built with HanzoFlow"
+                  content="Built with Hanzo Flow"
                 >
                   <Button
                     variant="primary"
                     className="h-12 w-12 !rounded-xl !p-4 shadow-lg"
                     onClick={HanzoFlowButtonClick}
                   >
-                    <FlowLogo className="h-[18px] w-[18px] scale-150" />
+                    <FlowLogo className="h-5 w-5" />
                   </Button>
                 </ShadTooltip>
               </div>

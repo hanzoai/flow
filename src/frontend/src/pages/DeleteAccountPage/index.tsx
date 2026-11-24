@@ -16,11 +16,11 @@ export default function DeleteAccountPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-muted">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-background">
       <div className="flex w-72 flex-col items-center justify-center gap-2">
         <FlowLogo
-          title="HanzoFlow logo"
-          className="mb-4 h-10 w-10 scale-[1.5]"
+          title="Hanzo Flow"
+          className="mb-4 h-12 w-12 text-foreground"
         />
         <span className="mb-4 text-center text-2xl font-semibold text-primary">
           Delete your account
