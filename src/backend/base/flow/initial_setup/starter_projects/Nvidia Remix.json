@@ -897,7 +897,7 @@
                 "dynamic": false,
                 "info": "Overrides global provider settings. Leave blank to use your pre-configured API Key.",
                 "input_types": [],
-                "load_from_db": true,
+                "load_from_db": false,
                 "name": "api_key",
                 "override_skip": false,
                 "password": true,
@@ -1145,7 +1145,23 @@
                 "trace_as_input": true,
                 "track_in_telemetry": false,
                 "type": "model",
-                "value": ""
+                "value": [
+                  {
+                    "icon": "Hanzo",
+                    "category": "Hanzo Enso",
+                    "provider": "Hanzo Enso",
+                    "name": "enso",
+                    "metadata": {
+                      "context_length": 200000,
+                      "model_class": "ChatOpenAI",
+                      "model_name_param": "model",
+                      "api_key_param": "api_key",
+                      "base_url": "https://api.hanzo.ai/v1",
+                      "base_url_param": "base_url",
+                      "model_type": "llm"
+                    }
+                  }
+                ]
               },
               "n_messages": {
                 "_input_type": "IntInput",
@@ -2425,7 +2441,7 @@
                 "dynamic": false,
                 "info": "Overrides global provider settings. Leave blank to use your pre-configured API Key.",
                 "input_types": [],
-                "load_from_db": true,
+                "load_from_db": false,
                 "name": "api_key",
                 "override_skip": false,
                 "password": true,
@@ -2436,7 +2452,7 @@
                 "title_case": false,
                 "track_in_telemetry": false,
                 "type": "str",
-                "value": "OPENAI_API_KEY"
+                "value": ""
               },
               "base_url_ibm_watsonx": {
                 "_input_type": "DropdownInput",
