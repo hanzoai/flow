@@ -64,7 +64,7 @@ export const getServerName = (
     folderName?.trim() && folderName.trim().length > 0
       ? folderName.trim()
       : "project";
-  return `lf-${parseString(name, [
+  return `hanzo-${parseString(name, [
     "snake_case",
     "no_blank",
     "lowercase",

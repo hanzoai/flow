@@ -371,11 +371,14 @@ def get_embeddings(
         if watsonx_params:
             kwargs["params"] = watsonx_params
 
-    # Hanzo Enso embeddings route through https://api.hanzo.ai/v1
-    if provider == "Hanzo Enso" and not optional_params.get("api_base"):
+    # Hanzo Enso embeddings route through https://api.hanzo.ai/v1; disable local
+    # tiktoken tokenization so raw strings are sent to /v1/embeddings.
+    if provider == "Hanzo Enso":
         from lfx.base.models.hanzo_constants import hanzo_base_url
 
-        kwargs["base_url"] = hanzo_base_url()
+        if not optional_params.get("api_base"):
+            kwargs["base_url"] = hanzo_base_url()
+        kwargs["check_embedding_ctx_length"] = False
 
     # Ollama-specific parameters
     if provider == "Ollama" and "base_url" in param_mapping:
