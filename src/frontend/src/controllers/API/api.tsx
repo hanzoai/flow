@@ -53,8 +53,16 @@ function ApiInterceptor() {
         // No need to manually add Authorization header from cookies
 
         if (!isExternalURL(url)) {
-          for (const [key, value] of Object.entries(customHeaders)) {
-            config.headers[key] = value;
+          config = config ?? {};
+          if (config.headers instanceof Headers) {
+            for (const [key, value] of Object.entries(customHeaders)) {
+              config.headers.set(key, value);
+            }
+          } else {
+            config.headers = {
+              ...(config.headers as Record<string, string> | undefined),
+              ...customHeaders,
+            };
           }
         }
 
