@@ -1,5 +1,6 @@
 // Export the lazy loading mapping for icons
 export const lazyIconsMapping = {
+  Hanzo: () => import("@/icons/Hanzo").then((mod) => ({ default: mod.HanzoIcon })),
   AIML: () => import("@/icons/AIML").then((mod) => ({ default: mod.AIMLIcon })),
   Agentics: () =>
     import("@/icons/Agentics").then((mod) => ({

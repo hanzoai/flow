@@ -154,6 +154,10 @@ def get_language_model_options(
     if user_id:
         with contextlib.suppress(Exception):
             enabled_providers = run_until_complete(_fetch_enabled_providers_for_user(user_id))
+    from lfx.base.models.hanzo_constants import HANZO_PROVIDER_NAME, hanzo_enso_auto_enabled
+
+    if hanzo_enso_auto_enabled():
+        enabled_providers.add(HANZO_PROVIDER_NAME)
 
     # Replace static defaults with actual available models from configured instances
     if enabled_providers:
@@ -261,6 +265,10 @@ def get_embedding_model_options(
     if user_id:
         with contextlib.suppress(Exception):
             enabled_providers = run_until_complete(_fetch_enabled_providers_for_user(user_id))
+    from lfx.base.models.hanzo_constants import HANZO_PROVIDER_NAME, hanzo_enso_auto_enabled
+
+    if hanzo_enso_auto_enabled():
+        enabled_providers.add(HANZO_PROVIDER_NAME)
 
     # Replace static defaults with actual available models from configured instances
     if enabled_providers:
@@ -276,6 +284,17 @@ def get_embedding_model_options(
 
     # Provider-specific param mappings
     param_mappings = {
+        "Hanzo Enso": {
+            "model": "model",
+            "api_key": "api_key",
+            "api_base": "base_url",
+            "dimensions": "dimensions",
+            "chunk_size": "chunk_size",
+            "request_timeout": "timeout",
+            "max_retries": "max_retries",
+            "show_progress_bar": "show_progress_bar",
+            "model_kwargs": "model_kwargs",
+        },
         "OpenAI": {
             "model": "model",
             "api_key": "api_key",

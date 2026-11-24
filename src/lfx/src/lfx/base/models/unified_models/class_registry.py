@@ -41,6 +41,7 @@ _EMBEDDING_CLASS_IMPORTS: dict[str, tuple[str, str, str | None]] = {
 # Used by EmbeddingModelComponent and by flow_requirements to resolve
 # which PyPI package a given embedding provider needs at runtime.
 EMBEDDING_PROVIDER_CLASS_MAPPING: dict[str, str] = {
+    "Hanzo Enso": "OpenAIEmbeddings",
     "OpenAI": "OpenAIEmbeddings",
     "Google Generative AI": "GoogleGenerativeAIEmbeddings",
     "Ollama": "OllamaEmbeddings",

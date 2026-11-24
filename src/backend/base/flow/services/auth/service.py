@@ -137,7 +137,7 @@ class AuthService(BaseAuthService):
         """
         import secrets
 
-        from flow.services.auth.iam import iam_enabled, try_validate
+        from flow.services.auth.iam import iam_enabled, set_user_iam_token, try_validate
 
         if not iam_enabled():
             return None
@@ -169,6 +169,7 @@ class AuthService(BaseAuthService):
             user.is_superuser = principal.is_admin
             await db.commit()
             await db.refresh(user)
+        set_user_iam_token(str(user.id), token)
         return user
 
     async def _authenticate_with_token(self, token: str, db: AsyncSession) -> User:

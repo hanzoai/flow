@@ -6,7 +6,7 @@ principal model (principal.Org / principal.Project) so a single IAM login is the
 session across console, studio, and flow.
 
 Enabled by env (no compat alias — forward-only):
-    FLOW_IAM_ISSUER         the IAM token issuer, e.g. https://hanzo.id  (presence = enabled)
+    FLOW_IAM_ISSUER         the IAM token issuer, e.g. https://hanzo.ai  (presence = enabled)
     FLOW_IAM_JWKS_URL       the JWKS endpoint (default: <issuer>/v1/iam/.well-known/jwks)
     FLOW_IAM_CLIENT_ID      the OAuth client id (default: hanzo-flow)
     FLOW_IAM_CLIENT_SECRET  optional OAuth client secret (PKCE S256 works without one)
@@ -33,6 +33,26 @@ import jwt
 # Set after a token validates; unset for anonymous/local paths (value None = no scope).
 current_org: ContextVar[str | None] = ContextVar("flow_iam_org", default=None)
 current_project: ContextVar[str | None] = ContextVar("flow_iam_project", default=None)
+current_iam_token: ContextVar[str | None] = ContextVar("flow_iam_token", default=None)
+
+# In-memory cache of the most recent verified Hanzo IAM bearer token per flow user_id
+# so worker threads (which may not inherit ContextVars) can authenticate Hanzo Enso
+# inference calls as the signed-in user without persisting tokens to disk or SQLite.
+_user_iam_tokens: dict[str, str] = {}
+
+
+def set_user_iam_token(user_id: str, token: str) -> None:
+    if user_id and token:
+        _user_iam_tokens[str(user_id)] = token
+
+
+def get_user_iam_token(user_id: str | None = None) -> str | None:
+    tok = current_iam_token.get()
+    if tok:
+        return tok
+    if user_id is not None:
+        return _user_iam_tokens.get(str(user_id))
+    return None
 
 # Asymmetric algorithms published by hanzo.id JWKS — never HS* or none.
 _ALLOWED_ALGS = ["RS256", "RS512", "ES256", "ES384", "ES512"]
@@ -222,4 +242,5 @@ def try_validate(token: str, *, validator: HanzoIAMValidator | None = None) -> I
     principal = v.validate(token)  # raises on a bad IAM token — never falls through
     current_org.set(principal.org)
     current_project.set(principal.project or None)
+    current_iam_token.set(token)
     return principal
