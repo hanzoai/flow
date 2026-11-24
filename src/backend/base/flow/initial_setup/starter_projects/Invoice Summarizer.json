@@ -712,7 +712,7 @@
               }
             ],
             "pinned": false,
-            "score": 7.568328950209746e-6,
+            "score": 7.568328950209746e-06,
             "template": {
               "_type": "Component",
               "code": {
@@ -1521,7 +1521,23 @@
                 "trace_as_input": true,
                 "track_in_telemetry": false,
                 "type": "model",
-                "value": ""
+                "value": [
+                  {
+                    "icon": "Hanzo",
+                    "category": "Hanzo Enso",
+                    "provider": "Hanzo Enso",
+                    "name": "enso",
+                    "metadata": {
+                      "context_length": 200000,
+                      "model_class": "ChatOpenAI",
+                      "model_name_param": "model",
+                      "api_key_param": "api_key",
+                      "base_url": "https://api.hanzo.ai/v1",
+                      "base_url_param": "base_url",
+                      "model_type": "llm"
+                    }
+                  }
+                ]
               },
               "n_messages": {
                 "_input_type": "IntInput",
