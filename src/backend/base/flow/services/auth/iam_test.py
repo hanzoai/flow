@@ -137,3 +137,11 @@ def test_iam_config_defaults_match_hanzo_id(monkeypatch):
     assert cfg.resolved_authorize_url() == "https://hanzo.id/v1/iam/oauth/authorize"
     assert cfg.resolved_token_url() == "https://hanzo.id/v1/iam/oauth/token"
     iam_config.cache_clear()
+
+
+def test_jwks_client_sets_non_urllib_user_agent():
+    v = HanzoIAMValidator(IAMConfig(issuer=ISSUER, jwks_url="https://hanzo.id/v1/iam/.well-known/jwks"))
+    assert v._jwks is not None
+    ua = v._jwks.headers.get("User-Agent", "")
+    assert ua.startswith("hanzo-flow/")
+    assert "urllib" not in ua.lower()

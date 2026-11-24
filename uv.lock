@@ -3250,7 +3250,7 @@ wheels = [
 
 [[package]]
 name = "hanzo-flow"
-version = "1.8.9"
+version = "1.8.10"
 source = { editable = "." }
 dependencies = [
     { name = "hanzo-flow-base", extra = ["complete"] },

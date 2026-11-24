@@ -1,4 +1,4 @@
-"""LangFlow Components module."""
+"""Hanzo Flow Components module."""
 
 from __future__ import annotations
 

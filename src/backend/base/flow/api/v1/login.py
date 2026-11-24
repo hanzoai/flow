@@ -19,6 +19,7 @@ from flow.services.auth.iam import iam_config, iam_enabled, pkce_pair, try_valid
 from flow.services.database.models.user.crud import get_user_by_id
 from flow.services.database.models.user.model import UserRead
 from flow.services.deps import get_auth_service, get_settings_service, get_variable_service
+from lfx.log.logger import logger
 
 router = APIRouter(tags=["Login"])
 iam_callback_router = APIRouter(tags=["Login"])
@@ -191,7 +192,8 @@ async def _handle_iam_callback(
     auth = get_auth_service()
     try:
         user = await auth._authenticate_with_iam(access_token, db)
-    except Exception:
+    except Exception as exc:
+        logger.warning("Hanzo IAM callback token verification failed: %s: %s", type(exc).__name__, exc)
         return RedirectResponse(url="/login?error=token_verification_failed", status_code=status.HTTP_302_FOUND)
 
     if user is None:
