@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 import jwt
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, MultiFernet
 from fastapi import HTTPException, Request, WebSocketException, status
 from jwt import InvalidTokenError
 from lfx.log.logger import logger
@@ -724,6 +724,37 @@ class AuthService(BaseAuthService):
         secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
         return Fernet(ensure_fernet_key(secret_key))
 
+    def _get_fernet_with_legacy_fallback(self) -> MultiFernet:
+        """Get a MultiFernet instance that supports both new and legacy key derivation.
+
+        The legacy derivation used random.seed(secret_key) + random.getrandbits(8)
+        which was non-cryptographic. This method returns a MultiFernet that tries
+        the new SHA-256 derivation first, then falls back to the legacy derivation
+        for decrypting old ciphertexts. We never encrypt with the legacy key.
+        """
+        from flow.services.auth.utils import MINIMUM_KEY_LENGTH, ensure_fernet_key
+
+        secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
+
+        # Primary: new SHA-256 derivation (used for encryption)
+        new_key = ensure_fernet_key(secret_key)
+        primary_fernet = Fernet(new_key)
+
+        # Legacy: old random.getrandbits derivation (decrypt-only fallback)
+        # Only add legacy if the secret_key is short (< 32 chars), since that's
+        # the only case where the old derivation would have been used.
+        fernets = [primary_fernet]
+        if len(secret_key) < MINIMUM_KEY_LENGTH:
+            import base64
+            import random
+
+            random.seed(secret_key)
+            legacy_key = bytes(random.getrandbits(8) for _ in range(32))
+            legacy_key = base64.urlsafe_b64encode(legacy_key)
+            fernets.append(Fernet(legacy_key))
+
+        return MultiFernet(fernets)
+
     def encrypt_api_key(self, api_key: str) -> str:
         fernet = self._get_fernet()
         encrypted_key = fernet.encrypt(api_key.encode())
@@ -741,6 +772,8 @@ class AuthService(BaseAuthService):
         Note:
             - Returns empty string for invalid input (None, empty string)
             - Returns plaintext keys as-is (not starting with "gAAAAA")
+            - Tries new SHA-256 derivation first, then falls back to legacy
+              random.getrandbits derivation for backward compatibility.
             - Logs warnings on decryption failures for security monitoring
         """
         if not isinstance(encrypted_api_key, str) or not encrypted_api_key:
@@ -751,7 +784,7 @@ class AuthService(BaseAuthService):
         if not encrypted_api_key.startswith("gAAAAA"):
             return encrypted_api_key
 
-        fernet = self._get_fernet()
+        fernet = self._get_fernet_with_legacy_fallback()
         try:
             return fernet.decrypt(encrypted_api_key.encode()).decode()
         except Exception as primary_exception:  # noqa: BLE001
