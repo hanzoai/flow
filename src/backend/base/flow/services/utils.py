@@ -70,6 +70,13 @@ async def get_or_create_super_user(session: AsyncSession, username, password, is
 
 
 async def setup_superuser(settings_service: SettingsService, session: AsyncSession) -> None:
+    from flow.services.auth.iam import iam_enabled
+
+    if iam_enabled():
+        await logger.adebug("Hanzo IAM is enabled; skipping local superuser bootstrap.")
+        settings_service.auth_settings.reset_credentials()
+        return
+
     if settings_service.auth_settings.AUTO_LOGIN:
         await logger.adebug("AUTO_LOGIN is set to True. Creating default superuser.")
         username = DEFAULT_SUPERUSER

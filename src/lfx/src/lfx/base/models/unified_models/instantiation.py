@@ -46,8 +46,24 @@ def get_llm(
 
     # Safely extract model configuration
     if not model or not isinstance(model, list) or len(model) == 0:
-        msg = "A model selection is required"
-        raise ValueError(msg)
+        from lfx.base.models.hanzo_constants import HANZO_PROVIDER_NAME, hanzo_enso_auto_enabled
+
+        if hanzo_enso_auto_enabled():
+            model = [
+                {
+                    "name": "enso",
+                    "provider": HANZO_PROVIDER_NAME,
+                    "icon": "Hanzo",
+                    "metadata": {
+                        "model_class": "ChatOpenAI",
+                        "model_name_param": "model",
+                        "api_key_param": "api_key",
+                    },
+                }
+            ]
+        else:
+            msg = "A model selection is required"
+            raise ValueError(msg)
 
     # Extract the first model (only one expected)
     model = model[0]
@@ -127,8 +143,13 @@ def get_llm(
             pass  # Skip invalid max_tokens (e.g. empty string from form input)
 
     # Enable streaming usage for providers that support it
-    if provider in ["OpenAI", "Anthropic"]:
+    if provider in ["Hanzo Enso", "OpenAI", "Anthropic"]:
         kwargs["stream_usage"] = True
+
+    if provider == "Hanzo Enso":
+        from lfx.base.models.hanzo_constants import hanzo_base_url
+
+        kwargs["base_url"] = hanzo_base_url()
 
     # Add provider-specific parameters
     if provider in {"IBM WatsonX", "IBM watsonx.ai"}:
@@ -349,6 +370,12 @@ def get_embeddings(
                 watsonx_params["return_options"] = {"input_text": bool(watsonx_input_text)}
         if watsonx_params:
             kwargs["params"] = watsonx_params
+
+    # Hanzo Enso embeddings route through https://api.hanzo.ai/v1
+    if provider == "Hanzo Enso" and not optional_params.get("api_base"):
+        from lfx.base.models.hanzo_constants import hanzo_base_url
+
+        kwargs["base_url"] = hanzo_base_url()
 
     # Ollama-specific parameters
     if provider == "Ollama" and "base_url" in param_mapping:

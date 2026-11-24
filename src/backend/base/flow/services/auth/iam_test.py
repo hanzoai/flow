@@ -140,8 +140,19 @@ def test_iam_config_defaults_match_hanzo_id(monkeypatch):
 
 
 def test_jwks_client_sets_non_urllib_user_agent():
-    v = HanzoIAMValidator(IAMConfig(issuer=ISSUER, jwks_url="https://hanzo.id/v1/iam/.well-known/jwks"))
+    v = HanzoIAMValidator(IAMConfig(issuer=ISSUER, jwks_url="https://hanzo.ai/v1/iam/.well-known/jwks"))
     assert v._jwks is not None
     ua = v._jwks.headers.get("User-Agent", "")
     assert ua.startswith("hanzo-flow/")
     assert "urllib" not in ua.lower()
+
+
+def test_user_iam_token_roundtrip():
+    from flow.services.auth.iam import current_iam_token, get_user_iam_token, set_user_iam_token
+
+    current_iam_token.set(None)
+    set_user_iam_token("user-42", "jwt-abc")
+    assert get_user_iam_token("user-42") == "jwt-abc"
+    current_iam_token.set("jwt-ctx")
+    assert get_user_iam_token("user-42") == "jwt-ctx"
+    current_iam_token.set(None)

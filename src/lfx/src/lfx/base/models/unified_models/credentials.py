@@ -103,7 +103,23 @@ def get_api_key_for_provider(user_id: UUID | str | None, provider: str, api_key:
     if api_key:
         return api_key
 
-    return os.getenv(variable_name)
+    env_val = os.getenv(variable_name)
+    if env_val:
+        return env_val
+
+    # For Hanzo Enso, fall back to the signed-in user's verified Hanzo IAM bearer token
+    # so flows route through https://api.hanzo.ai/v1 out of the box with zero key copy/paste.
+    if provider == "Hanzo Enso":
+        try:
+            from flow.services.auth.iam import get_user_iam_token
+
+            iam_tok = get_user_iam_token(str(user_id) if has_user else None)
+            if iam_tok:
+                return iam_tok
+        except Exception:  # noqa: BLE001
+            pass
+
+    return None
 
 
 def get_all_variables_for_provider(user_id: UUID | str | None, provider: str) -> dict[str, str]:
@@ -174,6 +190,13 @@ def _validate_and_get_enabled_providers(
     enabled = set()
 
     for provider in provider_variable_map:
+        if provider == "Hanzo Enso":
+            from lfx.base.models.hanzo_constants import hanzo_enso_auto_enabled
+
+            if hanzo_enso_auto_enabled():
+                enabled.add(provider)
+                continue
+
         provider_vars = get_provider_all_variables(provider)
 
         collected_values: dict[str, str] = {}
@@ -357,7 +380,25 @@ def validate_model_provider_key(provider: str, variables: dict[str, str], model_
         return
 
     try:
-        if provider == "OpenAI":
+        if provider == "Hanzo Enso":
+            from langchain_openai import ChatOpenAI  # type: ignore  # noqa: PGH003
+
+            from lfx.base.models.hanzo_constants import hanzo_base_url
+
+            api_key = variables.get("HANZO_API_KEY") or os.getenv("HANZO_API_KEY")
+            if not api_key:
+                try:
+                    from flow.services.auth.iam import get_user_iam_token
+
+                    api_key = get_user_iam_token()
+                except Exception:  # noqa: BLE001
+                    api_key = None
+            if not api_key:
+                return
+            llm = ChatOpenAI(api_key=api_key, base_url=hanzo_base_url(), model_name=first_model or "enso", max_tokens=1)
+            llm.invoke("test")
+
+        elif provider == "OpenAI":
             from langchain_openai import ChatOpenAI  # type: ignore  # noqa: PGH003
 
             api_key = variables.get("OPENAI_API_KEY")
