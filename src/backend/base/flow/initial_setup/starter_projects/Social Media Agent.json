@@ -642,7 +642,7 @@
         "data": {
           "id": "note-NZDOa",
           "node": {
-            "description": "# 📖 README\nExtract data with **Apify Actors** and analyze the data with an **Agent**.\n\n## Prerequisites\n\n* An [Apify API token](https://docs.apify.com/platform/integrations/api#api-token)\n* An [OpenAI API key](https://platform.openai.com/)\n\n## Quick start\n\n1. Configure your **Model Provider** with your API credentials.\n2. Enter your **Apify** API token in the **Apify Token** fields of the **Apify Actors** components.\n3. Open the **Playground** and chat with the agent. For example, task it with retrieving a profile bio and the latest video by using this prompt:  \n   ```\n   Find the TikTok profile of the company OpenAI using Google search, then show me the profile bio and their latest video.\n   ```",
+            "description": "# 📖 README\nExtract data with **Apify Actors** and analyze the data with an **Agent**.\n\n## Prerequisites\n\n* An [Apify API token](https://docs.apify.com/platform/integrations/api#api-token)\n* Signed in with your Hanzo account (**Hanzo Enso** is enabled automatically — no external API key needed)\n\n## Quick start\n\n1. **Hanzo Enso** (`enso`) is pre-configured for your signed-in Hanzo account.\n2. Enter your **Apify** API token in the **Apify Token** fields of the **Apify Actors** components.\n3. Open the **Playground** and chat with the agent. For example, task it with retrieving a profile bio and the latest video by using this prompt:  \n   ```\n   Find the TikTok profile of the company OpenAI using Google search, then show me the profile bio and their latest video.\n   ```",
             "display_name": "",
             "documentation": "",
             "template": {

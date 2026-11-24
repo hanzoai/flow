@@ -61,8 +61,20 @@ def get_api_key_for_provider(user_id: UUID | str | None, provider: str, api_key:
             resolved = _resolve_var_name(var_name)
             if resolved:
                 return resolved
-            # Unresolved variable name: don't use as literal key
+            # Unresolved variable name: for Hanzo Enso's default HANZO_API_KEY, fall back
+            # to the signed-in user's verified Hanzo IAM bearer token instead of failing closed.
             if re.match(r"^[A-Z][A-Z0-9_]*$", var_name):
+                if provider == "Hanzo Enso" and var_name == "HANZO_API_KEY":
+                    try:
+                        from flow.services.auth.iam import get_user_iam_token
+
+                        iam_tok = get_user_iam_token(
+                            str(user_id) if user_id and not (isinstance(user_id, str) and user_id == "None") else None
+                        )
+                        if iam_tok:
+                            return iam_tok
+                    except Exception:  # noqa: BLE001
+                        pass
                 return None
         # Literal API key (e.g. sk-...)
         return var_name

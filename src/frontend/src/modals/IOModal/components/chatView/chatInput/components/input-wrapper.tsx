@@ -94,7 +94,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
     <div className="flex w-full flex-col-reverse">
       <div
         data-testid="input-wrapper"
-        className="flex w-full flex-col rounded-md border cursor-text border-input p-4 hover:border-muted-foreground focus:border-[1.75px] has-[:focus]:border-primary"
+        className="flex w-full flex-col rounded-[20px] border cursor-text border-white/15 bg-[#0c0c0c] px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.45)] transition-colors hover:border-white/25 has-[:focus]:border-white/40"
         onClick={onClick}
         onMouseDown={onMouseDown}
         onKeyDown={onKeyDown}
@@ -114,20 +114,22 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
           isDragging={isDragging}
         />
 
-        <div className={classNameFilePreview}>
-          {files.map((file) => (
-            <FilePreview
-              error={file.error}
-              file={file.file}
-              loading={file.loading}
-              key={file.id}
-              onDelete={() => {
-                handleDeleteFile(file);
-              }}
-            />
-          ))}
-        </div>
-        <div className="flex w-full items-end justify-between">
+        {files.length > 0 && (
+          <div className={classNameFilePreview}>
+            {files.map((file) => (
+              <FilePreview
+                error={file.error}
+                file={file.file}
+                loading={file.loading}
+                key={file.id}
+                onDelete={() => {
+                  handleDeleteFile(file);
+                }}
+              />
+            ))}
+          </div>
+        )}
+        <div className="flex w-full items-center justify-between pt-2">
           <div className={isBuilding ? "cursor-not-allowed" : ""}>
             {(!playgroundPage ||
               (playgroundPage && ENABLE_FILES_ON_PLAYGROUND)) && (

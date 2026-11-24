@@ -41,9 +41,13 @@ current_iam_token: ContextVar[str | None] = ContextVar("flow_iam_token", default
 _user_iam_tokens: dict[str, str] = {}
 
 
+def _norm_user_key(user_id: object) -> str:
+    return str(user_id).strip().replace("-", "").lower()
+
+
 def set_user_iam_token(user_id: str, token: str) -> None:
     if user_id and token:
-        _user_iam_tokens[str(user_id)] = token
+        _user_iam_tokens[_norm_user_key(user_id)] = token
 
 
 def get_user_iam_token(user_id: str | None = None) -> str | None:
@@ -51,7 +55,7 @@ def get_user_iam_token(user_id: str | None = None) -> str | None:
     if tok:
         return tok
     if user_id is not None:
-        return _user_iam_tokens.get(str(user_id))
+        return _user_iam_tokens.get(_norm_user_key(user_id))
     return None
 
 # Asymmetric algorithms published by hanzo.id JWKS — never HS* or none.
