@@ -727,10 +727,10 @@ class AuthService(BaseAuthService):
     def _get_fernet_with_legacy_fallback(self) -> MultiFernet:
         """Get a MultiFernet instance that supports both new and legacy key derivation.
 
-        The legacy derivation used random.seed(secret_key) + random.getrandbits(8)
-        which was non-cryptographic. This method returns a MultiFernet that tries
-        the new SHA-256 derivation first, then falls back to the legacy derivation
-        for decrypting old ciphertexts. We never encrypt with the legacy key.
+        The legacy derivation used a module-global random seed. This method returns a
+        MultiFernet that tries the new SHA-256 derivation first, then falls back to
+        the legacy derivation for decrypting old ciphertexts. We never encrypt with
+        the legacy key.
         """
         from flow.services.auth.utils import MINIMUM_KEY_LENGTH, ensure_fernet_key
 
@@ -748,8 +748,11 @@ class AuthService(BaseAuthService):
             import base64
             import random
 
-            random.seed(secret_key)
-            legacy_key = bytes(random.getrandbits(8) for _ in range(32))
+            # Use a local Random instance to avoid mutating global state
+            # S311: Using random.Random here only to reproduce the legacy key for
+            # decrypt-only fallback; not for new cryptographic key generation.
+            rng = random.Random(secret_key)  # noqa: S311
+            legacy_key = bytes(rng.getrandbits(8) for _ in range(32))
             legacy_key = base64.urlsafe_b64encode(legacy_key)
             fernets.append(Fernet(legacy_key))
 

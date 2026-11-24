@@ -643,3 +643,57 @@ def test_legacy_ciphertext_decryption_fallback(tmp_path):
     # Decrypt should work via the legacy fallback
     decrypted = svc.decrypt_api_key(legacy_ciphertext)
     assert decrypted == test_value
+
+
+def test_global_random_state_unchanged_after_key_derivation():
+    """Deriving Fernet keys must not mutate the global random module state.
+
+    The legacy code used random.seed() which mutates process-wide state.
+    Both the new SHA-256 derivation and the local-Random legacy fallback
+    must leave random.getstate() identical.
+    """
+    import random
+    from flow.services.auth.utils import ensure_fernet_key
+    from flow.services.auth.service import AuthService
+    from lfx.services.settings.auth import AuthSettings
+    from types import SimpleNamespace
+    from pydantic import SecretStr
+    import warnings
+
+    raw_key = "short-secret"
+    settings = AuthSettings(CONFIG_DIR="/tmp")
+    settings.SECRET_KEY = SecretStr(raw_key)
+    settings_service = SimpleNamespace(
+        auth_settings=settings,
+        settings=SimpleNamespace(config_dir="/tmp"),
+    )
+    svc = AuthService(settings_service)
+
+    # Capture global random state before
+    state_before = random.getstate()
+
+    # Derive key via ensure_fernet_key (new SHA-256 path)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        _ = ensure_fernet_key(raw_key)
+
+    # State must be unchanged
+    state_after_sha256 = random.getstate()
+    assert state_after_sha256 == state_before, "SHA-256 derivation mutated global random state"
+
+    # Decrypt via legacy fallback (uses local Random instance)
+    # First create a legacy ciphertext
+    import base64
+    rng = random.Random(raw_key)
+    legacy_key = bytes(rng.getrandbits(8) for _ in range(32))
+    legacy_key = base64.urlsafe_b64encode(legacy_key)
+    from cryptography.fernet import Fernet
+    legacy_fernet = Fernet(legacy_key)
+    legacy_ciphertext = legacy_fernet.encrypt(b"test-value").decode()
+
+    # Now decrypt through the service (uses local Random in fallback)
+    _ = svc.decrypt_api_key(legacy_ciphertext)
+
+    # State must still be unchanged
+    state_after_decrypt = random.getstate()
+    assert state_after_decrypt == state_before, "Legacy decrypt fallback mutated global random state"

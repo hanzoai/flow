@@ -369,17 +369,11 @@ def ensure_fernet_key(secret_key: str) -> bytes:
     For short keys (< 32 chars), the 32-byte key is derived with SHA-256, a
     cryptographic hash. For longer keys, base64 padding is added.
 
-    Security note: short keys previously seeded Python's ``random`` module
-    (``random.seed(secret_key)``) to generate the key bytes. ``random`` is a
-    non-cryptographic Mersenne-Twister PRNG, so the resulting Fernet key was
-    fully predictable from the secret, and seeding it also mutated global PRNG
-    state. SHA-256 is deterministic (so the key stays stable for a given
-    secret) but is not predictable/reversible the way the PRNG output was.
-
-    Deployments that set a ``SECRET_KEY`` shorter than 32 characters will derive
-    a different key than before this fix and must re-enter encrypted secrets
-    (API keys, global variables) after upgrading. The default ``SECRET_KEY`` is
-    a 43-char ``secrets.token_urlsafe(32)`` value and is unaffected.
+    Legacy: short keys previously derived via Python's module-global random module.
+    The new derivation uses SHA-256. Deployments with a SECRET_KEY shorter than
+    32 characters will derive a different key and must re-enter encrypted
+    secrets (API keys, global variables) after upgrading. The default
+    SECRET_KEY (secrets.token_urlsafe(32)) is unaffected.
     """
     if len(secret_key) < MINIMUM_KEY_LENGTH:
         warnings.warn(
