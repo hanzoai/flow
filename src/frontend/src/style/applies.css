@@ -36,31 +36,31 @@
 
 @keyframes gradient-motion-start {
   0% {
-    stop-color: rgb(156, 138, 236);
+    stop-color: rgb(161, 161, 170);
   }
   50% {
-    stop-color: rgb(255, 130, 184);
+    stop-color: rgb(228, 228, 231);
   }
   80% {
-    stop-color: rgb(255, 165, 100);
+    stop-color: rgb(113, 113, 122);
   }
   100% {
-    stop-color: rgb(156, 138, 236);
+    stop-color: rgb(161, 161, 170);
   }
 }
 
 @keyframes gradient-motion-end {
   0% {
-    stop-color: rgb(156, 138, 236);
+    stop-color: rgb(113, 113, 122);
   }
   50% {
-    stop-color: rgb(255, 165, 100);
+    stop-color: rgb(161, 161, 170);
   }
   80% {
-    stop-color: rgb(255, 130, 184);
+    stop-color: rgb(228, 228, 231);
   }
   100% {
-    stop-color: rgb(156, 138, 236);
+    stop-color: rgb(113, 113, 122);
   }
 }
 
@@ -1321,20 +1321,20 @@
 
 :root {
   --color-bg1: rgb(255, 255, 255);
-  --color1: 255, 50, 118;
-  --color2: 244, 128, 255;
-  --color3: 117, 40, 252;
-  --color-interactive: 140, 100, 255;
+  --color1: 161, 161, 170;
+  --color2: 212, 212, 216;
+  --color3: 113, 113, 122;
+  --color-interactive: 82, 82, 91;
   --circle-size: 50%;
   --blending: hard-light;
 }
 
 .dark {
   --color-bg1: rgb(0, 0, 0);
-  --color1: 255, 50, 118;
-  --color2: 244, 128, 255;
-  --color3: 117, 40, 252;
-  --color-interactive: 140, 100, 255;
+  --color1: 82, 82, 91;
+  --color2: 63, 63, 70;
+  --color3: 39, 39, 42;
+  --color-interactive: 113, 113, 122;
   --circle-size: 60%;
   --blending: hard-light;
 }

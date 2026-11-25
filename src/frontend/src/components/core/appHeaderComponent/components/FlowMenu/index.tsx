@@ -95,34 +95,36 @@ export const MenuBar = memo((): JSX.Element => {
           className="relative flex w-full items-center justify-center gap-2"
           data-testid="menu_bar_wrapper"
         >
-          <div
-            className="header-menu-bar hidden max-w-40 justify-end truncate md:flex xl:max-w-full"
-            data-testid="menu_flow_bar"
-            id="menu_flow_bar_navigation"
-          >
-            {currentFolder?.name && (
-              <div className="hidden truncate md:flex">
-                <div
-                  className="cursor-pointer truncate text-sm text-muted-foreground hover:text-primary"
-                  onClick={() => {
-                    navigate(
-                      currentFolder?.id
-                        ? "/all/folder/" + currentFolder.id
-                        : "/all",
-                    );
-                  }}
-                >
-                  {currentFolder?.name}
+          {currentFolder?.name?.trim() && (
+            <>
+              <div
+                className="header-menu-bar hidden max-w-40 justify-end truncate md:flex xl:max-w-full"
+                data-testid="menu_flow_bar"
+                id="menu_flow_bar_navigation"
+              >
+                <div className="hidden truncate md:flex">
+                  <div
+                    className="cursor-pointer truncate text-sm text-muted-foreground hover:text-primary"
+                    onClick={() => {
+                      navigate(
+                        currentFolder?.id
+                          ? "/all/folder/" + currentFolder.id
+                          : "/all",
+                      );
+                    }}
+                  >
+                    {currentFolder.name}
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
-          <div
-            className="hidden w-fit shrink-0 select-none font-normal text-muted-foreground md:flex"
-            data-testid="menu_bar_separator"
-          >
-            /
-          </div>
+              <div
+                className="hidden w-fit shrink-0 select-none font-normal text-muted-foreground md:flex"
+                data-testid="menu_bar_separator"
+              >
+                /
+              </div>
+            </>
+          )}
           <div className={cn(`flex rounded p-1`, swatchColors[swatchIndex])}>
             <IconComponent
               name={currentFlowIcon ?? "Workflow"}

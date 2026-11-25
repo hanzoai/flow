@@ -11,12 +11,14 @@ import { SliderLabels } from "./components/slider-labels";
 import { buildColorByName } from "./helpers/build-color-by-name";
 
 const THRESHOLDS = [0.25, 0.5, 0.75, 1];
-const BACKGROUND_COLORS = ["#4f46e5", "#7c3aed", "#a21caf", "#c026d3"];
-const TEXT_COLORS = ["#fff", "#fff", "#fff", "#fff"];
+const LIGHT_BACKGROUND_COLORS = ["#18181b", "#27272a", "#3f3f46", "#52525b"];
+const DARK_BACKGROUND_COLORS = ["#ffffff", "#e4e4e7", "#d4d4d8", "#a1a1aa"];
+const LIGHT_TEXT_COLORS = ["#fff", "#fff", "#fff", "#fff"];
+const DARK_TEXT_COLORS = ["#09090b", "#09090b", "#09090b", "#09090b"];
 const PERCENTAGES = [0.125, 0.375, 0.625, 0.875];
 
 const DARK_COLOR_BACKGROUND = "#27272a";
-const DARK_COLOR_TEXT = "#52525b";
+const DARK_COLOR_TEXT = "#a1a1aa";
 const LIGHT_COLOR_BACKGROUND = "#e4e4e7";
 const LIGHT_COLOR_TEXT = "#52525b";
 
@@ -32,8 +34,8 @@ const MAX_LABEL = "Creative";
 const MIN_LABEL_ICON = "pencil-ruler";
 const MAX_LABEL_ICON = "palette";
 
-const DEFAULT_ACCENT_PINK_FOREGROUND_COLOR = "333 71% 51%";
-const DEFAULT_ACCENT_INDIGO_FOREGROUND_COLOR = "243 75% 59%";
+const DEFAULT_SLIDER_START_COLOR = "240 6% 10%";
+const DEFAULT_SLIDER_END_COLOR = "240 5% 34%";
 
 type ColorType = "background" | "text";
 
@@ -103,7 +105,14 @@ export default function SliderComponent({
     normalizedValue: number,
     colorType: ColorType,
   ): string => {
-    const colors = colorType === "background" ? BACKGROUND_COLORS : TEXT_COLORS;
+    const colors =
+      colorType === "background"
+        ? isDark
+          ? DARK_BACKGROUND_COLORS
+          : LIGHT_BACKGROUND_COLORS
+        : isDark
+          ? DARK_TEXT_COLORS
+          : LIGHT_TEXT_COLORS;
     const defaultColor = isDark
       ? colorType === "background"
         ? DARK_COLOR_BACKGROUND
@@ -174,25 +183,25 @@ export default function SliderComponent({
     document.documentElement.classList.remove("dark");
   }
 
-  const accentIndigoForeground = getComputedStyle(
+  const accentStartForeground = getComputedStyle(
     document.documentElement,
   ).getPropertyValue("--accent-indigo-foreground");
 
-  const accentPinkForeground = getComputedStyle(
+  const accentEndForeground = getComputedStyle(
     document.documentElement,
-  ).getPropertyValue("--accent-pink-foreground");
+  ).getPropertyValue("--muted-foreground");
 
   const getThumbColor = (percentage) => {
-    if (accentIndigoForeground && accentPinkForeground) {
+    if (accentStartForeground && accentEndForeground) {
       return buildColorByName(
-        accentIndigoForeground,
-        accentPinkForeground,
+        accentStartForeground,
+        accentEndForeground,
         percentage,
       );
     }
     return buildColorByName(
-      DEFAULT_ACCENT_INDIGO_FOREGROUND_COLOR,
-      DEFAULT_ACCENT_PINK_FOREGROUND_COLOR,
+      DEFAULT_SLIDER_START_COLOR,
+      DEFAULT_SLIDER_END_COLOR,
       percentage,
     );
   };
@@ -269,10 +278,10 @@ export default function SliderComponent({
             )}
           >
             <SliderPrimitive.Range
-              className="absolute h-full rounded-full bg-gradient-to-r from-accent-indigo-foreground to-accent-pink-foreground"
+              className="absolute h-full rounded-full bg-foreground"
               style={{
                 width: `${percentage}%`,
-                background: `linear-gradient(to right, rgb(79, 70, 229) 0%, ${getThumbColor(percentage)} ${percentage}%)`,
+                background: `linear-gradient(to right, hsl(var(--foreground)) 0%, ${getThumbColor(percentage)} ${percentage}%)`,
               }}
             />
           </SliderPrimitive.Track>

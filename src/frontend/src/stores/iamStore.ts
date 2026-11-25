@@ -42,11 +42,14 @@ export interface IamContext {
   links: IamLinks;
 }
 
-const ACTIVE_ORG_STORAGE_KEY = "hanzo_flow_active_org";
+const ACTIVE_ORG_STORAGE_KEY = "hanzo_active_org";
+const LEGACY_ACTIVE_ORG_STORAGE_KEY = "hanzo_flow_active_org";
 
 function readStoredOrg(): string | null {
   try {
-    const val = window.localStorage.getItem(ACTIVE_ORG_STORAGE_KEY);
+    const val =
+      window.localStorage.getItem(ACTIVE_ORG_STORAGE_KEY) ||
+      window.localStorage.getItem(LEGACY_ACTIVE_ORG_STORAGE_KEY);
     return val && val.trim() ? val.trim() : null;
   } catch {
     return null;
@@ -56,9 +59,12 @@ function readStoredOrg(): string | null {
 function writeStoredOrg(org: string | null): void {
   try {
     if (org && org.trim()) {
-      window.localStorage.setItem(ACTIVE_ORG_STORAGE_KEY, org.trim());
+      const clean = org.trim();
+      window.localStorage.setItem(ACTIVE_ORG_STORAGE_KEY, clean);
+      window.localStorage.setItem(LEGACY_ACTIVE_ORG_STORAGE_KEY, clean);
     } else {
       window.localStorage.removeItem(ACTIVE_ORG_STORAGE_KEY);
+      window.localStorage.removeItem(LEGACY_ACTIVE_ORG_STORAGE_KEY);
     }
   } catch {
     // Ignore storage quota / private mode failures

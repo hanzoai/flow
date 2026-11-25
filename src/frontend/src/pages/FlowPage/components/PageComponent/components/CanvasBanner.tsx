@@ -59,10 +59,10 @@ export default function CanvasBanner({
   return (
     <div className="version-preview-banner-enter pointer-events-auto absolute bottom-7 left-1/2 w-[650px]">
       <div className={canvasBannerVariants[variant]}>
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#6366F1]/20">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
           <ForwardedIconComponent
             name={icon}
-            className="h-5 w-5 text-[#6366F1]"
+            className="h-5 w-5 text-foreground"
           />
         </div>
         <div className="flex flex-1 flex-col">

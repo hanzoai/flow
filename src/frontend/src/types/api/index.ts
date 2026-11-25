@@ -192,9 +192,11 @@ export type Users = {
   is_active: boolean;
   is_superuser: boolean;
   profile_image: string;
+  org_id?: string | null;
   create_at: Date;
   updated_at: Date;
   optins?: {
+    org?: string;
     github_starred?: boolean;
     discord_clicked?: boolean;
     dialog_dismissed?: boolean;

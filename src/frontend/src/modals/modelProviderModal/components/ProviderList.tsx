@@ -4,6 +4,9 @@ import { useGetModelProviders } from "@/controllers/API/queries/models/use-get-m
 import ProviderListItem from "./ProviderListItem";
 import { Provider } from "./types";
 
+// Providers hidden from the default Model Providers list
+const HIDDEN_MODEL_PROVIDERS = new Set(["IBM WatsonX", "IBM watsonx.ai"]);
+
 // Supported model types for filtering providers
 type ModelType = "llm" | "embeddings" | "all";
 
@@ -25,24 +28,26 @@ const ProviderList = ({
   } = useGetModelProviders({});
 
   const filteredProviders: Provider[] = useMemo(() => {
-    return rawProviders.map((provider) => {
-      const matchingModels =
-        provider?.models?.filter((model) =>
-          modelType === "all"
-            ? true
-            : model?.metadata?.model_type === modelType,
-        ) || [];
+    return rawProviders
+      .filter((provider) => !HIDDEN_MODEL_PROVIDERS.has(provider.provider))
+      .map((provider) => {
+        const matchingModels =
+          provider?.models?.filter((model) =>
+            modelType === "all"
+              ? true
+              : model?.metadata?.model_type === modelType,
+          ) || [];
 
-      return {
-        provider: provider.provider,
-        icon: provider.icon,
-        is_enabled: provider.is_enabled,
-        is_configured: provider.is_configured,
-        model_count: matchingModels.length,
-        models: matchingModels,
-        api_docs_url: provider.api_docs_url,
-      };
-    });
+        return {
+          provider: provider.provider,
+          icon: provider.icon,
+          is_enabled: provider.is_enabled,
+          is_configured: provider.is_configured,
+          model_count: matchingModels.length,
+          models: matchingModels,
+          api_docs_url: provider.api_docs_url,
+        };
+      });
   }, [rawProviders, modelType]);
 
   const handleProviderSelect = (provider: Provider) => {

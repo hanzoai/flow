@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import BottomSettingsMenu from "@/components/core/bottomSettingsMenu";
 import SideBarFoldersButtonsComponent from "@/components/core/folderSidebarComponent/components/sideBarFolderButtons";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { getAxiosErrorMessage } from "@/controllers/API/helpers/get-axios-error-message";
@@ -82,7 +83,12 @@ export default function CollectionPage(): JSX.Element {
             {showMainContent ? (
               <Outlet />
             ) : (
-              <CustomEmptyPageCommunity setOpenModal={setOpenModal} />
+              <>
+                <CustomEmptyPageCommunity setOpenModal={setOpenModal} />
+                <div className="fixed bottom-3 left-3 z-40">
+                  <BottomSettingsMenu variant="rail" />
+                </div>
+              </>
             )}
           </div>
         ) : (

@@ -74,6 +74,7 @@ export const useGetModelProviders: useQueryFunctionType<
 // Helper function to map provider names to icon names
 const getProviderIcon = (providerName: string): string => {
   const iconMap: Record<string, string> = {
+    "Hanzo Enso": "Hanzo",
     OpenAI: "OpenAI",
     Anthropic: "Anthropic",
     "Google Generative AI": "GoogleGenerativeAI",
@@ -84,8 +85,6 @@ const getProviderIcon = (providerName: string): string => {
     "Azure OpenAI": "AzureOpenAI",
     SambaNova: "SambaNova",
     Ollama: "Ollama",
-    "IBM WatsonX": "IBM",
-    "IBM watsonx.ai": "IBM",
   };
 
   return iconMap[providerName] || "Bot";

@@ -292,7 +292,7 @@
   "settings.nav.shortcuts": "Shortcuts",
   "settings.nav.messages": "Messages",
   "settings.title": "Settings",
-  "settings.description": "Manage the general settings for Flow.",
+  "settings.description": "Manage the general settings for Hanzo Flow.",
   "globalVars.pageTitle": "Global Variables",
   "globalVars.pageDescription": "Manage global variables and assign them to fields.",
   "globalVars.columnVariableName": "Variable Name",

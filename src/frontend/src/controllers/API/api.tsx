@@ -145,6 +145,19 @@ function ApiInterceptor() {
           for (const [key, value] of Object.entries(customHeaders)) {
             config.headers[key] = value;
           }
+          const latestOrg =
+            useIamStore.getState().activeOrg ||
+            (() => {
+              try {
+                return window.localStorage.getItem("hanzo_active_org");
+              } catch {
+                return null;
+              }
+            })();
+          if (latestOrg) {
+            config.headers["X-Org-Id"] = latestOrg;
+            config.headers["X-IAM-Org-Id"] = latestOrg;
+          }
         }
 
         return {
@@ -260,7 +273,9 @@ async function performStreamingRequest({
     "Content-Type": "application/json",
     // this flag is fundamental to ensure server stops tasks when client disconnects
     Connection: "close",
-    ...(activeOrg ? { "X-IAM-Org-Id": activeOrg } : {}),
+    ...(activeOrg
+      ? { "X-Org-Id": activeOrg, "X-IAM-Org-Id": activeOrg }
+      : {}),
   };
 
   const params: RequestInit = {
