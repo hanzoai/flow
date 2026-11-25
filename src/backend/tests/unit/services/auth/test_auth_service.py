@@ -233,6 +233,42 @@ def test_ensure_fernet_key_with_44_char_key():
     assert fernet.decrypt(encrypted) == b"test-value"
 
 
+def test_ensure_fernet_key_short_key_uses_pbkdf2_kdf():
+    """Short-key derivation must use PBKDF2-HMAC-SHA256, not the old PRNG or bare SHA-256."""
+    import base64
+    import hashlib
+    import random
+    import warnings
+
+    from flow.services.auth.utils import (
+        _FERNET_KDF_ITERATIONS,
+        _FERNET_KDF_SALT,
+        derive_legacy_fernet_key,
+        ensure_fernet_key,
+    )
+
+    raw_key = "short-key"  # < 32 chars -> KDF derivation branch
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", UserWarning)
+
+        random.seed(0)
+        key_a = ensure_fernet_key(raw_key)
+        random.seed(123456789)
+        _ = [random.random() for _ in range(100)]  # noqa: S311  # perturb global PRNG state
+        key_b = ensure_fernet_key(raw_key)
+
+    assert len(caught) >= 1
+    assert key_a == key_b
+
+    expected = base64.urlsafe_b64encode(
+        hashlib.pbkdf2_hmac("sha256", raw_key.encode("utf-8"), _FERNET_KDF_SALT, _FERNET_KDF_ITERATIONS, dklen=32)
+    )
+    assert key_a == expected
+    assert key_a != derive_legacy_fernet_key(raw_key)
+    assert key_a != base64.urlsafe_b64encode(hashlib.sha256(raw_key.encode()).digest())
+
+
 def test_password_helpers_roundtrip(auth_service: AuthService):
     password = "Str0ngP@ssword"  # noqa: S105  # pragma: allowlist secret
 
@@ -557,3 +593,115 @@ async def test_get_current_active_user_mcp_inactive(auth_service: AuthService):
         await auth_service.get_current_active_user_mcp(user)
 
     assert exc.value.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_legacy_ciphertext_decryption_fallback(tmp_path):
+    """Legacy ciphertexts encrypted with the old random.getrandbits derivation must decrypt.
+
+    This test ensures backward compatibility: if an API key was encrypted with the
+    old vulnerable derivation (random.seed + random.getrandbits), it can still be
+    decrypted after the SHA-256 fix is deployed. The MultiFernet fallback in
+    _get_fernet_with_legacy_fallback handles this.
+    """
+    import base64
+    import random
+    from types import SimpleNamespace
+
+    import pytest
+    from cryptography.fernet import Fernet, InvalidToken
+    from flow.services.auth.service import AuthService
+    from lfx.services.settings.auth import AuthSettings
+    from pydantic import SecretStr
+
+    # Use a short secret key that would trigger the legacy derivation
+    raw_key = "short-secret"
+
+    # Simulate the old derivation
+    random.seed(raw_key)
+    legacy_key = bytes(random.getrandbits(8) for _ in range(32))
+    legacy_key = base64.urlsafe_b64encode(legacy_key)
+    legacy_fernet = Fernet(legacy_key)
+
+    # Encrypt a test value with the legacy key
+    test_value = "legacy-api-key-12345"
+    legacy_ciphertext = legacy_fernet.encrypt(test_value.encode()).decode()
+    assert legacy_ciphertext.startswith("gAAAAA")
+
+    # Now create an AuthService with the same short secret key
+    # and verify it can decrypt the legacy ciphertext
+    settings = AuthSettings(CONFIG_DIR=str(tmp_path))
+    settings.SECRET_KEY = SecretStr(raw_key)
+    settings_service = SimpleNamespace(
+        auth_settings=settings,
+        settings=SimpleNamespace(config_dir=str(tmp_path)),
+    )
+    svc = AuthService(settings_service)
+
+    # Decrypt should work via the legacy fallback
+    decrypted = svc.decrypt_api_key(legacy_ciphertext)
+    assert decrypted == test_value
+
+    # New encryptions MUST use the new PBKDF2 key, NEVER the legacy PRNG key.
+    new_ciphertext = svc.encrypt_api_key(test_value)
+    assert svc.decrypt_api_key(new_ciphertext) == test_value
+    with pytest.raises(InvalidToken):
+        legacy_fernet.decrypt(new_ciphertext.encode())
+
+    # Wrong-key ciphertext still fails safely (returns empty string, never leaks).
+    wrong_fernet = Fernet(Fernet.generate_key())
+    wrong_ciphertext = wrong_fernet.encrypt(test_value.encode()).decode()
+    assert svc.decrypt_api_key(wrong_ciphertext) == ""
+
+
+def test_global_random_state_unchanged_after_key_derivation(tmp_path):
+    """Deriving Fernet keys must not mutate the global random module state.
+
+    The legacy code used random.seed() which mutates process-wide state.
+    Both the new PBKDF2 derivation and the local-Random legacy fallback
+    must leave random.getstate() identical.
+    """
+    import base64
+    import random
+    import warnings
+    from types import SimpleNamespace
+
+    from cryptography.fernet import Fernet
+    from flow.services.auth.service import AuthService
+    from flow.services.auth.utils import ensure_fernet_key
+    from lfx.services.settings.auth import AuthSettings
+    from pydantic import SecretStr
+
+    raw_key = "short-secret"
+    settings = AuthSettings(CONFIG_DIR=str(tmp_path))
+    settings.SECRET_KEY = SecretStr(raw_key)
+    settings_service = SimpleNamespace(
+        auth_settings=settings,
+        settings=SimpleNamespace(config_dir=str(tmp_path)),
+    )
+    svc = AuthService(settings_service)
+
+    # Capture global random state before
+    state_before = random.getstate()
+
+    # Derive key via ensure_fernet_key (new PBKDF2 path)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        _ = ensure_fernet_key(raw_key)
+
+    # State must be unchanged
+    state_after_kdf = random.getstate()
+    assert state_after_kdf == state_before, "PBKDF2 derivation mutated global random state"
+
+    # Decrypt via legacy fallback (uses local Random instance)
+    rng = random.Random(raw_key)  # noqa: S311
+    legacy_key = bytes(rng.getrandbits(8) for _ in range(32))
+    legacy_key = base64.urlsafe_b64encode(legacy_key)
+    legacy_fernet = Fernet(legacy_key)
+    legacy_ciphertext = legacy_fernet.encrypt(b"test-value").decode()
+
+    # Now decrypt through the service (uses local Random in fallback)
+    _ = svc.decrypt_api_key(legacy_ciphertext)
+
+    # State must still be unchanged
+    state_after_decrypt = random.getstate()
+    assert state_after_decrypt == state_before, "Legacy decrypt fallback mutated global random state"

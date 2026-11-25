@@ -20,6 +20,8 @@ Usage:
 
 import argparse
 import base64
+import functools
+import hashlib
 import json
 import os
 import platform
@@ -29,11 +31,13 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from cryptography.fernet import Fernet, InvalidToken
+from cryptography.fernet import Fernet, InvalidToken, MultiFernet
 from platformdirs import user_cache_dir
 from sqlalchemy import create_engine, text
 
 MINIMUM_KEY_LENGTH = 32
+_FERNET_KDF_SALT = b"hanzo-flow-fernet-kdf-v1"
+_FERNET_KDF_ITERATIONS = 600_000
 SENSITIVE_AUTH_FIELDS = ["oauth_client_secret", "api_key"]
 # Must match flow.services.variable.constants.CREDENTIAL_TYPE
 CREDENTIAL_TYPE = "Credential"
@@ -92,28 +96,46 @@ def write_secret_key_to_file(config_dir: Path, key: str, filename: str = "secret
     set_secure_permissions(secret_file)
 
 
+@functools.lru_cache(maxsize=32)
+def _derive_pbkdf2_key(s: str) -> bytes:
+    dk = hashlib.pbkdf2_hmac("sha256", s.encode("utf-8"), _FERNET_KDF_SALT, _FERNET_KDF_ITERATIONS, dklen=32)
+    return base64.urlsafe_b64encode(dk)
+
+
+@functools.lru_cache(maxsize=32)
+def derive_legacy_valid_key(s: str) -> bytes:
+    """Reproduce the legacy (< 32 char) PRNG Fernet key without mutating global random state."""
+    rng = random.Random(s)  # noqa: S311
+    key = bytes(rng.getrandbits(8) for _ in range(32))
+    return base64.urlsafe_b64encode(key)
+
+
 def ensure_valid_key(s: str) -> bytes:
     """Convert a secret key string to valid Fernet key bytes.
 
-    For keys shorter than MINIMUM_KEY_LENGTH (32), generates a deterministic
-    key by seeding random with the input string. For longer keys, pads with
-    '=' to ensure valid base64 encoding.
+    For keys shorter than MINIMUM_KEY_LENGTH (32), derives a 32-byte key using
+    PBKDF2-HMAC-SHA256 (matching flow.services.auth.utils.ensure_fernet_key).
+    For longer keys, pads with '=' to ensure valid base64 encoding.
 
-    NOTE: This function is duplicated from flow.services.auth.utils.ensure_valid_key
+    NOTE: This function is duplicated from flow.services.auth.utils.ensure_fernet_key
     to keep the migration script self-contained (can run without full Flow installation).
     Keep in sync if encryption logic changes.
     """
     if len(s) < MINIMUM_KEY_LENGTH:
-        random.seed(s)
-        key = bytes(random.getrandbits(8) for _ in range(32))
-        return base64.urlsafe_b64encode(key)
-    padding_needed = 4 - len(s) % 4
-    return (s + "=" * padding_needed).encode()
+        return _derive_pbkdf2_key(s)
+    remainder = len(s) % 4
+    if remainder == 0:
+        return s.encode()
+    return (s + "=" * (4 - remainder)).encode()
 
 
 def decrypt_with_key(encrypted: str, key: str) -> str:
-    """Decrypt data with the given key."""
-    fernet = Fernet(ensure_valid_key(key))
+    """Decrypt data with the given key, falling back to legacy short-key derivation."""
+    primary = Fernet(ensure_valid_key(key))
+    if len(key) < MINIMUM_KEY_LENGTH:
+        fernet: Fernet | MultiFernet = MultiFernet([primary, Fernet(derive_legacy_valid_key(key))])
+    else:
+        fernet = primary
     return fernet.decrypt(encrypted.encode()).decode()
 
 

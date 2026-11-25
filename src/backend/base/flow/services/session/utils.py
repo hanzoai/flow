@@ -1,5 +1,5 @@
 import hashlib
-import random
+import secrets
 import string
 
 from flow.services.cache.utils import filter_json
@@ -7,7 +7,7 @@ from flow.services.database.models.base import orjson_dumps
 
 
 def session_id_generator(size=6):
-    return "".join(random.SystemRandom().choices(string.ascii_uppercase + string.digits, k=size))
+    return "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(size))
 
 
 def compute_dict_hash(graph_data):

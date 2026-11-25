@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import base64
+import functools
+import hashlib
 import random
+import warnings
 from typing import TYPE_CHECKING, Annotated, Final
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, MultiFernet
 from fastapi import Depends, HTTPException, Request, Security, WebSocket, WebSocketException, status
 from fastapi.security import APIKeyHeader, APIKeyQuery, OAuth2PasswordBearer
 from fastapi.security.utils import get_authorization_scheme_param
@@ -74,6 +77,11 @@ def _auth_service():
 
 REFRESH_TOKEN_TYPE: Final[str] = "refresh"  # noqa: S105
 ACCESS_TOKEN_TYPE: Final[str] = "access"  # noqa: S105
+
+# Fernet key derivation
+MINIMUM_KEY_LENGTH: Final[int] = 32
+_FERNET_KDF_SALT: Final[bytes] = b"hanzo-flow-fernet-kdf-v1"
+_FERNET_KDF_ITERATIONS: Final[int] = 600_000
 
 # JWT key configuration error messages
 PUBLIC_KEY_NOT_CONFIGURED_ERROR: Final[str] = (
@@ -359,33 +367,73 @@ def add_base64_padding(value: str) -> str:
     return value + "=" * (4 - remainder)
 
 
+@functools.lru_cache(maxsize=32)
+def _derive_fernet_key_pbkdf2(secret_key: str) -> bytes:
+    """Derive a 32-byte URL-safe base64 Fernet key with PBKDF2-HMAC-SHA256."""
+    dk = hashlib.pbkdf2_hmac(
+        "sha256",
+        secret_key.encode("utf-8"),
+        _FERNET_KDF_SALT,
+        _FERNET_KDF_ITERATIONS,
+        dklen=32,
+    )
+    return base64.urlsafe_b64encode(dk)
+
+
+@functools.lru_cache(maxsize=32)
+def derive_legacy_fernet_key(secret_key: str) -> bytes:
+    """Reproduce the legacy (< 32 char) PRNG Fernet key without mutating global random state.
+
+    Decrypt-only fallback for ciphertexts written before the PBKDF2 KDF migration.
+    Never used for new encryption.
+    """
+    # S311: isolated local Random instance reproduces legacy key bytes without touching module-global state.
+    rng = random.Random(secret_key)  # noqa: S311
+    legacy_bytes = bytes(rng.getrandbits(8) for _ in range(32))
+    return base64.urlsafe_b64encode(legacy_bytes)
+
+
 def ensure_fernet_key(secret_key: str) -> bytes:
     """Derive a valid Fernet key from a secret key string.
 
-    For short keys (< 32 chars), uses the key as a random seed to generate
-    a deterministic 32-byte key. For longer keys, adds base64 padding.
+    For short keys (< 32 chars), derives a 32-byte key via PBKDF2-HMAC-SHA256
+    (600,000 iterations, domain-separated salt). Existing ciphertexts created
+    under the legacy PRNG derivation remain decryptable via MultiFernet fallback.
+    For longer keys (>= 32 chars, e.g. secrets.token_urlsafe(32)), adds base64
+    padding as before.
     """
-    MINIMUM_KEY_LENGTH = 32  # noqa: N806
     if len(secret_key) < MINIMUM_KEY_LENGTH:
-        random.seed(secret_key)
-        key = bytes(random.getrandbits(8) for _ in range(32))
-        key = base64.urlsafe_b64encode(key)
+        warnings.warn(
+            "SECRET_KEY is shorter than 32 characters. "
+            "PBKDF2-HMAC-SHA256 will be used to derive the Fernet key (legacy ciphertexts "
+            "remain readable via automatic decrypt fallback). "
+            "Please set a SECRET_KEY of at least 32 characters (e.g., secrets.token_urlsafe(32)).",
+            UserWarning,
+            stacklevel=2,
+        )
+        key = _derive_fernet_key_pbkdf2(secret_key)
     else:
         key = add_base64_padding(secret_key).encode()
     return key
 
 
-def get_fernet(settings_service: SettingsService) -> Fernet:
+def get_fernet(settings_service: SettingsService) -> Fernet | MultiFernet:
     """Get a Fernet instance for encryption/decryption.
+
+    For short keys (< 32 chars), returns a MultiFernet that encrypts with the
+    PBKDF2-derived primary key and falls back to the legacy key on decryption.
 
     Args:
         settings_service: Settings service to get the secret key
 
     Returns:
-        Fernet instance for encryption/decryption
+        Fernet or MultiFernet instance for encryption/decryption
     """
     secret_key: str = settings_service.auth_settings.SECRET_KEY.get_secret_value()
-    return Fernet(ensure_fernet_key(secret_key))
+    primary = Fernet(ensure_fernet_key(secret_key))
+    if len(secret_key) < MINIMUM_KEY_LENGTH:
+        return MultiFernet([primary, Fernet(derive_legacy_fernet_key(secret_key))])
+    return primary
 
 
 def encrypt_api_key(api_key: str, settings_service: SettingsService | None = None) -> str:  # noqa: ARG001

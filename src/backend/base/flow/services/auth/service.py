@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 import jwt
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, MultiFernet
 from fastapi import HTTPException, Request, WebSocketException, status
 from jwt import InvalidTokenError
 from lfx.log.logger import logger
@@ -724,6 +724,31 @@ class AuthService(BaseAuthService):
         secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
         return Fernet(ensure_fernet_key(secret_key))
 
+    def _get_fernet_with_legacy_fallback(self) -> MultiFernet:
+        """Get a MultiFernet instance that supports both new and legacy key derivation.
+
+        Primary uses PBKDF2-HMAC-SHA256 (for short secrets) or base64-padded key
+        (for >=32-char secrets). For short secrets (< 32 chars), appends the legacy
+        isolated-PRNG Fernet as a decrypt-only fallback so existing DB ciphertexts
+        remain readable without mutating global random state. Never encrypts with
+        the legacy key.
+        """
+        from flow.services.auth.utils import (
+            MINIMUM_KEY_LENGTH,
+            derive_legacy_fernet_key,
+            ensure_fernet_key,
+        )
+
+        secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
+
+        primary_fernet = Fernet(ensure_fernet_key(secret_key))
+
+        fernets = [primary_fernet]
+        if len(secret_key) < MINIMUM_KEY_LENGTH:
+            fernets.append(Fernet(derive_legacy_fernet_key(secret_key)))
+
+        return MultiFernet(fernets)
+
     def encrypt_api_key(self, api_key: str) -> str:
         fernet = self._get_fernet()
         encrypted_key = fernet.encrypt(api_key.encode())
@@ -741,6 +766,8 @@ class AuthService(BaseAuthService):
         Note:
             - Returns empty string for invalid input (None, empty string)
             - Returns plaintext keys as-is (not starting with "gAAAAA")
+            - Tries new PBKDF2-HMAC-SHA256 derivation first, then falls back to legacy
+              random.getrandbits derivation for backward compatibility.
             - Logs warnings on decryption failures for security monitoring
         """
         if not isinstance(encrypted_api_key, str) or not encrypted_api_key:
@@ -751,7 +778,7 @@ class AuthService(BaseAuthService):
         if not encrypted_api_key.startswith("gAAAAA"):
             return encrypted_api_key
 
-        fernet = self._get_fernet()
+        fernet = self._get_fernet_with_legacy_fallback()
         try:
             return fernet.decrypt(encrypted_api_key.encode()).decode()
         except Exception as primary_exception:  # noqa: BLE001
