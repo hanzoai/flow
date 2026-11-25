@@ -39,7 +39,7 @@ export default function VersionListItem({
         onClick={() => onSelect(entry.id)}
         className={cn(
           "h-auto flex flex-1 flex-row items-center justify-between pl-3 py-3 rounded-none",
-          isSelected && "border-l-2 border-l-[#6366F1] !bg-[#6366F1]/10",
+          isSelected && "border-l-2 border-l-foreground !bg-accent",
         )}
       >
         <div className="flex flex-col items-start">
@@ -58,7 +58,7 @@ export default function VersionListItem({
               >
                 {isSelected ? (
                   <>
-                    <span className="block h-2 w-2 rounded-full bg-[#6366F1] group-hover/trigger:hidden" />
+                    <span className="block h-2 w-2 rounded-full bg-foreground group-hover/trigger:hidden" />
                     <ForwardedIconComponent
                       name="EllipsisVertical"
                       className="hidden h-3.5 w-3.5 text-muted-foreground group-hover/trigger:block"

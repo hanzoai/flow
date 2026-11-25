@@ -196,6 +196,17 @@ textarea[class^="ag-"]:focus {
   z-index: -1 !important;
 }
 
+.react-flow__selection {
+  background: hsl(var(--foreground) / 0.06) !important;
+  border: 1px solid hsl(var(--foreground) / 0.35) !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:focus .react-flow__edge-path,
+.react-flow__edge:focus-visible .react-flow__edge-path {
+  stroke: hsl(var(--foreground)) !important;
+}
+
 .card-shine-effect {
   --shine-deg: 135deg;
   position: relative;
@@ -449,11 +460,11 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .version-preview-overlay {
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  border: 1px solid hsl(var(--foreground) / 0.25);
   background: rgba(255, 255, 255, 0);
   box-shadow:
-    0 0 18px 2px rgba(99, 102, 241, 0.25) inset,
-    0 0 9px 1px rgba(99, 102, 241, 0.15) inset;
+    0 0 18px 2px hsl(var(--foreground) / 0.14) inset,
+    0 0 9px 1px hsl(var(--foreground) / 0.08) inset;
 }
 
 @keyframes banner-slide-up {

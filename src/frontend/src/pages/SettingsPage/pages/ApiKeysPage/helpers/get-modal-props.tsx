@@ -1,7 +1,7 @@
 export const getModalPropsApiKey = () => {
   const modalProps = {
     title: "Create API Key",
-    description: "Create a secret API Key to use HanzoFlow API.",
+    description: "Create a secret API Key to use Hanzo Flow API.",
     inputPlaceholder: "My API Key",
     buttonText: "Generate API Key",
     generatedKeyMessage: (

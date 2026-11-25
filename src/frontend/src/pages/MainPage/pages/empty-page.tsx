@@ -1,23 +1,12 @@
-import { ExternalLink } from "lucide-react";
-import { FaDiscord, FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
 import logoDarkPng from "@/assets/logo_dark.png";
 import logoLightPng from "@/assets/logo_light.png";
 import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
 import CardsWrapComponent from "@/components/core/cardsWrapComponent";
 import { Button } from "@/components/ui/button";
 import { DotBackgroundDemo } from "@/components/ui/dot-background";
-import { DISCORD_URL, GITHUB_URL } from "@/constants/constants";
-import { useGetUserData, useUpdateUser } from "@/controllers/API/queries/auth";
-import useAuthStore from "@/stores/authStore";
-import { useDarkStore } from "@/stores/darkStore";
 import { useFolderStore } from "@/stores/foldersStore";
-import { formatNumber } from "@/utils/utils";
 import useFileDrop from "../hooks/use-on-file-drop";
-
-const EXTERNAL_LINK_ICON_CLASS =
-  "absolute right-6 top-[35px] h-4 w-4 shrink-0 translate-x-0 opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100";
 
 export const EmptyPageCommunity = ({
   setOpenModal,
@@ -27,27 +16,6 @@ export const EmptyPageCommunity = ({
   const { t } = useTranslation();
   const handleFileDrop = useFileDrop(undefined);
   const folders = useFolderStore((state) => state.folders);
-  const userData = useAuthStore(useShallow((state) => state.userData));
-  const stars: number | undefined = useDarkStore((state) => state.stars);
-  const discordCount: number = useDarkStore((state) => state.discordCount);
-  const { mutate: updateUser } = useUpdateUser();
-  const { mutate: mutateLoggedUser } = useGetUserData();
-
-  const handleUserTrack = (key: string) => () => {
-    const optins = userData?.optins ?? {};
-    optins[key] = true;
-    updateUser(
-      {
-        user_id: userData?.id!,
-        user: { optins },
-      },
-      {
-        onSuccess: () => {
-          mutateLoggedUser({});
-        },
-      },
-    );
-  };
 
   return (
     <DotBackgroundDemo>
@@ -93,68 +61,8 @@ export const EmptyPageCommunity = ({
 
             <div className="flex w-full max-w-[510px] flex-col gap-7 sm:gap-[29px]">
               <Button
-                unstyled
-                className="group mx-3 h-[84px] sm:mx-0"
-                onClick={() => {
-                  handleUserTrack("github_starred")();
-                  window.open(GITHUB_URL, "_blank", "noopener,noreferrer");
-                }}
-                data-testid="empty_page_github_button"
-              >
-                <div className="relative flex flex-col rounded-lg border-[1px] bg-background p-4 transition-all duration-300 hover:border-accent-pink-foreground">
-                  <div className="grid w-full items-center justify-between gap-2">
-                    <div className="flex gap-3">
-                      <FaGithub className="h-6 w-6" />
-                      <div>
-                        <span className="font-semibold">GitHub</span>
-                        <span className="ml-2 font-mono text-muted-foreground">
-                          {formatNumber(stars)}
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-base text-secondary-foreground">
-                        {t("page.githubDescription")}
-                      </span>
-                    </div>
-                  </div>
-                  <ExternalLink className={EXTERNAL_LINK_ICON_CLASS} />
-                </div>
-              </Button>
-
-              <Button
-                unstyled
-                className="group mx-3 h-[84px] sm:mx-0"
-                onClick={() => {
-                  handleUserTrack("discord_clicked")();
-                  window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
-                }}
-                data-testid="empty_page_discord_button"
-              >
-                <div className="relative flex flex-col rounded-lg border-[1px] bg-background p-4 transition-all duration-300 hover:border-discord-color">
-                  <div className="grid w-full items-center justify-between gap-2">
-                    <div className="flex gap-3">
-                      <FaDiscord className="h-6 w-6 text-discord-color" />
-                      <div>
-                        <span className="font-semibold">Discord</span>
-                        <span className="ml-2 font-mono text-muted-foreground">
-                          {formatNumber(discordCount)}
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-base text-secondary-foreground">
-                        {t("page.discordDescription")}
-                      </span>
-                    </div>
-                  </div>
-                  <ExternalLink className={EXTERNAL_LINK_ICON_CLASS} />
-                </div>
-              </Button>
-
-              <Button
                 variant="default"
-                className="z-10 m-auto mt-3 h-10 w-full max-w-[10rem] rounded-lg font-bold transition-all duration-300"
+                className="z-10 m-auto mt-3 h-10 w-full max-w-[12rem] rounded-lg font-bold transition-all duration-300"
                 onClick={() => setOpenModal(true)}
                 id="new-project-btn"
                 data-testid="new_project_btn_empty_page"

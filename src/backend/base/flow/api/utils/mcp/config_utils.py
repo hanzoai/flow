@@ -447,6 +447,31 @@ async def auto_configure_starter_projects_mcp(session):
                     settings_service,
                 )
 
+                # Clean up legacy lf- starter project MCP server name if it points to this same project
+                legacy_server_name = f"lf-{sanitize_mcp_name(DEFAULT_FOLDER_NAME)[: (MAX_MCP_SERVER_NAME_LENGTH - 3)]}"
+                if legacy_server_name != server_name:
+                    try:
+                        existing_after = await get_server_list(
+                            user, session, get_storage_service(), settings_service
+                        )
+                        legacy_cfg = existing_after.get("mcpServers", {}).get(legacy_server_name)
+                        if isinstance(legacy_cfg, dict):
+                            legacy_urls = await extract_urls_from_strings(legacy_cfg.get("args", []))
+                            if any(str(user_starter_folder.id) in url for url in legacy_urls):
+                                await update_server(
+                                    legacy_server_name,
+                                    {},
+                                    user,
+                                    session,
+                                    get_storage_service(),
+                                    settings_service,
+                                    delete=True,
+                                )
+                    except Exception as cleanup_err:  # noqa: BLE001
+                        await logger.adebug(
+                            f"Could not clean up legacy MCP server '{legacy_server_name}': {cleanup_err}"
+                        )
+
                 total_servers_added += 1
                 await logger.adebug(f"Added starter projects MCP server for user: {user.username}")
 

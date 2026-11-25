@@ -6,10 +6,6 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ModelProviderCount from "@/components/common/modelProviderCountComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import CustomAccountMenu from "@/customization/components/custom-AccountMenu";
-import CustomFlowCounts from "@/customization/components/custom-flow-counts";
-import { CustomOrgSelector } from "@/customization/components/custom-org-selector";
 import { FLOW_AGENTIC_EXPERIENCE } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useTheme from "@/customization/hooks/use-custom-theme";
@@ -68,7 +64,6 @@ export default function AppHeader(): JSX.Element {
         >
           <FlowLogo className="h-5 w-5" />
         </Button>
-        <CustomOrgSelector />
       </div>
 
       {/* Middle Section */}
@@ -83,9 +78,6 @@ export default function AppHeader(): JSX.Element {
       >
         {false && <ModelProviderCount />}
         {FLOW_AGENTIC_EXPERIENCE && <AssistantButton type="header" />}
-        <div className="hidden pr-2 whitespace-nowrap lg:inline-flex lg:items-center">
-          <CustomFlowCounts />
-        </div>
         <AlertDropdown
           notificationRef={notificationContentRef}
           onClose={() => setActiveState(null)}
@@ -125,14 +117,6 @@ export default function AppHeader(): JSX.Element {
             </AlertDropdown>
           </ShadTooltip>
         </AlertDropdown>
-        <Separator
-          orientation="vertical"
-          className="my-auto h-7 dark:border-border"
-        />
-
-        <div className="flex">
-          <CustomAccountMenu />
-        </div>
       </div>
     </div>
   );

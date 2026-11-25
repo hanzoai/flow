@@ -1,6 +1,18 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import MenuBar from "../index";
 
+let mockFolders: Array<{ id: string; name: string }> = [
+  { id: "f1", name: "Folder" },
+];
+let mockCurrentFlow = {
+  id: "1",
+  name: "Flow",
+  folder_id: "f1" as string | undefined,
+  icon: "Workflow",
+  gradient: "0",
+  locked: false,
+};
+
 jest.mock("@/components/ui/button", () => ({
   Button: ({ children, ...rest }) => <button {...rest}>{children}</button>,
 }));
@@ -23,7 +35,7 @@ jest.mock(
 jest.mock("@/controllers/API/queries/folders/use-get-folders", () => ({
   __esModule: true,
   useGetFoldersQuery: () => ({
-    data: [{ id: "f1", name: "Folder" }],
+    data: mockFolders,
     isFetched: true,
   }),
 }));
@@ -59,14 +71,7 @@ jest.mock("@/stores/flowStore", () => ({
     sel({
       onFlowPage: true,
       isBuilding: false,
-      currentFlow: {
-        id: "1",
-        name: "Flow",
-        folder_id: "f1",
-        icon: "Workflow",
-        gradient: "0",
-        locked: false,
-      },
+      currentFlow: mockCurrentFlow,
     }),
 }));
 jest.mock("@/stores/shortcuts", () => ({
@@ -85,14 +90,52 @@ jest.mock("@/utils/utils", () => ({
 jest.mock("lucide-react/dynamicIconImports", () => ({}), { virtual: true });
 
 describe("FlowMenu MenuBar", () => {
-  it("renders current folder and flow name, enables save", async () => {
+  beforeEach(() => {
+    mockFolders = [{ id: "f1", name: "Folder" }];
+    mockCurrentFlow = {
+      id: "1",
+      name: "Flow",
+      folder_id: "f1",
+      icon: "Workflow",
+      gradient: "0",
+      locked: false,
+    };
+  });
+
+  it("renders current folder, separator, and flow name, enables save", async () => {
     render(<MenuBar />);
     expect(screen.getByTestId("menu_bar_wrapper")).toBeInTheDocument();
     expect(screen.getByText("Folder")).toBeInTheDocument();
+    expect(screen.getByTestId("menu_bar_separator")).toHaveTextContent("/");
     expect(screen.getByTestId("flow_name").textContent).toBe("Flow");
 
     const saveBtn = screen.getByTestId("save-flow-button");
     expect(saveBtn).not.toBeDisabled();
+  });
+
+  it("does NOT render dangling leading slash or folder bar when folder is missing", () => {
+    mockFolders = [];
+    mockCurrentFlow = {
+      id: "2",
+      name: "Pokédex Agent",
+      folder_id: undefined,
+      icon: "Workflow",
+      gradient: "0",
+      locked: false,
+    };
+
+    render(<MenuBar />);
+    expect(screen.getByTestId("flow_name").textContent).toBe("Pokédex Agent");
+    expect(screen.queryByTestId("menu_bar_separator")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("menu_flow_bar")).not.toBeInTheDocument();
+  });
+
+  it("does NOT render dangling leading slash when folder name is blank", () => {
+    mockFolders = [{ id: "f1", name: "   " }];
+
+    render(<MenuBar />);
+    expect(screen.queryByTestId("menu_bar_separator")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("menu_flow_bar")).not.toBeInTheDocument();
   });
 
   it("clicking save calls save flow", () => {

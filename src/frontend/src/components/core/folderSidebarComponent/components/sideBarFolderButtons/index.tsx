@@ -2,6 +2,7 @@ import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
+import BottomSettingsMenu from "@/components/core/bottomSettingsMenu";
 import {
   Sidebar,
   SidebarContent,
@@ -492,32 +493,37 @@ const SideBarFoldersButtonsComponent = ({
           </div>
         )}
       </SidebarContent>
-      {ENABLE_FILE_MANAGEMENT && (
-        <SidebarFooter className="border-t">
-          <div className="grid w-full items-center gap-2 p-2">
-            {/* TODO: Remove this on cleanup */}
-            {ENABLE_DATASTAX_FLOW && <CustomStoreButton />}{" "}
-            {ENABLE_KNOWLEDGE_BASES && (
+      <SidebarFooter className="border-t">
+        <div className="grid w-full items-center gap-2 p-2">
+          {ENABLE_FILE_MANAGEMENT && (
+            <>
+              {/* TODO: Remove this on cleanup */}
+              {ENABLE_DATASTAX_FLOW && <CustomStoreButton />}{" "}
+              {ENABLE_KNOWLEDGE_BASES && (
+                <SidebarMenuButton
+                  onClick={handleKnowledgeNavigation}
+                  size="md"
+                  className="text-sm"
+                >
+                  <ForwardedIconComponent name="Library" className="h-4 w-4" />
+                  {t("sidebar.knowledge")}
+                </SidebarMenuButton>
+              )}
               <SidebarMenuButton
-                onClick={handleKnowledgeNavigation}
+                onClick={handleFilesNavigation}
                 size="md"
                 className="text-sm"
               >
-                <ForwardedIconComponent name="Library" className="h-4 w-4" />
-                {t("sidebar.knowledge")}
+                <ForwardedIconComponent name="File" className="h-4 w-4" />
+                {t("sidebar.myFiles")}
               </SidebarMenuButton>
-            )}
-            <SidebarMenuButton
-              onClick={handleFilesNavigation}
-              size="md"
-              className="text-sm"
-            >
-              <ForwardedIconComponent name="File" className="h-4 w-4" />
-              {t("sidebar.myFiles")}
-            </SidebarMenuButton>
+            </>
+          )}
+          <div className={cn(ENABLE_FILE_MANAGEMENT && "border-t border-border pt-2")}>
+            <BottomSettingsMenu variant="sidebar" />
           </div>
-        </SidebarFooter>
-      )}
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 };

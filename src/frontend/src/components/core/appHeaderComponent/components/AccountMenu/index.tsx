@@ -1,6 +1,7 @@
 import { Building2, Check, ExternalLink } from "lucide-react";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { DOCS_URL } from "@/constants/constants";
 import { AuthContext } from "@/contexts/authContext";
 import { useLogout } from "@/controllers/API/queries/auth";
 import { useSwitchIamOrg } from "@/controllers/API/queries/auth/use-get-iam-context";
@@ -26,6 +27,7 @@ export const AccountMenu = () => {
   const { mutate: switchOrg } = useSwitchIamOrg();
   const { userData } = useContext(AuthContext);
 
+  const isAdmin = useAuthStore((state) => state.isAdmin);
   const autoLogin = useAuthStore((state) => state.autoLogin);
   const context = useIamStore((state) => state.context);
 
@@ -38,7 +40,7 @@ export const AccountMenu = () => {
     billing: "https://hanzo.ai/account/billing",
     organizations: "https://hanzo.ai/account/organizations",
     app: "https://hanzo.app/flow",
-    docs: "https://docs.hanzo.ai",
+    docs: DOCS_URL,
   };
 
   const displayName =
@@ -161,6 +163,17 @@ export const AccountMenu = () => {
             >
               <span>MCP Servers</span>
             </HeaderMenuItemButton>
+            {isAdmin && !autoLogin && (
+              <HeaderMenuItemButton
+                onClick={() => {
+                  navigate("/admin");
+                }}
+              >
+                <span data-testid="menu_admin_button" id="menu_admin_button">
+                  {t("account.adminPage")}
+                </span>
+              </HeaderMenuItemButton>
+            )}
           </div>
 
           {/* Hanzo Cloud / IAM Links */}

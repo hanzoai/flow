@@ -15,17 +15,22 @@ export function useGetIamContext() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const setContext = useIamStore((state) => state.setContext);
 
-  return useQuery<IamContext>({
+  return useQuery<IamContext | null>({
     queryKey: IAM_CONTEXT_QUERY_KEY,
     queryFn: async () => {
-      const response = await api.get<IamContext>(getURL("IAM_CONTEXT"));
-      setContext(response.data);
-      return response.data;
+      try {
+        const response = await api.get<IamContext>(getURL("IAM_CONTEXT"));
+        setContext(response.data);
+        return response.data;
+      } catch {
+        // Gracefully fall back to local / single-org mode without noisy console errors
+        return null;
+      }
     },
     enabled: Boolean(isAuthenticated),
     staleTime: 60_000,
     refetchOnWindowFocus: false,
-    retry: 1,
+    retry: false,
   });
 }
 

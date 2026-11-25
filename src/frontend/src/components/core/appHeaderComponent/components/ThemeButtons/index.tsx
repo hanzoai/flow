@@ -33,9 +33,9 @@ export const ThemeButtons = () => {
     <div className="relative ml-auto inline-flex rounded-full border border-border">
       {/* Sliding Indicator - Behind the Buttons */}
       <div
-        className={`absolute bottom-0.5 left-[1px] top-0.5 w-[30%] rounded-full bg-accent-amber-foreground ${
+        className={`absolute bottom-0.5 left-[1px] top-0.5 w-[30%] rounded-full bg-foreground ${
           hasInteracted ? "transition-all duration-300" : ""
-        } dark:bg-accent-purple-foreground`}
+        }`}
         style={{
           transform: `translateX(${
             selectedTheme === "light"
@@ -54,7 +54,7 @@ export const ThemeButtons = () => {
         className={`relative z-10 inline-flex items-center rounded-full px-1 ${
           selectedTheme === "light"
             ? "text-background"
-            : "text-foreground hover:bg-accent-amber-foreground hover:text-background"
+            : "text-foreground hover:bg-muted hover:text-foreground"
         }`}
         onClick={() => handleThemeChange("light")}
         data-testid="menu_light_button"
@@ -68,8 +68,8 @@ export const ThemeButtons = () => {
         unstyled
         className={`relative z-10 mx-1 inline-flex items-center rounded-full px-1 ${
           selectedTheme === "dark"
-            ? "bg-indigo-foreground text-primary hover:bg-indigo-foreground"
-            : "text-foreground hover:bg-indigo-foreground hover:text-background"
+            ? "text-background"
+            : "text-foreground hover:bg-muted hover:text-foreground"
         }`}
         onClick={() => handleThemeChange("dark")}
         data-testid="menu_dark_button"
@@ -83,8 +83,8 @@ export const ThemeButtons = () => {
         unstyled
         className={`relative z-10 inline-flex items-center rounded-full px-1 ${
           selectedTheme === "system"
-            ? "bg-foreground text-background"
-            : "hover:bg-foreground hover:text-background"
+            ? "text-background"
+            : "text-foreground hover:bg-muted hover:text-foreground"
         }`}
         onClick={() => handleThemeChange("system")}
         data-testid="menu_system_button"

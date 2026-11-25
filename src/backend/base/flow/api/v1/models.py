@@ -34,6 +34,9 @@ DEFAULT_EMBEDDING_MODEL_VAR = "__default_embedding_model__"
 MAX_STRING_LENGTH = 200  # Maximum length for model IDs and provider names
 MAX_BATCH_UPDATE_SIZE = 100  # Maximum number of models that can be updated at once
 
+# Providers hidden from the default /v1/models provider catalog unless explicitly requested
+HIDDEN_DEFAULT_PROVIDERS = frozenset({"IBM WatsonX", "IBM watsonx.ai"})
+
 
 def get_provider_from_variable_name(variable_name: str) -> str | None:
     """Get provider name from a model provider variable name.
@@ -125,7 +128,7 @@ class ValidateProviderResponse(BaseModel):
 @router.get("/providers", status_code=200, dependencies=[Depends(get_current_active_user)])
 async def list_model_providers() -> list[str]:
     """Return available model providers."""
-    return get_model_providers()
+    return [p for p in get_model_providers() if p not in HIDDEN_DEFAULT_PROVIDERS]
 
 
 @router.get("", status_code=200)
@@ -196,6 +199,12 @@ async def list_models(
         model_type=model_type,
         **metadata_filters,
     )
+    if not selected_providers:
+        filtered_models = [
+            provider_dict
+            for provider_dict in filtered_models
+            if provider_dict.get("provider") not in HIDDEN_DEFAULT_PROVIDERS
+        ]
 
     # Add configured and enabled status to each provider
     for provider_dict in filtered_models:

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
+import BottomSettingsMenu from "@/components/core/bottomSettingsMenu";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -121,6 +122,9 @@ const SidebarSegmentedNav = () => {
           </div>
         ))}
       </SidebarMenu>
+      <div className="mt-auto px-1 pb-2">
+        <BottomSettingsMenu variant="rail" />
+      </div>
     </div>
   );
 };

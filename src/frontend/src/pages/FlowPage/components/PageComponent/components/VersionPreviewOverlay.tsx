@@ -16,7 +16,7 @@ export default function VersionPreviewOverlay() {
   return (
     <div className="version-preview-overlay pointer-events-none absolute inset-0 z-50">
       <CanvasBadge>
-        <span className="h-2 w-2 shrink-0 rounded-lg bg-[#6366F1]" />
+        <span className="h-2 w-2 shrink-0 rounded-lg bg-foreground" />
         <span className="text-sm">
           {previewLabel === "Current Draft"
             ? "Current Flow"

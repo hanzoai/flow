@@ -121,6 +121,19 @@ jest.mock("@/stores/playgroundStore", () => ({
     selector(mockPlaygroundStore),
 }));
 
+jest.mock("@/components/core/bottomSettingsMenu", () => ({
+  __esModule: true,
+  default: ({ variant }: { variant?: string }) => (
+    <button
+      type="button"
+      data-testid="bottom-settings-cog"
+      data-variant={variant}
+    >
+      Settings
+    </button>
+  ),
+}));
+
 describe("SidebarSegmentedNav", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -435,5 +448,14 @@ describe("SidebarSegmentedNav", () => {
     expect(mockPlaygroundStore.setIsFullscreen).toHaveBeenCalledWith(false);
     expect(mockUseSidebar.setActiveSection).toHaveBeenCalledWith("components");
     expect(mockUseSidebar.toggleSidebar).not.toHaveBeenCalled();
+  });
+
+  it("renders bottom-left Settings cog pinned at bottom of the rail", () => {
+    render(<SidebarSegmentedNav />);
+
+    const settingsCog = screen.getByTestId("bottom-settings-cog");
+    expect(settingsCog).toBeInTheDocument();
+    expect(settingsCog).toHaveAttribute("data-variant", "rail");
+    expect(settingsCog.parentElement).toHaveClass("mt-auto");
   });
 });

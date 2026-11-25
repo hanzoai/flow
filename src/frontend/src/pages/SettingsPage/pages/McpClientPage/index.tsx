@@ -5,20 +5,21 @@ import { Button } from "@/components/ui/button";
 import { customGetHostProtocol } from "@/customization/utils/custom-get-host-protocol";
 import { cn } from "@/utils/utils";
 
-type AgentTab = "bob" | "claude-code";
+type AgentTab = "hanzo-dev" | "claude-code" | "cursor";
 
 const agents: { id: AgentTab; title: string; icon: string }[] = [
-  { id: "bob", title: "Bob (IBM)", icon: "Bot" },
+  { id: "hanzo-dev", title: "Hanzo Dev / CLI", icon: "Hanzo" },
   { id: "claude-code", title: "Claude Code", icon: "Terminal" },
+  { id: "cursor", title: "Cursor", icon: "Cursor" },
 ];
 
 function buildMcpJson(serverUrl: string): string {
   return JSON.stringify(
     {
       mcpServers: {
-        flow: {
-          command: "uvx",
-          args: ["--from", "lfx", "lfx-mcp"],
+        hanzo: {
+          command: "npx",
+          args: ["-y", "hanzo", "mcp"],
           env: {
             FLOW_SERVER_URL: serverUrl,
             FLOW_API_KEY: "YOUR_API_KEY", // pragma: allowlist secret
@@ -36,34 +37,49 @@ function getAgentInstructions(agent: AgentTab): {
   steps: string[];
 } {
   switch (agent) {
-    case "bob":
+    case "hanzo-dev":
       return {
-        configPath: "~/.bob/settings/mcp_settings.json",
+        configPath: "~/.hanzo/mcp.json",
         steps: [
-          "Open Bob and go to Settings > MCP",
-          'Click "Edit Global MCP" (or "Edit Project MCP" for per-project setup)',
-          "Paste the JSON config below and save",
+          "Run the Hanzo MCP server directly with npx or install globally with npm i -g hanzo:",
+          "Or add the JSON config below to ~/.hanzo/mcp.json (hanzo dev loads it automatically)",
         ],
       };
     case "claude-code":
       return {
-        configPath: "",
+        configPath: "~/.claude.json",
         steps: [
           "Run the command below in your terminal:",
-          "Or add the JSON config to ~/.claude.json manually",
+          "Or add the JSON config below to ~/.claude.json manually",
+        ],
+      };
+    case "cursor":
+      return {
+        configPath: "~/.cursor/mcp.json",
+        steps: [
+          "Open Cursor and go to Settings > MCP",
+          "Click \"Add new global MCP server\" (or add .cursor/mcp.json in your project)",
+          "Paste the JSON config below and save",
         ],
       };
   }
 }
 
-function getClaudeCodeCommand(serverUrl: string): string {
-  return `claude mcp add flow -- uvx --from lfx lfx-mcp \\
+function getCliCommand(agent: AgentTab, serverUrl: string): string | null {
+  switch (agent) {
+    case "hanzo-dev":
+      return `FLOW_SERVER_URL=${serverUrl} FLOW_API_KEY=YOUR_API_KEY npx -y hanzo mcp`;
+    case "claude-code":
+      return `claude mcp add hanzo -- npx -y hanzo mcp \\
   -e FLOW_SERVER_URL=${serverUrl} \\
   -e FLOW_API_KEY=YOUR_API_KEY`;
+    case "cursor":
+      return null;
+  }
 }
 
 export default function McpClientPage() {
-  const [selectedAgent, setSelectedAgent] = useState<AgentTab>("bob");
+  const [selectedAgent, setSelectedAgent] = useState<AgentTab>("hanzo-dev");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const { host, protocol } = customGetHostProtocol();
@@ -71,9 +87,9 @@ export default function McpClientPage() {
 
   const mcpJson = useMemo(() => buildMcpJson(serverUrl), [serverUrl]);
   const instructions = getAgentInstructions(selectedAgent);
-  const claudeCommand = useMemo(
-    () => getClaudeCodeCommand(serverUrl),
-    [serverUrl],
+  const cliCommand = useMemo(
+    () => getCliCommand(selectedAgent, serverUrl),
+    [selectedAgent, serverUrl],
   );
 
   const copyToClipboard = useCallback((text: string, key: string) => {
@@ -96,22 +112,28 @@ export default function McpClientPage() {
             />
           </h2>
           <p className="text-sm text-muted-foreground">
-            Connect coding agents to build and run flows on this Flow
+            Connect coding agents to build and run flows on this Hanzo Flow
             instance.
           </p>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row justify-start border-b border-border">
+        <div
+          className="flex flex-row justify-start border-b border-border"
+          role="tablist"
+        >
           {agents.map((agent) => (
             <Button
               unstyled
               key={agent.id}
+              role="tab"
+              aria-selected={selectedAgent === agent.id}
+              data-testid={`mcp-client-tab-${agent.id}`}
               className={cn(
-                "flex h-6 flex-row items-end gap-2 text-nowrap border-b-2 border-b-transparent px-3 py-2 text-[13px] font-medium",
+                "flex h-8 flex-row items-center gap-2 text-nowrap border-b-2 border-b-transparent px-3 py-2 text-[13px] font-medium transition-colors",
                 selectedAgent === agent.id
-                  ? "border-b-2 border-black dark:border-b-white"
+                  ? "border-b-foreground text-foreground"
                   : "text-muted-foreground hover:text-foreground",
               )}
               onClick={() => {
@@ -136,14 +158,14 @@ export default function McpClientPage() {
             ))}
           </ol>
 
-          {selectedAgent === "claude-code" && (
+          {cliCommand && (
             <div className="relative overflow-hidden rounded-lg border border-border bg-background">
               <div className="absolute right-3 top-3">
                 <Button
                   unstyled
                   size="icon"
                   className="h-4 w-4 text-muted-foreground hover:text-foreground"
-                  onClick={() => copyToClipboard(claudeCommand, "command")}
+                  onClick={() => copyToClipboard(cliCommand, "command")}
                 >
                   <ForwardedIconComponent
                     name={copiedKey === "command" ? "Check" : "Copy"}
@@ -152,8 +174,11 @@ export default function McpClientPage() {
                   />
                 </Button>
               </div>
-              <pre className="overflow-x-auto p-4 text-[13px]">
-                <code>{claudeCommand}</code>
+              <pre
+                className="overflow-x-auto p-4 text-[13px]"
+                data-testid="mcp-client-cli-command"
+              >
+                <code>{cliCommand}</code>
               </pre>
             </div>
           )}
@@ -182,23 +207,26 @@ export default function McpClientPage() {
                 />
               </Button>
             </div>
-            <pre className="overflow-x-auto p-4 text-[13px]">
+            <pre
+              className="overflow-x-auto p-4 text-[13px]"
+              data-testid="mcp-client-json-config"
+            >
               <code>{mcpJson}</code>
             </pre>
           </div>
 
-          <div className="flex items-start gap-2 rounded-md bg-accent-amber px-3 py-2 text-sm text-accent-amber-foreground">
+          <div className="flex items-start gap-2 rounded-md border border-border bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
             <ForwardedIconComponent
               name="Info"
-              className="mt-0.5 h-4 w-4 shrink-0"
+              className="mt-0.5 h-4 w-4 shrink-0 text-foreground"
             />
             <span>
-              If you don't provide an API key, the agent will need to log in
-              using the <code className="font-semibold">login</code> tool with
-              your username and password. You can generate an API key in{" "}
+              Authenticate with{" "}
+              <code className="font-mono text-foreground">hanzo auth login</code>{" "}
+              or generate an API key in{" "}
               <Link
                 to="/settings/api-keys"
-                className="underline hover:text-foreground"
+                className="text-foreground underline hover:opacity-80"
               >
                 API Keys settings
               </Link>

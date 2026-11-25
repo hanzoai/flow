@@ -64,12 +64,13 @@ export const getServerName = (
     folderName?.trim() && folderName.trim().length > 0
       ? folderName.trim()
       : "project";
-  return `hanzo-${parseString(name, [
+  const prefix = "hanzo-";
+  return `${prefix}${parseString(name, [
     "snake_case",
     "no_blank",
     "lowercase",
     "sanitize_mcp_name",
-  ]).slice(0, maxLen - 3)}`;
+  ]).slice(0, Math.max(0, maxLen - prefix.length))}`;
 };
 
 export const getAuthHeaders = ({

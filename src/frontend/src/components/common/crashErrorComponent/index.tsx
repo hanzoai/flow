@@ -44,17 +44,7 @@ export default function CrashErrorComponent({
 
             <CardFooter>
               <div className="m-auto mt-4 flex justify-center">
-                <Button onClick={resetErrorBoundary}>Restart HanzoFlow</Button>
-
-                <a
-                  href="https://github.com/hanzoai/flow/issues/new"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="ml-3" ignoreTitleCase variant={"outline"}>
-                    Report on GitHub
-                  </Button>
-                </a>
+                <Button onClick={resetErrorBoundary}>Restart Hanzo Flow</Button>
               </div>
             </CardFooter>
           </Card>

@@ -11,6 +11,7 @@ export function useCustomApiHeaders(): Record<string, string> {
       "Accept-Language": i18n.language || "en",
     };
     if (activeOrg) {
+      headers["X-Org-Id"] = activeOrg;
       headers["X-IAM-Org-Id"] = activeOrg;
     }
     return headers;

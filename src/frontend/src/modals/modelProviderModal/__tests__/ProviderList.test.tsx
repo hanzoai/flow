@@ -28,6 +28,12 @@ jest.mock("@/components/common/loadingTextComponent", () => ({
 // Mock provider data
 const mockProviders = [
   {
+    provider: "Hanzo Enso",
+    icon: "Hanzo",
+    is_enabled: true,
+    models: [{ model_name: "enso", metadata: { model_type: "llm" } }],
+  },
+  {
     provider: "OpenAI",
     icon: "Bot",
     is_enabled: true,
@@ -45,6 +51,18 @@ const mockProviders = [
     icon: "Brain",
     is_enabled: false,
     models: [{ model_name: "claude-3", metadata: { model_type: "llm" } }],
+  },
+  {
+    provider: "IBM WatsonX",
+    icon: "IBM",
+    is_enabled: false,
+    models: [{ model_name: "granite-3", metadata: { model_type: "llm" } }],
+  },
+  {
+    provider: "IBM watsonx.ai",
+    icon: "IBM",
+    is_enabled: false,
+    models: [{ model_name: "granite-2", metadata: { model_type: "llm" } }],
   },
 ];
 
@@ -107,11 +125,18 @@ describe("ProviderList", () => {
       expect(screen.getByTestId("provider-list")).toBeInTheDocument();
     });
 
-    it("should render providers with all model types", () => {
+    it("should render providers with all model types and hide IBM WatsonX", () => {
       render(<ProviderList modelType="all" />);
 
+      expect(screen.getByTestId("provider-item-Hanzo Enso")).toBeInTheDocument();
       expect(screen.getByTestId("provider-item-OpenAI")).toBeInTheDocument();
       expect(screen.getByTestId("provider-item-Anthropic")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("provider-item-IBM WatsonX"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("provider-item-IBM watsonx.ai"),
+      ).not.toBeInTheDocument();
     });
 
     it("should filter providers by LLM model type", () => {

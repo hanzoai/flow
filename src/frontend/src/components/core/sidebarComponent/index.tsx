@@ -1,9 +1,11 @@
 import { useLocation } from "react-router-dom";
+import BottomSettingsMenu from "@/components/core/bottomSettingsMenu";
 import { CustomLink } from "@/customization/components/custom-link";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -55,6 +57,9 @@ const SideBarButtonsComponent = ({ items }: SideBarButtonsComponentProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="border-t pr-6 pt-2">
+        <BottomSettingsMenu variant="sidebar" />
+      </SidebarFooter>
     </Sidebar>
   );
 };
