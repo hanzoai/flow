@@ -727,34 +727,25 @@ class AuthService(BaseAuthService):
     def _get_fernet_with_legacy_fallback(self) -> MultiFernet:
         """Get a MultiFernet instance that supports both new and legacy key derivation.
 
-        The legacy derivation used a module-global random seed. This method returns a
-        MultiFernet that tries the new SHA-256 derivation first, then falls back to
-        the legacy derivation for decrypting old ciphertexts. We never encrypt with
+        Primary uses PBKDF2-HMAC-SHA256 (for short secrets) or base64-padded key
+        (for >=32-char secrets). For short secrets (< 32 chars), appends the legacy
+        isolated-PRNG Fernet as a decrypt-only fallback so existing DB ciphertexts
+        remain readable without mutating global random state. Never encrypts with
         the legacy key.
         """
-        from flow.services.auth.utils import MINIMUM_KEY_LENGTH, ensure_fernet_key
+        from flow.services.auth.utils import (
+            MINIMUM_KEY_LENGTH,
+            derive_legacy_fernet_key,
+            ensure_fernet_key,
+        )
 
         secret_key: str = self.settings.auth_settings.SECRET_KEY.get_secret_value()
 
-        # Primary: new SHA-256 derivation (used for encryption)
-        new_key = ensure_fernet_key(secret_key)
-        primary_fernet = Fernet(new_key)
+        primary_fernet = Fernet(ensure_fernet_key(secret_key))
 
-        # Legacy: old random.getrandbits derivation (decrypt-only fallback)
-        # Only add legacy if the secret_key is short (< 32 chars), since that's
-        # the only case where the old derivation would have been used.
         fernets = [primary_fernet]
         if len(secret_key) < MINIMUM_KEY_LENGTH:
-            import base64
-            import random
-
-            # Use a local Random instance to avoid mutating global state
-            # S311: Using random.Random here only to reproduce the legacy key for
-            # decrypt-only fallback; not for new cryptographic key generation.
-            rng = random.Random(secret_key)  # noqa: S311
-            legacy_key = bytes(rng.getrandbits(8) for _ in range(32))
-            legacy_key = base64.urlsafe_b64encode(legacy_key)
-            fernets.append(Fernet(legacy_key))
+            fernets.append(Fernet(derive_legacy_fernet_key(secret_key)))
 
         return MultiFernet(fernets)
 
@@ -775,7 +766,7 @@ class AuthService(BaseAuthService):
         Note:
             - Returns empty string for invalid input (None, empty string)
             - Returns plaintext keys as-is (not starting with "gAAAAA")
-            - Tries new SHA-256 derivation first, then falls back to legacy
+            - Tries new PBKDF2-HMAC-SHA256 derivation first, then falls back to legacy
               random.getrandbits derivation for backward compatibility.
             - Logs warnings on decryption failures for security monitoring
         """

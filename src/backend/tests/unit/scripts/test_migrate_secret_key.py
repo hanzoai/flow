@@ -151,11 +151,22 @@ class TestEncryptDecrypt:
             migrate_module.decrypt_with_key(encrypted, new_key)
 
     def test_encrypt_decrypt_with_short_keys(self, migrate_module, short_old_key):
-        """Short keys should work for encryption/decryption."""
+        """Short keys should work for encryption/decryption and decrypt legacy PRNG ciphertexts."""
+        import base64
+        import random
+
         plaintext = "secret-value"
         encrypted = migrate_module.encrypt_with_key(plaintext, short_old_key)
-        decrypted = migrate_module.decrypt_with_key(encrypted, short_old_key)
-        assert decrypted == plaintext
+        assert migrate_module.decrypt_with_key(encrypted, short_old_key) == plaintext
+
+        # Legacy PRNG ciphertext written prior to PBKDF2 KDF migration must still decrypt and migrate.
+        rng = random.Random(short_old_key)  # noqa: S311
+        legacy_key = base64.urlsafe_b64encode(bytes(rng.getrandbits(8) for _ in range(32)))
+        legacy_ct = Fernet(legacy_key).encrypt(plaintext.encode()).decode()
+
+        state_before = random.getstate()
+        assert migrate_module.decrypt_with_key(legacy_ct, short_old_key) == plaintext
+        assert random.getstate() == state_before
 
 
 class TestMigrateValue:
