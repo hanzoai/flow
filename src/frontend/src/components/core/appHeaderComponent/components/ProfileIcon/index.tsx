@@ -1,6 +1,11 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/authContext";
-import { BASE_URL_API } from "@/customization/config-constants";
+import {
+  cleanAvatarUrl,
+  getInitials,
+  useIamStore,
+} from "@/stores/iamStore";
+import { cn } from "@/utils/utils";
 
 interface ProfileIconProps {
   className?: string;
@@ -8,16 +13,44 @@ interface ProfileIconProps {
 
 export function ProfileIcon({ className }: ProfileIconProps = {}) {
   const { userData } = useContext(AuthContext);
+  const iamUser = useIamStore((state) => state.context?.user);
+  const [imgFailed, setImgFailed] = useState(false);
 
-  const profileImageUrl = `${BASE_URL_API}files/profile_pictures/${
-    userData?.profile_image ?? "Space/046-rocket.svg"
-  }`;
+  const avatarUrl = cleanAvatarUrl(iamUser?.picture);
+  useEffect(() => {
+    setImgFailed(false);
+  }, [avatarUrl]);
+
+  const label =
+    iamUser?.display_name ||
+    iamUser?.email ||
+    iamUser?.username ||
+    userData?.username ||
+    "User";
+
+  if (avatarUrl && !imgFailed) {
+    return (
+      <img
+        src={avatarUrl}
+        alt={label}
+        onError={() => setImgFailed(true)}
+        className={cn(
+          "h-6 w-6 shrink-0 rounded-full border border-border object-cover focus-visible:outline-0",
+          className,
+        )}
+      />
+    );
+  }
 
   return (
-    <img
-      src={profileImageUrl}
-      alt="User"
-      className={className ?? "h-6 w-6 shrink-0 focus-visible:outline-0"}
-    />
+    <span
+      aria-label={label}
+      className={cn(
+        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-[11px] font-semibold text-foreground select-none focus-visible:outline-0",
+        className,
+      )}
+    >
+      {getInitials(label)}
+    </span>
   );
 }

@@ -271,7 +271,16 @@ async def _validate_and_assign_folder(
                 db_flow.folder_id = None
 
         if db_flow.folder_id is None:
-            db_flow.folder_id = await get_default_folder_id(session, user_id)
+            if db_flow.org_id:
+                org_folder = (
+                    await session.exec(
+                        select(Folder).where(Folder.user_id == user_id, Folder.org_id == db_flow.org_id)
+                    )
+                ).first()
+                if org_folder is not None:
+                    db_flow.folder_id = org_folder.id
+            if db_flow.folder_id is None:
+                db_flow.folder_id = await get_default_folder_id(session, user_id)
 
         await ensure_flow_move_allowed(
             session,
@@ -332,6 +341,12 @@ async def _new_flow(
             db_flow.id = effective_id
 
         db_flow.updated_at = datetime.now(timezone.utc)
+        from flow.services.auth.iam import current_org, iam_enabled
+
+        if iam_enabled() and not db_flow.org_id:
+            active_org = current_org.get()
+            if active_org:
+                db_flow.org_id = active_org
         await _validate_and_assign_folder(session, db_flow, user_id)
 
         session.add(db_flow)

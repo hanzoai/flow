@@ -34,6 +34,7 @@ import jwt
 current_org: ContextVar[str | None] = ContextVar("flow_iam_org", default=None)
 current_project: ContextVar[str | None] = ContextVar("flow_iam_project", default=None)
 current_iam_token: ContextVar[str | None] = ContextVar("flow_iam_token", default=None)
+current_principal: ContextVar[IAMPrincipal | None] = ContextVar("flow_iam_principal", default=None)
 
 # In-memory cache of the most recent verified Hanzo IAM bearer token per flow user_id
 # so worker threads (which may not inherit ContextVars) can authenticate Hanzo Enso
@@ -61,12 +62,38 @@ def get_user_iam_token(user_id: str | None = None) -> str | None:
 # Asymmetric algorithms published by hanzo.id JWKS — never HS* or none.
 _ALLOWED_ALGS = ["RS256", "RS512", "ES256", "ES384", "ES512"]
 
-# Explicit User-Agent so Cloudflare WAF does not 403 Python's default urllib UA
-# when fetching the IAM JWKS document.
-_JWKS_HEADERS = {
+# Explicit User-Agent so Cloudflare WAF does not 403 Python's default urllib/httpx UA
+# when calling Hanzo IAM / Cloud APIs.
+IAM_REQUEST_HEADERS = {
     "User-Agent": "hanzo-flow/1.8 (+https://flow.hanzo.ai)",
     "Accept": "application/json",
 }
+_JWKS_HEADERS = IAM_REQUEST_HEADERS
+
+
+def _extract_claim_orgs(claims: dict, primary_org: str, owner: str) -> tuple[tuple[str, str], ...]:
+    """Normalize JWT `orgs` / `groups` claims into immutable (slug, role) tuples."""
+    seen: dict[str, str] = {}
+    raw_orgs = claims.get("orgs")
+    if isinstance(raw_orgs, list):
+        for entry in raw_orgs:
+            if isinstance(entry, dict):
+                slug = str(entry.get("org") or entry.get("name") or "").strip()
+                role = str(entry.get("role") or "member").strip()
+                if slug:
+                    seen[slug] = role
+            elif isinstance(entry, str) and entry.strip():
+                seen.setdefault(entry.strip(), "member")
+    raw_groups = claims.get("groups")
+    if isinstance(raw_groups, list):
+        for grp in raw_groups:
+            if isinstance(grp, str) and grp.strip():
+                seen.setdefault(grp.strip(), "member")
+    if primary_org and primary_org not in seen:
+        seen[primary_org] = "admin" if claims.get("isAdmin") or owner == "admin" else "member"
+    if owner and owner not in seen:
+        seen[owner] = "admin" if owner == "admin" else "member"
+    return tuple(seen.items())
 
 
 @dataclass(frozen=True)
@@ -80,6 +107,28 @@ class IAMPrincipal:
     email: str = ""
     project: str = ""
     is_admin: bool = False
+    display_name: str = ""
+    picture: str = ""
+    owner: str = ""
+    orgs: tuple[tuple[str, str], ...] = ()
+
+    def member_org_names(self) -> list[str]:
+        names: list[str] = []
+        for slug, _ in self.orgs:
+            if slug and slug not in names:
+                names.append(slug)
+        for fallback in (self.org, self.owner):
+            if fallback and fallback not in names:
+                names.append(fallback)
+        return names
+
+    def can_access_org(self, org_slug: str) -> bool:
+        slug = (org_slug or "").strip()
+        if not slug:
+            return False
+        if self.is_admin:
+            return True
+        return slug in self.member_org_names()
 
 
 @dataclass(frozen=True)
@@ -93,6 +142,7 @@ class IAMConfig:
     authorize_url: str = ""
     token_url: str = ""
     logout_url: str = ""
+    api_base_url: str = ""
     # Claim names — org falls back through `organization` and `owner`.
     org_claim: str = "org"
     org_fallback_claim: str = "owner"
@@ -100,6 +150,9 @@ class IAMConfig:
     subject_claim: str = "sub"
     username_claim: str = "name"
     email_claim: str = "email"
+
+    def resolved_api_base(self) -> str:
+        return (self.api_base_url or "https://api.hanzo.ai").rstrip("/")
 
     def resolved_authorize_url(self) -> str:
         return self.authorize_url or f"{self.issuer}/v1/iam/oauth/authorize"
@@ -109,6 +162,18 @@ class IAMConfig:
 
     def resolved_logout_url(self) -> str:
         return self.logout_url or f"{self.issuer}/v1/iam/oauth/logout"
+
+    def resolved_userinfo_url(self) -> str:
+        return f"{self.resolved_api_base()}/v1/iam/oauth/userinfo"
+
+    def resolved_orgs_url(self) -> str:
+        return f"{self.resolved_api_base()}/v1/iam/organizations?limit=100"
+
+    def resolved_create_org_url(self) -> str:
+        return f"{self.resolved_api_base()}/v1/account/orgs"
+
+    def resolved_billing_tier_url(self) -> str:
+        return f"{self.resolved_api_base()}/v1/billing/tier"
 
 
 def pkce_pair() -> tuple[str, str]:
@@ -136,6 +201,7 @@ def iam_config() -> IAMConfig | None:
         authorize_url=os.getenv("FLOW_IAM_AUTHORIZE_URL", "").strip(),
         token_url=os.getenv("FLOW_IAM_TOKEN_URL", "").strip(),
         logout_url=os.getenv("FLOW_IAM_LOGOUT_URL", "").strip(),
+        api_base_url=os.getenv("FLOW_HANZO_API_URL", "").strip().rstrip("/"),
     )
 
 
@@ -202,6 +268,9 @@ class HanzoIAMValidator:
         # SuperAdmin iff IAM-validated owner == "admin" in the reserved admin org.
         # Organization-level isAdmin is never promoted to global superuser.
         is_super_admin = owner == "admin"
+        display_name = str(claims.get("displayName") or username or "").strip()
+        picture = str(claims.get("picture") or claims.get("avatar") or "").strip()
+        orgs = _extract_claim_orgs(claims, org, owner)
         return IAMPrincipal(
             user_id=subject,
             org=org,
@@ -209,6 +278,10 @@ class HanzoIAMValidator:
             email=str(claims.get(self.cfg.email_claim) or "").strip(),
             project=str(claims.get(self.cfg.project_claim) or "").strip(),
             is_admin=is_super_admin,
+            display_name=display_name,
+            picture=picture,
+            owner=owner,
+            orgs=orgs,
         )
 
 
@@ -247,4 +320,5 @@ def try_validate(token: str, *, validator: HanzoIAMValidator | None = None) -> I
     current_org.set(principal.org)
     current_project.set(principal.project or None)
     current_iam_token.set(token)
+    current_principal.set(principal)
     return principal

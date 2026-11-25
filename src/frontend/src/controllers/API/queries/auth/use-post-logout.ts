@@ -6,6 +6,7 @@ import useAuthStore from "@/stores/authStore";
 import useFlowStore from "@/stores/flowStore";
 import useFlowsManagerStore from "@/stores/flowsManagerStore";
 import { useFolderStore } from "@/stores/foldersStore";
+import { useIamStore } from "@/stores/iamStore";
 import type { useMutationFunctionType } from "@/types/api";
 import { getCookiesInstance } from "@/utils/cookie-manager";
 import { getAuthCookie } from "@/utils/utils";
@@ -41,6 +42,7 @@ export const useLogout: useMutationFunctionType<undefined, void> = (
       useFlowStore.getState().resetFlowState();
       useFlowsManagerStore.getState().resetStore();
       useFolderStore.getState().resetStore();
+      useIamStore.getState().reset();
 
       // Clear all React Query cache to prevent data leakage between users
       queryClient.clear();

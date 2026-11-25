@@ -38,6 +38,7 @@ from flow.api.v1.mappers.deployments.sync import retry_flow_operation_on_deploym
 from flow.api.v1.schemas import FlowListCreate
 from flow.helpers.user import get_user_by_flow_id_or_endpoint_name
 from flow.initial_setup.constants import STARTER_FOLDER_NAME
+from flow.services.auth.iam_org import active_org_for_user, org_scope_clause
 from flow.services.auth.utils import get_current_active_user
 from flow.services.cache.service import ThreadingInMemoryCache
 from flow.services.database.models.deployment.exceptions import (
@@ -139,6 +140,11 @@ async def read_flows(
             )
         else:
             stmt = select(Flow).where(Flow.user_id == current_user.id)
+
+        active_org, home_org = active_org_for_user(current_user)
+        org_clause = org_scope_clause(Flow.org_id, active_org, home_org)
+        if org_clause is not None:
+            stmt = stmt.where(org_clause)
 
         if remove_example_flows:
             stmt = stmt.where(Flow.folder_id != starter_folder_id)
