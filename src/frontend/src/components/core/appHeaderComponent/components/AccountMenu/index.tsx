@@ -1,20 +1,14 @@
-import { FaDiscord, FaGithub } from "react-icons/fa";
+import { Building2, Check, ExternalLink } from "lucide-react";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { ForwardedIconComponent } from "@/components/common/genericIconComponent";
-import {
-  DATASTAX_DOCS_URL,
-  DISCORD_URL,
-  DOCS_URL,
-  GITHUB_URL,
-  TWITTER_URL,
-} from "@/constants/constants";
+import { AuthContext } from "@/contexts/authContext";
 import { useLogout } from "@/controllers/API/queries/auth";
+import { useSwitchIamOrg } from "@/controllers/API/queries/auth/use-get-iam-context";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_FLOW } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useAuthStore from "@/stores/authStore";
 import { useDarkStore } from "@/stores/darkStore";
-import { cn, stripReleaseStageFromVersion } from "@/utils/utils";
+import { useIamStore } from "@/stores/iamStore";
 import {
   HeaderMenu,
   HeaderMenuItemButton,
@@ -27,152 +21,201 @@ import ThemeButtons from "../ThemeButtons";
 export const AccountMenu = () => {
   const { t } = useTranslation();
   const version = useDarkStore((state) => state.version);
-  const latestVersion = useDarkStore((state) => state.latestVersion);
   const navigate = useCustomNavigate();
   const { mutate: mutationLogout } = useLogout();
+  const { mutate: switchOrg } = useSwitchIamOrg();
+  const { userData } = useContext(AuthContext);
 
-  const { isAdmin, autoLogin } = useAuthStore((state) => ({
-    isAdmin: state.isAdmin,
-    autoLogin: state.autoLogin,
-  }));
+  const autoLogin = useAuthStore((state) => state.autoLogin);
+  const context = useIamStore((state) => state.context);
+
+  const iamUser = context?.user;
+  const activeOrg = context?.active_org ?? "";
+  const activeOrgInfo = context?.active_org_info;
+  const memberOrgs = (context?.orgs ?? []).filter((o) => o.is_member);
+  const links = context?.links ?? {
+    account: "https://hanzo.ai/account",
+    billing: "https://hanzo.ai/account/billing",
+    organizations: "https://hanzo.ai/account/organizations",
+    app: "https://hanzo.app/flow",
+    docs: "https://docs.hanzo.ai",
+  };
+
+  const displayName =
+    iamUser?.display_name || iamUser?.username || userData?.username || "Account";
+  const email = iamUser?.email || (userData?.username?.includes("@") ? userData.username : "");
 
   const handleLogout = () => {
     mutationLogout();
   };
 
-  const isLatestVersion = (() => {
-    if (!version || !latestVersion) return false;
-
-    const currentBaseVersion = stripReleaseStageFromVersion(version);
-    const latestBaseVersion = stripReleaseStageFromVersion(latestVersion);
-
-    return currentBaseVersion === latestBaseVersion;
-  })();
-
   return (
     <HeaderMenu>
       <HeaderMenuToggle>
         <div
-          className="h-6 w-6 rounded-lg focus-visible:outline-0"
+          className="h-6 w-6 rounded-full focus-visible:outline-0"
           data-testid="user-profile-settings"
         >
           <CustomProfileIcon />
         </div>
       </HeaderMenuToggle>
-      <HeaderMenuItems position="right" classNameSize="w-[272px]">
+      <HeaderMenuItems position="right" classNameSize="w-[292px]">
         <div className="divide-y divide-foreground/10">
-          <div>
-            <div className="h-[44px] items-center px-4 pt-3">
-              <div className="flex items-center justify-between">
-                <span
-                  data-testid="menu_version_button"
-                  id="menu_version_button"
-                  className="text-sm"
-                >
-                  {t("account.version")}
-                </span>
-                <div
-                  className={cn(
-                    "float-right text-xs",
-                    isLatestVersion && "text-accent-emerald-foreground",
-                    !isLatestVersion && "text-accent-amber-foreground",
+          {/* Identity header */}
+          <div className="px-4 py-3" data-testid="account-menu-identity">
+            <div className="flex items-center gap-2.5">
+              <CustomProfileIcon className="h-9 w-9 text-xs" />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="truncate text-sm font-semibold text-foreground">
+                    {displayName}
+                  </span>
+                  {iamUser?.is_super_admin && (
+                    <span className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium leading-none text-foreground">
+                      SuperAdmin
+                    </span>
                   )}
-                >
-                  {version}{" "}
-                  {isLatestVersion
-                    ? t("account.latest")
-                    : t("account.updateAvailable")}
                 </div>
+                {email && (
+                  <p className="truncate text-xs text-muted-foreground">
+                    {email}
+                  </p>
+                )}
               </div>
             </div>
+            {activeOrg && (
+              <div className="mt-2.5 flex items-center justify-between rounded-md border border-border bg-muted/40 px-2.5 py-1.5 text-xs">
+                <span className="flex min-w-0 items-center gap-1.5 text-foreground">
+                  <Building2 className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  <span className="truncate font-medium">
+                    {activeOrgInfo?.display_name || activeOrg}
+                  </span>
+                </span>
+                {activeOrgInfo?.plan && (
+                  <span className="shrink-0 text-[11px] text-muted-foreground">
+                    {activeOrgInfo.plan}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
-          <div>
+          {/* Quick org switch for multi-org members */}
+          {memberOrgs.length > 1 && (
+            <div className="py-1" data-testid="account-menu-orgs">
+              <div className="px-4 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                Switch Organization
+              </div>
+              {memberOrgs.slice(0, 4).map((org) => {
+                const isSelected = org.name === activeOrg;
+                return (
+                  <HeaderMenuItemButton
+                    key={org.name}
+                    onClick={() => {
+                      if (!isSelected) {
+                        switchOrg(org.name);
+                      }
+                    }}
+                  >
+                    <span className="flex w-full items-center justify-between gap-2 text-sm">
+                      <span className="truncate">{org.display_name}</span>
+                      {isSelected ? (
+                        <Check className="h-3.5 w-3.5 shrink-0 text-foreground" />
+                      ) : (
+                        <span className="text-[11px] text-muted-foreground">
+                          @{org.name}
+                        </span>
+                      )}
+                    </span>
+                  </HeaderMenuItemButton>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Flow Settings */}
+          <div className="py-1">
             <HeaderMenuItemButton
               onClick={() => {
-                navigate("/settings");
+                navigate("/settings/general");
               }}
             >
               <span
                 data-testid="menu_settings_button"
                 id="menu_settings_button"
               >
-                {t("account.settings")}
+                Account &amp; Organization
               </span>
             </HeaderMenuItemButton>
+            <HeaderMenuItemButton
+              onClick={() => {
+                navigate("/settings/model-providers");
+              }}
+            >
+              <span>Model Providers</span>
+            </HeaderMenuItemButton>
+            <HeaderMenuItemButton
+              onClick={() => {
+                navigate("/settings/mcp-servers");
+              }}
+            >
+              <span>MCP Servers</span>
+            </HeaderMenuItemButton>
+          </div>
 
-            {isAdmin && !autoLogin && (
-              <div>
-                <HeaderMenuItemButton
-                  onClick={() => {
-                    navigate("/admin");
-                  }}
-                >
-                  <span
-                    data-testid="menu_admin_page_button"
-                    id="menu_admin_page_button"
-                  >
-                    {t("account.adminPage")}
-                  </span>
-                </HeaderMenuItemButton>
+          {/* Hanzo Cloud / IAM Links */}
+          <div className="py-1">
+            <HeaderMenuItemLink newPage href={links.account} icon="">
+              <span className="flex w-full items-center justify-between text-sm">
+                <span>Hanzo Account</span>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+              </span>
+            </HeaderMenuItemLink>
+            <HeaderMenuItemLink newPage href={links.billing} icon="">
+              <span className="flex w-full items-center justify-between text-sm">
+                <span>Billing &amp; Plan</span>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+              </span>
+            </HeaderMenuItemLink>
+            <HeaderMenuItemLink newPage href={links.app} icon="">
+              <span className="flex w-full items-center justify-between text-sm">
+                <span>Open in Hanzo App</span>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+              </span>
+            </HeaderMenuItemLink>
+            <HeaderMenuItemLink newPage href={links.docs} icon="">
+              <span
+                data-testid="menu_docs_button"
+                id="menu_docs_button"
+                className="flex w-full items-center justify-between text-sm"
+              >
+                <span>{t("account.docs")}</span>
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+              </span>
+            </HeaderMenuItemLink>
+          </div>
+
+          {/* Theme + Version */}
+          <div>
+            <div className="flex items-center justify-between px-4 py-2 text-sm">
+              <span>{t("account.theme")}</span>
+              <div className="relative top-[1px]">
+                <ThemeButtons />
+              </div>
+            </div>
+            {version && (
+              <div className="flex items-center justify-between px-4 pb-2 text-xs text-muted-foreground">
+                <span data-testid="menu_version_button" id="menu_version_button">
+                  Hanzo Flow
+                </span>
+                <span className="font-mono">v{version}</span>
               </div>
             )}
-            <HeaderMenuItemLink
-              newPage
-              href={ENABLE_DATASTAX_FLOW ? DATASTAX_DOCS_URL : DOCS_URL}
-            >
-              <span data-testid="menu_docs_button" id="menu_docs_button">
-                {t("account.docs")}
-              </span>
-            </HeaderMenuItemLink>
           </div>
 
-          <div>
-            <HeaderMenuItemLink newPage href={GITHUB_URL}>
-              <span
-                data-testid="menu_github_button"
-                id="menu_github_button"
-                className="flex items-center gap-2"
-              >
-                <FaGithub className="h-4 w-4" />
-                {t("account.github")}
-              </span>
-            </HeaderMenuItemLink>
-            <HeaderMenuItemLink newPage href={DISCORD_URL}>
-              <span
-                data-testid="menu_discord_button"
-                id="menu_discord_button"
-                className="flex items-center gap-2"
-              >
-                <FaDiscord className="h-4 w-4 text-[#5865F2]" />
-                {t("account.discord")}
-              </span>
-            </HeaderMenuItemLink>
-            <HeaderMenuItemLink newPage href={TWITTER_URL}>
-              <span
-                data-testid="menu_twitter_button"
-                id="menu_twitter_button"
-                className="flex items-center gap-2"
-              >
-                <ForwardedIconComponent
-                  strokeWidth={2}
-                  name="TwitterX"
-                  className="h-4 w-4"
-                />
-                {t("account.twitter")}
-              </span>
-            </HeaderMenuItemLink>
-          </div>
-
-          <div className="flex items-center justify-between px-4 py-[6.5px] text-sm">
-            <span className="">{t("account.theme")}</span>
-            <div className="relative top-[1px] float-right">
-              <ThemeButtons />
-            </div>
-          </div>
-
+          {/* Sign Out */}
           {!autoLogin && (
-            <div>
+            <div className="py-1">
               <HeaderMenuItemButton onClick={handleLogout} icon="log-out">
                 {t("account.logout")}
               </HeaderMenuItemButton>

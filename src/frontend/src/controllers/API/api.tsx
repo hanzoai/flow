@@ -14,6 +14,7 @@ import {
   getFetchCredentials,
 } from "@/customization/utils/get-fetch-credentials";
 import useAuthStore from "@/stores/authStore";
+import { useIamStore } from "@/stores/iamStore";
 import { useUtilityStore } from "@/stores/utilityStore";
 import { BuildStatus, type EventDeliveryType } from "../../constants/enums";
 import useAlertStore from "../../stores/alertStore";
@@ -254,10 +255,12 @@ async function performStreamingRequest({
   onNetworkError,
   buildController,
 }: StreamingRequestParams) {
-  const headers = {
+  const activeOrg = useIamStore.getState().activeOrg;
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
     // this flag is fundamental to ensure server stops tasks when client disconnects
     Connection: "close",
+    ...(activeOrg ? { "X-IAM-Org-Id": activeOrg } : {}),
   };
 
   const params: RequestInit = {

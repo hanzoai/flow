@@ -30,6 +30,7 @@ from flow.api.v1.projects_mcp_helpers import (
     register_mcp_servers_for_project,
 )
 from flow.initial_setup.constants import ASSISTANT_FOLDER_NAME, STARTER_FOLDER_NAME
+from flow.services.auth.iam_org import active_org_for_user, org_scope_clause
 from flow.services.auth.mcp_encryption import encrypt_auth_settings
 from flow.services.database.models.deployment.exceptions import (
     araise_if_deployment_guard_error_or_skip,
@@ -66,8 +67,11 @@ async def create_project(
     current_user: CurrentActiveUser,
 ):
     try:
+        active_org, _ = active_org_for_user(current_user)
         new_project = Folder.model_validate(project, from_attributes=True)
         new_project.user_id = current_user.id
+        if active_org:
+            new_project.org_id = active_org
         # First check if the project.name is unique
         # there might be flows with name like: "MyFlow", "MyFlow (1)", "MyFlow (2)"
         # so we need to check if the name is unique with `like` operator
@@ -201,13 +205,14 @@ async def read_projects(
     current_user: CurrentActiveUser,
 ):
     try:
-        projects = (
-            await session.exec(
-                select(Folder).where(
-                    or_(Folder.user_id == current_user.id, Folder.user_id == None)  # noqa: E711
-                )
-            )
-        ).all()
+        active_org, home_org = active_org_for_user(current_user)
+        stmt = select(Folder).where(
+            or_(Folder.user_id == current_user.id, Folder.user_id == None)  # noqa: E711
+        )
+        scope = org_scope_clause(Folder.org_id, active_org, home_org)
+        if scope is not None:
+            stmt = stmt.where(scope)
+        projects = (await session.exec(stmt)).all()
         projects = [project for project in projects if project.name != STARTER_FOLDER_NAME]
         sorted_projects = sorted(projects, key=lambda x: x.name != DEFAULT_FOLDER_NAME)
 

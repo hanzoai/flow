@@ -1,23 +1,42 @@
 from __future__ import annotations
 
+import asyncio
 import hmac
 import json
 import secrets
-from typing import Annotated
+from typing import Annotated, Any
 from urllib.parse import quote, urlencode
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from sqlmodel import select
 
-from flow.api.utils import DbSession
+from flow.api.utils import CurrentActiveUser, DbSession
 from flow.api.v1.schemas import Token
 from flow.initial_setup.setup import get_or_create_default_folder
-from flow.services.auth.iam import iam_config, iam_enabled, pkce_pair, try_validate
+from flow.services.auth.iam import (
+    IAM_REQUEST_HEADERS,
+    current_org,
+    current_principal,
+    get_user_iam_token,
+    iam_config,
+    iam_enabled,
+    pkce_pair,
+    try_validate,
+)
+from flow.services.auth.iam_org import (
+    IAM_ORG_COOKIE,
+    extract_org_from_request,
+    is_valid_org_slug,
+    resolve_active_org,
+    sync_user_org,
+)
+from flow.services.database.models.folder.model import Folder
 from flow.services.database.models.user.crud import get_user_by_id
-from flow.services.database.models.user.model import UserRead
+from flow.services.database.models.user.model import User, UserRead
 from flow.services.deps import get_auth_service, get_settings_service, get_variable_service
 from lfx.log.logger import logger
 
@@ -170,7 +189,7 @@ async def _handle_iam_callback(
             tok_resp = await client.post(
                 cfg.resolved_token_url(),
                 data=token_form,
-                headers={"Accept": "application/json"},
+                headers=IAM_REQUEST_HEADERS,
             )
     except httpx.HTTPError:
         return RedirectResponse(url="/login?error=iam_unreachable", status_code=status.HTTP_302_FOUND)
@@ -315,7 +334,7 @@ async def refresh_token(
                     r = await client.post(
                         cfg.resolved_token_url(),
                         data=form,
-                        headers={"Accept": "application/json"},
+                        headers=IAM_REQUEST_HEADERS,
                     )
                 if r.status_code == status.HTTP_200_OK:
                     data = r.json()
@@ -409,10 +428,495 @@ async def get_session(
         return SessionResponse(authenticated=False)
 
 
-@router.post("/logout", include_in_schema=False)
-async def logout(response: Response):
-    auth_settings = get_settings_service().auth_settings
+class IamOrgSummary(BaseModel):
+    name: str
+    display_name: str
+    role: str = "member"
+    is_personal: bool = False
+    is_member: bool = True
+    logo: str = ""
+    favicon: str = ""
+    website_url: str = ""
+    plan: str = ""
 
+
+class IamUserProfile(BaseModel):
+    id: str
+    sub: str = ""
+    did: str = ""
+    username: str
+    display_name: str
+    email: str = ""
+    picture: str = ""
+    owner: str = ""
+    is_super_admin: bool = False
+
+
+class IamContextResponse(BaseModel):
+    iam_enabled: bool = True
+    issuer: str = "https://hanzo.ai"
+    user: IamUserProfile
+    active_org: str
+    active_org_info: IamOrgSummary | None = None
+    orgs: list[IamOrgSummary] = Field(default_factory=list)
+    links: dict[str, str] = Field(default_factory=dict)
+
+
+class SwitchOrgRequest(BaseModel):
+    org: str
+
+
+class CreateOrgRequest(BaseModel):
+    name: str
+
+
+def _default_iam_links(issuer: str) -> dict[str, str]:
+    base = (issuer or "https://hanzo.ai").rstrip("/")
+    return {
+        "account": f"{base}/account",
+        "billing": f"{base}/account/billing",
+        "organizations": f"{base}/account/organizations",
+        "app": "https://hanzo.app/flow",
+        "docs": "https://docs.hanzo.ai",
+    }
+
+
+def _clean_avatar(raw: str | None) -> str:
+    url = (raw or "").strip()
+    if not url:
+        return ""
+    if "gravatar.com/avatar/" in url and "d=identicon" in url:
+        return ""
+    return url
+
+
+def _format_plan_name(tier_payload: dict[str, Any] | None) -> str:
+    if not isinstance(tier_payload, dict):
+        return ""
+    for candidate in (
+        tier_payload.get("planName"),
+        (tier_payload.get("tier") or {}).get("displayName") if isinstance(tier_payload.get("tier"), dict) else None,
+        tier_payload.get("plan"),
+        (tier_payload.get("tier") or {}).get("name") if isinstance(tier_payload.get("tier"), dict) else None,
+    ):
+        val = str(candidate or "").strip()
+        if val:
+            return val if any(c.isupper() for c in val) else val.capitalize()
+    return ""
+
+
+async def _fetch_json(client: httpx.AsyncClient, url: str, headers: dict[str, str]) -> dict[str, Any] | None:
+    try:
+        resp = await client.get(url, headers=headers)
+        if resp.status_code == status.HTTP_200_OK:
+            data = resp.json()
+            if isinstance(data, dict):
+                return data
+    except Exception:
+        logger.debug("IAM upstream fetch failed for %s", url, exc_info=True)
+    return None
+
+
+async def _ensure_org_workspace_folder(
+    db: DbSession,
+    user: User,
+    org_slug: str,
+    display_name: str,
+) -> None:
+    """Create a default workspace folder scoped to `org_slug` if the user has none yet."""
+    existing = (
+        await db.exec(
+            select(Folder).where(Folder.user_id == user.id, Folder.org_id == org_slug)
+        )
+    ).first()
+    if existing is not None:
+        return
+
+    base_name = (display_name or org_slug).strip() or org_slug
+    candidate = base_name
+    if (
+        await db.exec(
+            select(Folder).where(Folder.user_id == user.id, Folder.name == candidate)
+        )
+    ).first() is not None:
+        candidate = f"{base_name} ({org_slug})"
+        suffix = 2
+        while (
+            await db.exec(
+                select(Folder).where(Folder.user_id == user.id, Folder.name == candidate)
+            )
+        ).first() is not None:
+            candidate = f"{base_name} ({suffix})"
+            suffix += 1
+
+    folder = Folder(
+        name=candidate,
+        description=f"Workspace projects for {display_name or org_slug}",
+        user_id=user.id,
+        org_id=org_slug,
+    )
+    db.add(folder)
+    await db.flush()
+    await db.refresh(folder)
+
+
+async def _build_iam_context(
+    request: Request,
+    current_user: User,
+    db: DbSession,
+    *,
+    override_org: str | None = None,
+) -> IamContextResponse:
+    cfg = iam_config()
+    principal = current_principal.get()
+    issuer = cfg.issuer if cfg else "https://hanzo.ai"
+
+    from flow.services.auth.utils import oauth2_login
+
+    token = await oauth2_login(request) or get_user_iam_token(str(current_user.id)) or ""
+
+    userinfo: dict[str, Any] = {}
+    org_rows: list[dict[str, Any]] = []
+    tier_payload: dict[str, Any] | None = None
+
+    requested_org = override_org or extract_org_from_request(request)
+    provisional_org = resolve_active_org(current_user, principal=principal, requested_org=requested_org) or "admin"
+
+    if cfg is not None and token:
+        base_headers = {**IAM_REQUEST_HEADERS, "Authorization": f"Bearer {token}"}
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            ui_data, orgs_data, tier_data = await asyncio.gather(
+                _fetch_json(client, cfg.resolved_userinfo_url(), base_headers),
+                _fetch_json(client, cfg.resolved_orgs_url(), base_headers),
+                _fetch_json(
+                    client,
+                    cfg.resolved_billing_tier_url(),
+                    {**base_headers, "X-Org-Id": provisional_org},
+                ),
+            )
+        if ui_data:
+            userinfo = ui_data
+        if orgs_data and isinstance(orgs_data.get("organizations"), list):
+            org_rows = [row for row in orgs_data["organizations"] if isinstance(row, dict)]
+        tier_payload = tier_data
+
+    owner = str(userinfo.get("owner") or (principal.owner if principal else "") or "").strip()
+    is_super_admin = bool(
+        (principal and principal.is_admin)
+        or owner == "admin"
+        or current_user.is_superuser
+    )
+
+    row_by_name: dict[str, dict[str, Any]] = {}
+    for row in org_rows:
+        slug = str(row.get("name") or "").strip()
+        if slug:
+            row_by_name[slug] = row
+
+    member_roles: dict[str, str] = {}
+    if isinstance(userinfo.get("orgs"), list):
+        for entry in userinfo["orgs"]:
+            if isinstance(entry, dict):
+                slug = str(entry.get("org") or entry.get("name") or "").strip()
+                if slug:
+                    member_roles[slug] = str(entry.get("role") or "member").strip()
+            elif isinstance(entry, str) and entry.strip():
+                member_roles.setdefault(entry.strip(), "member")
+    if isinstance(userinfo.get("groups"), list):
+        for grp in userinfo["groups"]:
+            if isinstance(grp, str) and grp.strip():
+                member_roles.setdefault(grp.strip(), "member")
+    if principal is not None:
+        for slug, role in principal.orgs:
+            if slug:
+                member_roles.setdefault(slug, role)
+        if principal.org:
+            member_roles.setdefault(principal.org, "admin" if principal.is_admin else "member")
+    if owner:
+        member_roles.setdefault(owner, "admin" if owner == "admin" else "member")
+    if not member_roles and current_user.org_id:
+        member_roles[current_user.org_id] = "admin" if is_super_admin else "member"
+
+    def _make_summary(slug: str, role: str, *, is_member: bool) -> IamOrgSummary:
+        row = row_by_name.get(slug, {})
+        display_name = str(row.get("displayName") or "").strip()
+        if not display_name:
+            display_name = "Hanzo Admin" if slug == "admin" else slug
+        return IamOrgSummary(
+            name=slug,
+            display_name=display_name,
+            role=role,
+            is_personal=bool(row.get("isPersonal", False)),
+            is_member=is_member,
+            logo=str(row.get("logoDark") or row.get("logo") or row.get("avatar") or "").strip(),
+            favicon=str(row.get("favicon") or "").strip(),
+            website_url=str(row.get("websiteUrl") or "").strip(),
+        )
+
+    member_summaries = [_make_summary(slug, role, is_member=True) for slug, role in member_roles.items()]
+    # Personal organization leads, then direct member organizations.
+    member_summaries.sort(key=lambda o: (not o.is_personal, o.name != "admin", o.display_name.lower()))
+
+    extra_summaries: list[IamOrgSummary] = []
+    if is_super_admin:
+        for slug in row_by_name:
+            if slug in member_roles:
+                continue
+            extra_summaries.append(_make_summary(slug, "superadmin", is_member=False))
+        extra_summaries.sort(key=lambda o: (o.name.startswith("wallet-"), o.display_name.lower()))
+
+    all_orgs = [*member_summaries, *extra_summaries]
+    allowed_slugs = {o.name for o in all_orgs}
+
+    active_org = override_org or extract_org_from_request(request) or current_user.org_id or ""
+    if not active_org or (allowed_slugs and active_org not in allowed_slugs and not is_super_admin):
+        active_org = member_summaries[0].name if member_summaries else (principal.org if principal else "admin")
+
+    # If the effective org differed from provisional_org, fetch the real plan for active_org.
+    plan_name = _format_plan_name(tier_payload)
+    if cfg is not None and token and active_org != provisional_org:
+        base_headers = {**IAM_REQUEST_HEADERS, "Authorization": f"Bearer {token}", "X-Org-Id": active_org}
+        async with httpx.AsyncClient(timeout=6.0) as client:
+            tier_data = await _fetch_json(client, cfg.resolved_billing_tier_url(), base_headers)
+        plan_name = _format_plan_name(tier_data)
+
+    active_org_info = next((o for o in all_orgs if o.name == active_org), None)
+    if active_org_info is None:
+        active_org_info = _make_summary(active_org, "admin" if is_super_admin else "member", is_member=True)
+        all_orgs.insert(0, active_org_info)
+    if plan_name:
+        active_org_info.plan = plan_name
+
+    if current_user.org_id != active_org and is_valid_org_slug(active_org):
+        await sync_user_org(current_user, active_org, db)
+    current_org.set(active_org)
+
+    email = str(userinfo.get("email") or (principal.email if principal else "") or "").strip()
+    if not email and "@" in current_user.username:
+        email = current_user.username
+    username = str(
+        userinfo.get("preferred_username")
+        or userinfo.get("name")
+        or (principal.username if principal else "")
+        or current_user.username
+    ).strip()
+    display_name = str(
+        userinfo.get("displayName")
+        or (principal.display_name if principal else "")
+        or username
+        or email
+    ).strip()
+    picture = _clean_avatar(
+        str(userinfo.get("picture") or userinfo.get("avatar") or (principal.picture if principal else "") or "")
+    )
+    sub = str(userinfo.get("sub") or (principal.user_id if principal else "") or str(current_user.id)).strip()
+    did = str(userinfo.get("did") or "").strip()
+
+    return IamContextResponse(
+        iam_enabled=cfg is not None,
+        issuer=issuer,
+        user=IamUserProfile(
+            id=str(current_user.id),
+            sub=sub,
+            did=did,
+            username=username,
+            display_name=display_name,
+            email=email,
+            picture=picture,
+            owner=owner or active_org,
+            is_super_admin=is_super_admin,
+        ),
+        active_org=active_org,
+        active_org_info=active_org_info,
+        orgs=all_orgs,
+        links=_default_iam_links(issuer),
+    )
+
+
+@router.get("/iam/context", response_model=IamContextResponse, include_in_schema=False)
+async def get_iam_context(
+    request: Request,
+    current_user: CurrentActiveUser,
+    db: DbSession,
+) -> IamContextResponse:
+    """Return the signed-in user's live Hanzo IAM identity, active org, plan, and accessible orgs."""
+    return await _build_iam_context(request, current_user, db)
+
+
+@router.post("/iam/org", response_model=IamContextResponse, include_in_schema=False)
+async def switch_iam_org(
+    payload: SwitchOrgRequest,
+    request: Request,
+    response: Response,
+    current_user: CurrentActiveUser,
+    db: DbSession,
+) -> IamContextResponse:
+    """Switch the active Hanzo IAM organization for this Flow session."""
+    target = (payload.org or "").strip()
+    if not is_valid_org_slug(target):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid organization slug")
+
+    ctx = await _build_iam_context(request, current_user, db)
+    allowed = {o.name for o in ctx.orgs}
+    if target not in allowed and not ctx.user.is_super_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You do not have access to organization '{target}'.",
+        )
+
+    await sync_user_org(current_user, target, db)
+    current_org.set(target)
+
+    target_info = next((o for o in ctx.orgs if o.name == target), None)
+    principal = current_principal.get()
+    home_org = principal.org if principal else None
+    if home_org and target != home_org:
+        await _ensure_org_workspace_folder(
+            db,
+            current_user,
+            target,
+            target_info.display_name if target_info else target,
+        )
+
+    auth_settings = get_settings_service().auth_settings
+    secure = _is_secure_request(request, "") or auth_settings.ACCESS_SECURE
+    response.set_cookie(
+        IAM_ORG_COOKIE,
+        target,
+        httponly=False,
+        samesite="lax",
+        secure=secure,
+        max_age=60 * 60 * 24 * 30,
+        domain=auth_settings.COOKIE_DOMAIN,
+        path="/",
+    )
+    return await _build_iam_context(request, current_user, db, override_org=target)
+
+
+@router.post("/iam/orgs", include_in_schema=False)
+async def create_iam_org(
+    payload: CreateOrgRequest,
+    request: Request,
+    response: Response,
+    current_user: CurrentActiveUser,
+    db: DbSession,
+):
+    """Create a real Hanzo IAM organization via POST /v1/account/orgs and switch into it."""
+    name = (payload.name or "").strip()
+    if len(name) < 2 or len(name) > 80:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization name must be between 2 and 80 characters.",
+        )
+
+    cfg = iam_config()
+    if cfg is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Hanzo IAM is not configured")
+
+    from flow.services.auth.utils import oauth2_login
+
+    token = await oauth2_login(request) or get_user_iam_token(str(current_user.id)) or ""
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing Hanzo IAM session token")
+
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            res = await client.post(
+                cfg.resolved_create_org_url(),
+                json={"name": name},
+                headers={
+                    **IAM_REQUEST_HEADERS,
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                },
+            )
+    except httpx.HTTPError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Could not reach Hanzo IAM to create organization.",
+        ) from exc
+
+    body: dict[str, Any] = {}
+    try:
+        parsed = res.json()
+        if isinstance(parsed, dict):
+            body = parsed
+    except ValueError:
+        pass
+
+    if res.status_code >= 400:
+        detail = str(body.get("detail") or body.get("error") or body.get("message") or f"Failed to create organization ({res.status_code})")
+        raise HTTPException(status_code=res.status_code, detail=detail)
+
+    org_slug = str(body.get("org") or body.get("name") or "").strip()
+    if not is_valid_org_slug(org_slug):
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Hanzo IAM did not return an organization handle.")
+
+    # Silently refresh the IAM token if a refresh cookie is present so the newly created org
+    # is embedded in the session JWT immediately.
+    refresh_cookie = request.cookies.get("refresh_token_lf")
+    auth_settings = get_settings_service().auth_settings
+    secure = _is_secure_request(request, "") or auth_settings.ACCESS_SECURE
+    if refresh_cookie:
+        try:
+            form: dict[str, str] = {
+                "grant_type": "refresh_token",
+                "client_id": cfg.client_id,
+                "refresh_token": refresh_cookie,
+            }
+            if cfg.client_secret:
+                form["client_secret"] = cfg.client_secret
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                ref = await client.post(cfg.resolved_token_url(), data=form, headers=IAM_REQUEST_HEADERS)
+            if ref.status_code == status.HTTP_200_OK:
+                ref_data = ref.json()
+                new_access = str(ref_data.get("access_token") or "").strip()
+                new_refresh = str(ref_data.get("refresh_token") or refresh_cookie).strip()
+                expires_in = int(ref_data.get("expires_in") or 0)
+                if new_access and try_validate(new_access) is not None:
+                    response.set_cookie(
+                        "access_token_lf",
+                        new_access,
+                        httponly=True,
+                        samesite="lax",
+                        secure=secure,
+                        max_age=expires_in if expires_in > 0 else auth_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
+                        domain=auth_settings.COOKIE_DOMAIN,
+                        path="/",
+                    )
+                    if new_refresh:
+                        response.set_cookie(
+                            "refresh_token_lf",
+                            new_refresh,
+                            httponly=True,
+                            samesite="lax",
+                            secure=secure,
+                            max_age=auth_settings.REFRESH_TOKEN_EXPIRE_SECONDS,
+                            domain=auth_settings.COOKIE_DOMAIN,
+                            path="/",
+                        )
+        except Exception:
+            logger.debug("Silent token refresh after org creation failed", exc_info=True)
+
+    await sync_user_org(current_user, org_slug, db)
+    current_org.set(org_slug)
+    await _ensure_org_workspace_folder(db, current_user, org_slug, name)
+    response.set_cookie(
+        IAM_ORG_COOKIE,
+        org_slug,
+        httponly=False,
+        samesite="lax",
+        secure=secure,
+        max_age=60 * 60 * 24 * 30,
+        domain=auth_settings.COOKIE_DOMAIN,
+        path="/",
+    )
+    ctx = await _build_iam_context(request, current_user, db, override_org=org_slug)
+    return {"org": org_slug, "display_name": name, "context": ctx}
+
+
+def _clear_session_cookies(response: Response) -> None:
+    auth_settings = get_settings_service().auth_settings
     response.delete_cookie(
         "refresh_token_lf",
         httponly=auth_settings.REFRESH_HTTPONLY,
@@ -438,4 +942,18 @@ async def logout(response: Response):
         path="/",
     )
     response.delete_cookie(_OIDC_TX_COOKIE, path="/")
+    response.delete_cookie(IAM_ORG_COOKIE, domain=auth_settings.COOKIE_DOMAIN, path="/")
+
+
+@router.get("/iam/logout", include_in_schema=False)
+async def iam_logout():
+    """Clear Flow session cookies and return to the sign-in screen."""
+    resp = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    _clear_session_cookies(resp)
+    return resp
+
+
+@router.post("/logout", include_in_schema=False)
+async def logout(response: Response):
+    _clear_session_cookies(response)
     return {"message": "Logout successful"}

@@ -149,7 +149,9 @@ class AuthService(BaseAuthService):
             raise AuthInvalidTokenError(msg) from e
         if principal is None:
             return None
-        # Get-or-create the flow user for this IAM identity; org_id carries the tenant.
+        # Get-or-create the flow user for this IAM identity; org_id carries the active tenant.
+        from flow.services.auth.iam import current_org
+
         username = principal.email or principal.username or principal.user_id
         user = await get_user_by_username(db, username)
         if user is None:
@@ -164,11 +166,18 @@ class AuthService(BaseAuthService):
             db.add(user)
             await db.commit()
             await db.refresh(user)
-        elif user.org_id != principal.org or user.is_superuser != principal.is_admin:
-            user.org_id = principal.org
-            user.is_superuser = principal.is_admin
-            await db.commit()
-            await db.refresh(user)
+        else:
+            needs_save = False
+            if not user.org_id:
+                user.org_id = principal.org
+                needs_save = True
+            if user.is_superuser != principal.is_admin:
+                user.is_superuser = principal.is_admin
+                needs_save = True
+            if needs_save:
+                await db.commit()
+                await db.refresh(user)
+        current_org.set(user.org_id or principal.org)
         set_user_iam_token(str(user.id), token)
         return user
 

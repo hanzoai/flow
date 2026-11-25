@@ -180,15 +180,21 @@ async def get_current_user(
     except AuthenticationError as e:
         raise _auth_error_to_http(e) from e
 
-    # Sync IAM org from gateway-injected header (X-IAM-Org-Id)
-    # This supplements the JWT-based extraction in _authenticate_with_token
+    # Sync active IAM org from request header (X-IAM-Org-Id) or cookie (hanzo_flow_org)
+    # after validating the caller is authorized for that organization.
     try:
-        from flow.services.auth.iam_org import extract_org_from_request, sync_user_org
-        org_id = extract_org_from_request(request)
-        if org_id and hasattr(user, "org_id"):
-            await sync_user_org(user, org_id, db)
+        from flow.services.auth.iam import current_org, current_principal
+        from flow.services.auth.iam_org import extract_org_from_request, resolve_active_org, sync_user_org
+
+        requested_org = extract_org_from_request(request)
+        principal = current_principal.get()
+        effective_org = resolve_active_org(user, principal=principal, requested_org=requested_org)
+        if effective_org:
+            current_org.set(effective_org)
+            if requested_org and requested_org == effective_org and hasattr(user, "org_id"):
+                await sync_user_org(user, effective_org, db)
     except Exception:
-        logger.debug("Failed to sync user org from request header", exc_info=True)
+        logger.debug("Failed to sync user org from request header/cookie", exc_info=True)
 
     return user
 

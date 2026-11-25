@@ -183,3 +183,83 @@ def test_hanzo_enso_credentials_fallback_when_api_key_is_var_name(monkeypatch):
     current_iam_token.set(None)
     set_user_iam_token(str(uid), "iam-jwt-fallback")
     assert get_api_key_for_provider(uid, "Hanzo Enso", "HANZO_API_KEY") == "iam-jwt-fallback"
+
+
+def test_principal_extracts_orgs_and_enforces_access_control():
+    priv, pub = _keypair()
+    member_tok = _token(
+        priv,
+        org="acme",
+        owner="acme",
+        name="alice",
+        displayName="Alice",
+        email="alice@acme.co",
+        orgs=[{"org": "acme", "role": "admin"}, {"org": "partner", "role": "member"}],
+    )
+    p = _validator(pub).validate(member_tok)
+    assert p.display_name == "Alice"
+    assert p.owner == "acme"
+    assert p.is_admin is False
+    assert p.member_org_names() == ["acme", "partner"]
+    assert p.can_access_org("acme") is True
+    assert p.can_access_org("partner") is True
+    assert p.can_access_org("other-org") is False
+
+    admin_tok = _token(
+        priv,
+        org="admin",
+        owner="admin",
+        name="z",
+        orgs=[{"org": "admin", "role": "admin"}, {"org": "lecce", "role": "admin"}],
+    )
+    ap = _validator(pub).validate(admin_tok)
+    assert ap.is_admin is True
+    assert ap.can_access_org("any-org") is True
+
+
+def test_iam_org_resolution_and_slug_validation():
+    from types import SimpleNamespace
+
+    from flow.services.auth.iam import IAMPrincipal
+    from flow.services.auth.iam_org import is_valid_org_slug, org_scope_clause, resolve_active_org
+
+    assert is_valid_org_slug("lecce") is True
+    assert is_valid_org_slug("my_org-1.prod") is True
+    assert is_valid_org_slug("") is False
+    assert is_valid_org_slug("../escape") is False
+    assert is_valid_org_slug("has space") is False
+
+    principal = IAMPrincipal(
+        user_id="u1",
+        org="acme",
+        owner="acme",
+        is_admin=False,
+        orgs=(("acme", "admin"), ("team-b", "member")),
+    )
+    user = SimpleNamespace(org_id="acme")
+
+    # Authorized switch succeeds
+    assert resolve_active_org(user, principal=principal, requested_org="team-b") == "team-b"
+    # Unauthorized switch is rejected back to user's authorized org
+    assert resolve_active_org(user, principal=principal, requested_org="secret-org") == "acme"
+
+    # Org scope clause: home org includes NULL legacy rows; non-home org isolates strictly
+    from flow.services.database.models.folder.model import Folder
+
+    home_clause = str(org_scope_clause(Folder.org_id, "acme", "acme"))
+    other_clause = str(org_scope_clause(Folder.org_id, "team-b", "acme"))
+    assert "IS NULL" in home_clause
+    assert "IS NULL" not in other_clause
+
+
+def test_iam_config_resolves_hanzo_api_endpoints(monkeypatch):
+    iam_config.cache_clear()
+    monkeypatch.setenv("FLOW_IAM_ISSUER", "https://hanzo.ai")
+    monkeypatch.delenv("FLOW_HANZO_API_URL", raising=False)
+    cfg = iam_config()
+    assert cfg is not None
+    assert cfg.resolved_userinfo_url() == "https://api.hanzo.ai/v1/iam/oauth/userinfo"
+    assert cfg.resolved_orgs_url() == "https://api.hanzo.ai/v1/iam/organizations?limit=100"
+    assert cfg.resolved_create_org_url() == "https://api.hanzo.ai/v1/account/orgs"
+    assert cfg.resolved_billing_tier_url() == "https://api.hanzo.ai/v1/billing/tier"
+    iam_config.cache_clear()
