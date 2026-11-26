@@ -85,6 +85,16 @@ def test_wrong_issuer_falls_through_to_local():
     assert try_validate(_token(priv, iss="https://other.example"), validator=_validator(pub)) is None
 
 
+def test_hanzo_sibling_issuers_accepted_and_foreign_rejected():
+    priv, pub = _keypair()
+    v = _validator(pub)
+    for iss in ("https://hanzo.id", "https://hanzo.ai", "https://iam.hanzo.ai"):
+        p = try_validate(_token(priv, iss=iss, org="acme"), validator=v)
+        assert p is not None and p.org == "acme"
+    with pytest.raises(jwt.InvalidIssuerError):
+        v.validate(_token(priv, iss="https://evil.example"))
+
+
 def test_our_issuer_bad_signature_never_falls_through():
     priv_wrong, _ = _keypair()
     _, pub = _keypair()

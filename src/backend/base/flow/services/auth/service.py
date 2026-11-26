@@ -150,6 +150,8 @@ class AuthService(BaseAuthService):
         if principal is None:
             return None
         # Get-or-create the flow user for this IAM identity; org_id carries the active tenant.
+        from sqlalchemy.exc import IntegrityError
+
         from flow.services.auth.iam import current_org
 
         username = principal.email or principal.username or principal.user_id
@@ -164,8 +166,15 @@ class AuthService(BaseAuthService):
                 last_login_at=None,
             )
             db.add(user)
-            await db.commit()
-            await db.refresh(user)
+            try:
+                await db.commit()
+                await db.refresh(user)
+            except IntegrityError:
+                # Concurrent first-visit requests for the same IAM user raced on INSERT.
+                await db.rollback()
+                user = await get_user_by_username(db, username)
+                if user is None:
+                    raise
         else:
             needs_save = False
             if not user.org_id:

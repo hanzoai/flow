@@ -136,6 +136,7 @@ class IAMConfig:
     issuer: str
     jwks_url: str
     audience: str = ""
+    also_issuers: tuple[str, ...] = ()
     client_id: str = "hanzo-flow"
     client_secret: str = ""
     redirect_uri: str = ""
@@ -150,6 +151,15 @@ class IAMConfig:
     subject_claim: str = "sub"
     username_claim: str = "name"
     email_claim: str = "email"
+
+    @property
+    def accepted_issuers(self) -> tuple[str, ...]:
+        seen: list[str] = []
+        for iss in (self.issuer, *self.also_issuers):
+            clean = iss.strip().rstrip("/")
+            if clean and clean not in seen:
+                seen.append(clean)
+        return tuple(seen)
 
     def resolved_api_base(self) -> str:
         return (self.api_base_url or "https://api.hanzo.ai").rstrip("/")
@@ -176,6 +186,22 @@ class IAMConfig:
         return f"{self.resolved_api_base()}/v1/billing/tier"
 
 
+# Hanzo IAM mints tokens under sibling issuers sharing the same JWKS
+# (https://hanzo.id for web OIDC, https://hanzo.ai for CLI, https://iam.hanzo.ai alias).
+_HANZO_SIBLING_ISSUERS = ("https://hanzo.id", "https://hanzo.ai", "https://iam.hanzo.ai")
+
+
+def _sibling_issuers_for(issuer: str, extra: str = "") -> tuple[str, ...]:
+    out: list[str] = []
+    if issuer in _HANZO_SIBLING_ISSUERS:
+        out.extend(_HANZO_SIBLING_ISSUERS)
+    for raw in extra.split(","):
+        clean = raw.strip().rstrip("/")
+        if clean and clean not in out:
+            out.append(clean)
+    return tuple(i for i in out if i != issuer)
+
+
 def pkce_pair() -> tuple[str, str]:
     """Generate an RFC 7636 S256 (code_verifier, code_challenge) pair."""
     verifier = secrets.token_urlsafe(48)
@@ -191,10 +217,12 @@ def iam_config() -> IAMConfig | None:
     if not issuer:
         return None
     jwks_url = os.getenv("FLOW_IAM_JWKS_URL", "").strip() or f"{issuer}/v1/iam/.well-known/jwks"
+    also = _sibling_issuers_for(issuer, os.getenv("FLOW_IAM_ISSUERS", ""))
     return IAMConfig(
         issuer=issuer,
         jwks_url=jwks_url,
         audience=os.getenv("FLOW_IAM_AUDIENCE", "").strip(),
+        also_issuers=also,
         client_id=os.getenv("FLOW_IAM_CLIENT_ID", "").strip() or "hanzo-flow",
         client_secret=os.getenv("FLOW_IAM_CLIENT_SECRET", "").strip(),
         redirect_uri=os.getenv("FLOW_IAM_REDIRECT_URI", "").strip(),
@@ -233,13 +261,21 @@ class HanzoIAMValidator:
         assert self._jwks is not None
         return self._jwks.get_signing_key_from_jwt(token).key
 
+    def accepts_issuer(self, iss: str) -> bool:
+        clean = str(iss or "").strip().rstrip("/")
+        if not clean:
+            return False
+        accepted = set(self.cfg.accepted_issuers)
+        if self.cfg.issuer.strip().rstrip("/") in _HANZO_SIBLING_ISSUERS:
+            accepted.update(_HANZO_SIBLING_ISSUERS)
+        return clean in accepted
+
     def validate(self, token: str) -> IAMPrincipal:
         """Verify `token` and return its principal. Raises jwt.InvalidTokenError on any
         failure (bad signature, wrong issuer/audience, expired, missing org/subject)."""
-        options = {"require": ["exp", "iss", self.cfg.subject_claim]}
+        options = {"require": ["exp", "iss", self.cfg.subject_claim], "verify_iss": False}
         kwargs: dict = {
             "algorithms": _ALLOWED_ALGS,
-            "issuer": self.cfg.issuer,
             "options": options,
         }
         if self.cfg.audience:
@@ -247,6 +283,9 @@ class HanzoIAMValidator:
         else:
             options["verify_aud"] = False
         claims = jwt.decode(token, self._key_for(token), **kwargs)
+        if not self.accepts_issuer(str(claims.get("iss") or "")):
+            msg = "Invalid issuer"
+            raise jwt.InvalidIssuerError(msg)
 
         owner = str(claims.get("owner") or "").strip()
         org = str(
@@ -314,7 +353,7 @@ def try_validate(token: str, *, validator: HanzoIAMValidator | None = None) -> I
         )
     except jwt.InvalidTokenError:
         return None
-    if str(unverified.get("iss", "")).rstrip("/") != v.cfg.issuer:
+    if not v.accepts_issuer(str(unverified.get("iss", ""))):
         return None
     principal = v.validate(token)  # raises on a bad IAM token — never falls through
     current_org.set(principal.org)
