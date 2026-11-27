@@ -263,7 +263,7 @@ nltk = ["nltk>=3.9.4"]
 lark = ["lark==1.2.2"]
 
 # Additional dependencies from requirements
-huggingface = ["huggingface-hub[inference]>=1.0.0,<2.0.0"]
+huggingface = ["huggingface-hub>=1.0.0,<2.0.0"]
 metaphor = ["metaphor-python==0.1.23"]
 metal = ["metal_sdk==2.5.1"]
 markup = ["MarkupSafe==3.0.2"]

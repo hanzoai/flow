@@ -7,9 +7,10 @@ import json
 import zipfile
 from pathlib import Path
 from typing import Any, TypeVar
+from urllib.parse import quote
 
 from flow_sdk._http import _HTTP_201_CREATED, _logger
-from flow_sdk.models import FlowCreate, RunRequest, StreamChunk
+from flow_sdk.models import FlowCreate, RunRequest, StreamChunk, WorkflowGraph
 from flow_sdk.serialization import flow_to_json, normalize_flow
 
 _ModelT = TypeVar("_ModelT")
@@ -209,3 +210,92 @@ class _ClientCommon:
     def _upsert_result(cls, model_type: type[_ModelT], response: Any) -> tuple[_ModelT, bool]:
         """Return ``(model, created)`` for an upsert response."""
         return cls._validate_model(model_type, response.json()), response.status_code == _HTTP_201_CREATED
+
+    @staticmethod
+    def _encode_path_segment(value: Any, name: str = "id") -> str:
+        """Validate and URL-encode a non-empty path segment."""
+        raw = str(value).strip()
+        if not raw:
+            msg = f"{name} must not be empty"
+            raise ValueError(msg)
+        return quote(raw, safe="")
+
+    @staticmethod
+    def _build_workflow_list_params(*, page: int | None = None, size: int | None = None) -> dict[str, str]:
+        """Build query params for ``GET /v1/flow/workflows``."""
+        params: dict[str, str] = {}
+        if page is not None:
+            params["page"] = str(page)
+        if size is not None:
+            params["size"] = str(size)
+        return params
+
+    @staticmethod
+    def _serialize_graph_data(data: WorkflowGraph | dict[str, Any] | None) -> dict[str, Any] | None:
+        if data is None:
+            return None
+        if isinstance(data, WorkflowGraph):
+            return data.model_dump(mode="json", by_alias=True, exclude_none=True)
+        return data
+
+    @classmethod
+    def _build_workflow_create_payload(
+        cls,
+        name: str,
+        *,
+        description: str | None = None,
+        data: WorkflowGraph | dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Build JSON body for ``POST /v1/flow/workflows``."""
+        if not name.strip():
+            msg = "workflow name must not be empty"
+            raise ValueError(msg)
+        payload: dict[str, Any] = {"name": name}
+        if description is not None:
+            payload["description"] = description
+        serialized = cls._serialize_graph_data(data)
+        if serialized is not None:
+            payload["data"] = serialized
+        return payload
+
+    @classmethod
+    def _build_workflow_update_payload(
+        cls,
+        *,
+        name: str | None = None,
+        description: str | None = None,
+        data: WorkflowGraph | dict[str, Any] | None = None,
+        locked: bool | None = None,
+    ) -> dict[str, Any]:
+        """Build partial JSON body for ``PATCH /v1/flow/workflows/{id}``."""
+        payload: dict[str, Any] = {}
+        if name is not None:
+            payload["name"] = name
+        if description is not None:
+            payload["description"] = description
+        serialized = cls._serialize_graph_data(data)
+        if serialized is not None:
+            payload["data"] = serialized
+        if locked is not None:
+            payload["locked"] = locked
+        return payload
+
+    @staticmethod
+    def _build_workflow_run_payload(
+        workflow_id: Any,
+        *,
+        input_value: str = "",
+        session: str | None = None,
+        tweaks: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Build JSON body for ``POST /v1/flow/runs``."""
+        wf = str(workflow_id).strip()
+        if not wf:
+            msg = "workflow_id must not be empty"
+            raise ValueError(msg)
+        payload: dict[str, Any] = {"workflow": wf, "input": input_value}
+        if session:
+            payload["session"] = session
+        if tweaks is not None:
+            payload["tweaks"] = tweaks
+        return payload

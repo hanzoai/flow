@@ -1,6 +1,6 @@
 [project]
 name = "lfx"
-version = "0.3.1"
+version = "0.4.6"
 description = "Flow Executor - A lightweight CLI tool for executing and serving Flow AI flows"
 readme = "README.md"
 authors = [
@@ -45,7 +45,7 @@ dependencies = [
     "pypdf>=6.10.0,<7.0.0",
     "cryptography>=46.0.7",
     "ag-ui-protocol>=0.1.10",
-    "hanzo-flow-sdk>=0.1.0",
+    "hanzo-flow-sdk>=0.1.7",
     "markitdown>=0.1.4,<2.0.0",
     "setuptools>=80.0.0,<81.0.0",
     "wheel>=0.46.2,<1.0.0",

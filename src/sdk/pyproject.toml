@@ -1,11 +1,14 @@
 [project]
 name = "hanzo-flow-sdk"
-version = "0.1.6"
-description = "Python SDK for the Flow REST API"
+version = "0.1.7"
+description = "Python SDK for the Hanzo Flow REST API"
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
 license = "MIT"
-keywords = ["flow", "sdk", "ai", "workflow"]
+maintainers = [
+    { name = "Hanzo AI", email = "oss@hanzo.ai" },
+]
+keywords = ["hanzo", "flow", "sdk", "ai", "workflow"]
 
 dependencies = [
     "httpx[http2]>=0.24.0,<1.0.0",
@@ -14,6 +17,10 @@ dependencies = [
     "tomli>=2.2.1,<3.0.0",
     "typing-extensions>=4.14.0,<5.0.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/hanzoai/flow"
+Documentation = "https://docs.hanzo.ai/flow"
 
 [project.optional-dependencies]
 testing = [

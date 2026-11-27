@@ -17,15 +17,21 @@ make dev                   # Start dev server
 make test                  # Run tests
 ```
 
-## Package Architecture (2026-03-25)
+## Package Architecture (2026-11-25)
 
-Three Python packages in a uv workspace:
+Four Python packages in a uv workspace plus native SDKs (`sdk/README.md`):
 
 | Package | PyPI name | Dir | Purpose |
 |---------|-----------|-----|---------|
-| `flow` | `flow-base` | `src/backend/base/flow/` | Main backend package (454 files) |
-| `flow` (root) | `flow` | `src/backend/flow/` | Root package (version only) |
-| `lfx` | `lfx` | `src/lfx/src/lfx/` | Lightweight executor, standalone CLI |
+| `flow` | `hanzo-flow-base` | `src/backend/base/flow/` | Main backend package (`0.9.6`) |
+| `flow` (root) | `hanzo-flow` | `src/backend/flow/` | Root package (`1.8.16`) |
+| `lfx` | `lfx` | `src/lfx/src/lfx/` | Lightweight executor, standalone CLI (`0.4.6`) |
+| `flow_sdk` | `hanzo-flow-sdk` | `src/sdk/src/flow_sdk/` | Python SDK for `/v1/flow/*` and direct backend (`0.1.7`) |
+
+Native SDKs & embedded `flow-core` DAG engines:
+- **Go**: `sdk/go` (`github.com/hanzoai/flow/sdk/go`, stdlib only) + `core/` (`flow-core`)
+- **Rust**: `sdk/rust` (`hanzo-flow-sdk`) + `core-rs/` (`flow-core`)
+- **C++20**: `sdk/cpp` (`hanzo::flow` — header-only `flow-core` DAG engine + `libcurl` REST client)
 
 ### Internal package name: `flow`
 - All Python imports use `from flow.xxx` / `import flow.xxx`

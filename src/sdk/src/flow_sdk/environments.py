@@ -66,14 +66,28 @@ _EXAMPLE_CONFIG = """\
 class EnvironmentConfig:
     """A single named environment definition."""
 
-    def __init__(self, name: str, url: str, api_key: str | None) -> None:
+    def __init__(
+        self,
+        name: str,
+        url: str,
+        api_key: str | None,
+        *,
+        token: str | None = None,
+        org_id: str | None = None,
+    ) -> None:
         self.name = name
         self.url = url
         self.api_key = api_key
+        self.token = token
+        self.org_id = org_id
 
     def __repr__(self) -> str:
-        masked = f"{self.api_key[:4]}..." if self.api_key else None
-        return f"EnvironmentConfig(name={self.name!r}, url={self.url!r}, api_key={masked!r})"
+        masked_key = f"{self.api_key[:4]}..." if self.api_key else None
+        masked_tok = f"{self.token[:4]}..." if self.token else None
+        return (
+            f"EnvironmentConfig(name={self.name!r}, url={self.url!r}, "
+            f"api_key={masked_key!r}, token={masked_tok!r}, org_id={self.org_id!r})"
+        )
 
 
 def _candidate_paths(explicit: Path | str | None) -> list[Path]:
@@ -116,7 +130,25 @@ def _parse_env(raw: dict[str, Any], file_path: Path, name: str) -> EnvironmentCo
             stacklevel=2,
         )
         api_key = raw["api_key"]
-    return EnvironmentConfig(name=name, url=url, api_key=api_key)
+    token: str | None = None
+    if "token_env" in raw:
+        token = os.environ.get(str(raw["token_env"]))
+    elif "token" in raw:
+        import warnings
+
+        warnings.warn(
+            f"Environment {name!r}: literal token in config file is not recommended. "
+            "Use token_env to reference an environment variable instead.",
+            UserWarning,
+            stacklevel=2,
+        )
+        token = raw["token"]
+    org_id: str | None = None
+    if "org_id_env" in raw:
+        org_id = os.environ.get(str(raw["org_id_env"]))
+    elif "org_id" in raw:
+        org_id = str(raw["org_id"])
+    return EnvironmentConfig(name=name, url=url, api_key=api_key, token=token, org_id=org_id)
 
 
 def load_environments(
@@ -231,7 +263,7 @@ def get_client(
     from flow_sdk.client import Client
 
     env = get_environment(environment, config_file=config_file)
-    return Client(base_url=env.url, api_key=env.api_key, timeout=timeout)
+    return Client(base_url=env.url, api_key=env.api_key, token=env.token, org_id=env.org_id, timeout=timeout)
 
 
 def get_async_client(
@@ -252,4 +284,4 @@ def get_async_client(
     from flow_sdk.client import AsyncClient
 
     env = get_environment(environment, config_file=config_file)
-    return AsyncClient(base_url=env.url, api_key=env.api_key, timeout=timeout)
+    return AsyncClient(base_url=env.url, api_key=env.api_key, token=env.token, org_id=env.org_id, timeout=timeout)

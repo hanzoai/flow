@@ -17,6 +17,7 @@ import httpx
 
 from flow_sdk._client_common import _ClientCommon
 from flow_sdk._http import (
+    _DEFAULT_BASE_URL,
     _DEFAULT_TIMEOUT,
     _build_headers,
     _connection_error,
@@ -28,6 +29,7 @@ from flow_sdk.background_job import BackgroundJob
 from flow_sdk.models import (
     Flow,
     FlowCreate,
+    FlowStatus,
     FlowUpdate,
     Project,
     ProjectCreate,
@@ -36,6 +38,7 @@ from flow_sdk.models import (
     RunRequest,
     RunResponse,
     StreamChunk,
+    WorkflowGraph,
 )
 
 if TYPE_CHECKING:
@@ -59,17 +62,22 @@ class AsyncFlowClient(_ClientCommon):
 
     def __init__(
         self,
-        base_url: str,
+        base_url: str = _DEFAULT_BASE_URL,
         api_key: str | None = None,
         timeout: float = _DEFAULT_TIMEOUT,
         httpx_client: httpx.AsyncClient | None = None,
+        *,
+        token: str | None = None,
+        org_id: str | None = None,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         self._api_key = api_key
+        self._token = token
+        self._org_id = org_id
         self._owns_client = httpx_client is None
         self._http = httpx_client or httpx.AsyncClient(
             base_url=self._base_url,
-            headers=_build_headers(api_key),
+            headers=_build_headers(api_key, token=token, org_id=org_id),
             timeout=timeout,
         )
 
@@ -112,6 +120,96 @@ class AsyncFlowClient(_ClientCommon):
         _logger.debug("HTTP %s %s -> %s", method, path, response.status_code)
         _raise_for_status(response)
         return response
+
+    # ------------------------------------------------------------------
+    # Canonical Hanzo Flow API (/v1/flow/*)
+    # ------------------------------------------------------------------
+
+    async def flow_status(self) -> FlowStatus:
+        """Return flow service reachability and version via ``GET /v1/flow/status``."""
+        resp = await self._request("GET", "/v1/flow/status")
+        return self._validate_model(FlowStatus, resp.json())
+
+    async def list_workflows(
+        self,
+        *,
+        page: int | None = None,
+        size: int | None = None,
+    ) -> Any:
+        """List workflows in the caller's org via ``GET /v1/flow/workflows``."""
+        params = self._build_workflow_list_params(page=page, size=size)
+        resp = await self._request("GET", "/v1/flow/workflows", params=params or None)
+        return resp.json()
+
+    async def get_workflow(self, workflow_id: UUID | str) -> dict[str, Any]:
+        """Fetch one workflow by ID via ``GET /v1/flow/workflows/{id}``."""
+        seg = self._encode_path_segment(workflow_id, "workflow_id")
+        resp = await self._request("GET", f"/v1/flow/workflows/{seg}")
+        return resp.json()
+
+    async def create_workflow(
+        self,
+        name: str,
+        *,
+        description: str | None = None,
+        data: WorkflowGraph | dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Create a workflow in the caller's org via ``POST /v1/flow/workflows``."""
+        payload = self._build_workflow_create_payload(name, description=description, data=data)
+        resp = await self._request("POST", "/v1/flow/workflows", json=payload)
+        return resp.json()
+
+    async def update_workflow(
+        self,
+        workflow_id: UUID | str,
+        *,
+        name: str | None = None,
+        description: str | None = None,
+        data: WorkflowGraph | dict[str, Any] | None = None,
+        locked: bool | None = None,
+    ) -> dict[str, Any]:
+        """Patch a workflow via ``PATCH /v1/flow/workflows/{id}``."""
+        seg = self._encode_path_segment(workflow_id, "workflow_id")
+        payload = self._build_workflow_update_payload(
+            name=name,
+            description=description,
+            data=data,
+            locked=locked,
+        )
+        resp = await self._request("PATCH", f"/v1/flow/workflows/{seg}", json=payload)
+        return resp.json()
+
+    async def delete_workflow(self, workflow_id: UUID | str) -> None:
+        """Delete a workflow and its runs via ``DELETE /v1/flow/workflows/{id}``."""
+        seg = self._encode_path_segment(workflow_id, "workflow_id")
+        await self._request("DELETE", f"/v1/flow/workflows/{seg}")
+
+    async def run_workflow(
+        self,
+        workflow_id: UUID | str,
+        *,
+        input_value: str = "",
+        session: str | None = None,
+        tweaks: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Execute a workflow synchronously via ``POST /v1/flow/runs``."""
+        payload = self._build_workflow_run_payload(
+            workflow_id,
+            input_value=input_value,
+            session=session,
+            tweaks=tweaks,
+        )
+        resp = await self._request("POST", "/v1/flow/runs", json=payload)
+        return resp.json()
+
+    async def list_runs(self, workflow_id: UUID | str) -> Any:
+        """List recorded runs for a workflow via ``GET /v1/flow/runs?workflow={id}``."""
+        wf = str(workflow_id).strip()
+        if not wf:
+            msg = "workflow_id must not be empty"
+            raise ValueError(msg)
+        resp = await self._request("GET", "/v1/flow/runs", params={"workflow": wf})
+        return resp.json()
 
     # ------------------------------------------------------------------
     # Flows

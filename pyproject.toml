@@ -138,7 +138,10 @@ postgresql = [
 ]
 
 [tool.uv]
-environments = ["sys_platform == 'linux'"]
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
 override-dependencies = [
     # temporary force a newer python-pptx
     "python-pptx>=1.0.2",
