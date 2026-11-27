@@ -63,6 +63,17 @@ Hanzo Flow is available at http://localhost:7860/.
 
 Hanzo Flow is completely open source and you can deploy it to all major deployment clouds.
 
+## SDKs
+
+Native SDKs for the canonical `/v1/flow/*` API (`https://api.hanzo.ai`) and embedded `flow-core` DAG engines:
+
+- **Python**: [`src/sdk`](./src/sdk/README.md) (`hanzo-flow-sdk`)
+- **Go**: [`sdk/go`](./sdk/go/README.md) (`github.com/hanzoai/flow/sdk/go`, zero external deps)
+- **Rust**: [`sdk/rust`](./sdk/rust/README.md) (`hanzo-flow-sdk`)
+- **C++20**: [`sdk/cpp`](./sdk/cpp/README.md) (`hanzo::flow` core DAG + `libcurl` REST client)
+
+See [`sdk/README.md`](./sdk/README.md) for the full API surface and examples.
+
 ## Contribute
 
 We welcome contributions from developers of all levels. If you'd like to contribute, please check our [contributing guidelines](./CONTRIBUTING.md) and help make Hanzo Flow more accessible.

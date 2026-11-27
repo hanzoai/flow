@@ -3,8 +3,8 @@
 # Copy this file to flow-environments.toml (in your project root or
 # ~/.config/flow/environments.toml) and fill in your instance details.
 #
-# The api_key_env field names an *environment variable* that holds the API key.
-# This keeps secrets out of the config file and out of version control.
+# The token_env / api_key_env fields name *environment variables* that hold
+# credentials, keeping secrets out of the config file and version control.
 #
 # Lookup order for this file:
 #   1. Explicit path passed to get_client() / load_environments()
@@ -14,16 +14,18 @@
 
 [environments.local]
 url = "http://localhost:7860"
-# No api_key_env means unauthenticated (AUTO_LOGIN must be enabled)
+# No token_env / api_key_env means unauthenticated (AUTO_LOGIN must be enabled)
 
 [environments.staging]
-url = "https://staging.flow.example.com"
-api_key_env = "FLOW_STAGING_API_KEY" # pragma: allowlist secret
+url = "https://api.hanzo.ai"
+token_env = "HANZO_STAGING_TOKEN" # pragma: allowlist secret
+org_id = "hanzo"
 
 [environments.production]
-url = "https://flow.example.com"
-api_key_env = "FLOW_PROD_API_KEY" # pragma: allowlist secret
+url = "https://api.hanzo.ai"
+token_env = "HANZO_API_KEY" # pragma: allowlist secret
+org_id = "hanzo"
 
 # Which environment is used when no name is specified
 [defaults]
-environment = "staging"
+environment = "production"

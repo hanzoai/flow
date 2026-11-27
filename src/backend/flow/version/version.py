@@ -16,6 +16,8 @@ def get_version() -> str:
         ValueError: If the package is not found from the list of package names.
     """
     pkg_names = [
+        "hanzo-flow",
+        "hanzo-flow-base",
         "flow",
         "flow-base",
         "flow-nightly",

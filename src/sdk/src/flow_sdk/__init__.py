@@ -1,6 +1,7 @@
-"""flow-sdk -- Python SDK for the Flow REST API."""
+"""flow-sdk -- Python SDK for the Hanzo Flow REST API."""
 
 from flow_sdk._async_client import AsyncClient, AsyncFlowClient
+from flow_sdk._version import __version__
 from flow_sdk.background_job import BackgroundJob
 from flow_sdk.client import Client, FlowClient
 from flow_sdk.environments import (
@@ -22,9 +23,13 @@ from flow_sdk.exceptions import (
     FlowValidationError,
 )
 from flow_sdk.models import (
+    GRAPH_SCHEMA_VERSION,
     Flow,
     FlowCreate,
+    FlowStatus,
     FlowUpdate,
+    GraphEdge,
+    GraphNode,
     Project,
     ProjectCreate,
     ProjectUpdate,
@@ -33,10 +38,12 @@ from flow_sdk.models import (
     RunRequest,
     RunResponse,
     StreamChunk,
+    WorkflowGraph,
 )
 from flow_sdk.serialization import flow_to_json, normalize_flow, normalize_flow_file
 
 __all__ = [
+    "GRAPH_SCHEMA_VERSION",
     "AsyncClient",  # short alias for AsyncFlowClient (preferred)
     "AsyncFlowClient",
     "BackgroundJob",
@@ -45,16 +52,19 @@ __all__ = [
     "EnvironmentConfigError",
     "EnvironmentNotFoundError",
     "Flow",
-    "FlowCreate",
-    "FlowUpdate",
     "FlowAuthError",
     "FlowClient",
     "FlowConnectionError",
+    "FlowCreate",
     "FlowError",
     "FlowHTTPError",
     "FlowNotFoundError",
+    "FlowStatus",
     "FlowTimeoutError",
+    "FlowUpdate",
     "FlowValidationError",
+    "GraphEdge",
+    "GraphNode",
     "Project",
     "ProjectCreate",
     "ProjectUpdate",
@@ -63,6 +73,8 @@ __all__ = [
     "RunRequest",
     "RunResponse",
     "StreamChunk",
+    "WorkflowGraph",
+    "__version__",
     "flow_to_json",
     "get_async_client",
     "get_client",

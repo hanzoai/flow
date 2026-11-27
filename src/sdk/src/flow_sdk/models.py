@@ -6,7 +6,53 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+GRAPH_SCHEMA_VERSION = "hanzo.flow/v1"
+
+
+# ---------------------------------------------------------------------------
+# Canonical /v1/flow/* models
+# ---------------------------------------------------------------------------
+
+
+class FlowStatus(BaseModel):
+    """Health and version report returned by ``GET /v1/flow/status``."""
+
+    reachable: bool
+    version: str | None = None
+
+
+class GraphNode(BaseModel):
+    """A node inside a ``hanzo.flow/v1`` workflow graph."""
+
+    id: str
+    type: str = ""
+    data: dict[str, Any] = Field(default_factory=dict)
+    position: dict[str, float] | None = None
+
+
+class GraphEdge(BaseModel):
+    """A directed edge inside a ``hanzo.flow/v1`` workflow graph."""
+
+    id: str = ""
+    source: str
+    source_handle: str | None = Field(default=None, alias="sourceHandle")
+    target: str
+    target_handle: str | None = Field(default=None, alias="targetHandle")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class WorkflowGraph(BaseModel):
+    """Portable ``hanzo.flow/v1`` workflow graph document."""
+
+    graph_schema: str = Field(default=GRAPH_SCHEMA_VERSION, alias="schema")
+    nodes: list[GraphNode] = Field(default_factory=list)
+    edges: list[GraphEdge] = Field(default_factory=list)
+
+    model_config = ConfigDict(populate_by_name=True)
+
 
 # ---------------------------------------------------------------------------
 # Flow models

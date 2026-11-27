@@ -25,6 +25,7 @@ def _get_version_info():
     """
     package_options = [
         ("hanzo-flow", "Flow"),
+        ("hanzo-flow-base", "Flow Base"),
         ("flow", "Flow"),
         ("flow-base", "Flow Base"),
         ("flow-nightly", "Flow Nightly"),
