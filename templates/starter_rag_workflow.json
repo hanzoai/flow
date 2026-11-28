@@ -1,0 +1,17 @@
+{
+  "name": "Starter RAG Workflow",
+  "description": "Retrieval-Augmented Generation workflow wired to local hanzoai/engine.",
+  "version": "1.0.0",
+  "engine_endpoint": "http://127.0.0.1:1234/v1",
+  "nodes": [
+    { "id": "input", "type": "ChatInput", "config": {} },
+    { "id": "retriever", "type": "VectorRetriever", "config": { "top_k": 5 } },
+    { "id": "llm", "type": "HanzoEngineLLM", "config": { "base_url": "http://127.0.0.1:1234/v1", "model": "zen-nano" } },
+    { "id": "output", "type": "ChatOutput", "config": {} }
+  ],
+  "edges": [
+    { "source": "input", "target": "retriever" },
+    { "source": "retriever", "target": "llm" },
+    { "source": "llm", "target": "output" }
+  ]
+}

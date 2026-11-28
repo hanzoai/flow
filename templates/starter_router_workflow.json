@@ -1,0 +1,20 @@
+{
+  "name": "Starter Router Workflow",
+  "description": "Intent-based semantic router workflow wired to local hanzoai/engine.",
+  "version": "1.0.0",
+  "engine_endpoint": "http://127.0.0.1:1234/v1",
+  "nodes": [
+    { "id": "input", "type": "ChatInput", "config": {} },
+    { "id": "router", "type": "IntentRouter", "config": { "base_url": "http://127.0.0.1:1234/v1", "routes": ["code", "general"] } },
+    { "id": "code_llm", "type": "HanzoEngineLLM", "config": { "base_url": "http://127.0.0.1:1234/v1", "model": "zen-coder" } },
+    { "id": "general_llm", "type": "HanzoEngineLLM", "config": { "base_url": "http://127.0.0.1:1234/v1", "model": "zen-nano" } },
+    { "id": "output", "type": "ChatOutput", "config": {} }
+  ],
+  "edges": [
+    { "source": "input", "target": "router" },
+    { "source": "router", "target": "code_llm" },
+    { "source": "router", "target": "general_llm" },
+    { "source": "code_llm", "target": "output" },
+    { "source": "general_llm", "target": "output" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Starter Tool Agent Workflow",
+  "description": "Single-agent tool-calling loop wired to local hanzoai/engine.",
+  "version": "1.0.0",
+  "engine_endpoint": "http://127.0.0.1:1234/v1",
+  "nodes": [
+    { "id": "input", "type": "ChatInput", "config": {} },
+    { "id": "agent", "type": "ToolCallingAgent", "config": { "base_url": "http://127.0.0.1:1234/v1", "max_iterations": 5 } },
+    { "id": "mcp_tools", "type": "MCPToolkit", "config": { "tools": ["web_search", "read_file"] } },
+    { "id": "output", "type": "ChatOutput", "config": {} }
+  ],
+  "edges": [
+    { "source": "input", "target": "agent" },
+    { "source": "mcp_tools", "target": "agent" },
+    { "source": "agent", "target": "output" }
+  ]
+}
