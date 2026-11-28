@@ -59,6 +59,19 @@ docker run -p 7860:7860 hanzoai/flow:latest
 ```
 Hanzo Flow is available at http://localhost:7860/.
 
+## Starter Agentic Workflows (Local Hanzo Engine BYOK)
+
+Hanzo Flow includes 3 pre-configured agentic workflow templates wired out-of-the-box to local `hanzoai/engine` (`http://127.0.0.1:1234/v1`):
+
+1. **Hanzo Local Engine RAG**: Offline, privacy-first retrieval augmented generation for documents and knowledge bases.
+2. **Hanzo Agentic Router**: Intent classifier and task dispatcher routing prompts to specialized domain agents.
+3. **Hanzo Tool Agent**: Autonomous multi-tool loop supporting calculators, dynamic web search, and iterative reasoning.
+
+Run starter template tests:
+```shell
+uv run pytest tests/test_hanzo_engine_workflows.py
+```
+
 ## Deployment
 
 Hanzo Flow is completely open source and you can deploy it to all major deployment clouds.
